@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Get a Free Health Insurance Quote | VS Benefits</title>
+<meta name="description" content="Free, no-pressure health insurance quote. Group (10-99), family, ACA, self-employed, Medicare. Licensed advisor, 40+ states." />
+<link rel="canonical" href="https://vshealthbenefits.com/get-a-quote.html" />
+<meta name="robots" content="index,follow" />
+<meta name="geo.region" content="US-FL" />
+<meta name="geo.placename" content="Miami" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Get a Free Health Insurance Quote | VS Benefits" />
+<meta property="og:description" content="Free, no-pressure health insurance quote. Group (10-99), family, ACA, self-employed, Medicare. Licensed advisor, 40+ states." />
+<meta property="og:url" content="https://vshealthbenefits.com/get-a-quote.html" />
+<meta property="og:site_name" content="VS Benefits" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Get a Free Health Insurance Quote | VS Benefits" />
+<meta name="twitter:description" content="Free, no-pressure health insurance quote. Group (10-99), family, ACA, self-employed, Medicare. Licensed advisor, 40+ states." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+/* ==========================================================
+   VS Benefits - vshealthbenefits.com
+   Single consolidated stylesheet
+   ========================================================== */
+
+:root{
+  --blue-900:#0b2346;
+  --blue-800:#0f2e5c;
+  --blue-700:#16447f;
+  --blue-600:#1e5ab0;
+  --blue-500:#2f7de0;
+  --blue-100:#e8f0fb;
+  --blue-50:#f4f8fe;
+  --teal:#0db5a6;
+  --teal-dark:#098374;
+  --ink:#0d1b2a;
+  --ink-2:#334155;
+  --muted:#5a6b80;
+  --line:#e4e9f2;
+  --bg:#ffffff;
+  --bg-soft:#f7faff;
+  --warn:#b23a1d;
+  --shadow:0 10px 30px rgba(13,27,42,.08);
+  --shadow-sm:0 4px 12px rgba(13,27,42,.06);
+  --radius:14px;
+  --radius-sm:10px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --container:1160px;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:var(--blue-700);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3,h4{font-family:'Poppins','Inter',system-ui,sans-serif;color:var(--blue-900);line-height:1.2;margin:0 0 .4em}
+h1{font-size:clamp(2rem,4vw,3rem);letter-spacing:-.02em}
+h2{font-size:clamp(1.6rem,2.6vw,2.2rem);letter-spacing:-.01em}
+h3{font-size:1.25rem}
+p{margin:0 0 1em;color:var(--ink-2)}
+.container{width:min(var(--container),92%);margin:0 auto}
+.eyebrow{
+  display:inline-block;
+  font-size:.78rem;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--blue-600);
+  background:var(--blue-100);
+  padding:6px 12px;
+  border-radius:999px;
+  margin-bottom:14px;
+}
+.section{padding:72px 0}
+.section-tight{padding:48px 0}
+.bg-soft{background:var(--bg-soft)}
+.center{text-align:center}
+.grid{display:grid;gap:22px}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 22px;
+  border-radius:999px;
+  font-weight:700;font-size:.95rem;
+  border:2px solid transparent;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease),background .2s,color .2s;
+  cursor:pointer;
+  text-decoration:none;
+  line-height:1;
+}
+.btn-primary{background:var(--blue-700);color:#fff}
+.btn-primary:hover{background:var(--blue-600);box-shadow:0 8px 20px rgba(30,90,176,.28);transform:translateY(-1px);text-decoration:none}
+.btn-secondary{background:#fff;color:var(--blue-700);border-color:var(--blue-700)}
+.btn-secondary:hover{background:var(--blue-700);color:#fff;text-decoration:none}
+.btn-ghost{background:transparent;color:var(--blue-700)}
+.btn-ghost:hover{background:var(--blue-100);text-decoration:none}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:var(--teal-dark);text-decoration:none}
+
+/* Header / Nav */
+.site-header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:saturate(160%) blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Poppins',sans-serif;font-weight:700;color:var(--blue-900)}
+.brand-badge{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--blue-700),var(--teal));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.95rem;
+  box-shadow:var(--shadow-sm);
+}
+.nav-links{display:flex;align-items:center;gap:26px}
+.nav-links a{color:var(--ink);font-weight:600;font-size:.95rem}
+.nav-links a:hover{color:var(--blue-700);text-decoration:none}
+.nav-links a.nav-cta{
+  background:var(--blue-700);color:#fff;padding:10px 18px;border-radius:999px;font-weight:700;
+}
+.nav-links a.nav-cta:hover{background:var(--blue-600);color:#fff}
+.menu-toggle{
+  display:none;background:transparent;border:0;padding:10px;cursor:pointer;
+  flex-direction:column;gap:5px;
+}
+.menu-toggle span{width:26px;height:2.5px;background:var(--ink);border-radius:2px;transition:transform .25s,opacity .25s}
+.menu-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.menu-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+
+/* Hero */
+.hero{
+  position:relative;
+  background:
+    radial-gradient(1200px 500px at 20% -10%,rgba(30,90,176,.14),transparent 60%),
+    radial-gradient(900px 450px at 90% 10%,rgba(13,181,166,.12),transparent 55%),
+    linear-gradient(180deg,#f4f8fe 0%,#ffffff 85%);
+  padding:90px 0 80px;
+  overflow:hidden;
+}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.hero .eyebrow{background:#fff;border:1px solid var(--blue-100)}
+.hero h1 span{
+  background:linear-gradient(90deg,var(--blue-700),var(--teal));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-sub{font-size:1.12rem;color:var(--ink-2);max-width:560px;margin-bottom:26px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:18px;color:var(--muted);font-size:.92rem}
+.hero-meta span{display:inline-flex;align-items:center;gap:7px}
+.hero-meta .dot{width:8px;height:8px;border-radius:50%;background:var(--teal)}
+
+.hero-card{
+  background:#fff;border-radius:18px;padding:26px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--line);
+}
+.hero-card h3{margin-bottom:6px}
+.hero-card p{font-size:.92rem;color:var(--muted);margin-bottom:18px}
+
+/* Forms */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:.02em}
+.field input, .field select, .field textarea{
+  width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;
+  font-size:1rem;font-family:inherit;color:var(--ink);background:#fff;
+  transition:border-color .2s, box-shadow .2s;
+}
+.field input:focus, .field select:focus, .field textarea:focus{
+  outline:0;border-color:var(--blue-600);box-shadow:0 0 0 4px rgba(30,90,176,.15);
+}
+.field textarea{resize:vertical;min-height:110px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fine-print{font-size:.78rem;color:var(--muted);margin-top:10px}
+
+/* Coverage Picker (stepped form) */
+.stepped-form{display:block}
+.step-indicator{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:18px}
+.step-indicator .dot{
+  width:9px;height:9px;border-radius:50%;background:var(--line);transition:background .2s,transform .2s;
+}
+.step-indicator .dot.active{background:var(--blue-600);transform:scale(1.3)}
+.coverage-step h3{margin-top:0}
+.coverage-step .sub{font-size:.95rem;color:var(--muted);margin-bottom:18px}
+.coverage-picker{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;margin-bottom:16px;
+}
+.coverage-picker .choice{
+  text-align:left;
+  background:#fff;border:2px solid var(--line);border-radius:12px;
+  padding:16px 14px;cursor:pointer;transition:border-color .18s,background .18s,transform .15s;
+  font-family:inherit;
+  display:flex;flex-direction:column;gap:4px;
+}
+.coverage-picker .choice:hover{border-color:var(--blue-500);background:var(--blue-50);transform:translateY(-1px)}
+.coverage-picker .choice.selected{border-color:var(--blue-600);background:var(--blue-50);box-shadow:0 0 0 3px rgba(30,90,176,.15)}
+.coverage-picker .choice .label{font-weight:700;color:var(--blue-900);font-size:.98rem}
+.coverage-picker .choice .desc{font-size:.82rem;color:var(--muted);line-height:1.35}
+.coverage-picker .choice .icon{font-size:1.25rem;margin-bottom:2px}
+
+.form-step[hidden], .coverage-step[hidden]{display:none !important}
+.back-to-picker{
+  background:transparent;border:0;color:var(--blue-700);font-weight:600;font-size:.88rem;
+  cursor:pointer;padding:4px 0;margin-bottom:10px;
+}
+.back-to-picker:hover{text-decoration:underline}
+.picked-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--blue-50);color:var(--blue-700);
+  font-weight:600;font-size:.78rem;padding:4px 10px;border-radius:999px;margin-bottom:10px;
+}
+
+/* Carriers carousel */
+.carriers{padding:40px 0;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.carriers h2{text-align:center;font-size:1rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-family:'Inter',sans-serif;font-weight:600;margin-bottom:22px}
+.carrier-track-wrap{
+  overflow:hidden;position:relative;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+}
+.carrier-track{display:flex;gap:60px;width:max-content;animation:scroll 30s linear infinite}
+.carrier{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  height:50px;padding:0 20px;
+  font-family:'Poppins',sans-serif;font-weight:700;color:var(--blue-900);
+  font-size:1.15rem;letter-spacing:.02em;white-space:nowrap;
+  opacity:.75;
+}
+.carrier.accent{color:var(--blue-700)}
+@keyframes scroll{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+
+/* Services cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:16px;
+  padding:26px;transition:transform .25s var(--ease),box-shadow .25s var(--ease),border-color .2s;
+  display:flex;flex-direction:column;gap:10px;
+}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--blue-100)}
+.card .ic{
+  width:46px;height:46px;border-radius:12px;
+  background:linear-gradient(135deg,var(--blue-100),#fff);
+  border:1px solid var(--blue-100);
+  display:flex;align-items:center;justify-content:center;color:var(--blue-700);
+  font-size:1.3rem;
+}
+.card h3{margin:4px 0 2px}
+.card .tag{font-size:.78rem;font-weight:700;color:var(--teal-dark);letter-spacing:.08em;text-transform:uppercase;margin-top:auto}
+.card.featured{background:linear-gradient(180deg,#fff, var(--blue-50));border-color:var(--blue-100)}
+
+/* Countdown */
+.countdown-wrap{
+  background:linear-gradient(135deg,var(--blue-800),var(--blue-600));
+  color:#fff;border-radius:20px;padding:44px 28px;text-align:center;
+  box-shadow:var(--shadow);
+}
+.countdown-wrap h2{color:#fff;margin-bottom:6px}
+.countdown-wrap p{color:rgba(255,255,255,.88);margin-bottom:24px}
+.countdown-wrap.closed{background:linear-gradient(135deg,#2a4a7a,#0e8a79)}
+.countdown{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.count-box{
+  background:rgba(255,255,255,.1);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:14px;padding:16px 18px;min-width:92px;
+}
+.count-num{font-family:'Poppins',sans-serif;font-weight:700;font-size:2.2rem;line-height:1}
+.count-label{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;opacity:.85;margin-top:6px}
+
+/* Why us / stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.stat{text-align:center;padding:22px 10px;background:#fff;border:1px solid var(--line);border-radius:14px}
+.stat-num{font-family:'Poppins',sans-serif;font-weight:700;font-size:2.1rem;color:var(--blue-700);line-height:1.1}
+.stat-label{font-size:.86rem;color:var(--muted);margin-top:6px}
+
+/* Process timeline */
+.process{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.step{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;position:relative}
+.step .n{
+  position:absolute;top:-14px;left:22px;
+  background:var(--blue-700);color:#fff;font-weight:800;
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:.95rem;
+  box-shadow:var(--shadow-sm);
+}
+
+/* Testimonials */
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.quote{
+  background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px;
+  display:flex;flex-direction:column;gap:14px;
+}
+.quote p{font-size:1rem;color:var(--ink);font-style:italic}
+.quote .who{font-weight:700;color:var(--blue-900);font-size:.9rem}
+.quote .role{font-size:.82rem;color:var(--muted)}
+
+/* FAQ */
+.faq{max-width:820px;margin:0 auto}
+details.faq-item{
+  background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:12px;
+  transition:border-color .2s;
+}
+details.faq-item[open]{border-color:var(--blue-100)}
+details.faq-item summary{
+  cursor:pointer;font-weight:700;color:var(--blue-900);list-style:none;
+  display:flex;justify-content:space-between;align-items:center;
+}
+details.faq-item summary::-webkit-details-marker{display:none}
+details.faq-item summary::after{content:"+";font-size:1.4rem;color:var(--blue-700);font-weight:400;transition:transform .2s}
+details.faq-item[open] summary::after{content:"-"}
+details.faq-item > *:not(summary){margin-top:12px;color:var(--ink-2)}
+
+/* Contact */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.contact-info h3{margin-bottom:6px}
+.info-list{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-direction:column;gap:14px}
+.info-list li{display:flex;gap:12px;align-items:flex-start;color:var(--ink-2)}
+.info-list .icon{
+  width:38px;height:38px;border-radius:10px;background:var(--blue-100);color:var(--blue-700);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;
+}
+.info-list strong{display:block;color:var(--ink);margin-bottom:2px;font-size:.95rem}
+
+/* CTA strip */
+.cta-strip{
+  background:linear-gradient(135deg,var(--blue-700),var(--blue-500));
+  color:#fff;border-radius:20px;padding:42px 32px;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:18px;
+}
+.cta-strip h2{color:#fff}
+.cta-strip p{color:rgba(255,255,255,.92);max-width:640px}
+
+/* Footer */
+footer{background:var(--blue-900);color:#c9d6ea;padding:56px 0 24px;margin-top:0}
+footer a{color:#c9d6ea}
+footer a:hover{color:#fff}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;margin-bottom:30px}
+.foot-grid h4{color:#fff;font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;font-family:'Inter',sans-serif;margin-bottom:14px}
+.foot-grid ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:.92rem}
+.foot-grid .brand{color:#fff;margin-bottom:10px}
+.foot-brand-text{color:rgba(255,255,255,.75);font-size:.9rem;line-height:1.6}
+.foot-bottom{
+  border-top:1px solid rgba(255,255,255,.12);
+  padding-top:20px;font-size:.82rem;color:rgba(255,255,255,.6);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+
+/* Blog */
+.post-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.post-card{
+  background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  display:flex;flex-direction:column;transition:transform .25s var(--ease),box-shadow .25s var(--ease);
+}
+.post-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.post-card .cover{
+  height:160px;
+  background:linear-gradient(135deg,var(--blue-700),var(--teal));
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-family:'Poppins',sans-serif;font-weight:700;padding:20px;text-align:center;font-size:1rem;
+}
+.post-card .cover.var2{background:linear-gradient(135deg,var(--blue-500),var(--blue-800))}
+.post-card .cover.var3{background:linear-gradient(135deg,var(--teal),var(--blue-700))}
+.post-card .body{padding:22px;display:flex;flex-direction:column;gap:10px;flex:1}
+.post-card h3{font-size:1.1rem;margin:0}
+.post-card .meta{font-size:.78rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.post-card .read-more{margin-top:auto;color:var(--blue-700);font-weight:700;font-size:.9rem}
+
+.article{max-width:780px;margin:0 auto;padding:40px 0 20px}
+.article h1{margin-top:18px}
+.article .meta{font-size:.85rem;color:var(--muted);margin-bottom:24px}
+.article h2{margin-top:40px}
+.article p, .article li{color:var(--ink-2);font-size:1.02rem}
+.article ul, .article ol{padding-left:22px}
+.article blockquote{
+  border-left:4px solid var(--blue-600);background:var(--blue-50);
+  padding:14px 20px;margin:20px 0;border-radius:0 10px 10px 0;color:var(--ink);
+}
+.article .cta-block{
+  background:linear-gradient(135deg,var(--blue-700),var(--teal));
+  color:#fff;padding:24px;border-radius:14px;margin:30px 0;text-align:center;
+}
+.article .cta-block h3{color:#fff;margin-bottom:6px}
+.article .cta-block a{color:#fff;text-decoration:underline}
+
+/* Timeline (about page) */
+.timeline{display:flex;flex-direction:column;gap:18px;margin-top:20px}
+.timeline .row{display:grid;grid-template-columns:110px 1fr;gap:18px;align-items:start}
+.timeline .year{
+  font-weight:800;color:var(--blue-700);font-family:'Poppins',sans-serif;font-size:1.05rem;
+  background:var(--blue-50);padding:6px 10px;border-radius:8px;text-align:center;
+}
+.timeline .detail strong{display:block;color:var(--blue-900);font-size:1rem;margin-bottom:2px}
+
+/* Utility */
+.space-8{height:8px}.space-16{height:16px}.space-24{height:24px}
+
+/* Mobile */
+@media (max-width: 880px){
+  .hero-grid{grid-template-columns:1fr;gap:32px}
+  .hero{padding:60px 0 50px}
+  .cards, .post-grid, .quotes, .process{grid-template-columns:1fr 1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .contact-grid{grid-template-columns:1fr;gap:28px}
+  .foot-grid{grid-template-columns:1fr 1fr}
+
+  /* Hamburger: use display toggle, not max-height */
+  .menu-toggle{display:flex}
+  .nav-links{
+    display:none;
+    position:absolute;top:72px;left:0;right:0;
+    flex-direction:column;gap:0;
+    background:#fff;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    box-shadow:0 12px 24px rgba(13,27,42,.08);
+    padding:8px 0;
+    z-index:60;
+  }
+  .nav-links.open{display:flex}
+  .nav-links a{
+    padding:14px 24px;border-bottom:1px solid var(--line);width:100%;
+  }
+  .nav-links a:last-child{border-bottom:0}
+  .nav-links a.nav-cta{
+    margin:10px 24px;border-radius:10px;text-align:center;padding:14px 16px;
+  }
+}
+@media (max-width: 620px){
+  .cards, .post-grid, .quotes, .process, .stats{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr}
+  .coverage-picker{grid-template-columns:1fr}
+  .field-row{grid-template-columns:1fr}
+  .section{padding:52px 0}
+  .count-box{min-width:78px;padding:12px 14px}
+  .count-num{font-size:1.7rem}
+}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "InsuranceAgency",
+  "@id": "https://vshealthbenefits.com/#org",
+  "name": "VS Benefits",
+  "url": "https://vshealthbenefits.com/",
+  "telephone": "+19548251009",
+  "email": "bvilsainthealth@gmail.com",
+  "areaServed": "US",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Miami",
+    "addressRegion": "FL",
+    "addressCountry": "US"
+  },
+  "openingHours": [
+    "Mo-Fr 08:00-18:00",
+    "Sa-Su 08:00-13:00"
+  ]
+}
+</script>
+
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="index.html" aria-label="VS Benefits home">
+      <span class="brand-badge">VS</span>
+      <span>VS Benefits</span>
+    </a>
+    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="nav-links" class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact</a>
+      <a class="nav-cta" href="get-a-quote.html">Get a Quote</a>
+    </nav>
+  </div>
+</header>
+
+
+<section class="hero" style="padding:70px 0 40px">
+  <div class="container">
+    <span class="eyebrow">Free quote | $0 to you</span>
+    <h1>Get your <span>real</span> options.</h1>
+    <p class="hero-sub">Two minutes of information. We shop every A-rated carrier that fits, then send back a side-by-side you can actually read. No pressure, no spam, no surprise upsells.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container" style="display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:start">
+    <div>
+      <form class="hero-card stepped-form" data-mailto="bvilsainthealth@gmail.com">
+        
+      <div class="step-indicator" aria-hidden="true">
+        <span class="dot active"></span><span class="dot"></span>
+      </div>
+
+      <div class="coverage-step">
+        <h3>What type of coverage?</h3>
+        <p class="sub">Select the option that best fits your situation.</p>
+        <div class="coverage-picker" role="group" aria-label="Coverage type">
+          <button type="button" class="choice" data-value="Individual / Family">
+            <span class="icon">&#128100;</span>
+            <span class="label">Individual / Family</span>
+            <span class="desc">Personal health coverage</span>
+          </button>
+          <button type="button" class="choice" data-value="Self-Employed">
+            <span class="icon">&#128188;</span>
+            <span class="label">Self-Employed</span>
+            <span class="desc">Freelancer / Contractor</span>
+          </button>
+          <button type="button" class="choice" data-value="Employer / Group">
+            <span class="icon">&#127970;</span>
+            <span class="label">Employer / Group</span>
+            <span class="desc">Team coverage</span>
+          </button>
+          <button type="button" class="choice" data-value="Medicare / Senior">
+            <span class="icon">&#128105;&#8205;&#9877;&#65039;</span>
+            <span class="label">Medicare / Senior</span>
+            <span class="desc">65+ coverage</span>
+          </button>
+        </div>
+        <p class="fine-print">Your information is confidential. Licensed advisor. No spam.</p>
+      </div>
+
+        <div class="form-step" hidden>
+          
+      <button type="button" class="back-to-picker">&larr; Change coverage type</button>
+      <div class="picked-badge">Coverage: <span class="picked-badge-value">Individual / Family</span></div>
+      <input type="hidden" name="coverage_type" value="Individual / Family" />
+
+          <h3>About you</h3>
+          <div class="field-row">
+            <div class="field">
+              <label for="q-name">Full name</label>
+              <input id="q-name" name="full_name" type="text" required autocomplete="name" />
+            </div>
+            <div class="field">
+              <label for="q-phone">Phone</label>
+              <input id="q-phone" name="phone" type="tel" required autocomplete="tel" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="q-email">Email</label>
+              <input id="q-email" name="email" type="email" required autocomplete="email" />
+            </div>
+            <div class="field">
+              <label for="q-zip">ZIP code</label>
+              <input id="q-zip" name="zip" type="text" inputmode="numeric" pattern="[0-9]{5}" required />
+            </div>
+          </div>
+
+          <h3 style="margin-top:10px">About the coverage</h3>
+          <div class="field-row">
+            <div class="field">
+              <label for="q-size">Household or team size</label>
+              <input id="q-size" name="household_size" type="number" min="1" max="999" required />
+            </div>
+            <div class="field">
+              <label for="q-eff">Target effective date</label>
+              <input id="q-eff" name="effective_date" type="text" placeholder="ASAP or MM/YYYY" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="q-current">Current coverage situation</label>
+            <select id="q-current" name="current_coverage">
+              <option>No coverage right now</option>
+              <option>On a current plan, shopping for alternatives</option>
+              <option>Renewal coming up</option>
+              <option>Just had a life event (job change, marriage, move)</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="q-notes">Anything else we should know?</label>
+            <textarea id="q-notes" name="notes" placeholder="Example: need pediatric dental, prefer BCBS network, want to compare ICHRA."></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit" style="width:100%">Send My Quote Request</button>
+          <p class="fine-print">By submitting, you consent to be contacted by VS Benefits. Your information is private and never shared or sold.</p>
+        </div>
+      </form>
+    </div>
+    <aside>
+      <div class="hero-card">
+        <h3>What happens next</h3>
+        <ol style="padding-left:18px;color:var(--ink-2)">
+          <li>You submit this form.</li>
+          <li>We reach out within 1 business day to confirm details.</li>
+          <li>We shop the market and prepare a side-by-side summary.</li>
+          <li>You pick the plan. We handle enrollment end to end.</li>
+        </ol>
+      </div>
+      <div class="space-16"></div>
+      <div class="hero-card">
+        <h3>Prep checklist</h3>
+        <ul style="padding-left:18px;color:var(--ink-2)">
+          <li>ZIP code(s) where members live or work</li>
+          <li>Date of birth for each covered person</li>
+          <li>Expected household income (for ACA subsidy math)</li>
+          <li>Any must-keep doctors or prescriptions</li>
+        </ul>
+      </div>
+      <div class="space-16"></div>
+      <div class="hero-card">
+        <h3>Prefer to talk first?</h3>
+        <p>Call <a href="tel:+19548251009">(954) 825-1009</a> or email <a href="mailto:bvilsainthealth@gmail.com">bvilsainthealth@gmail.com</a>. Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET.</p>
+        <p style="color:var(--teal-dark);font-weight:700">&#10003; Zero-pressure guarantee. You decide, not us.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="brand">
+          <span class="brand-badge">VS</span>
+          <span style="color:#fff">VS Benefits</span>
+        </div>
+        <p class="foot-brand-text">A licensed, independent health insurance advisor based in Miami, FL, serving small employers and families in 40+ states. Unbiased guidance, zero-cost consultations.</p>
+      </div>
+      <div>
+        <h4>Solutions</h4>
+        <ul>
+          <li><a href="services.html#group">Group 10-99</a></li>
+          <li><a href="services.html#micro">Micro-Group 2-9</a></li>
+          <li><a href="services.html#aca">ACA / Individual</a></li>
+          <li><a href="services.html#family">Family Plans</a></li>
+          <li><a href="services.html#medicaid">Medicaid Guidance</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="get-a-quote.html">Get a Quote</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Reach Us</h4>
+        <ul>
+          <li><a href="tel:+19548251009">(954) 825-1009</a></li>
+          <li><a href="mailto:bvilsainthealth@gmail.com">bvilsainthealth@gmail.com</a></li>
+          <li>Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET</li>
+          <li>Miami, FL office | 40+ states</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>&copy; <span id="year">2026</span> VS Benefits. All rights reserved.</span>
+      <span>vshealthbenefits.com | Licensed health insurance advisor</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* VS Benefits - vshealthbenefits.com
+   Interactive behaviors: mobile nav, countdown, coverage-picker,
+   form submission via Make.com webhook (with mailto fallback). */
+
+// !! REPLACE the placeholder below with your actual Make.com webhook URL.
+// Example: "https://hook.us1.make.com/abc123xyz..."
+window.MAKE_WEBHOOK_URL = window.MAKE_WEBHOOK_URL || "REPLACE_WITH_YOUR_MAKE_WEBHOOK_URL";
+
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+
+  /* ---------- Mobile hamburger nav ---------- */
+  var toggle = document.querySelector(".menu-toggle");
+  var links  = document.querySelector(".nav-links");
+
+  function closeMenu() {
+    if (!links) return;
+    links.classList.remove("open");
+    if (toggle) toggle.setAttribute("aria-expanded", "false");
+  }
+  function toggleMenu(e) {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
+    if (!links) return;
+    var open = links.classList.toggle("open");
+    if (toggle) toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  if (toggle && links) {
+    toggle.addEventListener("click", toggleMenu);
+    toggle.addEventListener("touchend", function (e) { toggleMenu(e); }, { passive: false });
+    // close menu after tapping a nav link
+    links.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", closeMenu);
+    });
+    // close menu when clicking/tapping outside
+    document.addEventListener("click", function (e) {
+      if (!links.classList.contains("open")) return;
+      if (toggle.contains(e.target) || links.contains(e.target)) return;
+      closeMenu();
+    });
+    // close menu on Escape
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeMenu();
+    });
+  }
+
+  /* ---------- ACA Open Enrollment countdown ---------- */
+  // 2026-27 Open Enrollment Period (federal marketplace): Nov 1, 2026 - Jan 15, 2027.
+  // Update these anchors annually.
+  var START = new Date("2026-11-01T00:00:00-05:00").getTime();
+  var END   = new Date("2027-01-15T23:59:59-05:00").getTime();
+
+  var elDays = document.getElementById("cd-days");
+  var elHrs  = document.getElementById("cd-hrs");
+  var elMin  = document.getElementById("cd-min");
+  var elSec  = document.getElementById("cd-sec");
+  var elTitle = document.getElementById("cd-title");
+  var elSub   = document.getElementById("cd-sub");
+  var elWrap  = document.getElementById("cd-wrap");
+
+  function pad(n){ return String(Math.max(0, n)).padStart(2, "0"); }
+
+  function paint(target, titleText, subText) {
+    var now = Date.now();
+    var delta = Math.max(0, target - now);
+    var d = Math.floor(delta / 86400000);
+    var h = Math.floor((delta % 86400000) / 3600000);
+    var m = Math.floor((delta % 3600000) / 60000);
+    var s = Math.floor((delta % 60000) / 1000);
+    if (elDays) elDays.textContent = pad(d);
+    if (elHrs)  elHrs.textContent  = pad(h);
+    if (elMin)  elMin.textContent  = pad(m);
+    if (elSec)  elSec.textContent  = pad(s);
+    if (elTitle && titleText) elTitle.textContent = titleText;
+    if (elSub   && subText)   elSub.textContent   = subText;
+  }
+  function tick() {
+    var now = Date.now();
+    if (now < START) {
+      paint(START,
+            "ACA Open Enrollment 2027 starts in",
+            "Nov 1, 2026 is your next chance to lock in individual or family ACA coverage. Get your documents ready.");
+      if (elWrap) elWrap.classList.remove("closed");
+    } else if (now <= END) {
+      paint(END,
+            "Time left to enroll in 2027 ACA coverage",
+            "Open Enrollment closes Jan 15, 2027. After that you will need a Special Enrollment event to switch plans.");
+      if (elWrap) elWrap.classList.add("closed");
+    } else {
+      paint(Date.now(),
+            "Open Enrollment is closed for 2027",
+            "You may still qualify for a Special Enrollment Period (job change, marriage, move, etc). Ask us.");
+      if (elWrap) elWrap.classList.add("closed");
+    }
+  }
+  if (elDays || elHrs || elMin || elSec) {
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  /* ---------- Coverage picker / stepped form ---------- */
+  // Every form wrapped in <form class="stepped-form"> will have a picker step
+  // followed by the data-collection step. On choice click, step 2 appears and
+  // carries a hidden input "coverage_type" with the user's selection.
+  document.querySelectorAll("form.stepped-form").forEach(function (form) {
+    var step1 = form.querySelector(".coverage-step");
+    var step2 = form.querySelector(".form-step");
+    var dots  = form.querySelectorAll(".step-indicator .dot");
+    var back  = form.querySelector(".back-to-picker");
+    var badge = form.querySelector(".picked-badge-value");
+    var hidden = form.querySelector('input[name="coverage_type"]');
+
+    if (!step1 || !step2) return; // not a stepped form
+
+    function setStep(n) {
+      if (n === 1) {
+        step1.hidden = false; step2.hidden = true;
+      } else {
+        step1.hidden = true;  step2.hidden = false;
+      }
+      if (dots.length >= 2) {
+        dots[0].classList.toggle("active", n === 1);
+        dots[1].classList.toggle("active", n === 2);
+      }
+    }
+    setStep(1);
+
+    form.querySelectorAll(".coverage-picker .choice").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        form.querySelectorAll(".coverage-picker .choice").forEach(function (b){ b.classList.remove("selected"); });
+        btn.classList.add("selected");
+        var val = btn.getAttribute("data-value") || btn.textContent.trim();
+        if (hidden) hidden.value = val;
+        if (badge) badge.textContent = val;
+        setStep(2);
+        // scroll form into view on mobile
+        setTimeout(function(){ form.scrollIntoView({behavior:"smooth", block:"start"}); }, 50);
+      });
+    });
+    if (back) {
+      back.addEventListener("click", function (e) {
+        e.preventDefault();
+        setStep(1);
+      });
+    }
+  });
+
+  /* ---------- Form submission: Make.com webhook with mailto fallback ---------- */
+  document.querySelectorAll("form[data-webhook], form.stepped-form, form[data-mailto]").forEach(function (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var data = {};
+      new FormData(form).forEach(function (v, k) { data[k] = v; });
+      data._source = "vshealthbenefits.com";
+      data._page   = window.location.pathname;
+      data._ts     = new Date().toISOString();
+
+      var webhook = form.getAttribute("data-webhook") || window.MAKE_WEBHOOK_URL;
+      var mailto  = form.getAttribute("data-mailto")  || "bvilsainthealth@gmail.com";
+      var submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+      var originalLabel = submitBtn ? submitBtn.textContent : "";
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Sending..."; }
+
+      function showSuccess() {
+        var note = form.querySelector(".form-success");
+        if (!note) {
+          note = document.createElement("div");
+          note.className = "form-success";
+          note.style.cssText = "margin-top:14px;padding:14px 16px;border-radius:10px;background:#e8f7ee;border:1px solid #b7e0c5;color:#165c2e;font-weight:600";
+          form.appendChild(note);
+        }
+        note.textContent = "Thanks - your request is in. I will personally reach out within one business day.";
+        form.reset();
+        var step1 = form.querySelector(".coverage-step");
+        var step2 = form.querySelector(".form-step");
+        if (step1 && step2) { step1.hidden = false; step2.hidden = true; }
+      }
+      function fallbackMailto() {
+        var subj = "VS Benefits website inquiry - " + (data.coverage_type || "general");
+        var body = Object.keys(data).filter(function(k){return k[0]!=="_"}).map(function(k){
+          return k.replace(/_/g," ").toUpperCase() + ": " + data[k];
+        }).join("\n");
+        var href = "mailto:" + encodeURIComponent(mailto) +
+                   "?subject=" + encodeURIComponent(subj) +
+                   "&body=" + encodeURIComponent(body);
+        window.location.href = href;
+      }
+
+      var useWebhook = webhook && webhook.indexOf("http") === 0 && webhook.indexOf("REPLACE_WITH_") === -1;
+
+      if (useWebhook) {
+        fetch(webhook, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        }).then(function (r) {
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalLabel; }
+          if (r.ok) { showSuccess(); }
+          else { fallbackMailto(); }
+        }).catch(function () {
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalLabel; }
+          fallbackMailto();
+        });
+      } else {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = originalLabel; }
+        fallbackMailto();
+      }
+    });
+  });
+
+  /* ---------- Footer year ---------- */
+  var y = document.getElementById("year");
+  if (y) y.textContent = new Date().getFullYear();
+});
+
+</script>
+</body>
+</html>
