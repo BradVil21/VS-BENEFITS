@@ -29,7 +29,7 @@ a{color:var(--blue-600);text-decoration:none}
 a:hover{text-decoration:underline}
 button{font-family:inherit}
 input,select,textarea{font-family:inherit;font-size:16px}
-
+ 
 .bar{background:var(--blue-900);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
 .bar .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-family:Poppins;font-size:15px}
 .bar .brand .b{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem}
@@ -39,25 +39,25 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .bar a.home:hover{color:#fff}
 .bar .signout{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px}
 .bar .signout:hover{background:rgba(255,255,255,.2)}
-
+ 
 /* Online/offline sync pill in top bar */
 .bar .sync{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:5px 10px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#e8f0fb}
 .bar .sync .dot{width:8px;height:8px;border-radius:50%;background:#2dbd79;box-shadow:0 0 0 3px rgba(45,189,121,.25)}
 .bar .sync.off .dot{background:#e5484d;box-shadow:0 0 0 3px rgba(229,72,77,.25)}
 .bar .sync .lbl{color:#cfe1ff}
-
+ 
 /* Per-client online dot */
 .presence-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#d0d7e2;margin-right:6px;vertical-align:middle}
 .presence-dot.on{background:#2dbd79;box-shadow:0 0 0 2px rgba(45,189,121,.22)}
 .presence-dot.off{background:#cfd6df}
-
+ 
 .wrap{max-width:1200px;margin:0 auto;padding:18px 16px 80px}
 .wrap-narrow{max-width:540px;margin:0 auto;padding:30px 16px 80px}
-
+ 
 .card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:22px;margin-bottom:20px}
 .card h2{font-size:20px;margin:0 0 6px}
 .card .lede{color:var(--ink-2);margin:0 0 16px;font-size:14px}
-
+ 
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
 .field label{font-size:13px;font-weight:600;color:var(--ink-2)}
 .field input,.field select,.field textarea{padding:11px 13px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;color:var(--ink);min-height:44px;width:100%}
@@ -67,7 +67,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .row3{display:grid;grid-template-columns:1fr;gap:0}
 @media(min-width:560px){.row3{grid-template-columns:1fr 1fr 1fr;gap:14px}}
 .hint{font-size:12.5px;color:var(--muted);margin-top:-2px}
-
+ 
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:9px;font-weight:700;font-size:14px;border:0;cursor:pointer;min-height:44px;text-decoration:none;line-height:1}
 .btn:hover{text-decoration:none}
 .btn-primary{background:var(--blue-600);color:#fff}
@@ -80,12 +80,12 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .btn-danger:hover{background:#fdf2f1}
 .btn-block{width:100%}
 .btn-sm{padding:7px 11px;min-height:36px;font-size:12.5px;border-radius:7px}
-
+ 
 .notice{padding:10px 12px;border-radius:8px;font-size:13.5px;margin-bottom:12px}
 .notice-err{background:#fdecea;color:var(--err);border:1px solid #f5c6c1}
 .notice-ok{background:#e6f7ef;color:var(--ok);border:1px solid #b9e6cf}
 .notice-info{background:var(--blue-50);color:var(--blue-700);border:1px solid #cfdef6}
-
+ 
 /* Tabs */
 .tabs-bar{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);margin-bottom:18px;overflow:hidden}
 .tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;border-bottom:1px solid var(--line)}
@@ -93,15 +93,15 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .tabs button .badge{background:var(--blue-100);color:var(--blue-700);font-size:11px;padding:2px 6px;border-radius:10px;font-weight:700}
 .tabs button.active{color:var(--blue-700);border-bottom-color:var(--blue-600)}
 .tabs button.active .badge{background:var(--blue-600);color:#fff}
-
+ 
 .panel{display:none;padding:22px}
 .panel.active{display:block}
 .panel h3{font-size:17px;margin:0 0 4px}
 .panel .lede{color:var(--muted);font-size:13.5px;margin:0 0 18px}
-
+ 
 .toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;align-items:center}
 .toolbar input.search{flex:1;min-width:200px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;min-height:40px}
-
+ 
 /* Tables (cards on mobile) */
 .tbl{display:flex;flex-direction:column;gap:10px}
 .tbl .row{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:14px}
@@ -110,7 +110,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .tbl .row .sub{font-size:13px;color:var(--ink-2);margin:2px 0}
 .tbl .row .meta{font-size:12px;color:var(--muted)}
 .tbl .row .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line-2)}
-
+ 
 .status-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
 .status-new{background:#e7f0ff;color:var(--blue-700)}
 .status-contacted{background:#fff4e1;color:var(--warn)}
@@ -123,9 +123,9 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .status-unpaid{background:#fff4e1;color:var(--warn)}
 .status-in-progress{background:#fff4e1;color:var(--warn)}
 .status-declined{background:#fbe7e7;color:var(--err)}
-
+ 
 .empty{padding:32px 16px;text-align:center;color:var(--muted);font-size:13.5px;background:var(--blue-50);border:1px dashed var(--line);border-radius:var(--r-md)}
-
+ 
 /* Modal */
 .modal-bg{position:fixed;inset:0;background:rgba(11,35,70,.55);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:20px;overflow-y:auto}
 .modal-bg.open{display:flex}
@@ -135,7 +135,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .modal .close-x{position:absolute;top:8px;right:10px;background:transparent;border:0;width:36px;height:36px;font-size:1.6rem;color:var(--muted);cursor:pointer;border-radius:8px}
 .modal .close-x:hover{background:var(--blue-50)}
 .modal-acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:8px}
-
+ 
 /* Calendar */
 .cal-wrap{display:grid;grid-template-columns:1fr;gap:18px}
 @media(min-width:880px){.cal-wrap{grid-template-columns:1fr 320px}}
@@ -153,7 +153,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .cal-day .num{font-weight:700;color:var(--ink);font-size:12px}
 .cal-day .dot{width:6px;height:6px;border-radius:50%;background:var(--blue-600);margin-top:auto;align-self:flex-end}
 .cal-day.selected{background:var(--blue-100);border-color:var(--blue-600)}
-
+ 
 .evlist{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
 .evlist h4{margin:0 0 10px;font-size:14px;color:var(--blue-900)}
 .ev{padding:10px;border:1px solid var(--line-2);border-radius:8px;margin-bottom:8px;background:var(--bg)}
@@ -161,7 +161,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .ev .em{font-size:12px;color:var(--muted);margin:2px 0}
 .ev .ea{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .ev .gtag{display:inline-flex;align-items:center;gap:4px;background:#e6f7ef;color:var(--ok);border:1px solid #b9e6cf;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;margin-top:4px}
-
+ 
 /* Conversation */
 .conv-wrap{display:grid;grid-template-columns:1fr;gap:14px}
 @media(min-width:880px){.conv-wrap{grid-template-columns:280px 1fr}}
@@ -178,17 +178,17 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .msg.client{background:#f3f5f8;color:var(--ink);border:1px solid var(--line-2)}
 .msg.advisor{background:var(--blue-50);color:var(--ink);margin-left:auto;border:1px solid #cfdef6}
 .msg .meta{font-size:11px;color:var(--muted);margin-top:3px}
-
+ 
 /* Avatar */
 .avatar{width:42px;height:42px;border-radius:50%;background:var(--blue-100);color:var(--blue-700);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;overflow:hidden;flex-shrink:0}
 .avatar img{width:100%;height:100%;object-fit:cover}
-
+ 
 .kv{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:14px}
 @media(min-width:560px){.kv{grid-template-columns:1fr 1fr}}
 .kv .item{background:var(--blue-50);border:1px solid var(--line-2);border-radius:8px;padding:10px 12px}
 .kv .item .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
 .kv .item .val{font-size:14px;color:var(--ink);margin-top:2px;word-break:break-word}
-
+ 
 /* Documents manager */
 .docmgr{background:var(--bg);border:1px solid var(--line-2);border-radius:10px;padding:12px;margin-top:10px}
 .docmgr h4{margin:0 0 8px;font-size:13.5px;color:var(--blue-900)}
@@ -196,18 +196,18 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .docrow .dname{flex:1;min-width:0;font-size:13px;color:var(--ink);word-break:break-word}
 .docrow .dmeta{font-size:11px;color:var(--muted)}
 .docrow .dact{display:flex;gap:4px}
-
+ 
 [hidden]{display:none !important}
-
+ 
 .authswitch{text-align:center;margin-top:14px;font-size:13px;color:var(--ink-2)}
 .authswitch a{color:var(--blue-600);cursor:pointer;font-weight:600}
 </style>
-
+ 
 <!-- Google Identity Services for Calendar push -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-
+ 
 <div class="bar">
   <a class="brand" href="index.html">
     <span class="b">VS</span>
@@ -222,7 +222,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
     <button id="signout-btn" class="signout" hidden>Sign out</button>
   </div>
 </div>
-
+ 
 <!-- ======================= LOGIN VIEW ======================= -->
 <div id="login-view" class="wrap-narrow" hidden>
   <div class="card">
@@ -245,7 +245,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
     </div>
   </div>
 </div>
-
+ 
 <!-- ======================= SIGNUP VIEW (private, gated) ======================= -->
 <div id="signup-view" class="wrap-narrow" hidden>
   <div class="card">
@@ -285,10 +285,10 @@ input,select,textarea{font-family:inherit;font-size:16px}
     </div>
   </div>
 </div>
-
+ 
 <!-- ======================= DASHBOARD ======================= -->
 <div id="dash-view" class="wrap" hidden>
-
+ 
   <div class="tabs-bar">
     <div class="tabs" role="tablist">
       <button id="t-leads" class="active" data-tab="leads" type="button">Leads <span class="badge" id="b-leads">0</span></button>
@@ -298,7 +298,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
       <button id="t-referrals" data-tab="referrals" type="button">Referrals <span class="badge" id="b-ref">0</span></button>
       <button id="t-settings" data-tab="settings" type="button">Settings</button>
     </div>
-
+ 
     <!-- ============== LEADS ============== -->
     <div id="p-leads" class="panel active">
       <h3>Leads</h3>
@@ -310,7 +310,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
       </div>
       <div id="leads-list" class="tbl"></div>
     </div>
-
+ 
     <!-- ============== CALENDAR ============== -->
     <div id="p-calendar" class="panel">
       <h3>Calendar</h3>
@@ -334,7 +334,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
         </div>
       </div>
     </div>
-
+ 
     <!-- ============== CLIENT ACCOUNTS ============== -->
     <div id="p-accounts" class="panel">
       <h3>Client Accounts</h3>
@@ -346,7 +346,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
       </div>
       <div id="accts-list" class="tbl"></div>
     </div>
-
+ 
     <!-- ============== SUPPORT ============== -->
     <div id="p-support" class="panel">
       <h3>Support inbox</h3>
@@ -374,7 +374,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
         </div>
       </div>
     </div>
-
+ 
     <!-- ============== REFERRALS ============== -->
     <div id="p-referrals" class="panel">
       <h3>Referrals</h3>
@@ -385,11 +385,11 @@ input,select,textarea{font-family:inherit;font-size:16px}
       </div>
       <div id="refs-list" class="tbl"></div>
     </div>
-
+ 
     <!-- ============== SETTINGS ============== -->
     <div id="p-settings" class="panel">
       <h3>Settings</h3>
-
+ 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Change my admin password</h4>
         <form id="pw-form" autocomplete="off">
@@ -400,7 +400,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
           <button type="submit" class="btn btn-primary">Update password</button>
         </form>
       </div>
-
+ 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Change admin setup code</h4>
         <p class="lede">This is the code required to create a new admin account. Default is (hidden in source).</p>
@@ -412,7 +412,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
           <button type="submit" class="btn btn-primary">Update setup code</button>
         </form>
       </div>
-
+ 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Google Calendar push</h4>
         <p class="lede">Connect your Google account so every new appointment auto-pushes to your Google Calendar.</p>
@@ -431,13 +431,13 @@ input,select,textarea{font-family:inherit;font-size:16px}
           <button id="gcal-disconnect" class="btn btn-ghost btn-sm" type="button" hidden>Disconnect</button>
         </div>
       </div>
-
+ 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Admin accounts</h4>
         <p class="lede">Everyone with an admin login. Create additional admins from the sign-in screen using the setup code.</p>
         <div id="admins-list" class="tbl"></div>
       </div>
-
+ 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Make.com / Zapier webhook</h4>
         <p class="lede">If set, key events get POSTed to this URL (fire-and-forget, no-cors).</p>
@@ -447,7 +447,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
           <button type="submit" class="btn btn-primary">Save webhook</button>
         </form>
       </div>
-
+ 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Backup / restore</h4>
         <p class="lede">Storage size: <strong id="settings-storage">--</strong></p>
@@ -457,11 +457,11 @@ input,select,textarea{font-family:inherit;font-size:16px}
         </div>
       </div>
     </div>
-
+ 
   </div>
-
+ 
 </div>
-
+ 
 <!-- ======================= MODAL ======================= -->
 <div id="modal-bg" class="modal-bg" role="dialog" aria-modal="true">
   <div class="modal" id="modal-box">
@@ -469,12 +469,12 @@ input,select,textarea{font-family:inherit;font-size:16px}
     <div id="modal-content"></div>
   </div>
 </div>
-
+ 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+ 
 const firebaseConfig = {
   apiKey: "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U",
   authDomain: "vs-benefits-c1da9.firebaseapp.com",
@@ -483,14 +483,14 @@ const firebaseConfig = {
   messagingSenderId: "487471388882",
   appId: "1:487471388882:web:63e98e6699d5a823e3f50b"
 };
-
+ 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-
+ 
 (function(){
 "use strict";
-
+ 
 /* ====================================================================
    Storage keys
    ==================================================================== */
@@ -503,7 +503,7 @@ var K={
   webhook:"vs_webhook_url",
   gcalCid:"vs_gcal_client_id",gcalTok:"vs_gcal_token",gcalEmail:"vs_gcal_email"
 };
-
+ 
 /* ====================================================================
    Helpers
    ==================================================================== */
@@ -535,7 +535,7 @@ function initials(a){var n=((a.firstName||"")+" "+(a.lastName||"")).trim();if(!n
 function asArr(k){try{return JSON.parse(localStorage.getItem(k)||"[]");}catch(e){return[];}}
 function setArrLocal(k,v){localStorage.setItem(k,JSON.stringify(v));}
 function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
-
+ 
 /* Accessor/mutator pairs (save* pushes to cloud) */
 var LOCAL_TO_REMOTE={};
 LOCAL_TO_REMOTE[K.leads]="leads";
@@ -545,7 +545,7 @@ LOCAL_TO_REMOTE[K.referrals]="referrals";
 LOCAL_TO_REMOTE[K.appointments]="appointments";
 LOCAL_TO_REMOTE[K.adminAccts]="admin_accounts";
 function setArr(k,v){setArrLocal(k,v);var r=LOCAL_TO_REMOTE[k];if(r)cloudPush(r,v);}
-
+ 
 function getLeads(){return asArr(K.leads);} function saveLeads(v){setArr(K.leads,v);}
 function getAccounts(){return asArr(K.accounts);} function saveAccounts(v){setArr(K.accounts,v);}
 function getMessages(){return asArr(K.messages);} function saveMessages(v){setArr(K.messages,v);}
@@ -554,16 +554,16 @@ function getAppts(){return asArr(K.appointments);} function saveAppts(v){setArr(
 function getAdmins(){return asArr(K.adminAccts);} function saveAdmins(v){setArr(K.adminAccts,v);}
 function getWebhook(){return localStorage.getItem(K.webhook)||"";}
 function setWebhook(v){localStorage.setItem(K.webhook,v||"");}
-
+ 
 async function sha256(t){var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0");}).join("");}
-
+ 
 function notice(elId,kind,text){var e=$(elId);if(!e)return;e.innerHTML="";if(!text)return;var n=el("div",{class:"notice notice-"+kind,text:text});e.appendChild(n);}
-
+ 
 function webhookFire(payload){
   var url=getWebhook();if(!url)return;
   try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});}catch(e){}
 }
-
+ 
 /* ====================================================================
    Cloud sync (Firestore + Anonymous Auth)
    ==================================================================== */
@@ -571,24 +571,24 @@ var cloud={ready:false,suspend:0};
 var presenceMap={}; // clientId -> last ts
 var REMOTE_KEYS=["leads","accounts","messages","referrals","appointments","admin_accounts"];
 var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts};
-
+ 
 function setSyncPill(state){
   var p=$("sync-pill");if(!p)return;
   if(state==="on"){p.classList.remove("off");$("sync-lbl").textContent="Online";}
   else{p.classList.add("off");$("sync-lbl").textContent="Offline";}
 }
-
+ 
 async function cloudPush(key,items){
   if(!cloud.ready||cloud.suspend>0)return;
   try{await setDoc(doc(db,"vs_state",key),{items:items,ts:Date.now()});}
   catch(e){console.warn("cloud push",key,e);}
 }
-
+ 
 async function initCloud(){
   try{await signInAnonymously(auth);}
   catch(e){console.warn("anon auth failed",e);setSyncPill("off");return;}
   cloud.ready=true;setSyncPill("on");
-
+ 
   REMOTE_KEYS.forEach(function(rk){
     onSnapshot(doc(db,"vs_state",rk),function(snap){
       if(!snap.exists())return;
@@ -607,7 +607,7 @@ async function initCloud(){
       }finally{setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},80);}
     },function(err){console.warn("snapshot err",rk,err);setSyncPill("off");});
   });
-
+ 
   // Presence (all signed-in clients) — shared map
   onSnapshot(doc(db,"vs_state","presence"),function(snap){
     if(!snap.exists())return;
@@ -615,26 +615,40 @@ async function initCloud(){
     if(!$("dash-view").hidden)renderAccounts();
   });
 }
-
+ 
 async function pullOnce(rk){
   try{
     var snap=await getDoc(doc(db,"vs_state",rk));
     if(snap.exists()){cloud.suspend++;try{setArrLocal(REMOTE_TO_LOCAL[rk],snap.data().items||[]);}finally{setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},60);}}
   }catch(e){}
 }
-
+ 
+/* Clear a single client's presence entry from the shared map (used on delete) */
+async function clearPresenceEntry(clientId){
+  if(!cloud.ready||!clientId)return;
+  try{
+    var snap=await getDoc(doc(db,"vs_state","presence"));
+    var map=snap.exists()?(snap.data().map||{}):{};
+    if(map[clientId]!==undefined){
+      delete map[clientId];
+      await setDoc(doc(db,"vs_state","presence"),{map:map,ts:Date.now()});
+    }
+    if(presenceMap[clientId]!==undefined)delete presenceMap[clientId];
+  }catch(e){console.warn("clear presence",e);}
+}
+ 
 function isOnline(clientId){
   var ts=presenceMap[clientId]||0;
   return (Date.now()-ts)<3*60*1000; // online if heartbeat within 3 min
 }
-
+ 
 /* ====================================================================
    Setup code
    ==================================================================== */
 function defaultSetupCode(){try{return atob("MDYwNQ==");}catch(e){return"0605";}}
 function ensureSetupCode(){if(!localStorage.getItem(K.setupCode))localStorage.setItem(K.setupCode,defaultSetupCode());}
 function currentSetupCode(){return localStorage.getItem(K.setupCode)||defaultSetupCode();}
-
+ 
 /* ====================================================================
    Admin auth: username+password, multi-user
    ==================================================================== */
@@ -642,7 +656,7 @@ function getSession(){try{return JSON.parse(sessionStorage.getItem(K.session)||"
 function setSession(s){sessionStorage.setItem(K.session,JSON.stringify(s));}
 function clearSession(){sessionStorage.removeItem(K.session);}
 function currentAdmin(){var s=getSession();if(!s)return null;return getAdmins().filter(function(a){return a.id===s.id;})[0]||null;}
-
+ 
 async function route(){
   ensureSetupCode();
   $("login-view").hidden=true;$("signup-view").hidden=true;$("dash-view").hidden=true;$("signout-btn").hidden=true;
@@ -654,10 +668,10 @@ async function route(){
   $("dash-view").hidden=false;$("signout-btn").hidden=false;
   renderAll();switchTab("leads");
 }
-
+ 
 $("go-signup").addEventListener("click",function(){$("login-view").hidden=true;$("signup-view").hidden=false;});
 $("go-login").addEventListener("click",function(){$("signup-view").hidden=true;$("login-view").hidden=false;});
-
+ 
 $("signup-form").addEventListener("submit",async function(e){
   e.preventDefault();
   var code=$("su-code").value.trim();
@@ -681,7 +695,7 @@ $("signup-form").addEventListener("submit",async function(e){
   setSession({id:rec.id,since:Date.now()});
   await route();
 });
-
+ 
 $("login-form").addEventListener("submit",async function(e){
   e.preventDefault();
   var user=normUser($("login-user").value);
@@ -705,9 +719,9 @@ $("login-form").addEventListener("submit",async function(e){
   setSession({id:a.id,since:Date.now()});
   route();
 });
-
+ 
 $("signout-btn").addEventListener("click",function(){clearSession();route();});
-
+ 
 /* ====================================================================
    Tabs
    ==================================================================== */
@@ -724,7 +738,7 @@ function switchTab(name){
   if(name==="settings")renderSettings();
 }
 document.querySelectorAll("[data-tab]").forEach(function(b){b.addEventListener("click",function(){switchTab(b.getAttribute("data-tab"));});});
-
+ 
 /* ====================================================================
    Modal
    ==================================================================== */
@@ -738,7 +752,7 @@ function closeModal(){$("modal-bg").classList.remove("open");document.body.style
 $("modal-bg").addEventListener("click",function(e){if(e.target===$("modal-bg"))closeModal();});
 document.addEventListener("click",function(e){if(e.target.matches("[data-close]"))closeModal();});
 document.addEventListener("keydown",function(e){if(e.key==="Escape")closeModal();});
-
+ 
 /* ====================================================================
    LEADS
    ==================================================================== */
@@ -815,7 +829,7 @@ $("export-leads-btn").addEventListener("click",function(){
   getLeads().forEach(function(l){rows.push([l.name,l.company,l.email,l.phone,l.address,l.coverage,l.status,l.next,l.notes,l.created?new Date(l.created).toISOString():"",l.updated?new Date(l.updated).toISOString():""].map(csvEscape));});
   downloadFile("leads-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
 });
-
+ 
 /* ====================================================================
    CALENDAR (+ Google push)
    ==================================================================== */
@@ -941,7 +955,7 @@ $("export-events-btn").addEventListener("click",function(){
   lines.push("END:VCALENDAR");
   downloadFile("vsbenefits-events.ics",lines.join("\r\n"),"text/calendar");
 });
-
+ 
 /* ====================================================================
    GOOGLE CALENDAR (GIS token client)
    ==================================================================== */
@@ -1019,7 +1033,7 @@ async function gcalDeleteEvent(gid){
   if(!gcal.ready||!gid)return;
   try{await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events/"+encodeURIComponent(gid),{method:"DELETE",headers:{"Authorization":"Bearer "+gcal.token}});}catch(e){}
 }
-
+ 
 /* ====================================================================
    CLIENT ACCOUNTS
    ==================================================================== */
@@ -1056,12 +1070,13 @@ function renderAccounts(){
     var acts=el("div",{class:"acts"});
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Set plan & docs",onclick:function(){openPlanForm(a);}}));
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Message",onclick:function(){msgClient(a);}}));
-    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Reset password",onclick:function(){if(confirm("Wipe this client's password? They'll need a new one from you to sign in."))resetPw(a.id);}}));
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Change password",onclick:function(){changePw(a);}}));
     if(a.status==="revoked"){
       acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Restore",onclick:function(){updateAcct(a.id,{status:"active"});}}));
     }else{
-      acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Revoke",onclick:function(){if(confirm("Revoke this account? They won't be able to sign in."))updateAcct(a.id,{status:"revoked"});}}));
+      acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Revoke",onclick:function(){if(confirm("Revoke this account? They won't be able to sign in, but their record will be kept."))updateAcct(a.id,{status:"revoked"});}}));
     }
+    acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete account",onclick:function(){deleteAcct(a);}}));
     row.appendChild(acts);
     box.appendChild(row);
   });
@@ -1070,7 +1085,45 @@ function updateAcct(id,patch){
   var arr=getAccounts().map(function(a){if(a.id===id)Object.assign(a,patch);return a;});
   saveAccounts(arr);renderAccounts();
 }
-function resetPw(id){updateAcct(id,{passwordHash:""});alert("Password cleared. Tell the client to sign up again or contact you for a new one.");}
+ 
+/* Change password: prompt, hash, save. Admin gets the plain password
+   back so they can share it with the client. */
+async function changePw(a){
+  var nm=((a.firstName||"")+" "+(a.lastName||"")).trim()||a.email||"this client";
+  var pw=prompt("Set a NEW password for "+nm+"\n\n(Minimum 8 characters. Save it somewhere before sharing with the client.)");
+  if(pw===null)return; // cancelled
+  pw=(pw||"").trim();
+  if(pw.length<8){alert("Password must be at least 8 characters. Not saved.");return;}
+  try{
+    var hash=await sha256(pw);
+    updateAcct(a.id,{passwordHash:hash});
+    alert("Password updated for "+nm+".\n\nNew password: "+pw+"\n\nShare this with the client. They can sign in and change it from their portal.");
+  }catch(err){
+    console.warn("changePw",err);
+    alert("Something went wrong saving the password. Try again.");
+  }
+}
+ 
+/* Delete account PERMANENTLY. Also removes their messages & referrals,
+   and clears their presence entry so the green dot doesn't linger. */
+async function deleteAcct(a){
+  var nm=((a.firstName||"")+" "+(a.lastName||"")).trim()||a.email||"this client";
+  if(!confirm("PERMANENTLY delete the account for "+nm+"?\n\nThis will remove:\n  - their login and profile\n  - all support messages to/from them\n  - any referrals they submitted\n\nThis cannot be undone. Continue?"))return;
+  // 1) remove the account record itself
+  saveAccounts(getAccounts().filter(function(x){return x.id!==a.id;}));
+  // 2) purge their support messages
+  saveMessages(getMessages().filter(function(m){return m.accountId!==a.id;}));
+  // 3) purge referrals they submitted
+  saveReferrals(getReferrals().filter(function(r){return r.fromAccountId!==a.id;}));
+  // 4) clear their presence entry (best effort)
+  await clearPresenceEntry(a.id);
+  // 5) if an active support thread was theirs, close it
+  if(activeThreadId===a.id)activeThreadId=null;
+  webhookFire({event:"admin_deleted_client",accountId:a.id,email:a.email||"",ts:Date.now()});
+  renderAccounts();renderSupport();renderReferrals();
+  alert("Deleted "+nm+".");
+}
+ 
 function msgClient(a){switchTab("support");selectThread(a.id);}
 function openPlanForm(a){
   var p=a.plan||{carrier:"",planName:"",effectiveDate:"",renewalDate:"",monthlyPremium:"",notes:""};
@@ -1163,7 +1216,7 @@ $("export-accts-btn").addEventListener("click",function(){
   getAccounts().forEach(function(a){var p=a.plan||{};rows.push([a.firstName,a.lastName,a.email,a.phone,a.status||"active",p.carrier||"",p.planName||"",p.effectiveDate||"",p.monthlyPremium||"",a.created?new Date(a.created).toISOString():"",a.lastSignIn?new Date(a.lastSignIn).toISOString():""].map(csvEscape));});
   downloadFile("clients-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
 });
-
+ 
 /* ====================================================================
    SUPPORT
    ==================================================================== */
@@ -1231,7 +1284,7 @@ $("reply-form").addEventListener("submit",function(e){
   webhookFire({event:"advisor_reply",accountId:activeThreadId,text:t,ts:Date.now()});
   selectThread(activeThreadId);
 });
-
+ 
 /* ====================================================================
    REFERRALS — status: in-progress / declined / paid
    ==================================================================== */
@@ -1307,7 +1360,7 @@ $("export-refs-btn").addEventListener("click",function(){
   getReferrals().forEach(function(r){var fa=accts.filter(function(a){return a.id===r.fromAccountId;})[0];rows.push([fa?((fa.firstName||"")+" "+(fa.lastName||"")).trim():"",fa?fa.email:"",r.referralName,r.referralPhone,r.referralEmail,r.relationship,r.notes,r.status||"in-progress",r.payout||0,r.paidAt?new Date(r.paidAt).toISOString():"",new Date(r.ts).toISOString()].map(csvEscape));});
   downloadFile("referrals-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
 });
-
+ 
 /* ====================================================================
    SETTINGS
    ==================================================================== */
@@ -1368,7 +1421,7 @@ $("gcal-cid-form").addEventListener("submit",function(e){
 });
 $("gcal-connect").addEventListener("click",gcalConnect);
 $("gcal-disconnect").addEventListener("click",function(){clearGcalToken();paintGcalUi();});
-
+ 
 $("export-all-btn").addEventListener("click",function(){
   var bundle={exported:new Date().toISOString(),leads:getLeads(),accounts:getAccounts(),messages:getMessages(),referrals:getReferrals(),appointments:getAppts(),admins:getAdmins(),webhook:getWebhook(),setupCode:currentSetupCode()};
   downloadFile("vsbenefits-backup-"+new Date().toISOString().slice(0,10)+".json",JSON.stringify(bundle,null,2),"application/json");
@@ -1387,9 +1440,9 @@ $("import-file").addEventListener("change",function(e){
   };
   r.readAsText(f);
 });
-
+ 
 function renderAll(){renderLeads();renderAccounts();renderSupport();renderReferrals();renderSettings();renderCalendar();}
-
+ 
 /* Boot */
 loadGcalFromStorage();
 (async function boot(){
@@ -1398,6 +1451,6 @@ loadGcalFromStorage();
 })();
 })();
 </script>
-
+ 
 </body>
 </html>
