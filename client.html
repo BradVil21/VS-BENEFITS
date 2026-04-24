@@ -41,10 +41,10 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .bar a.home:hover{color:#fff}
 .bar .signout{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px}
 .bar .signout:hover{background:rgba(255,255,255,.2)}
-.bar .sync{display:inline-flex;align-items:center;gap:6px;background:rgba(10,135,84,.18);border:1px solid rgba(10,135,84,.45);color:#b8f5d8;padding:4px 9px;border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.02em}
-.bar .sync .dot{width:7px;height:7px;border-radius:50%;background:#22c97b;box-shadow:0 0 6px #22c97b}
-.bar .sync.off{background:rgba(179,38,30,.18);border-color:rgba(179,38,30,.5);color:#fccfcb}
-.bar .sync.off .dot{background:#ef5a52;box-shadow:0 0 6px #ef5a52}
+.sync-pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.1);color:#cfe1ff;border:1px solid rgba(255,255,255,.15);font-weight:600}
+.sync-pill .dot{width:7px;height:7px;border-radius:50%;background:#9aa3b2}
+.sync-pill.ok .dot{background:#24c08a}
+.sync-pill.warn .dot{background:#f5b301}
 
 /* Wrap */
 .wrap{max-width:760px;margin:0 auto;padding:18px 16px 80px}
@@ -133,15 +133,6 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .subcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
 .subcard h4{margin:0 0 8px;font-size:14.5px;color:var(--blue-900)}
 
-/* Documents from advisor */
-.docs-list{display:flex;flex-direction:column;gap:8px}
-.doc-row{display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--blue-50);border:1px solid var(--line-2);border-radius:10px}
-.doc-row .doc-ico{width:32px;height:32px;border-radius:8px;background:var(--blue-600);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0}
-.doc-row .doc-meta{flex:1;min-width:0}
-.doc-row .doc-name{font-size:13.5px;font-weight:600;color:var(--ink);word-break:break-word}
-.doc-row .doc-sub{font-size:11.5px;color:var(--muted)}
-.doc-row a.doc-dl{font-size:12.5px;color:var(--blue-700);font-weight:600;white-space:nowrap}
-
 /* Messages */
 .msgs{border:1px solid var(--line);border-radius:12px;background:#fff;max-height:360px;overflow-y:auto;padding:12px;margin-bottom:14px}
 .msg{padding:10px 12px;border-radius:10px;margin-bottom:8px;max-width:85%;font-size:14px;line-height:1.45}
@@ -156,13 +147,6 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .gift-banner .gi-text{flex:1}
 .gift-banner .gi-text strong{display:block;color:#3b2a00;font-size:14px}
 .gift-banner .gi-text span{font-size:12.5px;color:#5a4400}
-
-/* Referral status pills */
-.ref-pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
-.ref-pill.in-progress{background:#fff4e1;color:var(--warn);border:1px solid #f4dd8d}
-.ref-pill.declined{background:#fbe7e7;color:var(--err);border:1px solid #f1c2bf}
-.ref-pill.paid{background:#e6f7ef;color:var(--ok);border:1px solid #b9e6cf}
-.payout-badge{color:var(--ok);font-weight:700}
 
 /* Footer */
 .foot{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12.5px}
@@ -179,7 +163,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
     <span>VS Benefits</span>
   </a>
   <div class="right">
-    <span id="sync-pill" class="sync off" title="Connection status"><span class="dot"></span><span id="sync-lbl">Offline</span></span>
+    <span id="sync-pill" class="sync-pill"><span class="dot"></span><span id="sync-label">Connecting</span></span>
     <a class="home" href="index.html">Home</a>
     <button id="signout-btn" class="signout" hidden>Sign out</button>
   </div>
@@ -315,10 +299,6 @@ input,select,textarea{font-family:inherit;font-size:16px}
         <!-- ============ Plan ============ -->
         <div id="panel-plan" class="panel">
           <div id="plan-display"></div>
-
-          <div class="sec-title"><h3>Documents from your advisor</h3></div>
-          <div id="docs-display"></div>
-
           <div class="sec-title"><h3>Why this matters</h3></div>
           <p class="muted">Your enrollment information is updated by your advisor. If anything looks wrong - effective date, premium, plan name - <a href="#" onclick="document.getElementById('dtab-support').click();return false;">message support</a> and someone will fix it.</p>
         </div>
@@ -343,11 +323,11 @@ input,select,textarea{font-family:inherit;font-size:16px}
             <div class="gi-ic">&#127873;</div>
             <div class="gi-text">
               <strong>Refer a friend that needs health insurance for a chance to win a gift!</strong>
-              <span>Every referral that becomes a client enters you in our quarterly gift drawing. You'll see the payout amount here once your advisor marks it paid.</span>
+              <span>Every referral that becomes a client enters you in our quarterly gift drawing.</span>
             </div>
           </div>
           <h3 style="font-size:16px;margin:0 0 4px">Send a referral</h3>
-          <p class="muted" style="margin:0 0 14px">Share their info and we'll reach out. Your referral starts as "in-progress" the moment you submit it.</p>
+          <p class="muted" style="margin:0 0 14px">Share their info and we'll reach out. You'll receive a thank-you and a gift entry for every qualified referral.</p>
           <form id="ref-form">
             <div id="ref-msg"></div>
             <div class="row2">
@@ -382,9 +362,12 @@ input,select,textarea{font-family:inherit;font-size:16px}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+/* =========================================================
+   Firebase - MUST match admin.html so data syncs both ways
+   ========================================================= */
 const firebaseConfig = {
   apiKey: "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U",
   authDomain: "vs-benefits-c1da9.firebaseapp.com",
@@ -398,12 +381,9 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-(function(){
-"use strict";
-
-/* ====================================================================
+/* =========================================================
    Storage keys (must match admin.html)
-   ==================================================================== */
+   ========================================================= */
 var K={
   accounts:"vs_client_accounts",
   session:"vs_client_session",
@@ -412,16 +392,14 @@ var K={
   webhook:"vs_webhook_url"
 };
 
-/* ====================================================================
+/* =========================================================
    Helpers
-   ==================================================================== */
+   ========================================================= */
 function $(id){return document.getElementById(id);}
 function uid(){return"id_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
-function asArr(k){try{return JSON.parse(localStorage.getItem(k)||"[]");}catch(e){return[];}}
-function setArrLocal(k,v){localStorage.setItem(k,JSON.stringify(v));}
-function getAccounts(){return asArr(K.accounts);}
-function getMessages(){return asArr(K.messages);}
-function getReferrals(){return asArr(K.referrals);}
+function getAccounts(){try{return JSON.parse(localStorage.getItem(K.accounts)||"[]");}catch(e){return[];}}
+function getMessages(){try{return JSON.parse(localStorage.getItem(K.messages)||"[]");}catch(e){return[];}}
+function getReferrals(){try{return JSON.parse(localStorage.getItem(K.referrals)||"[]");}catch(e){return[];}}
 function getWebhook(){return localStorage.getItem(K.webhook)||"";}
 function getSession(){try{return JSON.parse(sessionStorage.getItem(K.session)||"null");}catch(e){return null;}}
 function setSession(s){sessionStorage.setItem(K.session,JSON.stringify(s));}
@@ -437,8 +415,6 @@ function fmtDate(ts){if(!ts)return"--";var d=new Date(ts);return d.toLocaleDateS
 function fmtTime(ts){if(!ts)return"";var d=new Date(ts);return d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
 function normEmail(e){return(e||"").trim().toLowerCase();}
 function initials(a){var n=((a.firstName||"")+" "+(a.lastName||"")).trim();if(!n)return"?";var p=n.split(/\s+/);return((p[0]||"").charAt(0)+(p[1]||"").charAt(0)).toUpperCase()||(a.email||"?").charAt(0).toUpperCase();}
-function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
-function fmtMoney(n){var v=Number(n||0);return "$"+v.toFixed(2);}
 
 function showNotice(elId,kind,text){
   var el=$(elId);if(!el)return;
@@ -449,107 +425,90 @@ function showNotice(elId,kind,text){
   n.textContent=text;
   el.appendChild(n);
 }
+function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
 
 function webhookFire(payload){
   var url=getWebhook();if(!url)return;
   try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});}catch(e){}
 }
 
-/* ====================================================================
-   Cloud sync (Firestore + Anonymous Auth)
-   ==================================================================== */
-var cloud={ready:false,suspend:0};
-var REMOTE_KEYS=["accounts","messages","referrals"];
-var REMOTE_TO_LOCAL={accounts:K.accounts,messages:K.messages,referrals:K.referrals};
-var LOCAL_TO_REMOTE={};
-LOCAL_TO_REMOTE[K.accounts]="accounts";
-LOCAL_TO_REMOTE[K.messages]="messages";
-LOCAL_TO_REMOTE[K.referrals]="referrals";
-
-function setSyncPill(state){
-  var p=$("sync-pill");if(!p)return;
-  if(state==="on"){p.classList.remove("off");$("sync-lbl").textContent="Online";}
-  else{p.classList.add("off");$("sync-lbl").textContent="Offline";}
+/* =========================================================
+   Cloud sync - mirrors admin.html exactly so data flows
+   both ways (vs_state/{accounts,messages,referrals})
+   ========================================================= */
+var cloud={ready:false,suspend:0,unsubs:[]};
+function setSyncPill(state,label){
+  var p=$("sync-pill"),l=$("sync-label");
+  if(!p||!l)return;
+  p.classList.remove("ok","warn");
+  if(state==="ok")p.classList.add("ok");
+  else if(state==="warn")p.classList.add("warn");
+  l.textContent=label;
 }
 
-async function cloudPush(key,items){
-  if(!cloud.ready||cloud.suspend>0)return;
-  try{await setDoc(doc(db,"vs_state",key),{items:items,ts:Date.now()});}
-  catch(e){console.warn("cloud push",key,e);}
+function localSave(which,arr){
+  var key=K[which];
+  if(!key)return;
+  try{localStorage.setItem(key,JSON.stringify(arr));}catch(e){}
 }
 
-function setArr(k,v){
-  setArrLocal(k,v);
-  var r=LOCAL_TO_REMOTE[k];
-  if(r)cloudPush(r,v);
+async function pullOnce(which){
+  if(!cloud.ready)return;
+  try{
+    var snap=await getDoc(doc(db,"vs_state",which));
+    if(snap.exists()){
+      var items=snap.data().items||[];
+      cloud.suspend++;
+      localSave(which,items);
+      cloud.suspend--;
+    }
+  }catch(e){console.warn("pullOnce "+which,e);}
 }
-function saveAccounts(v){setArr(K.accounts,v);}
-function saveMessages(v){setArr(K.messages,v);}
-function saveReferrals(v){setArr(K.referrals,v);}
 
-async function initCloud(){
-  try{await signInAnonymously(auth);}
-  catch(e){console.warn("anon auth failed",e);setSyncPill("off");return;}
-  cloud.ready=true;setSyncPill("on");
+async function pushNow(which,items){
+  if(!cloud.ready)return;
+  try{
+    await setDoc(doc(db,"vs_state",which),{items:items||[],ts:Date.now()});
+  }catch(e){console.warn("pushNow "+which,e);}
+}
 
-  REMOTE_KEYS.forEach(function(rk){
-    onSnapshot(doc(db,"vs_state",rk),function(snap){
+function subscribe(which,onChange){
+  if(!cloud.ready)return;
+  try{
+    var unsub=onSnapshot(doc(db,"vs_state",which),function(snap){
+      if(cloud.suspend>0)return;
       if(!snap.exists())return;
       var items=snap.data().items||[];
       cloud.suspend++;
-      try{
-        setArrLocal(REMOTE_TO_LOCAL[rk],items);
-        if(!$("dash-view").hidden){
-          if(rk==="accounts"){refreshProfileAndPlan();}
-          if(rk==="messages")renderMessages();
-          if(rk==="referrals")renderMyReferrals();
-        }
-      }finally{setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},80);}
-    },function(err){console.warn("snapshot err",rk,err);setSyncPill("off");});
-  });
+      localSave(which,items);
+      cloud.suspend--;
+      if(typeof onChange==="function")try{onChange(items);}catch(e){}
+    },function(err){console.warn("onSnapshot "+which,err);setSyncPill("warn","Sync paused");});
+    cloud.unsubs.push(unsub);
+  }catch(e){console.warn("subscribe "+which,e);}
 }
 
-async function pullOnce(rk){
-  try{
-    var snap=await getDoc(doc(db,"vs_state",rk));
-    if(snap.exists()){cloud.suspend++;try{setArrLocal(REMOTE_TO_LOCAL[rk],snap.data().items||[]);}finally{setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},60);}}
-  }catch(e){}
+/* =========================================================
+   saveX wrappers - write locally AND push to Firestore.
+   Every client signup, message, referral is mirrored to
+   vs_state/* so admin sees it from any device instantly.
+   ========================================================= */
+function saveAccounts(a){
+  localSave("accounts",a);
+  if(cloud.ready&&cloud.suspend===0)pushNow("accounts",a);
+}
+function saveMessages(m){
+  localSave("messages",m);
+  if(cloud.ready&&cloud.suspend===0)pushNow("messages",m);
+}
+function saveReferrals(r){
+  localSave("referrals",r);
+  if(cloud.ready&&cloud.suspend===0)pushNow("referrals",r);
 }
 
-/* ====================================================================
-   Presence heartbeat — writes to vs_state/presence.map[clientId]=ts
-   Admin watches this map to show online/offline dot per client.
-   ==================================================================== */
-var presenceTimer=null;
-async function presenceWrite(clientId,ts){
-  if(!cloud.ready)return;
-  try{
-    var ref=doc(db,"vs_state","presence");
-    var snap=await getDoc(ref);
-    var map=(snap.exists()&&snap.data().map)||{};
-    map[clientId]=ts;
-    await setDoc(ref,{map:map,ts:Date.now()});
-  }catch(e){console.warn("presence write",e);}
-}
-function startPresence(clientId){
-  stopPresence();
-  presenceWrite(clientId,Date.now());
-  presenceTimer=setInterval(function(){presenceWrite(clientId,Date.now());},60*1000);
-}
-function stopPresence(){
-  if(presenceTimer){clearInterval(presenceTimer);presenceTimer=null;}
-}
-window.addEventListener("beforeunload",function(){
-  var s=getSession();
-  if(s&&cloud.ready){
-    // Fire-and-forget: mark offline
-    try{presenceWrite(s.id,0);}catch(e){}
-  }
-});
-
-/* ====================================================================
+/* =========================================================
    Auth tabs
-   ==================================================================== */
+   ========================================================= */
 $("tab-login").addEventListener("click",function(){
   $("tab-login").classList.add("active");$("tab-signup").classList.remove("active");
   $("login-form").hidden=false;$("signup-form").hidden=true;
@@ -561,9 +520,11 @@ $("tab-signup").addEventListener("click",function(){
   showNotice("login-msg","",""); showNotice("signup-msg","","");
 });
 
-/* ====================================================================
-   Sign up
-   ==================================================================== */
+/* =========================================================
+   Sign up - pulls latest accounts from cloud before checking
+   for duplicates, so a user signing up on device B sees the
+   account they made on device A.
+   ========================================================= */
 $("signup-form").addEventListener("submit",async function(e){
   e.preventDefault();
   var first=$("su-first").value.trim();
@@ -579,35 +540,34 @@ $("signup-form").addEventListener("submit",async function(e){
   if(pw.length<8)return showNotice("signup-msg","err","Password must be at least 8 characters.");
   if(pw!==pw2)return showNotice("signup-msg","err","Passwords don't match. Please try again.");
 
-  // Pull latest accounts so duplicate check is correct across devices
-  if(cloud.ready)await pullOnce("accounts");
+  // Pull latest from cloud so dup check is accurate across devices
+  await pullOnce("accounts");
 
   var accts=getAccounts();
   if(accts.some(function(a){return normEmail(a.email)===email;}))return showNotice("signup-msg","err","An account with this email already exists. Try signing in instead.");
 
   var hash=await sha256(pw);
-  var acct={id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:Date.now(),status:"active",plan:null,photoDataUrl:"",documents:[]};
+  var acct={id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:Date.now(),status:"active",plan:null,photoDataUrl:""};
   accts.push(acct);
-  saveAccounts(accts);
+  saveAccounts(accts); // pushes to vs_state/accounts -> admin sees it instantly
   setSession({id:acct.id,email:acct.email,since:Date.now()});
 
   webhookFire({event:"client_signup",account:{id:acct.id,firstName:first,lastName:last,email:email,phone:phone,created:acct.created}});
 
-  startPresence(acct.id);
   showDashboard();
 });
 
-/* ====================================================================
-   Sign in
-   ==================================================================== */
+/* =========================================================
+   Sign in - pulls latest accounts first so you can sign in
+   from any device even if that device never saw you sign up.
+   ========================================================= */
 $("login-form").addEventListener("submit",async function(e){
   e.preventDefault();
   var email=normEmail($("li-email").value);
   var pw=$("li-pw").value;
   if(!email||!pw)return showNotice("login-msg","err","Please enter your email and password.");
 
-  // Pull latest accounts before lookup (cross-device)
-  if(cloud.ready)await pullOnce("accounts");
+  await pullOnce("accounts");
 
   var accts=getAccounts();
   var acct=accts.filter(function(a){return normEmail(a.email)===email;})[0];
@@ -618,39 +578,31 @@ $("login-form").addEventListener("submit",async function(e){
   var hash=await sha256(pw);
   if(hash!==acct.passwordHash)return showNotice("login-msg","err","Incorrect password. Please try again.");
 
-  acct.lastSignIn=Date.now();
-  saveAccounts(accts);
+  // Update lastSignIn and push
+  var arr=accts.map(function(a){if(a.id===acct.id)a.lastSignIn=Date.now();return a;});
+  saveAccounts(arr);
   setSession({id:acct.id,email:acct.email,since:Date.now()});
 
   webhookFire({event:"client_signin",accountId:acct.id,email:email,ts:Date.now()});
 
-  startPresence(acct.id);
   showDashboard();
 });
 
-/* ====================================================================
+/* =========================================================
    Sign out / delete
-   ==================================================================== */
-$("signout-btn").addEventListener("click",function(){
-  var s=getSession();
-  if(s&&cloud.ready)presenceWrite(s.id,0);
-  stopPresence();
-  clearSession();
-  location.reload();
-});
+   ========================================================= */
+$("signout-btn").addEventListener("click",function(){clearSession();location.reload();});
 $("delete-account").addEventListener("click",function(){
   if(!confirm("Delete your account? This will remove your sign-in. Your messages and referral history stay with your advisor."))return;
   var s=getSession();if(!s)return;
   saveAccounts(getAccounts().filter(function(a){return a.id!==s.id;}));
   webhookFire({event:"client_account_deleted",accountId:s.id,email:s.email,ts:Date.now()});
-  if(cloud.ready)presenceWrite(s.id,0);
-  stopPresence();
   clearSession();location.reload();
 });
 
-/* ====================================================================
+/* =========================================================
    Change password
-   ==================================================================== */
+   ========================================================= */
 $("pw-form").addEventListener("submit",async function(e){
   e.preventDefault();
   var acct=currentAccount();if(!acct)return;
@@ -668,9 +620,9 @@ $("pw-form").addEventListener("submit",async function(e){
   webhookFire({event:"client_password_changed",accountId:acct.id,ts:Date.now()});
 });
 
-/* ====================================================================
+/* =========================================================
    Photo upload
-   ==================================================================== */
+   ========================================================= */
 $("photo-input").addEventListener("change",function(e){
   var f=e.target.files[0];if(!f)return;
   if(!/^image\//.test(f.type))return showNotice("photo-msg","err","Please pick an image file.");
@@ -704,9 +656,9 @@ function paintAvatar(dataUrl){
   else{var acct=currentAccount();av.textContent=acct?initials(acct):"VS";}
 }
 
-/* ====================================================================
+/* =========================================================
    Dashboard
-   ==================================================================== */
+   ========================================================= */
 function currentAccount(){
   var s=getSession();if(!s)return null;
   return getAccounts().filter(function(a){return a.id===s.id;})[0]||null;
@@ -719,13 +671,6 @@ function showDashboard(){
   $("dash-view").hidden=false;
   $("signout-btn").hidden=false;
 
-  refreshProfileAndPlan();
-  renderMessages();
-  renderMyReferrals();
-}
-
-function refreshProfileAndPlan(){
-  var acct=currentAccount();if(!acct)return;
   $("dh-name").textContent=((acct.firstName||"")+" "+(acct.lastName||"")).trim()||"Member";
   $("dh-email").textContent=acct.email;
   paintAvatar(acct.photoDataUrl);
@@ -736,12 +681,13 @@ function refreshProfileAndPlan(){
   $("pv-since").textContent=fmtDate(acct.created);
 
   renderPlan();
-  renderDocuments();
+  renderMessages();
+  renderMyReferrals();
 }
 
-/* ====================================================================
+/* =========================================================
    Plan view
-   ==================================================================== */
+   ========================================================= */
 function renderPlan(){
   var acct=currentAccount();if(!acct)return;
   var box=$("plan-display");box.innerHTML="";
@@ -774,63 +720,15 @@ function renderPlan(){
   }
 }
 
-/* ====================================================================
-   Documents from advisor
-   ==================================================================== */
-function renderDocuments(){
-  var acct=currentAccount();if(!acct)return;
-  var box=$("docs-display");if(!box)return;box.innerHTML="";
-  var docs=acct.documents||[];
-  if(!docs.length){
-    var e=document.createElement("div");
-    e.className="empty";
-    e.style.padding="16px";
-    e.style.background="var(--blue-50)";
-    e.style.border="1px dashed var(--line)";
-    e.style.borderRadius="12px";
-    e.textContent="No documents yet. When your advisor shares paperwork, it will appear here.";
-    box.appendChild(e);
-    return;
-  }
-  var list=document.createElement("div");list.className="docs-list";
-  docs.slice().sort(function(a,b){return (b.ts||0)-(a.ts||0);}).forEach(function(d){
-    var row=document.createElement("div");row.className="doc-row";
-    var ext=(d.name||"").split(".").pop().toUpperCase().slice(0,4)||"DOC";
-    var sizeLabel=d.size?((d.size/1024).toFixed(0)+" KB"):"";
-    row.innerHTML=
-      '<div class="doc-ico">'+escapeHtml(ext)+'</div>'+
-      '<div class="doc-meta">'+
-        '<div class="doc-name">'+escapeHtml(d.name||"document")+'</div>'+
-        '<div class="doc-sub">Added '+fmtTime(d.ts||0)+(sizeLabel?(" &middot; "+sizeLabel):"")+'</div>'+
-      '</div>';
-    if(d.dataUrl){
-      var a=document.createElement("a");
-      a.className="doc-dl";
-      a.href=d.dataUrl;
-      a.download=d.name||"document";
-      a.textContent="Download";
-      row.appendChild(a);
-    }
-    list.appendChild(row);
-  });
-  box.appendChild(list);
-}
-
-/* ====================================================================
-   Messages (two-way with advisor)
-   ==================================================================== */
+/* =========================================================
+   Messages
+   ========================================================= */
 function renderMessages(){
   var acct=currentAccount();if(!acct)return;
   var box=$("msgs");
   var msgs=getMessages().filter(function(m){return m.accountId===acct.id;}).sort(function(a,b){return a.ts-b.ts;});
-  if(!msgs.length){box.innerHTML='<div class="empty">No messages yet. Send your first message below - someone will get back to you within 24 hours.</div>';return;}
+  if(!msgs.length){box.innerHTML='<div class="empty">No messages yet. Send your first message below - Someone will get back to you within 24 hours.</div>';return;}
   box.innerHTML="";
-  // Mark advisor messages as read locally (client side)
-  var updated=false;
-  var all=getMessages();
-  all.forEach(function(m){if(m.accountId===acct.id&&m.from==="advisor"&&!m.readByClient){m.readByClient=true;updated=true;}});
-  if(updated)saveMessages(all);
-
   msgs.forEach(function(m){
     var d=document.createElement("div");
     d.className="msg "+(m.from==="advisor"?"advisor":"client");
@@ -845,16 +743,16 @@ $("msg-form").addEventListener("submit",function(e){
   e.preventDefault();
   var acct=currentAccount();if(!acct)return;
   var text=$("msg-text").value.trim();if(!text)return;
-  var m={id:uid(),accountId:acct.id,from:"client",text:text,ts:Date.now(),read:false,readByClient:true};
+  var m={id:uid(),accountId:acct.id,from:"client",text:text,ts:Date.now(),read:false};
   var arr=getMessages();arr.push(m);saveMessages(arr);
   webhookFire({event:"client_message",accountId:acct.id,email:acct.email,text:text,ts:Date.now()});
   $("msg-text").value="";
   renderMessages();
 });
 
-/* ====================================================================
-   Referrals — new ones start in-progress; show status + payout
-   ==================================================================== */
+/* =========================================================
+   Referrals
+   ========================================================= */
 $("ref-form").addEventListener("submit",function(e){
   e.preventDefault();
   var acct=currentAccount();if(!acct)return;
@@ -866,21 +764,12 @@ $("ref-form").addEventListener("submit",function(e){
   if(!name)return showNotice("ref-msg","err","Please add the person's name.");
   if(!phone&&!email)return showNotice("ref-msg","err","Please add at least a phone number or email.");
 
-  var r={
-    id:uid(),
-    fromAccountId:acct.id,
-    referralName:name,referralPhone:phone,referralEmail:email,
-    relationship:rel,notes:notes,
-    status:"in-progress",
-    payout:0,paidAt:0,
-    ts:Date.now(),
-    read:false
-  };
+  var r={id:uid(),fromAccountId:acct.id,referralName:name,referralPhone:phone,referralEmail:email,relationship:rel,notes:notes,status:"new",ts:Date.now(),read:false,payout:0,paid:false};
   var arr=getReferrals();arr.unshift(r);saveReferrals(arr);
 
   webhookFire({event:"client_referral",fromAccountId:acct.id,fromEmail:acct.email,referralName:name,referralPhone:phone,referralEmail:email,relationship:rel,notes:notes,ts:Date.now()});
 
-  showNotice("ref-msg","ok","Thanks! Your referral is in-progress and you're entered in our gift drawing.");
+  showNotice("ref-msg","ok","Thanks! Your referral was sent and you're entered in our gift drawing.");
   $("ref-form").reset();
   renderMyReferrals();
 });
@@ -890,46 +779,30 @@ function renderMyReferrals(){
   var box=$("my-refs");if(!box)return;box.innerHTML="";
   var mine=getReferrals().filter(function(r){return r.fromAccountId===acct.id;}).sort(function(a,b){return b.ts-a.ts;});
   if(!mine.length){box.appendChild(Object.assign(document.createElement("div"),{className:"empty",textContent:"No referrals yet. Send your first one above!"}));return;}
-
-  // Summary of paid earnings
-  var paidTotal=mine.filter(function(r){return r.status==="paid";}).reduce(function(s,r){return s+Number(r.payout||0);},0);
-  if(paidTotal>0){
-    var sum=document.createElement("div");
-    sum.className="notice notice-gold";
-    sum.innerHTML='<strong>Total paid out to you:</strong> '+fmtMoney(paidTotal)+' &middot; Thank you for the referrals!';
-    box.appendChild(sum);
-  }
-
   mine.forEach(function(r){
     var d=document.createElement("div");d.className="subcard";d.style.padding="12px 14px";
-    var status=r.status||"in-progress";
-    var payoutLabel="";
-    if(status==="paid"){
-      payoutLabel=' &middot; <span class="payout-badge">Paid '+fmtMoney(r.payout||0)+(r.paidAt?(" on "+fmtDate(r.paidAt)):"")+'</span>';
-    }else if(status==="in-progress"&&Number(r.payout||0)>0){
-      payoutLabel=' &middot; <span class="muted">Estimated payout '+fmtMoney(r.payout)+'</span>';
-    }
+    var status=r.status||"new";
+    var statusColor={"new":"#1e5ab0","contacted":"#b46b00","quoted":"#0b6996","enrolled":"#0a8754","lost":"#b3261e","in-progress":"#1e5ab0","declined":"#b3261e","paid":"#0a8754"}[status]||"#1e5ab0";
     d.innerHTML=
-      '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px">'+
         '<strong style="color:var(--blue-900)">'+escapeHtml(r.referralName||"(no name)")+'</strong>'+
-        '<span class="ref-pill '+status+'">'+escapeHtml(status)+'</span>'+
+        '<span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:'+statusColor+'">'+escapeHtml(status)+'</span>'+
       '</div>'+
-      '<div style="font-size:12.5px;color:var(--muted)">Sent '+fmtTime(r.ts)+payoutLabel+'</div>'+
-      (r.relationship?('<div style="font-size:12.5px;color:var(--ink-2);margin-top:3px">Relationship: '+escapeHtml(r.relationship)+'</div>'):"");
+      '<div style="font-size:12.5px;color:var(--muted)">Sent '+fmtTime(r.ts)+(r.payout?(' &middot; <span style="color:var(--ok);font-weight:600">Payout: $'+Number(r.payout).toFixed(2)+'</span>'):"")+(r.paid?(' &middot; <span style="color:var(--ok);font-weight:600">Gift entered</span>'):"")+'</div>';
     box.appendChild(d);
   });
 }
 
-/* ====================================================================
+/* =========================================================
    Tab switching
-   ==================================================================== */
+   ========================================================= */
 function dswitch(name){
   ["profile","plan","support","refer"].forEach(function(n){
     $("dtab-"+n).classList.toggle("active",n===name);
     $("panel-"+n).classList.toggle("active",n===name);
   });
   if(name==="support")renderMessages();
-  if(name==="plan"){renderPlan();renderDocuments();}
+  if(name==="plan")renderPlan();
   if(name==="refer")renderMyReferrals();
 }
 $("dtab-profile").addEventListener("click",function(){dswitch("profile");});
@@ -937,24 +810,50 @@ $("dtab-plan").addEventListener("click",function(){dswitch("plan");});
 $("dtab-support").addEventListener("click",function(){dswitch("support");});
 $("dtab-refer").addEventListener("click",function(){dswitch("refer");});
 
-/* ====================================================================
-   Boot
-   ==================================================================== */
+/* =========================================================
+   Boot - anonymous auth, pull initial state, subscribe
+   ========================================================= */
 $("yr").textContent=new Date().getFullYear();
+setSyncPill("","Connecting");
 
-(async function boot(){
-  await initCloud();
-  // After cloud ready, pull the latest accounts so any auto-resume session reflects
-  // cross-device plan/doc updates.
-  if(cloud.ready)await pullOnce("accounts");
-  var s=getSession();
-  if(s){
-    startPresence(s.id);
-    showDashboard();
+onAuthStateChanged(auth,async function(user){
+  if(!user){
+    try{await signInAnonymously(auth);}
+    catch(e){console.warn("anon signin failed",e);setSyncPill("warn","Offline");return;}
+    return; // onAuthStateChanged will fire again with the user
   }
-})();
 
-})();
+  cloud.ready=true;
+  setSyncPill("ok","Synced");
+
+  // Prime local cache from cloud so login checks work across devices
+  await Promise.all([pullOnce("accounts"),pullOnce("messages"),pullOnce("referrals")]);
+
+  // Subscribe to live changes
+  subscribe("accounts",function(){
+    // If signed in and any of our data changed, repaint dashboard
+    var s=getSession();
+    if(s){
+      var me=getAccounts().filter(function(a){return a.id===s.id;})[0];
+      if(!me){clearSession();location.reload();return;}
+      if(me.status==="revoked"){clearSession();alert("Your account was revoked by your advisor.");location.reload();return;}
+      if($("dash-view")&&!$("dash-view").hidden){
+        $("pv-name").textContent=((me.firstName||"")+" "+(me.lastName||"")).trim()||"--";
+        $("pv-email").textContent=me.email;
+        $("pv-phone").textContent=me.phone||"--";
+        renderPlan();
+      }
+    }
+  });
+  subscribe("messages",function(){if(!$("dash-view").hidden)renderMessages();});
+  subscribe("referrals",function(){if(!$("dash-view").hidden)renderMyReferrals();});
+
+  // If we already had a session, show the dashboard now that cloud is ready
+  if(getSession())showDashboard();
+});
+
+// If we have a local session, show dashboard immediately (it will refresh when cloud is ready)
+if(getSession())showDashboard();
 </script>
 
 </body>
