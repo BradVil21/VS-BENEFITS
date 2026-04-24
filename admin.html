@@ -216,7 +216,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
   </a>
   <div class="right">
     <span id="sync-pill" class="sync off" title="Live sync status">
-      <span class="dot"></span><span class="lbl" id="sync-lbl">Offline</span>
+      <span class="dot"></span><span class="lbl" id="sync-lbl">Online</span>
     </span>
     <a class="home" href="index.html">Home</a>
     <button id="signout-btn" class="signout" hidden>Sign out</button>
@@ -246,7 +246,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
   </div>
 </div>
 
-<!-- ======================= SIGNUP VIEW (private, 0605-gated) ======================= -->
+<!-- ======================= SIGNUP VIEW (private, gated) ======================= -->
 <div id="signup-view" class="wrap-narrow" hidden>
   <div class="card">
     <h2>Create admin account</h2>
@@ -403,7 +403,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Change admin setup code</h4>
-        <p class="lede">This is the code required to create a new admin account. Default is 0605 (hidden in source).</p>
+        <p class="lede">This is the code required to create a new admin account. Default is .... (hidden in source).</p>
         <form id="code-form" autocomplete="off">
           <div id="code-msg"></div>
           <div class="field"><label>Current code</label><input type="password" id="code-cur" required /></div>
@@ -474,22 +474,6 @@ input,select,textarea{font-family:inherit;font-size:16px}
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCsSgR6H5gmGNd84c-270jtwC4u8TR-dck",
-  authDomain: "vs-client-portal-9ece3.firebaseapp.com",
-  projectId: "vs-client-portal-9ece3",
-  storageBucket: "vs-client-portal-9ece3.firebasestorage.app",
-  messagingSenderId: "143162699366",
-  appId: "1:143162699366:web:bb46ef6b9e9e4f4fae87a7"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-(function(){
-"use strict";
 
 /* ====================================================================
    Storage keys
