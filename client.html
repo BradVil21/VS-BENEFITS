@@ -3,417 +3,865 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>VS Benefits - Member Portal</title>
+<title>Member Portal | VS Benefits</title>
+<meta name="description" content="VS Benefits member portal. Sign in or create an account to view your plan, message your advisor, refer friends for a gift, and update your profile." />
+<link rel="canonical" href="https://vshealthbenefits.com/client.html" />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="icon" type="image/png" href="assets/images/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
 <style>
-:root{--bg:#f6f8fb;--panel:#fff;--panel2:#f0f3f9;--ink:#0f172a;--mute:#64748b;--bd:#e2e8f0;--ac:#1d4ed8;--ac2:#1e3a8a;--ok:#10b981;--warn:#f59e0b;--err:#ef4444;--gold:#b8860b;--gold2:#d4af37}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,system-ui,Segoe UI,Roboto,sans-serif}
-button{font:inherit;cursor:pointer}
-input,select,textarea{font:inherit}
-a{color:var(--ac)}
-.app{max-width:760px;margin:0 auto;padding:14px}
-.hide{display:none!important}
-header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:var(--panel);border:1px solid var(--bd);border-radius:14px;margin-bottom:12px}
-.brand{display:flex;align-items:center;gap:10px}
-.logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);display:grid;place-items:center;font-weight:800;color:#fff}
-.brand h1{margin:0;font-size:16px}
-.brand p{margin:0;color:var(--mute);font-size:12px}
-.hbtn{background:var(--panel2);border:1px solid var(--bd);color:var(--ink);padding:9px 12px;border-radius:10px;min-height:40px}
-.tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{flex:0 0 auto;background:var(--panel);border:1px solid var(--bd);color:var(--mute);padding:10px 14px;border-radius:10px;min-height:44px;white-space:nowrap}
-.tab.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-.card{background:var(--panel);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
-.card h2{margin:0 0 8px;font-size:16px}
-.muted{color:var(--mute);font-size:13px}
-.row{display:flex;gap:8px;flex-wrap:wrap}
-.row>*{flex:1 1 160px;min-width:0}
-label{display:block;font-size:12px;color:var(--mute);margin-bottom:4px}
-.inp,select,textarea{width:100%;background:var(--panel);border:1px solid var(--bd);color:var(--ink);padding:11px 12px;border-radius:10px;min-height:44px}
-textarea{min-height:90px;resize:vertical}
-.btn{background:var(--ac);border:0;color:#fff;padding:11px 14px;border-radius:10px;min-height:44px;font-weight:600}
-.btn:hover{background:var(--ac2)}
-.btn.alt{background:var(--panel2);border:1px solid var(--bd);color:var(--ink)}
-.btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff}
-.btn.warn{background:var(--warn);color:#1a1300}
-.btn.err{background:var(--err)}
-.btn.sm{padding:7px 10px;font-size:13px;min-height:36px}
-.notice{padding:10px 12px;border-radius:10px;margin:8px 0;font-size:13px}
-.notice.err{background:rgba(239,68,68,.12);color:#b91c1c;border:1px solid rgba(239,68,68,.3)}
-.notice.ok{background:rgba(16,185,129,.12);color:#047857;border:1px solid rgba(16,185,129,.3)}
-.notice.warn{background:rgba(245,158,11,.12);color:#92400e;border:1px solid rgba(245,158,11,.3)}
-.center{display:grid;place-items:center;min-height:80vh;padding:14px}
-.auth{width:100%;max-width:420px;background:var(--panel);border:1px solid var(--bd);border-radius:16px;padding:20px}
-.auth h1{margin:0 0 6px;font-size:22px}
-.auth p{margin:0 0 14px;color:var(--mute);font-size:13px}
-.auth .switch{margin-top:12px;text-align:center;font-size:13px;color:var(--mute)}
-.auth .switch a{color:var(--ac);cursor:pointer;font-weight:600}
-.profile-photo{width:96px;height:96px;border-radius:50%;background:var(--panel2);border:2px solid var(--bd);object-fit:cover;display:block;margin:0 auto 10px}
-.plan-card{background:linear-gradient(135deg,#1d4ed8,#1e40af);color:#fff;border-radius:14px;padding:16px;margin-bottom:10px}
-.plan-card h3{margin:0 0 4px;font-size:14px;opacity:.8;text-transform:uppercase;letter-spacing:.5px}
-.plan-card .name{font-size:20px;font-weight:700}
-.plan-card .meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;font-size:13px}
-.plan-card .meta b{display:block;font-size:11px;opacity:.7;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
-.gold-banner{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid var(--gold2);border-radius:14px;padding:14px;margin-bottom:12px;text-align:center}
-.gold-banner h3{margin:0 0 4px;color:var(--gold);font-size:18px}
-.gold-banner p{margin:0;color:#78350f;font-size:13px}
-.docs-list{display:grid;gap:8px;margin-top:8px}
-.doc-item{display:flex;align-items:center;gap:10px;background:var(--panel2);border:1px solid var(--bd);border-radius:10px;padding:10px;font-size:13px}
-.doc-item .icon{width:36px;height:36px;border-radius:8px;background:var(--ac);color:#fff;display:grid;place-items:center;font-weight:700;font-size:11px;flex-shrink:0}
-.doc-item .body{flex:1;min-width:0}
-.doc-item .body .name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.doc-item .body .sub{color:var(--mute);font-size:12px}
-.doc-item a.btn{flex-shrink:0}
-.thumb{max-width:100%;border-radius:10px;border:1px solid var(--bd);margin-top:6px;display:block}
-@media(max-width:560px){
-  .row>*{flex:1 1 100%}
-  .plan-card .meta{grid-template-columns:1fr}
+:root{
+  --blue-900:#0b2346;--blue-800:#0f2e5c;--blue-700:#16447f;
+  --blue-600:#1e5ab0;--blue-500:#2f7de0;--blue-100:#e8f0fb;--blue-50:#f4f8fe;
+  --teal:#0db5a6;--teal-dark:#098374;--gold:#f5b301;
+  --ink:#0e1726;--ink-2:#314056;--muted:#5a6b80;
+  --line:#dfe6f1;--line-2:#eef2f8;
+  --bg:#f6f9fc;--white:#fff;
+  --ok:#0a8754;--warn:#b46b00;--err:#b3261e;
+  --shadow-sm:0 1px 2px rgba(11,35,70,.06);
+  --shadow-md:0 8px 24px rgba(11,35,70,.10);
+  --r-sm:8px;--r-md:12px;--r-lg:16px;--tap:44px;
 }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%}
+h1,h2,h3,h4{font-family:Poppins,Inter,system-ui,sans-serif;color:var(--blue-900);margin:0 0 .5em}
+a{color:var(--blue-600);text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:inherit}
+input,select,textarea{font-family:inherit;font-size:16px}
+
+/* Top bar */
+.bar{background:var(--blue-900);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.bar .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-family:Poppins;font-size:15px}
+.bar .brand .b{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem}
+.bar .right{display:flex;align-items:center;gap:8px}
+.bar a.home{color:#cfe1ff;font-size:13px}
+.bar a.home:hover{color:#fff}
+.bar .signout{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px}
+.bar .signout:hover{background:rgba(255,255,255,.2)}
+
+/* Wrap */
+.wrap{max-width:760px;margin:0 auto;padding:18px 16px 80px}
+
+/* Card */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:20px;margin-bottom:18px}
+.card h2{font-size:20px;margin:0 0 6px}
+.card .lede{color:var(--ink-2);margin:0 0 16px;font-size:14px}
+
+/* Auth tabs */
+.tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:18px;gap:4px}
+.tabs button{flex:1;background:none;border:0;padding:12px 8px;font-size:15px;font-weight:600;color:var(--ink-2);cursor:pointer;border-bottom:3px solid transparent;min-height:44px}
+.tabs button.active{color:var(--blue-700);border-bottom-color:var(--blue-600)}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:13px;font-weight:600;color:var(--ink-2)}
+.field input,.field select,.field textarea{padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;color:var(--ink);min-height:44px;width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(47,125,224,.18)}
+.row2{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:560px){.row2{grid-template-columns:1fr 1fr;gap:14px}.row2 .field{margin-bottom:14px}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:10px;font-weight:700;font-size:14.5px;border:0;cursor:pointer;min-height:44px;width:100%;text-decoration:none;line-height:1}
+.btn:hover{text-decoration:none}
+.btn-primary{background:var(--blue-600);color:#fff}
+.btn-primary:hover{background:var(--blue-700)}
+.btn-ghost{background:transparent;color:var(--blue-700);border:1px solid var(--line)}
+.btn-ghost:hover{background:var(--blue-50)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:var(--teal-dark)}
+.btn-danger{background:#fff;color:var(--err);border:1px solid #f1c2bf}
+.btn-danger:hover{background:#fdf2f1}
+.btn-gold{background:var(--gold);color:#3b2a00}
+.btn-gold:hover{background:#e0a601}
+
+.notice{padding:10px 12px;border-radius:8px;font-size:13.5px;margin-bottom:12px}
+.notice-err{background:#fdecea;color:var(--err);border:1px solid #f5c6c1}
+.notice-ok{background:#e6f7ef;color:var(--ok);border:1px solid #b9e6cf}
+.notice-info{background:var(--blue-50);color:var(--blue-700);border:1px solid #cfdef6}
+.notice-gold{background:#fef6da;color:#7a5500;border:1px solid #f4dd8d}
+
+.hint{font-size:12.5px;color:var(--muted);margin-top:-2px;margin-bottom:14px}
+.muted{color:var(--muted);font-size:13px}
+
+/* Dashboard head */
+.dash-head{display:flex;flex-direction:row;gap:14px;align-items:center;margin-bottom:16px;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:16px;box-shadow:var(--shadow-sm)}
+.dash-head .photo-wrap{position:relative;flex-shrink:0}
+.avatar{width:64px;height:64px;border-radius:50%;background:var(--blue-100);color:var(--blue-700);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.photo-wrap label.photo-edit{position:absolute;bottom:-2px;right:-2px;background:var(--blue-600);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid #fff;font-size:14px;font-weight:700;box-shadow:var(--shadow-sm)}
+.photo-wrap label.photo-edit:hover{background:var(--blue-700)}
+.dash-head .who{flex:1;min-width:0}
+.dash-head .who .hi{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.dash-head .who h1{font-size:18px;margin:0;line-height:1.25;word-break:break-word}
+.dash-head .who .em{font-size:12.5px;color:var(--ink-2);word-break:break-word}
+
+/* Dashboard tabs */
+.dtabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.dtabs button{background:none;border:0;padding:12px 14px;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;min-height:44px}
+.dtabs button.active{color:var(--blue-700);border-bottom-color:var(--blue-600)}
+
+.panel{display:none}
+.panel.active{display:block}
+
+/* Profile blocks */
+.kv{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:14px}
+@media(min-width:560px){.kv{grid-template-columns:1fr 1fr}}
+.kv .item{background:var(--blue-50);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px}
+.kv .item .lbl{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.kv .item .val{font-size:15px;color:var(--ink);margin-top:2px;word-break:break-word}
+
+/* Plan card */
+.plan-card{background:linear-gradient(135deg,var(--blue-700),var(--teal));color:#fff;border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:var(--shadow-md)}
+.plan-card .pl-eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.85;font-weight:700}
+.plan-card .pl-name{font-family:Poppins;font-size:20px;font-weight:700;margin:4px 0 2px}
+.plan-card .pl-carrier{font-size:14px;opacity:.95;margin-bottom:14px}
+.plan-card .pl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.plan-card .pl-cell .lbl{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.8;font-weight:700}
+.plan-card .pl-cell .val{font-size:14.5px;font-weight:600;margin-top:2px}
+.plan-empty{background:var(--blue-50);border:1px dashed var(--line);border-radius:12px;padding:18px;text-align:center;color:var(--muted);font-size:13.5px;margin-bottom:16px}
+
+/* Section */
+.sec-title{display:flex;justify-content:space-between;align-items:center;margin:18px 0 10px}
+.sec-title h3{font-size:15.5px;margin:0;color:var(--blue-900)}
+.sec-title small{color:var(--muted);font-size:12px}
+
+.subcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.subcard h4{margin:0 0 8px;font-size:14.5px;color:var(--blue-900)}
+
+/* Documents */
+.docs-list{display:flex;flex-direction:column;gap:8px}
+.doc-row{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.doc-row .doc-ic{width:38px;height:38px;border-radius:8px;background:var(--blue-50);color:var(--blue-700);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;flex-shrink:0;letter-spacing:.04em}
+.doc-row .doc-name{flex:1;min-width:0}
+.doc-row .doc-name .nm{font-size:14px;font-weight:600;color:var(--blue-900);word-break:break-word;line-height:1.2}
+.doc-row .doc-name .mt{font-size:12px;color:var(--muted);margin-top:2px}
+.doc-row a.doc-btn{flex-shrink:0;background:var(--blue-600);color:#fff;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;min-height:36px;display:inline-flex;align-items:center}
+.doc-row a.doc-btn:hover{background:var(--blue-700);text-decoration:none}
+
+/* Messages */
+.msgs{border:1px solid var(--line);border-radius:12px;background:#fff;max-height:360px;overflow-y:auto;padding:12px;margin-bottom:14px}
+.msg{padding:10px 12px;border-radius:10px;margin-bottom:8px;max-width:85%;font-size:14px;line-height:1.45}
+.msg.client{background:var(--blue-50);color:var(--ink);margin-left:auto;border:1px solid #cfdef6}
+.msg.advisor{background:#f3f5f8;color:var(--ink);border:1px solid var(--line-2)}
+.msg .meta{font-size:11px;color:var(--muted);margin-top:4px}
+.empty{padding:24px;text-align:center;color:var(--muted);font-size:13.5px}
+
+/* Gift banner */
+.gift-banner{background:linear-gradient(135deg,#fff5d8,#fbecc1);border:1px solid #f0d98c;border-radius:12px;padding:14px;margin-bottom:16px;display:flex;gap:12px;align-items:center}
+.gift-banner .gi-ic{width:42px;height:42px;border-radius:50%;background:var(--gold);color:#3b2a00;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;flex-shrink:0}
+.gift-banner .gi-text{flex:1}
+.gift-banner .gi-text strong{display:block;color:#3b2a00;font-size:14px}
+.gift-banner .gi-text span{font-size:12.5px;color:#5a4400}
+
+/* Sync indicator */
+.sync-pill{display:inline-flex;align-items:center;gap:6px;background:var(--blue-50);color:var(--blue-700);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.05em}
+.sync-pill .sd{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.sync-pill.off{background:#f3f5f8;color:var(--muted)}
+.sync-pill.off .sd{background:var(--muted)}
+
+/* Footer */
+.foot{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12.5px}
+.foot a{color:var(--muted)}
+
+[hidden]{display:none !important}
 </style>
 </head>
 <body>
 
-<!-- AUTH -->
-<div id="auth-view" class="center">
-  <div class="auth">
-    <div style="text-align:center"><div class="logo" style="margin:0 auto 12px;width:56px;height:56px;border-radius:14px;font-size:18px">VS</div></div>
-    <h1 id="auth-title">Member Sign In</h1>
-    <p id="auth-sub">Welcome back. Sign in to your account.</p>
-    <div id="auth-msg"></div>
+<div class="bar">
+  <a class="brand" href="index.html">
+    <span class="b">VS</span>
+    <span>VS Benefits</span>
+  </a>
+  <div class="right">
+    <a class="home" href="index.html">Home</a>
+    <button id="signout-btn" class="signout" hidden>Sign out</button>
+  </div>
+</div>
 
-    <div id="login-form">
-      <label>Email</label>
-      <input id="li-em" class="inp" type="email" autocomplete="email" />
-      <div style="height:8px"></div>
-      <label>Password</label>
-      <input id="li-pw" class="inp" type="password" autocomplete="current-password" />
-      <div style="height:12px"></div>
-      <button class="btn" id="li-go" style="width:100%">Sign in</button>
-      <div class="switch">No account yet? <a id="show-signup">Create one</a></div>
-    </div>
+<main class="wrap">
 
-    <div id="signup-form" class="hide">
-      <div class="row">
-        <div><label>First name</label><input id="su-fn" class="inp" /></div>
-        <div><label>Last name</label><input id="su-ln" class="inp" /></div>
+  <!-- ====================== AUTH VIEW ====================== -->
+  <section id="auth-view">
+    <div class="card">
+      <h2>Member portal</h2>
+      <p class="lede">Sign in to view your plan, message your advisor, and refer friends for a chance to win a gift.</p>
+
+      <div class="tabs" role="tablist">
+        <button id="tab-login" class="active" type="button" role="tab">Sign in</button>
+        <button id="tab-signup" type="button" role="tab">Create account</button>
       </div>
-      <div style="height:8px"></div>
-      <label>Email</label><input id="su-em" class="inp" type="email" />
-      <div style="height:8px"></div>
-      <label>Phone</label><input id="su-ph" class="inp" type="tel" />
-      <div style="height:8px"></div>
-      <label>Create password</label><input id="su-pw" class="inp" type="password" />
-      <div style="height:8px"></div>
-      <label>Confirm password</label><input id="su-pw2" class="inp" type="password" />
-      <div style="height:12px"></div>
-      <button class="btn" id="su-go" style="width:100%">Create my account</button>
-      <div class="switch">Already have one? <a id="show-login">Sign in</a></div>
+
+      <!-- Sign in -->
+      <form id="login-form" autocomplete="on" novalidate>
+        <div id="login-msg"></div>
+        <div class="field">
+          <label for="li-email">Email</label>
+          <input id="li-email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="li-pw">Password</label>
+          <input id="li-pw" type="password" autocomplete="current-password" required />
+        </div>
+        <button class="btn btn-primary" type="submit">Sign in</button>
+        <p class="muted" style="margin-top:14px;text-align:center">Forgot your password? <a href="contact.html">Contact your advisor</a> to reset it.</p>
+      </form>
+
+      <!-- Sign up -->
+      <form id="signup-form" autocomplete="on" novalidate hidden>
+        <div id="signup-msg"></div>
+        <div class="row2">
+          <div class="field">
+            <label for="su-first">First name</label>
+            <input id="su-first" type="text" autocomplete="given-name" required />
+          </div>
+          <div class="field">
+            <label for="su-last">Last name</label>
+            <input id="su-last" type="text" autocomplete="family-name" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="su-email">Email</label>
+          <input id="su-email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="su-phone">Phone</label>
+          <input id="su-phone" type="tel" autocomplete="tel" inputmode="tel" required />
+        </div>
+        <div class="field">
+          <label for="su-pw">Create password</label>
+          <input id="su-pw" type="password" autocomplete="new-password" minlength="8" required />
+          <p class="hint">At least 8 characters.</p>
+        </div>
+        <div class="field">
+          <label for="su-pw2">Confirm password</label>
+          <input id="su-pw2" type="password" autocomplete="new-password" minlength="8" required />
+        </div>
+        <button class="btn btn-primary" type="submit">Create account</button>
+      </form>
     </div>
-  </div>
-</div>
+  </section>
 
-<!-- APP -->
-<div id="app-view" class="app hide">
-<header>
-  <div class="brand">
-    <div class="logo">VS</div>
-    <div>
-      <h1>Member Portal</h1>
-      <p id="who">-</p>
+  <!-- ====================== DASHBOARD VIEW ====================== -->
+  <section id="dash-view" hidden>
+
+    <div class="dash-head">
+      <div class="photo-wrap">
+        <div id="dh-avatar" class="avatar">VS</div>
+        <label class="photo-edit" for="photo-input" title="Update photo">+</label>
+        <input id="photo-input" type="file" accept="image/*" hidden />
+      </div>
+      <div class="who">
+        <div class="hi">Welcome back, <span id="sync-pill" class="sync-pill off"><span class="sd"></span><span id="sync-label">offline</span></span></div>
+        <h1 id="dh-name">Member</h1>
+        <div class="em" id="dh-email"></div>
+      </div>
     </div>
-  </div>
-  <button class="hbtn" id="signout-btn">Sign out</button>
-</header>
 
-<div class="tabs">
-  <button class="tab on" data-tab="profile">Profile</button>
-  <button class="tab" data-tab="plan">My Plan</button>
-  <button class="tab" data-tab="support">Support</button>
-  <button class="tab" data-tab="refer">Refer for a Gift</button>
-</div>
+    <div class="card" style="padding:0">
+      <div class="dtabs" role="tablist">
+        <button id="dtab-profile" class="active" type="button" role="tab">Profile</button>
+        <button id="dtab-plan" type="button" role="tab">My Plan</button>
+        <button id="dtab-support" type="button" role="tab">Support</button>
+        <button id="dtab-refer" type="button" role="tab">Refer for a Gift</button>
+      </div>
 
-<!-- PROFILE -->
-<section id="tab-profile" class="tabpanel">
-  <div class="card" style="text-align:center">
-    <img id="profile-photo" class="profile-photo" alt="" />
-    <input type="file" id="photo-input" accept="image/*" style="display:none" />
-    <button class="btn alt sm" id="photo-btn">Change photo</button>
-    <div id="photo-msg"></div>
-  </div>
-  <div class="card">
-    <h2>Your details</h2>
-    <div class="row">
-      <div><label>First name</label><input id="me-fn" class="inp" /></div>
-      <div><label>Last name</label><input id="me-ln" class="inp" /></div>
-      <div><label>Email</label><input id="me-em" class="inp" type="email" /></div>
-      <div><label>Phone</label><input id="me-ph" class="inp" type="tel" /></div>
+      <div style="padding:18px">
+
+        <!-- ============ Profile ============ -->
+        <div id="panel-profile" class="panel active">
+          <div id="photo-msg"></div>
+
+          <div class="sec-title"><h3>Your information</h3></div>
+          <div class="kv">
+            <div class="item"><div class="lbl">Name</div><div class="val" id="pv-name">--</div></div>
+            <div class="item"><div class="lbl">Email</div><div class="val" id="pv-email">--</div></div>
+            <div class="item"><div class="lbl">Phone</div><div class="val" id="pv-phone">--</div></div>
+            <div class="item"><div class="lbl">Member since</div><div class="val" id="pv-since">--</div></div>
+          </div>
+          <div class="notice notice-info">Need to update your name, email, or phone? <a href="contact.html">Send your advisor a message</a> and they'll update your file.</div>
+
+          <div class="sec-title"><h3>Change password</h3></div>
+          <div class="subcard">
+            <form id="pw-form" autocomplete="off">
+              <div id="pw-msg"></div>
+              <div class="field">
+                <label for="pw-cur">Current password</label>
+                <input id="pw-cur" type="password" autocomplete="current-password" required />
+              </div>
+              <div class="field">
+                <label for="pw-new">New password</label>
+                <input id="pw-new" type="password" autocomplete="new-password" minlength="8" required />
+                <p class="hint">At least 8 characters.</p>
+              </div>
+              <div class="field">
+                <label for="pw-new2">Confirm new password</label>
+                <input id="pw-new2" type="password" autocomplete="new-password" minlength="8" required />
+              </div>
+              <button class="btn btn-primary" type="submit">Update password</button>
+            </form>
+          </div>
+
+          <div class="sec-title"><h3>Account</h3></div>
+          <button id="delete-account" class="btn btn-danger" type="button">Delete my account</button>
+        </div>
+
+        <!-- ============ Plan ============ -->
+        <div id="panel-plan" class="panel">
+          <div id="plan-display"></div>
+
+          <div class="sec-title"><h3>Documents from your advisor</h3></div>
+          <div id="docs-display"></div>
+
+          <div class="sec-title"><h3>Why this matters</h3></div>
+          <p class="muted">Your enrollment information is updated by your advisor. If anything looks wrong - effective date, premium, plan name - <a href="#" onclick="document.getElementById('dtab-support').click();return false;">message support</a> and someone will fix it.</p>
+        </div>
+
+        <!-- ============ Support ============ -->
+        <div id="panel-support" class="panel">
+          <h3 style="font-size:16px;margin:0 0 4px">Message your advisor</h3>
+          <p class="muted" style="margin:0 0 14px">Support typically responds within 24 hours.</p>
+          <div id="msgs" class="msgs"></div>
+          <form id="msg-form">
+            <div class="field">
+              <label for="msg-text">Your message</label>
+              <textarea id="msg-text" rows="3" placeholder="Type your question or update here..." required></textarea>
+            </div>
+            <button class="btn btn-primary" type="submit">Send message</button>
+          </form>
+        </div>
+
+        <!-- ============ Refer ============ -->
+        <div id="panel-refer" class="panel">
+          <div class="gift-banner">
+            <div class="gi-ic">&#127873;</div>
+            <div class="gi-text">
+              <strong>Refer a friend that needs health insurance for a chance to win a gift!</strong>
+              <span>Every referral that becomes a client enters you in our quarterly gift drawing.</span>
+            </div>
+          </div>
+          <h3 style="font-size:16px;margin:0 0 4px">Send a referral</h3>
+          <p class="muted" style="margin:0 0 14px">Share their info and we'll reach out. You'll receive a thank-you and a gift entry for every qualified referral.</p>
+          <form id="ref-form">
+            <div id="ref-msg"></div>
+            <div class="row2">
+              <div class="field"><label>Their name</label><input id="ref-name" type="text" required /></div>
+              <div class="field"><label>Their phone</label><input id="ref-phone" type="tel" inputmode="tel" /></div>
+            </div>
+            <div class="row2">
+              <div class="field"><label>Their email</label><input id="ref-email" type="email" /></div>
+              <div class="field"><label>Relationship</label><input id="ref-rel" type="text" placeholder="Friend, brother, coworker..." /></div>
+            </div>
+            <div class="field">
+              <label>Notes (optional)</label>
+              <textarea id="ref-notes" rows="2" placeholder="Best time to reach them, what they're looking for..."></textarea>
+            </div>
+            <button class="btn btn-gold" type="submit">Send referral &amp; enter to win</button>
+          </form>
+
+          <div class="sec-title"><h3>Your referrals</h3></div>
+          <div id="my-refs"></div>
+        </div>
+
+      </div>
     </div>
-    <div id="me-msg"></div>
-    <div style="height:8px"></div>
-    <button class="btn" id="me-save">Save changes</button>
-  </div>
-  <div class="card">
-    <h2>Change password</h2>
-    <div id="pw-msg"></div>
-    <div class="row">
-      <div><label>Current</label><input id="pw-cur" class="inp" type="password" /></div>
-      <div><label>New</label><input id="pw-new" class="inp" type="password" /></div>
-      <div><label>Confirm new</label><input id="pw-new2" class="inp" type="password" /></div>
-    </div>
-    <div style="height:8px"></div>
-    <button class="btn" id="pw-go">Update password</button>
-  </div>
-  <div class="card">
-    <h2 style="color:var(--err)">Delete my account</h2>
-    <p class="muted">This will permanently remove your account from this portal.</p>
-    <button class="btn err" id="del-go">Delete my account</button>
-  </div>
-</section>
 
-<!-- PLAN -->
-<section id="tab-plan" class="tabpanel hide">
-  <div id="plan-wrap"></div>
-</section>
+  </section>
 
-<!-- SUPPORT -->
-<section id="tab-support" class="tabpanel hide">
-  <div class="card">
-    <h2>Message your advisor</h2>
-    <p class="muted">Bradley will reply as soon as possible.</p>
-    <div id="msg-msg"></div>
-    <label>Subject</label>
-    <input id="msg-sub" class="inp" placeholder="What can we help with?" />
-    <div style="height:8px"></div>
-    <label>Message</label>
-    <textarea id="msg-body"></textarea>
-    <div style="height:8px"></div>
-    <button class="btn" id="msg-send">Send</button>
+  <div class="foot">
+    &copy; <span id="yr"></span> VS Benefits &middot; <a href="index.html">Home</a> &middot; <a href="contact.html">Contact</a>
   </div>
-  <div class="card">
-    <h2>Conversation history</h2>
-    <div id="msgs-list"></div>
-  </div>
-</section>
+</main>
 
-<!-- REFER -->
-<section id="tab-refer" class="tabpanel hide">
-  <div class="gold-banner">
-    <h3>Refer a friend - win a gift</h3>
-    <p>Every referral enters you into our quarterly gift drawing.</p>
-  </div>
-  <div class="card">
-    <h2>Submit a referral</h2>
-    <div id="ref-msg"></div>
-    <label>Friend's name</label>
-    <input id="rf-name" class="inp" />
-    <div style="height:8px"></div>
-    <label>Friend's email or phone</label>
-    <input id="rf-contact" class="inp" />
-    <div style="height:8px"></div>
-    <button class="btn gold" id="rf-go">Submit referral</button>
-  </div>
-</section>
 
-</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCsSgR6H5gmGNd84c-270jtwC4u8TR-dck",
+  authDomain: "vs-client-portal-9ece3.firebaseapp.com",
+  projectId: "vs-client-portal-9ece3",
+  storageBucket: "vs-client-portal-9ece3.firebasestorage.app",
+  messagingSenderId: "143162699366",
+  appId: "1:143162699366:web:bb46ef6b9e9e4f4fae87a7"
+};
+
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
+
+(function(){
 "use strict";
-var K={accounts:"vs_client_accounts",session:"vs_client_session",messages:"vs_messages",referrals:"vs_client_referrals_log"};
+
+/* ====================================================================
+   Storage keys (must match admin.html)
+   ==================================================================== */
+var K={
+  accounts:"vs_client_accounts",
+  session:"vs_client_session",
+  messages:"vs_messages",
+  referrals:"vs_referrals",
+  webhook:"vs_webhook_url"
+};
+
+/* ====================================================================
+   Helpers
+   ==================================================================== */
 function $(id){return document.getElementById(id);}
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
-function get(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
-function set(k,v){localStorage.setItem(k,JSON.stringify(v));}
-function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
-function fmtDate(s){if(!s)return"";var d=new Date(s);return isNaN(d)?String(s):d.toLocaleString([], {dateStyle:"medium", timeStyle:"short"});}
-function fmtDay(s){if(!s)return"";var d=new Date(s);return isNaN(d)?String(s):d.toLocaleDateString([], {dateStyle:"medium"});}
-async function sha(t){var b=new TextEncoder().encode(t);var h=await crypto.subtle.digest("SHA-256",b);return Array.from(new Uint8Array(h)).map(function(x){return x.toString(16).padStart(2,"0");}).join("");}
-function notice(el,kind,msg){var n=$(el);n.innerHTML='<div class="notice '+kind+'">'+esc(msg)+"</div>";setTimeout(function(){n.innerHTML="";},4000);}
-function admin(){return window.opener&&window.opener.VSAdmin?window.opener.VSAdmin:(window.parent&&window.parent.VSAdmin?window.parent.VSAdmin:null);}
+function uid(){return"id_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
+function getAccounts(){try{return JSON.parse(localStorage.getItem(K.accounts)||"[]");}catch(e){return[];}}
+function getMessages(){try{return JSON.parse(localStorage.getItem(K.messages)||"[]");}catch(e){return[];}}
+function getReferrals(){try{return JSON.parse(localStorage.getItem(K.referrals)||"[]");}catch(e){return[];}}
+function getWebhook(){return localStorage.getItem(K.webhook)||"";}
+function getSession(){try{return JSON.parse(sessionStorage.getItem(K.session)||"null");}catch(e){return null;}}
+function setSession(s){sessionStorage.setItem(K.session,JSON.stringify(s));}
+function clearSession(){sessionStorage.removeItem(K.session);}
 
-/* AUTH */
-function showAuth(){$("auth-view").classList.remove("hide");$("app-view").classList.add("hide");}
-function showApp(){$("auth-view").classList.add("hide");$("app-view").classList.remove("hide");loadProfile();}
+/* Cloud-aware savers - write to localStorage AND push to Firestore */
+function saveAccounts(a){localStorage.setItem(K.accounts,JSON.stringify(a));cloudPush("accounts",a);}
+function saveMessages(m){localStorage.setItem(K.messages,JSON.stringify(m));cloudPush("messages",m);}
+function saveReferrals(r){localStorage.setItem(K.referrals,JSON.stringify(r));cloudPush("referrals",r);}
 
-$("show-signup").addEventListener("click",function(){$("login-form").classList.add("hide");$("signup-form").classList.remove("hide");$("auth-title").textContent="Create Member Account";$("auth-sub").textContent="Quick signup - no codes required.";$("auth-msg").innerHTML="";});
-$("show-login").addEventListener("click",function(){$("signup-form").classList.add("hide");$("login-form").classList.remove("hide");$("auth-title").textContent="Member Sign In";$("auth-sub").textContent="Welcome back. Sign in to your account.";$("auth-msg").innerHTML="";});
-
-$("li-go").addEventListener("click",async function(){
-  var em=$("li-em").value.trim().toLowerCase(),pw=$("li-pw").value;
-  if(!em||!pw)return notice("auth-msg","err","Email and password required.");
-  var arr=get(K.accounts,[]);var a=arr.find(function(x){return x.email.toLowerCase()===em;});
-  if(!a)return notice("auth-msg","err","No account with that email.");
-  if(a.status==="revoked")return notice("auth-msg","err","Account has been revoked. Contact your advisor.");
-  if(await sha(pw)!==a.passwordHash)return notice("auth-msg","err","Wrong password.");
-  a.lastSignIn=new Date().toISOString();set(K.accounts,arr);
-  sessionStorage.setItem(K.session,a.id);
-  if(admin())try{admin().recordSignIn(a.id);}catch(e){}
-  showApp();
-});
-
-$("su-go").addEventListener("click",async function(){
-  var fn=$("su-fn").value.trim(),ln=$("su-ln").value.trim(),em=$("su-em").value.trim().toLowerCase(),ph=$("su-ph").value.trim(),pw=$("su-pw").value,pw2=$("su-pw2").value;
-  if(!fn||!ln||!em||!ph||!pw)return notice("auth-msg","err","All fields required.");
-  if(pw.length<6)return notice("auth-msg","err","Password must be at least 6 characters.");
-  if(pw!==pw2)return notice("auth-msg","err","Passwords don't match.");
-  var arr=get(K.accounts,[]);
-  if(arr.find(function(x){return x.email.toLowerCase()===em;}))return notice("auth-msg","err","An account with that email already exists.");
-  var rec={id:uid(),firstName:fn,lastName:ln,email:em,phone:ph,passwordHash:await sha(pw),created:new Date().toISOString(),lastSignIn:new Date().toISOString(),status:"active",plan:null,photoDataUrl:""};
-  arr.push(rec);set(K.accounts,arr);
-  if(admin())try{admin().recordAccountCreated(rec);}catch(e){}
-  sessionStorage.setItem(K.session,rec.id);showApp();
-});
-
-$("signout-btn").addEventListener("click",function(){sessionStorage.removeItem(K.session);location.reload();});
-
-/* TABS */
-Array.prototype.forEach.call(document.querySelectorAll(".tab"),function(b){
-  b.addEventListener("click",function(){
-    Array.prototype.forEach.call(document.querySelectorAll(".tab"),function(x){x.classList.remove("on");});
-    b.classList.add("on");
-    Array.prototype.forEach.call(document.querySelectorAll(".tabpanel"),function(p){p.classList.add("hide");});
-    $("tab-"+b.dataset.tab).classList.remove("hide");
-    if(b.dataset.tab==="plan")renderPlan();
-    if(b.dataset.tab==="support")renderMsgs();
-  });
-});
-
-/* PROFILE */
-function me(){var id=sessionStorage.getItem(K.session);if(!id)return null;return get(K.accounts,[]).find(function(x){return x.id===id;})||null;}
-function saveMe(updater){var id=sessionStorage.getItem(K.session);var arr=get(K.accounts,[]);var i=arr.findIndex(function(x){return x.id===id;});if(i<0)return null;updater(arr[i]);set(K.accounts,arr);return arr[i];}
-function loadProfile(){
-  var a=me();if(!a){showAuth();return;}
-  $("who").textContent=a.firstName+" "+a.lastName;
-  $("profile-photo").src=a.photoDataUrl||"data:image/svg+xml;utf8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96"><rect width="96" height="96" fill="#e2e8f0"/><circle cx="48" cy="38" r="16" fill="#94a3b8"/><path d="M16 88c0-18 14-28 32-28s32 10 32 28" fill="#94a3b8"/></svg>');
-  $("me-fn").value=a.firstName;$("me-ln").value=a.lastName;$("me-em").value=a.email;$("me-ph").value=a.phone||"";
+async function sha256(text){
+  var enc=new TextEncoder().encode(text);
+  var buf=await crypto.subtle.digest("SHA-256",enc);
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");
 }
 
-$("photo-btn").addEventListener("click",function(){$("photo-input").click();});
+function fmtDate(ts){if(!ts)return"--";var d=new Date(ts);return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}
+function fmtTime(ts){if(!ts)return"";var d=new Date(ts);return d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
+function normEmail(e){return(e||"").trim().toLowerCase();}
+function initials(a){var n=((a.firstName||"")+" "+(a.lastName||"")).trim();if(!n)return"?";var p=n.split(/\s+/);return((p[0]||"").charAt(0)+(p[1]||"").charAt(0)).toUpperCase()||(a.email||"?").charAt(0).toUpperCase();}
+function fmtBytes(b){if(!b)return"--";if(b<1024)return b+" B";if(b<1048576)return(b/1024).toFixed(1)+" KB";return(b/1048576).toFixed(2)+" MB";}
+function fileExt(name){var p=(name||"").split(".");return p.length>1?p[p.length-1].toUpperCase().slice(0,4):"FILE";}
+
+function showNotice(elId,kind,text){
+  var el=$(elId);if(!el)return;
+  el.innerHTML="";
+  if(!text){return;}
+  var n=document.createElement("div");
+  n.className="notice notice-"+kind;
+  n.textContent=text;
+  el.appendChild(n);
+}
+
+function webhookFire(payload){
+  var url=getWebhook();if(!url)return;
+  try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});}catch(e){}
+}
+
+/* ====================================================================
+   FIRESTORE CLOUD SYNC LAYER
+   --------------------------------------------------------------------
+   Sync accounts / messages / referrals across all devices in real time.
+   Doc layout: vs_state/{accounts|messages|referrals} -> { items: [...] }
+   ==================================================================== */
+var cloud={ready:false,suspend:0};
+var SYNC_KEYS=["accounts","messages","referrals"];
+var REMOTE_TO_LOCAL={accounts:K.accounts,messages:K.messages,referrals:K.referrals};
+
+function setSyncPill(state){
+  var p=$("sync-pill"),l=$("sync-label");if(!p||!l)return;
+  if(state==="on"){p.classList.remove("off");l.textContent="Synced";}
+  else if(state==="syncing"){p.classList.remove("off");l.textContent="Syncing...";}
+  else{p.classList.add("off");l.textContent="Offline";}
+}
+
+async function cloudPush(key,items){
+  if(!cloud.ready||cloud.suspend>0)return;
+  try{
+    await setDoc(doc(db,"vs_state",key),{items:items,ts:Date.now()});
+  }catch(e){console.warn("cloud push",key,e);}
+}
+
+async function pullOnce(remoteKey){
+  try{
+    var snap=await getDoc(doc(db,"vs_state",remoteKey));
+    if(snap.exists()){
+      var items=(snap.data().items)||[];
+      cloud.suspend++;
+      localStorage.setItem(REMOTE_TO_LOCAL[remoteKey],JSON.stringify(items));
+      setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},80);
+    }
+  }catch(e){}
+}
+
+async function initCloud(){
+  setSyncPill("syncing");
+  try{
+    await signInAnonymously(auth);
+  }catch(e){
+    console.warn("anon auth failed - sync disabled",e);
+    setSyncPill("off");return;
+  }
+  cloud.ready=true;
+  setSyncPill("on");
+
+  SYNC_KEYS.forEach(function(remoteKey){
+    var localKey=REMOTE_TO_LOCAL[remoteKey];
+    onSnapshot(doc(db,"vs_state",remoteKey),function(snap){
+      if(!snap.exists())return;
+      var data=snap.data();
+      var items=data&&data.items?data.items:[];
+      cloud.suspend++;
+      try{
+        localStorage.setItem(localKey,JSON.stringify(items));
+        if(remoteKey==="accounts"){
+          if(getSession()&&!$("dash-view").hidden){
+            var acct=currentAccount();
+            if(acct){
+              $("pv-name").textContent=((acct.firstName||"")+" "+(acct.lastName||"")).trim()||"--";
+              $("pv-email").textContent=acct.email;
+              $("pv-phone").textContent=acct.phone||"--";
+              $("pv-since").textContent=fmtDate(acct.created);
+              paintAvatar(acct.photoDataUrl);
+              renderPlan();
+            }
+          }
+        }
+        if(remoteKey==="messages"&&!$("dash-view").hidden)renderMessages();
+        if(remoteKey==="referrals"&&!$("dash-view").hidden)renderMyReferrals();
+      }finally{
+        setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},80);
+      }
+    },function(err){console.warn("cloud listen",remoteKey,err);setSyncPill("off");});
+  });
+}
+
+/* ====================================================================
+   Auth tabs
+   ==================================================================== */
+$("tab-login").addEventListener("click",function(){
+  $("tab-login").classList.add("active");$("tab-signup").classList.remove("active");
+  $("login-form").hidden=false;$("signup-form").hidden=true;
+  showNotice("login-msg","",""); showNotice("signup-msg","","");
+});
+$("tab-signup").addEventListener("click",function(){
+  $("tab-signup").classList.add("active");$("tab-login").classList.remove("active");
+  $("signup-form").hidden=false;$("login-form").hidden=true;
+  showNotice("login-msg","",""); showNotice("signup-msg","","");
+});
+
+/* ====================================================================
+   Sign up - first/last name + email + phone + password
+   ==================================================================== */
+$("signup-form").addEventListener("submit",async function(e){
+  e.preventDefault();
+  var first=$("su-first").value.trim();
+  var last=$("su-last").value.trim();
+  var email=normEmail($("su-email").value);
+  var phone=$("su-phone").value.trim();
+  var pw=$("su-pw").value;
+  var pw2=$("su-pw2").value;
+
+  if(!first||!last)return showNotice("signup-msg","err","Please enter your first and last name.");
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return showNotice("signup-msg","err","Please enter a valid email address.");
+  if(phone.replace(/\D/g,"").length<7)return showNotice("signup-msg","err","Please enter a valid phone number.");
+  if(pw.length<8)return showNotice("signup-msg","err","Password must be at least 8 characters.");
+  if(pw!==pw2)return showNotice("signup-msg","err","Passwords don't match. Please try again.");
+
+  // Pull latest accounts from cloud first to avoid duplicate-email race
+  if(cloud.ready)await pullOnce("accounts");
+
+  var accts=getAccounts();
+  if(accts.some(function(a){return normEmail(a.email)===email;}))return showNotice("signup-msg","err","An account with this email already exists. Try signing in instead.");
+
+  var hash=await sha256(pw);
+  var acct={id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:Date.now(),status:"active",plan:null,photoDataUrl:"",documents:[]};
+  accts.push(acct);
+  saveAccounts(accts);
+  setSession({id:acct.id,email:acct.email,since:Date.now()});
+
+  webhookFire({event:"client_signup",account:{id:acct.id,firstName:first,lastName:last,email:email,phone:phone,created:acct.created}});
+
+  showDashboard();
+});
+
+/* ====================================================================
+   Sign in
+   ==================================================================== */
+$("login-form").addEventListener("submit",async function(e){
+  e.preventDefault();
+  var email=normEmail($("li-email").value);
+  var pw=$("li-pw").value;
+  if(!email||!pw)return showNotice("login-msg","err","Please enter your email and password.");
+
+  // Pull fresh accounts from cloud before checking
+  if(cloud.ready)await pullOnce("accounts");
+
+  var accts=getAccounts();
+  var acct=accts.filter(function(a){return normEmail(a.email)===email;})[0];
+  if(!acct)return showNotice("login-msg","err","No account found for that email. Create an account to get started.");
+  if(acct.status==="revoked")return showNotice("login-msg","err","This account has been revoked. Please contact your advisor.");
+  if(!acct.passwordHash)return showNotice("login-msg","err","Your password was reset. Please contact your advisor for a new one.");
+
+  var hash=await sha256(pw);
+  if(hash!==acct.passwordHash)return showNotice("login-msg","err","Incorrect password. Please try again.");
+
+  acct.lastSignIn=Date.now();
+  saveAccounts(accts);
+  setSession({id:acct.id,email:acct.email,since:Date.now()});
+
+  webhookFire({event:"client_signin",accountId:acct.id,email:email,ts:Date.now()});
+
+  showDashboard();
+});
+
+/* ====================================================================
+   Sign out / delete
+   ==================================================================== */
+$("signout-btn").addEventListener("click",function(){clearSession();location.reload();});
+$("delete-account").addEventListener("click",function(){
+  if(!confirm("Delete your account? This will remove your sign-in. Your messages and referral history stay with your advisor."))return;
+  var s=getSession();if(!s)return;
+  saveAccounts(getAccounts().filter(function(a){return a.id!==s.id;}));
+  webhookFire({event:"client_account_deleted",accountId:s.id,email:s.email,ts:Date.now()});
+  clearSession();location.reload();
+});
+
+/* ====================================================================
+   Change password
+   ==================================================================== */
+$("pw-form").addEventListener("submit",async function(e){
+  e.preventDefault();
+  var acct=currentAccount();if(!acct)return;
+  var cur=$("pw-cur").value,n1=$("pw-new").value,n2=$("pw-new2").value;
+  if(!cur||!n1||!n2)return showNotice("pw-msg","err","Fill all fields.");
+  if(n1.length<8)return showNotice("pw-msg","err","New password must be at least 8 characters.");
+  if(n1!==n2)return showNotice("pw-msg","err","New passwords don't match.");
+  var curHash=await sha256(cur);
+  if(curHash!==acct.passwordHash)return showNotice("pw-msg","err","Current password is wrong.");
+  var newHash=await sha256(n1);
+  var arr=getAccounts().map(function(a){if(a.id===acct.id)a.passwordHash=newHash;return a;});
+  saveAccounts(arr);
+  $("pw-form").reset();
+  showNotice("pw-msg","ok","Password updated.");
+  webhookFire({event:"client_password_changed",accountId:acct.id,ts:Date.now()});
+});
+
+/* ====================================================================
+   Photo upload
+   ==================================================================== */
 $("photo-input").addEventListener("change",function(e){
   var f=e.target.files[0];if(!f)return;
-  if(!/^image\//.test(f.type))return notice("photo-msg","err","Please pick an image file.");
-  if(f.size>5*1024*1024)return notice("photo-msg","err","Image too large (over 5MB).");
+  if(!/^image\//.test(f.type))return showNotice("photo-msg","err","Please pick an image file.");
+  if(f.size>3*1024*1024)return showNotice("photo-msg","err","Image is over 3MB. Try a smaller one.");
   var reader=new FileReader();
   reader.onload=function(){
     var img=new Image();
     img.onload=function(){
-      var max=256;var w=img.width,h=img.height;
-      if(w>h){if(w>max){h=Math.round(h*max/w);w=max;}}else{if(h>max){w=Math.round(w*max/h);h=max;}}
-      var c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);
-      var url=c.toDataURL("image/jpeg",0.85);
-      saveMe(function(a){a.photoDataUrl=url;});
-      $("profile-photo").src=url;notice("photo-msg","ok","Photo updated.");
+      var maxSize=256;
+      var w=img.width,h=img.height;
+      if(w>h){if(w>maxSize){h=Math.round(h*maxSize/w);w=maxSize;}}
+      else{if(h>maxSize){w=Math.round(w*maxSize/h);h=maxSize;}}
+      var c=document.createElement("canvas");c.width=w;c.height=h;
+      c.getContext("2d").drawImage(img,0,0,w,h);
+      var dataUrl=c.toDataURL("image/jpeg",0.85);
+      var acct=currentAccount();if(!acct)return;
+      var arr=getAccounts().map(function(a){if(a.id===acct.id)a.photoDataUrl=dataUrl;return a;});
+      saveAccounts(arr);
+      paintAvatar(dataUrl);
+      showNotice("photo-msg","ok","Profile photo updated.");
+      webhookFire({event:"client_photo_updated",accountId:acct.id,ts:Date.now()});
     };
     img.src=reader.result;
   };
   reader.readAsDataURL(f);
+  $("photo-input").value="";
 });
+function paintAvatar(dataUrl){
+  var av=$("dh-avatar");av.innerHTML="";
+  if(dataUrl){var img=document.createElement("img");img.src=dataUrl;img.alt="Profile photo";av.appendChild(img);}
+  else{var acct=currentAccount();av.textContent=acct?initials(acct):"VS";}
+}
 
-$("me-save").addEventListener("click",function(){
-  var fn=$("me-fn").value.trim(),ln=$("me-ln").value.trim(),em=$("me-em").value.trim(),ph=$("me-ph").value.trim();
-  if(!fn||!ln||!em)return notice("me-msg","err","Name and email required.");
-  var arr=get(K.accounts,[]);var id=sessionStorage.getItem(K.session);
-  if(arr.find(function(x){return x.id!==id&&x.email.toLowerCase()===em.toLowerCase();}))return notice("me-msg","err","Email already in use.");
-  saveMe(function(a){a.firstName=fn;a.lastName=ln;a.email=em;a.phone=ph;});
-  loadProfile();notice("me-msg","ok","Saved.");
-});
+/* ====================================================================
+   Dashboard
+   ==================================================================== */
+function currentAccount(){
+  var s=getSession();if(!s)return null;
+  return getAccounts().filter(function(a){return a.id===s.id;})[0]||null;
+}
 
-$("pw-go").addEventListener("click",async function(){
-  var cur=$("pw-cur").value,n=$("pw-new").value,n2=$("pw-new2").value;
-  if(!cur||!n)return notice("pw-msg","err","All fields required.");
-  if(n.length<6)return notice("pw-msg","err","New password too short.");
-  if(n!==n2)return notice("pw-msg","err","Passwords don't match.");
-  var a=me();if(!a)return;
-  if(await sha(cur)!==a.passwordHash)return notice("pw-msg","err","Current password incorrect.");
-  saveMe(function(x){x.passwordHash=null;});
-  var nh=await sha(n);saveMe(function(x){x.passwordHash=nh;});
-  $("pw-cur").value=$("pw-new").value=$("pw-new2").value="";notice("pw-msg","ok","Password updated.");
-});
+function showDashboard(){
+  var acct=currentAccount();
+  if(!acct){clearSession();return;}
+  $("auth-view").hidden=true;
+  $("dash-view").hidden=false;
+  $("signout-btn").hidden=false;
 
-$("del-go").addEventListener("click",function(){
-  if(!confirm("Permanently delete your account? This cannot be undone."))return;
-  if(!confirm("Are you absolutely sure?"))return;
-  var id=sessionStorage.getItem(K.session);var arr=get(K.accounts,[]);
-  set(K.accounts,arr.filter(function(x){return x.id!==id;}));
-  sessionStorage.removeItem(K.session);location.reload();
-});
+  $("dh-name").textContent=((acct.firstName||"")+" "+(acct.lastName||"")).trim()||"Member";
+  $("dh-email").textContent=acct.email;
+  paintAvatar(acct.photoDataUrl);
 
-/* PLAN */
+  $("pv-name").textContent=((acct.firstName||"")+" "+(acct.lastName||"")).trim()||"--";
+  $("pv-email").textContent=acct.email;
+  $("pv-phone").textContent=acct.phone||"--";
+  $("pv-since").textContent=fmtDate(acct.created);
+
+  renderPlan();
+  renderMessages();
+  renderMyReferrals();
+}
+
+/* ====================================================================
+   Plan view + Documents
+   ==================================================================== */
 function renderPlan(){
-  var a=me();if(!a){showAuth();return;}
-  var w=$("plan-wrap");
-  if(!a.plan){
-    w.innerHTML='<div class="card"><h2>No plan on file yet</h2><p class="muted">Your advisor will set up your plan after you complete enrollment. If you have questions, send a message in Support.</p></div>';
-    return;
-  }
-  var p=a.plan;var prem=p.monthlyPremium?"$"+Number(p.monthlyPremium).toFixed(2):"-";
-  var docs=p.documents||[];
-  var docsHtml="";
-  if(docs.length){
-    docsHtml='<div class="card"><h2>Plan documents</h2><div class="muted">Tap to download or view.</div><div class="docs-list">'+docs.map(function(d){
-      var isImg=/^image\//.test(d.type||"");
-      var ext=(d.name||"").split(".").pop().toUpperCase().slice(0,4);
-      var sz=d.size?Math.round(d.size/1024)+" KB":"";
-      return '<div class="doc-item"><div class="icon">'+esc(ext||"DOC")+'</div><div class="body"><div class="name">'+esc(d.name)+'</div><div class="sub">'+esc(fmtDay(d.uploaded))+(sz?' · '+sz:"")+'</div>'+(isImg?'<img class="thumb" src="'+d.dataUrl+'" alt="" />':"")+'</div><a class="btn sm" href="'+d.dataUrl+'" download="'+esc(d.name)+'" target="_blank" rel="noopener">Open</a></div>';
-    }).join("")+'</div></div>';
+  var acct=currentAccount();if(!acct)return;
+  var box=$("plan-display");box.innerHTML="";
+  var p=acct.plan;
+  if(!p||(!p.carrier&&!p.planName)){
+    var d=document.createElement("div");
+    d.className="plan-empty";
+    d.innerHTML='<strong>No plan on file yet.</strong><br/>Once your advisor enrolls you, your plan details will appear here. <a href="contact.html">Reach out</a> if you have questions.';
+    box.appendChild(d);
   }else{
-    docsHtml='<div class="card"><h2>Plan documents</h2><p class="muted">No documents have been uploaded for your plan yet.</p></div>';
+    var card=document.createElement("div");card.className="plan-card";
+    card.innerHTML=
+      '<div class="pl-eyebrow">Active enrollment</div>'+
+      '<div class="pl-name">'+escapeHtml(p.planName||"Your plan")+'</div>'+
+      '<div class="pl-carrier">'+escapeHtml(p.carrier||"")+'</div>'+
+      '<div class="pl-grid">'+
+        '<div class="pl-cell"><div class="lbl">Effective date</div><div class="val">'+(p.effectiveDate?fmtDate(new Date(p.effectiveDate+"T00:00:00").getTime()):"--")+'</div></div>'+
+        '<div class="pl-cell"><div class="lbl">Renewal date</div><div class="val">'+(p.renewalDate?fmtDate(new Date(p.renewalDate+"T00:00:00").getTime()):"--")+'</div></div>'+
+        '<div class="pl-cell"><div class="lbl">Monthly premium</div><div class="val">'+(p.monthlyPremium?("$"+Number(p.monthlyPremium).toFixed(2)):"--")+'</div></div>'+
+        '<div class="pl-cell"><div class="lbl">Updated</div><div class="val">'+(p.updated?fmtDate(p.updated):"--")+'</div></div>'+
+      '</div>';
+    box.appendChild(card);
+
+    if(p.notes){
+      var n=document.createElement("div");
+      n.className="subcard";
+      n.innerHTML='<h4>Plan notes from your advisor</h4><div style="font-size:13.5px;color:var(--ink-2);white-space:pre-wrap">'+escapeHtml(p.notes)+'</div>';
+      box.appendChild(n);
+    }
   }
-  w.innerHTML='<div class="plan-card"><h3>Your Plan</h3><div class="name">'+esc(p.carrier||"Carrier")+(p.planName?' - '+esc(p.planName):"")+'</div>'+
-    '<div class="meta">'+
-    '<div><b>Effective</b>'+esc(fmtDay(p.effectiveDate)||"-")+'</div>'+
-    '<div><b>Renewal</b>'+esc(fmtDay(p.renewalDate)||"-")+'</div>'+
-    '<div><b>Monthly Premium</b>'+esc(prem)+'</div>'+
-    '<div><b>Updated</b>'+esc(fmtDay(p.updated)||"-")+'</div>'+
-    '</div></div>'+
-    (p.notes?'<div class="card"><h2>Notes from your advisor</h2><div style="white-space:pre-wrap">'+esc(p.notes)+'</div></div>':"")+
-    docsHtml;
+
+  // Documents
+  var dbox=$("docs-display");dbox.innerHTML="";
+  var docs=acct.documents||[];
+  if(!docs.length){
+    var em=document.createElement("div");em.className="empty";em.style.background="var(--blue-50)";em.style.border="1px dashed var(--line)";em.style.borderRadius="12px";
+    em.textContent="No documents yet. When your advisor uploads your insurance card, ID copy, or any plan documents, they'll appear here.";
+    dbox.appendChild(em);
+  }else{
+    var list=document.createElement("div");list.className="docs-list";
+    docs.slice().sort(function(a,b){return (b.ts||0)-(a.ts||0);}).forEach(function(d){
+      var row=document.createElement("div");row.className="doc-row";
+      row.innerHTML=
+        '<div class="doc-ic">'+escapeHtml(fileExt(d.name))+'</div>'+
+        '<div class="doc-name"><div class="nm">'+escapeHtml(d.name||"Document")+'</div>'+
+        '<div class="mt">'+fmtBytes(d.size)+' &middot; uploaded '+fmtDate(d.ts)+'</div></div>'+
+        '<a class="doc-btn" href="'+d.dataUrl+'" download="'+escapeHtml(d.name||"document")+'" target="_blank" rel="noopener">View</a>';
+      list.appendChild(row);
+    });
+    dbox.appendChild(list);
+  }
 }
 
-/* SUPPORT */
-function renderMsgs(){
-  var a=me();if(!a)return;
-  var threads=get(K.messages,[]);var t=threads.find(function(x){return x.accountId===a.id;});
-  var box=$("msgs-list");
-  if(!t||!t.messages.length){box.innerHTML='<div class="muted">No messages yet.</div>';return;}
-  box.innerHTML=t.messages.slice().reverse().map(function(m){
-    var mine=m.from==="client";
-    return '<div style="margin:6px 0;padding:10px;border-radius:10px;background:'+(mine?"#eff6ff":"var(--panel2)")+';border:1px solid var(--bd)"><div style="font-size:11px;color:var(--mute)">'+(mine?"You":"Bradley (Advisor)")+' · '+esc(fmtDate(m.at))+(m.subject?' · '+esc(m.subject):"")+'</div><div style="white-space:pre-wrap">'+esc(m.body)+'</div></div>';
-  }).join("");
+/* ====================================================================
+   Messages
+   ==================================================================== */
+function renderMessages(){
+  var acct=currentAccount();if(!acct)return;
+  var box=$("msgs");
+  var msgs=getMessages().filter(function(m){return m.accountId===acct.id;}).sort(function(a,b){return a.ts-b.ts;});
+  if(!msgs.length){box.innerHTML='<div class="empty">No messages yet. Send your first message below - Someone will get back to you within 24 hours.</div>';return;}
+  box.innerHTML="";
+  msgs.forEach(function(m){
+    var d=document.createElement("div");
+    d.className="msg "+(m.from==="advisor"?"advisor":"client");
+    var t=document.createElement("div");t.textContent=m.text;
+    var meta=document.createElement("div");meta.className="meta";meta.textContent=(m.from==="advisor"?"Bradley - ":"You - ")+fmtTime(m.ts);
+    d.appendChild(t);d.appendChild(meta);box.appendChild(d);
+  });
+  box.scrollTop=box.scrollHeight;
 }
-$("msg-send").addEventListener("click",function(){
-  var a=me();if(!a)return;
-  var sub=$("msg-sub").value.trim(),body=$("msg-body").value.trim();
-  if(!body)return notice("msg-msg","err","Write a message first.");
-  if(admin()){
-    try{admin().ingestMessage({accountId:a.id,clientName:a.firstName+" "+a.lastName,clientEmail:a.email,subject:sub,body:body});}catch(e){}
-  }
-  // also save into local messages so this browser sees the conversation
-  var threads=get(K.messages,[]);var t=threads.find(function(x){return x.accountId===a.id;});
-  if(!t){t={id:uid(),accountId:a.id,clientName:a.firstName+" "+a.lastName,clientEmail:a.email,messages:[]};threads.push(t);}
-  t.messages.push({id:uid(),from:"client",subject:sub,body:body,at:new Date().toISOString(),read:false});
-  set(K.messages,threads);
-  $("msg-sub").value=$("msg-body").value="";notice("msg-msg","ok","Sent. Bradley will reply soon.");renderMsgs();
+
+$("msg-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  var acct=currentAccount();if(!acct)return;
+  var text=$("msg-text").value.trim();if(!text)return;
+  var m={id:uid(),accountId:acct.id,from:"client",text:text,ts:Date.now(),read:false};
+  var arr=getMessages();arr.push(m);saveMessages(arr);
+  webhookFire({event:"client_message",accountId:acct.id,email:acct.email,text:text,ts:Date.now()});
+  $("msg-text").value="";
+  renderMessages();
 });
 
-/* REFERRALS */
-$("rf-go").addEventListener("click",function(){
-  var a=me();if(!a)return;
-  var name=$("rf-name").value.trim(),contact=$("rf-contact").value.trim();
-  if(!name||!contact)return notice("ref-msg","err","Name and contact required.");
-  var payload={referredBy:a.firstName+" "+a.lastName+" ("+a.email+")",leadName:name,contact:contact};
-  if(admin())try{admin().ingestReferral(payload);}catch(e){}
-  // local log
-  var log=get(K.referrals,[]);log.unshift(Object.assign({id:uid(),at:new Date().toISOString()},payload));set(K.referrals,log);
-  $("rf-name").value=$("rf-contact").value="";
-  notice("ref-msg","ok","Thanks! You've been entered into the next drawing.");
+/* ====================================================================
+   Referrals
+   ==================================================================== */
+$("ref-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  var acct=currentAccount();if(!acct)return;
+  var name=$("ref-name").value.trim();
+  var phone=$("ref-phone").value.trim();
+  var email=$("ref-email").value.trim();
+  var rel=$("ref-rel").value.trim();
+  var notes=$("ref-notes").value.trim();
+  if(!name)return showNotice("ref-msg","err","Please add the person's name.");
+  if(!phone&&!email)return showNotice("ref-msg","err","Please add at least a phone number or email.");
+
+  var r={id:uid(),fromAccountId:acct.id,referralName:name,referralPhone:phone,referralEmail:email,relationship:rel,notes:notes,status:"new",ts:Date.now(),read:false,payout:0,paid:false};
+  var arr=getReferrals();arr.unshift(r);saveReferrals(arr);
+  webhookFire({event:"client_referral",fromAccountId:acct.id,fromEmail:acct.email,referralName:name,referralPhone:phone,referralEmail:email,relationship:rel,notes:notes,ts:Date.now()});
+
+  showNotice("ref-msg","ok","Thanks! Your referral was sent and you're entered in our gift drawing.");
+  $("ref-form").reset();
+  renderMyReferrals();
 });
 
-/* INIT */
-(function init(){
-  var id=sessionStorage.getItem(K.session);
-  if(id&&get(K.accounts,[]).find(function(x){return x.id===id;}))showApp();
-  else showAuth();
+function renderMyReferrals(){
+  var acct=currentAccount();if(!acct)return;
+  var box=$("my-refs");if(!box)return;box.innerHTML="";
+  var mine=getReferrals().filter(function(r){return r.fromAccountId===acct.id;}).sort(function(a,b){return b.ts-a.ts;});
+  if(!mine.length){box.appendChild(Object.assign(document.createElement("div"),{className:"empty",textContent:"No referrals yet. Send your first one above!"}));return;}
+  mine.forEach(function(r){
+    var d=document.createElement("div");d.className="subcard";d.style.padding="12px 14px";
+    var status=r.status||"new";
+    var statusColor={"new":"#1e5ab0","contacted":"#b46b00","quoted":"#0b6996","enrolled":"#0a8754","lost":"#b3261e"}[status]||"#1e5ab0";
+    d.innerHTML=
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px">'+
+        '<strong style="color:var(--blue-900)">'+escapeHtml(r.referralName||"(no name)")+'</strong>'+
+        '<span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:'+statusColor+'">'+status+'</span>'+
+      '</div>'+
+      '<div style="font-size:12.5px;color:var(--muted)">Sent '+fmtTime(r.ts)+(r.paid?(' &middot; <span style="color:var(--ok);font-weight:600">Gift entered</span>'):"")+'</div>';
+    box.appendChild(d);
+  });
+}
+function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
+
+/* ====================================================================
+   Tab switching
+   ==================================================================== */
+function dswitch(name){
+  ["profile","plan","support","refer"].forEach(function(n){
+    $("dtab-"+n).classList.toggle("active",n===name);
+    $("panel-"+n).classList.toggle("active",n===name);
+  });
+  if(name==="support")renderMessages();
+  if(name==="plan")renderPlan();
+  if(name==="refer")renderMyReferrals();
+}
+$("dtab-profile").addEventListener("click",function(){dswitch("profile");});
+$("dtab-plan").addEventListener("click",function(){dswitch("plan");});
+$("dtab-support").addEventListener("click",function(){dswitch("support");});
+$("dtab-refer").addEventListener("click",function(){dswitch("refer");});
+
+/* ====================================================================
+   Boot
+   ==================================================================== */
+$("yr").textContent=new Date().getFullYear();
+if(getSession()){showDashboard();}
+initCloud();
+
 })();
 </script>
+
 </body>
 </html>
