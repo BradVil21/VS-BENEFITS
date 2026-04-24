@@ -1,251 +1,149 @@
-# VS Benefits - Admin & Client Portal Guide
+# VS Benefits Portal — Admin & Member Setup Guide
 
-This file covers the two private dashboards bundled with the site:
-
-- **`admin.html`** - your private command center (leads, members, accounts, support inbox, referrals, calendar)
-- **`client.html`** - the member-facing portal (your clients sign in here to view their plan, message you, and refer family)
-
-The home page now has a **Log In** button in the nav and a **Members** section that points clients to `client.html`. Nothing public links to `admin.html` - it's bookmark-only and tagged `noindex,nofollow` so search engines ignore it.
-
-Both portals are **mobile-first**: usable on a phone in the field, and progressively wider on tablet and desktop.
+This document explains how the **admin portal** (`admin.html`) and **member portal** (`client.html`) work, and how to manage them as the practice owner.
 
 ---
 
-## Quick start
+## 1. The two portals
 
-1. Open `admin.html` in a browser, set your admin password (one time per device).
-2. Go to the **Members** tab and click **+ Add member** for each current client. Each gets a 6-digit verification code + a copy/share invite link.
-3. Send the invite link (text or email) to the client. They click it, set a password, and they're in `client.html`.
-4. Manage everything from there: see who's registered (Accounts tab), reply to messages (Support tab), and track referrals + payouts (Referrals tab).
+| Page | Who it's for | URL |
+|---|---|---|
+| `admin.html` | You (Bradley), the advisor | `vshealthbenefits.com/admin.html` |
+| `client.html` | Your members / clients | `vshealthbenefits.com/client.html` |
+| `index.html` | Public marketing page with a Login modal that links to both | `vshealthbenefits.com/` |
 
----
-
-## Open the portals
-
-- Admin: **`https://vshealthbenefits.com/admin.html`** - bookmark this.
-- Client: **`https://vshealthbenefits.com/client.html`** - send to clients via the invite link, or they can reach it from the home page nav.
+Both portals share the same browser-side data (`localStorage`), so when both pages are open in the same browser they stay in sync. There is no server — everything lives in the browser. This keeps the site fast, free, and private to your machine. (For a true multi-device system you'd later wire it to a backend; the localStorage layer is designed so that's a clean swap.)
 
 ---
 
-## First-time admin setup
+## 2. First-time admin setup
 
-1. Open `admin.html`. You'll see **"Create your admin password"**.
-2. Choose 8+ characters. SHA-256 hashed, stored only in your browser (never sent anywhere).
-3. **No password reset.** If you forget it, the "Reset & start over" link wipes the password and all admin data on that device. Back up regularly.
-4. Each device is independent. Use **Settings -> Backup / Restore** to copy data between phone and laptop.
-5. Session lasts until you close the tab.
+The first time you open `admin.html`, you'll see a **Setup** screen. To create the admin account you'll be asked for:
 
----
+1. **Admin setup code** — this is the secret gate that prevents anyone other than you from creating an admin login.
+2. **Your password** (and confirm) — this becomes your admin login password.
 
-## Leads tab
+The setup code is intentionally **not visible anywhere on the page**. It's stored in source code as a base64-encoded value (`atob("MDYwNQ==")` decodes to `0605`). This is light obfuscation — appropriate for a static site — and good enough that someone glancing at the page source won't see "0605" in plain text.
 
-- **+ Add lead** - name, company, phone, email, **address**, coverage, status, next step, notes.
-- **Search** filters across name, company, email, phone, address, notes.
-- **Filter by status** - New / Contacted / Quoted / Closed won / Closed lost.
-- **Export CSV / Import CSV** - one-click backup, or import from a CSV with headers (`name`, `company`, `phone`, `email`, `address`, `coverage`, `status`, `next`, `notes`).
+> **The default admin setup code is `0605`.**
+> Don't share this code with anyone. Treat it like a master key.
 
-### Auto-capture from your Make.com webhook
-
-Public forms POST to `window.MAKE_WEBHOOK_URL` (set in Settings tab). To pipe submissions into Leads, the simplest path is still: have Make append to a Google Sheet, then weekly do **Import CSV**. For real-time, you'd need a small backend - ping me when you want it.
+After you complete setup, the setup screen disappears and a **Sign in** screen takes its place. From then on you log in with just your password.
 
 ---
 
-## Members tab
+## 3. Changing the admin setup code
 
-This is the master list of your **enrolled VS Benefits clients**. The portal restricts client account creation to people on this list.
+You can rotate the setup code at any time:
 
-- **+ Add member** - name, email, phone, address, enrollment date, coverage type, plan, status, notes.
-- Each new member gets:
-  - A **6-digit verification code** (used once during signup).
-  - A **shareable invite link** that pre-fills their email + code on the signup screen.
-- **Invite** - opens the invite modal with copy buttons for the code and the URL.
-- **New code** - regenerates the verification code if the client lost the old one. The previous code stops working immediately.
-- **Edit** - update any of their info.
-- **Delete** - removes the member. If they had a portal account, the account is left orphaned (use Accounts tab to revoke).
+1. Sign in to `admin.html`.
+2. Click the **Settings** tab.
+3. Find **Change admin setup code**.
+4. Enter the **current** code, then a **new** code, then confirm.
+5. Click Save.
 
-Status badges in the right-hand column tell you whether each member has registered an account, used their code, or is still pending.
+The new code is what anyone (including you, if you ever need to set up admin on a new device/browser) will need on the setup screen going forward.
 
----
-
-## Accounts tab (NEW)
-
-Shows every client who has registered a Client Portal account.
-
-- **Name / Email / Phone** - pulled from the matching Member record.
-- **Registered** - when the client first set up their account.
-- **Last sign-in** - relative timestamp, refreshed each time they log in.
-- **Status** - active / paused / churned (mirrors the Member record).
-
-Per-row actions:
-
-- **Message** - jumps you straight to the Support tab with that conversation pre-loaded so you can type a reply.
-- **Reset password** - clears the client's password AND issues a fresh 6-digit code. Use this when a client forgets their password. Tell them to use the new code on the Sign Up tab to re-register.
-- **Revoke** - removes the account entirely. The Member record stays put; they can no longer sign in until you regenerate their code from the Members tab.
-
-**Export CSV** dumps name, email, phone, registered date, last sign-in.
+If you forget the current code: open Browser DevTools → Application → Local Storage and delete the key `vs_admin_setup_code`. The default `0605` will be restored on next page load.
 
 ---
 
-## Support tab
+## 4. Member sign-up (clients)
 
-- Left column: list of conversations (newest activity first, unread badge if the client has messaged).
-- Right column: the thread for whoever you've selected, plus a reply box.
-- Replies are saved locally and (if a webhook is configured in Settings) forwarded to Make.com so you can fan them out via SMS or email.
-- **Mark all read** clears unread badges in bulk.
+Members create accounts at `client.html`. The form asks for **only**:
 
----
+- First name
+- Last name
+- Email
+- Phone
+- Password (and confirm)
 
-## Referrals tab
+There is **no 6-digit verification code** and no invitation flow. Anyone can create a member account. Their password is hashed with SHA-256 in the browser before storage — the raw password is never saved.
 
-Prospects your clients have submitted from the Refer tab in their portal.
+After creating an account they're signed in immediately and land on a dashboard with three tabs:
 
-Each row shows: who referred them, the prospect's contact info, relationship, notes, status, **payout amount**, and time submitted.
-
-**Editing on the fly:**
-
-- **Status** dropdown: New / Contacted / Enrolled / Lost.
-- **Payout** numeric field: enter the dollar amount you owe the referring client (e.g., $25, $50). Updates instantly. Webhook fires on change.
-- **Paid** checkbox: tick when you've sent the reward. Stamps the date and includes the row in your "Paid" totals.
-- **Move to Leads** - copies the prospect into your Leads tab so you can work them like any other lead.
-- **Delete** - remove the referral.
-
-**Top of tab** shows running totals for **Owed** vs **Paid** so you always know what you owe your clients. **Export CSV** includes payout amounts and paid status.
+- **Profile** — their info, account creation date, delete-account button
+- **Support** — direct messages to/from you
+- **Refer** — referral submission form (you receive these in the admin portal)
 
 ---
 
-## Calendar tab
+## 5. Admin dashboard
 
-Monthly grid of your events. Local-only by default; optionally two-way with Google Calendar.
+After signing in, you have these tabs:
 
-- **+ Add event** or click any day. Title, start/end, location/link, notes.
-- Click a colored pill to edit (blue = local, teal = Google).
-- "Upcoming (next 14 days)" list below the calendar shows everything in chronological order.
+| Tab | What's there |
+|---|---|
+| **Leads** | Marketing-form leads from the public site (Get a Quote, Contact, etc.). Add, edit, advance status, delete, export CSV. |
+| **Client Accounts** | Every member who created an account on `client.html`. Search by name/email/phone. Per row you can: send a direct message, reset their password (they'll have to contact you to be issued a new one), or revoke the account. Export CSV. |
+| **Support** | Two-way message threads with each member. Reply directly. Marks unread counts. |
+| **Referrals** | Every referral submitted via the member portal. Mark status, set the **payout amount**, mark **paid/unpaid**. One-click "Convert to Lead" pushes the referred contact into your Leads pipeline. Export CSV. |
+| **Settings** | Change admin password, change setup code, set Make.com webhook URL, export/import all data, sign out. |
 
-### Connect Google Calendar (optional)
+### Resetting a member's password
 
-You need your own OAuth Client ID (one-time, free).
+Use the "Reset password" action on their row in **Client Accounts**. This wipes their stored password hash. Next time they try to sign in they'll see a message telling them to contact their advisor for a new one — at which point you can either:
 
-1. **Google Cloud project** - [console.cloud.google.com](https://console.cloud.google.com) -> New Project ("VS Benefits Admin").
-2. **APIs & Services -> Library** -> Enable **Google Calendar API**.
-3. **OAuth consent screen** - External user type. Fill in App name, your email. Add scopes `../auth/calendar.events` and `../auth/userinfo.email`. Add yourself under Test users. Leave in "Testing" mode.
-4. **Credentials -> + Create Credentials -> OAuth client ID** - Web application. Authorized JavaScript origins: `https://vshealthbenefits.com` (and `http://localhost` for local testing - no `file://`).
-5. Copy the Client ID, paste into **admin.html -> Settings -> Google Client ID -> Save**.
-6. **Calendar tab -> Connect Google Calendar** -> sign in -> grant permissions.
+- Tell them to delete their account and create a new one (simplest), or
+- Ask them what password they want, sign in as them, and have them change it later (use the same browser they'll use).
 
-Local events created with the **"Also create on Google Calendar"** box ticked get pushed to your primary calendar. Editing existing Google events is intentionally read-only here - edit those on Google Calendar directly.
+There is no email-based password-reset flow because there is no backend mail server in this static setup.
 
----
+### Revoking an account
 
-## Settings tab
-
-- **Change password** (current required).
-- **Webhook URL** - Make.com endpoint that receives lead submissions, support messages, referrals, payout updates, sign-ins.
-- **Google OAuth Client ID**.
-- **Backup all data** - JSON download with leads, members, **accounts**, messages, referrals, events, and the webhook/Client ID. Password hash and Google token are NOT exported (for safety). **Save these weekly.**
-- **Restore from backup** - merges with current data. Useful for moving to a new device.
-- **Wipe all admin data** - nuclear option for this device.
+"Revoke" on a member row marks their account `status: revoked`. They keep showing up in your Accounts list (so you can audit) but can no longer sign in.
 
 ---
 
-## Client Portal (`client.html`)
+## 6. Optional: Make.com webhook
 
-Mobile-first dashboard your clients use after they register.
+In **Settings → Webhook URL**, paste a Make.com (or Zapier) webhook URL. From then on the following events will be POSTed to it (fire-and-forget, `mode: no-cors`):
 
-### Sign-up flow
+- `client_signup` — new member created an account
+- `client_signin` — member signed in
+- `client_message` — member sent you a support message
+- `client_referral` — member submitted a referral
+- `client_account_deleted` — member self-deleted their account
+- Lead form submissions from the public marketing pages
 
-1. Client opens `client.html` (from the home page Members section, the Login modal, or the invite link you sent them).
-2. Clicks the **Sign Up** tab.
-3. Enters their email, the 6-digit code, and picks a password.
-4. The portal verifies they exist as a Member with that exact code (and the code hasn't been used). If anything fails, they get a clear error and can't proceed.
-5. Account is created, logged in, and the dashboard loads.
-
-The verification keeps random visitors out - only people **you've explicitly added** to the Members tab can register.
-
-### Invite link
-
-When you click "Invite" on a member, the modal gives you a long URL like `client.html?invite=eyJuI...`. Sending that link prefills the signup form and seeds the member record on the client's device, so cross-device signup works even if they've never opened the site before.
-
-### Dashboard tabs (all mobile-first)
-
-- **Profile** - read-only view of the member info you entered: name, email, phone, address, enrollment date, coverage type, plan, status.
-- **Support** - chat-style thread with you. Their messages appear in your admin Support inbox; your replies show up here.
-- **Refer** - form to refer family or coworkers (name, relationship, phone, email, coverage interest, notes). Submissions land in your admin Referrals tab.
-
-### Webhook events the client portal fires
-
-If a webhook URL is configured in admin Settings, the client portal forwards (best-effort, no-cors) on:
-
-- `client_account_created` - when a member registers.
-- `client_sign_in` - on each successful login.
-- `support_message` - when the client posts a support message.
-- `client_referral` - when the client submits a referral.
-
-The admin portal also forwards: `admin_reply`, `referral_payout_updated`, `referral_paid_status`, `client_password_reset`, `client_account_revoked`.
+Use this to mirror events into Google Sheets, Slack, your CRM, or to send yourself email notifications.
 
 ---
 
-## Login modal (home page)
+## 7. Backups (export / import)
 
-The home page nav has a **Log In** button (also in the footer's Members column). It opens a modal with two clearly-labeled options:
+The whole admin database is just a few keys in `localStorage`. **Settings → Export data** downloads a single JSON file containing leads, accounts, messages, referrals, webhook URL, and the current setup code. Save this somewhere safe periodically.
 
-- **Client Portal** -> `client.html` (for members).
-- **Admin Portal** -> `admin.html` (for you / your team).
-
-This way, anyone arriving at the homepage sees the right entry point without exposing the admin URL to crawlers.
+To restore (e.g., on a new computer): set up admin first, then **Settings → Import data** and upload the JSON file.
 
 ---
 
-## Security notes
+## 8. Storage keys reference
 
-This is a **single-device, browser-storage** system. On purpose - the public site is fully static (no server, no database).
+If you ever need to inspect or clean up directly in DevTools:
 
-- All data lives in `localStorage`. Clear browser data and it's gone. **Back up weekly.**
-- Admin password hash never leaves the browser. Same for client passwords.
-- The 6-digit codes + Members allow-list keep the client portal from being abused, but anyone with admin access can issue codes - so guard your admin password.
-- For real multi-device sync (your phone + laptop, or several team members), you'd want a real backend. Ping me when you want it - I'll wire up serverless + Firestore or Supabase.
-
----
-
-## Mobile usage
-
-Both portals are usable on a phone:
-
-- Tap targets are 44px+.
-- Tables scroll horizontally where they don't fit.
-- The admin tabs wrap; the dashboard collapses to a single column.
-- Client portal: profile / support / refer all single-column on phone.
-
-The home page Login modal is full-screen-ish on phones and tappable.
+| Key | Holds |
+|---|---|
+| `vs_admin_hash` | SHA-256 hash of your admin password |
+| `vs_admin_session` | Active admin session (sessionStorage) |
+| `vs_admin_setup_code` | Current admin setup code (default: `0605`) |
+| `vs_leads` | All leads in the CRM |
+| `vs_client_accounts` | All member accounts |
+| `vs_messages` | All support thread messages |
+| `vs_referrals` | All referral submissions |
+| `vs_webhook_url` | Make.com / Zapier webhook URL |
+| `vs_client_session` | Active client session (sessionStorage, in client.html) |
 
 ---
 
-## Troubleshooting
+## 9. Quick checklist when going live
 
-**"A client says signup says 'no member record for that email'"**
-You haven't added them to the Members tab on the device they're trying to register from. Add them, then send them the invite link (which carries the member info to their device).
+1. Open `admin.html`, complete setup with code `0605` and a strong admin password.
+2. **Change the setup code** to something only you know (Settings → Change admin setup code).
+3. Optional: paste a Make.com webhook URL in Settings.
+4. Test creating a member at `client.html`. Confirm they show up in **Client Accounts**.
+5. Send yourself a test support message from `client.html` and reply from `admin.html`.
+6. Submit a test referral and verify it appears in the **Referrals** tab.
+7. Export your data once so you have an empty-baseline backup.
 
-**"A client lost their password"**
-Accounts tab -> find them -> **Reset password**. Then go to Members tab, copy the new 6-digit code, and send to them. They use the Sign Up tab to re-register.
-
-**"Two devices, two sets of data"**
-Expected - this is browser-local. Admin Settings -> Backup all data, transfer the JSON, Restore on the other device. Or move to a real backend.
-
-**"My referrals payout totals look wrong"**
-The "Owed" total adds up unpaid referrals; "Paid" totals the paid ones. If a payout reads $0, that referral hasn't been priced yet. Type a number into the payout field on that row.
-
-**"Google sign-in says 'Access blocked'"**
-You're either on `file://` (not allowed) or your URL isn't in Authorized JavaScript origins. Run a local server (`python3 -m http.server 8080`) or add the exact domain.
-
----
-
-## Roadmap (ask if you want any)
-
-- Real backend so phone + laptop stay in sync in real time.
-- Send the client an actual SMS / email when you reply (via your Make.com webhook).
-- Per-lead reminders tied to calendar events.
-- Pipeline / Kanban view for leads.
-- Click-to-call logging.
-- Bulk-import members from a CSV (right now they're added one-by-one).
-- Member dashboard: documents (insurance cards, EOBs) the client can download.
-
-Tell me which would actually save you time and I'll build it.
+That's it — you're ready to send the link to clients.

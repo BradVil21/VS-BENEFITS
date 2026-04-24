@@ -1,269 +1,277 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>VS Benefits - Client Portal</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Member Portal | VS Benefits</title>
+<meta name="description" content="VS Benefits member portal. Sign in or create an account to manage your coverage, send a message to your advisor, and refer friends and family." />
+<link rel="canonical" href="https://vshealthbenefits.com/client.html" />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="icon" type="image/png" href="assets/images/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
 <style>
 :root{
-  --bg:#f6f8fb;--card:#ffffff;--ink:#0e1b2c;--muted:#5b6a7d;--line:#e5ecf3;
-  --brand:#0a4f8a;--brand-2:#1e88c8;--accent:#10b981;--warn:#b91c1c;--ok:#047857;
-  --shadow:0 6px 18px rgba(14,27,44,.06);
+  --blue-900:#0b2346; --blue-800:#0f2e5c; --blue-700:#16447f;
+  --blue-600:#1e5ab0; --blue-500:#2f7de0; --blue-100:#e8f0fb; --blue-50:#f4f8fe;
+  --teal:#0db5a6; --gold:#f5b301;
+  --ink:#0e1726; --ink-2:#314056; --line:#dfe6f1; --line-2:#eef2f8;
+  --bg:#f6f9fc; --white:#fff;
+  --ok:#0a8754; --warn:#b46b00; --err:#b3261e;
+  --shadow-sm:0 1px 2px rgba(11,35,70,.06);
+  --shadow-md:0 8px 24px rgba(11,35,70,.10);
+  --r-sm:8px; --r-md:12px; --r-lg:16px;
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.45}
-a{color:var(--brand);text-decoration:none}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%}
+h1,h2,h3,h4{font-family:Poppins,Inter,system-ui,sans-serif;color:var(--blue-900);margin:0 0 .5em}
+a{color:var(--blue-600);text-decoration:none}
 a:hover{text-decoration:underline}
-button{font-family:inherit;font-size:15px;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink);padding:9px 14px;transition:background .15s,border .15s}
-button:hover{background:#f1f5fa}
-button.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
-button.primary:hover{background:var(--brand-2);border-color:var(--brand-2)}
-button.danger{background:#fff;color:var(--warn);border-color:#f1c2c2}
-button.danger:hover{background:#fdecec}
-button.ghost{background:transparent;border-color:transparent;color:var(--muted)}
-button.ghost:hover{background:#eef3f8;color:var(--ink)}
-button:disabled{opacity:.55;cursor:not-allowed}
-input,select,textarea{font-family:inherit;font-size:15px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink);padding:10px 12px;width:100%}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand-2);box-shadow:0 0 0 3px rgba(30,136,200,.18)}
-label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:5px}
-.field{margin-bottom:14px}
-.row{display:flex;gap:10px;flex-wrap:wrap}
-.row > *{flex:1;min-width:0}
-.muted{color:var(--muted)}
-.small{font-size:13px}
-.badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:999px;background:#eef3f8;color:var(--brand);text-transform:uppercase}
-.badge.ok{background:#dcfce7;color:#047857}
-.badge.warn{background:#fef3c7;color:#92400e}
-.badge.err{background:#fee2e2;color:#b91c1c}
-.hidden{display:none !important}
-header.appbar{background:#fff;border-bottom:1px solid var(--line);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:20}
-header.appbar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--brand);font-size:18px}
-header.appbar .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);display:inline-block}
-header.appbar .who{font-size:13px;color:var(--muted)}
-.tabs{display:flex;gap:4px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--line);overflow-x:auto}
-.tabs button{border:none;background:transparent;color:var(--muted);font-weight:600;padding:8px 14px;border-radius:8px;white-space:nowrap}
-.tabs button.active{background:var(--brand);color:#fff}
-main{padding:18px;max-width:1100px;margin:0 auto}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:18px;margin-bottom:18px}
-.card h2{margin:0 0 6px;font-size:18px}
-.card .desc{color:var(--muted);font-size:14px;margin-bottom:14px}
-.banner{padding:12px 14px;border-radius:10px;font-size:14px;margin-bottom:14px}
-.banner.info{background:#eef6fc;color:#075a8c;border:1px solid #cce5f4}
-.banner.ok{background:#ecfdf5;color:#065f46;border:1px solid #b6ebd1}
-.banner.err{background:#fef2f2;color:#9b1c1c;border:1px solid #f3c2c2}
-.center-screen{min-height:90vh;display:flex;align-items:center;justify-content:center;padding:18px}
-.auth-card{width:100%;max-width:480px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:24px}
-.auth-card h1{margin:0 0 4px;color:var(--brand);font-size:24px}
-.auth-card .sub{color:var(--muted);margin-bottom:18px;font-size:14px}
-.tabs.tabs-pill{padding:0;border:none;background:transparent;margin-bottom:16px;justify-content:center;gap:6px}
-.tabs.tabs-pill button{background:#eef3f8;color:var(--muted);border-radius:999px;padding:7px 18px;font-size:14px}
-.tabs.tabs-pill button.active{background:var(--brand);color:#fff}
-.kv{display:grid;grid-template-columns:160px 1fr;gap:8px 14px;font-size:14px}
-.kv .k{color:var(--muted);font-weight:600}
-.kv .v{color:var(--ink)}
-@media (max-width:600px){
-  .kv{grid-template-columns:1fr;gap:2px 0}
-  .kv .k{margin-top:8px}
-}
-.thread{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow-y:auto;padding:6px;border:1px solid var(--line);border-radius:10px;background:#f9fbfd;margin-bottom:12px}
-.thread .msg{max-width:78%;padding:9px 12px;border-radius:12px;font-size:14px;line-height:1.4}
-.thread .msg .meta{font-size:11px;color:var(--muted);margin-top:4px}
-.thread .msg.from-client{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:2px}
-.thread .msg.from-client .meta{color:rgba(255,255,255,.85)}
-.thread .msg.from-admin{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:2px}
-.empty-state{padding:40px 16px;text-align:center;color:var(--muted)}
-.foot{margin-top:24px;text-align:center;color:var(--muted);font-size:12px}
-.foot a{color:var(--muted)}
-.invite-tag{display:inline-block;background:#eef6fc;border:1px dashed #b8d8ee;color:#075a8c;font-size:12px;padding:4px 8px;border-radius:6px;margin-bottom:12px}
-.code-input{font-family:"SF Mono",Menlo,Consolas,monospace;letter-spacing:.4em;text-align:center;font-size:20px;font-weight:700}
-.divider{height:1px;background:var(--line);margin:18px 0}
+button{font-family:inherit}
+input,select,textarea{font-family:inherit;font-size:16px}
+
+/* Top bar */
+.bar{background:var(--blue-900);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.bar .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-family:Poppins}
+.bar .brand img{width:32px;height:32px;border-radius:6px;background:#fff;object-fit:contain}
+.bar .right{display:flex;align-items:center;gap:8px}
+.bar a.home{color:#cfe1ff;font-size:14px;text-decoration:none}
+.bar a.home:hover{color:#fff;text-decoration:underline}
+.bar .signout{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px}
+.bar .signout:hover{background:rgba(255,255,255,.2)}
+
+/* Wrap */
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 80px}
+
+/* Auth card */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:22px;margin-bottom:20px}
+.card h2{font-size:22px;margin:0 0 6px}
+.card .lede{color:var(--ink-2);margin:0 0 18px;font-size:14px}
+.tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:18px;gap:4px}
+.tabs button{flex:1;background:none;border:0;padding:12px 8px;font-size:15px;font-weight:600;color:var(--ink-2);cursor:pointer;border-bottom:3px solid transparent;min-height:44px}
+.tabs button.active{color:var(--blue-700);border-bottom-color:var(--blue-600)}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:13px;font-weight:600;color:var(--ink-2)}
+.field input,.field select,.field textarea{padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;color:var(--ink);min-height:44px;width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(47,125,224,.18)}
+.row2{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:560px){.row2{grid-template-columns:1fr 1fr;gap:14px}.row2 .field{margin-bottom:14px}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:10px;font-weight:700;font-size:15px;border:0;cursor:pointer;min-height:44px;width:100%}
+.btn-primary{background:var(--blue-600);color:#fff}
+.btn-primary:hover{background:var(--blue-700)}
+.btn-ghost{background:transparent;color:var(--blue-700);border:1px solid var(--line)}
+.btn-ghost:hover{background:var(--blue-50)}
+.btn-danger{background:#fff;color:var(--err);border:1px solid #f1c2bf}
+.btn-danger:hover{background:#fdf2f1}
+
+.notice{padding:10px 12px;border-radius:8px;font-size:13.5px;margin-bottom:12px}
+.notice-err{background:#fdecea;color:var(--err);border:1px solid #f5c6c1}
+.notice-ok{background:#e6f7ef;color:var(--ok);border:1px solid #b9e6cf}
+.notice-info{background:var(--blue-50);color:var(--blue-700);border:1px solid #cfdef6}
+
+.hint{font-size:12.5px;color:var(--ink-2);margin-top:-4px;margin-bottom:14px}
+.muted{color:var(--ink-2);font-size:13px}
+
+/* Dashboard */
+.dash-head{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+.dash-head .hi{font-size:13px;color:var(--ink-2)}
+.dash-head h1{font-size:24px;margin:0}
+@media(min-width:560px){.dash-head{flex-direction:row;align-items:end;justify-content:space-between}}
+
+.dtabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.dtabs button{background:none;border:0;padding:12px 14px;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;min-height:44px}
+.dtabs button.active{color:var(--blue-700);border-bottom-color:var(--blue-600)}
+
+.panel{display:none}
+.panel.active{display:block}
+
+/* Profile */
+.kv{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:14px}
+@media(min-width:560px){.kv{grid-template-columns:1fr 1fr}}
+.kv .item{background:var(--blue-50);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px}
+.kv .item .lbl{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);font-weight:700}
+.kv .item .val{font-size:15px;color:var(--ink);margin-top:2px;word-break:break-word}
+
+/* Messages */
+.msgs{border:1px solid var(--line);border-radius:12px;background:#fff;max-height:360px;overflow-y:auto;padding:12px;margin-bottom:14px}
+.msg{padding:10px 12px;border-radius:10px;margin-bottom:8px;max-width:85%;font-size:14px;line-height:1.45}
+.msg.client{background:var(--blue-50);color:var(--ink);margin-left:auto;border:1px solid #cfdef6}
+.msg.advisor{background:#f3f5f8;color:var(--ink);border:1px solid var(--line-2)}
+.msg .meta{font-size:11px;color:var(--ink-2);margin-top:4px}
+.empty{padding:24px;text-align:center;color:var(--ink-2);font-size:13.5px}
+
+/* Footer */
+.foot{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);text-align:center;color:var(--ink-2);font-size:12.5px}
+.foot a{color:var(--ink-2)}
+
+[hidden]{display:none !important}
 </style>
 </head>
 <body>
 
-<!-- ============ AUTH SCREEN ============ -->
-<section id="auth-screen" class="center-screen">
-  <div class="auth-card">
-    <h1>VS Benefits Client Portal</h1>
-    <div class="sub">Members-only access. Need help? Email <a href="mailto:bvilsainthealth@gmail.com">bvilsainthealth@gmail.com</a> or call (954) 825-1009.</div>
-
-    <div id="invite-banner" class="banner info hidden"></div>
-    <div id="auth-err" class="banner err hidden"></div>
-    <div id="auth-ok" class="banner ok hidden"></div>
-
-    <div class="tabs tabs-pill" role="tablist">
-      <button id="tab-login" class="active" type="button">Sign in</button>
-      <button id="tab-signup" type="button">Create account</button>
-    </div>
-
-    <!-- Login form -->
-    <form id="login-form">
-      <div class="field">
-        <label for="login-email">Email</label>
-        <input id="login-email" type="email" autocomplete="username" required>
-      </div>
-      <div class="field">
-        <label for="login-pass">Password</label>
-        <input id="login-pass" type="password" autocomplete="current-password" required>
-      </div>
-      <button class="primary" type="submit" style="width:100%">Sign in</button>
-    </form>
-
-    <!-- Signup form -->
-    <form id="signup-form" class="hidden">
-      <div class="field">
-        <label for="signup-email">Email (the one we have on file)</label>
-        <input id="signup-email" type="email" autocomplete="username" required>
-      </div>
-      <div class="field">
-        <label for="signup-code">6-digit verification code</label>
-        <input id="signup-code" class="code-input" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required>
-        <div class="small muted" style="margin-top:6px">Don't have a code? Ask Bradley to send your invite link or call (954) 825-1009.</div>
-      </div>
-      <div class="field">
-        <label for="signup-pass">Choose a password (min 8 chars)</label>
-        <input id="signup-pass" type="password" autocomplete="new-password" minlength="8" required>
-      </div>
-      <div class="field">
-        <label for="signup-pass2">Confirm password</label>
-        <input id="signup-pass2" type="password" autocomplete="new-password" minlength="8" required>
-      </div>
-      <button class="primary" type="submit" style="width:100%">Create account</button>
-    </form>
-
-    <div class="divider"></div>
-    <div class="small muted" style="text-align:center">
-      <a href="index.html">&larr; Back to vshealthbenefits.com</a>
-      &nbsp;&middot;&nbsp;
-      <a href="#" id="reset-link">Reset this device</a>
-    </div>
-  </div>
-</section>
-
-<!-- ============ DASHBOARD ============ -->
-<div id="dashboard" class="hidden">
-  <header class="appbar">
-    <div class="brand"><span class="dot"></span> VS Benefits Client Portal</div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <span class="who" id="who-label"></span>
-      <button id="signout" class="ghost" type="button">Sign out</button>
-    </div>
-  </header>
-
-  <nav class="tabs">
-    <button class="tab-btn active" data-panel="panel-profile" type="button">Profile</button>
-    <button class="tab-btn" data-panel="panel-support" type="button">Support</button>
-    <button class="tab-btn" data-panel="panel-refer" type="button">Refer a friend</button>
-  </nav>
-
-  <main>
-
-    <!-- ========= PROFILE ========= -->
-    <section id="panel-profile" class="panel">
-      <div class="card">
-        <h2>Your account</h2>
-        <div class="desc">This is what we have on file. Need to update something? Use the Support tab and we'll fix it.</div>
-        <div id="profile-kv" class="kv"></div>
-      </div>
-      <div class="card">
-        <h2>Quick actions</h2>
-        <div class="desc">Have a question about your plan, claims, or open enrollment?</div>
-        <div class="row">
-          <button class="primary" type="button" onclick="goTab('panel-support')">Message support</button>
-          <button type="button" onclick="goTab('panel-refer')">Refer a friend</button>
-          <a class="badge" href="tel:+19548251009" style="padding:9px 14px;text-decoration:none">Call (954) 825-1009</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========= SUPPORT ========= -->
-    <section id="panel-support" class="panel hidden">
-      <div class="card">
-        <h2>Support inbox</h2>
-        <div class="desc">Messages here go straight to Bradley. Typical response time: same business day.</div>
-        <div id="support-thread" class="thread"></div>
-        <form id="support-form" autocomplete="off">
-          <div class="field">
-            <label for="support-msg">New message</label>
-            <textarea id="support-msg" rows="3" placeholder="Type your question or update here&hellip;" required></textarea>
-          </div>
-          <div class="row">
-            <button class="primary" type="submit">Send message</button>
-            <button type="button" id="support-mailto" class="ghost">Or open in your email app</button>
-          </div>
-        </form>
-      </div>
-    </section>
-
-    <!-- ========= REFER ========= -->
-    <section id="panel-refer" class="panel hidden">
-      <div class="card">
-        <h2>Refer a friend</h2>
-        <div class="desc">Know a small business owner, family, or 1099 contractor who could use better coverage? Drop their info here and someone from VS Benefits will reach out personally. We'll let them know you sent us.</div>
-        <form id="refer-form" autocomplete="off">
-          <div class="row">
-            <div class="field">
-              <label for="ref-name">Their name *</label>
-              <input id="ref-name" type="text" required>
-            </div>
-            <div class="field">
-              <label for="ref-relationship">Your relationship</label>
-              <input id="ref-relationship" type="text" placeholder="e.g. business partner, friend, family">
-            </div>
-          </div>
-          <div class="row">
-            <div class="field">
-              <label for="ref-phone">Their phone</label>
-              <input id="ref-phone" type="tel" placeholder="(305) 555-1234">
-            </div>
-            <div class="field">
-              <label for="ref-email">Their email</label>
-              <input id="ref-email" type="email">
-            </div>
-          </div>
-          <div class="field">
-            <label for="ref-coverage">What kind of coverage might they need?</label>
-            <select id="ref-coverage">
-              <option value="">Not sure</option>
-              <option>Group Health (10-99 employees)</option>
-              <option>Micro-Group (2-9 employees)</option>
-              <option>Family / Individual</option>
-              <option>ACA Marketplace</option>
-              <option>Dental &amp; Vision</option>
-              <option>Medicaid</option>
-              <option>Self-Employed / 1099</option>
-              <option>Ancillary (Life / Disability)</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="ref-notes">Anything we should know? (optional)</label>
-            <textarea id="ref-notes" rows="3" placeholder="Best time to reach them, what they're looking for, etc."></textarea>
-          </div>
-          <button class="primary" type="submit">Send referral</button>
-        </form>
-        <div id="refer-ok" class="banner ok hidden" style="margin-top:14px"></div>
-      </div>
-
-      <div class="card">
-        <h2>Your past referrals</h2>
-        <div id="refer-list" class="muted small">You haven't sent any referrals yet.</div>
-      </div>
-    </section>
-
-  </main>
-
-  <div class="foot">
-    VS Benefits &middot; Miami, FL &middot; <a href="index.html">vshealthbenefits.com</a>
+<div class="bar">
+  <a class="brand" href="index.html">
+    <img src="assets/images/favicon.png" alt="" onerror="this.style.display='none'" />
+    <span>VS Benefits</span>
+  </a>
+  <div class="right">
+    <a class="home" href="index.html">Home</a>
+    <button id="signout-btn" class="signout" hidden>Sign out</button>
   </div>
 </div>
 
+<main class="wrap">
+
+  <!-- ====================== AUTH VIEW ====================== -->
+  <section id="auth-view">
+    <div class="card">
+      <h2>Member portal</h2>
+      <p class="lede">Sign in to message your advisor, refer a friend, and view your profile.</p>
+
+      <div class="tabs" role="tablist">
+        <button id="tab-login" class="active" type="button" role="tab">Sign in</button>
+        <button id="tab-signup" type="button" role="tab">Create account</button>
+      </div>
+
+      <!-- Sign in -->
+      <form id="login-form" autocomplete="on" novalidate>
+        <div id="login-msg"></div>
+        <div class="field">
+          <label for="li-email">Email</label>
+          <input id="li-email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="li-pw">Password</label>
+          <input id="li-pw" type="password" autocomplete="current-password" required />
+        </div>
+        <button class="btn btn-primary" type="submit">Sign in</button>
+        <p class="muted" style="margin-top:14px;text-align:center">Forgot your password? <a href="contact.html">Contact your advisor</a> to reset it.</p>
+      </form>
+
+      <!-- Sign up -->
+      <form id="signup-form" autocomplete="on" novalidate hidden>
+        <div id="signup-msg"></div>
+        <div class="row2">
+          <div class="field">
+            <label for="su-first">First name</label>
+            <input id="su-first" type="text" autocomplete="given-name" required />
+          </div>
+          <div class="field">
+            <label for="su-last">Last name</label>
+            <input id="su-last" type="text" autocomplete="family-name" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="su-email">Email</label>
+          <input id="su-email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="su-phone">Phone</label>
+          <input id="su-phone" type="tel" autocomplete="tel" inputmode="tel" required />
+        </div>
+        <div class="field">
+          <label for="su-pw">Create password</label>
+          <input id="su-pw" type="password" autocomplete="new-password" minlength="8" required />
+          <p class="hint">At least 8 characters.</p>
+        </div>
+        <div class="field">
+          <label for="su-pw2">Confirm password</label>
+          <input id="su-pw2" type="password" autocomplete="new-password" minlength="8" required />
+        </div>
+        <button class="btn btn-primary" type="submit">Create account</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ====================== DASHBOARD VIEW ====================== -->
+  <section id="dash-view" hidden>
+
+    <div class="dash-head">
+      <div>
+        <div class="hi">Welcome back,</div>
+        <h1 id="dh-name">Member</h1>
+      </div>
+      <div class="muted" id="dh-email"></div>
+    </div>
+
+    <div class="card" style="padding:0">
+      <div class="dtabs" role="tablist">
+        <button id="dtab-profile" class="active" type="button" role="tab">Profile</button>
+        <button id="dtab-support" type="button" role="tab">Support</button>
+        <button id="dtab-refer" type="button" role="tab">Refer</button>
+      </div>
+
+      <div style="padding:20px">
+
+        <!-- Profile -->
+        <div id="panel-profile" class="panel active">
+          <div class="kv">
+            <div class="item"><div class="lbl">Name</div><div class="val" id="pv-name">—</div></div>
+            <div class="item"><div class="lbl">Email</div><div class="val" id="pv-email">—</div></div>
+            <div class="item"><div class="lbl">Phone</div><div class="val" id="pv-phone">—</div></div>
+            <div class="item"><div class="lbl">Member since</div><div class="val" id="pv-since">—</div></div>
+          </div>
+          <div class="notice notice-info">Need to update your contact information? <a href="contact.html">Send a request</a> and your advisor will update your file.</div>
+          <button id="delete-account" class="btn btn-danger" type="button">Delete my account</button>
+        </div>
+
+        <!-- Support -->
+        <div id="panel-support" class="panel">
+          <h3 style="font-size:17px;margin:0 0 6px">Message your advisor</h3>
+          <p class="muted" style="margin:0 0 14px">Bradley typically responds within one business day.</p>
+          <div id="msgs" class="msgs"></div>
+          <form id="msg-form">
+            <div class="field">
+              <label for="msg-text">Your message</label>
+              <textarea id="msg-text" rows="3" placeholder="Type your question or update here&hellip;" required></textarea>
+            </div>
+            <button class="btn btn-primary" type="submit">Send message</button>
+          </form>
+        </div>
+
+        <!-- Refer -->
+        <div id="panel-refer" class="panel">
+          <h3 style="font-size:17px;margin:0 0 6px">Refer a friend or family member</h3>
+          <p class="muted" style="margin:0 0 14px">Share their info and we'll reach out. You'll receive a thank-you payout for every referral that becomes a client.</p>
+          <form id="ref-form">
+            <div id="ref-msg"></div>
+            <div class="row2">
+              <div class="field"><label for="ref-name">Their name</label><input id="ref-name" type="text" required /></div>
+              <div class="field"><label for="ref-phone">Their phone</label><input id="ref-phone" type="tel" inputmode="tel" /></div>
+            </div>
+            <div class="row2">
+              <div class="field"><label for="ref-email">Their email</label><input id="ref-email" type="email" /></div>
+              <div class="field"><label for="ref-rel">Relationship</label><input id="ref-rel" type="text" placeholder="Friend, brother, coworker&hellip;" /></div>
+            </div>
+            <div class="field">
+              <label for="ref-notes">Notes (optional)</label>
+              <textarea id="ref-notes" rows="2" placeholder="Best time to reach them, what they're looking for&hellip;"></textarea>
+            </div>
+            <button class="btn btn-primary" type="submit">Send referral</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <div class="foot">
+    &copy; <span id="yr"></span> VS Benefits &middot; <a href="index.html">Home</a> &middot; <a href="contact.html">Contact</a>
+  </div>
+</main>
+
 <script>
+(function(){
 "use strict";
 
-/* ============ STORAGE KEYS ============ */
+/* ======================================================================
+   Storage keys (must match admin.html)
+   ====================================================================== */
 var K={
-  members:"vs_members",
   accounts:"vs_client_accounts",
   session:"vs_client_session",
   messages:"vs_messages",
@@ -271,434 +279,262 @@ var K={
   webhook:"vs_webhook_url"
 };
 
-/* ============ TINY HELPERS ============ */
+/* ======================================================================
+   Helpers
+   ====================================================================== */
 function $(id){return document.getElementById(id);}
-function read(key,fallback){try{var raw=localStorage.getItem(key);if(!raw)return fallback;return JSON.parse(raw);}catch(e){return fallback;}}
-function write(key,val){try{localStorage.setItem(key,JSON.stringify(val));}catch(e){}}
-function uid(){return "id_"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
-function esc(s){s=String(s==null?"":s);return s.replace(/[&<>"']/g,function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c];});}
-function nowIso(){return new Date().toISOString();}
-function fmtDate(s){if(!s)return "";var d=new Date(s);if(isNaN(d.getTime()))return s;return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}
-function fmtDateTime(s){if(!s)return "";var d=new Date(s);if(isNaN(d.getTime()))return s;return d.toLocaleString();}
-function relTime(s){if(!s)return "";var d=new Date(s);if(isNaN(d.getTime()))return "";var diff=(Date.now()-d.getTime())/1000;if(diff<60)return "just now";if(diff<3600)return Math.floor(diff/60)+"m ago";if(diff<86400)return Math.floor(diff/3600)+"h ago";if(diff<86400*7)return Math.floor(diff/86400)+"d ago";return fmtDate(s);}
-async function sha256(text){var enc=new TextEncoder().encode(text);var buf=await crypto.subtle.digest("SHA-256",enc);return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");}
+function uid(){return"id_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
+function getAccounts(){try{return JSON.parse(localStorage.getItem(K.accounts)||"[]");}catch(e){return[];}}
+function saveAccounts(a){localStorage.setItem(K.accounts,JSON.stringify(a));}
+function getMessages(){try{return JSON.parse(localStorage.getItem(K.messages)||"[]");}catch(e){return[];}}
+function saveMessages(m){localStorage.setItem(K.messages,JSON.stringify(m));}
+function getReferrals(){try{return JSON.parse(localStorage.getItem(K.referrals)||"[]");}catch(e){return[];}}
+function saveReferrals(r){localStorage.setItem(K.referrals,JSON.stringify(r));}
+function getWebhook(){return localStorage.getItem(K.webhook)||"";}
+function getSession(){try{return JSON.parse(sessionStorage.getItem(K.session)||"null");}catch(e){return null;}}
+function setSession(s){sessionStorage.setItem(K.session,JSON.stringify(s));}
+function clearSession(){sessionStorage.removeItem(K.session);}
 
-/* ============ INVITE TOKEN DECODE ============ */
-function b64uDecode(str){
+async function sha256(text){
+  var enc=new TextEncoder().encode(text);
+  var buf=await crypto.subtle.digest("SHA-256",enc);
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");
+}
+
+function fmtDate(ts){if(!ts)return"—";var d=new Date(ts);return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}
+function fmtTime(ts){if(!ts)return"";var d=new Date(ts);return d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
+function normEmail(e){return(e||"").trim().toLowerCase();}
+
+function showNotice(elId,kind,text){
+  var el=$(elId);if(!el)return;
+  el.innerHTML="";
+  if(!text){return;}
+  var n=document.createElement("div");
+  n.className="notice notice-"+kind;
+  n.textContent=text;
+  el.appendChild(n);
+}
+
+/* Optional Make.com webhook forward */
+function webhookFire(payload){
+  var url=getWebhook();
+  if(!url)return;
   try{
-    str=str.replace(/-/g,"+").replace(/_/g,"/");
-    while(str.length%4)str+="=";
-    return decodeURIComponent(escape(atob(str)));
-  }catch(e){return null;}
-}
-function decodeInvite(token){
-  var raw=b64uDecode(token);
-  if(!raw)return null;
-  try{return JSON.parse(raw);}catch(e){return null;}
+    fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+  }catch(e){}
 }
 
-/* ============ MEMBER STORE ============ */
-function getMembers(){return read(K.members,[]);}
-function saveMembers(arr){write(K.members,arr);}
-function findMemberByEmail(email){
-  email=(email||"").toLowerCase().trim();
-  if(!email)return null;
-  return getMembers().find(function(m){return (m.email||"").toLowerCase()===email;})||null;
-}
+/* ======================================================================
+   Auth: tab switching
+   ====================================================================== */
+$("tab-login").addEventListener("click",function(){
+  $("tab-login").classList.add("active");$("tab-signup").classList.remove("active");
+  $("login-form").hidden=false;$("signup-form").hidden=true;
+  showNotice("login-msg","",""); showNotice("signup-msg","","");
+});
+$("tab-signup").addEventListener("click",function(){
+  $("tab-signup").classList.add("active");$("tab-login").classList.remove("active");
+  $("signup-form").hidden=false;$("login-form").hidden=true;
+  showNotice("login-msg","",""); showNotice("signup-msg","","");
+});
 
-/** Merge an invited member into local store if not already there. */
-function ensureMemberFromInvite(payload){
-  if(!payload||!payload.e)return null;
-  var members=getMembers();
-  var email=String(payload.e).toLowerCase();
-  var existing=members.find(function(m){return (m.email||"").toLowerCase()===email;});
-  if(existing){
-    // Refresh code/details if newer info came through
-    var updated=false;
-    if(payload.code && existing.code!==payload.code){existing.code=payload.code;existing.codeUsed=false;updated=true;}
-    if(payload.n && !existing.name){existing.name=payload.n;updated=true;}
-    if(payload.d && !existing.enrollmentDate){existing.enrollmentDate=payload.d;updated=true;}
-    if(payload.c && !existing.coverage){existing.coverage=payload.c;updated=true;}
-    if(payload.p && !existing.plan){existing.plan=payload.p;updated=true;}
-    if(payload.ph && !existing.phone){existing.phone=payload.ph;updated=true;}
-    if(payload.ad && !existing.address){existing.address=payload.ad;updated=true;}
-    if(updated)saveMembers(members);
-    return existing;
-  }
-  var fresh={
-    id:payload.mid||uid(),
-    name:payload.n||"",
-    email:email,
-    phone:payload.ph||"",
-    address:payload.ad||"",
-    enrollmentDate:payload.d||"",
-    coverage:payload.c||"",
-    plan:payload.p||"",
-    status:"active",
-    code:payload.code||"",
-    codeUsed:false,
-    notes:"",
-    accountId:"",
-    createdAt:nowIso()
-  };
-  members.push(fresh);
-  saveMembers(members);
-  return fresh;
-}
-
-/* ============ ACCOUNT STORE ============ */
-function getAccounts(){return read(K.accounts,[]);}
-function saveAccounts(arr){write(K.accounts,arr);}
-function findAccountByEmail(email){
-  email=(email||"").toLowerCase().trim();
-  return getAccounts().find(function(a){return (a.email||"").toLowerCase()===email;})||null;
-}
-
-/* ============ SESSION ============ */
-function getSession(){return read(K.session,null);}
-function setSession(s){write(K.session,s);}
-function clearSession(){localStorage.removeItem(K.session);}
-
-/* ============ WEBHOOK FORWARD ============ */
-async function forwardWebhook(type,payload){
-  var url=read(K.webhook,"");
-  if(!url||typeof url!=="string"||!/^https?:\/\//i.test(url))return;
-  try{
-    await fetch(url,{
-      method:"POST",
-      mode:"no-cors",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({source:"vs-client-portal",type:type,timestamp:nowIso(),payload:payload})
-    });
-  }catch(e){/* webhook is best-effort */}
-}
-
-/* ============ SUPPORT MESSAGES ============ */
-function getMessages(){return read(K.messages,[]);}
-function saveMessages(arr){write(K.messages,arr);}
-function getThreadFor(memberId){
-  return getMessages().filter(function(m){return m.memberId===memberId;}).sort(function(a,b){return new Date(a.timestamp)-new Date(b.timestamp);});
-}
-function postClientMessage(memberId,memberEmail,memberName,body){
-  var msgs=getMessages();
-  msgs.push({
-    id:uid(),
-    memberId:memberId,
-    memberEmail:memberEmail,
-    memberName:memberName,
-    direction:"in",
-    body:body,
-    timestamp:nowIso(),
-    read:false
-  });
-  saveMessages(msgs);
-  forwardWebhook("support_message",{memberId:memberId,memberEmail:memberEmail,memberName:memberName,body:body});
-}
-
-/* ============ REFERRALS ============ */
-function getReferrals(){return read(K.referrals,[]);}
-function saveReferrals(arr){write(K.referrals,arr);}
-
-/* ============ AUTH UI ============ */
-var tabLogin=$("tab-login"),tabSignup=$("tab-signup");
-var loginForm=$("login-form"),signupForm=$("signup-form");
-var inviteBanner=$("invite-banner"),authErr=$("auth-err"),authOk=$("auth-ok");
-
-function showAuthMode(mode){
-  if(mode==="signup"){
-    tabSignup.classList.add("active");tabLogin.classList.remove("active");
-    signupForm.classList.remove("hidden");loginForm.classList.add("hidden");
-  } else {
-    tabLogin.classList.add("active");tabSignup.classList.remove("active");
-    loginForm.classList.remove("hidden");signupForm.classList.add("hidden");
-  }
-  authErr.classList.add("hidden");authOk.classList.add("hidden");
-}
-tabLogin.addEventListener("click",function(){showAuthMode("login");});
-tabSignup.addEventListener("click",function(){showAuthMode("signup");});
-
-function showErr(msg){authErr.textContent=msg;authErr.classList.remove("hidden");authOk.classList.add("hidden");}
-function showOk(msg){authOk.textContent=msg;authOk.classList.remove("hidden");authErr.classList.add("hidden");}
-
-/* Handle ?invite=<token> on load */
-function handleInviteParam(){
-  var params=new URLSearchParams(location.search);
-  var token=params.get("invite");
-  if(!token)return;
-  var payload=decodeInvite(token);
-  if(!payload||!payload.e){
-    inviteBanner.textContent="That invite link couldn't be read. Please double-check it or contact Bradley.";
-    inviteBanner.classList.remove("hidden");
-    return;
-  }
-  var member=ensureMemberFromInvite(payload);
-  if(member){
-    inviteBanner.innerHTML="Welcome, "+esc(member.name||member.email)+"! Use the code below to create your account.";
-    inviteBanner.classList.remove("hidden");
-    showAuthMode("signup");
-    $("signup-email").value=member.email;
-    if(member.code)$("signup-code").value=member.code;
-    // Strip token from URL so it isn't bookmarked
-    if(history.replaceState)history.replaceState(null,"",location.pathname);
-  }
-}
-
-/* Login submit */
-loginForm.addEventListener("submit",async function(e){
+/* ======================================================================
+   Sign up — first/last name + email + phone + password (no verification code)
+   ====================================================================== */
+$("signup-form").addEventListener("submit",async function(e){
   e.preventDefault();
-  var email=$("login-email").value.trim().toLowerCase();
-  var pass=$("login-pass").value;
-  if(!email||!pass){showErr("Enter your email and password.");return;}
-  var acct=findAccountByEmail(email);
-  if(!acct){showErr("No account found for that email. If you're a VS Benefits member, click 'Create account' to set one up.");return;}
-  var hash=await sha256(pass);
-  if(hash!==acct.passwordHash){showErr("That password doesn't match our records.");return;}
-  // Record last sign-in
-  var now=Date.now();
-  acct.lastSignIn=now;acct.lastSignInIso=nowIso();
-  saveAccounts(getAccounts().map(function(a){return a.id===acct.id?acct:a;}));
-  try{if(window.VSAdmin&&typeof window.VSAdmin.recordSignIn==="function"){window.VSAdmin.recordSignIn(acct.email);}}catch(_){}
-  forwardWebhook("client_sign_in",{email:acct.email,memberId:acct.memberId,ts:now});
-  setSession({accountId:acct.id,memberId:acct.memberId,email:acct.email,signedInAt:nowIso()});
+  var first=$("su-first").value.trim();
+  var last=$("su-last").value.trim();
+  var email=normEmail($("su-email").value);
+  var phone=$("su-phone").value.trim();
+  var pw=$("su-pw").value;
+  var pw2=$("su-pw2").value;
+
+  if(!first||!last){return showNotice("signup-msg","err","Please enter your first and last name.");}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){return showNotice("signup-msg","err","Please enter a valid email address.");}
+  if(phone.replace(/\D/g,"").length<7){return showNotice("signup-msg","err","Please enter a valid phone number.");}
+  if(pw.length<8){return showNotice("signup-msg","err","Password must be at least 8 characters.");}
+  if(pw!==pw2){return showNotice("signup-msg","err","Passwords don't match. Please try again.");}
+
+  var accts=getAccounts();
+  if(accts.some(function(a){return normEmail(a.email)===email;})){
+    return showNotice("signup-msg","err","An account with this email already exists. Try signing in instead.");
+  }
+
+  var hash=await sha256(pw);
+  var acct={
+    id:uid(),
+    firstName:first,
+    lastName:last,
+    email:email,
+    phone:phone,
+    passwordHash:hash,
+    created:Date.now(),
+    lastSignIn:Date.now(),
+    status:"active"
+  };
+  accts.push(acct);
+  saveAccounts(accts);
+  setSession({id:acct.id,email:acct.email,since:Date.now()});
+
+  webhookFire({event:"client_signup",account:{id:acct.id,firstName:first,lastName:last,email:email,phone:phone,created:acct.created}});
+
+  if(window.VSAdmin&&typeof window.VSAdmin.recordAccountCreated==="function"){try{window.VSAdmin.recordAccountCreated();}catch(e){}}
+
   showDashboard();
 });
 
-/* Signup submit */
-signupForm.addEventListener("submit",async function(e){
+/* ======================================================================
+   Sign in — email + password
+   ====================================================================== */
+$("login-form").addEventListener("submit",async function(e){
   e.preventDefault();
-  var email=$("signup-email").value.trim().toLowerCase();
-  var code=$("signup-code").value.trim();
-  var pass=$("signup-pass").value;
-  var pass2=$("signup-pass2").value;
-  if(!email||!code||!pass){showErr("Fill in every field to continue.");return;}
-  if(pass.length<8){showErr("Password must be at least 8 characters.");return;}
-  if(pass!==pass2){showErr("Those passwords don't match.");return;}
-  var member=findMemberByEmail(email);
-  if(!member){
-    showErr("We don't have a member record for that email. Account creation is restricted to VS Benefits clients. If this is an error, call (954) 825-1009.");
-    return;
-  }
-  if(!member.code||String(member.code)!==String(code)){
-    showErr("That verification code doesn't match what we have on file. Double-check the code Bradley sent you.");
-    return;
-  }
-  if(member.codeUsed){
-    showErr("That code has already been used. If you need to reset your password, contact Bradley directly.");
-    return;
-  }
-  if(findAccountByEmail(email)){
-    showErr("An account already exists for that email. Use 'Sign in' instead.");
-    return;
-  }
-  var hash=await sha256(pass);
-  var acct={
-    id:uid(),
-    memberId:member.id,
-    email:email,
-    passwordHash:hash,
-    createdAt:nowIso(),
-    created:Date.now(),
-    lastSignIn:Date.now()
-  };
+  var email=normEmail($("li-email").value);
+  var pw=$("li-pw").value;
+  if(!email||!pw){return showNotice("login-msg","err","Please enter your email and password.");}
+
   var accts=getAccounts();
-  accts.push(acct);
+  var acct=accts.filter(function(a){return normEmail(a.email)===email;})[0];
+  if(!acct){return showNotice("login-msg","err","No account found for that email. Create an account to get started.");}
+  if(acct.status==="revoked"){return showNotice("login-msg","err","This account has been revoked. Please contact your advisor.");}
+  if(!acct.passwordHash){return showNotice("login-msg","err","Your password was reset. Please contact your advisor for a new one.");}
+
+  var hash=await sha256(pw);
+  if(hash!==acct.passwordHash){return showNotice("login-msg","err","Incorrect password. Please try again.");}
+
+  acct.lastSignIn=Date.now();
   saveAccounts(accts);
-  // Mark code consumed on the member record
-  var members=getMembers();
-  var idx=members.findIndex(function(m){return m.id===member.id;});
-  if(idx>-1){
-    members[idx].codeUsed=true;
-    members[idx].accountId=acct.id;
-    members[idx].accountCreatedAt=nowIso();
-    saveMembers(members);
-  }
-  // Notify admin layer if same browser
-  try{
-    if(window.VSAdmin&&typeof window.VSAdmin.markAccountCreated==="function"){
-      window.VSAdmin.markAccountCreated(member.id,acct.id);
-    }
-  }catch(err){}
-  forwardWebhook("client_account_created",{memberId:member.id,email:email,name:member.name});
-  setSession({accountId:acct.id,memberId:member.id,email:email,signedInAt:nowIso()});
-  showOk("Account created. Loading your dashboard&hellip;");
-  setTimeout(showDashboard,500);
+  setSession({id:acct.id,email:acct.email,since:Date.now()});
+
+  webhookFire({event:"client_signin",accountId:acct.id,email:email,ts:Date.now()});
+
+  if(window.VSAdmin&&typeof window.VSAdmin.recordSignIn==="function"){try{window.VSAdmin.recordSignIn(email);}catch(e){}}
+
+  showDashboard();
 });
 
-/* Reset device */
-$("reset-link").addEventListener("click",function(e){
-  e.preventDefault();
-  if(!confirm("This will sign you out on this device. Your account remains intact. Continue?"))return;
+/* ======================================================================
+   Sign out
+   ====================================================================== */
+$("signout-btn").addEventListener("click",function(){
   clearSession();
   location.reload();
 });
 
-/* ============ DASHBOARD ============ */
-var currentMember=null,currentAccount=null;
+/* ======================================================================
+   Delete account (client-initiated)
+   ====================================================================== */
+$("delete-account").addEventListener("click",function(){
+  if(!confirm("Delete your account? This will remove your sign-in. Your messages and referral history stay with your advisor."))return;
+  var s=getSession();if(!s)return;
+  var accts=getAccounts().filter(function(a){return a.id!==s.id;});
+  saveAccounts(accts);
+  webhookFire({event:"client_account_deleted",accountId:s.id,email:s.email,ts:Date.now()});
+  clearSession();
+  location.reload();
+});
+
+/* ======================================================================
+   Dashboard render
+   ====================================================================== */
+function currentAccount(){
+  var s=getSession();if(!s)return null;
+  return getAccounts().filter(function(a){return a.id===s.id;})[0]||null;
+}
 
 function showDashboard(){
-  var session=getSession();
-  if(!session){showAuth();return;}
-  var acct=getAccounts().find(function(a){return a.id===session.accountId;});
-  if(!acct){clearSession();showAuth();return;}
-  var member=getMembers().find(function(m){return m.id===acct.memberId;});
-  if(!member){clearSession();showAuth();return;}
-  currentAccount=acct;
-  currentMember=member;
-  $("auth-screen").classList.add("hidden");
-  $("dashboard").classList.remove("hidden");
-  $("who-label").textContent=member.name?member.name+" \u00b7 "+member.email:member.email;
-  renderProfile();
-  renderSupport();
-  renderReferrals();
-  goTab("panel-profile");
+  var acct=currentAccount();
+  if(!acct){clearSession();return;}
+  $("auth-view").hidden=true;
+  $("dash-view").hidden=false;
+  $("signout-btn").hidden=false;
+
+  $("dh-name").textContent=(acct.firstName||"Member")+(acct.lastName?(" "+acct.lastName):"");
+  $("dh-email").textContent=acct.email;
+  $("pv-name").textContent=((acct.firstName||"")+" "+(acct.lastName||"")).trim()||"—";
+  $("pv-email").textContent=acct.email;
+  $("pv-phone").textContent=acct.phone||"—";
+  $("pv-since").textContent=fmtDate(acct.created);
+
+  renderMessages();
 }
 
-function showAuth(){
-  $("dashboard").classList.add("hidden");
-  $("auth-screen").classList.remove("hidden");
-}
-
-/* Tab switching */
-function goTab(panelId){
-  document.querySelectorAll(".panel").forEach(function(p){p.classList.add("hidden");});
-  var el=$(panelId);if(el)el.classList.remove("hidden");
-  document.querySelectorAll(".tab-btn").forEach(function(b){
-    b.classList.toggle("active",b.dataset.panel===panelId);
+function renderMessages(){
+  var acct=currentAccount();if(!acct)return;
+  var box=$("msgs");
+  var msgs=getMessages().filter(function(m){return m.accountId===acct.id;}).sort(function(a,b){return a.ts-b.ts;});
+  if(!msgs.length){box.innerHTML='<div class="empty">No messages yet. Send your first message below — Bradley will get back to you within a business day.</div>';return;}
+  box.innerHTML="";
+  msgs.forEach(function(m){
+    var d=document.createElement("div");
+    d.className="msg "+(m.from==="advisor"?"advisor":"client");
+    var t=document.createElement("div");t.textContent=m.text;
+    var meta=document.createElement("div");meta.className="meta";meta.textContent=(m.from==="advisor"?"Bradley • ":"You • ")+fmtTime(m.ts);
+    d.appendChild(t);d.appendChild(meta);box.appendChild(d);
   });
-  if(panelId==="panel-support")renderSupport();
-}
-window.goTab=goTab;
-document.querySelectorAll(".tab-btn").forEach(function(b){
-  b.addEventListener("click",function(){goTab(b.dataset.panel);});
-});
-
-$("signout").addEventListener("click",function(){
-  clearSession();
-  currentAccount=null;currentMember=null;
-  location.reload();
-});
-
-/* ---- Profile ---- */
-function renderProfile(){
-  if(!currentMember)return;
-  var m=currentMember;
-  var status=m.status||"active";
-  var rows=[
-    ["Name",esc(m.name||"")],
-    ["Email",esc(m.email||"")],
-    ["Phone",esc(m.phone||"\u2014")],
-    ["Address",esc(m.address||"\u2014")],
-    ["Enrolled on",esc(m.enrollmentDate?fmtDate(m.enrollmentDate):"\u2014")],
-    ["Coverage type",esc(m.coverage||"\u2014")],
-    ["Plan",esc(m.plan||"\u2014")],
-    ["Account status",'<span class="badge '+(status==="active"?"ok":(status==="lapsed"?"err":"warn"))+'">'+esc(status)+"</span>"]
-  ];
-  var html="";
-  rows.forEach(function(r){html+='<div class="k">'+r[0]+'</div><div class="v">'+r[1]+'</div>';});
-  $("profile-kv").innerHTML=html;
+  box.scrollTop=box.scrollHeight;
 }
 
-/* ---- Support ---- */
-function renderSupport(){
-  if(!currentMember)return;
-  var thread=getThreadFor(currentMember.id);
-  var box=$("support-thread");
-  if(thread.length===0){
-    box.innerHTML='<div class="empty-state">No messages yet. Send your first message below and we\'ll get back to you shortly.</div>';
-  } else {
-    box.innerHTML=thread.map(function(m){
-      var cls=m.direction==="out"?"from-admin":"from-client";
-      return '<div class="msg '+cls+'">'+esc(m.body).replace(/\n/g,"<br>")+'<div class="meta">'+(m.direction==="out"?"VS Benefits":"You")+' \u00b7 '+esc(relTime(m.timestamp))+'</div></div>';
-    }).join("");
-    // Mark inbound (admin reply) messages as read
-    var msgs=getMessages();
-    var changed=false;
-    msgs.forEach(function(m){if(m.memberId===currentMember.id&&m.direction==="out"&&!m.readByClient){m.readByClient=true;changed=true;}});
-    if(changed)saveMessages(msgs);
-  }
-  // Auto-scroll to bottom
-  setTimeout(function(){box.scrollTop=box.scrollHeight;},10);
-}
-
-$("support-form").addEventListener("submit",function(e){
+/* Send message */
+$("msg-form").addEventListener("submit",function(e){
   e.preventDefault();
-  var body=$("support-msg").value.trim();
-  if(!body)return;
-  postClientMessage(currentMember.id,currentMember.email,currentMember.name,body);
-  $("support-msg").value="";
-  renderSupport();
-});
+  var acct=currentAccount();if(!acct)return;
+  var text=$("msg-text").value.trim();if(!text)return;
 
-$("support-mailto").addEventListener("click",function(){
-  var body=$("support-msg").value.trim();
-  var subject="VS Benefits support request from "+(currentMember.name||currentMember.email);
-  var mail="mailto:bvilsainthealth@gmail.com?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body||"");
-  location.href=mail;
-});
-
-/* ---- Refer ---- */
-function renderReferrals(){
-  var mine=getReferrals().filter(function(r){return r.referrerMemberId===currentMember.id;}).sort(function(a,b){return new Date(b.timestamp)-new Date(a.timestamp);});
-  if(mine.length===0){
-    $("refer-list").innerHTML='<div class="muted small">You haven\'t sent any referrals yet.</div>';
-    return;
+  if(window.VSAdmin&&typeof window.VSAdmin.ingestMessage==="function"){
+    try{window.VSAdmin.ingestMessage({accountId:acct.id,from:"client",text:text,ts:Date.now()});}catch(e){}
+  }else{
+    var m={id:uid(),accountId:acct.id,from:"client",text:text,ts:Date.now(),read:false};
+    var arr=getMessages();arr.push(m);saveMessages(arr);
   }
-  var html='<table style="width:100%;border-collapse:collapse;font-size:14px"><thead><tr style="text-align:left;color:var(--muted);border-bottom:1px solid var(--line)"><th style="padding:6px 8px">Name</th><th style="padding:6px 8px">Coverage</th><th style="padding:6px 8px">Sent</th><th style="padding:6px 8px">Status</th></tr></thead><tbody>';
-  mine.forEach(function(r){
-    html+='<tr style="border-bottom:1px solid var(--line)">';
-    html+='<td style="padding:8px">'+esc(r.name||"")+(r.email?'<br><span class="muted small">'+esc(r.email)+'</span>':"")+'</td>';
-    html+='<td style="padding:8px">'+esc(r.coverage||"\u2014")+'</td>';
-    html+='<td style="padding:8px">'+esc(relTime(r.timestamp))+'</td>';
-    var st=r.status||"new";
-    var cls=st==="enrolled"?"ok":(st==="lost"?"err":(st==="contacted"?"warn":""));
-    html+='<td style="padding:8px"><span class="badge '+cls+'">'+esc(st)+'</span></td>';
-    html+='</tr>';
-  });
-  html+='</tbody></table>';
-  $("refer-list").innerHTML=html;
-}
+  webhookFire({event:"client_message",accountId:acct.id,email:acct.email,text:text,ts:Date.now()});
 
-$("refer-form").addEventListener("submit",function(e){
+  $("msg-text").value="";
+  renderMessages();
+});
+
+/* Send referral */
+$("ref-form").addEventListener("submit",function(e){
   e.preventDefault();
+  var acct=currentAccount();if(!acct)return;
   var name=$("ref-name").value.trim();
-  if(!name){return;}
-  var ref={
-    id:uid(),
-    referrerMemberId:currentMember.id,
-    referrerName:currentMember.name||currentMember.email,
-    referrerEmail:currentMember.email,
-    name:name,
-    relationship:$("ref-relationship").value.trim(),
-    phone:$("ref-phone").value.trim(),
-    email:$("ref-email").value.trim(),
-    coverage:$("ref-coverage").value,
-    notes:$("ref-notes").value.trim(),
-    status:"new",
-    timestamp:nowIso()
-  };
-  var refs=getReferrals();
-  refs.unshift(ref);
-  saveReferrals(refs);
-  // Push to admin layer if available
-  try{
-    if(window.VSAdmin&&typeof window.VSAdmin.ingestReferral==="function"){
-      window.VSAdmin.ingestReferral(ref);
-    }
-  }catch(err){}
-  forwardWebhook("client_referral",ref);
-  $("refer-form").reset();
-  $("refer-ok").innerHTML="Thanks! We received your referral for <strong>"+esc(ref.name)+"</strong>. Bradley will reach out within one business day.";
-  $("refer-ok").classList.remove("hidden");
-  setTimeout(function(){$("refer-ok").classList.add("hidden");},6000);
-  renderReferrals();
+  var phone=$("ref-phone").value.trim();
+  var email=$("ref-email").value.trim();
+  var rel=$("ref-rel").value.trim();
+  var notes=$("ref-notes").value.trim();
+  if(!name){return showNotice("ref-msg","err","Please add the person's name.");}
+  if(!phone&&!email){return showNotice("ref-msg","err","Please add at least a phone number or email.");}
+
+  if(window.VSAdmin&&typeof window.VSAdmin.ingestReferral==="function"){
+    try{window.VSAdmin.ingestReferral({fromAccountId:acct.id,referralName:name,referralPhone:phone,referralEmail:email,relationship:rel,notes:notes});}catch(e){}
+  }else{
+    var r={id:uid(),fromAccountId:acct.id,referralName:name,referralPhone:phone,referralEmail:email,relationship:rel,notes:notes,status:"new",ts:Date.now(),read:false,payout:0,paid:false};
+    var arr=getReferrals();arr.unshift(r);saveReferrals(arr);
+  }
+  webhookFire({event:"client_referral",fromAccountId:acct.id,fromEmail:acct.email,referralName:name,referralPhone:phone,referralEmail:email,relationship:rel,notes:notes,ts:Date.now()});
+
+  showNotice("ref-msg","ok","Thanks! Your referral was sent. We'll reach out shortly.");
+  $("ref-form").reset();
 });
 
-/* ============ BOOT ============ */
-(function boot(){
-  handleInviteParam();
-  var session=getSession();
-  if(session){showDashboard();}else{showAuth();}
+/* Dashboard tab switching */
+function dswitch(name){
+  ["profile","support","refer"].forEach(function(n){
+    $("dtab-"+n).classList.toggle("active",n===name);
+    $("panel-"+n).classList.toggle("active",n===name);
+  });
+  if(name==="support")renderMessages();
+}
+$("dtab-profile").addEventListener("click",function(){dswitch("profile");});
+$("dtab-support").addEventListener("click",function(){dswitch("support");});
+$("dtab-refer").addEventListener("click",function(){dswitch("refer");});
+
+/* Boot */
+$("yr").textContent=new Date().getFullYear();
+if(getSession()){showDashboard();}
+
 })();
 </script>
+
 </body>
 </html>
