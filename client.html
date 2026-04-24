@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Member Portal | VS Benefits</title>
-<meta name="description" content="VS Benefits member portal. Sign in or create an account to manage your coverage, send a message to your advisor, and refer friends and family." />
+<meta name="description" content="VS Benefits member portal. Sign in or create an account to view your plan, message your advisor, refer friends for a gift, and update your profile." />
 <link rel="canonical" href="https://vshealthbenefits.com/client.html" />
 <meta name="robots" content="noindex,nofollow" />
 <link rel="icon" type="image/png" href="assets/images/favicon.png" />
@@ -13,18 +13,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
 <style>
 :root{
-  --blue-900:#0b2346; --blue-800:#0f2e5c; --blue-700:#16447f;
-  --blue-600:#1e5ab0; --blue-500:#2f7de0; --blue-100:#e8f0fb; --blue-50:#f4f8fe;
-  --teal:#0db5a6; --gold:#f5b301;
-  --ink:#0e1726; --ink-2:#314056; --line:#dfe6f1; --line-2:#eef2f8;
-  --bg:#f6f9fc; --white:#fff;
-  --ok:#0a8754; --warn:#b46b00; --err:#b3261e;
+  --blue-900:#0b2346;--blue-800:#0f2e5c;--blue-700:#16447f;
+  --blue-600:#1e5ab0;--blue-500:#2f7de0;--blue-100:#e8f0fb;--blue-50:#f4f8fe;
+  --teal:#0db5a6;--teal-dark:#098374;--gold:#f5b301;
+  --ink:#0e1726;--ink-2:#314056;--muted:#5a6b80;
+  --line:#dfe6f1;--line-2:#eef2f8;
+  --bg:#f6f9fc;--white:#fff;
+  --ok:#0a8754;--warn:#b46b00;--err:#b3261e;
   --shadow-sm:0 1px 2px rgba(11,35,70,.06);
   --shadow-md:0 8px 24px rgba(11,35,70,.10);
-  --r-sm:8px; --r-md:12px; --r-lg:16px;
+  --r-sm:8px;--r-md:12px;--r-lg:16px;--tap:44px;
 }
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%}
 h1,h2,h3,h4{font-family:Poppins,Inter,system-ui,sans-serif;color:var(--blue-900);margin:0 0 .5em}
 a{color:var(--blue-600);text-decoration:none}
 a:hover{text-decoration:underline}
@@ -33,21 +34,23 @@ input,select,textarea{font-family:inherit;font-size:16px}
 
 /* Top bar */
 .bar{background:var(--blue-900);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-.bar .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-family:Poppins}
-.bar .brand img{width:32px;height:32px;border-radius:6px;background:#fff;object-fit:contain}
+.bar .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-family:Poppins;font-size:15px}
+.bar .brand .b{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem}
 .bar .right{display:flex;align-items:center;gap:8px}
-.bar a.home{color:#cfe1ff;font-size:14px;text-decoration:none}
-.bar a.home:hover{color:#fff;text-decoration:underline}
+.bar a.home{color:#cfe1ff;font-size:13px}
+.bar a.home:hover{color:#fff}
 .bar .signout{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px}
 .bar .signout:hover{background:rgba(255,255,255,.2)}
 
 /* Wrap */
-.wrap{max-width:760px;margin:0 auto;padding:20px 16px 80px}
+.wrap{max-width:760px;margin:0 auto;padding:18px 16px 80px}
 
-/* Auth card */
-.card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:22px;margin-bottom:20px}
-.card h2{font-size:22px;margin:0 0 6px}
-.card .lede{color:var(--ink-2);margin:0 0 18px;font-size:14px}
+/* Card */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:20px;margin-bottom:18px}
+.card h2{font-size:20px;margin:0 0 6px}
+.card .lede{color:var(--ink-2);margin:0 0 16px;font-size:14px}
+
+/* Auth tabs */
 .tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:18px;gap:4px}
 .tabs button{flex:1;background:none;border:0;padding:12px 8px;font-size:15px;font-weight:600;color:var(--ink-2);cursor:pointer;border-bottom:3px solid transparent;min-height:44px}
 .tabs button.active{color:var(--blue-700);border-bottom-color:var(--blue-600)}
@@ -59,28 +62,41 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .row2{display:grid;grid-template-columns:1fr;gap:0}
 @media(min-width:560px){.row2{grid-template-columns:1fr 1fr;gap:14px}.row2 .field{margin-bottom:14px}}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:10px;font-weight:700;font-size:15px;border:0;cursor:pointer;min-height:44px;width:100%}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:10px;font-weight:700;font-size:14.5px;border:0;cursor:pointer;min-height:44px;width:100%;text-decoration:none;line-height:1}
+.btn:hover{text-decoration:none}
 .btn-primary{background:var(--blue-600);color:#fff}
 .btn-primary:hover{background:var(--blue-700)}
 .btn-ghost{background:transparent;color:var(--blue-700);border:1px solid var(--line)}
 .btn-ghost:hover{background:var(--blue-50)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:var(--teal-dark)}
 .btn-danger{background:#fff;color:var(--err);border:1px solid #f1c2bf}
 .btn-danger:hover{background:#fdf2f1}
+.btn-gold{background:var(--gold);color:#3b2a00}
+.btn-gold:hover{background:#e0a601}
 
 .notice{padding:10px 12px;border-radius:8px;font-size:13.5px;margin-bottom:12px}
 .notice-err{background:#fdecea;color:var(--err);border:1px solid #f5c6c1}
 .notice-ok{background:#e6f7ef;color:var(--ok);border:1px solid #b9e6cf}
 .notice-info{background:var(--blue-50);color:var(--blue-700);border:1px solid #cfdef6}
+.notice-gold{background:#fef6da;color:#7a5500;border:1px solid #f4dd8d}
 
-.hint{font-size:12.5px;color:var(--ink-2);margin-top:-4px;margin-bottom:14px}
-.muted{color:var(--ink-2);font-size:13px}
+.hint{font-size:12.5px;color:var(--muted);margin-top:-2px;margin-bottom:14px}
+.muted{color:var(--muted);font-size:13px}
 
-/* Dashboard */
-.dash-head{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
-.dash-head .hi{font-size:13px;color:var(--ink-2)}
-.dash-head h1{font-size:24px;margin:0}
-@media(min-width:560px){.dash-head{flex-direction:row;align-items:end;justify-content:space-between}}
+/* Dashboard head */
+.dash-head{display:flex;flex-direction:row;gap:14px;align-items:center;margin-bottom:16px;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:16px;box-shadow:var(--shadow-sm)}
+.dash-head .photo-wrap{position:relative;flex-shrink:0}
+.avatar{width:64px;height:64px;border-radius:50%;background:var(--blue-100);color:var(--blue-700);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.photo-wrap label.photo-edit{position:absolute;bottom:-2px;right:-2px;background:var(--blue-600);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid #fff;font-size:14px;font-weight:700;box-shadow:var(--shadow-sm)}
+.photo-wrap label.photo-edit:hover{background:var(--blue-700)}
+.dash-head .who{flex:1;min-width:0}
+.dash-head .who .hi{font-size:12px;color:var(--muted)}
+.dash-head .who h1{font-size:18px;margin:0;line-height:1.25;word-break:break-word}
+.dash-head .who .em{font-size:12.5px;color:var(--ink-2);word-break:break-word}
 
+/* Dashboard tabs */
 .dtabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .dtabs button{background:none;border:0;padding:12px 14px;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;min-height:44px}
 .dtabs button.active{color:var(--blue-700);border-bottom-color:var(--blue-600)}
@@ -88,24 +104,49 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .panel{display:none}
 .panel.active{display:block}
 
-/* Profile */
-.kv{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:14px}
+/* Profile blocks */
+.kv{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:14px}
 @media(min-width:560px){.kv{grid-template-columns:1fr 1fr}}
 .kv .item{background:var(--blue-50);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px}
-.kv .item .lbl{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);font-weight:700}
+.kv .item .lbl{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
 .kv .item .val{font-size:15px;color:var(--ink);margin-top:2px;word-break:break-word}
+
+/* Plan card */
+.plan-card{background:linear-gradient(135deg,var(--blue-700),var(--teal));color:#fff;border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:var(--shadow-md)}
+.plan-card .pl-eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.85;font-weight:700}
+.plan-card .pl-name{font-family:Poppins;font-size:20px;font-weight:700;margin:4px 0 2px}
+.plan-card .pl-carrier{font-size:14px;opacity:.95;margin-bottom:14px}
+.plan-card .pl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.plan-card .pl-cell .lbl{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.8;font-weight:700}
+.plan-card .pl-cell .val{font-size:14.5px;font-weight:600;margin-top:2px}
+.plan-empty{background:var(--blue-50);border:1px dashed var(--line);border-radius:12px;padding:18px;text-align:center;color:var(--muted);font-size:13.5px;margin-bottom:16px}
+
+/* Section */
+.sec-title{display:flex;justify-content:space-between;align-items:center;margin:18px 0 10px}
+.sec-title h3{font-size:15.5px;margin:0;color:var(--blue-900)}
+.sec-title small{color:var(--muted);font-size:12px}
+
+.subcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.subcard h4{margin:0 0 8px;font-size:14.5px;color:var(--blue-900)}
 
 /* Messages */
 .msgs{border:1px solid var(--line);border-radius:12px;background:#fff;max-height:360px;overflow-y:auto;padding:12px;margin-bottom:14px}
 .msg{padding:10px 12px;border-radius:10px;margin-bottom:8px;max-width:85%;font-size:14px;line-height:1.45}
 .msg.client{background:var(--blue-50);color:var(--ink);margin-left:auto;border:1px solid #cfdef6}
 .msg.advisor{background:#f3f5f8;color:var(--ink);border:1px solid var(--line-2)}
-.msg .meta{font-size:11px;color:var(--ink-2);margin-top:4px}
-.empty{padding:24px;text-align:center;color:var(--ink-2);font-size:13.5px}
+.msg .meta{font-size:11px;color:var(--muted);margin-top:4px}
+.empty{padding:24px;text-align:center;color:var(--muted);font-size:13.5px}
+
+/* Gift banner */
+.gift-banner{background:linear-gradient(135deg,#fff5d8,#fbecc1);border:1px solid #f0d98c;border-radius:12px;padding:14px;margin-bottom:16px;display:flex;gap:12px;align-items:center}
+.gift-banner .gi-ic{width:42px;height:42px;border-radius:50%;background:var(--gold);color:#3b2a00;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;flex-shrink:0}
+.gift-banner .gi-text{flex:1}
+.gift-banner .gi-text strong{display:block;color:#3b2a00;font-size:14px}
+.gift-banner .gi-text span{font-size:12.5px;color:#5a4400}
 
 /* Footer */
-.foot{margin-top:32px;padding-top:18px;border-top:1px solid var(--line);text-align:center;color:var(--ink-2);font-size:12.5px}
-.foot a{color:var(--ink-2)}
+.foot{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12.5px}
+.foot a{color:var(--muted)}
 
 [hidden]{display:none !important}
 </style>
@@ -114,7 +155,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
 
 <div class="bar">
   <a class="brand" href="index.html">
-    <img src="assets/images/favicon.png" alt="" onerror="this.style.display='none'" />
+    <span class="b">VS</span>
     <span>VS Benefits</span>
   </a>
   <div class="right">
@@ -129,7 +170,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
   <section id="auth-view">
     <div class="card">
       <h2>Member portal</h2>
-      <p class="lede">Sign in to message your advisor, refer a friend, and view your profile.</p>
+      <p class="lede">Sign in to view your plan, message your advisor, and refer friends for a chance to win a gift.</p>
 
       <div class="tabs" role="tablist">
         <button id="tab-login" class="active" type="button" role="tab">Sign in</button>
@@ -190,68 +231,117 @@ input,select,textarea{font-family:inherit;font-size:16px}
   <section id="dash-view" hidden>
 
     <div class="dash-head">
-      <div>
+      <div class="photo-wrap">
+        <div id="dh-avatar" class="avatar">VS</div>
+        <label class="photo-edit" for="photo-input" title="Update photo">+</label>
+        <input id="photo-input" type="file" accept="image/*" hidden />
+      </div>
+      <div class="who">
         <div class="hi">Welcome back,</div>
         <h1 id="dh-name">Member</h1>
+        <div class="em" id="dh-email"></div>
       </div>
-      <div class="muted" id="dh-email"></div>
     </div>
 
     <div class="card" style="padding:0">
       <div class="dtabs" role="tablist">
         <button id="dtab-profile" class="active" type="button" role="tab">Profile</button>
+        <button id="dtab-plan" type="button" role="tab">My Plan</button>
         <button id="dtab-support" type="button" role="tab">Support</button>
-        <button id="dtab-refer" type="button" role="tab">Refer</button>
+        <button id="dtab-refer" type="button" role="tab">Refer for a Gift</button>
       </div>
 
-      <div style="padding:20px">
+      <div style="padding:18px">
 
-        <!-- Profile -->
+        <!-- ============ Profile ============ -->
         <div id="panel-profile" class="panel active">
+          <div id="photo-msg"></div>
+
+          <div class="sec-title"><h3>Your information</h3></div>
           <div class="kv">
-            <div class="item"><div class="lbl">Name</div><div class="val" id="pv-name">—</div></div>
-            <div class="item"><div class="lbl">Email</div><div class="val" id="pv-email">—</div></div>
-            <div class="item"><div class="lbl">Phone</div><div class="val" id="pv-phone">—</div></div>
-            <div class="item"><div class="lbl">Member since</div><div class="val" id="pv-since">—</div></div>
+            <div class="item"><div class="lbl">Name</div><div class="val" id="pv-name">--</div></div>
+            <div class="item"><div class="lbl">Email</div><div class="val" id="pv-email">--</div></div>
+            <div class="item"><div class="lbl">Phone</div><div class="val" id="pv-phone">--</div></div>
+            <div class="item"><div class="lbl">Member since</div><div class="val" id="pv-since">--</div></div>
           </div>
-          <div class="notice notice-info">Need to update your contact information? <a href="contact.html">Send a request</a> and your advisor will update your file.</div>
+          <div class="notice notice-info">Need to update your name, email, or phone? <a href="contact.html">Send your advisor a message</a> and they'll update your file.</div>
+
+          <div class="sec-title"><h3>Change password</h3></div>
+          <div class="subcard">
+            <form id="pw-form" autocomplete="off">
+              <div id="pw-msg"></div>
+              <div class="field">
+                <label for="pw-cur">Current password</label>
+                <input id="pw-cur" type="password" autocomplete="current-password" required />
+              </div>
+              <div class="field">
+                <label for="pw-new">New password</label>
+                <input id="pw-new" type="password" autocomplete="new-password" minlength="8" required />
+                <p class="hint">At least 8 characters.</p>
+              </div>
+              <div class="field">
+                <label for="pw-new2">Confirm new password</label>
+                <input id="pw-new2" type="password" autocomplete="new-password" minlength="8" required />
+              </div>
+              <button class="btn btn-primary" type="submit">Update password</button>
+            </form>
+          </div>
+
+          <div class="sec-title"><h3>Account</h3></div>
           <button id="delete-account" class="btn btn-danger" type="button">Delete my account</button>
         </div>
 
-        <!-- Support -->
+        <!-- ============ Plan ============ -->
+        <div id="panel-plan" class="panel">
+          <div id="plan-display"></div>
+          <div class="sec-title"><h3>Why this matters</h3></div>
+          <p class="muted">Your enrollment information is updated by your advisor. If anything looks wrong - effective date, premium, plan name - <a href="#" onclick="document.getElementById('dtab-support').click();return false;">message support</a> and Bradley will fix it.</p>
+        </div>
+
+        <!-- ============ Support ============ -->
         <div id="panel-support" class="panel">
-          <h3 style="font-size:17px;margin:0 0 6px">Message your advisor</h3>
+          <h3 style="font-size:16px;margin:0 0 4px">Message your advisor</h3>
           <p class="muted" style="margin:0 0 14px">Bradley typically responds within one business day.</p>
           <div id="msgs" class="msgs"></div>
           <form id="msg-form">
             <div class="field">
               <label for="msg-text">Your message</label>
-              <textarea id="msg-text" rows="3" placeholder="Type your question or update here&hellip;" required></textarea>
+              <textarea id="msg-text" rows="3" placeholder="Type your question or update here..." required></textarea>
             </div>
             <button class="btn btn-primary" type="submit">Send message</button>
           </form>
         </div>
 
-        <!-- Refer -->
+        <!-- ============ Refer ============ -->
         <div id="panel-refer" class="panel">
-          <h3 style="font-size:17px;margin:0 0 6px">Refer a friend or family member</h3>
-          <p class="muted" style="margin:0 0 14px">Share their info and we'll reach out. You'll receive a thank-you payout for every referral that becomes a client.</p>
+          <div class="gift-banner">
+            <div class="gi-ic">&#127873;</div>
+            <div class="gi-text">
+              <strong>Refer a friend - chance to win a gift!</strong>
+              <span>Every referral that becomes a client enters you in our quarterly gift drawing.</span>
+            </div>
+          </div>
+          <h3 style="font-size:16px;margin:0 0 4px">Send a referral</h3>
+          <p class="muted" style="margin:0 0 14px">Share their info and we'll reach out. You'll receive a thank-you and a gift entry for every qualified referral.</p>
           <form id="ref-form">
             <div id="ref-msg"></div>
             <div class="row2">
-              <div class="field"><label for="ref-name">Their name</label><input id="ref-name" type="text" required /></div>
-              <div class="field"><label for="ref-phone">Their phone</label><input id="ref-phone" type="tel" inputmode="tel" /></div>
+              <div class="field"><label>Their name</label><input id="ref-name" type="text" required /></div>
+              <div class="field"><label>Their phone</label><input id="ref-phone" type="tel" inputmode="tel" /></div>
             </div>
             <div class="row2">
-              <div class="field"><label for="ref-email">Their email</label><input id="ref-email" type="email" /></div>
-              <div class="field"><label for="ref-rel">Relationship</label><input id="ref-rel" type="text" placeholder="Friend, brother, coworker&hellip;" /></div>
+              <div class="field"><label>Their email</label><input id="ref-email" type="email" /></div>
+              <div class="field"><label>Relationship</label><input id="ref-rel" type="text" placeholder="Friend, brother, coworker..." /></div>
             </div>
             <div class="field">
-              <label for="ref-notes">Notes (optional)</label>
-              <textarea id="ref-notes" rows="2" placeholder="Best time to reach them, what they're looking for&hellip;"></textarea>
+              <label>Notes (optional)</label>
+              <textarea id="ref-notes" rows="2" placeholder="Best time to reach them, what they're looking for..."></textarea>
             </div>
-            <button class="btn btn-primary" type="submit">Send referral</button>
+            <button class="btn btn-gold" type="submit">Send referral &amp; enter to win</button>
           </form>
+
+          <div class="sec-title"><h3>Your referrals</h3></div>
+          <div id="my-refs"></div>
         </div>
 
       </div>
@@ -268,9 +358,9 @@ input,select,textarea{font-family:inherit;font-size:16px}
 (function(){
 "use strict";
 
-/* ======================================================================
+/* ====================================================================
    Storage keys (must match admin.html)
-   ====================================================================== */
+   ==================================================================== */
 var K={
   accounts:"vs_client_accounts",
   session:"vs_client_session",
@@ -279,9 +369,9 @@ var K={
   webhook:"vs_webhook_url"
 };
 
-/* ======================================================================
+/* ====================================================================
    Helpers
-   ====================================================================== */
+   ==================================================================== */
 function $(id){return document.getElementById(id);}
 function uid(){return"id_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
 function getAccounts(){try{return JSON.parse(localStorage.getItem(K.accounts)||"[]");}catch(e){return[];}}
@@ -301,9 +391,10 @@ async function sha256(text){
   return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");
 }
 
-function fmtDate(ts){if(!ts)return"—";var d=new Date(ts);return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}
+function fmtDate(ts){if(!ts)return"--";var d=new Date(ts);return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}
 function fmtTime(ts){if(!ts)return"";var d=new Date(ts);return d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
 function normEmail(e){return(e||"").trim().toLowerCase();}
+function initials(a){var n=((a.firstName||"")+" "+(a.lastName||"")).trim();if(!n)return"?";var p=n.split(/\s+/);return((p[0]||"").charAt(0)+(p[1]||"").charAt(0)).toUpperCase()||(a.email||"?").charAt(0).toUpperCase();}
 
 function showNotice(elId,kind,text){
   var el=$(elId);if(!el)return;
@@ -315,18 +406,14 @@ function showNotice(elId,kind,text){
   el.appendChild(n);
 }
 
-/* Optional Make.com webhook forward */
 function webhookFire(payload){
-  var url=getWebhook();
-  if(!url)return;
-  try{
-    fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-  }catch(e){}
+  var url=getWebhook();if(!url)return;
+  try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});}catch(e){}
 }
 
-/* ======================================================================
-   Auth: tab switching
-   ====================================================================== */
+/* ====================================================================
+   Auth tabs
+   ==================================================================== */
 $("tab-login").addEventListener("click",function(){
   $("tab-login").classList.add("active");$("tab-signup").classList.remove("active");
   $("login-form").hidden=false;$("signup-form").hidden=true;
@@ -338,9 +425,9 @@ $("tab-signup").addEventListener("click",function(){
   showNotice("login-msg","",""); showNotice("signup-msg","","");
 });
 
-/* ======================================================================
-   Sign up — first/last name + email + phone + password (no verification code)
-   ====================================================================== */
+/* ====================================================================
+   Sign up - first/last name + email + phone + password
+   ==================================================================== */
 $("signup-form").addEventListener("submit",async function(e){
   e.preventDefault();
   var first=$("su-first").value.trim();
@@ -350,93 +437,127 @@ $("signup-form").addEventListener("submit",async function(e){
   var pw=$("su-pw").value;
   var pw2=$("su-pw2").value;
 
-  if(!first||!last){return showNotice("signup-msg","err","Please enter your first and last name.");}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){return showNotice("signup-msg","err","Please enter a valid email address.");}
-  if(phone.replace(/\D/g,"").length<7){return showNotice("signup-msg","err","Please enter a valid phone number.");}
-  if(pw.length<8){return showNotice("signup-msg","err","Password must be at least 8 characters.");}
-  if(pw!==pw2){return showNotice("signup-msg","err","Passwords don't match. Please try again.");}
+  if(!first||!last)return showNotice("signup-msg","err","Please enter your first and last name.");
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return showNotice("signup-msg","err","Please enter a valid email address.");
+  if(phone.replace(/\D/g,"").length<7)return showNotice("signup-msg","err","Please enter a valid phone number.");
+  if(pw.length<8)return showNotice("signup-msg","err","Password must be at least 8 characters.");
+  if(pw!==pw2)return showNotice("signup-msg","err","Passwords don't match. Please try again.");
 
   var accts=getAccounts();
-  if(accts.some(function(a){return normEmail(a.email)===email;})){
-    return showNotice("signup-msg","err","An account with this email already exists. Try signing in instead.");
-  }
+  if(accts.some(function(a){return normEmail(a.email)===email;}))return showNotice("signup-msg","err","An account with this email already exists. Try signing in instead.");
 
   var hash=await sha256(pw);
-  var acct={
-    id:uid(),
-    firstName:first,
-    lastName:last,
-    email:email,
-    phone:phone,
-    passwordHash:hash,
-    created:Date.now(),
-    lastSignIn:Date.now(),
-    status:"active"
-  };
+  var acct={id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:Date.now(),status:"active",plan:null,photoDataUrl:""};
   accts.push(acct);
   saveAccounts(accts);
   setSession({id:acct.id,email:acct.email,since:Date.now()});
 
   webhookFire({event:"client_signup",account:{id:acct.id,firstName:first,lastName:last,email:email,phone:phone,created:acct.created}});
-
   if(window.VSAdmin&&typeof window.VSAdmin.recordAccountCreated==="function"){try{window.VSAdmin.recordAccountCreated();}catch(e){}}
 
   showDashboard();
 });
 
-/* ======================================================================
-   Sign in — email + password
-   ====================================================================== */
+/* ====================================================================
+   Sign in
+   ==================================================================== */
 $("login-form").addEventListener("submit",async function(e){
   e.preventDefault();
   var email=normEmail($("li-email").value);
   var pw=$("li-pw").value;
-  if(!email||!pw){return showNotice("login-msg","err","Please enter your email and password.");}
+  if(!email||!pw)return showNotice("login-msg","err","Please enter your email and password.");
 
   var accts=getAccounts();
   var acct=accts.filter(function(a){return normEmail(a.email)===email;})[0];
-  if(!acct){return showNotice("login-msg","err","No account found for that email. Create an account to get started.");}
-  if(acct.status==="revoked"){return showNotice("login-msg","err","This account has been revoked. Please contact your advisor.");}
-  if(!acct.passwordHash){return showNotice("login-msg","err","Your password was reset. Please contact your advisor for a new one.");}
+  if(!acct)return showNotice("login-msg","err","No account found for that email. Create an account to get started.");
+  if(acct.status==="revoked")return showNotice("login-msg","err","This account has been revoked. Please contact your advisor.");
+  if(!acct.passwordHash)return showNotice("login-msg","err","Your password was reset. Please contact your advisor for a new one.");
 
   var hash=await sha256(pw);
-  if(hash!==acct.passwordHash){return showNotice("login-msg","err","Incorrect password. Please try again.");}
+  if(hash!==acct.passwordHash)return showNotice("login-msg","err","Incorrect password. Please try again.");
 
   acct.lastSignIn=Date.now();
   saveAccounts(accts);
   setSession({id:acct.id,email:acct.email,since:Date.now()});
 
   webhookFire({event:"client_signin",accountId:acct.id,email:email,ts:Date.now()});
-
   if(window.VSAdmin&&typeof window.VSAdmin.recordSignIn==="function"){try{window.VSAdmin.recordSignIn(email);}catch(e){}}
 
   showDashboard();
 });
 
-/* ======================================================================
-   Sign out
-   ====================================================================== */
-$("signout-btn").addEventListener("click",function(){
-  clearSession();
-  location.reload();
-});
-
-/* ======================================================================
-   Delete account (client-initiated)
-   ====================================================================== */
+/* ====================================================================
+   Sign out / delete
+   ==================================================================== */
+$("signout-btn").addEventListener("click",function(){clearSession();location.reload();});
 $("delete-account").addEventListener("click",function(){
   if(!confirm("Delete your account? This will remove your sign-in. Your messages and referral history stay with your advisor."))return;
   var s=getSession();if(!s)return;
-  var accts=getAccounts().filter(function(a){return a.id!==s.id;});
-  saveAccounts(accts);
+  saveAccounts(getAccounts().filter(function(a){return a.id!==s.id;}));
   webhookFire({event:"client_account_deleted",accountId:s.id,email:s.email,ts:Date.now()});
-  clearSession();
-  location.reload();
+  clearSession();location.reload();
 });
 
-/* ======================================================================
-   Dashboard render
-   ====================================================================== */
+/* ====================================================================
+   Change password
+   ==================================================================== */
+$("pw-form").addEventListener("submit",async function(e){
+  e.preventDefault();
+  var acct=currentAccount();if(!acct)return;
+  var cur=$("pw-cur").value,n1=$("pw-new").value,n2=$("pw-new2").value;
+  if(!cur||!n1||!n2)return showNotice("pw-msg","err","Fill all fields.");
+  if(n1.length<8)return showNotice("pw-msg","err","New password must be at least 8 characters.");
+  if(n1!==n2)return showNotice("pw-msg","err","New passwords don't match.");
+  var curHash=await sha256(cur);
+  if(curHash!==acct.passwordHash)return showNotice("pw-msg","err","Current password is wrong.");
+  var newHash=await sha256(n1);
+  var arr=getAccounts().map(function(a){if(a.id===acct.id)a.passwordHash=newHash;return a;});
+  saveAccounts(arr);
+  $("pw-form").reset();
+  showNotice("pw-msg","ok","Password updated.");
+  webhookFire({event:"client_password_changed",accountId:acct.id,ts:Date.now()});
+});
+
+/* ====================================================================
+   Photo upload
+   ==================================================================== */
+$("photo-input").addEventListener("change",function(e){
+  var f=e.target.files[0];if(!f)return;
+  if(!/^image\//.test(f.type))return showNotice("photo-msg","err","Please pick an image file.");
+  if(f.size>3*1024*1024)return showNotice("photo-msg","err","Image is over 3MB. Try a smaller one.");
+  var reader=new FileReader();
+  reader.onload=function(){
+    var img=new Image();
+    img.onload=function(){
+      // Resize to max 256x256 to keep storage small
+      var maxSize=256;
+      var w=img.width,h=img.height;
+      if(w>h){if(w>maxSize){h=Math.round(h*maxSize/w);w=maxSize;}}
+      else{if(h>maxSize){w=Math.round(w*maxSize/h);h=maxSize;}}
+      var c=document.createElement("canvas");c.width=w;c.height=h;
+      c.getContext("2d").drawImage(img,0,0,w,h);
+      var dataUrl=c.toDataURL("image/jpeg",0.85);
+      var acct=currentAccount();if(!acct)return;
+      var arr=getAccounts().map(function(a){if(a.id===acct.id)a.photoDataUrl=dataUrl;return a;});
+      saveAccounts(arr);
+      paintAvatar(dataUrl);
+      showNotice("photo-msg","ok","Profile photo updated.");
+      webhookFire({event:"client_photo_updated",accountId:acct.id,ts:Date.now()});
+    };
+    img.src=reader.result;
+  };
+  reader.readAsDataURL(f);
+  $("photo-input").value="";
+});
+function paintAvatar(dataUrl){
+  var av=$("dh-avatar");av.innerHTML="";
+  if(dataUrl){var img=document.createElement("img");img.src=dataUrl;img.alt="Profile photo";av.appendChild(img);}
+  else{var acct=currentAccount();av.textContent=acct?initials(acct):"VS";}
+}
+
+/* ====================================================================
+   Dashboard
+   ==================================================================== */
 function currentAccount(){
   var s=getSession();if(!s)return null;
   return getAccounts().filter(function(a){return a.id===s.id;})[0]||null;
@@ -449,38 +570,78 @@ function showDashboard(){
   $("dash-view").hidden=false;
   $("signout-btn").hidden=false;
 
-  $("dh-name").textContent=(acct.firstName||"Member")+(acct.lastName?(" "+acct.lastName):"");
+  $("dh-name").textContent=((acct.firstName||"")+" "+(acct.lastName||"")).trim()||"Member";
   $("dh-email").textContent=acct.email;
-  $("pv-name").textContent=((acct.firstName||"")+" "+(acct.lastName||"")).trim()||"—";
+  paintAvatar(acct.photoDataUrl);
+
+  $("pv-name").textContent=((acct.firstName||"")+" "+(acct.lastName||"")).trim()||"--";
   $("pv-email").textContent=acct.email;
-  $("pv-phone").textContent=acct.phone||"—";
+  $("pv-phone").textContent=acct.phone||"--";
   $("pv-since").textContent=fmtDate(acct.created);
 
+  renderPlan();
   renderMessages();
+  renderMyReferrals();
 }
 
+/* ====================================================================
+   Plan view
+   ==================================================================== */
+function renderPlan(){
+  var acct=currentAccount();if(!acct)return;
+  var box=$("plan-display");box.innerHTML="";
+  var p=acct.plan;
+  if(!p||(!p.carrier&&!p.planName)){
+    var d=document.createElement("div");
+    d.className="plan-empty";
+    d.innerHTML='<strong>No plan on file yet.</strong><br/>Once your advisor enrolls you, your plan details will appear here. <a href="contact.html">Reach out</a> if you have questions.';
+    box.appendChild(d);
+    return;
+  }
+  var card=document.createElement("div");card.className="plan-card";
+  card.innerHTML=
+    '<div class="pl-eyebrow">Active enrollment</div>'+
+    '<div class="pl-name">'+(p.planName||"Your plan")+'</div>'+
+    '<div class="pl-carrier">'+(p.carrier||"")+'</div>'+
+    '<div class="pl-grid">'+
+      '<div class="pl-cell"><div class="lbl">Effective date</div><div class="val">'+(p.effectiveDate?fmtDate(new Date(p.effectiveDate+"T00:00:00").getTime()):"--")+'</div></div>'+
+      '<div class="pl-cell"><div class="lbl">Renewal date</div><div class="val">'+(p.renewalDate?fmtDate(new Date(p.renewalDate+"T00:00:00").getTime()):"--")+'</div></div>'+
+      '<div class="pl-cell"><div class="lbl">Monthly premium</div><div class="val">'+(p.monthlyPremium?("$"+Number(p.monthlyPremium).toFixed(2)):"--")+'</div></div>'+
+      '<div class="pl-cell"><div class="lbl">Updated</div><div class="val">'+(p.updated?fmtDate(p.updated):"--")+'</div></div>'+
+    '</div>';
+  box.appendChild(card);
+
+  if(p.notes){
+    var n=document.createElement("div");
+    n.className="subcard";
+    n.innerHTML='<h4>Plan notes from your advisor</h4><div style="font-size:13.5px;color:var(--ink-2);white-space:pre-wrap">'+p.notes.replace(/[<>&]/g,function(c){return{"<":"&lt;",">":"&gt;","&":"&amp;"}[c];})+'</div>';
+    box.appendChild(n);
+  }
+}
+
+/* ====================================================================
+   Messages
+   ==================================================================== */
 function renderMessages(){
   var acct=currentAccount();if(!acct)return;
   var box=$("msgs");
   var msgs=getMessages().filter(function(m){return m.accountId===acct.id;}).sort(function(a,b){return a.ts-b.ts;});
-  if(!msgs.length){box.innerHTML='<div class="empty">No messages yet. Send your first message below — Bradley will get back to you within a business day.</div>';return;}
+  if(!msgs.length){box.innerHTML='<div class="empty">No messages yet. Send your first message below - Bradley will get back to you within a business day.</div>';return;}
   box.innerHTML="";
   msgs.forEach(function(m){
     var d=document.createElement("div");
     d.className="msg "+(m.from==="advisor"?"advisor":"client");
     var t=document.createElement("div");t.textContent=m.text;
-    var meta=document.createElement("div");meta.className="meta";meta.textContent=(m.from==="advisor"?"Bradley • ":"You • ")+fmtTime(m.ts);
+    var meta=document.createElement("div");meta.className="meta";meta.textContent=(m.from==="advisor"?"Bradley - ":"You - ")+fmtTime(m.ts);
     d.appendChild(t);d.appendChild(meta);box.appendChild(d);
   });
   box.scrollTop=box.scrollHeight;
 }
 
-/* Send message */
 $("msg-form").addEventListener("submit",function(e){
   e.preventDefault();
   var acct=currentAccount();if(!acct)return;
   var text=$("msg-text").value.trim();if(!text)return;
-
   if(window.VSAdmin&&typeof window.VSAdmin.ingestMessage==="function"){
     try{window.VSAdmin.ingestMessage({accountId:acct.id,from:"client",text:text,ts:Date.now()});}catch(e){}
   }else{
@@ -488,12 +649,13 @@ $("msg-form").addEventListener("submit",function(e){
     var arr=getMessages();arr.push(m);saveMessages(arr);
   }
   webhookFire({event:"client_message",accountId:acct.id,email:acct.email,text:text,ts:Date.now()});
-
   $("msg-text").value="";
   renderMessages();
 });
 
-/* Send referral */
+/* ====================================================================
+   Referrals
+   ==================================================================== */
 $("ref-form").addEventListener("submit",function(e){
   e.preventDefault();
   var acct=currentAccount();if(!acct)return;
@@ -502,8 +664,8 @@ $("ref-form").addEventListener("submit",function(e){
   var email=$("ref-email").value.trim();
   var rel=$("ref-rel").value.trim();
   var notes=$("ref-notes").value.trim();
-  if(!name){return showNotice("ref-msg","err","Please add the person's name.");}
-  if(!phone&&!email){return showNotice("ref-msg","err","Please add at least a phone number or email.");}
+  if(!name)return showNotice("ref-msg","err","Please add the person's name.");
+  if(!phone&&!email)return showNotice("ref-msg","err","Please add at least a phone number or email.");
 
   if(window.VSAdmin&&typeof window.VSAdmin.ingestReferral==="function"){
     try{window.VSAdmin.ingestReferral({fromAccountId:acct.id,referralName:name,referralPhone:phone,referralEmail:email,relationship:rel,notes:notes});}catch(e){}
@@ -513,23 +675,51 @@ $("ref-form").addEventListener("submit",function(e){
   }
   webhookFire({event:"client_referral",fromAccountId:acct.id,fromEmail:acct.email,referralName:name,referralPhone:phone,referralEmail:email,relationship:rel,notes:notes,ts:Date.now()});
 
-  showNotice("ref-msg","ok","Thanks! Your referral was sent. We'll reach out shortly.");
+  showNotice("ref-msg","ok","Thanks! Your referral was sent and you're entered in our gift drawing.");
   $("ref-form").reset();
+  renderMyReferrals();
 });
 
-/* Dashboard tab switching */
+function renderMyReferrals(){
+  var acct=currentAccount();if(!acct)return;
+  var box=$("my-refs");if(!box)return;box.innerHTML="";
+  var mine=getReferrals().filter(function(r){return r.fromAccountId===acct.id;}).sort(function(a,b){return b.ts-a.ts;});
+  if(!mine.length){box.appendChild(Object.assign(document.createElement("div"),{className:"empty",textContent:"No referrals yet. Send your first one above!"}));return;}
+  mine.forEach(function(r){
+    var d=document.createElement("div");d.className="subcard";d.style.padding="12px 14px";
+    var status=r.status||"new";
+    var statusColor={"new":"#1e5ab0","contacted":"#b46b00","quoted":"#0b6996","enrolled":"#0a8754","lost":"#b3261e"}[status]||"#1e5ab0";
+    d.innerHTML=
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px">'+
+        '<strong style="color:var(--blue-900)">'+escapeHtml(r.referralName||"(no name)")+'</strong>'+
+        '<span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:'+statusColor+'">'+status+'</span>'+
+      '</div>'+
+      '<div style="font-size:12.5px;color:var(--muted)">Sent '+fmtTime(r.ts)+(r.paid?(' &middot; <span style="color:var(--ok);font-weight:600">Gift entered</span>'):"")+'</div>';
+    box.appendChild(d);
+  });
+}
+function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
+
+/* ====================================================================
+   Tab switching
+   ==================================================================== */
 function dswitch(name){
-  ["profile","support","refer"].forEach(function(n){
+  ["profile","plan","support","refer"].forEach(function(n){
     $("dtab-"+n).classList.toggle("active",n===name);
     $("panel-"+n).classList.toggle("active",n===name);
   });
   if(name==="support")renderMessages();
+  if(name==="plan")renderPlan();
+  if(name==="refer")renderMyReferrals();
 }
 $("dtab-profile").addEventListener("click",function(){dswitch("profile");});
+$("dtab-plan").addEventListener("click",function(){dswitch("plan");});
 $("dtab-support").addEventListener("click",function(){dswitch("support");});
 $("dtab-refer").addEventListener("click",function(){dswitch("refer");});
 
-/* Boot */
+/* ====================================================================
+   Boot
+   ==================================================================== */
 $("yr").textContent=new Date().getFullYear();
 if(getSession()){showDashboard();}
 

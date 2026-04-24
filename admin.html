@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>VS Benefits - Admin Portal</title>
+<title>Admin Portal | VS Benefits</title>
 <meta name="robots" content="noindex,nofollow" />
 <link rel="icon" type="image/png" href="assets/images/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -11,827 +11,1020 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
 <style>
 :root{
-  --blue-900:#0b2346;--blue-800:#0f2e5c;--blue-700:#16447f;--blue-600:#1e5ab0;--blue-500:#2f7de0;
-  --blue-100:#e8f0fb;--blue-50:#f4f8fe;--teal:#0db5a6;--teal-dark:#098374;
-  --ink:#0d1b2a;--ink-2:#334155;--muted:#5a6b80;--line:#e4e9f2;
-  --bg:#ffffff;--bg-soft:#f7faff;--warn:#b23a1d;--ok:#0e8a4f;
-  --shadow:0 10px 30px rgba(13,27,42,.08);--shadow-sm:0 4px 12px rgba(13,27,42,.06);
-  --radius:14px;--radius-sm:10px;--tap:44px;--container:1200px;
+  --blue-900:#0b2346;--blue-800:#0f2e5c;--blue-700:#16447f;
+  --blue-600:#1e5ab0;--blue-500:#2f7de0;--blue-100:#e8f0fb;--blue-50:#f4f8fe;
+  --teal:#0db5a6;--teal-dark:#098374;--gold:#f5b301;
+  --ink:#0e1726;--ink-2:#314056;--muted:#5a6b80;
+  --line:#dfe6f1;--line-2:#eef2f8;
+  --bg:#f6f9fc;--white:#fff;
+  --ok:#0a8754;--warn:#b46b00;--err:#b3261e;
+  --shadow-sm:0 1px 2px rgba(11,35,70,.06);
+  --shadow-md:0 8px 24px rgba(11,35,70,.10);
+  --r-sm:8px;--r-md:12px;--r-lg:16px;--tap:44px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);background:var(--bg-soft);line-height:1.55;font-size:16px;-webkit-font-smoothing:antialiased}
-h1,h2,h3,h4{font-family:'Poppins','Inter',system-ui,sans-serif;color:var(--blue-900);line-height:1.2;margin:0 0 .4em}
-h1{font-size:1.6rem}h2{font-size:1.2rem}h3{font-size:1rem}
-p{margin:0 0 1em;color:var(--ink-2)}
-a{color:var(--blue-700)}
-code{background:var(--blue-50);padding:1px 6px;border-radius:4px;font-size:.88em}
-.container{max-width:var(--container);margin:0 auto;padding:0 14px}
-.small{font-size:.85rem}.muted{color:var(--muted)}.center{text-align:center}.hidden{display:none !important}
-.stack{display:flex;flex-direction:column;gap:10px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.row-actions{display:flex;gap:6px;flex-wrap:wrap}
-.row-actions button{font-size:.78rem;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--ink-2);min-height:32px}
-.row-actions button:hover{border-color:var(--blue-500);color:var(--blue-700)}
-.row-actions button.del{color:var(--warn)}
-.row-actions button.del:hover{border-color:var(--warn);background:#fff5f3}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%;font-size:15px}
+h1,h2,h3,h4{font-family:Poppins,Inter,system-ui,sans-serif;color:var(--blue-900);margin:0 0 .5em}
+a{color:var(--blue-600);text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:inherit}
+input,select,textarea{font-family:inherit;font-size:16px}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:var(--tap);padding:11px 18px;border-radius:10px;font-weight:700;font-size:.95rem;border:1.5px solid transparent;cursor:pointer;text-decoration:none;font-family:inherit}
-.btn-primary{background:var(--blue-700);color:#fff}
-.btn-primary:hover{background:var(--blue-600)}
-.btn-ghost{background:#fff;color:var(--ink);border-color:var(--line)}
-.btn-ghost:hover{border-color:var(--blue-500);color:var(--blue-700)}
+.bar{background:var(--blue-900);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.bar .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-family:Poppins;font-size:15px}
+.bar .brand .b{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem}
+.bar .pill{background:rgba(245,179,1,.18);color:#ffd95a;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;letter-spacing:.06em;text-transform:uppercase;margin-left:8px}
+.bar .right{display:flex;align-items:center;gap:8px}
+.bar a.home{color:#cfe1ff;font-size:13px}
+.bar a.home:hover{color:#fff}
+.bar .signout{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px}
+.bar .signout:hover{background:rgba(255,255,255,.2)}
+
+.wrap{max-width:1200px;margin:0 auto;padding:18px 16px 80px}
+.wrap-narrow{max-width:540px;margin:0 auto;padding:30px 16px 80px}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:22px;margin-bottom:20px}
+.card h2{font-size:20px;margin:0 0 6px}
+.card .lede{color:var(--ink-2);margin:0 0 16px;font-size:14px}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:13px;font-weight:600;color:var(--ink-2)}
+.field input,.field select,.field textarea{padding:11px 13px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;color:var(--ink);min-height:44px;width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(47,125,224,.18)}
+.row2{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:560px){.row2{grid-template-columns:1fr 1fr;gap:14px}}
+.row3{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:560px){.row3{grid-template-columns:1fr 1fr 1fr;gap:14px}}
+.hint{font-size:12.5px;color:var(--muted);margin-top:-2px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:9px;font-weight:700;font-size:14px;border:0;cursor:pointer;min-height:44px;text-decoration:none;line-height:1}
+.btn:hover{text-decoration:none}
+.btn-primary{background:var(--blue-600);color:#fff}
+.btn-primary:hover{background:var(--blue-700)}
+.btn-ghost{background:transparent;color:var(--blue-700);border:1px solid var(--line)}
+.btn-ghost:hover{background:var(--blue-50)}
 .btn-teal{background:var(--teal);color:#fff}
 .btn-teal:hover{background:var(--teal-dark)}
-.btn-warn{background:#fff;color:var(--warn);border-color:var(--warn)}
-.btn-warn:hover{background:var(--warn);color:#fff}
-.btn-sm{padding:7px 12px;font-size:.84rem;min-height:36px}
+.btn-danger{background:#fff;color:var(--err);border:1px solid #f1c2bf}
+.btn-danger:hover{background:#fdf2f1}
+.btn-block{width:100%}
+.btn-sm{padding:7px 11px;min-height:36px;font-size:12.5px;border-radius:7px}
 
-.site-header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
-.site-header .nav-wrap{display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 14px}
-.brand{display:flex;align-items:center;gap:8px;font-family:'Poppins',sans-serif;font-weight:700;color:var(--blue-900)}
-.brand-badge{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.85rem}
-.who-area{display:flex;gap:8px;align-items:center}
-.who-area .small{display:none}
-@media(min-width:640px){.who-area .small{display:inline}}
+.notice{padding:10px 12px;border-radius:8px;font-size:13.5px;margin-bottom:12px}
+.notice-err{background:#fdecea;color:var(--err);border:1px solid #f5c6c1}
+.notice-ok{background:#e6f7ef;color:var(--ok);border:1px solid #b9e6cf}
+.notice-info{background:var(--blue-50);color:var(--blue-700);border:1px solid #cfdef6}
 
-main{padding:20px 0 60px}
+/* Tabs */
+.tabs-bar{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);margin-bottom:18px;overflow:hidden}
+.tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;border-bottom:1px solid var(--line)}
+.tabs button{background:none;border:0;padding:14px 18px;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;min-height:50px;flex-shrink:0;display:flex;align-items:center;gap:7px}
+.tabs button .badge{background:var(--blue-100);color:var(--blue-700);font-size:11px;padding:2px 6px;border-radius:10px;font-weight:700}
+.tabs button.active{color:var(--blue-700);border-bottom-color:var(--blue-600)}
+.tabs button.active .badge{background:var(--blue-600);color:#fff}
 
-.panel{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm)}
-.auth-card{max-width:440px;margin:40px auto;padding:28px 22px}
-.auth-card h1{margin-bottom:6px}
-.auth-card p.lead{color:var(--muted);font-size:.95rem;margin-bottom:18px}
-.auth-card .field{margin-bottom:12px}
-.auth-card .err{color:var(--warn);font-size:.85rem;min-height:1.2em;margin:6px 0 0}
-.auth-card .ok{color:var(--ok);font-size:.85rem;min-height:1.2em;margin:6px 0 0}
+.panel{display:none;padding:22px}
+.panel.active{display:block}
+.panel h3{font-size:17px;margin:0 0 4px}
+.panel .lede{color:var(--muted);font-size:13.5px;margin:0 0 18px}
 
-.field label{display:block;font-size:.82rem;font-weight:700;margin-bottom:5px;color:var(--ink)}
-.field input,.field select,.field textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:9px;font-size:16px;font-family:inherit;color:var(--ink);background:#fff;min-height:var(--tap)}
-.field input:focus,.field select:focus,.field textarea:focus{outline:0;border-color:var(--blue-600);box-shadow:0 0 0 3px rgba(30,90,176,.15)}
-.field textarea{resize:vertical;min-height:80px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;align-items:center}
+.toolbar input.search{flex:1;min-width:200px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;min-height:40px}
 
-.tabs{display:flex;flex-wrap:wrap;gap:2px;border-bottom:1px solid var(--line);padding:6px 6px 0;background:#fff;border-radius:14px 14px 0 0}
-.tab{background:transparent;border:0;padding:11px 14px;font-size:.92rem;font-weight:600;color:var(--muted);cursor:pointer;border-radius:8px 8px 0 0;font-family:inherit;min-height:42px;display:inline-flex;align-items:center;gap:6px;border-bottom:2px solid transparent;margin-bottom:-1px}
-.tab:hover{color:var(--blue-700)}
-.tab.active{color:var(--blue-700);border-bottom-color:var(--blue-700);background:var(--blue-50)}
-.tab .badge{background:var(--blue-700);color:#fff;font-size:.7rem;padding:1px 7px;border-radius:999px;font-weight:700}
+/* Tables (cards on mobile) */
+.tbl{display:flex;flex-direction:column;gap:10px}
+.tbl .row{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:14px}
+.tbl .row .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+.tbl .row .name{font-weight:700;color:var(--blue-900);font-size:15px}
+.tbl .row .sub{font-size:13px;color:var(--ink-2);margin:2px 0}
+.tbl .row .meta{font-size:12px;color:var(--muted)}
+.tbl .row .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line-2)}
 
-.tab-panel{padding:18px 14px 22px}
-.tab-panel[hidden]{display:none}
+.status-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.status-new{background:#e7f0ff;color:var(--blue-700)}
+.status-contacted{background:#fff4e1;color:var(--warn)}
+.status-quoted{background:#e7f6ff;color:#0b6996}
+.status-enrolled{background:#e6f7ef;color:var(--ok)}
+.status-lost{background:#fbe7e7;color:var(--err)}
+.status-active{background:#e6f7ef;color:var(--ok)}
+.status-revoked{background:#fbe7e7;color:var(--err)}
+.status-paid{background:#e6f7ef;color:var(--ok)}
+.status-unpaid{background:#fff4e1;color:var(--warn)}
 
-.dash-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px}
-.pill{display:inline-block;background:var(--blue-50);color:var(--blue-700);font-weight:700;font-size:.78rem;padding:3px 10px;border-radius:999px}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.toolbar input[type=search],.toolbar select{padding:9px 11px;border-radius:9px;border:1px solid var(--line);min-height:var(--tap);font-size:16px;flex:1;min-width:160px}
+.empty{padding:32px 16px;text-align:center;color:var(--muted);font-size:13.5px;background:var(--blue-50);border:1px dashed var(--line);border-radius:var(--r-md)}
 
-.table-wrap{overflow-x:auto;margin:0 -4px}
-table.data{width:100%;border-collapse:collapse;font-size:.88rem;min-width:640px}
-table.data th{background:var(--blue-50);text-align:left;padding:10px 8px;font-weight:700;color:var(--blue-900);border-bottom:1px solid var(--line);font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
-table.data td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
-table.data tr:hover td{background:var(--blue-50)}
-.empty{padding:30px 16px;text-align:center;color:var(--muted);font-size:.92rem}
-
-.status-badge{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.74rem;font-weight:700;text-transform:capitalize}
-.status-badge.new{background:#fff8e1;color:#7a5800}
-.status-badge.contacted{background:#e8f0fb;color:#1e5ab0}
-.status-badge.quoted{background:#e6f7f4;color:#098374}
-.status-badge.closed,.status-badge.enrolled{background:#e3f4e9;color:#0e8a4f}
-.status-badge.lost{background:#fce8e3;color:#b23a1d}
-.status-badge.active{background:#e3f4e9;color:#0e8a4f}
-.status-badge.paused{background:#fff8e1;color:#7a5800}
-.status-badge.churned{background:#fce8e3;color:#b23a1d}
-
-.kv{display:flex;justify-content:space-between;gap:14px;padding:6px 0;border-bottom:1px dashed var(--line)}
-.kv .k{color:var(--muted);font-size:.85rem}.kv .v{font-weight:600}
-
-.modal-bg{display:none;position:fixed;inset:0;z-index:100;background:rgba(11,35,70,.55);backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:14px}
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(11,35,70,.55);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:20px;overflow-y:auto}
 .modal-bg.open{display:flex}
-.modal-card{background:#fff;border-radius:14px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding:22px 18px;box-shadow:0 20px 60px rgba(11,35,70,.3);position:relative}
-.modal-card h3{margin-bottom:14px}
-.modal-close{position:absolute;top:8px;right:8px;background:transparent;border:0;font-size:1.4rem;color:var(--muted);cursor:pointer;width:36px;height:36px;border-radius:8px}
-.modal-close:hover{background:var(--blue-50);color:var(--blue-700)}
+.modal{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:24px;box-shadow:var(--shadow-md);position:relative;margin:auto}
+.modal h3{margin:0 0 4px;font-size:18px}
+.modal .lede{color:var(--muted);font-size:13px;margin:0 0 16px}
+.modal .close-x{position:absolute;top:8px;right:10px;background:transparent;border:0;width:36px;height:36px;font-size:1.6rem;color:var(--muted);cursor:pointer;border-radius:8px}
+.modal .close-x:hover{background:var(--blue-50)}
+.modal-acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:8px}
 
-.thread{background:var(--blue-50);border-radius:10px;padding:10px;max-height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
-.msg{padding:8px 11px;border-radius:10px;max-width:84%;word-wrap:break-word;font-size:.92rem}
-.msg.client{background:#fff;border:1px solid var(--line);align-self:flex-start}
-.msg.admin{background:var(--blue-700);color:#fff;align-self:flex-end}
-.msg .ts{display:block;font-size:.7rem;opacity:.7;margin-top:4px}
-.msg-thread-empty{text-align:center;color:var(--muted);padding:24px 14px;font-size:.9rem}
+/* Calendar */
+.cal-wrap{display:grid;grid-template-columns:1fr;gap:18px}
+@media(min-width:880px){.cal-wrap{grid-template-columns:1fr 320px}}
+.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
+.cal-head h3{margin:0;font-size:17px}
+.cal-nav{display:flex;gap:4px}
+.cal-nav button{padding:7px 12px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;font-weight:600;color:var(--ink-2);min-height:36px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px}
+.cal-dow{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;text-align:center;padding:6px 0;background:var(--blue-50);border-radius:6px}
+.cal-day{aspect-ratio:1/1;background:var(--bg);border:1px solid var(--line-2);border-radius:6px;padding:4px;cursor:pointer;display:flex;flex-direction:column;font-size:11px;min-height:46px;transition:background .15s}
+.cal-day:hover{background:var(--blue-50)}
+.cal-day.muted{opacity:.35}
+.cal-day.today{border-color:var(--blue-600);background:#fff;box-shadow:inset 0 0 0 1px var(--blue-600)}
+.cal-day.has{background:var(--blue-50)}
+.cal-day .num{font-weight:700;color:var(--ink);font-size:12px}
+.cal-day .dot{width:6px;height:6px;border-radius:50%;background:var(--blue-600);margin-top:auto;align-self:flex-end}
+.cal-day.selected{background:var(--blue-100);border-color:var(--blue-600)}
 
-.support-list-item{padding:10px;border:1px solid var(--line);border-radius:10px;cursor:pointer;background:#fff}
-.support-list-item:hover{border-color:var(--blue-500)}
-.support-list-item.selected{border-color:var(--blue-700);background:var(--blue-50)}
-.support-list-item .name{font-weight:700;color:var(--blue-900)}
-.support-list-item .preview{font-size:.82rem;color:var(--muted);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.support-list-item .meta{font-size:.74rem;color:var(--muted);margin-top:3px}
-.support-list-item.unread{border-left:3px solid var(--blue-700)}
+.evlist{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+.evlist h4{margin:0 0 10px;font-size:14px;color:var(--blue-900)}
+.ev{padding:10px;border:1px solid var(--line-2);border-radius:8px;margin-bottom:8px;background:var(--bg)}
+.ev .et{font-weight:700;color:var(--blue-900);font-size:13.5px}
+.ev .em{font-size:12px;color:var(--muted);margin:2px 0}
+.ev .ea{display:flex;gap:6px;margin-top:8px}
 
-@media(min-width:760px){
-  #support-grid{grid-template-columns:1fr 1.6fr !important}
-}
+/* Conversation */
+.conv-wrap{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:880px){.conv-wrap{grid-template-columns:280px 1fr}}
+.thread-list{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;max-height:480px;overflow-y:auto}
+.thread{padding:10px 12px;border-radius:8px;cursor:pointer;border:1px solid transparent;margin-bottom:4px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.thread:hover{background:var(--blue-50)}
+.thread.active{background:var(--blue-50);border-color:var(--blue-600)}
+.thread .tn{font-weight:700;font-size:13px;color:var(--blue-900)}
+.thread .te{font-size:11px;color:var(--muted)}
+.thread .tu{background:var(--err);color:#fff;border-radius:999px;font-size:10.5px;font-weight:700;padding:1px 7px;min-width:18px;text-align:center}
+.conv{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column}
+.msgs{max-height:340px;overflow-y:auto;padding:6px;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
+.msg{padding:9px 12px;border-radius:10px;max-width:85%;font-size:13.5px;line-height:1.45}
+.msg.client{background:#f3f5f8;color:var(--ink);border:1px solid var(--line-2)}
+.msg.advisor{background:var(--blue-50);color:var(--ink);margin-left:auto;border:1px solid #cfdef6}
+.msg .meta{font-size:11px;color:var(--muted);margin-top:3px}
 
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--blue-900);color:#fff;padding:10px 18px;border-radius:10px;box-shadow:var(--shadow);z-index:200;font-size:.9rem;opacity:0;transition:opacity .2s,transform .2s}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+/* Avatar */
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--blue-100);color:var(--blue-700);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;overflow:hidden;flex-shrink:0}
+.avatar img{width:100%;height:100%;object-fit:cover}
+
+.kv{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:14px}
+@media(min-width:560px){.kv{grid-template-columns:1fr 1fr}}
+.kv .item{background:var(--blue-50);border:1px solid var(--line-2);border-radius:8px;padding:10px 12px}
+.kv .item .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
+.kv .item .val{font-size:14px;color:var(--ink);margin-top:2px;word-break:break-word}
+
+[hidden]{display:none !important}
 </style>
 </head>
 <body>
 
-<header class="site-header">
-  <div class="nav-wrap">
-    <a class="brand" href="index.html">
-      <span class="brand-badge">VS</span>
-      <span>VS Benefits Admin</span>
-    </a>
-    <div class="who-area" id="who-area">
-      <span class="small muted" id="who-label"></span>
-      <button class="btn btn-ghost btn-sm hidden" id="logout-btn">Sign out</button>
-    </div>
+<div class="bar">
+  <a class="brand" href="index.html">
+    <span class="b">VS</span>
+    <span>VS Benefits</span>
+    <span class="pill">Admin</span>
+  </a>
+  <div class="right">
+    <a class="home" href="index.html">Home</a>
+    <button id="signout-btn" class="signout" hidden>Sign out</button>
   </div>
-</header>
+</div>
 
-<main>
-  <div class="container">
+<!-- ======================= SETUP VIEW ======================= -->
+<div id="setup-view" class="wrap-narrow" hidden>
+  <div class="card">
+    <h2>First-time admin setup</h2>
+    <p class="lede">Create the admin account for this device. You'll need the secret <strong>admin setup code</strong> to continue.</p>
+    <form id="setup-form" autocomplete="off" novalidate>
+      <div id="setup-msg"></div>
+      <div class="field">
+        <label for="setup-code">Admin setup code</label>
+        <input type="password" id="setup-code" autocomplete="off" inputmode="numeric" required />
+        <div class="hint">Don't have it? It's the master key only the practice owner knows.</div>
+      </div>
+      <div class="field">
+        <label for="setup-pw">Create admin password</label>
+        <input type="password" id="setup-pw" autocomplete="new-password" minlength="8" required />
+      </div>
+      <div class="field">
+        <label for="setup-pw2">Confirm password</label>
+        <input type="password" id="setup-pw2" autocomplete="new-password" minlength="8" required />
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Create admin account</button>
+    </form>
+  </div>
+</div>
 
-    <!-- ===== SETUP VIEW (first-time, requires hidden setup code) ===== -->
-    <section id="setup-view" class="panel auth-card" hidden>
-      <h1>Create your admin account</h1>
-      <p class="lead">First time on this device. Enter the admin setup code, then choose a password.</p>
-      <form id="setup-form" class="stack">
-        <div class="field">
-          <label for="setup-code">Admin setup code</label>
-          <input type="password" id="setup-code" autocomplete="off" inputmode="numeric" required />
+<!-- ======================= LOGIN VIEW ======================= -->
+<div id="login-view" class="wrap-narrow" hidden>
+  <div class="card">
+    <h2>Admin sign in</h2>
+    <p class="lede">Enter your admin password to continue.</p>
+    <form id="login-form" autocomplete="off" novalidate>
+      <div id="login-msg"></div>
+      <div class="field">
+        <label for="login-pw">Admin password</label>
+        <input type="password" id="login-pw" autocomplete="current-password" required />
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+  </div>
+</div>
+
+<!-- ======================= DASHBOARD ======================= -->
+<div id="dash-view" class="wrap" hidden>
+
+  <div class="tabs-bar">
+    <div class="tabs" role="tablist">
+      <button id="t-leads" class="active" data-tab="leads" type="button">Leads <span class="badge" id="b-leads">0</span></button>
+      <button id="t-calendar" data-tab="calendar" type="button">Calendar <span class="badge" id="b-cal">0</span></button>
+      <button id="t-accounts" data-tab="accounts" type="button">Client Accounts <span class="badge" id="b-acct">0</span></button>
+      <button id="t-support" data-tab="support" type="button">Support <span class="badge" id="b-sup">0</span></button>
+      <button id="t-referrals" data-tab="referrals" type="button">Referrals <span class="badge" id="b-ref">0</span></button>
+      <button id="t-settings" data-tab="settings" type="button">Settings</button>
+    </div>
+
+    <!-- ============== LEADS ============== -->
+    <div id="p-leads" class="panel active">
+      <h3>Leads</h3>
+      <p class="lede">Marketing-form leads from the public site, plus anyone you add manually.</p>
+      <div class="toolbar">
+        <input id="lead-search" class="search" type="search" placeholder="Search by name, email, phone, company..." />
+        <button id="add-lead-btn" class="btn btn-primary btn-sm" type="button">+ Add lead</button>
+        <button id="export-leads-btn" class="btn btn-ghost btn-sm" type="button">Export CSV</button>
+      </div>
+      <div id="leads-list" class="tbl"></div>
+    </div>
+
+    <!-- ============== CALENDAR ============== -->
+    <div id="p-calendar" class="panel">
+      <h3>Calendar</h3>
+      <p class="lede">Book consults and client meetings. Each event includes a one-click "Add to Google Calendar" link.</p>
+      <div class="toolbar">
+        <button id="add-event-btn" class="btn btn-primary btn-sm" type="button">+ Book appointment</button>
+        <button id="export-events-btn" class="btn btn-ghost btn-sm" type="button">Export ICS</button>
+      </div>
+      <div class="cal-wrap">
+        <div>
+          <div class="cal-head">
+            <button id="cal-prev" class="btn btn-ghost btn-sm" type="button">&laquo;</button>
+            <h3 id="cal-title">Month</h3>
+            <button id="cal-next" class="btn btn-ghost btn-sm" type="button">&raquo;</button>
+          </div>
+          <div id="cal-grid" class="cal-grid"></div>
         </div>
-        <div class="field">
-          <label for="setup-pass">Choose a password (8+ chars)</label>
-          <input type="password" id="setup-pass" minlength="8" autocomplete="new-password" required />
+        <div class="evlist">
+          <h4 id="ev-title">Upcoming</h4>
+          <div id="ev-list"></div>
         </div>
-        <div class="field">
-          <label for="setup-pass2">Confirm password</label>
-          <input type="password" id="setup-pass2" minlength="8" autocomplete="new-password" required />
-        </div>
-        <div class="err" id="setup-err"></div>
-        <button type="submit" class="btn btn-primary">Create admin account</button>
-      </form>
-      <p class="small muted" style="margin-top:14px">Don't have the setup code? Ask Bradley directly. The code is hidden by design - only authorized admins can create accounts.</p>
-    </section>
+      </div>
+    </div>
 
-    <!-- ===== LOGIN VIEW ===== -->
-    <section id="login-view" class="panel auth-card" hidden>
-      <h1>Admin sign in</h1>
-      <p class="lead">Welcome back. Enter your password to access the dashboard.</p>
-      <form id="login-form" class="stack">
-        <div class="field">
-          <label for="login-pass">Password</label>
-          <input type="password" id="login-pass" autocomplete="current-password" required />
-        </div>
-        <div class="err" id="login-err"></div>
-        <button type="submit" class="btn btn-primary">Sign in</button>
-      </form>
-      <p class="small muted" style="margin-top:14px"><a href="#" id="reset-link">Forgot password? Reset this device</a> (clears all admin data on this device).</p>
-    </section>
+    <!-- ============== CLIENT ACCOUNTS ============== -->
+    <div id="p-accounts" class="panel">
+      <h3>Client Accounts</h3>
+      <p class="lede">Every member who signed up on the client portal, plus accounts you've created on their behalf.</p>
+      <div class="toolbar">
+        <input id="acct-search" class="search" type="search" placeholder="Search by name, email, phone..." />
+        <button id="create-acct-btn" class="btn btn-primary btn-sm" type="button">+ Create client account</button>
+        <button id="export-accts-btn" class="btn btn-ghost btn-sm" type="button">Export CSV</button>
+      </div>
+      <div id="accts-list" class="tbl"></div>
+    </div>
 
-    <!-- ===== DASHBOARD ===== -->
-    <section id="dash-view" hidden>
-      <div class="panel" style="padding:0">
-        <div class="tabs" role="tablist">
-          <button class="tab active" data-tab="leads" role="tab">Leads</button>
-          <button class="tab" data-tab="accounts" role="tab">Client Accounts <span class="badge hidden" id="acct-badge">0</span></button>
-          <button class="tab" data-tab="support" role="tab">Support <span class="badge hidden" id="support-badge">0</span></button>
-          <button class="tab" data-tab="referrals" role="tab">Referrals <span class="badge hidden" id="ref-badge">0</span></button>
-          <button class="tab" data-tab="settings" role="tab">Settings</button>
-        </div>
-
-        <!-- LEADS -->
-        <div class="tab-panel" id="tab-leads">
-          <div class="dash-bar">
-            <h2>Leads <span class="pill" id="lead-count">0</span></h2>
-            <div class="row">
-              <button class="btn btn-ghost btn-sm" id="leads-export">Export CSV</button>
-              <button class="btn btn-primary btn-sm" id="add-lead-btn">+ Add lead</button>
-            </div>
-          </div>
-          <div class="toolbar">
-            <input type="search" id="lead-search" placeholder="Search by name, company, email, phone, address..." />
-            <select id="lead-filter">
-              <option value="">All statuses</option>
-              <option value="new">New</option>
-              <option value="contacted">Contacted</option>
-              <option value="quoted">Quoted</option>
-              <option value="closed">Closed won</option>
-              <option value="lost">Closed lost</option>
-            </select>
-          </div>
-          <div class="table-wrap">
-            <table class="data" id="leads-table">
-              <thead><tr><th>Name</th><th>Company</th><th>Phone / Email</th><th>Address</th><th>Coverage</th><th>Status</th><th>Next step</th><th></th></tr></thead>
-              <tbody id="leads-body"></tbody>
-            </table>
-            <div class="empty hidden" id="leads-empty">No leads yet. Click "+ Add lead" to get started.</div>
-          </div>
-        </div>
-
-        <!-- CLIENT ACCOUNTS -->
-        <div class="tab-panel" id="tab-accounts" hidden>
-          <div class="dash-bar">
-            <h2>Client Portal Accounts <span class="pill" id="acct-count">0</span></h2>
-            <button class="btn btn-ghost btn-sm" id="acct-export">Export CSV</button>
-          </div>
-          <p class="small muted" style="margin:0 0 12px">Anyone who has registered a Client Portal account at <code>client.html</code>. Reset their password (clears it - they'll set a new one on next sign-in), message them, or revoke the account.</p>
-          <div class="toolbar">
-            <input type="search" id="acct-search" placeholder="Search by name, email, phone..." />
-          </div>
-          <div class="table-wrap">
-            <table class="data" id="acct-table">
-              <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Registered</th><th>Last sign-in</th><th>Status</th><th></th></tr></thead>
-              <tbody id="acct-body"></tbody>
-            </table>
-            <div class="empty hidden" id="acct-empty">No client portal accounts yet.</div>
-          </div>
-        </div>
-
-        <!-- SUPPORT -->
-        <div class="tab-panel" id="tab-support" hidden>
-          <div class="dash-bar">
-            <h2>Support inbox <span class="pill" id="support-count">0</span></h2>
-            <button class="btn btn-ghost btn-sm" id="support-mark-all">Mark all read</button>
-          </div>
-          <div id="support-grid" style="display:grid;gap:12px;grid-template-columns:1fr">
-            <div class="panel" style="padding:12px">
-              <h3 style="margin-top:0">Conversations</h3>
-              <div id="support-list" class="stack"></div>
-              <div class="empty hidden" id="support-empty">No conversations yet.</div>
-            </div>
-            <div class="panel" style="padding:12px" id="support-thread-panel">
-              <h3 style="margin-top:0" id="support-thread-title">Pick a conversation</h3>
-              <div class="thread" id="support-thread"><div class="msg-thread-empty">Select a client on the left to see their messages.</div></div>
-              <form id="support-reply-form" class="stack" style="margin-top:10px" hidden>
-                <textarea id="support-reply" rows="3" placeholder="Type your reply..."></textarea>
-                <div style="display:flex;gap:8px;justify-content:flex-end"><button type="submit" class="btn btn-primary btn-sm">Send reply</button></div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <!-- REFERRALS -->
-        <div class="tab-panel" id="tab-referrals" hidden>
-          <div class="dash-bar">
-            <h2>Referrals <span class="pill" id="ref-count">0</span></h2>
-            <div class="row">
-              <span id="ref-payout-summary" style="display:flex;gap:6px;flex-wrap:wrap"></span>
-              <button class="btn btn-ghost btn-sm" id="ref-export">Export CSV</button>
-            </div>
-          </div>
-          <p class="small muted" style="margin:0 0 12px">Prospects your clients have referred. Set the payout you owe the referrer and check Paid when sent.</p>
-          <div class="table-wrap">
-            <table class="data" id="ref-table">
-              <thead><tr><th>Referred by</th><th>Prospect</th><th>Phone / Email</th><th>Relationship</th><th>Notes</th><th>Status</th><th>Payout</th><th>When</th><th></th></tr></thead>
-              <tbody id="ref-body"></tbody>
-            </table>
-            <div class="empty hidden" id="ref-empty">No referrals yet. They'll appear here when clients submit them through their portal.</div>
-          </div>
-        </div>
-
-        <!-- SETTINGS -->
-        <div class="tab-panel" id="tab-settings" hidden>
-          <div class="stack">
-            <div class="panel" style="padding:18px">
-              <h3>Change admin password</h3>
-              <form id="pwchange-form" class="stack">
-                <div class="field"><label>Current password</label><input type="password" id="pw-cur" required /></div>
-                <div class="field"><label>New password (8+ chars)</label><input type="password" id="pw-new" minlength="8" required /></div>
-                <div class="field"><label>Confirm new password</label><input type="password" id="pw-new2" minlength="8" required /></div>
-                <div class="err" id="pw-err"></div>
-                <div class="ok" id="pw-ok"></div>
-                <button class="btn btn-primary btn-sm" type="submit">Update password</button>
-              </form>
-            </div>
-
-            <div class="panel" style="padding:18px">
-              <h3>Change admin setup code</h3>
-              <p class="small muted">This is the code anyone needs to register a new admin account on a fresh device. Keep it private. Default is set when the portal is first opened.</p>
-              <form id="codechange-form" class="stack">
-                <div class="field"><label>Current setup code</label><input type="password" id="code-cur" inputmode="numeric" autocomplete="off" required /></div>
-                <div class="field"><label>New setup code</label><input type="password" id="code-new" inputmode="numeric" autocomplete="off" required /></div>
-                <div class="field"><label>Confirm new setup code</label><input type="password" id="code-new2" inputmode="numeric" autocomplete="off" required /></div>
-                <div class="err" id="code-err"></div>
-                <div class="ok" id="code-ok"></div>
-                <button class="btn btn-primary btn-sm" type="submit">Update setup code</button>
-              </form>
-            </div>
-
-            <div class="panel" style="padding:18px">
-              <h3>Webhook (optional)</h3>
-              <p class="small muted">Make.com / Zapier endpoint for real-time forwarding of leads, support messages, referrals, payout updates, sign-ins.</p>
-              <div class="field"><label>Webhook URL</label><input type="url" id="wh-input" placeholder="https://hook.us2.make.com/..." /></div>
-              <button class="btn btn-primary btn-sm" id="wh-save">Save webhook</button>
-              <span class="ok" id="wh-ok" style="margin-left:8px"></span>
-            </div>
-
-            <div class="panel" style="padding:18px">
-              <h3>Backup / Restore</h3>
-              <p class="small muted">Export everything (leads, accounts, messages, referrals, webhook). Password hash stays local only.</p>
-              <div class="row">
-                <button class="btn btn-ghost btn-sm" id="backup-btn">Backup all data (JSON)</button>
-                <button class="btn btn-ghost btn-sm" id="restore-btn">Restore from backup</button>
-                <input type="file" id="restore-file" accept=".json" hidden />
+    <!-- ============== SUPPORT ============== -->
+    <div id="p-support" class="panel">
+      <h3>Support inbox</h3>
+      <p class="lede">Two-way message threads with each member. Reply directly. The thread list is sorted by most recent activity.</p>
+      <div class="conv-wrap">
+        <div id="thread-list" class="thread-list"></div>
+        <div id="conv" class="conv">
+          <div id="conv-empty" class="empty">Pick a conversation on the left to view.</div>
+          <div id="conv-active" hidden>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:10px">
+              <div>
+                <div id="conv-name" style="font-weight:700;color:var(--blue-900)"></div>
+                <div id="conv-email" style="font-size:12px;color:var(--muted)"></div>
               </div>
+              <button id="conv-mark-read" class="btn btn-ghost btn-sm" type="button">Mark all read</button>
             </div>
-
-            <div class="panel" style="padding:18px">
-              <h3>Storage on this device</h3>
-              <div class="kv"><span class="k">Leads</span><span class="v" id="settings-lead-count">0</span></div>
-              <div class="kv"><span class="k">Client portal accounts</span><span class="v" id="settings-acct-count">0</span></div>
-              <div class="kv"><span class="k">Support messages</span><span class="v" id="settings-msg-count">0</span></div>
-              <div class="kv"><span class="k">Referrals</span><span class="v" id="settings-ref-count">0</span></div>
-              <div class="kv"><span class="k">Approx. storage used</span><span class="v" id="settings-storage">-</span></div>
-              <button class="btn btn-warn btn-sm" id="wipe-btn" style="margin-top:14px">Wipe all admin data on this device</button>
-            </div>
+            <div id="msgs" class="msgs"></div>
+            <form id="reply-form">
+              <div class="field" style="margin-bottom:10px">
+                <textarea id="reply-text" rows="2" placeholder="Reply to client..." required></textarea>
+              </div>
+              <button class="btn btn-primary btn-block" type="submit">Send reply</button>
+            </form>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+
+    <!-- ============== REFERRALS ============== -->
+    <div id="p-referrals" class="panel">
+      <h3>Referrals</h3>
+      <p class="lede">Set the payout amount and mark paid when you've sent the gift / payout to the referring client.</p>
+      <div class="toolbar">
+        <input id="ref-search" class="search" type="search" placeholder="Search referrals..." />
+        <button id="export-refs-btn" class="btn btn-ghost btn-sm" type="button">Export CSV</button>
+      </div>
+      <div id="refs-list" class="tbl"></div>
+    </div>
+
+    <!-- ============== SETTINGS ============== -->
+    <div id="p-settings" class="panel">
+      <h3>Settings</h3>
+
+      <div class="card" style="margin-bottom:14px">
+        <h4 style="margin:0 0 6px;font-size:15px">Change admin password</h4>
+        <form id="pw-form" autocomplete="off">
+          <div id="pw-msg"></div>
+          <div class="field"><label>Current password</label><input type="password" id="pw-cur" autocomplete="current-password" required /></div>
+          <div class="field"><label>New password</label><input type="password" id="pw-new" autocomplete="new-password" minlength="8" required /></div>
+          <div class="field"><label>Confirm new password</label><input type="password" id="pw-new2" autocomplete="new-password" minlength="8" required /></div>
+          <button type="submit" class="btn btn-primary">Update password</button>
+        </form>
+      </div>
+
+      <div class="card" style="margin-bottom:14px">
+        <h4 style="margin:0 0 6px;font-size:15px">Change admin setup code</h4>
+        <p class="lede">This is the code required to create a new admin account on a new device. Default is hidden in source.</p>
+        <form id="code-form" autocomplete="off">
+          <div id="code-msg"></div>
+          <div class="field"><label>Current code</label><input type="password" id="code-cur" required /></div>
+          <div class="field"><label>New code</label><input type="password" id="code-new" required /></div>
+          <div class="field"><label>Confirm new code</label><input type="password" id="code-new2" required /></div>
+          <button type="submit" class="btn btn-primary">Update setup code</button>
+        </form>
+      </div>
+
+      <div class="card" style="margin-bottom:14px">
+        <h4 style="margin:0 0 6px;font-size:15px">Make.com / Zapier webhook</h4>
+        <p class="lede">If set, key events get POSTed to this URL (fire-and-forget, no-cors).</p>
+        <form id="wh-form" autocomplete="off">
+          <div id="wh-msg"></div>
+          <div class="field"><label>Webhook URL</label><input type="url" id="wh-input" placeholder="https://hook.eu1.make.com/..." /></div>
+          <button type="submit" class="btn btn-primary">Save webhook</button>
+        </form>
+      </div>
+
+      <div class="card" style="margin-bottom:14px">
+        <h4 style="margin:0 0 6px;font-size:15px">Backup / restore</h4>
+        <p class="lede">Storage size: <strong id="settings-storage">--</strong></p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <button id="export-all-btn" type="button" class="btn btn-ghost">Export all data (JSON)</button>
+          <label class="btn btn-ghost" style="cursor:pointer">Import data<input id="import-file" type="file" accept="application/json" hidden /></label>
+        </div>
+      </div>
+    </div>
 
   </div>
-</main>
 
-<!-- LEAD MODAL -->
-<div class="modal-bg" id="lead-modal"><div class="modal-card">
-  <button class="modal-close" data-close>&times;</button>
-  <h3 id="lead-modal-title">Add lead</h3>
-  <form id="lead-form" class="stack">
-    <input type="hidden" id="lead-id" />
-    <div class="field"><label>Name</label><input id="lf-name" required /></div>
-    <div class="field"><label>Company</label><input id="lf-company" /></div>
-    <div class="field"><label>Phone</label><input id="lf-phone" /></div>
-    <div class="field"><label>Email</label><input id="lf-email" type="email" /></div>
-    <div class="field"><label>Address</label><input id="lf-address" /></div>
-    <div class="field"><label>Coverage</label>
-      <select id="lf-coverage"><option value="">-</option><option>Group 10-99</option><option>Micro 2-9</option><option>Family / ACA</option><option>Self-employed / 1099</option><option>Dental &amp; Vision</option><option>Medicaid</option></select>
-    </div>
-    <div class="field"><label>Status</label>
-      <select id="lf-status"><option value="new">New</option><option value="contacted">Contacted</option><option value="quoted">Quoted</option><option value="closed">Closed won</option><option value="lost">Closed lost</option></select>
-    </div>
-    <div class="field"><label>Next step</label><input id="lf-next" /></div>
-    <div class="field"><label>Notes</label><textarea id="lf-notes" rows="3"></textarea></div>
-    <div class="row" style="justify-content:flex-end"><button type="button" class="btn btn-ghost btn-sm" data-close>Cancel</button><button type="submit" class="btn btn-primary btn-sm">Save lead</button></div>
-  </form>
-</div></div>
+</div>
 
-<div class="toast" id="toast"></div>
+<!-- ======================= MODAL ======================= -->
+<div id="modal-bg" class="modal-bg" role="dialog" aria-modal="true">
+  <div class="modal" id="modal-box">
+    <button class="close-x" type="button" data-close>&times;</button>
+    <div id="modal-content"></div>
+  </div>
+</div>
 
 <script>
 (function(){
 "use strict";
 
-/* ===== Storage keys ===== */
+/* ====================================================================
+   Storage keys (must match client.html)
+   ==================================================================== */
 var K={
   hash:"vs_admin_hash",session:"vs_admin_session",setupCode:"vs_admin_setup_code",
-  leads:"vs_leads",accounts:"vs_client_accounts",messages:"vs_messages",referrals:"vs_referrals",
+  leads:"vs_leads",accounts:"vs_client_accounts",messages:"vs_messages",
+  referrals:"vs_referrals",appointments:"vs_appointments",
   webhook:"vs_webhook_url"
 };
 
-/* ===== Hidden default setup code (base64 so it doesn't appear as plain text in source) =====
-   This seeds K.setupCode on first run only. After first run it can be changed via Settings.    */
-function defaultSetupCode(){try{return atob("MDYwNQ==");}catch(e){return"";}}
+/* ====================================================================
+   Helpers
+   ==================================================================== */
+function $(id){return document.getElementById(id);}
+function uid(){return"id_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
+function el(t,attrs,children){
+  var e=document.createElement(t);
+  if(attrs)Object.keys(attrs).forEach(function(k){
+    if(k==="class")e.className=attrs[k];
+    else if(k==="text")e.textContent=attrs[k];
+    else if(k.indexOf("on")===0)e.addEventListener(k.slice(2),attrs[k]);
+    else e.setAttribute(k,attrs[k]);
+  });
+  if(children)children.forEach(function(c){e.appendChild(c);});
+  return e;
+}
+function csvEscape(s){s=String(s==null?"":s);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
+function downloadFile(name,content,mime){
+  var blob=new Blob([content],{type:mime||"text/plain"});
+  var url=URL.createObjectURL(blob);
+  var a=el("a",{href:url,download:name});
+  document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+}
+function fmtDate(ts){if(!ts)return"--";var d=new Date(ts);return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}
+function fmtDateTime(ts){if(!ts)return"--";var d=new Date(ts);return d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
+function normEmail(e){return(e||"").trim().toLowerCase();}
+function initials(a){var n=((a.firstName||"")+" "+(a.lastName||"")).trim();if(!n)return"?";var p=n.split(/\s+/);return((p[0]||"").charAt(0)+(p[1]||"").charAt(0)).toUpperCase()||(a.email||"?").charAt(0).toUpperCase();}
+function asArr(k){try{return JSON.parse(localStorage.getItem(k)||"[]");}catch(e){return[];}}
+function setArr(k,v){localStorage.setItem(k,JSON.stringify(v));}
+function getLeads(){return asArr(K.leads);} function saveLeads(v){setArr(K.leads,v);}
+function getAccounts(){return asArr(K.accounts);} function saveAccounts(v){setArr(K.accounts,v);}
+function getMessages(){return asArr(K.messages);} function saveMessages(v){setArr(K.messages,v);}
+function getReferrals(){return asArr(K.referrals);} function saveReferrals(v){setArr(K.referrals,v);}
+function getAppts(){return asArr(K.appointments);} function saveAppts(v){setArr(K.appointments,v);}
+function getWebhook(){return localStorage.getItem(K.webhook)||"";}
+function setWebhook(v){localStorage.setItem(K.webhook,v||"");}
+
+async function sha256(t){var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0");}).join("");}
+
+function notice(elId,kind,text){var e=$(elId);if(!e)return;e.innerHTML="";if(!text)return;var n=el("div",{class:"notice notice-"+kind,text:text});e.appendChild(n);}
+
+function webhookFire(payload){
+  var url=getWebhook();if(!url)return;
+  try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});}catch(e){}
+}
+
+/* ====================================================================
+   Setup code (default 0605, base64-obfuscated)
+   ==================================================================== */
+function defaultSetupCode(){try{return atob("MDYwNQ==");}catch(e){return"0605";}}
 function ensureSetupCode(){if(!localStorage.getItem(K.setupCode))localStorage.setItem(K.setupCode,defaultSetupCode());}
 function currentSetupCode(){return localStorage.getItem(K.setupCode)||defaultSetupCode();}
 
-/* ===== Utils ===== */
-function $(id){return document.getElementById(id);}
-function uid(){return Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
-function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
-function loadJSON(k,def){try{var v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch(e){return def;}}
-function saveJSON(k,v){localStorage.setItem(k,JSON.stringify(v));}
-async function sha256(text){var enc=new TextEncoder().encode(text);var buf=await crypto.subtle.digest("SHA-256",enc);return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");}
-function relTime(ts){var d=Date.now()-ts;if(d<60000)return"just now";if(d<3600000)return Math.floor(d/60000)+"m ago";if(d<86400000)return Math.floor(d/3600000)+"h ago";if(d<604800000)return Math.floor(d/86400000)+"d ago";return new Date(ts).toLocaleDateString();}
-function csvEscape(v){v=String(v==null?"":v);if(v.indexOf('"')>=0||v.indexOf(",")>=0||v.indexOf("\n")>=0)return'"'+v.replace(/"/g,'""')+'"';return v;}
-function toast(msg){var t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(function(){t.classList.remove("show");},2200);}
-
-/* ===== Routing ===== */
-function isLoggedIn(){return sessionStorage.getItem(K.session)==="1";}
-function hasAdmin(){return!!localStorage.getItem(K.hash);}
-function show(view){
-  ["setup-view","login-view","dash-view"].forEach(function(v){$(v).hidden=(v!==view);});
-  $("logout-btn").classList.toggle("hidden",view!=="dash-view");
-  $("who-label").textContent=view==="dash-view"?"Admin":"";
-}
+/* ====================================================================
+   Routing: setup vs login vs dash
+   ==================================================================== */
+function isSignedIn(){return!!sessionStorage.getItem(K.session);}
 function route(){
   ensureSetupCode();
-  if(!hasAdmin()){show("setup-view");return;}
-  if(!isLoggedIn()){show("login-view");return;}
-  show("dash-view");renderAll();
+  $("setup-view").hidden=true;$("login-view").hidden=true;$("dash-view").hidden=true;$("signout-btn").hidden=true;
+  if(!localStorage.getItem(K.hash)){$("setup-view").hidden=false;return;}
+  if(!isSignedIn()){$("login-view").hidden=false;return;}
+  $("dash-view").hidden=false;$("signout-btn").hidden=false;
+  renderAll();
+  switchTab("leads");
 }
 
-/* ===== Setup form (gated by setup code) ===== */
+/* ====================================================================
+   Setup form
+   ==================================================================== */
 $("setup-form").addEventListener("submit",async function(e){
   e.preventDefault();
   var code=$("setup-code").value.trim();
-  var p1=$("setup-pass").value;var p2=$("setup-pass2").value;
-  var err=$("setup-err");err.textContent="";
-  if(code!==currentSetupCode()){err.textContent="That setup code isn't valid. Ask Bradley for the current code.";return;}
-  if(p1.length<8){err.textContent="Password must be at least 8 characters.";return;}
-  if(p1!==p2){err.textContent="Passwords don't match.";return;}
-  var h=await sha256(p1);
-  localStorage.setItem(K.hash,h);
-  sessionStorage.setItem(K.session,"1");
-  toast("Admin account created");route();
+  var p1=$("setup-pw").value;
+  var p2=$("setup-pw2").value;
+  if(code!==currentSetupCode())return notice("setup-msg","err","That setup code isn't valid. Ask the practice owner for the current code.");
+  if(p1.length<8)return notice("setup-msg","err","Password must be at least 8 characters.");
+  if(p1!==p2)return notice("setup-msg","err","Passwords don't match.");
+  localStorage.setItem(K.hash,await sha256(p1));
+  sessionStorage.setItem(K.session,JSON.stringify({since:Date.now()}));
+  route();
 });
 
-/* ===== Login form ===== */
+/* Login form */
 $("login-form").addEventListener("submit",async function(e){
   e.preventDefault();
-  var pass=$("login-pass").value;
-  var h=await sha256(pass);
-  if(h===localStorage.getItem(K.hash)){sessionStorage.setItem(K.session,"1");toast("Signed in");route();}
-  else $("login-err").textContent="Wrong password.";
+  var pw=$("login-pw").value;
+  if(!pw)return notice("login-msg","err","Enter your password.");
+  if(await sha256(pw)!==localStorage.getItem(K.hash))return notice("login-msg","err","Incorrect password.");
+  sessionStorage.setItem(K.session,JSON.stringify({since:Date.now()}));
+  route();
 });
-$("reset-link").addEventListener("click",function(e){
-  e.preventDefault();
-  if(!confirm("Wipe ALL admin data on this device (password, leads, accounts, messages, referrals)? Cannot be undone."))return;
-  Object.values(K).forEach(function(k){localStorage.removeItem(k);});
-  sessionStorage.removeItem(K.session);route();
-});
-$("logout-btn").addEventListener("click",function(){sessionStorage.removeItem(K.session);route();});
 
-/* ===== Tabs ===== */
-document.querySelectorAll(".tab").forEach(function(t){
-  t.addEventListener("click",function(){
-    document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("active");});
-    t.classList.add("active");
-    var which=t.getAttribute("data-tab");
-    ["leads","accounts","support","referrals","settings"].forEach(function(name){
-      var el=$("tab-"+name);if(el)el.hidden=(name!==which);
-    });
-    if(which==="accounts")renderAccounts();
-    if(which==="support")renderSupport();
-    if(which==="referrals")renderReferrals();
-    if(which==="settings")renderSettings();
+$("signout-btn").addEventListener("click",function(){sessionStorage.removeItem(K.session);route();});
+
+/* ====================================================================
+   Tabs
+   ==================================================================== */
+function switchTab(name){
+  ["leads","calendar","accounts","support","referrals","settings"].forEach(function(n){
+    var btn=$("t-"+n);if(btn)btn.classList.toggle("active",n===name);
+    var pn=$("p-"+n);if(pn)pn.classList.toggle("active",n===name);
   });
-});
+  if(name==="calendar")renderCalendar();
+  if(name==="support")renderSupport();
+  if(name==="referrals")renderReferrals();
+  if(name==="accounts")renderAccounts();
+  if(name==="leads")renderLeads();
+  if(name==="settings")renderSettings();
+}
+document.querySelectorAll("[data-tab]").forEach(function(b){b.addEventListener("click",function(){switchTab(b.getAttribute("data-tab"));});});
 
-/* ===== Modals ===== */
-function openModal(id){$(id).classList.add("open");}
-function closeModal(id){$(id).classList.remove("open");}
-document.querySelectorAll("[data-close]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll(".modal-bg.open").forEach(function(m){m.classList.remove("open");});});});
-document.querySelectorAll(".modal-bg").forEach(function(m){m.addEventListener("click",function(e){if(e.target===m)m.classList.remove("open");});});
+/* ====================================================================
+   Modal helper
+   ==================================================================== */
+function openModal(html){
+  $("modal-content").innerHTML="";
+  if(typeof html==="string")$("modal-content").innerHTML=html;
+  else $("modal-content").appendChild(html);
+  $("modal-bg").classList.add("open");document.body.style.overflow="hidden";
+}
+function closeModal(){$("modal-bg").classList.remove("open");document.body.style.overflow="";}
+$("modal-bg").addEventListener("click",function(e){if(e.target===$("modal-bg"))closeModal();});
+document.addEventListener("click",function(e){if(e.target.matches("[data-close]"))closeModal();});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeModal();});
 
-/* ===== LEADS ===== */
-function getLeads(){return loadJSON(K.leads,[]);}
-function saveLeads(a){saveJSON(K.leads,a);}
+/* ====================================================================
+   LEADS
+   ==================================================================== */
+var LEAD_STATUSES=["new","contacted","quoted","enrolled","lost"];
 function renderLeads(){
-  var leads=getLeads();
-  var q=($("lead-search").value||"").trim().toLowerCase();
-  var f=$("lead-filter").value;
-  var rows=leads.filter(function(l){
-    var hit=!q||[l.name,l.company,l.email,l.phone,l.address,l.coverage,l.notes].join(" ").toLowerCase().indexOf(q)>=0;
-    var match=!f||l.status===f;
-    return hit&&match;
-  });
-  $("lead-count").textContent=leads.length;
-  var body=$("leads-body");body.innerHTML="";
-  if(!rows.length){$("leads-empty").classList.remove("hidden");$("leads-empty").textContent=leads.length?"No leads match.":'No leads yet. Click "+ Add lead" to get started.';return;}
-  $("leads-empty").classList.add("hidden");
+  var q=($("lead-search").value||"").toLowerCase().trim();
+  var rows=getLeads().filter(function(l){if(!q)return true;return[l.name,l.email,l.phone,l.company,l.address].join(" ").toLowerCase().indexOf(q)>=0;});
+  var box=$("leads-list");box.innerHTML="";
+  $("b-leads").textContent=getLeads().length;
+  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No leads yet. Public-site forms drop in here, or click + Add lead."}));return;}
   rows.forEach(function(l){
-    var tr=document.createElement("tr");
-    tr.innerHTML=
-      "<td><strong>"+esc(l.name||"")+"</strong></td>"+
-      "<td>"+esc(l.company||"")+"</td>"+
-      "<td>"+(l.phone?'<a href="tel:'+esc(l.phone)+'">'+esc(l.phone)+"</a><br>":"")+(l.email?'<a href="mailto:'+esc(l.email)+'">'+esc(l.email)+"</a>":"")+"</td>"+
-      "<td>"+esc(l.address||"")+"</td>"+
-      "<td>"+esc(l.coverage||"")+"</td>"+
-      '<td><span class="status-badge '+esc(l.status||"new")+'">'+esc(l.status||"new")+"</span></td>"+
-      "<td>"+esc(l.next||"")+"</td>"+
-      '<td><div class="row-actions"><button data-edit-l="'+esc(l.id)+'">Edit</button><button class="del" data-del-l="'+esc(l.id)+'">Delete</button></div></td>';
-    body.appendChild(tr);
+    var row=el("div",{class:"row"});
+    var top=el("div",{class:"top"});
+    var name=el("div",{},[el("div",{class:"name",text:l.name||"(no name)"})]);
+    if(l.company)name.appendChild(el("div",{class:"sub",text:l.company}));
+    top.appendChild(name);
+    top.appendChild(el("span",{class:"status-pill status-"+(l.status||"new"),text:l.status||"new"}));
+    row.appendChild(top);
+    if(l.email)row.appendChild(el("div",{class:"sub",text:l.email}));
+    if(l.phone)row.appendChild(el("div",{class:"sub",text:l.phone}));
+    if(l.address)row.appendChild(el("div",{class:"sub",text:l.address}));
+    if(l.coverage)row.appendChild(el("div",{class:"sub",text:"Coverage: "+l.coverage}));
+    if(l.next)row.appendChild(el("div",{class:"meta",text:"Next: "+l.next}));
+    row.appendChild(el("div",{class:"meta",text:"Added "+fmtDate(l.created)}));
+    var acts=el("div",{class:"acts"});
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Edit",onclick:function(){openLeadForm(l);}}));
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Advance",onclick:function(){advanceLead(l.id);}}));
+    acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete",onclick:function(){if(confirm("Delete this lead?")){saveLeads(getLeads().filter(function(x){return x.id!==l.id;}));renderLeads();}}}));
+    row.appendChild(acts);
+    box.appendChild(row);
   });
-  body.querySelectorAll("[data-edit-l]").forEach(function(b){b.addEventListener("click",function(){openLeadModal(b.getAttribute("data-edit-l"));});});
-  body.querySelectorAll("[data-del-l]").forEach(function(b){b.addEventListener("click",function(){
-    if(!confirm("Delete this lead?"))return;
-    saveLeads(getLeads().filter(function(x){return x.id!==b.getAttribute("data-del-l");}));renderLeads();
-  });});
 }
+function advanceLead(id){
+  var arr=getLeads().map(function(l){
+    if(l.id!==id)return l;
+    var i=LEAD_STATUSES.indexOf(l.status||"new");
+    l.status=LEAD_STATUSES[Math.min(i+1,LEAD_STATUSES.length-1)];
+    l.updated=Date.now();
+    return l;
+  });
+  saveLeads(arr);renderLeads();
+}
+function openLeadForm(existing){
+  var l=existing||{id:uid(),name:"",company:"",email:"",phone:"",address:"",coverage:"",status:"new",next:"",notes:"",created:Date.now()};
+  var html=
+    '<h3>'+(existing?"Edit lead":"Add lead")+'</h3>'+
+    '<form id="lead-form">'+
+    '<div class="row2"><div class="field"><label>Name</label><input id="l-name" required value="'+(l.name||"").replace(/"/g,"&quot;")+'" /></div>'+
+    '<div class="field"><label>Company</label><input id="l-company" value="'+(l.company||"").replace(/"/g,"&quot;")+'" /></div></div>'+
+    '<div class="row2"><div class="field"><label>Email</label><input id="l-email" type="email" value="'+(l.email||"")+'" /></div>'+
+    '<div class="field"><label>Phone</label><input id="l-phone" type="tel" value="'+(l.phone||"")+'" /></div></div>'+
+    '<div class="field"><label>Address</label><input id="l-address" value="'+(l.address||"").replace(/"/g,"&quot;")+'" /></div>'+
+    '<div class="row2"><div class="field"><label>Coverage interest</label><input id="l-coverage" value="'+(l.coverage||"").replace(/"/g,"&quot;")+'" /></div>'+
+    '<div class="field"><label>Status</label><select id="l-status">'+LEAD_STATUSES.map(function(s){return '<option value="'+s+'"'+(s===(l.status||"new")?" selected":"")+'>'+s+'</option>';}).join("")+'</select></div></div>'+
+    '<div class="field"><label>Next action</label><input id="l-next" value="'+(l.next||"").replace(/"/g,"&quot;")+'" /></div>'+
+    '<div class="field"><label>Notes</label><textarea id="l-notes" rows="3">'+(l.notes||"")+'</textarea></div>'+
+    '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save lead</button></div>'+
+    '</form>';
+  openModal(html);
+  $("lead-form").addEventListener("submit",function(e){
+    e.preventDefault();
+    l.name=$("l-name").value.trim();l.company=$("l-company").value.trim();l.email=$("l-email").value.trim();
+    l.phone=$("l-phone").value.trim();l.address=$("l-address").value.trim();l.coverage=$("l-coverage").value.trim();
+    l.status=$("l-status").value;l.next=$("l-next").value.trim();l.notes=$("l-notes").value.trim();l.updated=Date.now();
+    var arr=getLeads();var i=arr.findIndex(function(x){return x.id===l.id;});
+    if(i>=0)arr[i]=l;else arr.unshift(l);
+    saveLeads(arr);closeModal();renderLeads();
+  });
+}
+$("add-lead-btn").addEventListener("click",function(){openLeadForm(null);});
 $("lead-search").addEventListener("input",renderLeads);
-$("lead-filter").addEventListener("change",renderLeads);
-$("add-lead-btn").addEventListener("click",function(){openLeadModal(null);});
-function openLeadModal(id){
-  var l=id?getLeads().find(function(x){return x.id===id;}):null;
-  $("lead-modal-title").textContent=l?"Edit lead":"Add lead";
-  $("lead-id").value=l?l.id:"";
-  ["name","company","phone","email","address","coverage","status","next","notes"].forEach(function(k){
-    var el=$("lf-"+k);if(el)el.value=l&&l[k]?l[k]:(k==="status"?"new":"");
-  });
-  openModal("lead-modal");
-}
-$("lead-form").addEventListener("submit",function(e){
-  e.preventDefault();
-  var id=$("lead-id").value;var leads=getLeads();
-  var payload={id:id||uid(),name:$("lf-name").value.trim(),company:$("lf-company").value.trim(),phone:$("lf-phone").value.trim(),email:$("lf-email").value.trim(),address:$("lf-address").value.trim(),coverage:$("lf-coverage").value,status:$("lf-status").value,next:$("lf-next").value.trim(),notes:$("lf-notes").value.trim(),created:Date.now(),updated:Date.now()};
-  if(id){saveLeads(leads.map(function(x){return x.id===id?Object.assign(x,payload):x;}));}
-  else{leads.unshift(payload);saveLeads(leads);}
-  closeModal("lead-modal");renderLeads();toast("Lead saved");
-});
-$("leads-export").addEventListener("click",function(){
-  var leads=getLeads();
-  var cols=["name","company","phone","email","address","coverage","status","next","notes","created"];
-  var out=[cols.join(",")];
-  leads.forEach(function(l){out.push(cols.map(function(c){return csvEscape(c==="created"?new Date(l[c]||0).toISOString():l[c]);}).join(","));});
-  var blob=new Blob([out.join("\n")],{type:"text/csv"});var url=URL.createObjectURL(blob);
-  var a=document.createElement("a");a.href=url;a.download="vs-leads-"+new Date().toISOString().slice(0,10)+".csv";a.click();
-  setTimeout(function(){URL.revokeObjectURL(url);},500);
+$("export-leads-btn").addEventListener("click",function(){
+  var rows=[["name","company","email","phone","address","coverage","status","next","notes","created","updated"]];
+  getLeads().forEach(function(l){rows.push([l.name,l.company,l.email,l.phone,l.address,l.coverage,l.status,l.next,l.notes,l.created?new Date(l.created).toISOString():"",l.updated?new Date(l.updated).toISOString():""].map(csvEscape));});
+  downloadFile("leads-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
 });
 
-/* ===== CLIENT ACCOUNTS (read-only view of vs_client_accounts) ===== */
-function getAccounts(){return loadJSON(K.accounts,[]);}
-function saveAccounts(a){saveJSON(K.accounts,a);}
-function renderAccounts(){
-  var accts=getAccounts().slice().sort(function(a,b){return (b.created||0)-(a.created||0);});
-  var q=(($("acct-search")&&$("acct-search").value)||"").trim().toLowerCase();
-  $("acct-count").textContent=accts.length;
-  var badge=$("acct-badge");if(accts.length){badge.textContent=accts.length;badge.classList.remove("hidden");}else badge.classList.add("hidden");
-  var body=$("acct-body");body.innerHTML="";
-  var rows=accts.filter(function(a){if(!q)return true;return[a.firstName,a.lastName,a.email,a.phone].join(" ").toLowerCase().indexOf(q)>=0;});
-  if(!rows.length){$("acct-empty").classList.remove("hidden");$("acct-empty").textContent=accts.length?"No accounts match your filter.":"No client portal accounts yet.";return;}
-  $("acct-empty").classList.add("hidden");
-  rows.forEach(function(a){
-    var name=((a.firstName||"")+" "+(a.lastName||"")).trim()||"(no name)";
-    var status=a.status||"active";
-    var tr=document.createElement("tr");
-    tr.innerHTML=
-      "<td><strong>"+esc(name)+"</strong></td>"+
-      '<td><a href="mailto:'+esc(a.email)+'">'+esc(a.email)+"</a></td>"+
-      "<td>"+(a.phone?'<a href="tel:'+esc(a.phone)+'">'+esc(a.phone)+"</a>":"-")+"</td>"+
-      "<td>"+esc(a.created?new Date(a.created).toLocaleDateString():"-")+"</td>"+
-      "<td>"+esc(a.lastSignIn?relTime(a.lastSignIn):"never")+"</td>"+
-      '<td><span class="status-badge '+esc(status)+'">'+esc(status)+"</span></td>"+
-      '<td><div class="row-actions">'+
-        '<button data-acct-msg="'+esc(a.id)+'">Message</button>'+
-        '<button data-acct-reset="'+esc(a.email)+'">Reset password</button>'+
-        '<button class="del" data-acct-del="'+esc(a.email)+'">Revoke</button>'+
-      "</div></td>";
-    body.appendChild(tr);
-  });
-  body.querySelectorAll("[data-acct-msg]").forEach(function(b){b.addEventListener("click",function(){
-    var aid=b.getAttribute("data-acct-msg");
-    document.querySelector('.tab[data-tab="support"]').click();
-    setTimeout(function(){supportSelected=aid;renderSupport();renderThread();var ta=$("support-reply");if(ta)ta.focus();},80);
-  });});
-  body.querySelectorAll("[data-acct-reset]").forEach(function(b){b.addEventListener("click",function(){
-    var email=b.getAttribute("data-acct-reset");
-    if(!confirm("Reset this client's password? They'll be signed out and need to set a new one on next sign-in."))return;
-    saveAccounts(getAccounts().map(function(a){if(a.email===email){a.passwordHash=null;a.resetAt=Date.now();}return a;}));
-    forwardWebhook({type:"client_password_reset",email:email,ts:Date.now()});
-    toast("Password reset. Tell client to sign in and set a new password.");renderAccounts();
-  });});
-  body.querySelectorAll("[data-acct-del]").forEach(function(b){b.addEventListener("click",function(){
-    if(!confirm("Revoke this account? They will not be able to sign in again."))return;
-    var email=b.getAttribute("data-acct-del");
-    saveAccounts(getAccounts().filter(function(a){return a.email!==email;}));
-    forwardWebhook({type:"client_account_revoked",email:email,ts:Date.now()});
-    renderAccounts();toast("Account revoked");
-  });});
+/* ====================================================================
+   CALENDAR
+   ==================================================================== */
+var calCursor=new Date();calCursor.setDate(1);
+var selectedDate=null;
+function renderCalendar(){
+  var appts=getAppts();
+  $("b-cal").textContent=appts.filter(function(a){return new Date(a.start).getTime()>=Date.now()-86400000;}).length;
+  var year=calCursor.getFullYear(),month=calCursor.getMonth();
+  $("cal-title").textContent=calCursor.toLocaleString(undefined,{month:"long",year:"numeric"});
+  var grid=$("cal-grid");grid.innerHTML="";
+  ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(function(d){grid.appendChild(el("div",{class:"cal-dow",text:d}));});
+  var first=new Date(year,month,1),last=new Date(year,month+1,0);
+  var startWeek=first.getDay();
+  for(var i=0;i<startWeek;i++){
+    var d=new Date(year,month,1-(startWeek-i));
+    grid.appendChild(makeCalDay(d,true,appts));
+  }
+  for(var d2=1;d2<=last.getDate();d2++){
+    grid.appendChild(makeCalDay(new Date(year,month,d2),false,appts));
+  }
+  var afterLast=42-(startWeek+last.getDate());
+  for(var i2=1;i2<=afterLast;i2++){
+    grid.appendChild(makeCalDay(new Date(year,month+1,i2),true,appts));
+  }
+  if(!selectedDate)selectedDate=isoDate(new Date());
+  renderEventList();
 }
-if($("acct-search"))$("acct-search").addEventListener("input",renderAccounts);
-$("acct-export").addEventListener("click",function(){
+function isoDate(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function makeCalDay(date,muted,appts){
+  var iso=isoDate(date);
+  var has=appts.some(function(a){return a.start.slice(0,10)===iso;});
+  var today=isoDate(new Date());
+  var c="cal-day"+(muted?" muted":"")+(iso===today?" today":"")+(has?" has":"")+(iso===selectedDate?" selected":"");
+  var d=el("div",{class:c,onclick:function(){selectedDate=iso;renderCalendar();}});
+  d.appendChild(el("div",{class:"num",text:date.getDate()}));
+  if(has)d.appendChild(el("div",{class:"dot"}));
+  return d;
+}
+function renderEventList(){
+  var box=$("ev-list");box.innerHTML="";
+  $("ev-title").textContent=selectedDate?("Events on "+new Date(selectedDate+"T00:00:00").toLocaleDateString(undefined,{month:"long",day:"numeric"})):"Upcoming";
+  var appts=getAppts().filter(function(a){return a.start.slice(0,10)===selectedDate;}).sort(function(a,b){return a.start.localeCompare(b.start);});
+  if(!appts.length){box.appendChild(el("div",{class:"empty",text:"No events on this day."}));return;}
+  appts.forEach(function(a){
+    var ev=el("div",{class:"ev"});
+    ev.appendChild(el("div",{class:"et",text:a.title||"(untitled)"}));
+    var when=fmtDateTime(a.start)+(a.end?(" - "+new Date(a.end).toLocaleString(undefined,{hour:"numeric",minute:"2-digit"})):"");
+    ev.appendChild(el("div",{class:"em",text:when}));
+    if(a.with)ev.appendChild(el("div",{class:"em",text:"With: "+a.with}));
+    if(a.location)ev.appendChild(el("div",{class:"em",text:a.location}));
+    if(a.notes)ev.appendChild(el("div",{class:"em",text:a.notes}));
+    var acts=el("div",{class:"ea"});
+    acts.appendChild(el("a",{class:"btn btn-teal btn-sm",href:googleCalUrl(a),target:"_blank",rel:"noopener",text:"Add to Google"}));
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Edit",onclick:function(){openApptForm(a);}}));
+    acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete",onclick:function(){if(confirm("Delete event?")){saveAppts(getAppts().filter(function(x){return x.id!==a.id;}));renderCalendar();}}}));
+    ev.appendChild(acts);
+    box.appendChild(ev);
+  });
+}
+function googleCalUrl(a){
+  function fmt(s){var d=new Date(s);return d.getUTCFullYear()+String(d.getUTCMonth()+1).padStart(2,"0")+String(d.getUTCDate()).padStart(2,"0")+"T"+String(d.getUTCHours()).padStart(2,"0")+String(d.getUTCMinutes()).padStart(2,"0")+"00Z";}
+  var endIso=a.end||new Date(new Date(a.start).getTime()+30*60000).toISOString();
+  var params={
+    action:"TEMPLATE",
+    text:a.title||"VS Benefits appointment",
+    dates:fmt(a.start)+"/"+fmt(endIso),
+    details:[a.with?"With: "+a.with:"",a.notes||""].filter(Boolean).join("\n\n"),
+    location:a.location||""
+  };
+  var qs=Object.keys(params).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(params[k]);}).join("&");
+  return"https://calendar.google.com/calendar/render?"+qs;
+}
+function openApptForm(existing){
+  var a=existing||{id:uid(),title:"",with:"",accountId:"",start:isoDate(new Date(selectedDate||new Date()))+"T10:00",end:"",location:"",notes:"",created:Date.now()};
   var accts=getAccounts();
-  var cols=["first_name","last_name","email","phone","registered","last_sign_in","status"];
-  var out=[cols.join(",")];
-  accts.forEach(function(a){
-    out.push([a.firstName||"",a.lastName||"",a.email||"",a.phone||"",a.created?new Date(a.created).toISOString():"",a.lastSignIn?new Date(a.lastSignIn).toISOString():"",a.status||"active"].map(csvEscape).join(","));
+  var withOpts='<option value="">-- none --</option>'+accts.map(function(x){return '<option value="'+x.id+'"'+(x.id===a.accountId?" selected":"")+'>'+(((x.firstName||"")+" "+(x.lastName||"")).trim()||x.email)+'</option>';}).join("");
+  var html=
+    '<h3>'+(existing?"Edit appointment":"Book appointment")+'</h3>'+
+    '<form id="appt-form">'+
+    '<div class="field"><label>Title</label><input id="a-title" required value="'+(a.title||"").replace(/"/g,"&quot;")+'" placeholder="Discovery call, ACA review..." /></div>'+
+    '<div class="row2"><div class="field"><label>Start</label><input id="a-start" type="datetime-local" required value="'+(a.start||"")+'" /></div>'+
+    '<div class="field"><label>End</label><input id="a-end" type="datetime-local" value="'+(a.end||"")+'" /></div></div>'+
+    '<div class="field"><label>With (existing client)</label><select id="a-acct">'+withOpts+'</select></div>'+
+    '<div class="field"><label>Or with (free text)</label><input id="a-with" value="'+(a.with||"").replace(/"/g,"&quot;")+'" placeholder="Lead name, group contact..." /></div>'+
+    '<div class="field"><label>Location / link</label><input id="a-loc" value="'+(a.location||"").replace(/"/g,"&quot;")+'" placeholder="Phone, Zoom URL, address..." /></div>'+
+    '<div class="field"><label>Notes</label><textarea id="a-notes" rows="2">'+(a.notes||"")+'</textarea></div>'+
+    '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div>'+
+    '</form>';
+  openModal(html);
+  $("appt-form").addEventListener("submit",function(e){
+    e.preventDefault();
+    a.title=$("a-title").value.trim();
+    a.start=$("a-start").value;a.end=$("a-end").value;
+    a.accountId=$("a-acct").value;
+    a.with=$("a-with").value.trim();
+    a.location=$("a-loc").value.trim();a.notes=$("a-notes").value.trim();
+    if(a.accountId&&!a.with){var ac=accts.filter(function(x){return x.id===a.accountId;})[0];if(ac)a.with=((ac.firstName||"")+" "+(ac.lastName||"")).trim()||ac.email;}
+    var arr=getAppts();var i=arr.findIndex(function(x){return x.id===a.id;});
+    if(i>=0)arr[i]=a;else arr.push(a);
+    saveAppts(arr);closeModal();renderCalendar();
   });
-  var blob=new Blob([out.join("\n")],{type:"text/csv"});var url=URL.createObjectURL(blob);
-  var a=document.createElement("a");a.href=url;a.download="vs-accounts-"+new Date().toISOString().slice(0,10)+".csv";a.click();
-  setTimeout(function(){URL.revokeObjectURL(url);},500);
+}
+$("add-event-btn").addEventListener("click",function(){openApptForm(null);});
+$("cal-prev").addEventListener("click",function(){calCursor.setMonth(calCursor.getMonth()-1);renderCalendar();});
+$("cal-next").addEventListener("click",function(){calCursor.setMonth(calCursor.getMonth()+1);renderCalendar();});
+$("export-events-btn").addEventListener("click",function(){
+  var lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//VS Benefits//EN"];
+  function fmt(s){var d=new Date(s);return d.getUTCFullYear()+String(d.getUTCMonth()+1).padStart(2,"0")+String(d.getUTCDate()).padStart(2,"0")+"T"+String(d.getUTCHours()).padStart(2,"0")+String(d.getUTCMinutes()).padStart(2,"0")+"00Z";}
+  getAppts().forEach(function(a){
+    lines.push("BEGIN:VEVENT","UID:"+a.id+"@vsbenefits","DTSTAMP:"+fmt(new Date().toISOString()),"DTSTART:"+fmt(a.start),"DTEND:"+fmt(a.end||new Date(new Date(a.start).getTime()+30*60000).toISOString()),"SUMMARY:"+(a.title||"VS Benefits"),"DESCRIPTION:"+((a.with?"With: "+a.with+"\\n":"")+(a.notes||"").replace(/\n/g,"\\n")),"LOCATION:"+(a.location||""),"END:VEVENT");
+  });
+  lines.push("END:VCALENDAR");
+  downloadFile("vsbenefits-events.ics",lines.join("\r\n"),"text/calendar");
 });
 
-/* ===== SUPPORT ===== */
-function getMessages(){return loadJSON(K.messages,[]);}
-function saveMessages(a){saveJSON(K.messages,a);}
-var supportSelected=null;
+/* ====================================================================
+   CLIENT ACCOUNTS
+   ==================================================================== */
+function renderAccounts(){
+  var q=($("acct-search").value||"").toLowerCase().trim();
+  var accts=getAccounts();
+  $("b-acct").textContent=accts.length;
+  var rows=accts.filter(function(a){if(!q)return true;return[a.firstName,a.lastName,a.email,a.phone].join(" ").toLowerCase().indexOf(q)>=0;});
+  var box=$("accts-list");box.innerHTML="";
+  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No client accounts yet. Members who sign up at /client.html appear here, or click + Create client account."}));return;}
+  rows.forEach(function(a){
+    var row=el("div",{class:"row"});
+    var top=el("div",{class:"top"});
+    var nameWrap=el("div",{},[]);
+    var nameLine=el("div",{style:"display:flex;gap:10px;align-items:center"});
+    var av=el("div",{class:"avatar"});
+    if(a.photoDataUrl){av.appendChild(el("img",{src:a.photoDataUrl,alt:""}));}else{av.textContent=initials(a);}
+    nameLine.appendChild(av);
+    var nameInner=el("div");
+    nameInner.appendChild(el("div",{class:"name",text:((a.firstName||"")+" "+(a.lastName||"")).trim()||"(no name)"}));
+    nameInner.appendChild(el("div",{class:"sub",text:a.email}));
+    nameLine.appendChild(nameInner);
+    nameWrap.appendChild(nameLine);
+    top.appendChild(nameWrap);
+    top.appendChild(el("span",{class:"status-pill status-"+(a.status||"active"),text:a.status||"active"}));
+    row.appendChild(top);
+    if(a.phone)row.appendChild(el("div",{class:"sub",text:a.phone}));
+    if(a.plan&&(a.plan.carrier||a.plan.planName))row.appendChild(el("div",{class:"sub",text:"Plan: "+[a.plan.carrier,a.plan.planName].filter(Boolean).join(" - ")+(a.plan.effectiveDate?(" (eff. "+fmtDate(a.plan.effectiveDate)+")"):"")}));
+    row.appendChild(el("div",{class:"meta",text:"Joined "+fmtDate(a.created)+" - last seen "+(a.lastSignIn?fmtDate(a.lastSignIn):"never")}));
+    var acts=el("div",{class:"acts"});
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Set plan",onclick:function(){openPlanForm(a);}}));
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Message",onclick:function(){msgClient(a);}}));
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Reset password",onclick:function(){if(confirm("Wipe this client's password? They'll need a new one from you to sign in."))resetPw(a.id);}}));
+    if(a.status==="revoked"){
+      acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Restore",onclick:function(){updateAcct(a.id,{status:"active"});}}));
+    }else{
+      acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Revoke",onclick:function(){if(confirm("Revoke this account? They won't be able to sign in."))updateAcct(a.id,{status:"revoked"});}}));
+    }
+    row.appendChild(acts);
+    box.appendChild(row);
+  });
+}
+function updateAcct(id,patch){
+  var arr=getAccounts().map(function(a){if(a.id===id)Object.assign(a,patch);return a;});
+  saveAccounts(arr);renderAccounts();
+}
+function resetPw(id){updateAcct(id,{passwordHash:""});alert("Password cleared. Tell the client to sign up again or contact you for a new one.");}
+function msgClient(a){switchTab("support");selectThread(a.id);}
+function openPlanForm(a){
+  var p=a.plan||{carrier:"",planName:"",effectiveDate:"",renewalDate:"",monthlyPremium:"",notes:""};
+  var html=
+    '<h3>Enrollment plan for '+(((a.firstName||"")+" "+(a.lastName||"")).trim()||a.email)+'</h3>'+
+    '<form id="plan-form">'+
+    '<div class="row2"><div class="field"><label>Carrier</label><input id="pl-carrier" value="'+(p.carrier||"").replace(/"/g,"&quot;")+'" /></div>'+
+    '<div class="field"><label>Plan name</label><input id="pl-name" value="'+(p.planName||"").replace(/"/g,"&quot;")+'" /></div></div>'+
+    '<div class="row2"><div class="field"><label>Effective date</label><input id="pl-eff" type="date" value="'+(p.effectiveDate||"")+'" /></div>'+
+    '<div class="field"><label>Renewal date</label><input id="pl-ren" type="date" value="'+(p.renewalDate||"")+'" /></div></div>'+
+    '<div class="field"><label>Monthly premium ($)</label><input id="pl-prem" type="number" step="0.01" min="0" value="'+(p.monthlyPremium||"")+'" /></div>'+
+    '<div class="field"><label>Notes (deductible, network, member ID...)</label><textarea id="pl-notes" rows="3">'+(p.notes||"")+'</textarea></div>'+
+    '<div class="modal-acts">'+(a.plan?'<button type="button" class="btn btn-danger" id="pl-clear">Clear plan</button>':'')+'<button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save plan</button></div>'+
+    '</form>';
+  openModal(html);
+  $("plan-form").addEventListener("submit",function(e){
+    e.preventDefault();
+    var plan={carrier:$("pl-carrier").value.trim(),planName:$("pl-name").value.trim(),effectiveDate:$("pl-eff").value,renewalDate:$("pl-ren").value,monthlyPremium:$("pl-prem").value,notes:$("pl-notes").value.trim(),updated:Date.now()};
+    updateAcct(a.id,{plan:plan});closeModal();
+  });
+  if($("pl-clear"))$("pl-clear").addEventListener("click",function(){if(confirm("Remove plan info?")){updateAcct(a.id,{plan:null});closeModal();}});
+}
+function openCreateAcctForm(){
+  var html=
+    '<h3>Create client account</h3>'+
+    '<p class="lede">Set them up an account directly. They can sign in with the email + password you create.</p>'+
+    '<form id="ca-form">'+
+    '<div id="ca-msg"></div>'+
+    '<div class="row2"><div class="field"><label>First name</label><input id="ca-first" required /></div>'+
+    '<div class="field"><label>Last name</label><input id="ca-last" required /></div></div>'+
+    '<div class="field"><label>Email</label><input id="ca-email" type="email" required /></div>'+
+    '<div class="field"><label>Phone</label><input id="ca-phone" type="tel" required /></div>'+
+    '<div class="field"><label>Temporary password</label><input id="ca-pw" type="text" minlength="8" required value="VSBenefits!2026" /></div>'+
+    '<p class="hint">Share this with the client; they can change it after signing in (when self-edit is enabled in client portal).</p>'+
+    '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Create account</button></div>'+
+    '</form>';
+  openModal(html);
+  $("ca-form").addEventListener("submit",async function(e){
+    e.preventDefault();
+    var first=$("ca-first").value.trim(),last=$("ca-last").value.trim(),email=normEmail($("ca-email").value),phone=$("ca-phone").value.trim(),pw=$("ca-pw").value;
+    if(pw.length<8)return notice("ca-msg","err","Password must be at least 8 characters.");
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return notice("ca-msg","err","Enter a valid email.");
+    var accts=getAccounts();
+    if(accts.some(function(a){return normEmail(a.email)===email;}))return notice("ca-msg","err","An account with this email already exists.");
+    var hash=await sha256(pw);
+    accts.push({id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:0,status:"active",plan:null,photoDataUrl:""});
+    saveAccounts(accts);webhookFire({event:"admin_created_client",email:email,ts:Date.now()});closeModal();renderAccounts();
+  });
+}
+$("create-acct-btn").addEventListener("click",openCreateAcctForm);
+$("acct-search").addEventListener("input",renderAccounts);
+$("export-accts-btn").addEventListener("click",function(){
+  var rows=[["firstName","lastName","email","phone","status","plan_carrier","plan_name","plan_effective","plan_premium","created","lastSignIn"]];
+  getAccounts().forEach(function(a){var p=a.plan||{};rows.push([a.firstName,a.lastName,a.email,a.phone,a.status||"active",p.carrier||"",p.planName||"",p.effectiveDate||"",p.monthlyPremium||"",a.created?new Date(a.created).toISOString():"",a.lastSignIn?new Date(a.lastSignIn).toISOString():""].map(csvEscape));});
+  downloadFile("clients-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
+});
+
+/* ====================================================================
+   SUPPORT
+   ==================================================================== */
+var activeThreadId=null;
 function renderSupport(){
   var msgs=getMessages();
-  $("support-count").textContent=new Set(msgs.map(function(m){return m.accountId;})).size;
-  var unreadCount=msgs.filter(function(m){return m.from==="client"&&!m.read;}).length;
-  var b=$("support-badge");if(unreadCount){b.textContent=unreadCount;b.classList.remove("hidden");}else b.classList.add("hidden");
+  $("b-sup").textContent=msgs.filter(function(m){return m.from==="client"&&!m.read;}).length;
+  var byAcct={};
+  msgs.forEach(function(m){(byAcct[m.accountId]=byAcct[m.accountId]||[]).push(m);});
+  var ids=Object.keys(byAcct).sort(function(a,b){
+    var ma=Math.max.apply(null,byAcct[a].map(function(x){return x.ts;}));
+    var mb=Math.max.apply(null,byAcct[b].map(function(x){return x.ts;}));
+    return mb-ma;
+  });
+  var box=$("thread-list");box.innerHTML="";
+  if(!ids.length){box.appendChild(el("div",{class:"empty",text:"No conversations yet."}));$("conv-empty").hidden=false;$("conv-active").hidden=true;return;}
   var accts=getAccounts();
-  var grouped={};
-  msgs.forEach(function(m){if(!grouped[m.accountId])grouped[m.accountId]=[];grouped[m.accountId].push(m);});
-  var ids=Object.keys(grouped).sort(function(a,b){var la=grouped[a][grouped[a].length-1].ts;var lb=grouped[b][grouped[b].length-1].ts;return lb-la;});
-  var list=$("support-list");list.innerHTML="";
-  if(!ids.length){$("support-empty").classList.remove("hidden");$("support-thread-title").textContent="Pick a conversation";$("support-thread").innerHTML='<div class="msg-thread-empty">No client messages yet.</div>';$("support-reply-form").hidden=true;return;}
-  $("support-empty").classList.add("hidden");
   ids.forEach(function(id){
-    var thread=grouped[id];var last=thread[thread.length-1];
-    var acct=accts.find(function(a){return a.id===id;});
-    var name=acct?((acct.firstName||"")+" "+(acct.lastName||"")).trim()||acct.email:"(unknown)";
-    var unread=thread.some(function(m){return m.from==="client"&&!m.read;});
-    var div=document.createElement("div");div.className="support-list-item"+(supportSelected===id?" selected":"")+(unread?" unread":"");
-    div.innerHTML='<div class="name">'+esc(name)+"</div>"+'<div class="preview">'+esc(last.text||"").slice(0,90)+"</div>"+'<div class="meta">'+esc(relTime(last.ts))+"</div>";
-    div.addEventListener("click",function(){supportSelected=id;renderSupport();renderThread();});
-    list.appendChild(div);
+    var ac=accts.filter(function(a){return a.id===id;})[0];
+    var name=ac?(((ac.firstName||"")+" "+(ac.lastName||"")).trim()||ac.email):"(unknown)";
+    var unread=byAcct[id].filter(function(m){return m.from==="client"&&!m.read;}).length;
+    var row=el("div",{class:"thread"+(activeThreadId===id?" active":""),onclick:function(){selectThread(id);}});
+    var left=el("div");left.appendChild(el("div",{class:"tn",text:name}));left.appendChild(el("div",{class:"te",text:ac?ac.email:""}));
+    row.appendChild(left);
+    if(unread)row.appendChild(el("div",{class:"tu",text:unread}));
+    box.appendChild(row);
   });
-  renderThread();
+  if(activeThreadId)selectThread(activeThreadId);
+  else{$("conv-empty").hidden=false;$("conv-active").hidden=true;}
 }
-function renderThread(){
-  var thread=$("support-thread");
-  if(!supportSelected){thread.innerHTML='<div class="msg-thread-empty">Select a client on the left to see their messages.</div>';$("support-reply-form").hidden=true;$("support-thread-title").textContent="Pick a conversation";return;}
-  var accts=getAccounts();var acct=accts.find(function(a){return a.id===supportSelected;});
-  $("support-thread-title").textContent=acct?(((acct.firstName||"")+" "+(acct.lastName||"")).trim()||acct.email):"Conversation";
-  var msgs=getMessages().filter(function(m){return m.accountId===supportSelected;}).sort(function(a,b){return a.ts-b.ts;});
-  thread.innerHTML="";
-  if(!msgs.length){thread.innerHTML='<div class="msg-thread-empty">No messages.</div>';}
-  msgs.forEach(function(m){var d=document.createElement("div");d.className="msg "+m.from;d.innerHTML=esc(m.text||"").replace(/\n/g,"<br>")+'<span class="ts">'+esc(new Date(m.ts).toLocaleString())+"</span>";thread.appendChild(d);});
-  // mark read
-  var changed=false;var all=getMessages();
-  all.forEach(function(m){if(m.accountId===supportSelected&&m.from==="client"&&!m.read){m.read=true;changed=true;}});
-  if(changed){saveMessages(all);}
-  thread.scrollTop=thread.scrollHeight;
-  $("support-reply-form").hidden=false;
+function selectThread(id){
+  activeThreadId=id;
+  document.querySelectorAll(".thread").forEach(function(t){t.classList.remove("active");});
+  var accts=getAccounts();var ac=accts.filter(function(a){return a.id===id;})[0];
+  if(!ac){$("conv-empty").hidden=false;$("conv-active").hidden=true;return;}
+  $("conv-empty").hidden=true;$("conv-active").hidden=false;
+  $("conv-name").textContent=((ac.firstName||"")+" "+(ac.lastName||"")).trim()||ac.email;
+  $("conv-email").textContent=ac.email;
+  var msgs=getMessages().filter(function(m){return m.accountId===id;}).sort(function(a,b){return a.ts-b.ts;});
+  var box=$("msgs");box.innerHTML="";
+  msgs.forEach(function(m){
+    var d=el("div",{class:"msg "+(m.from==="advisor"?"advisor":"client")});
+    d.appendChild(el("div",{text:m.text}));
+    d.appendChild(el("div",{class:"meta",text:(m.from==="advisor"?"Bradley - ":"Client - ")+fmtDateTime(m.ts)}));
+    box.appendChild(d);
+  });
+  box.scrollTop=box.scrollHeight;
 }
-$("support-reply-form").addEventListener("submit",function(e){
-  e.preventDefault();var t=$("support-reply").value.trim();if(!t||!supportSelected)return;
-  var msgs=getMessages();msgs.push({id:uid(),accountId:supportSelected,from:"admin",text:t,ts:Date.now(),read:true});
-  saveMessages(msgs);$("support-reply").value="";
-  forwardWebhook({type:"admin_reply",accountId:supportSelected,text:t,ts:Date.now()});
-  renderThread();toast("Reply sent");
+$("conv-mark-read").addEventListener("click",function(){
+  if(!activeThreadId)return;
+  var arr=getMessages().map(function(m){if(m.accountId===activeThreadId&&m.from==="client")m.read=true;return m;});
+  saveMessages(arr);renderSupport();
 });
-$("support-mark-all").addEventListener("click",function(){
-  var all=getMessages();var changed=false;all.forEach(function(m){if(m.from==="client"&&!m.read){m.read=true;changed=true;}});
-  if(changed){saveMessages(all);renderSupport();}
+$("reply-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  if(!activeThreadId)return;
+  var t=$("reply-text").value.trim();if(!t)return;
+  var arr=getMessages();arr.push({id:uid(),accountId:activeThreadId,from:"advisor",text:t,ts:Date.now(),read:true});saveMessages(arr);
+  $("reply-text").value="";
+  webhookFire({event:"advisor_reply",accountId:activeThreadId,text:t,ts:Date.now()});
+  selectThread(activeThreadId);
 });
 
-/* ===== REFERRALS ===== */
-function getReferrals(){return loadJSON(K.referrals,[]);}
-function saveReferrals(a){saveJSON(K.referrals,a);}
-function fmtMoney(n){var v=Number(n);if(!isFinite(v)||v<=0)return"$0.00";return"$"+v.toFixed(2);}
+/* ====================================================================
+   REFERRALS
+   ==================================================================== */
+var REF_STATUSES=["new","contacted","quoted","enrolled","lost"];
 function renderReferrals(){
-  var refs=getReferrals().slice().sort(function(a,b){return b.ts-a.ts;});
+  var q=($("ref-search").value||"").toLowerCase().trim();
+  var refs=getReferrals();
+  $("b-ref").textContent=refs.filter(function(r){return!r.read;}).length;
+  var rows=refs.filter(function(r){if(!q)return true;return[r.referralName,r.referralEmail,r.referralPhone,r.notes].join(" ").toLowerCase().indexOf(q)>=0;});
   var accts=getAccounts();
-  $("ref-count").textContent=refs.length;
-  var unread=refs.filter(function(r){return!r.read;}).length;
-  var b=$("ref-badge");if(unread){b.textContent=unread;b.classList.remove("hidden");}else b.classList.add("hidden");
-  var owed=refs.reduce(function(s,r){return s+(r.paid?0:Number(r.payout||0));},0);
-  var paid=refs.reduce(function(s,r){return s+(r.paid?Number(r.payout||0):0);},0);
-  $("ref-payout-summary").innerHTML='<span class="pill">Owed: '+fmtMoney(owed)+'</span> <span class="pill">Paid: '+fmtMoney(paid)+"</span>";
-  var body=$("ref-body");body.innerHTML="";
-  if(!refs.length){$("ref-empty").classList.remove("hidden");return;}
-  $("ref-empty").classList.add("hidden");
-  refs.forEach(function(r){
-    var fa=accts.find(function(x){return x.id===r.fromAccountId;});
+  var box=$("refs-list");box.innerHTML="";
+  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No referrals yet."}));return;}
+  rows.forEach(function(r){
+    var fa=accts.filter(function(a){return a.id===r.fromAccountId;})[0];
     var fromName=fa?((fa.firstName||"")+" "+(fa.lastName||"")).trim()||fa.email:"(unknown)";
-    var paidLabel=r.paid?'<div class="small muted">Paid '+esc(r.paidAt?new Date(r.paidAt).toLocaleDateString():"")+"</div>":"";
-    var tr=document.createElement("tr");
-    tr.innerHTML=
-      "<td>"+esc(fromName)+(fa?'<div class="small muted">'+esc(fa.email)+"</div>":"")+"</td>"+
-      "<td><strong>"+esc(r.referralName||"")+"</strong></td>"+
-      "<td>"+(r.referralPhone?'<a href="tel:'+esc(r.referralPhone)+'">'+esc(r.referralPhone)+"</a><br>":"")+(r.referralEmail?'<a href="mailto:'+esc(r.referralEmail)+'">'+esc(r.referralEmail)+"</a>":"")+"</td>"+
-      "<td>"+esc(r.relationship||"")+"</td>"+
-      "<td>"+esc((r.notes||"").slice(0,80))+((r.notes||"").length>80?"...":"")+"</td>"+
-      '<td><select data-ref-status="'+esc(r.id)+'" style="padding:4px 6px;border-radius:6px;border:1px solid var(--line);font-size:.85rem"><option value="new"'+(r.status==="new"?" selected":"")+'>New</option><option value="contacted"'+(r.status==="contacted"?" selected":"")+'>Contacted</option><option value="enrolled"'+(r.status==="enrolled"?" selected":"")+'>Enrolled</option><option value="lost"'+(r.status==="lost"?" selected":"")+'>Lost</option></select></td>'+
-      '<td><div style="display:flex;flex-direction:column;gap:4px;min-width:120px"><div style="display:flex;align-items:center;gap:4px"><span class="muted small">$</span><input type="number" min="0" step="0.01" data-ref-payout="'+esc(r.id)+'" value="'+esc(r.payout||"")+'" placeholder="0.00" style="width:80px;padding:4px 6px;border-radius:6px;border:1px solid var(--line);font-size:.88rem" /></div><label style="display:flex;align-items:center;gap:4px;font-size:.78rem;color:var(--muted);cursor:pointer"><input type="checkbox" data-ref-paid="'+esc(r.id)+'"'+(r.paid?" checked":"")+' /> Paid</label>'+paidLabel+'</div></td>'+
-      "<td>"+esc(relTime(r.ts))+"</td>"+
-      '<td><div class="row-actions"><button data-promote="'+esc(r.id)+'">Move to Leads</button><button class="del" data-del-r="'+esc(r.id)+'">Delete</button></div></td>';
-    body.appendChild(tr);
+    var row=el("div",{class:"row"});
+    var top=el("div",{class:"top"});
+    top.appendChild(el("div",{},[
+      el("div",{class:"name",text:r.referralName||"(no name)"}),
+      el("div",{class:"sub",text:"Referred by "+fromName})
+    ]));
+    var pills=el("div",{style:"display:flex;flex-direction:column;gap:4px;align-items:flex-end"});
+    pills.appendChild(el("span",{class:"status-pill status-"+(r.status||"new"),text:r.status||"new"}));
+    pills.appendChild(el("span",{class:"status-pill status-"+(r.paid?"paid":"unpaid"),text:r.paid?"PAID $"+(r.payout||0):"UNPAID"}));
+    top.appendChild(pills);
+    row.appendChild(top);
+    if(r.referralEmail)row.appendChild(el("div",{class:"sub",text:r.referralEmail}));
+    if(r.referralPhone)row.appendChild(el("div",{class:"sub",text:r.referralPhone}));
+    if(r.relationship)row.appendChild(el("div",{class:"sub",text:"Relationship: "+r.relationship}));
+    if(r.notes)row.appendChild(el("div",{class:"meta",text:"Notes: "+r.notes}));
+    row.appendChild(el("div",{class:"meta",text:"Submitted "+fmtDateTime(r.ts)+(r.paidAt?(" - paid "+fmtDateTime(r.paidAt)):"")}));
+    var acts=el("div",{class:"acts"});
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Edit",onclick:function(){openRefForm(r);}}));
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Convert to lead",onclick:function(){convertReferralToLead(r);}}));
+    if(r.paid){acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Mark unpaid",onclick:function(){updateRef(r.id,{paid:false,paidAt:0});}}));}
+    else{acts.appendChild(el("button",{class:"btn btn-teal btn-sm",type:"button",text:"Mark paid",onclick:function(){var amt=prompt("Payout amount paid to referrer ($):",r.payout||"50");if(amt!==null)updateRef(r.id,{paid:true,paidAt:Date.now(),payout:Number(amt)||0});}}));}
+    acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete",onclick:function(){if(confirm("Delete this referral?")){saveReferrals(getReferrals().filter(function(x){return x.id!==r.id;}));renderReferrals();}}}));
+    row.appendChild(acts);
+    box.appendChild(row);
   });
-  // mark read
-  var changed=false;var all=getReferrals();all.forEach(function(r){if(!r.read){r.read=true;changed=true;}});
-  if(changed)saveReferrals(all);
-  body.querySelectorAll("[data-ref-status]").forEach(function(s){s.addEventListener("change",function(){
-    var id=s.getAttribute("data-ref-status");saveReferrals(getReferrals().map(function(x){if(x.id===id)x.status=s.value;return x;}));
-  });});
-  body.querySelectorAll("[data-ref-payout]").forEach(function(inp){inp.addEventListener("change",function(){
-    var id=inp.getAttribute("data-ref-payout");var v=Number(inp.value)||0;
-    saveReferrals(getReferrals().map(function(x){if(x.id===id){x.payout=v;x.payoutUpdated=Date.now();}return x;}));
-    forwardWebhook({type:"referral_payout_updated",referralId:id,payout:v,ts:Date.now()});
-    renderReferrals();
-  });});
-  body.querySelectorAll("[data-ref-paid]").forEach(function(cb){cb.addEventListener("change",function(){
-    var id=cb.getAttribute("data-ref-paid");var p=cb.checked;
-    saveReferrals(getReferrals().map(function(x){if(x.id===id){x.paid=p;x.paidAt=p?Date.now():null;}return x;}));
-    forwardWebhook({type:"referral_paid_status",referralId:id,paid:p,ts:Date.now()});
-    renderReferrals();
-  });});
-  body.querySelectorAll("[data-promote]").forEach(function(b){b.addEventListener("click",function(){
-    var id=b.getAttribute("data-promote");var r=getReferrals().find(function(x){return x.id===id;});if(!r)return;
-    var fa=accts.find(function(x){return x.id===r.fromAccountId;});
-    var lead={id:uid(),name:r.referralName||"",company:"",phone:r.referralPhone||"",email:r.referralEmail||"",address:"",coverage:"",status:"new",next:"Referred by "+(fa?((fa.firstName||"")+" "+(fa.lastName||"")).trim():"client"),notes:r.notes||"",created:Date.now(),updated:Date.now()};
-    var leads=getLeads();leads.unshift(lead);saveLeads(leads);
-    saveReferrals(getReferrals().map(function(x){if(x.id===id)x.status="contacted";return x;}));
-    toast("Referral added to your Leads");renderReferrals();renderLeads();
-  });});
-  body.querySelectorAll("[data-del-r]").forEach(function(b){b.addEventListener("click",function(){
-    if(!confirm("Delete this referral?"))return;
-    saveReferrals(getReferrals().filter(function(x){return x.id!==b.getAttribute("data-del-r");}));renderReferrals();
-  });});
 }
-$("ref-export").addEventListener("click",function(){
-  var refs=getReferrals();var accts=getAccounts();
-  var cols=["referred_by_name","referred_by_email","prospect_name","prospect_phone","prospect_email","relationship","notes","status","payout","paid","paid_at","when"];
-  var out=[cols.join(",")];
-  refs.forEach(function(r){
-    var fa=accts.find(function(x){return x.id===r.fromAccountId;});
-    out.push([fa?((fa.firstName||"")+" "+(fa.lastName||"")).trim():"",fa?fa.email:"",r.referralName,r.referralPhone,r.referralEmail,r.relationship,r.notes,r.status,r.payout||0,r.paid?"yes":"no",r.paidAt?new Date(r.paidAt).toISOString():"",new Date(r.ts).toISOString()].map(csvEscape).join(","));
+function updateRef(id,patch){var arr=getReferrals().map(function(r){if(r.id===id)Object.assign(r,patch);return r;});saveReferrals(arr);renderReferrals();}
+function openRefForm(r){
+  var html=
+    '<h3>Edit referral</h3>'+
+    '<form id="r-form">'+
+    '<div class="field"><label>Status</label><select id="r-status">'+REF_STATUSES.map(function(s){return '<option value="'+s+'"'+(s===(r.status||"new")?" selected":"")+'>'+s+'</option>';}).join("")+'</select></div>'+
+    '<div class="row2"><div class="field"><label>Payout amount ($)</label><input id="r-payout" type="number" step="0.01" min="0" value="'+(r.payout||0)+'" /></div>'+
+    '<div class="field"><label>Paid?</label><select id="r-paid"><option value="0"'+(r.paid?"":" selected")+'>Unpaid</option><option value="1"'+(r.paid?" selected":"")+'>Paid</option></select></div></div>'+
+    '<div class="field"><label>Notes</label><textarea id="r-notes" rows="2">'+(r.notes||"")+'</textarea></div>'+
+    '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div>'+
+    '</form>';
+  openModal(html);
+  $("r-form").addEventListener("submit",function(e){
+    e.preventDefault();
+    var paid=$("r-paid").value==="1";
+    updateRef(r.id,{status:$("r-status").value,payout:Number($("r-payout").value)||0,paid:paid,paidAt:paid?(r.paidAt||Date.now()):0,notes:$("r-notes").value.trim(),read:true});
+    closeModal();
   });
-  var blob=new Blob([out.join("\n")],{type:"text/csv"});var url=URL.createObjectURL(blob);
-  var a=document.createElement("a");a.href=url;a.download="vs-referrals-"+new Date().toISOString().slice(0,10)+".csv";a.click();
-  setTimeout(function(){URL.revokeObjectURL(url);},500);
+}
+function convertReferralToLead(r){
+  var accts=getAccounts();var fa=accts.filter(function(a){return a.id===r.fromAccountId;})[0];
+  var lead={id:uid(),name:r.referralName||"",company:"",phone:r.referralPhone||"",email:r.referralEmail||"",address:"",coverage:"",status:"new",next:"Referred by "+(fa?((fa.firstName||"")+" "+(fa.lastName||"")).trim():"client"),notes:r.notes||"",created:Date.now(),updated:Date.now()};
+  var leads=getLeads();leads.unshift(lead);saveLeads(leads);
+  updateRef(r.id,{status:"contacted",read:true});
+  alert("Added to Leads. Switching to Leads tab.");switchTab("leads");
+}
+$("ref-search").addEventListener("input",renderReferrals);
+$("export-refs-btn").addEventListener("click",function(){
+  var rows=[["from_name","from_email","ref_name","ref_phone","ref_email","relationship","notes","status","payout","paid","paid_at","submitted"]];
+  var accts=getAccounts();
+  getReferrals().forEach(function(r){var fa=accts.filter(function(a){return a.id===r.fromAccountId;})[0];rows.push([fa?((fa.firstName||"")+" "+(fa.lastName||"")).trim():"",fa?fa.email:"",r.referralName,r.referralPhone,r.referralEmail,r.relationship,r.notes,r.status,r.payout||0,r.paid?"yes":"no",r.paidAt?new Date(r.paidAt).toISOString():"",new Date(r.ts).toISOString()].map(csvEscape));});
+  downloadFile("referrals-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
 });
 
-/* ===== Webhook ===== */
-function getWebhook(){return localStorage.getItem(K.webhook)||"";}
-function forwardWebhook(payload){
-  var url=getWebhook();if(!url||url.indexOf("http")!==0)return;
-  payload._source="vshealthbenefits.com/admin";payload._ts=new Date().toISOString();
-  try{fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload),keepalive:true,mode:"no-cors"}).catch(function(){});}catch(e){}
-}
-
-/* ===== SETTINGS ===== */
-$("pwchange-form").addEventListener("submit",async function(e){
-  e.preventDefault();
-  var cur=$("pw-cur").value;var n1=$("pw-new").value;var n2=$("pw-new2").value;
-  $("pw-err").textContent="";$("pw-ok").textContent="";
-  var ch=await sha256(cur);
-  if(ch!==localStorage.getItem(K.hash)){$("pw-err").textContent="Current password is wrong.";return;}
-  if(n1.length<8){$("pw-err").textContent="New password must be 8+ characters.";return;}
-  if(n1!==n2){$("pw-err").textContent="New passwords don't match.";return;}
-  var nh=await sha256(n1);localStorage.setItem(K.hash,nh);
-  $("pw-ok").textContent="Password updated.";
-  $("pw-cur").value="";$("pw-new").value="";$("pw-new2").value="";
-});
-$("codechange-form").addEventListener("submit",function(e){
-  e.preventDefault();
-  var cur=$("code-cur").value.trim();var n1=$("code-new").value.trim();var n2=$("code-new2").value.trim();
-  $("code-err").textContent="";$("code-ok").textContent="";
-  if(cur!==currentSetupCode()){$("code-err").textContent="Current setup code is wrong.";return;}
-  if(!n1||n1.length<3){$("code-err").textContent="New setup code is too short.";return;}
-  if(n1!==n2){$("code-err").textContent="New setup codes don't match.";return;}
-  localStorage.setItem(K.setupCode,n1);
-  $("code-ok").textContent="Setup code updated.";
-  $("code-cur").value="";$("code-new").value="";$("code-new2").value="";
-});
-$("wh-save").addEventListener("click",function(){
-  var v=$("wh-input").value.trim();localStorage.setItem(K.webhook,v);
-  $("wh-ok").textContent=v?"Webhook saved.":"Webhook cleared.";
-  setTimeout(function(){$("wh-ok").textContent="";},2000);
-});
-$("backup-btn").addEventListener("click",function(){
-  var bundle={exported:new Date().toISOString(),leads:getLeads(),accounts:getAccounts(),messages:getMessages(),referrals:getReferrals(),webhook:getWebhook(),setupCode:currentSetupCode()};
-  var blob=new Blob([JSON.stringify(bundle,null,2)],{type:"application/json"});var url=URL.createObjectURL(blob);
-  var a=document.createElement("a");a.href=url;a.download="vs-admin-backup-"+new Date().toISOString().slice(0,10)+".json";a.click();
-  setTimeout(function(){URL.revokeObjectURL(url);},500);
-});
-$("restore-btn").addEventListener("click",function(){$("restore-file").click();});
-$("restore-file").addEventListener("change",function(e){
-  var f=e.target.files[0];if(!f)return;var r=new FileReader();
-  r.onload=function(){
-    try{
-      var b=JSON.parse(r.result);
-      if(!confirm("Merge "+(b.leads||[]).length+" leads, "+(b.accounts||[]).length+" accounts, "+(b.messages||[]).length+" messages, "+(b.referrals||[]).length+" referrals?"))return;
-      saveLeads(getLeads().concat(b.leads||[]));
-      saveAccounts(getAccounts().concat(b.accounts||[]));
-      saveMessages(getMessages().concat(b.messages||[]));
-      saveReferrals(getReferrals().concat(b.referrals||[]));
-      if(b.webhook)localStorage.setItem(K.webhook,b.webhook);
-      if(b.setupCode)localStorage.setItem(K.setupCode,b.setupCode);
-      toast("Restore complete");renderAll();
-    }catch(err){alert("Invalid backup: "+err.message);}
-  };
-  r.readAsText(f);e.target.value="";
-});
-$("wipe-btn").addEventListener("click",function(){
-  if(!confirm("Wipe ALL admin data on this device? Cannot be undone."))return;
-  Object.values(K).forEach(function(k){localStorage.removeItem(k);});
-  sessionStorage.removeItem(K.session);route();
-});
+/* ====================================================================
+   SETTINGS
+   ==================================================================== */
 function renderSettings(){
-  $("settings-lead-count").textContent=getLeads().length;
-  $("settings-acct-count").textContent=getAccounts().length;
-  $("settings-msg-count").textContent=getMessages().length;
-  $("settings-ref-count").textContent=getReferrals().length;
   var bytes=0;Object.keys(K).forEach(function(name){var v=localStorage.getItem(K[name]);if(v)bytes+=v.length;});
   $("settings-storage").textContent=(bytes/1024).toFixed(1)+" KB";
   $("wh-input").value=getWebhook();
 }
+$("pw-form").addEventListener("submit",async function(e){
+  e.preventDefault();
+  var cur=$("pw-cur").value,n1=$("pw-new").value,n2=$("pw-new2").value;
+  if(await sha256(cur)!==localStorage.getItem(K.hash))return notice("pw-msg","err","Current password is wrong.");
+  if(n1.length<8)return notice("pw-msg","err","New password must be 8+ chars.");
+  if(n1!==n2)return notice("pw-msg","err","Passwords don't match.");
+  localStorage.setItem(K.hash,await sha256(n1));$("pw-form").reset();notice("pw-msg","ok","Password updated.");
+});
+$("code-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  var cur=$("code-cur").value,n1=$("code-new").value,n2=$("code-new2").value;
+  if(cur!==currentSetupCode())return notice("code-msg","err","Current code is wrong.");
+  if(!n1)return notice("code-msg","err","New code can't be empty.");
+  if(n1!==n2)return notice("code-msg","err","Codes don't match.");
+  localStorage.setItem(K.setupCode,n1);$("code-form").reset();notice("code-msg","ok","Setup code updated.");
+});
+$("wh-form").addEventListener("submit",function(e){
+  e.preventDefault();setWebhook($("wh-input").value.trim());notice("wh-msg","ok","Webhook saved.");
+});
+$("export-all-btn").addEventListener("click",function(){
+  var bundle={exported:new Date().toISOString(),leads:getLeads(),accounts:getAccounts(),messages:getMessages(),referrals:getReferrals(),appointments:getAppts(),webhook:getWebhook(),setupCode:currentSetupCode()};
+  downloadFile("vsbenefits-backup-"+new Date().toISOString().slice(0,10)+".json",JSON.stringify(bundle,null,2),"application/json");
+});
+$("import-file").addEventListener("change",function(e){
+  var f=e.target.files[0];if(!f)return;var r=new FileReader();
+  r.onload=function(){
+    try{
+      var b=JSON.parse(r.result);
+      if(b.leads)saveLeads(b.leads);if(b.accounts)saveAccounts(b.accounts);if(b.messages)saveMessages(b.messages);
+      if(b.referrals)saveReferrals(b.referrals);if(b.appointments)saveAppts(b.appointments);
+      if(b.webhook)setWebhook(b.webhook);if(b.setupCode)localStorage.setItem(K.setupCode,b.setupCode);
+      alert("Import done.");renderAll();
+    }catch(err){alert("Bad JSON file.");}
+  };
+  r.readAsText(f);
+});
 
-function renderAll(){renderLeads();renderAccounts();renderSupport();renderReferrals();renderSettings();}
+function renderAll(){renderLeads();renderAccounts();renderSupport();renderReferrals();renderSettings();renderCalendar();}
 
-/* ===== Public API: client.html calls into this when on the same browser ===== */
+/* ====================================================================
+   Public API for client.html
+   ==================================================================== */
 window.VSAdmin={
-  ingestMessage:function(obj){
-    var m={id:uid(),accountId:obj.accountId,from:obj.from||"client",text:obj.text||"",ts:obj.ts||Date.now(),read:false};
-    var a=getMessages();a.push(m);saveMessages(a);if(!$("dash-view").hidden)renderSupport();return m.id;
-  },
-  ingestReferral:function(obj){
-    var r={id:uid(),fromAccountId:obj.fromAccountId,referralName:obj.referralName||"",referralPhone:obj.referralPhone||"",referralEmail:obj.referralEmail||"",relationship:obj.relationship||"",notes:obj.notes||"",status:"new",ts:Date.now(),read:false,payout:0,paid:false};
-    var a=getReferrals();a.unshift(r);saveReferrals(a);if(!$("dash-view").hidden)renderReferrals();return r.id;
-  },
-  recordSignIn:function(email){
-    saveAccounts(getAccounts().map(function(a){if(a.email===(email||"").toLowerCase())a.lastSignIn=Date.now();return a;}));
-    if(!$("dash-view").hidden)renderAccounts();
-  },
+  ingestMessage:function(o){var m={id:uid(),accountId:o.accountId,from:o.from||"client",text:o.text||"",ts:o.ts||Date.now(),read:false};var a=getMessages();a.push(m);saveMessages(a);if(!$("dash-view").hidden)renderSupport();return m.id;},
+  ingestReferral:function(o){var r={id:uid(),fromAccountId:o.fromAccountId,referralName:o.referralName||"",referralPhone:o.referralPhone||"",referralEmail:o.referralEmail||"",relationship:o.relationship||"",notes:o.notes||"",status:"new",ts:Date.now(),read:false,payout:0,paid:false};var a=getReferrals();a.unshift(r);saveReferrals(a);if(!$("dash-view").hidden)renderReferrals();return r.id;},
+  recordSignIn:function(email){saveAccounts(getAccounts().map(function(a){if(a.email===(email||"").toLowerCase())a.lastSignIn=Date.now();return a;}));if(!$("dash-view").hidden)renderAccounts();},
   recordAccountCreated:function(){if(!$("dash-view").hidden)renderAccounts();}
 };
 
-/* ===== Boot ===== */
+/* Boot */
 route();
 })();
 </script>
