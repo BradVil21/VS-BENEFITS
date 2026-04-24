@@ -198,6 +198,31 @@ input,select,textarea{font-family:inherit;font-size:16px}
 </head>
 <body>
 
+  <!-- ======================= FIREBASE ======================= -->
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <div id="unlock-modal" class="modal-bg">
+  <div class="modal">
+    <button class="close-x" id="close-unlock">&times;</button>
+    <h3>Admin Setup Access</h3>
+    <p class="lede">Enter the admin setup code to create or reset the admin account.</p>
+
+    <div id="unlock-msg"></div>
+
+    <div class="field">
+      <label>Setup Code</label>
+      <input type="password" id="unlock-code" />
+    </div>
+
+    <div class="modal-acts">
+      <button class="btn btn-primary" id="unlock-btn">Continue</button>
+    </div>
+  </div>
+</div>
+
 <div class="bar">
   <a class="brand" href="index.html">
     <span class="b">VS</span>
@@ -205,14 +230,14 @@ input,select,textarea{font-family:inherit;font-size:16px}
     <span class="pill">Admin</span>
   </a>
   <div class="right">
-    <span id="bar-sync" class="sync off" title="Cloud sync status"><span class="sd"></span><span id="bar-sync-label">offline</span></span>
+    <span id="bar-sync" class="sync off" title="Cloud sync status"><span class="sd"></span><span id="bar-sync-label">ONLINE</span></span>
     <a class="home" href="index.html">Home</a>
     <button id="signout-btn" class="signout" hidden>Sign out</button>
   </div>
 </div>
 
 <!-- ======================= SETUP VIEW ======================= -->
-<div id="setup-view" class="wrap-narrow" >
+<div id="setup-view" class="wrap-narrow" hidden>
   <div class="card">
     <h2>First-time admin setup</h2>
     <p class="lede">Create the admin account for this device. You'll need the secret <strong>admin setup code</strong> to continue.</p>
@@ -250,6 +275,9 @@ input,select,textarea{font-family:inherit;font-size:16px}
       <button class="btn btn-primary btn-block" type="submit">Sign in</button>
     </form>
   </div>
+</div>
+<div style="text-align:center;margin-top:10px;">
+  <a href="#" id="cant-access-link">Can't access account?</a>
 </div>
 
 <!-- ======================= DASHBOARD ======================= -->
@@ -441,21 +469,66 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCsSgR6H5gmGNd84c-270jtwC4u8TR-dck",
-  authDomain: "vs-client-portal-9ece3.firebaseapp.com",
-  projectId: "vs-client-portal-9ece3",
-  storageBucket: "vs-client-portal-9ece3.firebasestorage.app",
-  messagingSenderId: "143162699366",
-  appId: "1:143162699366:web:bb46ef6b9e9e4f4fae87a7"
+  apiKey: "AIzaSyAbn3iPpR9WQFrKY67GBN5Al2-E3ldXslY",
+  authDomain: "vs-benefits-46152.firebaseapp.com",
+  projectId: "vs-benefits-46152",
+  storageBucket: "vs-benefits-46152.firebasestorage.app",
+  messagingSenderId: "632441667394",
+  appId: "1:632441667394:web:123420d3d7965f335152db"
 };
 
-const app  = initializeApp(firebaseConfig);
-const db   = getFirestore(app);
-const auth = getAuth(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-(function(){
-"use strict";
+/* ====================================================================
+   Client Sign Up 
+   ==================================================================== */
+
+async function signUp(email, password, name) {
+  const userCred = await auth.createUserWithEmailAndPassword(email, password);
+
+  await db.collection("users").doc(userCred.user.uid).set({
+    name,
+    email,
+    role: "client",
+    createdAt: Date.now()
+  });
+}
+
+/* ====================================================================
+   Admin Load Clients
+   ==================================================================== */
+
+function loadClients() {
+  db.collection("users").onSnapshot(snapshot => {
+    let clients = [];
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.role === "client") {
+        clients.push(data);
+      }
+    });
+
+    console.log("Clients:", clients);
+    // render into your table here
+  });
+}
+
+/* ====================================================================
+   Login System
+   ==================================================================== */
+
+async function login(email, password) {
+  await auth.signInWithEmailAndPassword(email, password);
+}
 
 /* ====================================================================
    Storage keys (must match client.html)
