@@ -626,7 +626,7 @@ function renderMessages(){
   var acct=currentAccount();if(!acct)return;
   var box=$("msgs");
   var msgs=getMessages().filter(function(m){return m.accountId===acct.id;}).sort(function(a,b){return a.ts-b.ts;});
-  if(!msgs.length){box.innerHTML='<div class="empty">No messages yet. Send your first message below - Bradley will get back to you within a business day.</div>';return;}
+  if(!msgs.length){box.innerHTML='<div class="empty">No messages yet. Send your first message below - Someone will get back to you within 24 hours.</div>';return;}
   box.innerHTML="";
   msgs.forEach(function(m){
     var d=document.createElement("div");
