@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root{
   --blue-900:#0b2346;--blue-800:#0f2e5c;--blue-700:#16447f;
@@ -35,15 +34,22 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .bar .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-family:Poppins;font-size:15px}
 .bar .brand .b{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem}
 .bar .pill{background:rgba(245,179,1,.18);color:#ffd95a;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;letter-spacing:.06em;text-transform:uppercase;margin-left:8px}
-.bar .right{display:flex;align-items:center;gap:8px}
+.bar .right{display:flex;align-items:center;gap:10px}
 .bar a.home{color:#cfe1ff;font-size:13px}
 .bar a.home:hover{color:#fff}
 .bar .signout{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px}
 .bar .signout:hover{background:rgba(255,255,255,.2)}
-.bar .sync{background:rgba(13,181,166,.18);color:#7be4d6;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;letter-spacing:.05em;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px}
-.bar .sync .sd{width:7px;height:7px;border-radius:50%;background:#0db5a6}
-.bar .sync.off{background:rgba(255,255,255,.1);color:#a8b6c8}
-.bar .sync.off .sd{background:#a8b6c8}
+
+/* Online/offline sync pill in top bar */
+.bar .sync{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:5px 10px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#e8f0fb}
+.bar .sync .dot{width:8px;height:8px;border-radius:50%;background:#2dbd79;box-shadow:0 0 0 3px rgba(45,189,121,.25)}
+.bar .sync.off .dot{background:#e5484d;box-shadow:0 0 0 3px rgba(229,72,77,.25)}
+.bar .sync .lbl{color:#cfe1ff}
+
+/* Per-client online dot */
+.presence-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#d0d7e2;margin-right:6px;vertical-align:middle}
+.presence-dot.on{background:#2dbd79;box-shadow:0 0 0 2px rgba(45,189,121,.22)}
+.presence-dot.off{background:#cfd6df}
 
 .wrap{max-width:1200px;margin:0 auto;padding:18px 16px 80px}
 .wrap-narrow{max-width:540px;margin:0 auto;padding:30px 16px 80px}
@@ -115,6 +121,8 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .status-revoked{background:#fbe7e7;color:var(--err)}
 .status-paid{background:#e6f7ef;color:var(--ok)}
 .status-unpaid{background:#fff4e1;color:var(--warn)}
+.status-in-progress{background:#fff4e1;color:var(--warn)}
+.status-declined{background:#fbe7e7;color:var(--err)}
 
 .empty{padding:32px 16px;text-align:center;color:var(--muted);font-size:13.5px;background:var(--blue-50);border:1px dashed var(--line);border-radius:var(--r-md)}
 
@@ -152,7 +160,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .ev .et{font-weight:700;color:var(--blue-900);font-size:13.5px}
 .ev .em{font-size:12px;color:var(--muted);margin:2px 0}
 .ev .ea{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.ev .gpush{font-size:11px;font-weight:700;color:var(--ok);background:#e6f7ef;padding:2px 7px;border-radius:999px;display:inline-flex;align-items:center;gap:4px}
+.ev .gtag{display:inline-flex;align-items:center;gap:4px;background:#e6f7ef;color:var(--ok);border:1px solid #b9e6cf;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;margin-top:4px}
 
 /* Conversation */
 .conv-wrap{display:grid;grid-template-columns:1fr;gap:14px}
@@ -181,47 +189,24 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .kv .item .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
 .kv .item .val{font-size:14px;color:var(--ink);margin-top:2px;word-break:break-word}
 
-/* Plan modal docs */
-.docmgr{margin-top:12px;padding:12px;border:1px dashed var(--line);border-radius:10px;background:var(--blue-50)}
-.docmgr h4{margin:0 0 8px;font-size:13px;color:var(--blue-900)}
-.docmgr .file-pick{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
-.docmgr .file-pick label.fp{background:#fff;border:1px solid var(--line);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px;color:var(--blue-700);min-height:36px;display:inline-flex;align-items:center}
-.docmgr .file-pick label.fp:hover{background:var(--blue-100)}
-.docmgr .doc-mini{display:flex;align-items:center;gap:8px;background:#fff;padding:8px 10px;border:1px solid var(--line);border-radius:8px;margin-bottom:6px;font-size:12.5px}
-.docmgr .doc-mini .nm{flex:1;min-width:0;font-weight:600;color:var(--blue-900);word-break:break-word}
-.docmgr .doc-mini .sz{color:var(--muted);font-size:11px;flex-shrink:0}
-.docmgr .doc-mini button{background:transparent;border:0;color:var(--err);font-size:18px;cursor:pointer;line-height:1;padding:2px 6px;border-radius:6px}
-.docmgr .doc-mini button:hover{background:#fdecea}
+/* Documents manager */
+.docmgr{background:var(--bg);border:1px solid var(--line-2);border-radius:10px;padding:12px;margin-top:10px}
+.docmgr h4{margin:0 0 8px;font-size:13.5px;color:var(--blue-900)}
+.docrow{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:6px}
+.docrow .dname{flex:1;min-width:0;font-size:13px;color:var(--ink);word-break:break-word}
+.docrow .dmeta{font-size:11px;color:var(--muted)}
+.docrow .dact{display:flex;gap:4px}
 
 [hidden]{display:none !important}
+
+.authswitch{text-align:center;margin-top:14px;font-size:13px;color:var(--ink-2)}
+.authswitch a{color:var(--blue-600);cursor:pointer;font-weight:600}
 </style>
+
+<!-- Google Identity Services for Calendar push -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
-
-  <!-- ======================= FIREBASE ======================= -->
-
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
-  <div id="unlock-modal" class="modal-bg">
-  <div class="modal">
-    <button class="close-x" id="close-unlock">&times;</button>
-    <h3>Admin Setup Access</h3>
-    <p class="lede">Enter the admin setup code to create or reset the admin account.</p>
-
-    <div id="unlock-msg"></div>
-
-    <div class="field">
-      <label>Setup Code</label>
-      <input type="password" id="unlock-code" />
-    </div>
-
-    <div class="modal-acts">
-      <button class="btn btn-primary" id="unlock-btn">Continue</button>
-    </div>
-  </div>
-</div>
 
 <div class="bar">
   <a class="brand" href="index.html">
@@ -230,34 +215,11 @@ input,select,textarea{font-family:inherit;font-size:16px}
     <span class="pill">Admin</span>
   </a>
   <div class="right">
-    <span id="bar-sync" class="sync off" title="Cloud sync status"><span class="sd"></span><span id="bar-sync-label">ONLINE</span></span>
+    <span id="sync-pill" class="sync off" title="Live sync status">
+      <span class="dot"></span><span class="lbl" id="sync-lbl">Offline</span>
+    </span>
     <a class="home" href="index.html">Home</a>
     <button id="signout-btn" class="signout" hidden>Sign out</button>
-  </div>
-</div>
-
-<!-- ======================= SETUP VIEW ======================= -->
-<div id="setup-view" class="wrap-narrow" hidden>
-  <div class="card">
-    <h2>First-time admin setup</h2>
-    <p class="lede">Create the admin account for this device. You'll need the secret <strong>admin setup code</strong> to continue.</p>
-    <form id="setup-form" autocomplete="off" novalidate>
-      <div id="setup-msg"></div>
-      <div class="field">
-        <label for="setup-code">Admin setup code</label>
-        <input type="password" id="setup-code" autocomplete="off" inputmode="numeric" required />
-        <div class="hint">Don't have it? It's the master key only the practice owner knows.</div>
-      </div>
-      <div class="field">
-        <label for="setup-pw">Create admin password</label>
-        <input type="password" id="setup-pw" autocomplete="new-password" minlength="8" required />
-      </div>
-      <div class="field">
-        <label for="setup-pw2">Confirm password</label>
-        <input type="password" id="setup-pw2" autocomplete="new-password" minlength="8" required />
-      </div>
-      <button class="btn btn-primary btn-block" type="submit">Create admin account</button>
-    </form>
   </div>
 </div>
 
@@ -265,19 +227,63 @@ input,select,textarea{font-family:inherit;font-size:16px}
 <div id="login-view" class="wrap-narrow" hidden>
   <div class="card">
     <h2>Admin sign in</h2>
-    <p class="lede">Enter your admin password to continue.</p>
+    <p class="lede">Enter your admin username and password to continue.</p>
     <form id="login-form" autocomplete="off" novalidate>
       <div id="login-msg"></div>
       <div class="field">
-        <label for="login-pw">Admin password</label>
+        <label for="login-user">Username</label>
+        <input type="text" id="login-user" autocomplete="username" required />
+      </div>
+      <div class="field">
+        <label for="login-pw">Password</label>
         <input type="password" id="login-pw" autocomplete="current-password" required />
       </div>
       <button class="btn btn-primary btn-block" type="submit">Sign in</button>
     </form>
+    <div class="authswitch">
+      Don't have an admin account? <a id="go-signup">Create admin account</a>
+    </div>
   </div>
 </div>
-<div style="text-align:center;margin-top:10px;">
-  <a href="#" id="cant-access-link">Can't access account?</a>
+
+<!-- ======================= SIGNUP VIEW (private, 0605-gated) ======================= -->
+<div id="signup-view" class="wrap-narrow" hidden>
+  <div class="card">
+    <h2>Create admin account</h2>
+    <p class="lede">Private page. You need the secret <strong>admin setup code</strong> to create an account.</p>
+    <form id="signup-form" autocomplete="off" novalidate>
+      <div id="signup-msg"></div>
+      <div class="field">
+        <label for="su-code">Admin setup code</label>
+        <input type="password" id="su-code" autocomplete="off" inputmode="numeric" required />
+        <div class="hint">Don't share this code publicly. Ask Bradley if you don't have it.</div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="su-first">First name</label><input type="text" id="su-first" required /></div>
+        <div class="field"><label for="su-last">Last name</label><input type="text" id="su-last" required /></div>
+      </div>
+      <div class="field">
+        <label for="su-user">Username</label>
+        <input type="text" id="su-user" autocomplete="username" required />
+      </div>
+      <div class="field">
+        <label for="su-email">Email (optional)</label>
+        <input type="email" id="su-email" />
+      </div>
+      <div class="field">
+        <label for="su-pw">Create password</label>
+        <input type="password" id="su-pw" autocomplete="new-password" minlength="8" required />
+      </div>
+      <div class="field">
+        <label for="su-pw2">Confirm password</label>
+        <input type="password" id="su-pw2" autocomplete="new-password" minlength="8" required />
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Create admin account</button>
+    </form>
+    <div class="authswitch">
+      Already have an account? <a id="go-login">Back to sign in</a>
+    </div>
+  </div>
 </div>
 
 <!-- ======================= DASHBOARD ======================= -->
@@ -308,11 +314,10 @@ input,select,textarea{font-family:inherit;font-size:16px}
     <!-- ============== CALENDAR ============== -->
     <div id="p-calendar" class="panel">
       <h3>Calendar</h3>
-      <p class="lede">Book consults and client meetings. When Google Calendar push is connected (in Settings), every appointment is pushed to your Google Calendar automatically.</p>
+      <p class="lede">Book consults and client meetings. Connect Google Calendar (Settings) to auto-push every new appointment.</p>
       <div class="toolbar">
         <button id="add-event-btn" class="btn btn-primary btn-sm" type="button">+ Book appointment</button>
         <button id="export-events-btn" class="btn btn-ghost btn-sm" type="button">Export ICS</button>
-        <span id="gcal-status" style="font-size:12px;color:var(--muted);margin-left:auto"></span>
       </div>
       <div class="cal-wrap">
         <div>
@@ -333,7 +338,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
     <!-- ============== CLIENT ACCOUNTS ============== -->
     <div id="p-accounts" class="panel">
       <h3>Client Accounts</h3>
-      <p class="lede">Every member who signed up on the client portal, plus accounts you've created on their behalf.</p>
+      <p class="lede">Every member who signed up on the client portal. Green dot = currently online.</p>
       <div class="toolbar">
         <input id="acct-search" class="search" type="search" placeholder="Search by name, email, phone..." />
         <button id="create-acct-btn" class="btn btn-primary btn-sm" type="button">+ Create client account</button>
@@ -373,7 +378,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
     <!-- ============== REFERRALS ============== -->
     <div id="p-referrals" class="panel">
       <h3>Referrals</h3>
-      <p class="lede">Set the payout amount and mark paid when you've sent the gift / payout to the referring client.</p>
+      <p class="lede">When a client submits a referral it starts "in-progress". Update to "paid" (with payout amount) or "declined".</p>
       <div class="toolbar">
         <input id="ref-search" class="search" type="search" placeholder="Search referrals..." />
         <button id="export-refs-btn" class="btn btn-ghost btn-sm" type="button">Export CSV</button>
@@ -386,31 +391,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
       <h3>Settings</h3>
 
       <div class="card" style="margin-bottom:14px">
-        <h4 style="margin:0 0 6px;font-size:15px">Cloud sync (cross-device)</h4>
-        <p class="lede" style="margin-bottom:10px">Client accounts, messages, and referrals sync between every device that loads this portal. Powered by your Firebase project (vs-client-portal-9ece3).</p>
-        <p style="margin:0 0 10px;font-size:13.5px">Status: <strong id="sync-state-text">checking...</strong></p>
-        <button id="force-pull-btn" type="button" class="btn btn-ghost btn-sm">Force re-sync from cloud</button>
-      </div>
-
-      <div class="card" style="margin-bottom:14px">
-        <h4 style="margin:0 0 6px;font-size:15px">Google Calendar push</h4>
-        <p class="lede" style="margin-bottom:10px">Connect your Google account once. After that every appointment you book is automatically pushed to your Google Calendar.</p>
-        <div id="gcal-msg"></div>
-        <div class="field">
-          <label>Google OAuth Client ID</label>
-          <input type="text" id="gcal-client-id" placeholder="123-abc.apps.googleusercontent.com" />
-          <div class="hint">Get it from Google Cloud Console &raquo; APIs &amp; Services &raquo; Credentials &raquo; Create OAuth client ID (Web app). Add this site's URL to "Authorized JavaScript origins".</div>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-          <button id="gcal-save-id" type="button" class="btn btn-primary btn-sm">Save Client ID</button>
-          <button id="gcal-connect-btn" type="button" class="btn btn-teal btn-sm">Connect Google Calendar</button>
-          <button id="gcal-disconnect-btn" type="button" class="btn btn-ghost btn-sm" hidden>Disconnect</button>
-          <span id="gcal-conn" style="font-size:12.5px;color:var(--muted)"></span>
-        </div>
-      </div>
-
-      <div class="card" style="margin-bottom:14px">
-        <h4 style="margin:0 0 6px;font-size:15px">Change admin password</h4>
+        <h4 style="margin:0 0 6px;font-size:15px">Change my admin password</h4>
         <form id="pw-form" autocomplete="off">
           <div id="pw-msg"></div>
           <div class="field"><label>Current password</label><input type="password" id="pw-cur" autocomplete="current-password" required /></div>
@@ -422,7 +403,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Change admin setup code</h4>
-        <p class="lede">This is the code required to create a new admin account on a new device. Default is hidden in source.</p>
+        <p class="lede">This is the code required to create a new admin account. Default is 0605 (hidden in source).</p>
         <form id="code-form" autocomplete="off">
           <div id="code-msg"></div>
           <div class="field"><label>Current code</label><input type="password" id="code-cur" required /></div>
@@ -430,6 +411,31 @@ input,select,textarea{font-family:inherit;font-size:16px}
           <div class="field"><label>Confirm new code</label><input type="password" id="code-new2" required /></div>
           <button type="submit" class="btn btn-primary">Update setup code</button>
         </form>
+      </div>
+
+      <div class="card" style="margin-bottom:14px">
+        <h4 style="margin:0 0 6px;font-size:15px">Google Calendar push</h4>
+        <p class="lede">Connect your Google account so every new appointment auto-pushes to your Google Calendar.</p>
+        <form id="gcal-cid-form" autocomplete="off">
+          <div id="gcal-msg"></div>
+          <div class="field">
+            <label>Google OAuth Client ID</label>
+            <input type="text" id="gcal-cid" placeholder="123456-abc.apps.googleusercontent.com" />
+            <div class="hint">Create at console.cloud.google.com &rarr; Credentials &rarr; OAuth Client ID (Web). Enable "Google Calendar API".</div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm">Save Client ID</button>
+        </form>
+        <div id="gcal-status" style="margin-top:12px"></div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+          <button id="gcal-connect" class="btn btn-teal btn-sm" type="button">Connect Google Calendar</button>
+          <button id="gcal-disconnect" class="btn btn-ghost btn-sm" type="button" hidden>Disconnect</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:14px">
+        <h4 style="margin:0 0 6px;font-size:15px">Admin accounts</h4>
+        <p class="lede">Everyone with an admin login. Create additional admins from the sign-in screen using the setup code.</p>
+        <div id="admins-list" class="tbl"></div>
       </div>
 
       <div class="card" style="margin-bottom:14px">
@@ -469,76 +475,33 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBsNizBUhSyjdfMyIRb0V4u0Fh5C_evPj8",
-  authDomain: "vs-benefits-46152.firebaseapp.com",
-  projectId: "vs-benefits-46152",
-  storageBucket: "vs-benefits-46152.firebasestorage.app",
-  messagingSenderId: "632441667394",
-  appId: "1:632441667394:web:123420d3d7965f335152db"
+  apiKey: "AIzaSyCsSgR6H5gmGNd84c-270jtwC4u8TR-dck",
+  authDomain: "vs-client-portal-9ece3.firebaseapp.com",
+  projectId: "vs-client-portal-9ece3",
+  storageBucket: "vs-client-portal-9ece3.firebasestorage.app",
+  messagingSenderId: "143162699366",
+  appId: "1:143162699366:web:bb46ef6b9e9e4f4fae87a7"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+(function(){
+"use strict";
 
 /* ====================================================================
-   Client Sign Up 
-   ==================================================================== */
-
-async function signUp(email, password, name) {
-  const userCred = await auth.createUserWithEmailAndPassword(email, password);
-
-  await db.collection("users").doc(userCred.user.uid).set({
-    name,
-    email,
-    role: "client",
-    createdAt: Date.now()
-  });
-}
-
-/* ====================================================================
-   Admin Load Clients
-   ==================================================================== */
-
-function loadClients() {
-  db.collection("users").onSnapshot(snapshot => {
-    let clients = [];
-
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      if (data.role === "client") {
-        clients.push(data);
-      }
-    });
-
-    console.log("Clients:", clients);
-    // render into your table here
-  });
-}
-
-/* ====================================================================
-   Login System
-   ==================================================================== */
-
-async function login(email, password) {
-  await auth.signInWithEmailAndPassword(email, password);
-}
-
-/* ====================================================================
-   Storage keys (must match client.html)
+   Storage keys
    ==================================================================== */
 var K={
-  hash:"vs_admin_hash",session:"vs_admin_session",setupCode:"vs_admin_setup_code",
+  session:"vs_admin_session",setupCode:"vs_admin_setup_code",
+  adminAccts:"vs_admin_accounts",
+  legacyHash:"vs_admin_hash",
   leads:"vs_leads",accounts:"vs_client_accounts",messages:"vs_messages",
   referrals:"vs_referrals",appointments:"vs_appointments",
   webhook:"vs_webhook_url",
-  gcalClientId:"vs_gcal_client_id",gcalToken:"vs_gcal_token",gcalEmail:"vs_gcal_email"
+  gcalCid:"vs_gcal_client_id",gcalTok:"vs_gcal_token",gcalEmail:"vs_gcal_email"
 };
 
 /* ====================================================================
@@ -567,23 +530,28 @@ function downloadFile(name,content,mime){
 function fmtDate(ts){if(!ts)return"--";var d=new Date(ts);return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}
 function fmtDateTime(ts){if(!ts)return"--";var d=new Date(ts);return d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
 function normEmail(e){return(e||"").trim().toLowerCase();}
+function normUser(u){return(u||"").trim().toLowerCase();}
 function initials(a){var n=((a.firstName||"")+" "+(a.lastName||"")).trim();if(!n)return"?";var p=n.split(/\s+/);return((p[0]||"").charAt(0)+(p[1]||"").charAt(0)).toUpperCase()||(a.email||"?").charAt(0).toUpperCase();}
-function fmtBytes(b){if(!b)return"--";if(b<1024)return b+" B";if(b<1048576)return(b/1024).toFixed(1)+" KB";return(b/1048576).toFixed(2)+" MB";}
-function escAttr(s){return String(s||"").replace(/"/g,"&quot;").replace(/</g,"&lt;");}
 function asArr(k){try{return JSON.parse(localStorage.getItem(k)||"[]");}catch(e){return[];}}
 function setArrLocal(k,v){localStorage.setItem(k,JSON.stringify(v));}
+function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
 
-/* setArr is the single write path; it also pushes to cloud for synced keys */
-function setArr(k,v){
-  setArrLocal(k,v);
-  var remote=LOCAL_TO_REMOTE[k];
-  if(remote)cloudPush(remote,v);
-}
+/* Accessor/mutator pairs (save* pushes to cloud) */
+var LOCAL_TO_REMOTE={};
+LOCAL_TO_REMOTE[K.leads]="leads";
+LOCAL_TO_REMOTE[K.accounts]="accounts";
+LOCAL_TO_REMOTE[K.messages]="messages";
+LOCAL_TO_REMOTE[K.referrals]="referrals";
+LOCAL_TO_REMOTE[K.appointments]="appointments";
+LOCAL_TO_REMOTE[K.adminAccts]="admin_accounts";
+function setArr(k,v){setArrLocal(k,v);var r=LOCAL_TO_REMOTE[k];if(r)cloudPush(r,v);}
+
 function getLeads(){return asArr(K.leads);} function saveLeads(v){setArr(K.leads,v);}
 function getAccounts(){return asArr(K.accounts);} function saveAccounts(v){setArr(K.accounts,v);}
 function getMessages(){return asArr(K.messages);} function saveMessages(v){setArr(K.messages,v);}
 function getReferrals(){return asArr(K.referrals);} function saveReferrals(v){setArr(K.referrals,v);}
 function getAppts(){return asArr(K.appointments);} function saveAppts(v){setArr(K.appointments,v);}
+function getAdmins(){return asArr(K.adminAccts);} function saveAdmins(v){setArr(K.adminAccts,v);}
 function getWebhook(){return localStorage.getItem(K.webhook)||"";}
 function setWebhook(v){localStorage.setItem(K.webhook,v||"");}
 
@@ -597,221 +565,148 @@ function webhookFire(payload){
 }
 
 /* ====================================================================
-   FIRESTORE CLOUD SYNC LAYER
+   Cloud sync (Firestore + Anonymous Auth)
    ==================================================================== */
 var cloud={ready:false,suspend:0};
-var SYNC_KEYS=["accounts","messages","referrals","appointments","leads"];
-var LOCAL_TO_REMOTE={};
-LOCAL_TO_REMOTE[K.accounts]="accounts";
-LOCAL_TO_REMOTE[K.messages]="messages";
-LOCAL_TO_REMOTE[K.referrals]="referrals";
-LOCAL_TO_REMOTE[K.appointments]="appointments";
-LOCAL_TO_REMOTE[K.leads]="leads";
-var REMOTE_TO_LOCAL={accounts:K.accounts,messages:K.messages,referrals:K.referrals,appointments:K.appointments,leads:K.leads};
+var presenceMap={}; // clientId -> last ts
+var REMOTE_KEYS=["leads","accounts","messages","referrals","appointments","admin_accounts"];
+var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts};
 
-function setSyncBar(state){
-  var p=$("bar-sync"),l=$("bar-sync-label");if(!p||!l)return;
-  if(state==="on"){p.classList.remove("off");l.textContent="Synced";}
-  else if(state==="syncing"){p.classList.remove("off");l.textContent="Syncing";}
-  else{p.classList.add("off");l.textContent="Offline";}
-  var st=$("sync-state-text");if(st)st.textContent=state==="on"?"Connected, real-time sync active":(state==="syncing"?"Connecting...":"Offline (changes stay on this device only)");
+function setSyncPill(state){
+  var p=$("sync-pill");if(!p)return;
+  if(state==="on"){p.classList.remove("off");$("sync-lbl").textContent="Online";}
+  else{p.classList.add("off");$("sync-lbl").textContent="Offline";}
 }
 
-async function cloudPush(remoteKey,items){
+async function cloudPush(key,items){
   if(!cloud.ready||cloud.suspend>0)return;
-  try{await setDoc(doc(db,"vs_state",remoteKey),{items:items,ts:Date.now()});}
-  catch(e){console.warn("cloud push",remoteKey,e);}
-}
-
-async function pullOnce(remoteKey){
-  try{
-    var snap=await getDoc(doc(db,"vs_state",remoteKey));
-    if(snap.exists()){
-      var items=(snap.data().items)||[];
-      cloud.suspend++;
-      setArrLocal(REMOTE_TO_LOCAL[remoteKey],items);
-      setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},80);
-    }
-  }catch(e){}
+  try{await setDoc(doc(db,"vs_state",key),{items:items,ts:Date.now()});}
+  catch(e){console.warn("cloud push",key,e);}
 }
 
 async function initCloud(){
-  setSyncBar("syncing");
   try{await signInAnonymously(auth);}
-  catch(e){console.warn("anon auth failed - sync disabled",e);setSyncBar("off");return;}
-  cloud.ready=true;setSyncBar("on");
+  catch(e){console.warn("anon auth failed",e);setSyncPill("off");return;}
+  cloud.ready=true;setSyncPill("on");
 
-  SYNC_KEYS.forEach(function(remoteKey){
-    var localKey=REMOTE_TO_LOCAL[remoteKey];
-    onSnapshot(doc(db,"vs_state",remoteKey),function(snap){
+  REMOTE_KEYS.forEach(function(rk){
+    onSnapshot(doc(db,"vs_state",rk),function(snap){
       if(!snap.exists())return;
-      var items=(snap.data().items)||[];
+      var items=snap.data().items||[];
       cloud.suspend++;
       try{
-        setArrLocal(localKey,items);
+        setArrLocal(REMOTE_TO_LOCAL[rk],items);
         if(!$("dash-view").hidden){
-          if(remoteKey==="accounts")renderAccounts();
-          if(remoteKey==="messages")renderSupport();
-          if(remoteKey==="referrals")renderReferrals();
-          if(remoteKey==="appointments")renderCalendar();
-          if(remoteKey==="leads")renderLeads();
+          if(rk==="leads")renderLeads();
+          if(rk==="accounts"){renderAccounts();renderSupport();renderAdminsList();}
+          if(rk==="messages"){renderSupport();if(activeThreadId)selectThread(activeThreadId);}
+          if(rk==="referrals")renderReferrals();
+          if(rk==="appointments")renderCalendar();
+          if(rk==="admin_accounts")renderAdminsList();
         }
-      }finally{
-        setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},80);
-      }
-    },function(err){console.warn("cloud listen",remoteKey,err);setSyncBar("off");});
+      }finally{setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},80);}
+    },function(err){console.warn("snapshot err",rk,err);setSyncPill("off");});
+  });
+
+  // Presence (all signed-in clients) — shared map
+  onSnapshot(doc(db,"vs_state","presence"),function(snap){
+    if(!snap.exists())return;
+    presenceMap=snap.data().map||{};
+    if(!$("dash-view").hidden)renderAccounts();
   });
 }
 
-/* ====================================================================
-   GOOGLE CALENDAR PUSH
-   --------------------------------------------------------------------
-   Uses Google Identity Services (GIS) implicit token flow.
-   Admin pastes their OAuth Client ID, clicks Connect, approves once.
-   After connect, every saveAppts pushes new events to Google Calendar.
-   ==================================================================== */
-var gcal={ready:false,token:"",expires:0,client:null};
-
-function getGcalClientId(){return localStorage.getItem(K.gcalClientId)||"";}
-function setGcalClientId(v){localStorage.setItem(K.gcalClientId,v||"");}
-function getGcalToken(){
-  try{var t=JSON.parse(localStorage.getItem(K.gcalToken)||"null");if(t&&t.expires>Date.now()+10000)return t;}catch(e){}
-  return null;
-}
-function setGcalToken(t){localStorage.setItem(K.gcalToken,JSON.stringify(t));}
-function clearGcalToken(){localStorage.removeItem(K.gcalToken);localStorage.removeItem(K.gcalEmail);}
-
-function paintGcalUi(){
-  var t=getGcalToken();
-  var em=localStorage.getItem(K.gcalEmail)||"";
-  $("gcal-client-id").value=getGcalClientId();
-  if(t){
-    gcal.ready=true;gcal.token=t.access_token;gcal.expires=t.expires;
-    $("gcal-conn").innerHTML='Connected'+(em?(' as <strong>'+em+'</strong>'):'')+'. Auto-push is ON.';
-    $("gcal-disconnect-btn").hidden=false;
-    $("gcal-connect-btn").textContent="Reconnect";
-    $("gcal-status").innerHTML='&#10003; Google Calendar push: ON';
-    $("gcal-status").style.color="var(--ok)";
-  }else{
-    gcal.ready=false;gcal.token="";
-    $("gcal-conn").innerHTML=getGcalClientId()?'Not connected. Click Connect to authorize.':'Add your OAuth Client ID first, then click Connect.';
-    $("gcal-disconnect-btn").hidden=true;
-    $("gcal-connect-btn").textContent="Connect Google Calendar";
-    $("gcal-status").innerHTML='Google Calendar push: <strong>off</strong> (use the per-event "Add to Google" link, or connect in Settings to enable auto-push)';
-    $("gcal-status").style.color="var(--muted)";
-  }
-}
-
-function gcalConnect(){
-  var cid=getGcalClientId().trim();
-  if(!cid)return notice("gcal-msg","err","Save your OAuth Client ID first.");
-  if(typeof google==="undefined"||!google.accounts||!google.accounts.oauth2){
-    return notice("gcal-msg","err","Google sign-in script not loaded yet. Wait a second and try again.");
-  }
+async function pullOnce(rk){
   try{
-    var client=google.accounts.oauth2.initTokenClient({
-      client_id:cid,
-      scope:"https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.email",
-      callback:function(resp){
-        if(resp.error){notice("gcal-msg","err","Authorization failed: "+resp.error);return;}
-        var expires=Date.now()+(Number(resp.expires_in||3600)*1000);
-        setGcalToken({access_token:resp.access_token,expires:expires});
-        // Try to fetch the email of the connected account
-        fetch("https://openidconnect.googleapis.com/v1/userinfo",{headers:{Authorization:"Bearer "+resp.access_token}})
-          .then(function(r){return r.json();})
-          .then(function(d){if(d&&d.email)localStorage.setItem(K.gcalEmail,d.email);paintGcalUi();})
-          .catch(function(){paintGcalUi();});
-        notice("gcal-msg","ok","Connected. New appointments will auto-push to your Google Calendar.");
-      }
-    });
-    client.requestAccessToken({prompt:"consent"});
-  }catch(e){
-    notice("gcal-msg","err","Could not start Google flow. Check that your OAuth Client ID is correct and that this site's URL is in the Authorized JavaScript origins.");
-  }
-}
-
-async function gcalPushEvent(a){
-  if(!gcal.ready||!gcal.token)return null;
-  if(a.googleEventId)return a.googleEventId; // already pushed
-  var endIso=a.end?new Date(a.end).toISOString():new Date(new Date(a.start).getTime()+30*60000).toISOString();
-  var body={
-    summary:a.title||"VS Benefits appointment",
-    description:[a.with?"With: "+a.with:"",a.notes||""].filter(Boolean).join("\n\n"),
-    location:a.location||"",
-    start:{dateTime:new Date(a.start).toISOString()},
-    end:{dateTime:endIso}
-  };
-  try{
-    var r=await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events",{
-      method:"POST",
-      headers:{"Authorization":"Bearer "+gcal.token,"Content-Type":"application/json"},
-      body:JSON.stringify(body)
-    });
-    if(r.status===401){clearGcalToken();paintGcalUi();return null;}
-    if(!r.ok){console.warn("gcal push failed",r.status,await r.text());return null;}
-    var data=await r.json();
-    return data.id||null;
-  }catch(e){console.warn("gcal push error",e);return null;}
-}
-
-async function gcalDeleteEvent(eventId){
-  if(!gcal.ready||!gcal.token||!eventId)return;
-  try{
-    await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events/"+encodeURIComponent(eventId),{
-      method:"DELETE",
-      headers:{"Authorization":"Bearer "+gcal.token}
-    });
+    var snap=await getDoc(doc(db,"vs_state",rk));
+    if(snap.exists()){cloud.suspend++;try{setArrLocal(REMOTE_TO_LOCAL[rk],snap.data().items||[]);}finally{setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},60);}}
   }catch(e){}
 }
 
+function isOnline(clientId){
+  var ts=presenceMap[clientId]||0;
+  return (Date.now()-ts)<3*60*1000; // online if heartbeat within 3 min
+}
+
 /* ====================================================================
-   Setup code (default 0605, base64-obfuscated)
+   Setup code
    ==================================================================== */
 function defaultSetupCode(){try{return atob("MDYwNQ==");}catch(e){return"0605";}}
 function ensureSetupCode(){if(!localStorage.getItem(K.setupCode))localStorage.setItem(K.setupCode,defaultSetupCode());}
 function currentSetupCode(){return localStorage.getItem(K.setupCode)||defaultSetupCode();}
 
 /* ====================================================================
-   Routing: setup vs login vs dash
+   Admin auth: username+password, multi-user
    ==================================================================== */
-function isSignedIn(){return!!sessionStorage.getItem(K.session);}
-function route(){
+function getSession(){try{return JSON.parse(sessionStorage.getItem(K.session)||"null");}catch(e){return null;}}
+function setSession(s){sessionStorage.setItem(K.session,JSON.stringify(s));}
+function clearSession(){sessionStorage.removeItem(K.session);}
+function currentAdmin(){var s=getSession();if(!s)return null;return getAdmins().filter(function(a){return a.id===s.id;})[0]||null;}
+
+async function route(){
   ensureSetupCode();
-  $("setup-view").hidden=true;$("login-view").hidden=true;$("dash-view").hidden=true;$("signout-btn").hidden=true;
-  if(!localStorage.getItem(K.hash)){$("setup-view").hidden=false;return;}
-  if(!isSignedIn()){$("login-view").hidden=false;return;}
+  $("login-view").hidden=true;$("signup-view").hidden=true;$("dash-view").hidden=true;$("signout-btn").hidden=true;
+  // Pull latest admins from cloud so sign-in works on a fresh device
+  if(cloud.ready){await pullOnce("admin_accounts");await pullOnce("accounts");}
+  var admins=getAdmins();
+  if(!admins.length){$("signup-view").hidden=false;return;}
+  if(!currentAdmin()){$("login-view").hidden=false;return;}
   $("dash-view").hidden=false;$("signout-btn").hidden=false;
-  renderAll();
-  switchTab("leads");
+  renderAll();switchTab("leads");
 }
 
-/* ====================================================================
-   Setup form
-   ==================================================================== */
-$("setup-form").addEventListener("submit",async function(e){
+$("go-signup").addEventListener("click",function(){$("login-view").hidden=true;$("signup-view").hidden=false;});
+$("go-login").addEventListener("click",function(){$("signup-view").hidden=true;$("login-view").hidden=false;});
+
+$("signup-form").addEventListener("submit",async function(e){
   e.preventDefault();
-  var code=$("setup-code").value.trim();
-  var p1=$("setup-pw").value;
-  var p2=$("setup-pw2").value;
-  if(code!==currentSetupCode())return notice("setup-msg","err","That setup code isn't valid. Ask the practice owner for the current code.");
-  if(p1.length<8)return notice("setup-msg","err","Password must be at least 8 characters.");
-  if(p1!==p2)return notice("setup-msg","err","Passwords don't match.");
-  localStorage.setItem(K.hash,await sha256(p1));
-  sessionStorage.setItem(K.session,JSON.stringify({since:Date.now()}));
-  route();
+  var code=$("su-code").value.trim();
+  var first=$("su-first").value.trim();
+  var last=$("su-last").value.trim();
+  var user=normUser($("su-user").value);
+  var email=normEmail($("su-email").value);
+  var p1=$("su-pw").value;
+  var p2=$("su-pw2").value;
+  if(code!==currentSetupCode())return notice("signup-msg","err","Wrong setup code.");
+  if(!first||!last)return notice("signup-msg","err","Enter your first and last name.");
+  if(user.length<3)return notice("signup-msg","err","Username must be at least 3 characters.");
+  if(p1.length<8)return notice("signup-msg","err","Password must be at least 8 characters.");
+  if(p1!==p2)return notice("signup-msg","err","Passwords don't match.");
+  if(cloud.ready)await pullOnce("admin_accounts");
+  var admins=getAdmins();
+  if(admins.some(function(a){return normUser(a.username)===user;}))return notice("signup-msg","err","That username is taken.");
+  var hash=await sha256(p1);
+  var rec={id:uid(),username:user,firstName:first,lastName:last,email:email,passwordHash:hash,created:Date.now()};
+  admins.push(rec);saveAdmins(admins);
+  setSession({id:rec.id,since:Date.now()});
+  await route();
 });
 
-/* Login form */
 $("login-form").addEventListener("submit",async function(e){
   e.preventDefault();
+  var user=normUser($("login-user").value);
   var pw=$("login-pw").value;
-  if(!pw)return notice("login-msg","err","Enter your password.");
-  if(await sha256(pw)!==localStorage.getItem(K.hash))return notice("login-msg","err","Incorrect password.");
-  sessionStorage.setItem(K.session,JSON.stringify({since:Date.now()}));
+  if(!user||!pw)return notice("login-msg","err","Enter username and password.");
+  if(cloud.ready)await pullOnce("admin_accounts");
+  var admins=getAdmins();
+  // Legacy single-password fallback
+  if(!admins.length){
+    var legacy=localStorage.getItem(K.legacyHash);
+    if(legacy&&await sha256(pw)===legacy){
+      var rec={id:uid(),username:user,firstName:"Admin",lastName:"",email:"",passwordHash:legacy,created:Date.now()};
+      admins.push(rec);saveAdmins(admins);setSession({id:rec.id,since:Date.now()});return route();
+    }
+    return notice("login-msg","err","No admin accounts yet. Click Create admin account.");
+  }
+  var a=admins.filter(function(x){return normUser(x.username)===user;})[0];
+  if(!a)return notice("login-msg","err","Username not found.");
+  var h=await sha256(pw);
+  if(h!==a.passwordHash)return notice("login-msg","err","Wrong password.");
+  setSession({id:a.id,since:Date.now()});
   route();
 });
 
-$("signout-btn").addEventListener("click",function(){sessionStorage.removeItem(K.session);route();});
+$("signout-btn").addEventListener("click",function(){clearSession();route();});
 
 /* ====================================================================
    Tabs
@@ -831,7 +726,7 @@ function switchTab(name){
 document.querySelectorAll("[data-tab]").forEach(function(b){b.addEventListener("click",function(){switchTab(b.getAttribute("data-tab"));});});
 
 /* ====================================================================
-   Modal helper
+   Modal
    ==================================================================== */
 function openModal(html){
   $("modal-content").innerHTML="";
@@ -891,15 +786,15 @@ function openLeadForm(existing){
   var html=
     '<h3>'+(existing?"Edit lead":"Add lead")+'</h3>'+
     '<form id="lead-form">'+
-    '<div class="row2"><div class="field"><label>Name</label><input id="l-name" required value="'+escAttr(l.name)+'" /></div>'+
-    '<div class="field"><label>Company</label><input id="l-company" value="'+escAttr(l.company)+'" /></div></div>'+
-    '<div class="row2"><div class="field"><label>Email</label><input id="l-email" type="email" value="'+escAttr(l.email)+'" /></div>'+
-    '<div class="field"><label>Phone</label><input id="l-phone" type="tel" value="'+escAttr(l.phone)+'" /></div></div>'+
-    '<div class="field"><label>Address</label><input id="l-address" value="'+escAttr(l.address)+'" /></div>'+
-    '<div class="row2"><div class="field"><label>Coverage interest</label><input id="l-coverage" value="'+escAttr(l.coverage)+'" /></div>'+
+    '<div class="row2"><div class="field"><label>Name</label><input id="l-name" required value="'+escapeHtml(l.name||"")+'" /></div>'+
+    '<div class="field"><label>Company</label><input id="l-company" value="'+escapeHtml(l.company||"")+'" /></div></div>'+
+    '<div class="row2"><div class="field"><label>Email</label><input id="l-email" type="email" value="'+escapeHtml(l.email||"")+'" /></div>'+
+    '<div class="field"><label>Phone</label><input id="l-phone" type="tel" value="'+escapeHtml(l.phone||"")+'" /></div></div>'+
+    '<div class="field"><label>Address</label><input id="l-address" value="'+escapeHtml(l.address||"")+'" /></div>'+
+    '<div class="row2"><div class="field"><label>Coverage interest</label><input id="l-coverage" value="'+escapeHtml(l.coverage||"")+'" /></div>'+
     '<div class="field"><label>Status</label><select id="l-status">'+LEAD_STATUSES.map(function(s){return '<option value="'+s+'"'+(s===(l.status||"new")?" selected":"")+'>'+s+'</option>';}).join("")+'</select></div></div>'+
-    '<div class="field"><label>Next action</label><input id="l-next" value="'+escAttr(l.next)+'" /></div>'+
-    '<div class="field"><label>Notes</label><textarea id="l-notes" rows="3">'+escAttr(l.notes)+'</textarea></div>'+
+    '<div class="field"><label>Next action</label><input id="l-next" value="'+escapeHtml(l.next||"")+'" /></div>'+
+    '<div class="field"><label>Notes</label><textarea id="l-notes" rows="3">'+escapeHtml(l.notes||"")+'</textarea></div>'+
     '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save lead</button></div>'+
     '</form>';
   openModal(html);
@@ -922,7 +817,7 @@ $("export-leads-btn").addEventListener("click",function(){
 });
 
 /* ====================================================================
-   CALENDAR
+   CALENDAR (+ Google push)
    ==================================================================== */
 var calCursor=new Date();calCursor.setDate(1);
 var selectedDate=null;
@@ -973,17 +868,14 @@ function renderEventList(){
     if(a.with)ev.appendChild(el("div",{class:"em",text:"With: "+a.with}));
     if(a.location)ev.appendChild(el("div",{class:"em",text:a.location}));
     if(a.notes)ev.appendChild(el("div",{class:"em",text:a.notes}));
-    if(a.googleEventId){
-      var p=el("div",{class:"em"});p.innerHTML='<span class="gpush">&#10003; In Google Calendar</span>';ev.appendChild(p);
-    }
+    if(a.googleEventId)ev.appendChild(el("div",{class:"gtag",text:"In Google Calendar"}));
     var acts=el("div",{class:"ea"});
-    acts.appendChild(el("a",{class:"btn btn-teal btn-sm",href:googleCalUrl(a),target:"_blank",rel:"noopener",text:"Open in Google"}));
+    acts.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:googleCalUrl(a),target:"_blank",rel:"noopener",text:"Open in Google"}));
+    if(!a.googleEventId&&gcal.ready){
+      acts.appendChild(el("button",{class:"btn btn-teal btn-sm",type:"button",text:"Push to Google",onclick:async function(){var gid=await gcalPushEvent(a);if(gid){a.googleEventId=gid;var arr=getAppts().map(function(x){return x.id===a.id?a:x;});saveAppts(arr);renderCalendar();}}}));
+    }
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Edit",onclick:function(){openApptForm(a);}}));
-    acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete",onclick:function(){
-      if(!confirm("Delete event?"))return;
-      if(a.googleEventId)gcalDeleteEvent(a.googleEventId);
-      saveAppts(getAppts().filter(function(x){return x.id!==a.id;}));renderCalendar();
-    }}));
+    acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete",onclick:async function(){if(!confirm("Delete event?"))return;if(a.googleEventId&&gcal.ready){await gcalDeleteEvent(a.googleEventId);}saveAppts(getAppts().filter(function(x){return x.id!==a.id;}));renderCalendar();}}));
     ev.appendChild(acts);
     box.appendChild(ev);
   });
@@ -1002,20 +894,20 @@ function googleCalUrl(a){
   return"https://calendar.google.com/calendar/render?"+qs;
 }
 function openApptForm(existing){
-  var a=existing||{id:uid(),title:"",with:"",accountId:"",start:isoDate(new Date(selectedDate||new Date()))+"T10:00",end:"",location:"",notes:"",created:Date.now(),googleEventId:""};
+  var a=existing||{id:uid(),title:"",with:"",accountId:"",start:(selectedDate||isoDate(new Date()))+"T10:00",end:"",location:"",notes:"",created:Date.now(),googleEventId:""};
   var accts=getAccounts();
-  var withOpts='<option value="">-- none --</option>'+accts.map(function(x){return '<option value="'+x.id+'"'+(x.id===a.accountId?" selected":"")+'>'+(((x.firstName||"")+" "+(x.lastName||"")).trim()||x.email)+'</option>';}).join("");
+  var withOpts='<option value="">-- none --</option>'+accts.map(function(x){return '<option value="'+x.id+'"'+(x.id===a.accountId?" selected":"")+'>'+escapeHtml(((x.firstName||"")+" "+(x.lastName||"")).trim()||x.email)+'</option>';}).join("");
   var html=
     '<h3>'+(existing?"Edit appointment":"Book appointment")+'</h3>'+
     '<form id="appt-form">'+
-    '<div class="field"><label>Title</label><input id="a-title" required value="'+escAttr(a.title)+'" placeholder="Discovery call, ACA review..." /></div>'+
+    '<div class="field"><label>Title</label><input id="a-title" required value="'+escapeHtml(a.title||"")+'" placeholder="Discovery call, ACA review..." /></div>'+
     '<div class="row2"><div class="field"><label>Start</label><input id="a-start" type="datetime-local" required value="'+(a.start||"")+'" /></div>'+
     '<div class="field"><label>End</label><input id="a-end" type="datetime-local" value="'+(a.end||"")+'" /></div></div>'+
     '<div class="field"><label>With (existing client)</label><select id="a-acct">'+withOpts+'</select></div>'+
-    '<div class="field"><label>Or with (free text)</label><input id="a-with" value="'+escAttr(a.with)+'" placeholder="Lead name, group contact..." /></div>'+
-    '<div class="field"><label>Location / link</label><input id="a-loc" value="'+escAttr(a.location)+'" placeholder="Phone, Zoom URL, address..." /></div>'+
-    '<div class="field"><label>Notes</label><textarea id="a-notes" rows="2">'+escAttr(a.notes)+'</textarea></div>'+
-    (gcal.ready?'<p class="hint" style="color:var(--ok);font-weight:600">&#10003; Will be auto-pushed to your Google Calendar.</p>':'<p class="hint">Connect Google Calendar in Settings to auto-push.</p>')+
+    '<div class="field"><label>Or with (free text)</label><input id="a-with" value="'+escapeHtml(a.with||"")+'" placeholder="Lead name, group contact..." /></div>'+
+    '<div class="field"><label>Location / link</label><input id="a-loc" value="'+escapeHtml(a.location||"")+'" placeholder="Phone, Zoom URL, address..." /></div>'+
+    '<div class="field"><label>Notes</label><textarea id="a-notes" rows="2">'+escapeHtml(a.notes||"")+'</textarea></div>'+
+    (gcal.ready?'<div class="notice notice-info">Connected to Google Calendar. This appointment will auto-push on save.</div>':'<div class="notice notice-info">Google Calendar not connected. Connect it in Settings to auto-push.</div>')+
     '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div>'+
     '</form>';
   openModal(html);
@@ -1027,7 +919,7 @@ function openApptForm(existing){
     a.with=$("a-with").value.trim();
     a.location=$("a-loc").value.trim();a.notes=$("a-notes").value.trim();
     if(a.accountId&&!a.with){var ac=accts.filter(function(x){return x.id===a.accountId;})[0];if(ac)a.with=((ac.firstName||"")+" "+(ac.lastName||"")).trim()||ac.email;}
-    // Push to Google Calendar if connected and not already pushed
+    // Push to Google if connected and not yet pushed
     if(gcal.ready&&!a.googleEventId){
       var gid=await gcalPushEvent(a);
       if(gid)a.googleEventId=gid;
@@ -1051,6 +943,84 @@ $("export-events-btn").addEventListener("click",function(){
 });
 
 /* ====================================================================
+   GOOGLE CALENDAR (GIS token client)
+   ==================================================================== */
+var gcal={ready:false,token:"",expires:0,email:""};
+function getGcalClientId(){return localStorage.getItem(K.gcalCid)||"";}
+function setGcalClientId(v){localStorage.setItem(K.gcalCid,v||"");}
+function getGcalToken(){try{return JSON.parse(localStorage.getItem(K.gcalTok)||"null");}catch(e){return null;}}
+function setGcalToken(o){if(o)localStorage.setItem(K.gcalTok,JSON.stringify(o));else localStorage.removeItem(K.gcalTok);}
+function clearGcalToken(){gcal.ready=false;gcal.token="";gcal.expires=0;gcal.email="";setGcalToken(null);localStorage.removeItem(K.gcalEmail);}
+function loadGcalFromStorage(){
+  var t=getGcalToken();
+  if(t&&t.access_token&&t.expires>Date.now()+5000){
+    gcal.ready=true;gcal.token=t.access_token;gcal.expires=t.expires;gcal.email=localStorage.getItem(K.gcalEmail)||"";
+  }
+}
+function paintGcalUi(){
+  var box=$("gcal-status");if(!box)return;
+  var cid=getGcalClientId();
+  $("gcal-cid").value=cid;
+  if(!cid){box.innerHTML='<div class="notice notice-info">Save your OAuth Client ID above, then click Connect.</div>';$("gcal-disconnect").hidden=true;return;}
+  if(gcal.ready){
+    box.innerHTML='<div class="notice notice-ok">Connected'+(gcal.email?(" as <strong>"+escapeHtml(gcal.email)+"</strong>"):"")+'. New appointments auto-push.</div>';
+    $("gcal-disconnect").hidden=false;
+  }else{
+    box.innerHTML='<div class="notice notice-info">Not connected. Click Connect Google Calendar.</div>';
+    $("gcal-disconnect").hidden=true;
+  }
+}
+async function gcalFetchEmail(){
+  try{
+    var r=await fetch("https://www.googleapis.com/oauth2/v2/userinfo",{headers:{"Authorization":"Bearer "+gcal.token}});
+    if(!r.ok)return;
+    var d=await r.json();if(d.email){gcal.email=d.email;localStorage.setItem(K.gcalEmail,d.email);}
+  }catch(e){}
+}
+function gcalConnect(){
+  var cid=(getGcalClientId()||"").trim();
+  if(!cid){notice("gcal-msg","err","Save your OAuth Client ID first.");return;}
+  if(typeof google==="undefined"||!google.accounts||!google.accounts.oauth2){
+    notice("gcal-msg","err","Google Identity Services hasn't loaded yet. Try again in a moment.");return;
+  }
+  var client=google.accounts.oauth2.initTokenClient({
+    client_id:cid,
+    scope:"https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.email",
+    callback:async function(resp){
+      if(resp.error){notice("gcal-msg","err","Google error: "+resp.error);return;}
+      var tok={access_token:resp.access_token,expires:Date.now()+(Number(resp.expires_in||3600)*1000)};
+      gcal.ready=true;gcal.token=tok.access_token;gcal.expires=tok.expires;setGcalToken(tok);
+      await gcalFetchEmail();
+      paintGcalUi();
+      notice("gcal-msg","ok","Connected.");
+    }
+  });
+  client.requestAccessToken({prompt:"consent"});
+}
+async function gcalPushEvent(a){
+  if(!gcal.ready)return null;
+  if(Date.now()>gcal.expires){clearGcalToken();paintGcalUi();return null;}
+  var endIso=a.end?new Date(a.end).toISOString():new Date(new Date(a.start).getTime()+30*60000).toISOString();
+  var body={
+    summary:a.title||"VS Benefits appointment",
+    description:[a.with?"With: "+a.with:"",a.notes||""].filter(Boolean).join("\n\n"),
+    location:a.location||"",
+    start:{dateTime:new Date(a.start).toISOString()},
+    end:{dateTime:endIso}
+  };
+  try{
+    var r=await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events",{method:"POST",headers:{"Authorization":"Bearer "+gcal.token,"Content-Type":"application/json"},body:JSON.stringify(body)});
+    if(r.status===401){clearGcalToken();paintGcalUi();return null;}
+    if(!r.ok)return null;
+    var d=await r.json();return d.id||null;
+  }catch(e){return null;}
+}
+async function gcalDeleteEvent(gid){
+  if(!gcal.ready||!gid)return;
+  try{await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events/"+encodeURIComponent(gid),{method:"DELETE",headers:{"Authorization":"Bearer "+gcal.token}});}catch(e){}
+}
+
+/* ====================================================================
    CLIENT ACCOUNTS
    ==================================================================== */
 function renderAccounts(){
@@ -1059,7 +1029,7 @@ function renderAccounts(){
   $("b-acct").textContent=accts.length;
   var rows=accts.filter(function(a){if(!q)return true;return[a.firstName,a.lastName,a.email,a.phone].join(" ").toLowerCase().indexOf(q)>=0;});
   var box=$("accts-list");box.innerHTML="";
-  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No client accounts yet. Members who sign up at /client.html appear here, or click + Create client account."}));return;}
+  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No client accounts yet. Members who sign up at /client.html appear here automatically, or click + Create client account."}));return;}
   rows.forEach(function(a){
     var row=el("div",{class:"row"});
     var top=el("div",{class:"top"});
@@ -1069,7 +1039,10 @@ function renderAccounts(){
     if(a.photoDataUrl){av.appendChild(el("img",{src:a.photoDataUrl,alt:""}));}else{av.textContent=initials(a);}
     nameLine.appendChild(av);
     var nameInner=el("div");
-    nameInner.appendChild(el("div",{class:"name",text:((a.firstName||"")+" "+(a.lastName||"")).trim()||"(no name)"}));
+    var nameLbl=el("div",{class:"name"});
+    var dot=el("span",{class:"presence-dot "+(isOnline(a.id)?"on":"off"),title:isOnline(a.id)?"Online":"Offline"});
+    nameLbl.appendChild(dot);nameLbl.appendChild(document.createTextNode(((a.firstName||"")+" "+(a.lastName||"")).trim()||"(no name)"));
+    nameInner.appendChild(nameLbl);
     nameInner.appendChild(el("div",{class:"sub",text:a.email}));
     nameLine.appendChild(nameInner);
     nameWrap.appendChild(nameLine);
@@ -1078,11 +1051,10 @@ function renderAccounts(){
     row.appendChild(top);
     if(a.phone)row.appendChild(el("div",{class:"sub",text:a.phone}));
     if(a.plan&&(a.plan.carrier||a.plan.planName))row.appendChild(el("div",{class:"sub",text:"Plan: "+[a.plan.carrier,a.plan.planName].filter(Boolean).join(" - ")+(a.plan.effectiveDate?(" (eff. "+fmtDate(a.plan.effectiveDate)+")"):"")}));
-    var docCount=(a.documents||[]).length;
-    if(docCount)row.appendChild(el("div",{class:"sub",text:docCount+" document"+(docCount===1?"":"s")+" shared with client"}));
-    row.appendChild(el("div",{class:"meta",text:"Joined "+fmtDate(a.created)+" - last seen "+(a.lastSignIn?fmtDate(a.lastSignIn):"never")}));
+    var lastSeenTs=presenceMap[a.id]||a.lastSignIn||0;
+    row.appendChild(el("div",{class:"meta",text:"Joined "+fmtDate(a.created)+(isOnline(a.id)?" - online now":(lastSeenTs?(" - last seen "+fmtDateTime(lastSeenTs)):" - never signed in"))}));
     var acts=el("div",{class:"acts"});
-    acts.appendChild(el("button",{class:"btn btn-primary btn-sm",type:"button",text:"Set plan & docs",onclick:function(){openPlanForm(a);}}));
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Set plan & docs",onclick:function(){openPlanForm(a);}}));
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Message",onclick:function(){msgClient(a);}}));
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Reset password",onclick:function(){if(confirm("Wipe this client's password? They'll need a new one from you to sign in."))resetPw(a.id);}}));
     if(a.status==="revoked"){
@@ -1100,69 +1072,62 @@ function updateAcct(id,patch){
 }
 function resetPw(id){updateAcct(id,{passwordHash:""});alert("Password cleared. Tell the client to sign up again or contact you for a new one.");}
 function msgClient(a){switchTab("support");selectThread(a.id);}
-
 function openPlanForm(a){
   var p=a.plan||{carrier:"",planName:"",effectiveDate:"",renewalDate:"",monthlyPremium:"",notes:""};
-  var docs=(a.documents||[]).slice();
-  function docMiniHtml(d){
-    return '<div class="doc-mini" data-id="'+escAttr(d.id)+'">'+
-      '<span class="nm">'+escAttr(d.name)+'</span>'+
-      '<span class="sz">'+fmtBytes(d.size)+'</span>'+
-      '<button type="button" data-rm="'+escAttr(d.id)+'" title="Remove">&times;</button>'+
-    '</div>';
-  }
   var html=
-    '<h3>Plan & documents for '+escAttr(((a.firstName||"")+" "+(a.lastName||"")).trim()||a.email)+'</h3>'+
+    '<h3>Plan & documents for '+escapeHtml(((a.firstName||"")+" "+(a.lastName||"")).trim()||a.email)+'</h3>'+
     '<form id="plan-form">'+
-    '<div class="row2"><div class="field"><label>Carrier</label><input id="pl-carrier" value="'+escAttr(p.carrier)+'" /></div>'+
-    '<div class="field"><label>Plan name</label><input id="pl-name" value="'+escAttr(p.planName)+'" /></div></div>'+
-    '<div class="row2"><div class="field"><label>Effective date</label><input id="pl-eff" type="date" value="'+escAttr(p.effectiveDate)+'" /></div>'+
-    '<div class="field"><label>Renewal date</label><input id="pl-ren" type="date" value="'+escAttr(p.renewalDate)+'" /></div></div>'+
-    '<div class="field"><label>Monthly premium ($)</label><input id="pl-prem" type="number" step="0.01" min="0" value="'+escAttr(p.monthlyPremium)+'" /></div>'+
-    '<div class="field"><label>Notes (deductible, network, member ID...)</label><textarea id="pl-notes" rows="3">'+escAttr(p.notes)+'</textarea></div>'+
-
+    '<div class="row2"><div class="field"><label>Carrier</label><input id="pl-carrier" value="'+escapeHtml(p.carrier||"")+'" /></div>'+
+    '<div class="field"><label>Plan name</label><input id="pl-name" value="'+escapeHtml(p.planName||"")+'" /></div></div>'+
+    '<div class="row2"><div class="field"><label>Effective date</label><input id="pl-eff" type="date" value="'+(p.effectiveDate||"")+'" /></div>'+
+    '<div class="field"><label>Renewal date</label><input id="pl-ren" type="date" value="'+(p.renewalDate||"")+'" /></div></div>'+
+    '<div class="field"><label>Monthly premium ($)</label><input id="pl-prem" type="number" step="0.01" min="0" value="'+(p.monthlyPremium||"")+'" /></div>'+
+    '<div class="field"><label>Notes (deductible, network, member ID...)</label><textarea id="pl-notes" rows="3">'+escapeHtml(p.notes||"")+'</textarea></div>'+
     '<div class="docmgr">'+
-      '<h4>Documents shared with client</h4>'+
-      '<div class="file-pick">'+
-        '<label class="fp">+ Add file<input id="pl-file" type="file" hidden accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt" /></label>'+
-        '<span style="font-size:12px;color:var(--muted)">Insurance card, ID copy, plan brochure (max 700 KB each)</span>'+
-      '</div>'+
-      '<div id="pl-docs">'+docs.map(docMiniHtml).join("")+'</div>'+
-      '<div id="pl-doc-msg" style="margin-top:6px"></div>'+
+      '<h4>Documents (client sees these on their Plan tab)</h4>'+
+      '<div id="doc-list"></div>'+
+      '<label class="btn btn-ghost btn-sm" style="cursor:pointer;margin-top:6px">+ Upload document<input id="doc-input" type="file" accept="image/*,.pdf,.doc,.docx" hidden multiple /></label>'+
+      '<div class="hint" style="margin-top:6px">Max ~700KB per file (image, PDF, etc.).</div>'+
     '</div>'+
-
     '<div class="modal-acts">'+(a.plan?'<button type="button" class="btn btn-danger" id="pl-clear">Clear plan</button>':'')+'<button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div>'+
     '</form>';
   openModal(html);
-
-  // File picker
-  $("pl-file").addEventListener("change",function(e){
-    var f=e.target.files[0];if(!f)return;
-    if(f.size>700*1024){notice("pl-doc-msg","err","File is over 700 KB. Please pick a smaller file or compress it.");$("pl-file").value="";return;}
-    var reader=new FileReader();
-    reader.onload=function(){
-      docs.push({id:uid(),name:f.name,type:f.type||"",size:f.size,dataUrl:reader.result,ts:Date.now()});
-      $("pl-docs").innerHTML=docs.map(docMiniHtml).join("");
-      notice("pl-doc-msg","ok","Added. Click Save to share with the client.");
-    };
-    reader.readAsDataURL(f);
-    $("pl-file").value="";
+  var docs=(a.documents||[]).slice();
+  function renderDocs(){
+    var box=$("doc-list");box.innerHTML="";
+    if(!docs.length){box.appendChild(el("div",{class:"empty",style:"padding:14px;margin:6px 0",text:"No documents yet."}));return;}
+    docs.slice().sort(function(x,y){return (y.ts||0)-(x.ts||0);}).forEach(function(d){
+      var row=el("div",{class:"docrow"});
+      row.appendChild(el("div",{class:"dname"},[
+        el("div",{text:d.name||"(file)"}),
+        el("div",{class:"dmeta",text:fmtBytes(d.size)+" - "+fmtDate(d.ts)})
+      ]));
+      var act=el("div",{class:"dact"});
+      act.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:d.dataUrl,target:"_blank",download:d.name||"document",text:"View"}));
+      act.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Remove",onclick:function(){docs=docs.filter(function(x){return x.id!==d.id;});renderDocs();}}));
+      row.appendChild(act);
+      box.appendChild(row);
+    });
+  }
+  renderDocs();
+  $("doc-input").addEventListener("change",function(e){
+    var files=Array.from(e.target.files||[]);
+    files.forEach(function(f){
+      if(f.size>700*1024){alert('"'+f.name+'" is over 700KB. Please shrink it first.');return;}
+      var r=new FileReader();
+      r.onload=function(){docs.push({id:uid(),name:f.name,size:f.size,type:f.type,dataUrl:r.result,ts:Date.now()});renderDocs();};
+      r.readAsDataURL(f);
+    });
+    $("doc-input").value="";
   });
-  // Remove handler (delegated)
-  $("pl-docs").addEventListener("click",function(e){
-    var t=e.target;if(t.tagName!=="BUTTON")return;
-    var rm=t.getAttribute("data-rm");if(!rm)return;
-    docs=docs.filter(function(d){return d.id!==rm;});
-    $("pl-docs").innerHTML=docs.map(docMiniHtml).join("");
-  });
-
   $("plan-form").addEventListener("submit",function(e){
     e.preventDefault();
     var plan={carrier:$("pl-carrier").value.trim(),planName:$("pl-name").value.trim(),effectiveDate:$("pl-eff").value,renewalDate:$("pl-ren").value,monthlyPremium:$("pl-prem").value,notes:$("pl-notes").value.trim(),updated:Date.now()};
     updateAcct(a.id,{plan:plan,documents:docs});closeModal();
   });
-  if($("pl-clear"))$("pl-clear").addEventListener("click",function(){if(confirm("Remove plan info? Documents will be kept.")){updateAcct(a.id,{plan:null,documents:docs});closeModal();}});
+  if($("pl-clear"))$("pl-clear").addEventListener("click",function(){if(confirm("Remove plan info?")){updateAcct(a.id,{plan:null});closeModal();}});
 }
+function fmtBytes(n){if(!n)return"0 B";if(n<1024)return n+" B";if(n<1048576)return (n/1024).toFixed(1)+" KB";return (n/1048576).toFixed(1)+" MB";}
 function openCreateAcctForm(){
   var html=
     '<h3>Create client account</h3>'+
@@ -1194,8 +1159,8 @@ function openCreateAcctForm(){
 $("create-acct-btn").addEventListener("click",openCreateAcctForm);
 $("acct-search").addEventListener("input",renderAccounts);
 $("export-accts-btn").addEventListener("click",function(){
-  var rows=[["firstName","lastName","email","phone","status","plan_carrier","plan_name","plan_effective","plan_premium","docs","created","lastSignIn"]];
-  getAccounts().forEach(function(a){var p=a.plan||{};rows.push([a.firstName,a.lastName,a.email,a.phone,a.status||"active",p.carrier||"",p.planName||"",p.effectiveDate||"",p.monthlyPremium||"",(a.documents||[]).length,a.created?new Date(a.created).toISOString():"",a.lastSignIn?new Date(a.lastSignIn).toISOString():""].map(csvEscape));});
+  var rows=[["firstName","lastName","email","phone","status","plan_carrier","plan_name","plan_effective","plan_premium","created","lastSignIn"]];
+  getAccounts().forEach(function(a){var p=a.plan||{};rows.push([a.firstName,a.lastName,a.email,a.phone,a.status||"active",p.carrier||"",p.planName||"",p.effectiveDate||"",p.monthlyPremium||"",a.created?new Date(a.created).toISOString():"",a.lastSignIn?new Date(a.lastSignIn).toISOString():""].map(csvEscape));});
   downloadFile("clients-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
 });
 
@@ -1221,7 +1186,12 @@ function renderSupport(){
     var name=ac?(((ac.firstName||"")+" "+(ac.lastName||"")).trim()||ac.email):"(unknown)";
     var unread=byAcct[id].filter(function(m){return m.from==="client"&&!m.read;}).length;
     var row=el("div",{class:"thread"+(activeThreadId===id?" active":""),onclick:function(){selectThread(id);}});
-    var left=el("div");left.appendChild(el("div",{class:"tn",text:name}));left.appendChild(el("div",{class:"te",text:ac?ac.email:""}));
+    var left=el("div");
+    var nm=el("div",{class:"tn"});
+    if(ac)nm.appendChild(el("span",{class:"presence-dot "+(isOnline(ac.id)?"on":"off")}));
+    nm.appendChild(document.createTextNode(name));
+    left.appendChild(nm);
+    left.appendChild(el("div",{class:"te",text:ac?ac.email:""}));
     row.appendChild(left);
     if(unread)row.appendChild(el("div",{class:"tu",text:unread}));
     box.appendChild(row);
@@ -1242,7 +1212,7 @@ function selectThread(id){
   msgs.forEach(function(m){
     var d=el("div",{class:"msg "+(m.from==="advisor"?"advisor":"client")});
     d.appendChild(el("div",{text:m.text}));
-    d.appendChild(el("div",{class:"meta",text:(m.from==="advisor"?"Bradley - ":"Client - ")+fmtDateTime(m.ts)}));
+    d.appendChild(el("div",{class:"meta",text:(m.from==="advisor"?"You - ":"Client - ")+fmtDateTime(m.ts)}));
     box.appendChild(d);
   });
   box.scrollTop=box.scrollHeight;
@@ -1263,9 +1233,9 @@ $("reply-form").addEventListener("submit",function(e){
 });
 
 /* ====================================================================
-   REFERRALS
+   REFERRALS — status: in-progress / declined / paid
    ==================================================================== */
-var REF_STATUSES=["new","contacted","quoted","enrolled","lost"];
+var REF_STATUSES=["in-progress","declined","paid"];
 function renderReferrals(){
   var q=($("ref-search").value||"").toLowerCase().trim();
   var refs=getReferrals();
@@ -1284,8 +1254,9 @@ function renderReferrals(){
       el("div",{class:"sub",text:"Referred by "+fromName})
     ]));
     var pills=el("div",{style:"display:flex;flex-direction:column;gap:4px;align-items:flex-end"});
-    pills.appendChild(el("span",{class:"status-pill status-"+(r.status||"new"),text:r.status||"new"}));
-    pills.appendChild(el("span",{class:"status-pill status-"+(r.paid?"paid":"unpaid"),text:r.paid?"PAID $"+(r.payout||0):"UNPAID"}));
+    var st=r.status||"in-progress";
+    pills.appendChild(el("span",{class:"status-pill status-"+st,text:st}));
+    if(r.payout)pills.appendChild(el("span",{class:"status-pill status-"+(st==="paid"?"paid":"unpaid"),text:"$"+Number(r.payout).toFixed(2)}));
     top.appendChild(pills);
     row.appendChild(top);
     if(r.referralEmail)row.appendChild(el("div",{class:"sub",text:r.referralEmail}));
@@ -1296,8 +1267,9 @@ function renderReferrals(){
     var acts=el("div",{class:"acts"});
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Edit",onclick:function(){openRefForm(r);}}));
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Convert to lead",onclick:function(){convertReferralToLead(r);}}));
-    if(r.paid){acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Mark unpaid",onclick:function(){updateRef(r.id,{paid:false,paidAt:0});}}));}
-    else{acts.appendChild(el("button",{class:"btn btn-teal btn-sm",type:"button",text:"Mark paid",onclick:function(){var amt=prompt("Payout amount paid to referrer ($):",r.payout||"50");if(amt!==null)updateRef(r.id,{paid:true,paidAt:Date.now(),payout:Number(amt)||0});}}));}
+    if(st!=="paid")acts.appendChild(el("button",{class:"btn btn-teal btn-sm",type:"button",text:"Mark paid",onclick:function(){var amt=prompt("Payout amount paid ($):",r.payout||"50");if(amt!==null)updateRef(r.id,{status:"paid",paidAt:Date.now(),payout:Number(amt)||0,read:true});}}));
+    else acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Undo paid",onclick:function(){updateRef(r.id,{status:"in-progress",paidAt:0});}}));
+    if(st!=="declined")acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Decline",onclick:function(){updateRef(r.id,{status:"declined",read:true});}}));
     acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete",onclick:function(){if(confirm("Delete this referral?")){saveReferrals(getReferrals().filter(function(x){return x.id!==r.id;}));renderReferrals();}}}));
     row.appendChild(acts);
     box.appendChild(row);
@@ -1308,17 +1280,16 @@ function openRefForm(r){
   var html=
     '<h3>Edit referral</h3>'+
     '<form id="r-form">'+
-    '<div class="field"><label>Status</label><select id="r-status">'+REF_STATUSES.map(function(s){return '<option value="'+s+'"'+(s===(r.status||"new")?" selected":"")+'>'+s+'</option>';}).join("")+'</select></div>'+
-    '<div class="row2"><div class="field"><label>Payout amount ($)</label><input id="r-payout" type="number" step="0.01" min="0" value="'+(r.payout||0)+'" /></div>'+
-    '<div class="field"><label>Paid?</label><select id="r-paid"><option value="0"'+(r.paid?"":" selected")+'>Unpaid</option><option value="1"'+(r.paid?" selected":"")+'>Paid</option></select></div></div>'+
-    '<div class="field"><label>Notes</label><textarea id="r-notes" rows="2">'+escAttr(r.notes)+'</textarea></div>'+
+    '<div class="field"><label>Status</label><select id="r-status">'+REF_STATUSES.map(function(s){return '<option value="'+s+'"'+(s===(r.status||"in-progress")?" selected":"")+'>'+s+'</option>';}).join("")+'</select></div>'+
+    '<div class="field"><label>Payout amount ($)</label><input id="r-payout" type="number" step="0.01" min="0" value="'+(r.payout||0)+'" /></div>'+
+    '<div class="field"><label>Notes</label><textarea id="r-notes" rows="2">'+escapeHtml(r.notes||"")+'</textarea></div>'+
     '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div>'+
     '</form>';
   openModal(html);
   $("r-form").addEventListener("submit",function(e){
     e.preventDefault();
-    var paid=$("r-paid").value==="1";
-    updateRef(r.id,{status:$("r-status").value,payout:Number($("r-payout").value)||0,paid:paid,paidAt:paid?(r.paidAt||Date.now()):0,notes:$("r-notes").value.trim(),read:true});
+    var st=$("r-status").value;
+    updateRef(r.id,{status:st,payout:Number($("r-payout").value)||0,paidAt:st==="paid"?(r.paidAt||Date.now()):0,notes:$("r-notes").value.trim(),read:true});
     closeModal();
   });
 }
@@ -1326,14 +1297,14 @@ function convertReferralToLead(r){
   var accts=getAccounts();var fa=accts.filter(function(a){return a.id===r.fromAccountId;})[0];
   var lead={id:uid(),name:r.referralName||"",company:"",phone:r.referralPhone||"",email:r.referralEmail||"",address:"",coverage:"",status:"new",next:"Referred by "+(fa?((fa.firstName||"")+" "+(fa.lastName||"")).trim():"client"),notes:r.notes||"",created:Date.now(),updated:Date.now()};
   var leads=getLeads();leads.unshift(lead);saveLeads(leads);
-  updateRef(r.id,{status:"contacted",read:true});
+  updateRef(r.id,{read:true});
   alert("Added to Leads. Switching to Leads tab.");switchTab("leads");
 }
 $("ref-search").addEventListener("input",renderReferrals);
 $("export-refs-btn").addEventListener("click",function(){
-  var rows=[["from_name","from_email","ref_name","ref_phone","ref_email","relationship","notes","status","payout","paid","paid_at","submitted"]];
+  var rows=[["from_name","from_email","ref_name","ref_phone","ref_email","relationship","notes","status","payout","paid_at","submitted"]];
   var accts=getAccounts();
-  getReferrals().forEach(function(r){var fa=accts.filter(function(a){return a.id===r.fromAccountId;})[0];rows.push([fa?((fa.firstName||"")+" "+(fa.lastName||"")).trim():"",fa?fa.email:"",r.referralName,r.referralPhone,r.referralEmail,r.relationship,r.notes,r.status,r.payout||0,r.paid?"yes":"no",r.paidAt?new Date(r.paidAt).toISOString():"",new Date(r.ts).toISOString()].map(csvEscape));});
+  getReferrals().forEach(function(r){var fa=accts.filter(function(a){return a.id===r.fromAccountId;})[0];rows.push([fa?((fa.firstName||"")+" "+(fa.lastName||"")).trim():"",fa?fa.email:"",r.referralName,r.referralPhone,r.referralEmail,r.relationship,r.notes,r.status||"in-progress",r.payout||0,r.paidAt?new Date(r.paidAt).toISOString():"",new Date(r.ts).toISOString()].map(csvEscape));});
   downloadFile("referrals-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
 });
 
@@ -1345,14 +1316,41 @@ function renderSettings(){
   $("settings-storage").textContent=(bytes/1024).toFixed(1)+" KB";
   $("wh-input").value=getWebhook();
   paintGcalUi();
+  renderAdminsList();
+}
+function renderAdminsList(){
+  var box=$("admins-list");if(!box)return;box.innerHTML="";
+  var list=getAdmins();
+  if(!list.length){box.appendChild(el("div",{class:"empty",text:"No admin accounts yet."}));return;}
+  var me=currentAdmin();
+  list.forEach(function(a){
+    var row=el("div",{class:"row"});
+    var top=el("div",{class:"top"});
+    top.appendChild(el("div",{},[
+      el("div",{class:"name",text:(((a.firstName||"")+" "+(a.lastName||"")).trim()||a.username)+(me&&me.id===a.id?" (you)":"")}),
+      el("div",{class:"sub",text:"@"+a.username+(a.email?(" - "+a.email):"")})
+    ]));
+    top.appendChild(el("span",{class:"status-pill status-active",text:"admin"}));
+    row.appendChild(top);
+    row.appendChild(el("div",{class:"meta",text:"Created "+fmtDate(a.created)}));
+    if(!me||me.id!==a.id){
+      var acts=el("div",{class:"acts"});
+      acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Remove",onclick:function(){if(confirm("Remove this admin account?")){saveAdmins(getAdmins().filter(function(x){return x.id!==a.id;}));renderAdminsList();}}}));
+      row.appendChild(acts);
+    }
+    box.appendChild(row);
+  });
 }
 $("pw-form").addEventListener("submit",async function(e){
   e.preventDefault();
+  var me=currentAdmin();if(!me)return notice("pw-msg","err","Not signed in.");
   var cur=$("pw-cur").value,n1=$("pw-new").value,n2=$("pw-new2").value;
-  if(await sha256(cur)!==localStorage.getItem(K.hash))return notice("pw-msg","err","Current password is wrong.");
+  if(await sha256(cur)!==me.passwordHash)return notice("pw-msg","err","Current password is wrong.");
   if(n1.length<8)return notice("pw-msg","err","New password must be 8+ chars.");
   if(n1!==n2)return notice("pw-msg","err","Passwords don't match.");
-  localStorage.setItem(K.hash,await sha256(n1));$("pw-form").reset();notice("pw-msg","ok","Password updated.");
+  var hash=await sha256(n1);
+  var arr=getAdmins().map(function(a){if(a.id===me.id)a.passwordHash=hash;return a;});
+  saveAdmins(arr);$("pw-form").reset();notice("pw-msg","ok","Password updated.");
 });
 $("code-form").addEventListener("submit",function(e){
   e.preventDefault();
@@ -1365,8 +1363,14 @@ $("code-form").addEventListener("submit",function(e){
 $("wh-form").addEventListener("submit",function(e){
   e.preventDefault();setWebhook($("wh-input").value.trim());notice("wh-msg","ok","Webhook saved.");
 });
+$("gcal-cid-form").addEventListener("submit",function(e){
+  e.preventDefault();setGcalClientId($("gcal-cid").value.trim());paintGcalUi();notice("gcal-msg","ok","Client ID saved.");
+});
+$("gcal-connect").addEventListener("click",gcalConnect);
+$("gcal-disconnect").addEventListener("click",function(){clearGcalToken();paintGcalUi();});
+
 $("export-all-btn").addEventListener("click",function(){
-  var bundle={exported:new Date().toISOString(),leads:getLeads(),accounts:getAccounts(),messages:getMessages(),referrals:getReferrals(),appointments:getAppts(),webhook:getWebhook(),setupCode:currentSetupCode()};
+  var bundle={exported:new Date().toISOString(),leads:getLeads(),accounts:getAccounts(),messages:getMessages(),referrals:getReferrals(),appointments:getAppts(),admins:getAdmins(),webhook:getWebhook(),setupCode:currentSetupCode()};
   downloadFile("vsbenefits-backup-"+new Date().toISOString().slice(0,10)+".json",JSON.stringify(bundle,null,2),"application/json");
 });
 $("import-file").addEventListener("change",function(e){
@@ -1376,6 +1380,7 @@ $("import-file").addEventListener("change",function(e){
       var b=JSON.parse(r.result);
       if(b.leads)saveLeads(b.leads);if(b.accounts)saveAccounts(b.accounts);if(b.messages)saveMessages(b.messages);
       if(b.referrals)saveReferrals(b.referrals);if(b.appointments)saveAppts(b.appointments);
+      if(b.admins)saveAdmins(b.admins);
       if(b.webhook)setWebhook(b.webhook);if(b.setupCode)localStorage.setItem(K.setupCode,b.setupCode);
       alert("Import done.");renderAll();
     }catch(err){alert("Bad JSON file.");}
@@ -1383,40 +1388,14 @@ $("import-file").addEventListener("change",function(e){
   r.readAsText(f);
 });
 
-/* Settings: Cloud sync force-pull + Google Cal connect */
-$("force-pull-btn").addEventListener("click",async function(){
-  if(!cloud.ready)return alert("Sync isn't ready yet. Check your internet.");
-  await Promise.all(SYNC_KEYS.map(pullOnce));
-  renderAll();alert("Pulled latest from cloud.");
-});
-$("gcal-save-id").addEventListener("click",function(){
-  var v=$("gcal-client-id").value.trim();
-  setGcalClientId(v);
-  notice("gcal-msg","ok","Client ID saved.");
-  paintGcalUi();
-});
-$("gcal-connect-btn").addEventListener("click",gcalConnect);
-$("gcal-disconnect-btn").addEventListener("click",function(){
-  clearGcalToken();paintGcalUi();notice("gcal-msg","ok","Disconnected. Future appointments will not auto-push.");
-});
-
 function renderAll(){renderLeads();renderAccounts();renderSupport();renderReferrals();renderSettings();renderCalendar();}
 
-/* ====================================================================
-   Public API for client.html (kept for backward compat - no-op now since
-   both portals share Firestore directly)
-   ==================================================================== */
-window.VSAdmin={
-  ingestMessage:function(o){var m={id:uid(),accountId:o.accountId,from:o.from||"client",text:o.text||"",ts:o.ts||Date.now(),read:false};var a=getMessages();a.push(m);saveMessages(a);if(!$("dash-view").hidden)renderSupport();return m.id;},
-  ingestReferral:function(o){var r={id:uid(),fromAccountId:o.fromAccountId,referralName:o.referralName||"",referralPhone:o.referralPhone||"",referralEmail:o.referralEmail||"",relationship:o.relationship||"",notes:o.notes||"",status:"new",ts:Date.now(),read:false,payout:0,paid:false};var a=getReferrals();a.unshift(r);saveReferrals(a);if(!$("dash-view").hidden)renderReferrals();return r.id;},
-  recordSignIn:function(email){saveAccounts(getAccounts().map(function(a){if(a.email===(email||"").toLowerCase())a.lastSignIn=Date.now();return a;}));if(!$("dash-view").hidden)renderAccounts();},
-  recordAccountCreated:function(){if(!$("dash-view").hidden)renderAccounts();}
-};
-
 /* Boot */
-route();
-initCloud();
-
+loadGcalFromStorage();
+(async function boot(){
+  await initCloud();
+  await route();
+})();
 })();
 </script>
 
