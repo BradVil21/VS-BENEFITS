@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>VS Benefits - Client Portal</title>
+<style>
+:root{
+  --bg:#f6f8fb;--card:#ffffff;--ink:#0e1b2c;--muted:#5b6a7d;--line:#e5ecf3;
+  --brand:#0a4f8a;--brand-2:#1e88c8;--accent:#10b981;--warn:#b91c1c;--ok:#047857;
+  --shadow:0 6px 18px rgba(14,27,44,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16px;line-height:1.45}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:inherit;font-size:15px;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink);padding:9px 14px;transition:background .15s,border .15s}
+button:hover{background:#f1f5fa}
+button.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+button.primary:hover{background:var(--brand-2);border-color:var(--brand-2)}
+button.danger{background:#fff;color:var(--warn);border-color:#f1c2c2}
+button.danger:hover{background:#fdecec}
+button.ghost{background:transparent;border-color:transparent;color:var(--muted)}
+button.ghost:hover{background:#eef3f8;color:var(--ink)}
+button:disabled{opacity:.55;cursor:not-allowed}
+input,select,textarea{font-family:inherit;font-size:15px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink);padding:10px 12px;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand-2);box-shadow:0 0 0 3px rgba(30,136,200,.18)}
+label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:5px}
+.field{margin-bottom:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row > *{flex:1;min-width:0}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:999px;background:#eef3f8;color:var(--brand);text-transform:uppercase}
+.badge.ok{background:#dcfce7;color:#047857}
+.badge.warn{background:#fef3c7;color:#92400e}
+.badge.err{background:#fee2e2;color:#b91c1c}
+.hidden{display:none !important}
+header.appbar{background:#fff;border-bottom:1px solid var(--line);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:20}
+header.appbar .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--brand);font-size:18px}
+header.appbar .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);display:inline-block}
+header.appbar .who{font-size:13px;color:var(--muted)}
+.tabs{display:flex;gap:4px;padding:10px 14px;background:#fff;border-bottom:1px solid var(--line);overflow-x:auto}
+.tabs button{border:none;background:transparent;color:var(--muted);font-weight:600;padding:8px 14px;border-radius:8px;white-space:nowrap}
+.tabs button.active{background:var(--brand);color:#fff}
+main{padding:18px;max-width:1100px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:18px;margin-bottom:18px}
+.card h2{margin:0 0 6px;font-size:18px}
+.card .desc{color:var(--muted);font-size:14px;margin-bottom:14px}
+.banner{padding:12px 14px;border-radius:10px;font-size:14px;margin-bottom:14px}
+.banner.info{background:#eef6fc;color:#075a8c;border:1px solid #cce5f4}
+.banner.ok{background:#ecfdf5;color:#065f46;border:1px solid #b6ebd1}
+.banner.err{background:#fef2f2;color:#9b1c1c;border:1px solid #f3c2c2}
+.center-screen{min-height:90vh;display:flex;align-items:center;justify-content:center;padding:18px}
+.auth-card{width:100%;max-width:480px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:24px}
+.auth-card h1{margin:0 0 4px;color:var(--brand);font-size:24px}
+.auth-card .sub{color:var(--muted);margin-bottom:18px;font-size:14px}
+.tabs.tabs-pill{padding:0;border:none;background:transparent;margin-bottom:16px;justify-content:center;gap:6px}
+.tabs.tabs-pill button{background:#eef3f8;color:var(--muted);border-radius:999px;padding:7px 18px;font-size:14px}
+.tabs.tabs-pill button.active{background:var(--brand);color:#fff}
+.kv{display:grid;grid-template-columns:160px 1fr;gap:8px 14px;font-size:14px}
+.kv .k{color:var(--muted);font-weight:600}
+.kv .v{color:var(--ink)}
+@media (max-width:600px){
+  .kv{grid-template-columns:1fr;gap:2px 0}
+  .kv .k{margin-top:8px}
+}
+.thread{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow-y:auto;padding:6px;border:1px solid var(--line);border-radius:10px;background:#f9fbfd;margin-bottom:12px}
+.thread .msg{max-width:78%;padding:9px 12px;border-radius:12px;font-size:14px;line-height:1.4}
+.thread .msg .meta{font-size:11px;color:var(--muted);margin-top:4px}
+.thread .msg.from-client{align-self:flex-end;background:var(--brand);color:#fff;border-bottom-right-radius:2px}
+.thread .msg.from-client .meta{color:rgba(255,255,255,.85)}
+.thread .msg.from-admin{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-left-radius:2px}
+.empty-state{padding:40px 16px;text-align:center;color:var(--muted)}
+.foot{margin-top:24px;text-align:center;color:var(--muted);font-size:12px}
+.foot a{color:var(--muted)}
+.invite-tag{display:inline-block;background:#eef6fc;border:1px dashed #b8d8ee;color:#075a8c;font-size:12px;padding:4px 8px;border-radius:6px;margin-bottom:12px}
+.code-input{font-family:"SF Mono",Menlo,Consolas,monospace;letter-spacing:.4em;text-align:center;font-size:20px;font-weight:700}
+.divider{height:1px;background:var(--line);margin:18px 0}
+</style>
+</head>
+<body>
+
+<!-- ============ AUTH SCREEN ============ -->
+<section id="auth-screen" class="center-screen">
+  <div class="auth-card">
+    <h1>VS Benefits Client Portal</h1>
+    <div class="sub">Members-only access. Need help? Email <a href="mailto:bvilsainthealth@gmail.com">bvilsainthealth@gmail.com</a> or call (954) 825-1009.</div>
+
+    <div id="invite-banner" class="banner info hidden"></div>
+    <div id="auth-err" class="banner err hidden"></div>
+    <div id="auth-ok" class="banner ok hidden"></div>
+
+    <div class="tabs tabs-pill" role="tablist">
+      <button id="tab-login" class="active" type="button">Sign in</button>
+      <button id="tab-signup" type="button">Create account</button>
+    </div>
+
+    <!-- Login form -->
+    <form id="login-form">
+      <div class="field">
+        <label for="login-email">Email</label>
+        <input id="login-email" type="email" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="login-pass">Password</label>
+        <input id="login-pass" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="primary" type="submit" style="width:100%">Sign in</button>
+    </form>
+
+    <!-- Signup form -->
+    <form id="signup-form" class="hidden">
+      <div class="field">
+        <label for="signup-email">Email (the one we have on file)</label>
+        <input id="signup-email" type="email" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="signup-code">6-digit verification code</label>
+        <input id="signup-code" class="code-input" type="text" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required>
+        <div class="small muted" style="margin-top:6px">Don't have a code? Ask Bradley to send your invite link or call (954) 825-1009.</div>
+      </div>
+      <div class="field">
+        <label for="signup-pass">Choose a password (min 8 chars)</label>
+        <input id="signup-pass" type="password" autocomplete="new-password" minlength="8" required>
+      </div>
+      <div class="field">
+        <label for="signup-pass2">Confirm password</label>
+        <input id="signup-pass2" type="password" autocomplete="new-password" minlength="8" required>
+      </div>
+      <button class="primary" type="submit" style="width:100%">Create account</button>
+    </form>
+
+    <div class="divider"></div>
+    <div class="small muted" style="text-align:center">
+      <a href="index.html">&larr; Back to vshealthbenefits.com</a>
+      &nbsp;&middot;&nbsp;
+      <a href="#" id="reset-link">Reset this device</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DASHBOARD ============ -->
+<div id="dashboard" class="hidden">
+  <header class="appbar">
+    <div class="brand"><span class="dot"></span> VS Benefits Client Portal</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="who" id="who-label"></span>
+      <button id="signout" class="ghost" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-panel="panel-profile" type="button">Profile</button>
+    <button class="tab-btn" data-panel="panel-support" type="button">Support</button>
+    <button class="tab-btn" data-panel="panel-refer" type="button">Refer a friend</button>
+  </nav>
+
+  <main>
+
+    <!-- ========= PROFILE ========= -->
+    <section id="panel-profile" class="panel">
+      <div class="card">
+        <h2>Your account</h2>
+        <div class="desc">This is what we have on file. Need to update something? Use the Support tab and we'll fix it.</div>
+        <div id="profile-kv" class="kv"></div>
+      </div>
+      <div class="card">
+        <h2>Quick actions</h2>
+        <div class="desc">Have a question about your plan, claims, or open enrollment?</div>
+        <div class="row">
+          <button class="primary" type="button" onclick="goTab('panel-support')">Message support</button>
+          <button type="button" onclick="goTab('panel-refer')">Refer a friend</button>
+          <a class="badge" href="tel:+19548251009" style="padding:9px 14px;text-decoration:none">Call (954) 825-1009</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========= SUPPORT ========= -->
+    <section id="panel-support" class="panel hidden">
+      <div class="card">
+        <h2>Support inbox</h2>
+        <div class="desc">Messages here go straight to Bradley. Typical response time: same business day.</div>
+        <div id="support-thread" class="thread"></div>
+        <form id="support-form" autocomplete="off">
+          <div class="field">
+            <label for="support-msg">New message</label>
+            <textarea id="support-msg" rows="3" placeholder="Type your question or update here&hellip;" required></textarea>
+          </div>
+          <div class="row">
+            <button class="primary" type="submit">Send message</button>
+            <button type="button" id="support-mailto" class="ghost">Or open in your email app</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ========= REFER ========= -->
+    <section id="panel-refer" class="panel hidden">
+      <div class="card">
+        <h2>Refer a friend</h2>
+        <div class="desc">Know a small business owner, family, or 1099 contractor who could use better coverage? Drop their info here and someone from VS Benefits will reach out personally. We'll let them know you sent us.</div>
+        <form id="refer-form" autocomplete="off">
+          <div class="row">
+            <div class="field">
+              <label for="ref-name">Their name *</label>
+              <input id="ref-name" type="text" required>
+            </div>
+            <div class="field">
+              <label for="ref-relationship">Your relationship</label>
+              <input id="ref-relationship" type="text" placeholder="e.g. business partner, friend, family">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="ref-phone">Their phone</label>
+              <input id="ref-phone" type="tel" placeholder="(305) 555-1234">
+            </div>
+            <div class="field">
+              <label for="ref-email">Their email</label>
+              <input id="ref-email" type="email">
+            </div>
+          </div>
+          <div class="field">
+            <label for="ref-coverage">What kind of coverage might they need?</label>
+            <select id="ref-coverage">
+              <option value="">Not sure</option>
+              <option>Group Health (10-99 employees)</option>
+              <option>Micro-Group (2-9 employees)</option>
+              <option>Family / Individual</option>
+              <option>ACA Marketplace</option>
+              <option>Dental &amp; Vision</option>
+              <option>Medicaid</option>
+              <option>Self-Employed / 1099</option>
+              <option>Ancillary (Life / Disability)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="ref-notes">Anything we should know? (optional)</label>
+            <textarea id="ref-notes" rows="3" placeholder="Best time to reach them, what they're looking for, etc."></textarea>
+          </div>
+          <button class="primary" type="submit">Send referral</button>
+        </form>
+        <div id="refer-ok" class="banner ok hidden" style="margin-top:14px"></div>
+      </div>
+
+      <div class="card">
+        <h2>Your past referrals</h2>
+        <div id="refer-list" class="muted small">You haven't sent any referrals yet.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="foot">
+    VS Benefits &middot; Miami, FL &middot; <a href="index.html">vshealthbenefits.com</a>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* ============ STORAGE KEYS ============ */
+var K={
+  members:"vs_members",
+  accounts:"vs_client_accounts",
+  session:"vs_client_session",
+  messages:"vs_messages",
+  referrals:"vs_referrals",
+  webhook:"vs_webhook_url"
+};
+
+/* ============ TINY HELPERS ============ */
+function $(id){return document.getElementById(id);}
+function read(key,fallback){try{var raw=localStorage.getItem(key);if(!raw)return fallback;return JSON.parse(raw);}catch(e){return fallback;}}
+function write(key,val){try{localStorage.setItem(key,JSON.stringify(val));}catch(e){}}
+function uid(){return "id_"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function esc(s){s=String(s==null?"":s);return s.replace(/[&<>"']/g,function(c){return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c];});}
+function nowIso(){return new Date().toISOString();}
+function fmtDate(s){if(!s)return "";var d=new Date(s);if(isNaN(d.getTime()))return s;return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}
+function fmtDateTime(s){if(!s)return "";var d=new Date(s);if(isNaN(d.getTime()))return s;return d.toLocaleString();}
+function relTime(s){if(!s)return "";var d=new Date(s);if(isNaN(d.getTime()))return "";var diff=(Date.now()-d.getTime())/1000;if(diff<60)return "just now";if(diff<3600)return Math.floor(diff/60)+"m ago";if(diff<86400)return Math.floor(diff/3600)+"h ago";if(diff<86400*7)return Math.floor(diff/86400)+"d ago";return fmtDate(s);}
+async function sha256(text){var enc=new TextEncoder().encode(text);var buf=await crypto.subtle.digest("SHA-256",enc);return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");}
+
+/* ============ INVITE TOKEN DECODE ============ */
+function b64uDecode(str){
+  try{
+    str=str.replace(/-/g,"+").replace(/_/g,"/");
+    while(str.length%4)str+="=";
+    return decodeURIComponent(escape(atob(str)));
+  }catch(e){return null;}
+}
+function decodeInvite(token){
+  var raw=b64uDecode(token);
+  if(!raw)return null;
+  try{return JSON.parse(raw);}catch(e){return null;}
+}
+
+/* ============ MEMBER STORE ============ */
+function getMembers(){return read(K.members,[]);}
+function saveMembers(arr){write(K.members,arr);}
+function findMemberByEmail(email){
+  email=(email||"").toLowerCase().trim();
+  if(!email)return null;
+  return getMembers().find(function(m){return (m.email||"").toLowerCase()===email;})||null;
+}
+
+/** Merge an invited member into local store if not already there. */
+function ensureMemberFromInvite(payload){
+  if(!payload||!payload.e)return null;
+  var members=getMembers();
+  var email=String(payload.e).toLowerCase();
+  var existing=members.find(function(m){return (m.email||"").toLowerCase()===email;});
+  if(existing){
+    // Refresh code/details if newer info came through
+    var updated=false;
+    if(payload.code && existing.code!==payload.code){existing.code=payload.code;existing.codeUsed=false;updated=true;}
+    if(payload.n && !existing.name){existing.name=payload.n;updated=true;}
+    if(payload.d && !existing.enrollmentDate){existing.enrollmentDate=payload.d;updated=true;}
+    if(payload.c && !existing.coverage){existing.coverage=payload.c;updated=true;}
+    if(payload.p && !existing.plan){existing.plan=payload.p;updated=true;}
+    if(payload.ph && !existing.phone){existing.phone=payload.ph;updated=true;}
+    if(payload.ad && !existing.address){existing.address=payload.ad;updated=true;}
+    if(updated)saveMembers(members);
+    return existing;
+  }
+  var fresh={
+    id:payload.mid||uid(),
+    name:payload.n||"",
+    email:email,
+    phone:payload.ph||"",
+    address:payload.ad||"",
+    enrollmentDate:payload.d||"",
+    coverage:payload.c||"",
+    plan:payload.p||"",
+    status:"active",
+    code:payload.code||"",
+    codeUsed:false,
+    notes:"",
+    accountId:"",
+    createdAt:nowIso()
+  };
+  members.push(fresh);
+  saveMembers(members);
+  return fresh;
+}
+
+/* ============ ACCOUNT STORE ============ */
+function getAccounts(){return read(K.accounts,[]);}
+function saveAccounts(arr){write(K.accounts,arr);}
+function findAccountByEmail(email){
+  email=(email||"").toLowerCase().trim();
+  return getAccounts().find(function(a){return (a.email||"").toLowerCase()===email;})||null;
+}
+
+/* ============ SESSION ============ */
+function getSession(){return read(K.session,null);}
+function setSession(s){write(K.session,s);}
+function clearSession(){localStorage.removeItem(K.session);}
+
+/* ============ WEBHOOK FORWARD ============ */
+async function forwardWebhook(type,payload){
+  var url=read(K.webhook,"");
+  if(!url||typeof url!=="string"||!/^https?:\/\//i.test(url))return;
+  try{
+    await fetch(url,{
+      method:"POST",
+      mode:"no-cors",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({source:"vs-client-portal",type:type,timestamp:nowIso(),payload:payload})
+    });
+  }catch(e){/* webhook is best-effort */}
+}
+
+/* ============ SUPPORT MESSAGES ============ */
+function getMessages(){return read(K.messages,[]);}
+function saveMessages(arr){write(K.messages,arr);}
+function getThreadFor(memberId){
+  return getMessages().filter(function(m){return m.memberId===memberId;}).sort(function(a,b){return new Date(a.timestamp)-new Date(b.timestamp);});
+}
+function postClientMessage(memberId,memberEmail,memberName,body){
+  var msgs=getMessages();
+  msgs.push({
+    id:uid(),
+    memberId:memberId,
+    memberEmail:memberEmail,
+    memberName:memberName,
+    direction:"in",
+    body:body,
+    timestamp:nowIso(),
+    read:false
+  });
+  saveMessages(msgs);
+  forwardWebhook("support_message",{memberId:memberId,memberEmail:memberEmail,memberName:memberName,body:body});
+}
+
+/* ============ REFERRALS ============ */
+function getReferrals(){return read(K.referrals,[]);}
+function saveReferrals(arr){write(K.referrals,arr);}
+
+/* ============ AUTH UI ============ */
+var tabLogin=$("tab-login"),tabSignup=$("tab-signup");
+var loginForm=$("login-form"),signupForm=$("signup-form");
+var inviteBanner=$("invite-banner"),authErr=$("auth-err"),authOk=$("auth-ok");
+
+function showAuthMode(mode){
+  if(mode==="signup"){
+    tabSignup.classList.add("active");tabLogin.classList.remove("active");
+    signupForm.classList.remove("hidden");loginForm.classList.add("hidden");
+  } else {
+    tabLogin.classList.add("active");tabSignup.classList.remove("active");
+    loginForm.classList.remove("hidden");signupForm.classList.add("hidden");
+  }
+  authErr.classList.add("hidden");authOk.classList.add("hidden");
+}
+tabLogin.addEventListener("click",function(){showAuthMode("login");});
+tabSignup.addEventListener("click",function(){showAuthMode("signup");});
+
+function showErr(msg){authErr.textContent=msg;authErr.classList.remove("hidden");authOk.classList.add("hidden");}
+function showOk(msg){authOk.textContent=msg;authOk.classList.remove("hidden");authErr.classList.add("hidden");}
+
+/* Handle ?invite=<token> on load */
+function handleInviteParam(){
+  var params=new URLSearchParams(location.search);
+  var token=params.get("invite");
+  if(!token)return;
+  var payload=decodeInvite(token);
+  if(!payload||!payload.e){
+    inviteBanner.textContent="That invite link couldn't be read. Please double-check it or contact Bradley.";
+    inviteBanner.classList.remove("hidden");
+    return;
+  }
+  var member=ensureMemberFromInvite(payload);
+  if(member){
+    inviteBanner.innerHTML="Welcome, "+esc(member.name||member.email)+"! Use the code below to create your account.";
+    inviteBanner.classList.remove("hidden");
+    showAuthMode("signup");
+    $("signup-email").value=member.email;
+    if(member.code)$("signup-code").value=member.code;
+    // Strip token from URL so it isn't bookmarked
+    if(history.replaceState)history.replaceState(null,"",location.pathname);
+  }
+}
+
+/* Login submit */
+loginForm.addEventListener("submit",async function(e){
+  e.preventDefault();
+  var email=$("login-email").value.trim().toLowerCase();
+  var pass=$("login-pass").value;
+  if(!email||!pass){showErr("Enter your email and password.");return;}
+  var acct=findAccountByEmail(email);
+  if(!acct){showErr("No account found for that email. If you're a VS Benefits member, click 'Create account' to set one up.");return;}
+  var hash=await sha256(pass);
+  if(hash!==acct.passwordHash){showErr("That password doesn't match our records.");return;}
+  // Record last sign-in
+  var now=Date.now();
+  acct.lastSignIn=now;acct.lastSignInIso=nowIso();
+  saveAccounts(getAccounts().map(function(a){return a.id===acct.id?acct:a;}));
+  try{if(window.VSAdmin&&typeof window.VSAdmin.recordSignIn==="function"){window.VSAdmin.recordSignIn(acct.email);}}catch(_){}
+  forwardWebhook("client_sign_in",{email:acct.email,memberId:acct.memberId,ts:now});
+  setSession({accountId:acct.id,memberId:acct.memberId,email:acct.email,signedInAt:nowIso()});
+  showDashboard();
+});
+
+/* Signup submit */
+signupForm.addEventListener("submit",async function(e){
+  e.preventDefault();
+  var email=$("signup-email").value.trim().toLowerCase();
+  var code=$("signup-code").value.trim();
+  var pass=$("signup-pass").value;
+  var pass2=$("signup-pass2").value;
+  if(!email||!code||!pass){showErr("Fill in every field to continue.");return;}
+  if(pass.length<8){showErr("Password must be at least 8 characters.");return;}
+  if(pass!==pass2){showErr("Those passwords don't match.");return;}
+  var member=findMemberByEmail(email);
+  if(!member){
+    showErr("We don't have a member record for that email. Account creation is restricted to VS Benefits clients. If this is an error, call (954) 825-1009.");
+    return;
+  }
+  if(!member.code||String(member.code)!==String(code)){
+    showErr("That verification code doesn't match what we have on file. Double-check the code Bradley sent you.");
+    return;
+  }
+  if(member.codeUsed){
+    showErr("That code has already been used. If you need to reset your password, contact Bradley directly.");
+    return;
+  }
+  if(findAccountByEmail(email)){
+    showErr("An account already exists for that email. Use 'Sign in' instead.");
+    return;
+  }
+  var hash=await sha256(pass);
+  var acct={
+    id:uid(),
+    memberId:member.id,
+    email:email,
+    passwordHash:hash,
+    createdAt:nowIso(),
+    created:Date.now(),
+    lastSignIn:Date.now()
+  };
+  var accts=getAccounts();
+  accts.push(acct);
+  saveAccounts(accts);
+  // Mark code consumed on the member record
+  var members=getMembers();
+  var idx=members.findIndex(function(m){return m.id===member.id;});
+  if(idx>-1){
+    members[idx].codeUsed=true;
+    members[idx].accountId=acct.id;
+    members[idx].accountCreatedAt=nowIso();
+    saveMembers(members);
+  }
+  // Notify admin layer if same browser
+  try{
+    if(window.VSAdmin&&typeof window.VSAdmin.markAccountCreated==="function"){
+      window.VSAdmin.markAccountCreated(member.id,acct.id);
+    }
+  }catch(err){}
+  forwardWebhook("client_account_created",{memberId:member.id,email:email,name:member.name});
+  setSession({accountId:acct.id,memberId:member.id,email:email,signedInAt:nowIso()});
+  showOk("Account created. Loading your dashboard&hellip;");
+  setTimeout(showDashboard,500);
+});
+
+/* Reset device */
+$("reset-link").addEventListener("click",function(e){
+  e.preventDefault();
+  if(!confirm("This will sign you out on this device. Your account remains intact. Continue?"))return;
+  clearSession();
+  location.reload();
+});
+
+/* ============ DASHBOARD ============ */
+var currentMember=null,currentAccount=null;
+
+function showDashboard(){
+  var session=getSession();
+  if(!session){showAuth();return;}
+  var acct=getAccounts().find(function(a){return a.id===session.accountId;});
+  if(!acct){clearSession();showAuth();return;}
+  var member=getMembers().find(function(m){return m.id===acct.memberId;});
+  if(!member){clearSession();showAuth();return;}
+  currentAccount=acct;
+  currentMember=member;
+  $("auth-screen").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  $("who-label").textContent=member.name?member.name+" \u00b7 "+member.email:member.email;
+  renderProfile();
+  renderSupport();
+  renderReferrals();
+  goTab("panel-profile");
+}
+
+function showAuth(){
+  $("dashboard").classList.add("hidden");
+  $("auth-screen").classList.remove("hidden");
+}
+
+/* Tab switching */
+function goTab(panelId){
+  document.querySelectorAll(".panel").forEach(function(p){p.classList.add("hidden");});
+  var el=$(panelId);if(el)el.classList.remove("hidden");
+  document.querySelectorAll(".tab-btn").forEach(function(b){
+    b.classList.toggle("active",b.dataset.panel===panelId);
+  });
+  if(panelId==="panel-support")renderSupport();
+}
+window.goTab=goTab;
+document.querySelectorAll(".tab-btn").forEach(function(b){
+  b.addEventListener("click",function(){goTab(b.dataset.panel);});
+});
+
+$("signout").addEventListener("click",function(){
+  clearSession();
+  currentAccount=null;currentMember=null;
+  location.reload();
+});
+
+/* ---- Profile ---- */
+function renderProfile(){
+  if(!currentMember)return;
+  var m=currentMember;
+  var status=m.status||"active";
+  var rows=[
+    ["Name",esc(m.name||"")],
+    ["Email",esc(m.email||"")],
+    ["Phone",esc(m.phone||"\u2014")],
+    ["Address",esc(m.address||"\u2014")],
+    ["Enrolled on",esc(m.enrollmentDate?fmtDate(m.enrollmentDate):"\u2014")],
+    ["Coverage type",esc(m.coverage||"\u2014")],
+    ["Plan",esc(m.plan||"\u2014")],
+    ["Account status",'<span class="badge '+(status==="active"?"ok":(status==="lapsed"?"err":"warn"))+'">'+esc(status)+"</span>"]
+  ];
+  var html="";
+  rows.forEach(function(r){html+='<div class="k">'+r[0]+'</div><div class="v">'+r[1]+'</div>';});
+  $("profile-kv").innerHTML=html;
+}
+
+/* ---- Support ---- */
+function renderSupport(){
+  if(!currentMember)return;
+  var thread=getThreadFor(currentMember.id);
+  var box=$("support-thread");
+  if(thread.length===0){
+    box.innerHTML='<div class="empty-state">No messages yet. Send your first message below and we\'ll get back to you shortly.</div>';
+  } else {
+    box.innerHTML=thread.map(function(m){
+      var cls=m.direction==="out"?"from-admin":"from-client";
+      return '<div class="msg '+cls+'">'+esc(m.body).replace(/\n/g,"<br>")+'<div class="meta">'+(m.direction==="out"?"VS Benefits":"You")+' \u00b7 '+esc(relTime(m.timestamp))+'</div></div>';
+    }).join("");
+    // Mark inbound (admin reply) messages as read
+    var msgs=getMessages();
+    var changed=false;
+    msgs.forEach(function(m){if(m.memberId===currentMember.id&&m.direction==="out"&&!m.readByClient){m.readByClient=true;changed=true;}});
+    if(changed)saveMessages(msgs);
+  }
+  // Auto-scroll to bottom
+  setTimeout(function(){box.scrollTop=box.scrollHeight;},10);
+}
+
+$("support-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  var body=$("support-msg").value.trim();
+  if(!body)return;
+  postClientMessage(currentMember.id,currentMember.email,currentMember.name,body);
+  $("support-msg").value="";
+  renderSupport();
+});
+
+$("support-mailto").addEventListener("click",function(){
+  var body=$("support-msg").value.trim();
+  var subject="VS Benefits support request from "+(currentMember.name||currentMember.email);
+  var mail="mailto:bvilsainthealth@gmail.com?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body||"");
+  location.href=mail;
+});
+
+/* ---- Refer ---- */
+function renderReferrals(){
+  var mine=getReferrals().filter(function(r){return r.referrerMemberId===currentMember.id;}).sort(function(a,b){return new Date(b.timestamp)-new Date(a.timestamp);});
+  if(mine.length===0){
+    $("refer-list").innerHTML='<div class="muted small">You haven\'t sent any referrals yet.</div>';
+    return;
+  }
+  var html='<table style="width:100%;border-collapse:collapse;font-size:14px"><thead><tr style="text-align:left;color:var(--muted);border-bottom:1px solid var(--line)"><th style="padding:6px 8px">Name</th><th style="padding:6px 8px">Coverage</th><th style="padding:6px 8px">Sent</th><th style="padding:6px 8px">Status</th></tr></thead><tbody>';
+  mine.forEach(function(r){
+    html+='<tr style="border-bottom:1px solid var(--line)">';
+    html+='<td style="padding:8px">'+esc(r.name||"")+(r.email?'<br><span class="muted small">'+esc(r.email)+'</span>':"")+'</td>';
+    html+='<td style="padding:8px">'+esc(r.coverage||"\u2014")+'</td>';
+    html+='<td style="padding:8px">'+esc(relTime(r.timestamp))+'</td>';
+    var st=r.status||"new";
+    var cls=st==="enrolled"?"ok":(st==="lost"?"err":(st==="contacted"?"warn":""));
+    html+='<td style="padding:8px"><span class="badge '+cls+'">'+esc(st)+'</span></td>';
+    html+='</tr>';
+  });
+  html+='</tbody></table>';
+  $("refer-list").innerHTML=html;
+}
+
+$("refer-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  var name=$("ref-name").value.trim();
+  if(!name){return;}
+  var ref={
+    id:uid(),
+    referrerMemberId:currentMember.id,
+    referrerName:currentMember.name||currentMember.email,
+    referrerEmail:currentMember.email,
+    name:name,
+    relationship:$("ref-relationship").value.trim(),
+    phone:$("ref-phone").value.trim(),
+    email:$("ref-email").value.trim(),
+    coverage:$("ref-coverage").value,
+    notes:$("ref-notes").value.trim(),
+    status:"new",
+    timestamp:nowIso()
+  };
+  var refs=getReferrals();
+  refs.unshift(ref);
+  saveReferrals(refs);
+  // Push to admin layer if available
+  try{
+    if(window.VSAdmin&&typeof window.VSAdmin.ingestReferral==="function"){
+      window.VSAdmin.ingestReferral(ref);
+    }
+  }catch(err){}
+  forwardWebhook("client_referral",ref);
+  $("refer-form").reset();
+  $("refer-ok").innerHTML="Thanks! We received your referral for <strong>"+esc(ref.name)+"</strong>. Bradley will reach out within one business day.";
+  $("refer-ok").classList.remove("hidden");
+  setTimeout(function(){$("refer-ok").classList.add("hidden");},6000);
+  renderReferrals();
+});
+
+/* ============ BOOT ============ */
+(function boot(){
+  handleInviteParam();
+  var session=getSession();
+  if(session){showDashboard();}else{showAuth();}
+})();
+</script>
+</body>
+</html>

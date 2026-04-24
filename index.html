@@ -377,6 +377,83 @@ details.faq-item > *:not(summary){margin-top:10px;color:var(--ink-2)}
 .cta-strip h2{color:#fff}
 .cta-strip p{color:rgba(255,255,255,.92)}
 
+/* ---- Members section (Client Sign-In + Create Account CTAs) ---- */
+.members-section{padding:42px 0;background:linear-gradient(180deg,#fff,var(--blue-50))}
+.members-grid{display:grid;grid-template-columns:1fr;gap:16px;max-width:880px;margin:18px auto 0}
+.member-card{
+  background:#fff;border:1px solid var(--line);border-radius:16px;
+  padding:26px 22px;text-align:center;
+  box-shadow:var(--shadow-sm);
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease),border-color .2s;
+  display:flex;flex-direction:column;gap:12px;align-items:center;
+}
+.member-card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--blue-100);text-decoration:none}
+.member-card .ic{
+  width:54px;height:54px;border-radius:14px;
+  background:linear-gradient(135deg,var(--blue-100),#fff);
+  border:1px solid var(--blue-100);
+  display:flex;align-items:center;justify-content:center;color:var(--blue-700);
+  font-size:1.5rem;
+}
+.member-card h3{margin:0;color:var(--blue-900)}
+.member-card p{font-size:.92rem;color:var(--muted);margin:0 0 4px}
+.member-card .btn{width:100%;max-width:260px}
+
+/* ---- Login modal ---- */
+.modal-backdrop{
+  display:none;position:fixed;inset:0;z-index:1000;
+  background:rgba(11,35,70,.55);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;padding:18px;
+}
+.modal-backdrop.open{display:flex}
+.modal{
+  background:#fff;border-radius:16px;width:100%;max-width:460px;
+  padding:24px 22px;box-shadow:0 20px 60px rgba(11,35,70,.3);
+  position:relative;max-height:90vh;overflow-y:auto;
+}
+.modal h3{margin:0 0 6px;color:var(--blue-900);font-size:1.25rem}
+.modal .modal-sub{font-size:.92rem;color:var(--muted);margin:0 0 18px}
+.modal-close{
+  position:absolute;top:10px;right:10px;
+  background:transparent;border:0;font-size:1.4rem;line-height:1;color:var(--muted);
+  cursor:pointer;width:var(--tap);height:var(--tap);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal-close:hover{background:var(--blue-50);color:var(--blue-700)}
+.modal-options{display:flex;flex-direction:column;gap:12px}
+.modal-option{
+  display:flex;align-items:center;gap:14px;
+  padding:16px;border:2px solid var(--line);border-radius:12px;
+  text-decoration:none;color:var(--ink);
+  transition:border-color .18s,background .18s,transform .15s;
+  min-height:var(--tap);
+}
+.modal-option:hover{border-color:var(--blue-600);background:var(--blue-50);text-decoration:none}
+.modal-option:active{transform:scale(.99)}
+.modal-option .opt-ic{
+  width:42px;height:42px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--blue-700),var(--teal));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.2rem;font-weight:700;
+}
+.modal-option .opt-text{display:flex;flex-direction:column;gap:2px}
+.modal-option .opt-title{font-weight:700;color:var(--blue-900);font-size:1rem}
+.modal-option .opt-desc{font-size:.84rem;color:var(--muted)}
+.modal-foot{
+  margin-top:14px;padding-top:14px;border-top:1px solid var(--line);
+  font-size:.84rem;color:var(--muted);text-align:center;
+}
+.modal-foot a{color:var(--blue-700);font-weight:600}
+
+/* nav login pill (visible on desktop) */
+.nav-links a.nav-login,
+.nav-links button.nav-login{
+  background:transparent;border:0;color:var(--ink);font-weight:600;font-size:1rem;
+  padding:14px 20px;border-bottom:1px solid var(--line);
+  min-height:var(--tap);width:100%;text-align:left;
+  display:flex;align-items:center;cursor:pointer;font-family:inherit;
+}
+.nav-links button.nav-login:hover{color:var(--blue-700);background:transparent}
+
 /* ---- Footer ---- */
 footer{background:var(--blue-900);color:#c9d6ea;padding:40px 0 20px}
 footer a{color:#c9d6ea}
@@ -485,6 +562,7 @@ footer a:hover{color:#fff}
   .stats{grid-template-columns:repeat(4,1fr)}
   .foot-grid{grid-template-columns:1fr 1fr}
   .foot-bottom{flex-direction:row;justify-content:space-between}
+  .members-grid{grid-template-columns:1fr 1fr;gap:18px}
   .service-block{grid-template-columns:.9fr 1.1fr}
   .service-block .img{aspect-ratio:auto;height:100%;min-height:260px}
   .timeline .row{grid-template-columns:110px 1fr;gap:18px}
@@ -508,13 +586,20 @@ footer a:hover{color:#fff}
   .nav-links a.nav-cta{
     margin:0;padding:10px 18px;border-radius:999px;font-weight:700;
   }
+  .nav-links a.nav-login,
+  .nav-links button.nav-login{
+    padding:8px 4px;border-bottom:0;width:auto;font-size:.94rem;
+    text-align:center;background:transparent;color:var(--ink);
+  }
+  .nav-links button.nav-login:hover{color:var(--blue-700)}
   .menu-toggle{display:none}
+  .members-grid{grid-template-columns:1fr 1fr;gap:22px}
   .cards{grid-template-columns:repeat(3,1fr)}
   .post-grid{grid-template-columns:repeat(3,1fr)}
   .quotes{grid-template-columns:repeat(3,1fr)}
   .process{grid-template-columns:repeat(4,1fr)}
   .contact-grid{grid-template-columns:1fr 1fr;gap:40px}
-  .foot-grid{grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
+  .foot-grid{grid-template-columns:1.5fr 1fr 1fr 1fr 1fr;gap:28px}
   .about-grid{grid-template-columns:.9fr 1.1fr;gap:40px}
   .quote-layout{grid-template-columns:1.2fr .8fr;gap:40px}
   .show-desktop{display:initial}
@@ -567,6 +652,7 @@ footer a:hover{color:#fff}
       <a href="about.html">About</a>
       <a href="blog.html">Blog</a>
       <a href="contact.html">Contact</a>
+      <button type="button" class="nav-login" data-open-login>Log In</button>
       <a class="nav-cta" href="get-a-quote.html">Get a Quote</a>
     </nav>
   </div>
@@ -592,7 +678,7 @@ footer a:hover{color:#fff}
     </div>
     <div>
       <div class="hero-image">
-        <img src="./images/family picture.jpg" alt="VS Benefits - trusted health insurance advisor" loading="lazy" />
+        <img src="assets/images/hero-main.jpg" alt="VS Benefits - trusted health insurance advisor" loading="lazy" />
       </div>
     </div>
   </div>
@@ -633,7 +719,7 @@ footer a:hover{color:#fff}
     </div>
     <div class="cards">
       <div class="card featured">
-        <div class="card-image"><img src="./images/10-99working.jpg" alt="Group health insurance for 10 to 99 employees" loading="lazy" /></div>
+        <div class="card-image"><img src="assets/images/service-group.jpg" alt="Group health insurance for 10 to 99 employees" loading="lazy" /></div>
         <div class="card-body">
           <div class="ic">&#127970;</div>
           <h3>Group 10-99 Employees</h3>
@@ -642,7 +728,7 @@ footer a:hover{color:#fff}
         </div>
       </div>
       <div class="card">
-        <div class="card-image"><img src="./images/microemployee.jpg" alt="Micro group 2 to 9 employees" loading="lazy" /></div>
+        <div class="card-image"><img src="assets/images/service-micro.jpg" alt="Micro group 2 to 9 employees" loading="lazy" /></div>
         <div class="card-body">
           <div class="ic">&#128101;</div>
           <h3>Micro-Group 2-9</h3>
@@ -651,7 +737,7 @@ footer a:hover{color:#fff}
         </div>
       </div>
       <div class="card">
-        <div class="card-image"><img src="./images/Family photo.jpg" alt="Family and individual ACA coverage" loading="lazy" /></div>
+        <div class="card-image"><img src="assets/images/service-family.jpg" alt="Family and individual ACA coverage" loading="lazy" /></div>
         <div class="card-body">
           <div class="ic">&#128106;</div>
           <h3>Family &amp; Individual ACA</h3>
@@ -660,7 +746,7 @@ footer a:hover{color:#fff}
         </div>
       </div>
       <div class="card">
-        <div class="card-image"><img src="./images/eyedoctor.jpg" alt="Dental and vision insurance plans" loading="lazy" /></div>
+        <div class="card-image"><img src="assets/images/service-dental-vision.jpg" alt="Dental and vision insurance plans" loading="lazy" /></div>
         <div class="card-body">
           <div class="ic">&#129463;</div>
           <h3>Dental &amp; Vision</h3>
@@ -669,7 +755,7 @@ footer a:hover{color:#fff}
         </div>
       </div>
       <div class="card">
-        <div class="card-image"><img src="./images/m.jpg" alt="Medicaid eligibility and guidance" loading="lazy" /></div>
+        <div class="card-image"><img src="assets/images/service-medicaid.jpg" alt="Medicaid eligibility and guidance" loading="lazy" /></div>
         <div class="card-body">
           <div class="ic">&#128202;</div>
           <h3>Medicaid Guidance</h3>
@@ -678,7 +764,7 @@ footer a:hover{color:#fff}
         </div>
       </div>
       <div class="card">
-        <div class="card-image"><img src="./images/10-99.jpg" alt="Self-employed and 1099 health coverage" loading="lazy" /></div>
+        <div class="card-image"><img src="assets/images/service-self-employed.jpg" alt="Self-employed and 1099 health coverage" loading="lazy" /></div>
         <div class="card-body">
           <div class="ic">&#128100;</div>
           <h3>Self-Employed &amp; 1099</h3>
@@ -686,6 +772,30 @@ footer a:hover{color:#fff}
           <span class="tag">Tax-aware design</span>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="members-section" id="members">
+  <div class="container">
+    <div class="center">
+      <span class="eyebrow">VS Benefits Members</span>
+      <h2>Already a client? Manage everything in your portal</h2>
+      <p style="max-width:640px;margin:0 auto;color:var(--muted)">View your enrollment, message support, and refer family or coworkers who could use better coverage. Account access is reserved for current VS Benefits clients.</p>
+    </div>
+    <div class="members-grid">
+      <a class="member-card" href="client.html">
+        <div class="ic">&#128274;</div>
+        <h3>Member Sign-In</h3>
+        <p>Log in to view your plan, talk with our support team, and track your referrals.</p>
+        <span class="btn btn-primary">Sign In to Portal</span>
+      </a>
+      <a class="member-card" href="client.html#signup">
+        <div class="ic">&#128100;</div>
+        <h3>Create Your Account</h3>
+        <p>Already enrolled? Use the 6-digit verification code from your advisor to set up your portal.</p>
+        <span class="btn btn-secondary">Create Account</span>
+      </a>
     </div>
   </div>
 </section>
@@ -849,6 +959,33 @@ footer a:hover{color:#fff}
 </section>
 
 
+<div class="modal-backdrop" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
+  <div class="modal">
+    <button type="button" class="modal-close" aria-label="Close" data-close-login>&times;</button>
+    <h3 id="login-modal-title">Sign in to VS Benefits</h3>
+    <p class="modal-sub">Choose how you'd like to log in.</p>
+    <div class="modal-options">
+      <a class="modal-option" href="client.html">
+        <div class="opt-ic">C</div>
+        <div class="opt-text">
+          <span class="opt-title">Client Portal</span>
+          <span class="opt-desc">For VS Benefits members &mdash; view plan, message support, refer family.</span>
+        </div>
+      </a>
+      <a class="modal-option" href="admin.html">
+        <div class="opt-ic">A</div>
+        <div class="opt-text">
+          <span class="opt-title">Admin Portal</span>
+          <span class="opt-desc">For VS Benefits team &mdash; manage members, leads, and referrals.</span>
+        </div>
+      </a>
+    </div>
+    <div class="modal-foot">
+      Not a member yet? <a href="client.html#signup">Create your account</a>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="container">
     <div class="foot-grid">
@@ -886,6 +1023,14 @@ footer a:hover{color:#fff}
           <li><a href="mailto:bvilsainthealth@gmail.com">bvilsainthealth@gmail.com</a></li>
           <li>Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET</li>
           <li>Miami, FL | 40+ states</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Members</h4>
+        <ul>
+          <li><a href="client.html">Client Portal Sign-In</a></li>
+          <li><a href="client.html#signup">Create Account</a></li>
+          <li><a href="#" data-open-login>Login Options</a></li>
         </ul>
       </div>
     </div>
@@ -932,6 +1077,37 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
   }
+
+  /* ---------- Login modal (Client vs Admin portal chooser) ---------- */
+  var loginModal = document.getElementById("login-modal");
+  function openLogin(e){
+    if(e){e.preventDefault();}
+    if(!loginModal) return;
+    loginModal.classList.add("open");
+    document.body.style.overflow = "hidden";
+    closeMenu();
+    var first = loginModal.querySelector(".modal-option");
+    if(first) try{ first.focus(); }catch(_){}
+  }
+  function closeLogin(){
+    if(!loginModal) return;
+    loginModal.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+  document.querySelectorAll("[data-open-login]").forEach(function(el){
+    el.addEventListener("click", openLogin);
+  });
+  document.querySelectorAll("[data-close-login]").forEach(function(el){
+    el.addEventListener("click", closeLogin);
+  });
+  if(loginModal){
+    loginModal.addEventListener("click", function(e){
+      if(e.target === loginModal) closeLogin();
+    });
+  }
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && loginModal && loginModal.classList.contains("open")) closeLogin();
+  });
 
   /* ---------- ACA Open Enrollment countdown ---------- */
   var START = new Date("2026-11-01T00:00:00-05:00").getTime();

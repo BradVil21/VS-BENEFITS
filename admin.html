@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Admin Portal | VS Benefits</title>
-<meta name="description" content="VS Benefits admin portal - manage leads and calendar." />
+<meta name="description" content="VS Benefits admin portal - manage leads, members, support, calendar." />
 <meta name="robots" content="noindex,nofollow" />
 <link rel="icon" type="image/png" href="assets/images/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -12,36 +12,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
 <style>
 :root{
-  --blue-900:#0b2346;
-  --blue-800:#0f2e5c;
-  --blue-700:#16447f;
-  --blue-600:#1e5ab0;
-  --blue-500:#2f7de0;
-  --blue-100:#e8f0fb;
-  --blue-50:#f4f8fe;
-  --teal:#0db5a6;
-  --teal-dark:#098374;
-  --ink:#0d1b2a;
-  --ink-2:#334155;
-  --muted:#5a6b80;
-  --line:#e4e9f2;
-  --bg:#ffffff;
-  --bg-soft:#f7faff;
-  --danger:#c1372a;
-  --ok:#165c2e;
-  --shadow:0 10px 30px rgba(13,27,42,.08);
-  --shadow-sm:0 4px 12px rgba(13,27,42,.06);
-  --radius:14px;
-  --radius-sm:10px;
-  --container:1160px;
-  --tap:44px;
+  --blue-900:#0b2346;--blue-800:#0f2e5c;--blue-700:#16447f;--blue-600:#1e5ab0;--blue-500:#2f7de0;
+  --blue-100:#e8f0fb;--blue-50:#f4f8fe;
+  --teal:#0db5a6;--teal-dark:#098374;
+  --ink:#0d1b2a;--ink-2:#334155;--muted:#5a6b80;
+  --line:#e4e9f2;--bg:#ffffff;--bg-soft:#f7faff;
+  --danger:#c1372a;--ok:#165c2e;
+  --shadow:0 10px 30px rgba(13,27,42,.08);--shadow-sm:0 4px 12px rgba(13,27,42,.06);
+  --radius:14px;--radius-sm:10px;--container:1160px;--tap:44px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{
-  margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  color:var(--ink);background:var(--bg-soft);line-height:1.6;font-size:16px;
-}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg-soft);line-height:1.6;font-size:16px}
 h1,h2,h3,h4{font-family:Poppins,Inter,sans-serif;color:var(--blue-900);margin:0 0 .5em}
 h1{font-size:clamp(1.6rem,4vw,2.2rem);line-height:1.2}
 h2{font-size:clamp(1.3rem,3vw,1.7rem);line-height:1.25}
@@ -50,21 +32,12 @@ a{color:var(--blue-600);text-decoration:none}
 a:hover{text-decoration:underline}
 button{font-family:inherit}
 input,select,textarea{font-family:inherit;font-size:16px}
-
 .container{max-width:var(--container);margin:0 auto;padding:0 18px}
-
-/* ---------- Header / nav ---------- */
-.site-header{
-  position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);
-  backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line);
-}
+.site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line)}
 .nav-wrap{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:12px}
 .brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;color:var(--blue-900);font-family:Poppins,Inter,sans-serif;font-size:1.1rem;text-decoration:none}
 .brand-badge{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--blue-700),var(--teal));color:#fff;font-weight:800;box-shadow:var(--shadow-sm);font-size:.95rem}
-.menu-toggle{
-  display:inline-flex;flex-direction:column;justify-content:center;gap:5px;
-  width:var(--tap);height:var(--tap);border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;padding:10px;
-}
+.menu-toggle{display:inline-flex;flex-direction:column;justify-content:center;gap:5px;width:var(--tap);height:var(--tap);border:1px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;padding:10px}
 .menu-toggle span{width:20px;height:2.5px;background:var(--ink);border-radius:2px;transition:transform .25s,opacity .25s}
 .menu-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
 .menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
@@ -81,27 +54,18 @@ input,select,textarea{font-family:inherit;font-size:16px}
   .nav-links a{padding:8px 14px}
   .nav-cta{margin-top:0}
 }
-
-/* ---------- Admin shell ---------- */
 .admin-wrap{padding:26px 0 80px;min-height:70vh}
 .panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:22px}
 .panel + .panel{margin-top:18px}
 .eyebrow{display:inline-block;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem;font-weight:700;color:var(--teal-dark);background:#e3f7f3;padding:6px 10px;border-radius:999px;margin-bottom:10px}
-
-/* Auth card */
 .auth-card{max-width:460px;margin:40px auto;padding:28px}
 .auth-card h1{margin-top:6px}
 .auth-card p.lead{color:var(--muted);margin:0 0 18px}
 .field{margin-bottom:14px}
 .field label{display:block;font-weight:600;margin-bottom:6px;font-size:.95rem}
-.field input,.field select,.field textarea{
-  width:100%;padding:12px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;min-height:var(--tap);
-}
+.field input,.field select,.field textarea{width:100%;padding:12px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;min-height:var(--tap)}
 .field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--blue-500);outline-offset:1px;border-color:var(--blue-500)}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  padding:12px 18px;border-radius:10px;border:0;cursor:pointer;font-weight:600;min-height:var(--tap);font-size:.98rem;
-}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:10px;border:0;cursor:pointer;font-weight:600;min-height:var(--tap);font-size:.98rem}
 .btn-primary{background:var(--blue-700);color:#fff}
 .btn-primary:hover{background:var(--blue-800)}
 .btn-ghost{background:#fff;color:var(--blue-700);border:1px solid var(--line)}
@@ -112,57 +76,47 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .btn-teal:hover{background:var(--teal-dark)}
 .btn.block{width:100%}
 .btn[disabled]{opacity:.55;cursor:not-allowed}
+.btn-sm{padding:6px 10px;font-size:.82rem;min-height:32px}
 .error{color:var(--danger);font-size:.92rem;margin-top:6px;min-height:1.2em}
 .ok{color:var(--ok);font-size:.92rem;margin-top:6px;min-height:1.2em}
-
-/* Tabs */
-.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:0 6px;margin-bottom:0}
-.tab{
-  border:0;background:transparent;color:var(--muted);padding:14px 16px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;min-height:var(--tap);
-}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:0 6px;margin-bottom:0;overflow-x:auto}
+.tab{border:0;background:transparent;color:var(--muted);padding:14px 16px;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;min-height:var(--tap);white-space:nowrap}
 .tab.active{color:var(--blue-700);border-bottom-color:var(--blue-700)}
 .tab:hover{color:var(--blue-700)}
+.tab .badge{display:inline-block;background:var(--danger);color:#fff;font-size:.7rem;padding:2px 6px;border-radius:999px;margin-left:6px;vertical-align:middle;font-weight:700}
 .tab-panel{padding:20px 6px}
 .tab-panel[hidden]{display:none}
-
-/* Dashboard bar */
 .dash-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
 .dash-bar h2{margin:0}
 .pill{display:inline-flex;align-items:center;gap:6px;background:var(--blue-50);color:var(--blue-800);padding:6px 10px;border-radius:999px;font-weight:600;font-size:.85rem}
 .pill.teal{background:#e3f7f3;color:var(--teal-dark)}
 .pill.warn{background:#fff3ee;color:#a6391a}
-
-/* Leads table */
 .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
 .toolbar input[type="search"]{flex:1 1 220px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);min-height:var(--tap);font-size:16px}
 .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff}
-table.leads{width:100%;border-collapse:collapse;font-size:.95rem;min-width:720px}
-table.leads th,table.leads td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-table.leads th{background:var(--blue-50);color:var(--blue-900);font-weight:700;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;position:sticky;top:0}
-table.leads tr:hover{background:var(--bg-soft)}
-.lead-status{display:inline-block;padding:3px 8px;border-radius:999px;font-size:.78rem;font-weight:700}
-.lead-status.new{background:#e3f7f3;color:var(--teal-dark)}
+table.data{width:100%;border-collapse:collapse;font-size:.95rem;min-width:720px}
+table.data th,table.data td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+table.data th{background:var(--blue-50);color:var(--blue-900);font-weight:700;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;position:sticky;top:0}
+table.data tr:hover{background:var(--bg-soft)}
+.lead-status,.member-status{display:inline-block;padding:3px 8px;border-radius:999px;font-size:.78rem;font-weight:700}
+.lead-status.new,.member-status.pending{background:#e3f7f3;color:var(--teal-dark)}
 .lead-status.contacted{background:var(--blue-50);color:var(--blue-700)}
 .lead-status.quoted{background:#fff3d8;color:#8a5a00}
-.lead-status.closed{background:#e9f0e7;color:#2f6b2a}
-.lead-status.lost{background:#fdecea;color:var(--danger)}
+.lead-status.closed,.member-status.active{background:#e9f0e7;color:#2f6b2a}
+.lead-status.lost,.member-status.inactive{background:#fdecea;color:var(--danger)}
 .row-actions{display:flex;gap:6px;flex-wrap:wrap}
 .row-actions button{padding:6px 10px;font-size:.82rem;min-height:32px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--blue-700);cursor:pointer}
 .row-actions button:hover{background:var(--blue-50)}
 .row-actions .del{color:var(--danger);border-color:#f1c4be}
 .row-actions .del:hover{background:#fdecea}
 .empty{padding:30px 20px;text-align:center;color:var(--muted)}
-
-/* Modal */
 .modal-bg{position:fixed;inset:0;background:rgba(11,35,70,.45);display:none;align-items:center;justify-content:center;z-index:200;padding:16px}
 .modal-bg.open{display:flex}
-.modal{background:#fff;border-radius:14px;max-width:520px;width:100%;padding:22px;box-shadow:var(--shadow);max-height:90vh;overflow-y:auto}
+.modal{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:22px;box-shadow:var(--shadow);max-height:90vh;overflow-y:auto}
 .modal h3{margin-top:0}
 .row-2{display:grid;gap:12px}
 @media (min-width:640px){.row-2{grid-template-columns:1fr 1fr}}
 .modal .footer-row{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:10px}
-
-/* Calendar */
 .cal-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px}
 .cal-month{font-family:Poppins,Inter,sans-serif;font-weight:700;color:var(--blue-900);font-size:1.2rem}
 .cal-nav button{padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:600;color:var(--blue-700);min-height:var(--tap);margin:0 4px}
@@ -175,15 +129,9 @@ table.leads tr:hover{background:var(--bg-soft)}
 .cal-cell.today .cal-date{background:var(--blue-700);color:#fff;border-radius:999px;display:inline-block;width:26px;height:26px;line-height:26px;text-align:center}
 .cal-date{font-size:.85rem;font-weight:700;color:var(--ink)}
 .cal-ev{font-size:.72rem;background:var(--teal);color:#fff;margin-top:3px;padding:2px 6px;border-radius:6px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
-.cal-ev.local{background:var(--blue-600)}
-.cal-ev.google{background:var(--teal)}
+.cal-ev.local{background:var(--blue-600)}.cal-ev.google{background:var(--teal)}
 .cal-more{font-size:.7rem;color:var(--muted);margin-top:2px}
-@media (max-width:640px){
-  .cal-cell{min-height:64px;padding:4px}
-  .cal-ev{font-size:.66rem;padding:1px 4px}
-}
-
-/* Event list */
+@media (max-width:640px){.cal-cell{min-height:64px;padding:4px}.cal-ev{font-size:.66rem;padding:1px 4px}}
 .evlist{list-style:none;padding:0;margin:14px 0 0}
 .evlist li{padding:10px 0;border-bottom:1px solid var(--line);display:flex;gap:12px;justify-content:space-between;align-items:flex-start}
 .evlist li:last-child{border-bottom:0}
@@ -191,33 +139,31 @@ table.leads tr:hover{background:var(--bg-soft)}
 .ev-title{font-weight:600}
 .ev-src{font-size:.72rem;padding:2px 6px;border-radius:4px;background:var(--blue-50);color:var(--blue-700)}
 .ev-src.google{background:#e3f7f3;color:var(--teal-dark)}
-
-/* Google connect */
 .gcard{background:var(--blue-50);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
 .gcard h3{margin-top:0}
 .gcard .status{font-weight:600;margin:6px 0 10px}
-.gcard .status.ok{color:var(--ok)}
-.gcard .status.off{color:var(--muted)}
-
-/* Settings */
+.gcard .status.ok{color:var(--ok)}.gcard .status.off{color:var(--muted)}
 .settings-grid{display:grid;gap:14px}
 .kv{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg-soft);flex-wrap:wrap}
 .kv .k{font-weight:600;color:var(--ink)}
 .kv .v{color:var(--muted);font-size:.9rem;word-break:break-all}
-
-/* Footer */
 footer{background:var(--blue-900);color:#c7d5e8;padding:30px 0 24px;font-size:.9rem;margin-top:40px}
-footer a{color:#c7d5e8}
-footer a:hover{color:#fff}
+footer a{color:#c7d5e8}footer a:hover{color:#fff}
 .foot-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:12px;margin-top:16px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;color:#8fa3bf}
-
-/* Utility */
 .hidden{display:none !important}
 .muted{color:var(--muted)}
 .small{font-size:.88rem}
 .stack>*+*{margin-top:10px}
-.grid-2{display:grid;gap:14px}
-@media (min-width:768px){.grid-2{grid-template-columns:1fr 1fr}}
+.code-box{font-family:'Courier New',monospace;background:var(--blue-50);color:var(--blue-900);padding:8px 12px;border-radius:8px;font-size:1.1rem;font-weight:700;letter-spacing:.18em;display:inline-block;border:1px dashed var(--blue-600)}
+.invite-box{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--bg-soft);padding:10px 12px;border-radius:10px;border:1px solid var(--line);margin:8px 0}
+.invite-box code{flex:1;font-size:.78rem;color:var(--ink-2);word-break:break-all;font-family:'Courier New',monospace}
+.thread{display:flex;flex-direction:column;gap:8px;max-height:380px;overflow-y:auto;padding:6px 4px;background:var(--bg-soft);border-radius:10px;border:1px solid var(--line)}
+.msg{padding:10px 14px;border-radius:14px;max-width:85%;font-size:.95rem;line-height:1.45}
+.msg .ts{display:block;font-size:.72rem;color:var(--muted);margin-top:4px}
+.msg.client{background:#fff;border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.admin{background:var(--blue-700);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.msg.admin .ts{color:rgba(255,255,255,.78)}
+.msg-thread-empty{padding:20px;text-align:center;color:var(--muted);font-size:.9rem}
 </style>
 </head>
 <body>
@@ -249,16 +195,10 @@ footer a:hover{color:#fff}
     <section id="setup-view" class="panel auth-card" hidden>
       <span class="eyebrow">First-time setup</span>
       <h1>Create your admin password</h1>
-      <p class="lead">This password protects your leads and calendar. It never leaves this device. Choose something you'll remember - there is no reset.</p>
+      <p class="lead">This password protects your leads, members, and calendar. It never leaves this device. Choose something you'll remember - there is no reset.</p>
       <form id="setup-form" class="stack" autocomplete="off">
-        <div class="field">
-          <label for="setup-pw">New password (min 8 characters)</label>
-          <input type="password" id="setup-pw" required minlength="8" autocomplete="new-password" />
-        </div>
-        <div class="field">
-          <label for="setup-pw2">Confirm password</label>
-          <input type="password" id="setup-pw2" required minlength="8" autocomplete="new-password" />
-        </div>
+        <div class="field"><label for="setup-pw">New password (min 8 characters)</label><input type="password" id="setup-pw" required minlength="8" autocomplete="new-password" /></div>
+        <div class="field"><label for="setup-pw2">Confirm password</label><input type="password" id="setup-pw2" required minlength="8" autocomplete="new-password" /></div>
         <div id="setup-err" class="error"></div>
         <button type="submit" class="btn btn-primary block">Create password &amp; continue</button>
       </form>
@@ -268,18 +208,16 @@ footer a:hover{color:#fff}
     <section id="login-view" class="panel auth-card" hidden>
       <span class="eyebrow">Admin sign-in</span>
       <h1>VS Benefits Admin</h1>
-      <p class="lead">Enter your password to manage leads and your calendar.</p>
+      <p class="lead">Enter your password to manage leads, members, and your calendar.</p>
       <form id="login-form" class="stack" autocomplete="off">
-        <div class="field">
-          <label for="login-pw">Password</label>
-          <input type="password" id="login-pw" required autocomplete="current-password" />
-        </div>
+        <div class="field"><label for="login-pw">Password</label><input type="password" id="login-pw" required autocomplete="current-password" /></div>
         <div id="login-err" class="error"></div>
         <button type="submit" class="btn btn-primary block">Sign in</button>
       </form>
       <p class="small muted" style="margin-top:20px">
         Forgot it? <a href="#" id="reset-link">Reset &amp; start over</a> (clears all admin data on this device).
       </p>
+      <p class="small muted" style="margin-top:6px">Looking for the client portal? <a href="client.html">Sign in here</a>.</p>
     </section>
 
     <!-- ========== DASHBOARD ========== -->
@@ -288,7 +226,7 @@ footer a:hover{color:#fff}
       <div class="dash-bar">
         <div>
           <h1 style="margin-bottom:4px">Admin Portal</h1>
-          <p class="muted" style="margin:0">Welcome back, Bradley. Manage your leads and calendar below.</p>
+          <p class="muted" style="margin:0">Welcome back, Bradley.</p>
         </div>
         <button id="logout-btn" class="btn btn-ghost">Sign out</button>
       </div>
@@ -296,6 +234,10 @@ footer a:hover{color:#fff}
       <div class="panel" style="padding:0">
         <div class="tabs" role="tablist">
           <button class="tab active" data-tab="leads" role="tab">Leads</button>
+          <button class="tab" data-tab="members" role="tab">Members</button>
+          <button class="tab" data-tab="accounts" role="tab">Accounts <span class="badge hidden" id="acct-badge">0</span></button>
+          <button class="tab" data-tab="support" role="tab">Support <span class="badge hidden" id="support-badge">0</span></button>
+          <button class="tab" data-tab="referrals" role="tab">Referrals <span class="badge hidden" id="ref-badge">0</span></button>
           <button class="tab" data-tab="cal" role="tab">Calendar</button>
           <button class="tab" data-tab="settings" role="tab">Settings</button>
         </div>
@@ -311,9 +253,8 @@ footer a:hover{color:#fff}
               <button class="btn btn-primary" id="add-lead-btn">+ Add lead</button>
             </div>
           </div>
-
           <div class="toolbar">
-            <input type="search" id="lead-search" placeholder="Search by name, company, email, phone..." />
+            <input type="search" id="lead-search" placeholder="Search by name, company, email, phone, address..." />
             <select id="lead-filter" style="padding:10px;border-radius:10px;border:1px solid var(--line);min-height:var(--tap);font-size:16px">
               <option value="">All statuses</option>
               <option value="new">New</option>
@@ -323,42 +264,116 @@ footer a:hover{color:#fff}
               <option value="lost">Closed lost</option>
             </select>
           </div>
-
           <div class="table-wrap">
-            <table class="leads" id="leads-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Company</th>
-                  <th>Phone / Email</th>
-                  <th>Coverage</th>
-                  <th>Status</th>
-                  <th>Next step</th>
-                  <th></th>
-                </tr>
-              </thead>
+            <table class="data" id="leads-table">
+              <thead><tr>
+                <th>Name</th><th>Company</th><th>Phone / Email</th><th>Address</th><th>Coverage</th><th>Status</th><th>Next step</th><th></th>
+              </tr></thead>
               <tbody id="leads-body"></tbody>
             </table>
             <div class="empty hidden" id="leads-empty">No leads yet. Click "Add lead" to get started, or import a CSV.</div>
           </div>
+          <p class="small muted" style="margin-top:10px">Connect your Make.com webhook to <code>admin.html</code> to auto-capture form submissions. See ADMIN_README.md.</p>
+        </div>
 
-          <p class="small muted" style="margin-top:10px">Tip: connect your Make.com webhook to <code>admin.html</code> to auto-capture form submissions. See ADMIN_README.md for the exact steps.</p>
+        <!-- ---------- MEMBERS TAB ---------- -->
+        <div class="tab-panel" id="tab-members" hidden>
+          <div class="dash-bar">
+            <h2>VS Benefits Members <span class="pill" id="member-count">0</span></h2>
+            <button class="btn btn-primary" id="add-member-btn">+ Add member</button>
+          </div>
+          <p class="small muted" style="margin:0 0 14px">Members you add here are the only people who can create a Client Portal account. Each member gets a 6-digit verification code and a copy-to-share invite link.</p>
+          <div class="toolbar">
+            <input type="search" id="member-search" placeholder="Search by name, email, phone, coverage..." />
+          </div>
+          <div class="table-wrap">
+            <table class="data" id="members-table">
+              <thead><tr>
+                <th>Name</th><th>Email</th><th>Coverage</th><th>Enrolled</th><th>Status</th><th>Invite</th><th></th>
+              </tr></thead>
+              <tbody id="members-body"></tbody>
+            </table>
+            <div class="empty hidden" id="members-empty">No members yet. Click "Add member" to issue a verification code and invite link.</div>
+          </div>
+        </div>
+
+        <!-- ---------- ACCOUNTS TAB (registered client portal accounts) ---------- -->
+        <div class="tab-panel" id="tab-accounts" hidden>
+          <div class="dash-bar">
+            <h2>Client Portal Accounts <span class="pill" id="acct-count">0</span></h2>
+            <button class="btn btn-ghost btn-sm" id="acct-export">Export CSV</button>
+          </div>
+          <p class="small muted" style="margin:0 0 14px">Members who have registered a Client Portal account. Reset a password to clear it (the client picks a new one on next sign-in), message them directly, or revoke the account entirely.</p>
+          <div class="toolbar">
+            <input type="search" id="acct-search" placeholder="Search by name, email, phone..." />
+          </div>
+          <div class="table-wrap">
+            <table class="data" id="acct-table">
+              <thead><tr>
+                <th>Name</th><th>Email</th><th>Phone</th><th>Registered</th><th>Last sign-in</th><th>Status</th><th></th>
+              </tr></thead>
+              <tbody id="acct-body"></tbody>
+            </table>
+            <div class="empty hidden" id="acct-empty">No client portal accounts yet. Members register through client.html using their 6-digit code.</div>
+          </div>
+        </div>
+
+        <!-- ---------- SUPPORT TAB ---------- -->
+        <div class="tab-panel" id="tab-support" hidden>
+          <div class="dash-bar">
+            <h2>Support inbox <span class="pill" id="support-count">0</span></h2>
+            <button class="btn btn-ghost btn-sm" id="support-mark-all">Mark all read</button>
+          </div>
+          <p class="small muted" style="margin:0 0 14px">Conversations with your clients. Pick a member on the left, reply on the right. Outbound replies are saved here and (if a webhook is configured) forwarded so the client gets notified.</p>
+          <div id="support-grid" style="display:grid;gap:14px;grid-template-columns:1fr">
+            <div class="panel" style="padding:14px">
+              <h3 style="margin-top:0">Conversations</h3>
+              <div id="support-list" class="stack"></div>
+            </div>
+            <div class="panel" style="padding:14px" id="support-thread-panel">
+              <h3 style="margin-top:0" id="support-thread-title">Pick a conversation</h3>
+              <div class="thread" id="support-thread"><div class="msg-thread-empty">Select a member on the left to see their messages.</div></div>
+              <form id="support-reply-form" class="stack" style="margin-top:12px" hidden>
+                <textarea id="support-reply" rows="3" placeholder="Type your reply..."></textarea>
+                <div style="display:flex;gap:8px;justify-content:flex-end"><button type="submit" class="btn btn-primary btn-sm">Send reply</button></div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---------- REFERRALS TAB ---------- -->
+        <div class="tab-panel" id="tab-referrals" hidden>
+          <div class="dash-bar">
+            <h2>Referrals <span class="pill" id="ref-count">0</span></h2>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+              <span id="ref-payout-summary" style="display:flex;gap:6px;flex-wrap:wrap"></span>
+              <button class="btn btn-ghost" id="ref-export">Export CSV</button>
+            </div>
+          </div>
+          <p class="small muted" style="margin:0 0 14px">Prospects your existing members have referred. Update status, set the payout you owe the referrer, and mark paid when you've sent them their reward.</p>
+          <div class="table-wrap">
+            <table class="data" id="ref-table">
+              <thead><tr>
+                <th>Referred by</th><th>Prospect</th><th>Phone / Email</th><th>Relationship</th><th>Notes</th><th>Status</th><th>Payout</th><th>When</th><th></th>
+              </tr></thead>
+              <tbody id="ref-body"></tbody>
+            </table>
+            <div class="empty hidden" id="ref-empty">No referrals yet. They show up here when a client submits one through their portal.</div>
+          </div>
         </div>
 
         <!-- ---------- CALENDAR TAB ---------- -->
         <div class="tab-panel" id="tab-cal" hidden>
-
           <div class="gcard">
             <h3>Google Calendar</h3>
             <div class="status off" id="gcal-status">Not connected</div>
-            <p class="small muted" style="margin:0 0 10px">Connect Google Calendar to two-way sync events (read upcoming + create new events on your primary calendar). Requires a Google OAuth Client ID - see Settings tab.</p>
+            <p class="small muted" style="margin:0 0 10px">Connect Google Calendar to two-way sync events. Requires a Google OAuth Client ID - see Settings tab.</p>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
               <button class="btn btn-teal" id="gcal-connect">Connect Google Calendar</button>
               <button class="btn btn-ghost hidden" id="gcal-refresh">Refresh events</button>
               <button class="btn btn-ghost hidden" id="gcal-disconnect">Disconnect</button>
             </div>
           </div>
-
           <div class="cal-bar">
             <div class="cal-month" id="cal-month-label"></div>
             <div class="cal-nav">
@@ -368,9 +383,7 @@ footer a:hover{color:#fff}
               <button class="btn btn-primary" id="add-event-btn" style="margin-left:6px">+ Add event</button>
             </div>
           </div>
-
           <div class="cal-grid" id="cal-grid"></div>
-
           <h3 style="margin-top:20px">Upcoming (next 14 days)</h3>
           <ul class="evlist" id="ev-upcoming"></ul>
         </div>
@@ -378,53 +391,44 @@ footer a:hover{color:#fff}
         <!-- ---------- SETTINGS TAB ---------- -->
         <div class="tab-panel" id="tab-settings" hidden>
           <h2>Settings</h2>
-
           <div class="settings-grid">
-
             <div>
               <h3>Change password</h3>
               <form id="pw-form" class="stack" autocomplete="off" style="max-width:420px">
-                <div class="field">
-                  <label>Current password</label>
-                  <input type="password" id="pw-old" required autocomplete="current-password" />
-                </div>
-                <div class="field">
-                  <label>New password (min 8 characters)</label>
-                  <input type="password" id="pw-new" required minlength="8" autocomplete="new-password" />
-                </div>
+                <div class="field"><label>Current password</label><input type="password" id="pw-old" required autocomplete="current-password" /></div>
+                <div class="field"><label>New password (min 8 characters)</label><input type="password" id="pw-new" required minlength="8" autocomplete="new-password" /></div>
                 <div id="pw-err" class="error"></div>
                 <div id="pw-ok" class="ok"></div>
                 <button type="submit" class="btn btn-primary">Update password</button>
               </form>
             </div>
-
+            <div>
+              <h3>Make.com webhook (optional)</h3>
+              <p class="small muted">Used to forward client support messages and referrals to your email/CRM. Leave blank to use the mailto fallback.</p>
+              <form id="wh-form" class="stack" autocomplete="off" style="max-width:620px">
+                <div class="field"><label>Webhook URL</label><input type="url" id="wh-input" placeholder="https://hook.us1.make.com/..." /></div>
+                <div id="wh-ok" class="ok"></div>
+                <button type="submit" class="btn btn-primary">Save webhook</button>
+              </form>
+            </div>
             <div>
               <h3>Google OAuth Client ID</h3>
-              <p class="small muted">Create an OAuth 2.0 Client ID at <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">console.cloud.google.com/apis/credentials</a> (type: Web application). Add this page's URL to authorized JavaScript origins. Full steps are in ADMIN_README.md.</p>
+              <p class="small muted">Create an OAuth 2.0 Client ID at <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener">console.cloud.google.com/apis/credentials</a> (Web application). Add this page's URL to authorized JavaScript origins. Full steps in ADMIN_README.md.</p>
               <form id="gclient-form" class="stack" autocomplete="off" style="max-width:620px">
-                <div class="field">
-                  <label>Google Client ID</label>
-                  <input type="text" id="gclient-input" placeholder="xxxxxx.apps.googleusercontent.com" />
-                </div>
+                <div class="field"><label>Google Client ID</label><input type="text" id="gclient-input" placeholder="xxxxxx.apps.googleusercontent.com" /></div>
                 <div id="gclient-ok" class="ok"></div>
                 <button type="submit" class="btn btn-primary">Save Client ID</button>
               </form>
             </div>
-
             <div>
               <h3>Data</h3>
-              <div class="kv">
-                <span class="k">Leads stored locally</span>
-                <span class="v" id="settings-lead-count">0</span>
-              </div>
-              <div class="kv">
-                <span class="k">Calendar events stored locally</span>
-                <span class="v" id="settings-ev-count">0</span>
-              </div>
-              <div class="kv">
-                <span class="k">Storage used</span>
-                <span class="v" id="settings-storage">0 KB</span>
-              </div>
+              <div class="kv"><span class="k">Leads</span><span class="v" id="settings-lead-count">0</span></div>
+              <div class="kv"><span class="k">Members</span><span class="v" id="settings-member-count">0</span></div>
+              <div class="kv"><span class="k">Client portal accounts</span><span class="v" id="settings-acct-count">0</span></div>
+              <div class="kv"><span class="k">Support messages</span><span class="v" id="settings-msg-count">0</span></div>
+              <div class="kv"><span class="k">Referrals</span><span class="v" id="settings-ref-count">0</span></div>
+              <div class="kv"><span class="k">Calendar events</span><span class="v" id="settings-ev-count">0</span></div>
+              <div class="kv"><span class="k">Storage used</span><span class="v" id="settings-storage">0 KB</span></div>
               <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
                 <button class="btn btn-ghost" id="backup-btn">Backup all data (JSON)</button>
                 <button class="btn btn-ghost" id="restore-btn">Restore from backup</button>
@@ -432,13 +436,10 @@ footer a:hover{color:#fff}
                 <button class="btn btn-danger" id="wipe-btn">Wipe all admin data</button>
               </div>
             </div>
-
           </div>
         </div>
-
       </div>
     </section>
-
   </div>
 </main>
 
@@ -449,64 +450,99 @@ footer a:hover{color:#fff}
     <form id="lead-form" class="stack" autocomplete="off">
       <input type="hidden" id="lead-id" />
       <div class="row-2">
-        <div class="field">
-          <label>Name</label>
-          <input type="text" id="lf-name" required />
-        </div>
-        <div class="field">
-          <label>Company</label>
-          <input type="text" id="lf-company" />
-        </div>
+        <div class="field"><label>Name</label><input type="text" id="lf-name" required /></div>
+        <div class="field"><label>Company</label><input type="text" id="lf-company" /></div>
       </div>
       <div class="row-2">
-        <div class="field">
-          <label>Phone</label>
-          <input type="tel" id="lf-phone" />
-        </div>
-        <div class="field">
-          <label>Email</label>
-          <input type="email" id="lf-email" />
-        </div>
+        <div class="field"><label>Phone</label><input type="tel" id="lf-phone" /></div>
+        <div class="field"><label>Email</label><input type="email" id="lf-email" /></div>
       </div>
+      <div class="field"><label>Street address</label><input type="text" id="lf-address" placeholder="123 Main St, City, ST ZIP" /></div>
       <div class="row-2">
-        <div class="field">
-          <label>Coverage type</label>
+        <div class="field"><label>Coverage type</label>
           <select id="lf-coverage">
             <option value="">--</option>
-            <option>Group 10-99</option>
-            <option>Micro-Group 2-9</option>
-            <option>Family / Individual</option>
-            <option>ACA / Marketplace</option>
-            <option>Dental &amp; Vision</option>
-            <option>Medicaid</option>
-            <option>Self-Employed / 1099</option>
-            <option>Ancillary</option>
+            <option>Group 10-99</option><option>Micro-Group 2-9</option><option>Family / Individual</option>
+            <option>ACA / Marketplace</option><option>Dental &amp; Vision</option><option>Medicaid</option>
+            <option>Self-Employed / 1099</option><option>Ancillary</option>
           </select>
         </div>
-        <div class="field">
-          <label>Status</label>
+        <div class="field"><label>Status</label>
           <select id="lf-status">
-            <option value="new">New</option>
-            <option value="contacted">Contacted</option>
-            <option value="quoted">Quoted</option>
-            <option value="closed">Closed won</option>
-            <option value="lost">Closed lost</option>
+            <option value="new">New</option><option value="contacted">Contacted</option>
+            <option value="quoted">Quoted</option><option value="closed">Closed won</option><option value="lost">Closed lost</option>
           </select>
         </div>
       </div>
-      <div class="field">
-        <label>Next step</label>
-        <input type="text" id="lf-next" placeholder="e.g. Follow up Tue 2pm" />
-      </div>
-      <div class="field">
-        <label>Notes</label>
-        <textarea id="lf-notes" rows="3"></textarea>
-      </div>
+      <div class="field"><label>Next step</label><input type="text" id="lf-next" placeholder="e.g. Follow up Tue 2pm" /></div>
+      <div class="field"><label>Notes</label><textarea id="lf-notes" rows="3"></textarea></div>
       <div class="footer-row">
         <button type="button" class="btn btn-ghost" data-close>Cancel</button>
         <button type="submit" class="btn btn-primary">Save lead</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- ========== MEMBER MODAL ========== -->
+<div class="modal-bg" id="member-modal">
+  <div class="modal">
+    <h3 id="member-modal-title">Add member</h3>
+    <form id="member-form" class="stack" autocomplete="off">
+      <input type="hidden" id="member-id" />
+      <div class="row-2">
+        <div class="field"><label>Full name</label><input type="text" id="mf-name" required /></div>
+        <div class="field"><label>Email *</label><input type="email" id="mf-email" required placeholder="used as their login" /></div>
+      </div>
+      <div class="row-2">
+        <div class="field"><label>Phone</label><input type="tel" id="mf-phone" /></div>
+        <div class="field"><label>Enrollment date</label><input type="date" id="mf-enrolled" /></div>
+      </div>
+      <div class="field"><label>Address</label><input type="text" id="mf-address" /></div>
+      <div class="row-2">
+        <div class="field"><label>Coverage</label>
+          <select id="mf-coverage">
+            <option value="">--</option>
+            <option>Group 10-99</option><option>Micro-Group 2-9</option><option>Family / Individual</option>
+            <option>ACA / Marketplace</option><option>Dental &amp; Vision</option><option>Medicaid</option>
+            <option>Self-Employed / 1099</option><option>Ancillary</option>
+          </select>
+        </div>
+        <div class="field"><label>Status</label>
+          <select id="mf-status">
+            <option value="active">Active</option><option value="pending">Pending</option><option value="inactive">Inactive</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Carrier / Plan name</label><input type="text" id="mf-plan" placeholder="e.g. Aetna Open Access PPO 2500" /></div>
+      <div class="field"><label>Notes</label><textarea id="mf-notes" rows="2"></textarea></div>
+      <div class="footer-row">
+        <button type="button" class="btn btn-ghost" data-close>Cancel</button>
+        <button type="submit" class="btn btn-primary">Save &amp; issue code</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ========== INVITE MODAL ========== -->
+<div class="modal-bg" id="invite-modal">
+  <div class="modal">
+    <h3>Invite for <span id="invite-name"></span></h3>
+    <p class="muted small" style="margin-top:0">Share these with the client. They'll use either to create their portal account.</p>
+    <div class="kv"><span class="k">Email</span><span class="v" id="invite-email"></span></div>
+    <div class="kv"><span class="k">Verification code</span><span class="v"><span class="code-box" id="invite-code"></span></span></div>
+    <div style="margin-top:12px">
+      <strong>Invite link</strong>
+      <div class="invite-box"><code id="invite-link"></code><button type="button" class="btn btn-ghost btn-sm" id="copy-invite-link">Copy link</button></div>
+      <p class="small muted">The link encodes the member's name, email, enrollment date, coverage, and code so they can sign up on any device.</p>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+      <button type="button" class="btn btn-ghost" id="copy-invite-text">Copy ready-to-send message</button>
+      <a class="btn btn-teal" id="invite-mailto" href="#">Open in email</a>
+    </div>
+    <div class="footer-row" style="margin-top:14px">
+      <button type="button" class="btn btn-primary" data-close>Done</button>
+    </div>
   </div>
 </div>
 
@@ -517,31 +553,14 @@ footer a:hover{color:#fff}
     <form id="ev-form" class="stack" autocomplete="off">
       <input type="hidden" id="ev-id" />
       <input type="hidden" id="ev-source" value="local" />
-      <div class="field">
-        <label>Title</label>
-        <input type="text" id="ef-title" required />
-      </div>
+      <div class="field"><label>Title</label><input type="text" id="ef-title" required /></div>
       <div class="row-2">
-        <div class="field">
-          <label>Start</label>
-          <input type="datetime-local" id="ef-start" required />
-        </div>
-        <div class="field">
-          <label>End</label>
-          <input type="datetime-local" id="ef-end" required />
-        </div>
+        <div class="field"><label>Start</label><input type="datetime-local" id="ef-start" required /></div>
+        <div class="field"><label>End</label><input type="datetime-local" id="ef-end" required /></div>
       </div>
-      <div class="field">
-        <label>Location or link</label>
-        <input type="text" id="ef-loc" placeholder="Zoom link, phone #, address..." />
-      </div>
-      <div class="field">
-        <label>Notes</label>
-        <textarea id="ef-notes" rows="3"></textarea>
-      </div>
-      <div class="field">
-        <label><input type="checkbox" id="ef-push" /> Also create on Google Calendar (if connected)</label>
-      </div>
+      <div class="field"><label>Location or link</label><input type="text" id="ef-loc" placeholder="Zoom link, phone #, address..." /></div>
+      <div class="field"><label>Notes</label><textarea id="ef-notes" rows="3"></textarea></div>
+      <div class="field"><label><input type="checkbox" id="ef-push" /> Also create on Google Calendar (if connected)</label></div>
       <div class="footer-row">
         <button type="button" class="btn btn-danger hidden" id="ef-delete">Delete</button>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-left:auto">
@@ -557,25 +576,23 @@ footer a:hover{color:#fff}
   <div class="container">
     <div class="foot-bottom">
       <span>&copy; <span id="year"></span> VS Benefits. Admin portal.</span>
-      <span><a href="index.html">&larr; Back to public site</a></span>
+      <span><a href="index.html">&larr; Back to public site</a> | <a href="client.html">Client portal &rarr;</a></span>
     </div>
   </div>
 </footer>
 
 <script>
 /* =====================================================================
-   VS Benefits Admin Portal
-   - Client-side gate (SHA-256 hashed password, stored in localStorage)
-   - Leads CRM (localStorage, CSV import/export)
-   - Calendar (localStorage events + Google Calendar OAuth integration)
-   NOTE: This is a single-user, single-device personal admin. Data lives
-   in THIS browser only. Use Backup regularly or connect Make.com +
-   Google Sheets for a cloud copy.
+   VS Benefits Admin Portal v2
+   - Added: address on leads, Members tab + invite codes/links,
+            Support inbox (with client message ingest hook),
+            Referrals tab (with client referral ingest hook).
+   - Storage: localStorage on this device only. Use Backup weekly.
    ===================================================================== */
 (function(){
 "use strict";
 
-/* ---------- Mobile nav (same pattern as public site) ---------- */
+/* ---------- Mobile nav ---------- */
 var mt=document.querySelector(".menu-toggle"),nl=document.querySelector(".nav-links");
 function closeMenu(){if(!nl)return;nl.classList.remove("open");if(mt)mt.setAttribute("aria-expanded","false");}
 function toggleMenu(e){if(e){e.preventDefault();e.stopPropagation();}if(!nl)return;var o=nl.classList.toggle("open");if(mt)mt.setAttribute("aria-expanded",o?"true":"false");}
@@ -588,82 +605,65 @@ if(mt&&nl){
 }
 var yEl=document.getElementById("year");if(yEl)yEl.textContent=new Date().getFullYear();
 
-/* ---------- Storage keys ---------- */
+/* ---------- Storage ---------- */
 var K={
-  hash:"vs_admin_hash",
-  session:"vs_admin_session",
-  leads:"vs_leads",
-  events:"vs_events",
-  gclient:"vs_google_client_id",
-  gtoken:"vs_google_token"
+  hash:"vs_admin_hash",session:"vs_admin_session",
+  leads:"vs_leads",members:"vs_members",messages:"vs_messages",referrals:"vs_referrals",
+  events:"vs_events",accounts:"vs_client_accounts",
+  webhook:"vs_webhook_url",gclient:"vs_google_client_id",gtoken:"vs_google_token"
 };
 
 /* ---------- Utility ---------- */
 function $(id){return document.getElementById(id);}
 function uid(){return Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
+function gencode(){var s="";for(var i=0;i<6;i++)s+=Math.floor(Math.random()*10);return s;}
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
 function loadJSON(k,def){try{var v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch(e){return def;}}
 function saveJSON(k,v){localStorage.setItem(k,JSON.stringify(v));}
-async function sha256(text){
-  var enc=new TextEncoder().encode(text);
-  var buf=await crypto.subtle.digest("SHA-256",enc);
-  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");
+async function sha256(text){var enc=new TextEncoder().encode(text);var buf=await crypto.subtle.digest("SHA-256",enc);return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");}
+function copyText(t){if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(t);var ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand("copy");ta.remove();return Promise.resolve();}
+function relTime(ts){var d=Date.now()-ts;if(d<60000)return"just now";if(d<3600000)return Math.floor(d/60000)+"m ago";if(d<86400000)return Math.floor(d/3600000)+"h ago";if(d<604800000)return Math.floor(d/86400000)+"d ago";return new Date(ts).toLocaleDateString();}
+
+/* Encode/decode invite token (URL-safe base64 of JSON) */
+function b64u(s){return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
+function inviteToken(member){
+  var payload={n:member.name,e:member.email,d:member.enrollmentDate||"",c:member.coverage||"",p:member.plan||"",ph:member.phone||"",ad:member.address||"",code:member.code,mid:member.id};
+  return b64u(JSON.stringify(payload));
+}
+function inviteUrl(member){
+  var origin=location.origin&&location.origin!=="null"?location.origin:"";
+  var path=location.pathname.replace(/admin\.html.*$/,"")+"client.html";
+  return (origin?origin:"")+path+"?invite="+inviteToken(member);
 }
 
-/* ---------- Router: setup / login / dashboard ---------- */
-function show(view){
-  ["setup-view","login-view","dash-view"].forEach(function(id){
-    var el=$(id);if(!el)return;el.hidden=(id!==view);
-  });
-}
-function route(){
-  var hash=localStorage.getItem(K.hash);
-  var sess=sessionStorage.getItem(K.session);
-  if(!hash){show("setup-view");return;}
-  if(sess==="1"){show("dash-view");renderAll();return;}
-  show("login-view");
-}
+/* ---------- Routing ---------- */
+function show(view){["setup-view","login-view","dash-view"].forEach(function(id){var el=$(id);if(!el)return;el.hidden=(id!==view);});}
+function route(){var hash=localStorage.getItem(K.hash);var sess=sessionStorage.getItem(K.session);if(!hash){show("setup-view");return;}if(sess==="1"){show("dash-view");renderAll();return;}show("login-view");}
 
 /* ---------- Setup ---------- */
 $("setup-form").addEventListener("submit",async function(e){
   e.preventDefault();
-  var pw=$("setup-pw").value,pw2=$("setup-pw2").value,err=$("setup-err");
-  err.textContent="";
+  var pw=$("setup-pw").value,pw2=$("setup-pw2").value,err=$("setup-err");err.textContent="";
   if(pw.length<8){err.textContent="Password must be at least 8 characters.";return;}
   if(pw!==pw2){err.textContent="Passwords do not match.";return;}
-  localStorage.setItem(K.hash,await sha256(pw));
-  sessionStorage.setItem(K.session,"1");
-  route();
+  localStorage.setItem(K.hash,await sha256(pw));sessionStorage.setItem(K.session,"1");route();
 });
 
 /* ---------- Login ---------- */
 $("login-form").addEventListener("submit",async function(e){
-  e.preventDefault();
-  var pw=$("login-pw").value,err=$("login-err");
-  err.textContent="";
+  e.preventDefault();var pw=$("login-pw").value,err=$("login-err");err.textContent="";
   var h=await sha256(pw);
-  if(h===localStorage.getItem(K.hash)){
-    sessionStorage.setItem(K.session,"1");
-    $("login-pw").value="";
-    route();
-  } else {
-    err.textContent="Wrong password.";
-  }
+  if(h===localStorage.getItem(K.hash)){sessionStorage.setItem(K.session,"1");$("login-pw").value="";route();}
+  else{err.textContent="Wrong password.";}
 });
 $("reset-link").addEventListener("click",function(e){
   e.preventDefault();
-  if(confirm("This will DELETE your admin password, all leads, events, and Google connection on this device. Continue?")){
-    [K.hash,K.leads,K.events,K.gclient,K.gtoken].forEach(function(k){localStorage.removeItem(k);});
-    sessionStorage.removeItem(K.session);
-    route();
+  if(confirm("This will DELETE your admin password, leads, members, messages, referrals, events, and connections on this device. Continue?")){
+    Object.values(K).forEach(function(k){localStorage.removeItem(k);});
+    sessionStorage.removeItem(K.session);route();
   }
 });
-
-/* ---------- Logout ---------- */
-$("logout-btn").addEventListener("click",function(){
-  sessionStorage.removeItem(K.session);
-  route();
-});
+$("logout-btn").addEventListener("click",function(){sessionStorage.removeItem(K.session);route();});
 
 /* ---------- Tabs ---------- */
 document.querySelectorAll(".tab").forEach(function(t){
@@ -671,26 +671,26 @@ document.querySelectorAll(".tab").forEach(function(t){
     document.querySelectorAll(".tab").forEach(function(x){x.classList.remove("active");});
     t.classList.add("active");
     var which=t.getAttribute("data-tab");
-    ["leads","cal","settings"].forEach(function(name){
+    ["leads","members","accounts","support","referrals","cal","settings"].forEach(function(name){
       var el=$("tab-"+name);if(el)el.hidden=(name!==which);
     });
     if(which==="cal")renderCalendar();
     if(which==="settings")renderSettings();
+    if(which==="members")renderMembers();
+    if(which==="accounts")renderAccounts();
+    if(which==="support")renderSupport();
+    if(which==="referrals")renderReferrals();
   });
 });
 
 /* ---------- Modals ---------- */
 function openModal(id){$(id).classList.add("open");}
 function closeModal(id){$(id).classList.remove("open");}
-document.querySelectorAll("[data-close]").forEach(function(b){
-  b.addEventListener("click",function(){document.querySelectorAll(".modal-bg.open").forEach(function(m){m.classList.remove("open");});});
-});
-document.querySelectorAll(".modal-bg").forEach(function(m){
-  m.addEventListener("click",function(e){if(e.target===m)m.classList.remove("open");});
-});
+document.querySelectorAll("[data-close]").forEach(function(b){b.addEventListener("click",function(){document.querySelectorAll(".modal-bg.open").forEach(function(m){m.classList.remove("open");});});});
+document.querySelectorAll(".modal-bg").forEach(function(m){m.addEventListener("click",function(e){if(e.target===m)m.classList.remove("open");});});
 
 /* =====================================================================
-   LEADS
+   LEADS (with address)
    ===================================================================== */
 function getLeads(){return loadJSON(K.leads,[]);}
 function saveLeads(a){saveJSON(K.leads,a);}
@@ -702,14 +702,13 @@ function renderLeads(){
   var filtered=leads.filter(function(l){
     if(f&&l.status!==f)return false;
     if(!q)return true;
-    return[l.name,l.company,l.email,l.phone,l.notes,l.coverage].join(" ").toLowerCase().indexOf(q)>=0;
+    return[l.name,l.company,l.email,l.phone,l.address,l.notes,l.coverage].join(" ").toLowerCase().indexOf(q)>=0;
   });
   $("lead-count").textContent=leads.length;
-  var body=$("leads-body");
-  body.innerHTML="";
+  var body=$("leads-body");body.innerHTML="";
   if(!filtered.length){
     $("leads-empty").classList.remove("hidden");
-    $("leads-empty").textContent=leads.length?"No leads match your filter.":"No leads yet. Click \"Add lead\" to get started, or import a CSV.";
+    $("leads-empty").textContent=leads.length?"No leads match your filter.":'No leads yet. Click "Add lead" to get started, or import a CSV.';
   } else {
     $("leads-empty").classList.add("hidden");
     filtered.forEach(function(l){
@@ -718,19 +717,18 @@ function renderLeads(){
         "<td><strong>"+esc(l.name||"")+"</strong>"+(l.created?'<div class="small muted">'+new Date(l.created).toLocaleDateString()+"</div>":"")+"</td>"+
         "<td>"+esc(l.company||"")+"</td>"+
         "<td>"+(l.phone?'<a href="tel:'+esc(l.phone)+'">'+esc(l.phone)+"</a><br>":"")+(l.email?'<a href="mailto:'+esc(l.email)+'">'+esc(l.email)+"</a>":"")+"</td>"+
+        "<td>"+esc(l.address||"")+"</td>"+
         "<td>"+esc(l.coverage||"")+"</td>"+
-        "<td><span class=\"lead-status "+esc(l.status||"new")+"\">"+esc((l.status||"new").replace("_"," "))+"</span></td>"+
+        '<td><span class="lead-status '+esc(l.status||"new")+'">'+esc((l.status||"new").replace("_"," "))+"</span></td>"+
         "<td>"+esc(l.next||"")+"</td>"+
-        "<td><div class=\"row-actions\"><button data-edit=\""+esc(l.id)+"\">Edit</button><button class=\"del\" data-del=\""+esc(l.id)+"\">Delete</button></div></td>";
+        '<td><div class="row-actions"><button data-edit="'+esc(l.id)+'">Edit</button><button class="del" data-del="'+esc(l.id)+'">Delete</button></div></td>';
       body.appendChild(tr);
     });
   }
   body.querySelectorAll("[data-edit]").forEach(function(b){b.addEventListener("click",function(){openLeadModal(b.getAttribute("data-edit"));});});
   body.querySelectorAll("[data-del]").forEach(function(b){b.addEventListener("click",function(){
     if(!confirm("Delete this lead?"))return;
-    var id=b.getAttribute("data-del");
-    saveLeads(getLeads().filter(function(x){return x.id!==id;}));
-    renderLeads();
+    var id=b.getAttribute("data-del");saveLeads(getLeads().filter(function(x){return x.id!==id;}));renderLeads();
   });});
 }
 
@@ -742,6 +740,7 @@ function openLeadModal(id){
   $("lf-company").value=lead?lead.company||"":"";
   $("lf-phone").value=lead?lead.phone||"":"";
   $("lf-email").value=lead?lead.email||"":"";
+  $("lf-address").value=lead?lead.address||"":"";
   $("lf-coverage").value=lead?lead.coverage||"":"";
   $("lf-status").value=lead?lead.status||"new":"new";
   $("lf-next").value=lead?lead.next||"":"";
@@ -751,111 +750,432 @@ function openLeadModal(id){
 $("add-lead-btn").addEventListener("click",function(){openLeadModal(null);});
 $("lead-form").addEventListener("submit",function(e){
   e.preventDefault();
-  var id=$("lead-id").value;
-  var leads=getLeads();
+  var id=$("lead-id").value;var leads=getLeads();
   var payload={
-    id:id||uid(),
-    name:$("lf-name").value.trim(),
-    company:$("lf-company").value.trim(),
-    phone:$("lf-phone").value.trim(),
-    email:$("lf-email").value.trim(),
-    coverage:$("lf-coverage").value,
-    status:$("lf-status").value,
-    next:$("lf-next").value.trim(),
-    notes:$("lf-notes").value.trim(),
-    created:id?(leads.find(function(x){return x.id===id;})||{}).created||Date.now():Date.now(),
-    updated:Date.now()
+    id:id||uid(),name:$("lf-name").value.trim(),company:$("lf-company").value.trim(),
+    phone:$("lf-phone").value.trim(),email:$("lf-email").value.trim(),address:$("lf-address").value.trim(),
+    coverage:$("lf-coverage").value,status:$("lf-status").value,
+    next:$("lf-next").value.trim(),notes:$("lf-notes").value.trim(),
+    created:id?(leads.find(function(x){return x.id===id;})||{}).created||Date.now():Date.now(),updated:Date.now()
   };
-  if(id){
-    saveLeads(leads.map(function(l){return l.id===id?payload:l;}));
-  } else {
-    leads.unshift(payload);saveLeads(leads);
-  }
-  closeModal("lead-modal");
-  renderLeads();
+  if(id){saveLeads(leads.map(function(l){return l.id===id?payload:l;}));}
+  else{leads.unshift(payload);saveLeads(leads);}
+  closeModal("lead-modal");renderLeads();
 });
-
-/* ---------- Search / filter ---------- */
 $("lead-search").addEventListener("input",renderLeads);
 $("lead-filter").addEventListener("change",renderLeads);
 
-/* ---------- CSV export ---------- */
+/* CSV (now includes address) */
 function csvEscape(v){v=(v==null?"":String(v));if(/[",\n\r]/.test(v))return'"'+v.replace(/"/g,'""')+'"';return v;}
 $("leads-export").addEventListener("click",function(){
-  var leads=getLeads();
-  var cols=["name","company","phone","email","coverage","status","next","notes","created"];
-  var out=[cols.join(",")];
-  leads.forEach(function(l){out.push(cols.map(function(c){return csvEscape(l[c]);}).join(","));});
-  var blob=new Blob([out.join("\n")],{type:"text/csv"});
-  var url=URL.createObjectURL(blob);
+  var leads=getLeads();var cols=["name","company","phone","email","address","coverage","status","next","notes","created"];
+  var out=[cols.join(",")];leads.forEach(function(l){out.push(cols.map(function(c){return csvEscape(l[c]);}).join(","));});
+  var blob=new Blob([out.join("\n")],{type:"text/csv"});var url=URL.createObjectURL(blob);
   var a=document.createElement("a");a.href=url;a.download="vs-leads-"+new Date().toISOString().slice(0,10)+".csv";a.click();
   setTimeout(function(){URL.revokeObjectURL(url);},500);
 });
-
-/* ---------- CSV import ---------- */
 $("leads-import").addEventListener("click",function(){$("leads-import-file").click();});
 $("leads-import-file").addEventListener("change",function(e){
-  var f=e.target.files[0];if(!f)return;
-  var r=new FileReader();
+  var f=e.target.files[0];if(!f)return;var r=new FileReader();
   r.onload=function(){
     try{
-      var rows=parseCSV(r.result);
-      if(!rows.length){alert("CSV is empty.");return;}
+      var rows=parseCSV(r.result);if(!rows.length){alert("CSV is empty.");return;}
       var header=rows[0].map(function(h){return h.toLowerCase().trim();});
       var toIdx={};header.forEach(function(h,i){toIdx[h]=i;});
       var imported=[];
       for(var i=1;i<rows.length;i++){
         var row=rows[i];if(!row.length||row.every(function(c){return !c;}))continue;
         imported.push({
-          id:uid(),
-          name:row[toIdx.name]||row[toIdx["full name"]]||row[toIdx["first name"]]||"",
-          company:row[toIdx.company]||row[toIdx.business]||"",
-          phone:row[toIdx.phone]||row[toIdx.telephone]||"",
-          email:row[toIdx.email]||"",
+          id:uid(),name:row[toIdx.name]||row[toIdx["full name"]]||row[toIdx["first name"]]||"",
+          company:row[toIdx.company]||row[toIdx.business]||"",phone:row[toIdx.phone]||row[toIdx.telephone]||"",
+          email:row[toIdx.email]||"",address:row[toIdx.address]||row[toIdx.street]||"",
           coverage:row[toIdx.coverage]||row[toIdx["coverage_type"]]||row[toIdx["coverage type"]]||"",
-          status:(row[toIdx.status]||"new").toLowerCase(),
-          next:row[toIdx.next]||row[toIdx["next step"]]||"",
-          notes:row[toIdx.notes]||row[toIdx.note]||"",
-          created:Date.now(),updated:Date.now()
+          status:(row[toIdx.status]||"new").toLowerCase(),next:row[toIdx.next]||row[toIdx["next step"]]||"",
+          notes:row[toIdx.notes]||row[toIdx.note]||"",created:Date.now(),updated:Date.now()
         });
       }
       var existing=getLeads();saveLeads(imported.concat(existing));
-      alert("Imported "+imported.length+" leads.");
-      renderLeads();
+      alert("Imported "+imported.length+" leads.");renderLeads();
     }catch(err){alert("Could not parse CSV: "+err.message);}
   };
-  r.readAsText(f);
-  e.target.value="";
+  r.readAsText(f);e.target.value="";
 });
-
 function parseCSV(text){
   var rows=[],row=[],cur="",inQ=false;
-  for(var i=0;i<text.length;i++){
-    var c=text[i];
-    if(inQ){
-      if(c==='"'&&text[i+1]==='"'){cur+='"';i++;}
-      else if(c==='"'){inQ=false;}
-      else{cur+=c;}
-    } else {
-      if(c==='"'){inQ=true;}
-      else if(c===","){row.push(cur);cur="";}
-      else if(c==="\n"||c==="\r"){if(c==="\r"&&text[i+1]==="\n")i++;row.push(cur);rows.push(row);row=[];cur="";}
-      else{cur+=c;}
-    }
-  }
-  if(cur!==""||row.length){row.push(cur);rows.push(row);}
-  return rows;
+  for(var i=0;i<text.length;i++){var c=text[i];
+    if(inQ){if(c==='"'&&text[i+1]==='"'){cur+='"';i++;}else if(c==='"'){inQ=false;}else{cur+=c;}}
+    else{if(c==='"'){inQ=true;}else if(c===","){row.push(cur);cur="";}
+    else if(c==="\n"||c==="\r"){if(c==="\r"&&text[i+1]==="\n")i++;row.push(cur);rows.push(row);row=[];cur="";}
+    else{cur+=c;}}}
+  if(cur!==""||row.length){row.push(cur);rows.push(row);}return rows;
 }
 
 /* =====================================================================
-   CALENDAR
+   MEMBERS (issue verification codes + invite links)
+   ===================================================================== */
+function getMembers(){return loadJSON(K.members,[]);}
+function saveMembers(a){saveJSON(K.members,a);}
+
+function renderMembers(){
+  var members=getMembers();
+  var q=($("member-search").value||"").trim().toLowerCase();
+  var filtered=members.filter(function(m){if(!q)return true;return[m.name,m.email,m.phone,m.coverage,m.plan].join(" ").toLowerCase().indexOf(q)>=0;});
+  $("member-count").textContent=members.length;
+  var body=$("members-body");body.innerHTML="";
+  if(!filtered.length){
+    $("members-empty").classList.remove("hidden");
+    $("members-empty").textContent=members.length?"No members match your filter.":'No members yet. Click "Add member" to issue a verification code and invite link.';
+  } else {
+    $("members-empty").classList.add("hidden");
+    filtered.forEach(function(m){
+      var inviteStatus=m.accountCreated?'<span class="member-status active">Account created</span>':(m.codeUsed?'<span class="member-status pending">Code used (no account)</span>':'<span class="member-status pending">Code: '+esc(m.code||"")+"</span>");
+      var tr=document.createElement("tr");
+      tr.innerHTML=
+        "<td><strong>"+esc(m.name||"")+"</strong>"+(m.phone?'<div class="small muted">'+esc(m.phone)+"</div>":"")+"</td>"+
+        '<td><a href="mailto:'+esc(m.email)+'">'+esc(m.email)+"</a></td>"+
+        "<td>"+esc(m.coverage||"")+(m.plan?'<div class="small muted">'+esc(m.plan)+"</div>":"")+"</td>"+
+        "<td>"+esc(m.enrollmentDate||"-")+"</td>"+
+        '<td><span class="member-status '+esc(m.status||"active")+'">'+esc(m.status||"active")+"</span></td>"+
+        "<td>"+inviteStatus+"</td>"+
+        '<td><div class="row-actions"><button data-invite="'+esc(m.id)+'">Invite</button><button data-edit-m="'+esc(m.id)+'">Edit</button><button data-regen="'+esc(m.id)+'">New code</button><button class="del" data-del-m="'+esc(m.id)+'">Delete</button></div></td>';
+      body.appendChild(tr);
+    });
+  }
+  body.querySelectorAll("[data-invite]").forEach(function(b){b.addEventListener("click",function(){openInviteModal(b.getAttribute("data-invite"));});});
+  body.querySelectorAll("[data-edit-m]").forEach(function(b){b.addEventListener("click",function(){openMemberModal(b.getAttribute("data-edit-m"));});});
+  body.querySelectorAll("[data-regen]").forEach(function(b){b.addEventListener("click",function(){
+    if(!confirm("Generate a NEW verification code? The old one will stop working."))return;
+    var id=b.getAttribute("data-regen");
+    saveMembers(getMembers().map(function(m){if(m.id===id){m.code=gencode();m.codeUsed=false;m.accountCreated=false;m.accountId=null;m.updated=Date.now();}return m;}));
+    renderMembers();openInviteModal(id);
+  });});
+  body.querySelectorAll("[data-del-m]").forEach(function(b){b.addEventListener("click",function(){
+    if(!confirm("Delete this member? Their account will no longer work."))return;
+    var id=b.getAttribute("data-del-m");saveMembers(getMembers().filter(function(x){return x.id!==id;}));renderMembers();
+  });});
+}
+$("member-search").addEventListener("input",renderMembers);
+
+function openMemberModal(id){
+  var m=id?getMembers().find(function(x){return x.id===id;}):null;
+  $("member-modal-title").textContent=m?"Edit member":"Add member";
+  $("member-id").value=m?m.id:"";
+  $("mf-name").value=m?m.name||"":"";
+  $("mf-email").value=m?m.email||"":"";
+  $("mf-phone").value=m?m.phone||"":"";
+  $("mf-enrolled").value=m?m.enrollmentDate||"":"";
+  $("mf-address").value=m?m.address||"":"";
+  $("mf-coverage").value=m?m.coverage||"":"";
+  $("mf-status").value=m?m.status||"active":"active";
+  $("mf-plan").value=m?m.plan||"":"";
+  $("mf-notes").value=m?m.notes||"":"";
+  openModal("member-modal");
+}
+$("add-member-btn").addEventListener("click",function(){openMemberModal(null);});
+$("member-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  var id=$("member-id").value;var members=getMembers();
+  var existing=id?members.find(function(x){return x.id===id;}):null;
+  var email=$("mf-email").value.trim().toLowerCase();
+  // dedupe by email
+  var clash=members.find(function(x){return x.email===email&&x.id!==id;});
+  if(clash){alert("A member with that email already exists.");return;}
+  var payload={
+    id:id||uid(),name:$("mf-name").value.trim(),email:email,phone:$("mf-phone").value.trim(),
+    enrollmentDate:$("mf-enrolled").value,address:$("mf-address").value.trim(),
+    coverage:$("mf-coverage").value,status:$("mf-status").value,plan:$("mf-plan").value.trim(),
+    notes:$("mf-notes").value.trim(),
+    code:existing?existing.code:gencode(),
+    codeUsed:existing?existing.codeUsed||false:false,
+    accountCreated:existing?existing.accountCreated||false:false,
+    accountId:existing?existing.accountId||null:null,
+    created:existing?existing.created:Date.now(),updated:Date.now()
+  };
+  if(id){saveMembers(members.map(function(m){return m.id===id?payload:m;}));}
+  else{members.unshift(payload);saveMembers(members);}
+  closeModal("member-modal");renderMembers();
+  if(!id)openInviteModal(payload.id);
+});
+
+function openInviteModal(id){
+  var m=getMembers().find(function(x){return x.id===id;});if(!m)return;
+  $("invite-name").textContent=m.name;
+  $("invite-email").textContent=m.email;
+  $("invite-code").textContent=m.code;
+  var url=inviteUrl(m);
+  $("invite-link").textContent=url;
+  var msg="Hi "+m.name+",\n\nYour VS Benefits Client Portal is ready. Two ways to sign in:\n\n1) Click this link to set up: "+url+"\n\n2) Or go to vshealthbenefits.com/client.html, choose Create Account, and enter:\n   Email: "+m.email+"\n   Verification code: "+m.code+"\n\nFrom there you can message me, see your enrollment info, and refer friends.\n\n- Bradley\nVS Benefits | (954) 825-1009";
+  $("copy-invite-text").onclick=function(){copyText(msg).then(function(){$("copy-invite-text").textContent="Copied!";setTimeout(function(){$("copy-invite-text").textContent="Copy ready-to-send message";},1500);});};
+  $("copy-invite-link").onclick=function(){copyText(url).then(function(){$("copy-invite-link").textContent="Copied!";setTimeout(function(){$("copy-invite-link").textContent="Copy link";},1500);});};
+  $("invite-mailto").href="mailto:"+encodeURIComponent(m.email)+"?subject="+encodeURIComponent("Your VS Benefits Client Portal access")+"&body="+encodeURIComponent(msg);
+  openModal("invite-modal");
+}
+
+/* =====================================================================
+   SUPPORT (admin inbox; messages stored locally + ingest from client)
+   ===================================================================== */
+function getMessages(){return loadJSON(K.messages,[]);}
+function saveMessages(a){saveJSON(K.messages,a);}
+
+var supportSelected=null;
+
+function renderSupport(){
+  var msgs=getMessages();
+  // Group by member
+  var byMember={};msgs.forEach(function(m){(byMember[m.memberId]=byMember[m.memberId]||[]).push(m);});
+  var members=getMembers();
+  var rows=Object.keys(byMember).map(function(mid){
+    var ms=byMember[mid].sort(function(a,b){return a.ts-b.ts;});
+    var member=members.find(function(x){return x.id===mid;})||{name:"(unknown)",email:""};
+    var unread=ms.filter(function(m){return m.from==="client"&&!m.read;}).length;
+    return{memberId:mid,member:member,messages:ms,unread:unread,latestTs:ms[ms.length-1].ts};
+  }).sort(function(a,b){return b.latestTs-a.latestTs;});
+
+  $("support-count").textContent=rows.length;
+  var totalUnread=rows.reduce(function(s,r){return s+r.unread;},0);
+  var badge=$("support-badge");if(totalUnread){badge.textContent=totalUnread;badge.classList.remove("hidden");}else{badge.classList.add("hidden");}
+
+  var list=$("support-list");list.innerHTML="";
+  if(!rows.length){list.innerHTML='<div class="muted small">No conversations yet. Clients can message you from their portal.</div>';return;}
+  rows.forEach(function(r){
+    var btn=document.createElement("button");
+    btn.className="btn btn-ghost";btn.style.justifyContent="flex-start";btn.style.width="100%";btn.style.textAlign="left";
+    var preview=r.messages[r.messages.length-1].text.slice(0,55);
+    btn.innerHTML='<div style="flex:1"><div style="font-weight:700;color:var(--blue-900)">'+esc(r.member.name)+(r.unread?' <span class="pill warn" style="margin-left:6px">'+r.unread+" new</span>":"")+'</div><div class="small muted">'+esc(preview)+(preview.length>=55?"...":"")+'</div></div><span class="small muted">'+esc(relTime(r.latestTs))+"</span>";
+    btn.addEventListener("click",function(){supportSelected=r.memberId;renderThread();});
+    list.appendChild(btn);
+  });
+  if(supportSelected)renderThread();
+}
+
+function renderThread(){
+  var member=getMembers().find(function(x){return x.id===supportSelected;});
+  var thread=$("support-thread");
+  $("support-thread-title").innerHTML=member?esc(member.name)+' <span class="muted small">- '+esc(member.email)+"</span>":"Pick a conversation";
+  if(!member){thread.innerHTML='<div class="msg-thread-empty">Select a member on the left to see their messages.</div>';$("support-reply-form").hidden=true;return;}
+  var msgs=getMessages().filter(function(m){return m.memberId===supportSelected;}).sort(function(a,b){return a.ts-b.ts;});
+  if(!msgs.length){thread.innerHTML='<div class="msg-thread-empty">No messages yet.</div>';}
+  else{
+    thread.innerHTML="";
+    msgs.forEach(function(m){
+      var div=document.createElement("div");div.className="msg "+m.from;
+      div.innerHTML=esc(m.text).replace(/\n/g,"<br>")+'<span class="ts">'+esc(new Date(m.ts).toLocaleString())+"</span>";
+      thread.appendChild(div);
+    });
+    // mark read
+    var changed=false;var all=getMessages();
+    all.forEach(function(m){if(m.memberId===supportSelected&&m.from==="client"&&!m.read){m.read=true;changed=true;}});
+    if(changed){saveMessages(all);setTimeout(renderSupport,50);}
+    thread.scrollTop=thread.scrollHeight;
+  }
+  $("support-reply-form").hidden=false;
+}
+$("support-reply-form").addEventListener("submit",function(e){
+  e.preventDefault();var t=$("support-reply").value.trim();if(!t||!supportSelected)return;
+  var all=getMessages();
+  all.push({id:uid(),memberId:supportSelected,from:"admin",text:t,ts:Date.now(),read:true});
+  saveMessages(all);$("support-reply").value="";
+  // Also forward to webhook so client gets pinged via your automation
+  forwardWebhook({type:"admin_reply",memberId:supportSelected,text:t,ts:Date.now()});
+  renderThread();
+});
+$("support-mark-all").addEventListener("click",function(){
+  var all=getMessages();var changed=false;all.forEach(function(m){if(m.from==="client"&&!m.read){m.read=true;changed=true;}});
+  if(changed){saveMessages(all);renderSupport();}
+});
+
+/* =====================================================================
+   CLIENT PORTAL ACCOUNTS
+   Stored under K.accounts as: [{ memberId, email, hash, salt, created, lastSignIn }]
+   We never see the raw password - client.html stores the hash.
+   ===================================================================== */
+function getAccounts(){return loadJSON(K.accounts,[]);}
+function saveAccounts(a){saveJSON(K.accounts,a);}
+
+function renderAccounts(){
+  var accts=getAccounts();
+  var members=getMembers();
+  var q=(($("acct-search")&&$("acct-search").value)||"").trim().toLowerCase();
+  $("acct-count").textContent=accts.length;
+  var badge=$("acct-badge");
+  if(accts.length){badge.textContent=accts.length;badge.classList.remove("hidden");}else{badge.classList.add("hidden");}
+  var body=$("acct-body");body.innerHTML="";
+  // join accounts to members
+  var rows=accts.map(function(a){
+    var m=members.find(function(x){return x.id===a.memberId;})||members.find(function(x){return x.email===a.email;})||{};
+    return {a:a,m:m};
+  }).filter(function(r){
+    if(!q)return true;
+    return [r.m.name,r.a.email,r.m.phone].join(" ").toLowerCase().indexOf(q)>=0;
+  }).sort(function(x,y){return (y.a.created||0)-(x.a.created||0);});
+
+  if(!rows.length){
+    $("acct-empty").classList.remove("hidden");
+    $("acct-empty").textContent=accts.length?"No accounts match your filter.":"No client portal accounts yet. Members register through client.html using their 6-digit code.";
+    return;
+  }
+  $("acct-empty").classList.add("hidden");
+  rows.forEach(function(r){
+    var m=r.m,a=r.a;
+    var status=m&&m.status?m.status:"active";
+    var tr=document.createElement("tr");
+    tr.innerHTML=
+      "<td><strong>"+esc(m.name||"(member missing)")+"</strong></td>"+
+      '<td><a href="mailto:'+esc(a.email)+'">'+esc(a.email)+"</a></td>"+
+      "<td>"+esc(m.phone||"-")+"</td>"+
+      "<td>"+esc(a.created?new Date(a.created).toLocaleDateString():"-")+"</td>"+
+      "<td>"+esc(a.lastSignIn?relTime(a.lastSignIn):"never")+"</td>"+
+      '<td><span class="member-status '+esc(status)+'">'+esc(status)+"</span></td>"+
+      '<td><div class="row-actions">'+
+        '<button data-acct-msg="'+esc(m.id||"")+'">Message</button>'+
+        '<button data-acct-reset="'+esc(a.email)+'">Reset password</button>'+
+        '<button class="del" data-acct-del="'+esc(a.email)+'">Revoke</button>'+
+      "</div></td>";
+    body.appendChild(tr);
+  });
+  body.querySelectorAll("[data-acct-msg]").forEach(function(b){b.addEventListener("click",function(){
+    var mid=b.getAttribute("data-acct-msg");if(!mid){alert("This account has no matching member record.");return;}
+    // Switch to support tab and select this conversation
+    document.querySelector('.tab[data-tab="support"]').click();
+    setTimeout(function(){supportSelected=mid;renderSupport();renderThread();var ta=$("support-reply");if(ta)ta.focus();},80);
+  });});
+  body.querySelectorAll("[data-acct-reset]").forEach(function(b){b.addEventListener("click",function(){
+    var email=b.getAttribute("data-acct-reset");
+    if(!confirm("Reset this client's password? They will be signed out and will need to register again with a new 6-digit code (which we will issue)."))return;
+    // Remove their account entry
+    saveAccounts(getAccounts().filter(function(x){return x.email!==email;}));
+    // Reset their member record so they can re-enroll with a fresh code
+    saveMembers(getMembers().map(function(m){if(m.email===email){m.code=gencode();m.codeUsed=false;m.accountCreated=false;m.accountId=null;m.updated=Date.now();}return m;}));
+    // Also clear any existing client session for that email (best effort)
+    try{var sess=loadJSON("vs_client_session",null);if(sess&&sess.email===email){localStorage.removeItem("vs_client_session");}}catch(e){}
+    forwardWebhook({type:"client_password_reset",email:email,ts:Date.now()});
+    alert("Password cleared. A new 6-digit code has been generated for this member - copy it from the Members tab and share with the client so they can re-register.");
+    renderAccounts();
+  });});
+  body.querySelectorAll("[data-acct-del]").forEach(function(b){b.addEventListener("click",function(){
+    if(!confirm("Revoke this account entirely? The member record stays put, but they can no longer sign in until you regenerate their code."))return;
+    var email=b.getAttribute("data-acct-del");
+    saveAccounts(getAccounts().filter(function(x){return x.email!==email;}));
+    saveMembers(getMembers().map(function(m){if(m.email===email){m.codeUsed=false;m.accountCreated=false;m.accountId=null;m.updated=Date.now();}return m;}));
+    forwardWebhook({type:"client_account_revoked",email:email,ts:Date.now()});
+    renderAccounts();
+  });});
+}
+if($("acct-search"))$("acct-search").addEventListener("input",renderAccounts);
+if($("acct-export"))$("acct-export").addEventListener("click",function(){
+  var accts=getAccounts();var members=getMembers();
+  var cols=["name","email","phone","registered","last_sign_in"];
+  var out=[cols.join(",")];
+  accts.forEach(function(a){
+    var m=members.find(function(x){return x.id===a.memberId;})||members.find(function(x){return x.email===a.email;})||{};
+    out.push([m.name||"",a.email,m.phone||"",a.created?new Date(a.created).toISOString():"",a.lastSignIn?new Date(a.lastSignIn).toISOString():""].map(csvEscape).join(","));
+  });
+  var blob=new Blob([out.join("\n")],{type:"text/csv"});var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");a.href=url;a.download="vs-accounts-"+new Date().toISOString().slice(0,10)+".csv";a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);},500);
+});
+
+/* =====================================================================
+   REFERRALS
+   ===================================================================== */
+function getReferrals(){return loadJSON(K.referrals,[]);}
+function saveReferrals(a){saveJSON(K.referrals,a);}
+function fmtMoney(n){var v=Number(n);if(!isFinite(v)||v<=0)return "";return "$"+v.toFixed(2);}
+
+function renderReferrals(){
+  var refs=getReferrals().sort(function(a,b){return b.ts-a.ts;});
+  var members=getMembers();
+  $("ref-count").textContent=refs.length;
+  var unread=refs.filter(function(r){return !r.read;}).length;
+  var badge=$("ref-badge");if(unread){badge.textContent=unread;badge.classList.remove("hidden");}else{badge.classList.add("hidden");}
+  // Payout summary line
+  var totalOwed=refs.reduce(function(s,r){return s+(r.paid?0:Number(r.payout||0));},0);
+  var totalPaid=refs.reduce(function(s,r){return s+(r.paid?Number(r.payout||0):0);},0);
+  var sumEl=$("ref-payout-summary");
+  if(sumEl){
+    sumEl.innerHTML='<span class="pill">Owed: <strong>'+(fmtMoney(totalOwed)||"$0.00")+'</strong></span> <span class="pill">Paid: <strong>'+(fmtMoney(totalPaid)||"$0.00")+'</strong></span>';
+  }
+  var body=$("ref-body");body.innerHTML="";
+  if(!refs.length){$("ref-empty").classList.remove("hidden");return;}
+  $("ref-empty").classList.add("hidden");
+  refs.forEach(function(r){
+    var fromMember=members.find(function(x){return x.id===r.fromMemberId;});
+    var paidLabel=r.paid?'<div class="small muted">Paid '+esc(r.paidAt?new Date(r.paidAt).toLocaleDateString():"")+"</div>":"";
+    var tr=document.createElement("tr");
+    tr.innerHTML=
+      "<td>"+esc(fromMember?fromMember.name:"(unknown)")+(fromMember?'<div class="small muted">'+esc(fromMember.email)+"</div>":"")+"</td>"+
+      "<td><strong>"+esc(r.referralName||"")+"</strong></td>"+
+      "<td>"+(r.referralPhone?'<a href="tel:'+esc(r.referralPhone)+'">'+esc(r.referralPhone)+"</a><br>":"")+(r.referralEmail?'<a href="mailto:'+esc(r.referralEmail)+'">'+esc(r.referralEmail)+"</a>":"")+"</td>"+
+      "<td>"+esc(r.relationship||"")+"</td>"+
+      "<td>"+esc((r.notes||"").slice(0,80))+((r.notes||"").length>80?"...":"")+"</td>"+
+      '<td><select data-ref-status="'+esc(r.id)+'" style="padding:4px 6px;border-radius:6px;border:1px solid var(--line)"><option value="new"'+(r.status==="new"?" selected":"")+'>New</option><option value="contacted"'+(r.status==="contacted"?" selected":"")+'>Contacted</option><option value="enrolled"'+(r.status==="enrolled"?" selected":"")+'>Enrolled</option><option value="lost"'+(r.status==="lost"?" selected":"")+'>Lost</option></select></td>'+
+      '<td><div style="display:flex;flex-direction:column;gap:4px;min-width:120px"><div style="display:flex;align-items:center;gap:4px"><span style="color:var(--muted);font-size:.85rem">$</span><input type="number" min="0" step="0.01" data-ref-payout="'+esc(r.id)+'" value="'+esc(r.payout||"")+'" placeholder="0.00" style="width:80px;padding:4px 6px;border-radius:6px;border:1px solid var(--line);font-size:.88rem" /></div><label style="display:flex;align-items:center;gap:4px;font-size:.78rem;color:var(--muted);cursor:pointer"><input type="checkbox" data-ref-paid="'+esc(r.id)+'"'+(r.paid?" checked":"")+' /> Paid</label>'+paidLabel+'</div></td>'+
+      "<td>"+esc(relTime(r.ts))+"</td>"+
+      '<td><div class="row-actions"><button data-promote="'+esc(r.id)+'">Move to Leads</button><button class="del" data-del-r="'+esc(r.id)+'">Delete</button></div></td>';
+    body.appendChild(tr);
+  });
+  // mark read
+  var changed=false;var all=getReferrals();all.forEach(function(r){if(!r.read){r.read=true;changed=true;}});
+  if(changed)saveReferrals(all);
+  body.querySelectorAll("[data-ref-status]").forEach(function(s){s.addEventListener("change",function(){
+    var id=s.getAttribute("data-ref-status");saveReferrals(getReferrals().map(function(x){if(x.id===id)x.status=s.value;return x;}));
+  });});
+  body.querySelectorAll("[data-ref-payout]").forEach(function(inp){inp.addEventListener("change",function(){
+    var id=inp.getAttribute("data-ref-payout");var v=Number(inp.value)||0;
+    saveReferrals(getReferrals().map(function(x){if(x.id===id){x.payout=v;x.payoutUpdated=Date.now();}return x;}));
+    forwardWebhook({type:"referral_payout_updated",referralId:id,payout:v,ts:Date.now()});
+    renderReferrals();
+  });});
+  body.querySelectorAll("[data-ref-paid]").forEach(function(cb){cb.addEventListener("change",function(){
+    var id=cb.getAttribute("data-ref-paid");var paid=cb.checked;
+    saveReferrals(getReferrals().map(function(x){if(x.id===id){x.paid=paid;x.paidAt=paid?Date.now():null;}return x;}));
+    forwardWebhook({type:"referral_paid_status",referralId:id,paid:paid,ts:Date.now()});
+    renderReferrals();
+  });});
+  body.querySelectorAll("[data-promote]").forEach(function(b){b.addEventListener("click",function(){
+    var id=b.getAttribute("data-promote");var r=getReferrals().find(function(x){return x.id===id;});if(!r)return;
+    var fromMember=members.find(function(x){return x.id===r.fromMemberId;});
+    var lead={id:uid(),name:r.referralName||"",company:"",phone:r.referralPhone||"",email:r.referralEmail||"",address:"",coverage:"",status:"new",next:"Referred by "+(fromMember?fromMember.name:"client"),notes:r.notes||"",created:Date.now(),updated:Date.now()};
+    var leads=getLeads();leads.unshift(lead);saveLeads(leads);
+    saveReferrals(getReferrals().map(function(x){if(x.id===id)x.status="contacted";return x;}));
+    alert("Referral added to your Leads. Switch to Leads tab to follow up.");
+    renderReferrals();renderLeads();
+  });});
+  body.querySelectorAll("[data-del-r]").forEach(function(b){b.addEventListener("click",function(){
+    if(!confirm("Delete this referral?"))return;
+    saveReferrals(getReferrals().filter(function(x){return x.id!==b.getAttribute("data-del-r");}));renderReferrals();
+  });});
+}
+$("ref-export").addEventListener("click",function(){
+  var refs=getReferrals();var members=getMembers();
+  var cols=["referred_by","referred_email","prospect_name","prospect_phone","prospect_email","relationship","notes","status","payout","paid","paid_at","when"];
+  var out=[cols.join(",")];
+  refs.forEach(function(r){
+    var fm=members.find(function(x){return x.id===r.fromMemberId;});
+    out.push([fm?fm.name:"",fm?fm.email:"",r.referralName,r.referralPhone,r.referralEmail,r.relationship,r.notes,r.status,r.payout||0,r.paid?"yes":"no",r.paidAt?new Date(r.paidAt).toISOString():"",new Date(r.ts).toISOString()].map(csvEscape).join(","));
+  });
+  var blob=new Blob([out.join("\n")],{type:"text/csv"});var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");a.href=url;a.download="vs-referrals-"+new Date().toISOString().slice(0,10)+".csv";a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);},500);
+});
+
+/* =====================================================================
+   WEBHOOK forwarding (for support replies, etc.)
+   ===================================================================== */
+function getWebhook(){return localStorage.getItem(K.webhook)||"";}
+function forwardWebhook(payload){
+  var url=getWebhook();if(!url||url.indexOf("http")!==0)return;
+  payload._source="vshealthbenefits.com/admin";payload._ts=new Date().toISOString();
+  try{fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload),keepalive:true}).catch(function(){});}catch(e){}
+}
+
+/* =====================================================================
+   CALENDAR (unchanged from v1, condensed)
    ===================================================================== */
 var calDate=new Date();calDate.setDate(1);
-var googleEvents=[]; // cached from API
-
+var googleEvents=[];
 function getEvents(){return loadJSON(K.events,[]);}
 function saveEvents(a){saveJSON(K.events,a);}
-
 function startOfMonth(d){return new Date(d.getFullYear(),d.getMonth(),1);}
 function endOfMonth(d){return new Date(d.getFullYear(),d.getMonth()+1,0);}
 function addDays(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x;}
@@ -863,55 +1183,30 @@ function sameDay(a,b){return a.getFullYear()===b.getFullYear()&&a.getMonth()===b
 function fmtMonth(d){return d.toLocaleDateString(undefined,{month:"long",year:"numeric"});}
 function fmtDT(d){d=new Date(d);return d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
 function toInputDT(d){d=new Date(d);var p=function(n){return String(n).padStart(2,"0");};return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+"T"+p(d.getHours())+":"+p(d.getMinutes());}
-
 function allEventsForMonth(){
-  var s=startOfMonth(calDate),e=endOfMonth(calDate);
-  var list=[];
-  getEvents().forEach(function(ev){
-    var st=new Date(ev.start);
-    if(st>=addDays(s,-1)&&st<=addDays(e,1))list.push({source:"local",data:ev,start:st,end:new Date(ev.end||ev.start),title:ev.title});
-  });
-  googleEvents.forEach(function(ev){
-    var st=new Date(ev.start);
-    if(st>=addDays(s,-1)&&st<=addDays(e,1))list.push({source:"google",data:ev,start:st,end:new Date(ev.end||ev.start),title:ev.title});
-  });
+  var s=startOfMonth(calDate),e=endOfMonth(calDate);var list=[];
+  getEvents().forEach(function(ev){var st=new Date(ev.start);if(st>=addDays(s,-1)&&st<=addDays(e,1))list.push({source:"local",data:ev,start:st,end:new Date(ev.end||ev.start),title:ev.title});});
+  googleEvents.forEach(function(ev){var st=new Date(ev.start);if(st>=addDays(s,-1)&&st<=addDays(e,1))list.push({source:"google",data:ev,start:st,end:new Date(ev.end||ev.start),title:ev.title});});
   return list;
 }
-
 function renderCalendar(){
   $("cal-month-label").textContent=fmtMonth(calDate);
-  var grid=$("cal-grid");
-  grid.innerHTML="";
-  ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(function(d){
-    var el=document.createElement("div");el.className="cal-dow";el.textContent=d;grid.appendChild(el);
-  });
-  var first=startOfMonth(calDate);
-  var startDow=first.getDay();
-  var gridStart=addDays(first,-startDow);
-  var today=new Date();
-  var events=allEventsForMonth();
+  var grid=$("cal-grid");grid.innerHTML="";
+  ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(function(d){var el=document.createElement("div");el.className="cal-dow";el.textContent=d;grid.appendChild(el);});
+  var first=startOfMonth(calDate);var startDow=first.getDay();var gridStart=addDays(first,-startDow);
+  var today=new Date();var events=allEventsForMonth();
   for(var i=0;i<42;i++){
-    var d=addDays(gridStart,i);
-    var cell=document.createElement("div");
+    var d=addDays(gridStart,i);var cell=document.createElement("div");
     cell.className="cal-cell"+(d.getMonth()!==calDate.getMonth()?" other-month":"")+(sameDay(d,today)?" today":"");
     cell.innerHTML='<div class="cal-date">'+d.getDate()+"</div>";
     var dayEvs=events.filter(function(ev){return sameDay(ev.start,d);}).sort(function(a,b){return a.start-b.start;});
-    dayEvs.slice(0,3).forEach(function(ev){
-      var pill=document.createElement("span");
-      pill.className="cal-ev "+ev.source;
-      pill.textContent=ev.start.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"})+" "+ev.title;
-      pill.addEventListener("click",function(e){e.stopPropagation();openEventModal(ev);});
-      cell.appendChild(pill);
-    });
-    if(dayEvs.length>3){
-      var more=document.createElement("div");more.className="cal-more";more.textContent="+"+(dayEvs.length-3)+" more";cell.appendChild(more);
-    }
+    dayEvs.slice(0,3).forEach(function(ev){var pill=document.createElement("span");pill.className="cal-ev "+ev.source;pill.textContent=ev.start.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"})+" "+ev.title;pill.addEventListener("click",function(e){e.stopPropagation();openEventModal(ev);});cell.appendChild(pill);});
+    if(dayEvs.length>3){var more=document.createElement("div");more.className="cal-more";more.textContent="+"+(dayEvs.length-3)+" more";cell.appendChild(more);}
     (function(dateVal){cell.addEventListener("click",function(){var nd=new Date(dateVal);nd.setHours(10,0,0,0);openEventModal({_newOn:nd});});})(d);
     grid.appendChild(cell);
   }
   renderUpcoming();
 }
-
 function renderUpcoming(){
   var ul=$("ev-upcoming");ul.innerHTML="";
   var now=new Date(),in14=addDays(now,14);
@@ -926,29 +1221,21 @@ function renderUpcoming(){
     ul.appendChild(li);
   });
 }
-
 function openEventModal(evRef){
-  // evRef is either {source,data} from list, or {_newOn:Date}, or null for "add event" button
   var isNew=!evRef||evRef._newOn;
   $("ev-modal-title").textContent=isNew?"Add event":"Edit event";
   $("ef-delete").classList.toggle("hidden",isNew||(evRef&&evRef.source==="google"));
   $("ef-push").parentElement.style.display=(evRef&&evRef.source==="google")?"none":"";
   if(isNew){
     var st=evRef&&evRef._newOn?new Date(evRef._newOn):new Date(Date.now()+60*60*1000);
-    st.setMinutes(0,0,0);
-    var en=new Date(st);en.setHours(en.getHours()+1);
-    $("ev-id").value="";$("ev-source").value="local";
-    $("ef-title").value="";$("ef-start").value=toInputDT(st);$("ef-end").value=toInputDT(en);
-    $("ef-loc").value="";$("ef-notes").value="";$("ef-push").checked=false;
+    st.setMinutes(0,0,0);var en=new Date(st);en.setHours(en.getHours()+1);
+    $("ev-id").value="";$("ev-source").value="local";$("ef-title").value="";
+    $("ef-start").value=toInputDT(st);$("ef-end").value=toInputDT(en);$("ef-loc").value="";$("ef-notes").value="";$("ef-push").checked=false;
   } else {
-    $("ev-id").value=evRef.data.id||"";
-    $("ev-source").value=evRef.source;
+    $("ev-id").value=evRef.data.id||"";$("ev-source").value=evRef.source;
     $("ef-title").value=evRef.title||evRef.data.title||"";
-    $("ef-start").value=toInputDT(evRef.start);
-    $("ef-end").value=toInputDT(evRef.end||evRef.start);
-    $("ef-loc").value=evRef.data.location||"";
-    $("ef-notes").value=evRef.data.notes||evRef.data.description||"";
-    $("ef-push").checked=false;
+    $("ef-start").value=toInputDT(evRef.start);$("ef-end").value=toInputDT(evRef.end||evRef.start);
+    $("ef-loc").value=evRef.data.location||"";$("ef-notes").value=evRef.data.notes||evRef.data.description||"";$("ef-push").checked=false;
   }
   openModal("ev-modal");
 }
@@ -956,236 +1243,160 @@ $("add-event-btn").addEventListener("click",function(){openEventModal(null);});
 $("cal-prev").addEventListener("click",function(){calDate=new Date(calDate.getFullYear(),calDate.getMonth()-1,1);renderCalendar();});
 $("cal-next").addEventListener("click",function(){calDate=new Date(calDate.getFullYear(),calDate.getMonth()+1,1);renderCalendar();});
 $("cal-today").addEventListener("click",function(){calDate=new Date();calDate.setDate(1);renderCalendar();});
-
 $("ev-form").addEventListener("submit",async function(e){
-  e.preventDefault();
-  var id=$("ev-id").value,src=$("ev-source").value;
-  var payload={
-    id:id||uid(),
-    title:$("ef-title").value.trim(),
-    start:new Date($("ef-start").value).toISOString(),
-    end:new Date($("ef-end").value).toISOString(),
-    location:$("ef-loc").value.trim(),
-    notes:$("ef-notes").value.trim()
-  };
-  if(src==="google"){
-    // We only support local save + optional re-push. Editing google events requires more scope.
-    alert("Google Calendar events can be viewed here but edited on Google Calendar directly.");
-    closeModal("ev-modal");return;
-  }
-  var events=getEvents();
-  if(id){events=events.map(function(x){return x.id===id?payload:x;});}
-  else{events.unshift(payload);}
-  saveEvents(events);
-  if($("ef-push").checked){
-    try{await pushToGoogle(payload);alert("Saved locally and pushed to Google Calendar.");}
-    catch(err){alert("Saved locally, but Google push failed: "+err.message);}
-  }
-  closeModal("ev-modal");
-  renderCalendar();
-});
-$("ef-delete").addEventListener("click",function(){
-  var id=$("ev-id").value;if(!id)return;
-  if(!confirm("Delete this event?"))return;
-  saveEvents(getEvents().filter(function(x){return x.id!==id;}));
+  e.preventDefault();var id=$("ev-id").value,src=$("ev-source").value;
+  var payload={id:id||uid(),title:$("ef-title").value.trim(),start:new Date($("ef-start").value).toISOString(),end:new Date($("ef-end").value).toISOString(),location:$("ef-loc").value.trim(),notes:$("ef-notes").value.trim()};
+  if(src==="google"){alert("Google Calendar events can be viewed here but edited on Google Calendar directly.");closeModal("ev-modal");return;}
+  var events=getEvents();if(id){events=events.map(function(x){return x.id===id?payload:x;});}else{events.unshift(payload);}saveEvents(events);
+  if($("ef-push").checked){try{await pushToGoogle(payload);alert("Saved locally and pushed to Google Calendar.");}catch(err){alert("Saved locally, but Google push failed: "+err.message);}}
   closeModal("ev-modal");renderCalendar();
 });
+$("ef-delete").addEventListener("click",function(){
+  var id=$("ev-id").value;if(!id)return;if(!confirm("Delete this event?"))return;
+  saveEvents(getEvents().filter(function(x){return x.id!==id;}));closeModal("ev-modal");renderCalendar();
+});
 
-/* =====================================================================
-   GOOGLE CALENDAR (OAuth via Google Identity Services)
-   Scope: https://www.googleapis.com/auth/calendar.events
-   ===================================================================== */
+/* Google Calendar OAuth (unchanged) */
 var gTokenClient=null;
 function gClientId(){return localStorage.getItem(K.gclient)||"";}
 function gAccessToken(){var t=loadJSON(K.gtoken,null);if(!t)return null;if(t.expires_at&&t.expires_at<Date.now())return null;return t.access_token;}
-
-function updateGStatus(){
-  var el=$("gcal-status");
-  var has=!!gAccessToken();
-  el.textContent=has?"Connected - "+(JSON.parse(localStorage.getItem(K.gtoken)||"{}").email||"Google account"):"Not connected"+(gClientId()?"":" (add a Google Client ID in Settings first)");
-  el.classList.toggle("ok",has);el.classList.toggle("off",!has);
-  $("gcal-refresh").classList.toggle("hidden",!has);
-  $("gcal-disconnect").classList.toggle("hidden",!has);
-  $("gcal-connect").textContent=has?"Reconnect":"Connect Google Calendar";
-  $("gcal-connect").disabled=!gClientId();
-}
-
-function loadGSI(cb){
-  if(window.google&&google.accounts&&google.accounts.oauth2){cb();return;}
-  var s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.async=true;s.defer=true;s.onload=cb;document.head.appendChild(s);
-}
-
+function updateGStatus(){var el=$("gcal-status");var has=!!gAccessToken();el.textContent=has?"Connected - "+(JSON.parse(localStorage.getItem(K.gtoken)||"{}").email||"Google account"):"Not connected"+(gClientId()?"":" (add a Google Client ID in Settings first)");el.classList.toggle("ok",has);el.classList.toggle("off",!has);$("gcal-refresh").classList.toggle("hidden",!has);$("gcal-disconnect").classList.toggle("hidden",!has);$("gcal-connect").textContent=has?"Reconnect":"Connect Google Calendar";$("gcal-connect").disabled=!gClientId();}
+function loadGSI(cb){if(window.google&&google.accounts&&google.accounts.oauth2){cb();return;}var s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.async=true;s.defer=true;s.onload=cb;document.head.appendChild(s);}
 $("gcal-connect").addEventListener("click",function(){
-  if(!gClientId()){alert("Add your Google OAuth Client ID in the Settings tab first.");return;}
+  if(!gClientId()){alert("Add your Google OAuth Client ID in Settings first.");return;}
   loadGSI(function(){
     gTokenClient=google.accounts.oauth2.initTokenClient({
-      client_id:gClientId(),
-      scope:"https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.email",
+      client_id:gClientId(),scope:"https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.email",
       callback:async function(resp){
         if(resp.error){alert("Google sign-in failed: "+resp.error);return;}
         var token={access_token:resp.access_token,expires_at:Date.now()+(resp.expires_in||3600)*1000};
-        // try to get email
-        try{
-          var r=await fetch("https://www.googleapis.com/oauth2/v2/userinfo",{headers:{Authorization:"Bearer "+resp.access_token}});
-          if(r.ok){var j=await r.json();token.email=j.email;}
-        }catch(e){}
-        saveJSON(K.gtoken,token);
-        updateGStatus();
-        fetchGoogleEvents();
+        try{var r=await fetch("https://www.googleapis.com/oauth2/v2/userinfo",{headers:{Authorization:"Bearer "+resp.access_token}});if(r.ok){var j=await r.json();token.email=j.email;}}catch(e){}
+        saveJSON(K.gtoken,token);updateGStatus();fetchGoogleEvents();
       }
     });
     gTokenClient.requestAccessToken();
   });
 });
-$("gcal-disconnect").addEventListener("click",function(){
-  localStorage.removeItem(K.gtoken);googleEvents=[];updateGStatus();renderCalendar();
-});
+$("gcal-disconnect").addEventListener("click",function(){localStorage.removeItem(K.gtoken);googleEvents=[];updateGStatus();renderCalendar();});
 $("gcal-refresh").addEventListener("click",fetchGoogleEvents);
-
 async function fetchGoogleEvents(){
   var t=gAccessToken();if(!t)return;
-  var timeMin=new Date();timeMin.setDate(timeMin.getDate()-30);
-  var timeMax=new Date();timeMax.setDate(timeMax.getDate()+120);
-  var url="https://www.googleapis.com/calendar/v3/calendars/primary/events"+
-    "?timeMin="+encodeURIComponent(timeMin.toISOString())+
-    "&timeMax="+encodeURIComponent(timeMax.toISOString())+
-    "&singleEvents=true&orderBy=startTime&maxResults=250";
+  var timeMin=new Date();timeMin.setDate(timeMin.getDate()-30);var timeMax=new Date();timeMax.setDate(timeMax.getDate()+120);
+  var url="https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin="+encodeURIComponent(timeMin.toISOString())+"&timeMax="+encodeURIComponent(timeMax.toISOString())+"&singleEvents=true&orderBy=startTime&maxResults=250";
   try{
     var r=await fetch(url,{headers:{Authorization:"Bearer "+t}});
-    if(!r.ok){
-      if(r.status===401){localStorage.removeItem(K.gtoken);updateGStatus();alert("Google session expired - please reconnect.");return;}
-      throw new Error("HTTP "+r.status);
-    }
+    if(!r.ok){if(r.status===401){localStorage.removeItem(K.gtoken);updateGStatus();alert("Google session expired - please reconnect.");return;}throw new Error("HTTP "+r.status);}
     var j=await r.json();
-    googleEvents=(j.items||[]).filter(function(ev){return ev.start;}).map(function(ev){
-      return{
-        id:ev.id,
-        title:ev.summary||"(no title)",
-        start:ev.start.dateTime||ev.start.date,
-        end:(ev.end&&(ev.end.dateTime||ev.end.date))||ev.start.dateTime||ev.start.date,
-        location:ev.location||"",
-        description:ev.description||"",
-        htmlLink:ev.htmlLink
-      };
-    });
+    googleEvents=(j.items||[]).filter(function(ev){return ev.start;}).map(function(ev){return{id:ev.id,title:ev.summary||"(no title)",start:ev.start.dateTime||ev.start.date,end:(ev.end&&(ev.end.dateTime||ev.end.date))||ev.start.dateTime||ev.start.date,location:ev.location||"",description:ev.description||"",htmlLink:ev.htmlLink};});
     renderCalendar();
   }catch(e){alert("Could not fetch Google events: "+e.message);}
 }
-
 async function pushToGoogle(local){
   var t=gAccessToken();if(!t)throw new Error("Not connected to Google Calendar.");
-  var body={
-    summary:local.title,
-    location:local.location||undefined,
-    description:local.notes||undefined,
-    start:{dateTime:new Date(local.start).toISOString()},
-    end:{dateTime:new Date(local.end).toISOString()}
-  };
-  var r=await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events",{
-    method:"POST",
-    headers:{"Authorization":"Bearer "+t,"Content-Type":"application/json"},
-    body:JSON.stringify(body)
-  });
+  var body={summary:local.title,location:local.location||undefined,description:local.notes||undefined,start:{dateTime:new Date(local.start).toISOString()},end:{dateTime:new Date(local.end).toISOString()}};
+  var r=await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events",{method:"POST",headers:{"Authorization":"Bearer "+t,"Content-Type":"application/json"},body:JSON.stringify(body)});
   if(!r.ok){var err=await r.text();throw new Error(err);}
-  fetchGoogleEvents();
-  return r.json();
+  fetchGoogleEvents();return r.json();
 }
 
 /* =====================================================================
    SETTINGS
    ===================================================================== */
 $("pw-form").addEventListener("submit",async function(e){
-  e.preventDefault();
-  var err=$("pw-err"),ok=$("pw-ok");err.textContent="";ok.textContent="";
+  e.preventDefault();var err=$("pw-err"),ok=$("pw-ok");err.textContent="";ok.textContent="";
   var old=$("pw-old").value,newp=$("pw-new").value;
   if(newp.length<8){err.textContent="New password must be at least 8 characters.";return;}
   var oldH=await sha256(old);
   if(oldH!==localStorage.getItem(K.hash)){err.textContent="Current password is wrong.";return;}
-  localStorage.setItem(K.hash,await sha256(newp));
-  $("pw-old").value="";$("pw-new").value="";ok.textContent="Password updated.";
+  localStorage.setItem(K.hash,await sha256(newp));$("pw-old").value="";$("pw-new").value="";ok.textContent="Password updated.";
 });
-
+$("wh-form").addEventListener("submit",function(e){
+  e.preventDefault();var v=$("wh-input").value.trim();
+  if(v)localStorage.setItem(K.webhook,v);else localStorage.removeItem(K.webhook);
+  $("wh-ok").textContent=v?"Webhook saved.":"Webhook cleared.";
+});
 $("gclient-form").addEventListener("submit",function(e){
-  e.preventDefault();
-  var v=$("gclient-input").value.trim();
+  e.preventDefault();var v=$("gclient-input").value.trim();
   if(v)localStorage.setItem(K.gclient,v);else localStorage.removeItem(K.gclient);
-  $("gclient-ok").textContent=v?"Client ID saved.":"Client ID cleared.";
-  updateGStatus();
+  $("gclient-ok").textContent=v?"Client ID saved.":"Client ID cleared.";updateGStatus();
 });
 
 $("backup-btn").addEventListener("click",function(){
-  var bundle={
-    exported:new Date().toISOString(),
-    leads:getLeads(),
-    events:getEvents(),
-    google_client_id:localStorage.getItem(K.gclient)||""
-    // hash and token intentionally NOT exported
-  };
-  var blob=new Blob([JSON.stringify(bundle,null,2)],{type:"application/json"});
-  var url=URL.createObjectURL(blob);
+  var bundle={exported:new Date().toISOString(),leads:getLeads(),members:getMembers(),accounts:getAccounts(),messages:getMessages(),referrals:getReferrals(),events:getEvents(),webhook:localStorage.getItem(K.webhook)||"",google_client_id:localStorage.getItem(K.gclient)||""};
+  var blob=new Blob([JSON.stringify(bundle,null,2)],{type:"application/json"});var url=URL.createObjectURL(blob);
   var a=document.createElement("a");a.href=url;a.download="vs-admin-backup-"+new Date().toISOString().slice(0,10)+".json";a.click();
   setTimeout(function(){URL.revokeObjectURL(url);},500);
 });
 $("restore-btn").addEventListener("click",function(){$("restore-file").click();});
 $("restore-file").addEventListener("change",function(e){
-  var f=e.target.files[0];if(!f)return;
-  var r=new FileReader();
+  var f=e.target.files[0];if(!f)return;var r=new FileReader();
   r.onload=function(){
     try{
       var b=JSON.parse(r.result);
-      if(!confirm("Restore "+(b.leads||[]).length+" leads and "+(b.events||[]).length+" events? This MERGES with existing data."))return;
-      var nl=getLeads().concat(b.leads||[]);saveLeads(nl);
-      var ne=getEvents().concat(b.events||[]);saveEvents(ne);
+      if(!confirm("Restore "+(b.leads||[]).length+" leads, "+(b.members||[]).length+" members, "+(b.messages||[]).length+" messages, "+(b.referrals||[]).length+" referrals, "+(b.events||[]).length+" events? Merges with existing data."))return;
+      saveLeads(getLeads().concat(b.leads||[]));
+      saveMembers(getMembers().concat(b.members||[]));
+      if(b.accounts)saveAccounts(getAccounts().concat(b.accounts||[]));
+      saveMessages(getMessages().concat(b.messages||[]));
+      saveReferrals(getReferrals().concat(b.referrals||[]));
+      saveEvents(getEvents().concat(b.events||[]));
+      if(b.webhook)localStorage.setItem(K.webhook,b.webhook);
       if(b.google_client_id)localStorage.setItem(K.gclient,b.google_client_id);
       alert("Restore complete.");renderAll();
-    }catch(err){alert("Invalid backup file: "+err.message);}
+    }catch(err){alert("Invalid backup: "+err.message);}
   };
   r.readAsText(f);e.target.value="";
 });
 $("wipe-btn").addEventListener("click",function(){
-  if(!confirm("Wipe ALL admin data on this device (password, leads, events, Google)? This cannot be undone."))return;
-  [K.hash,K.leads,K.events,K.gclient,K.gtoken].forEach(function(k){localStorage.removeItem(k);});
-  sessionStorage.removeItem(K.session);
-  route();
+  if(!confirm("Wipe ALL admin data on this device? Cannot be undone."))return;
+  Object.values(K).forEach(function(k){localStorage.removeItem(k);});
+  sessionStorage.removeItem(K.session);route();
 });
 
 function renderSettings(){
   $("settings-lead-count").textContent=getLeads().length;
+  $("settings-member-count").textContent=getMembers().length;
+  if($("settings-acct-count"))$("settings-acct-count").textContent=getAccounts().length;
+  $("settings-msg-count").textContent=getMessages().length;
+  $("settings-ref-count").textContent=getReferrals().length;
   $("settings-ev-count").textContent=getEvents().length;
-  var bytes=0;["leads","events","hash","gclient","gtoken"].forEach(function(k){var v=localStorage.getItem(K[k]);if(v)bytes+=v.length;});
+  var bytes=0;Object.keys(K).forEach(function(name){var v=localStorage.getItem(K[name]);if(v)bytes+=v.length;});
   $("settings-storage").textContent=(bytes/1024).toFixed(1)+" KB";
+  $("wh-input").value=getWebhook();
   $("gclient-input").value=gClientId();
   updateGStatus();
 }
 
-/* ---------- Render all (after login) ---------- */
 function renderAll(){
-  renderLeads();
-  renderCalendar();
-  updateGStatus();
-  // try to fetch google events if already connected
-  if(gAccessToken())loadGSI(fetchGoogleEvents);
+  renderLeads();renderMembers();renderAccounts();renderSupport();renderReferrals();renderCalendar();
+  updateGStatus();if(gAccessToken())loadGSI(fetchGoogleEvents);
 }
 
-/* ---------- Public: programmatic lead ingest (for webhook bridge) ----------
-   Other tabs / bookmarklets / external bridges can drop a lead by calling:
-     window.VSAdmin.ingestLead({name:"..",email:"..",...})
-   The lead appears immediately on next refresh. Useful for a Make.com
-   scenario that also writes to localStorage via postMessage, or for pasting
-   a JSON payload into the console.                                      */
+/* ---------- Public API: programmatic ingest from client.html or webhook bridges ---------- */
 window.VSAdmin={
   ingestLead:function(obj){
-    var l={
-      id:uid(),name:obj.name||obj.full_name||"",company:obj.company||obj.business||"",
-      phone:obj.phone||obj.telephone||"",email:obj.email||"",coverage:obj.coverage||obj.coverage_type||"",
-      status:obj.status||"new",next:obj.next||obj.next_step||"",notes:obj.notes||obj.message||"",
-      created:Date.now(),updated:Date.now()
-    };
-    var a=getLeads();a.unshift(l);saveLeads(a);
-    if(!$("dash-view").hidden)renderLeads();
-    return l.id;
+    var l={id:uid(),name:obj.name||obj.full_name||"",company:obj.company||obj.business||"",phone:obj.phone||obj.telephone||"",email:obj.email||"",address:obj.address||obj.street||"",coverage:obj.coverage||obj.coverage_type||"",status:obj.status||"new",next:obj.next||obj.next_step||"",notes:obj.notes||obj.message||"",created:Date.now(),updated:Date.now()};
+    var a=getLeads();a.unshift(l);saveLeads(a);if(!$("dash-view").hidden)renderLeads();return l.id;
   },
-  export:function(){return{leads:getLeads(),events:getEvents()};}
+  ingestMessage:function(obj){
+    var m={id:uid(),memberId:obj.memberId,from:obj.from||"client",text:obj.text||"",ts:obj.ts||Date.now(),read:false};
+    var a=getMessages();a.push(m);saveMessages(a);if(!$("dash-view").hidden)renderSupport();return m.id;
+  },
+  ingestReferral:function(obj){
+    var r={id:uid(),fromMemberId:obj.fromMemberId,referralName:obj.referralName||obj.name||"",referralPhone:obj.referralPhone||obj.phone||"",referralEmail:obj.referralEmail||obj.email||"",relationship:obj.relationship||"",notes:obj.notes||"",status:"new",ts:Date.now(),read:false};
+    var a=getReferrals();a.unshift(r);saveReferrals(a);if(!$("dash-view").hidden)renderReferrals();return r.id;
+  },
+  markAccountCreated:function(memberId,accountId){
+    saveMembers(getMembers().map(function(m){if(m.id===memberId){m.codeUsed=true;m.accountCreated=true;m.accountId=accountId;m.updated=Date.now();}return m;}));
+    if(!$("dash-view").hidden){renderMembers();renderAccounts();}
+  },
+  recordSignIn:function(email){
+    saveAccounts(getAccounts().map(function(a){if(a.email===(email||"").toLowerCase()){a.lastSignIn=Date.now();}return a;}));
+    if(!$("dash-view").hidden)renderAccounts();
+  },
+  getMemberByEmail:function(email){return getMembers().find(function(m){return m.email===(email||"").toLowerCase();});},
+  validateInvite:function(email,code){var m=getMembers().find(function(x){return x.email===(email||"").toLowerCase()&&x.code===String(code||"")&&!x.codeUsed;});return m||null;},
+  export:function(){return{leads:getLeads(),members:getMembers(),accounts:getAccounts(),messages:getMessages(),referrals:getReferrals(),events:getEvents()};}
 };
 
 /* ---------- Boot ---------- */
