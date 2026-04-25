@@ -110,7 +110,15 @@ p{margin:0 0 1em;color:var(--ink-2);font-size:1rem}
 .btn-secondary:hover{background:var(--blue-700);color:#fff;text-decoration:none}
 .btn-teal{background:var(--teal);color:#fff}
 .btn-teal:hover{background:var(--teal-dark);color:#fff;text-decoration:none}
-.btn.submitted{background:var(--success)!important;border-color:var(--success)!important;color:#fff!important;cursor:default;opacity:1;transform:none!important;box-shadow:none!important}
+.btn.submitted{
+  background:var(--success)!important;
+  border-color:var(--success)!important;
+  color:#fff!important;
+  cursor:default;
+  opacity:1;
+  transform:none!important;
+  box-shadow:none!important;
+}
 
 /* ---- Header / Nav (mobile-first) ---- */
 .site-header{
@@ -154,18 +162,9 @@ p{margin:0 0 1em;color:var(--ink-2);font-size:1rem}
   z-index:60;
 }
 .nav-links.open{display:flex}
-.nav-links a,
-.nav-links button.nav-login{
-  color:var(--ink);font-weight:600;font-size:1rem;
-  padding:14px 20px;
-  border-bottom:1px solid var(--line);
-  min-height:var(--tap);
-  display:flex;align-items:center;
-  background:transparent;border-left:0;border-right:0;border-top:0;
-  font-family:inherit;cursor:pointer;width:100%;text-align:left;
-}
-.nav-links a:hover,
-.nav-links button.nav-login:hover{color:var(--blue-700);text-decoration:none}
+.nav-links a,.nav-links button.nav-login{color:var(--ink);font-weight:600;font-size:1rem;padding:14px 20px;border-bottom:1px solid var(--line);min-height:var(--tap);display:flex;align-items:center;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left;cursor:pointer;font-family:inherit}
+.nav-links a:last-child{border-bottom:0}
+.nav-links a:hover,.nav-links button.nav-login:hover{color:var(--blue-700);text-decoration:none}
 .nav-links a.nav-cta{
   background:var(--blue-700);color:#fff;
   margin:10px 20px 0;
@@ -466,17 +465,22 @@ footer a:hover{color:#fff}
 .service-block li{margin-bottom:6px}
 .service-block .btn{margin-top:10px}
 
+/* ---- Footer linklike (button styled as link) ---- */
+.foot-grid button.linklike{background:none;border:0;color:#c9d6ea;font-family:inherit;font-size:.92rem;padding:0;cursor:pointer;text-align:left}
+.foot-grid button.linklike:hover{color:#fff;text-decoration:underline}
+
 /* ---- Login modal ---- */
-.login-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:18px}
-.login-modal[hidden]{display:none !important}
-.login-modal:not([hidden]){display:flex}
-.login-backdrop{position:absolute;inset:0;background:rgba(13,27,42,.55);backdrop-filter:blur(2px)}
-.login-card{position:relative;background:#fff;border-radius:16px;padding:28px 24px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center}
-.login-card h3{margin-bottom:6px}
-.login-card p{color:var(--muted);margin-bottom:20px}
-.login-close{position:absolute;top:10px;right:14px;background:transparent;border:0;font-size:1.6rem;color:var(--muted);cursor:pointer;line-height:1}
-.login-options{display:flex;flex-direction:column;gap:10px}
-.login-options .btn{width:100%}
+.modal-backdrop{position:fixed;inset:0;background:rgba(13,27,42,.55);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;overflow-y:auto}
+.modal-backdrop.open{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:440px;width:100%;padding:28px 24px;box-shadow:0 20px 48px rgba(13,27,42,.25);position:relative;margin:auto}
+.modal h2{margin-bottom:6px;font-size:1.4rem}
+.modal p.lede{color:var(--muted);margin-bottom:20px;font-size:.95rem}
+.modal .close-x{position:absolute;top:10px;right:12px;background:transparent;border:0;width:36px;height:36px;font-size:1.6rem;color:var(--muted);cursor:pointer;line-height:1;border-radius:8px}
+.modal .close-x:hover{background:var(--blue-50);color:var(--ink)}
+.modal .choice-row{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.modal .choice-row .btn{width:100%;padding:14px 18px}
+.modal .small{font-size:.82rem;color:var(--muted);text-align:center}
+.modal .small a{color:var(--blue-700);font-weight:600}
 
 /* ---- Hide desktop-only utilities on mobile ---- */
 .show-desktop{display:none}
@@ -718,9 +722,9 @@ footer a:hover{color:#fff}
           <li><a href="blog.html">Blog</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li><a href="get-a-quote.html">Get a Quote</a></li>
-          <li><a href="#" data-open-login>Member Login</a></li>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms &amp; Conditions</a></li>
+          <li><button type="button" class="linklike" data-open-login>Member Login</button></li>
         </ul>
       </div>
       <div>
@@ -740,16 +744,17 @@ footer a:hover{color:#fff}
   </div>
 </footer>
 
-<div class="login-modal" id="login-modal" hidden>
-  <div class="login-backdrop" data-close-login></div>
-  <div class="login-card" role="dialog" aria-modal="true" aria-labelledby="login-title">
-    <button type="button" class="login-close" data-close-login aria-label="Close">&times;</button>
-    <h3 id="login-title">Member Login</h3>
-    <p>Choose your portal</p>
-    <div class="login-options">
-      <a class="btn btn-primary" href="https://vs-benefits-c1da9.web.app/client" target="_blank" rel="noopener">Client Portal</a>
-      <a class="btn btn-secondary" href="https://vs-benefits-c1da9.web.app/admin" target="_blank" rel="noopener">Admin Portal</a>
+<!-- ====================== LOGIN MODAL ====================== -->
+<div class="modal-backdrop" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
+  <div class="modal">
+    <button class="close-x" type="button" aria-label="Close" data-close-login>&times;</button>
+    <h2 id="login-modal-title">Sign in</h2>
+    <p class="lede">Choose where you'd like to go.</p>
+    <div class="choice-row">
+      <a class="btn btn-primary" href="client.html">Client / Member Portal</a>
+      <a class="btn btn-secondary" href="admin.html">Admin Portal</a>
     </div>
+    <p class="small">Not a member yet? <a href="client.html">Create a client account</a></p>
   </div>
 </div>
 
@@ -757,21 +762,21 @@ footer a:hover{color:#fff}
 <script>
 /* VS Benefits - vshealthbenefits.com
    Mobile-first interactivity: nav, countdown, coverage picker, form submit.
-   ============================================================
-   MAKE.COM WEBHOOK
-   Form submissions POST JSON to this URL in the background.
-   The user sees instant success (green button + confetti) regardless
-   of network latency or webhook errors.
-   ============================================================ */
+   Replace the Make.com webhook URL below to enable webhook delivery.     */
 
-window.MAKE_WEBHOOK_URL = window.MAKE_WEBHOOK_URL || "---";
+window.MAKE_WEBHOOK_URL = window.MAKE_WEBHOOK_URL || "https://services.leadconnectorhq.com/hooks/V5Px5jvE14SWLdNrFeGL/webhook-trigger/2418a3dc-cdd9-43f9-a56a-66b7918d58b2";
 
+/* ---------- Confetti burst (brand colors) ---------- */
 function fireConfetti(){
-  if (typeof window.confetti !== "function") return;
-  var colors=['#1e5ab0','#0db5a6','#16a34a','#2f7de0','#ffc857'];
-  window.confetti({particleCount:120,spread:70,origin:{y:.6},colors:colors});
-  setTimeout(function(){window.confetti({particleCount:80,angle:60,spread:60,origin:{x:0,y:.7},colors:colors});},150);
-  setTimeout(function(){window.confetti({particleCount:80,angle:120,spread:60,origin:{x:1,y:.7},colors:colors});},300);
+  if (typeof confetti !== "function") return;
+  var colors = ["#1e5ab0","#0db5a6","#16a34a","#2f7de0","#ffc857"];
+  confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 }, colors: colors });
+  setTimeout(function(){
+    confetti({ particleCount: 60, angle: 60,  spread: 55, origin: { x: 0, y: 0.7 }, colors: colors });
+  }, 180);
+  setTimeout(function(){
+    confetti({ particleCount: 60, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors: colors });
+  }, 360);
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -878,27 +883,48 @@ document.addEventListener("DOMContentLoaded", function () {
     if(back){back.addEventListener("click",function(e){e.preventDefault();setStep(1);});}
   });
 
-  /* ---------- Form submission: instant success UI + background webhook ---------- */
+  /* ---------- Form submission: instant green + confetti, webhook fire-and-forget ---------- */
   document.querySelectorAll("form[data-webhook], form.stepped-form, form[data-mailto]").forEach(function(form){
     form.addEventListener("submit",function(e){
       e.preventDefault();
 
-      // Build the payload from form fields + helpful metadata
+      // Build payload
       var data={};
       new FormData(form).forEach(function(v,k){data[k]=v;});
       data._source="vshealthbenefits.com";
       data._page  =window.location.pathname;
       data._ts    =new Date().toISOString();
+      data._user_agent=navigator.userAgent;
 
+      // Flip the Send Message button to green "Submitted" right away
       var btn=form.querySelector('button[type="submit"],input[type="submit"]');
-
-      // 1) Show success state IMMEDIATELY — green button, "Submitted", confetti.
-      //    The user gets instant feedback regardless of network conditions.
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = "\u2713 Submitted";
+      var origLabel="";
+      if(btn){
+        origLabel = btn.tagName==="INPUT" ? btn.value : btn.innerHTML;
+        btn.disabled=true;
         btn.classList.add("submitted");
+        if(btn.tagName==="INPUT"){ btn.value="\u2713 Submitted"; }
+        else{ btn.innerHTML="\u2713 Submitted"; }
       }
+
+      // Pop the confetti
+      fireConfetti();
+
+      // Fire-and-forget POST to Make.com (keepalive survives nav)
+      var webhook=form.getAttribute("data-webhook")||window.MAKE_WEBHOOK_URL;
+      if(webhook && webhook.indexOf("http")===0){
+        try{
+          fetch(webhook,{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(data),
+            keepalive:true,
+            mode:"no-cors"
+          }).catch(function(){ /* swallow - UI already shows success */ });
+        }catch(err){ /* ignore */ }
+      }
+
+      // Show a friendly inline note
       var note=form.querySelector(".form-success");
       if(!note){
         note=document.createElement("div");
@@ -906,45 +932,40 @@ document.addEventListener("DOMContentLoaded", function () {
         note.style.cssText="margin-top:14px;padding:14px 16px;border-radius:10px;background:#e8f7ee;border:1px solid #b7e0c5;color:#165c2e;font-weight:600";
         form.appendChild(note);
       }
-      note.textContent="Thanks - your message is in. I will personally reach out within one business day.";
-      fireConfetti();
+      note.textContent="Thanks - your request is in. I will personally reach out within one business day.";
 
-      // 2) Send to Make.com in the background. Fire-and-forget — we don't
-      //    block the UI on the response, and we silently swallow any errors.
-      var webhook=form.getAttribute("data-webhook")||window.MAKE_WEBHOOK_URL;
-      var useWebhook=webhook && webhook.indexOf("http")===0 && webhook.indexOf("REPLACE_WITH_")===-1;
-      if(useWebhook){
-        try{
-          fetch(webhook,{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify(data),
-            keepalive:true
-          }).catch(function(){ /* ignore network errors so the user UX is uninterrupted */ });
-        }catch(err){ /* ignore */ }
-      }
+      // Reset the form fields so it's clear the message went out
+      try{ form.reset(); }catch(e2){}
+      var s1=form.querySelector(".coverage-step"),s2=form.querySelector(".form-step");
+      if(s1&&s2){s1.hidden=false;s2.hidden=true;}
+
+      // Restore the button after a short delay so they can submit again
+      setTimeout(function(){
+        if(btn){
+          btn.disabled=false;
+          btn.classList.remove("submitted");
+          if(btn.tagName==="INPUT"){ btn.value=origLabel||"Send Message"; }
+          else{ btn.innerHTML=origLabel||"Send Message"; }
+        }
+        if(note && note.parentNode){ note.parentNode.removeChild(note); }
+      }, 6000);
     });
   });
 
-  /* ---------- Login modal open/close ---------- */
-  var loginModal=document.getElementById("login-modal");
-  document.querySelectorAll("[data-open-login]").forEach(function(el){
-    el.addEventListener("click",function(e){
-      e.preventDefault();
-      if(loginModal){loginModal.removeAttribute("hidden");}
-      closeMenu();
-    });
+  /* ---------- Login modal ---------- */
+  var modal = document.getElementById("login-modal");
+  function openModal(){ if(modal){ modal.classList.add("open"); document.body.style.overflow="hidden"; } closeMenu(); }
+  function closeModal(){ if(modal){ modal.classList.remove("open"); document.body.style.overflow=""; } }
+  document.querySelectorAll("[data-open-login]").forEach(function(b){
+    b.addEventListener("click", function(e){ e.preventDefault(); openModal(); });
   });
-  document.querySelectorAll("[data-close-login]").forEach(function(el){
-    el.addEventListener("click",function(){
-      if(loginModal){loginModal.setAttribute("hidden","");}
-    });
+  document.querySelectorAll("[data-close-login]").forEach(function(b){
+    b.addEventListener("click", function(e){ e.preventDefault(); closeModal(); });
   });
-  document.addEventListener("keydown",function(e){
-    if(e.key==="Escape"&&loginModal&&!loginModal.hasAttribute("hidden")){
-      loginModal.setAttribute("hidden","");
-    }
-  });
+  if (modal) {
+    modal.addEventListener("click", function(e){ if (e.target === modal) closeModal(); });
+  }
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeModal(); });
 
   /* ---------- Footer year ---------- */
   var y=document.getElementById("year");
