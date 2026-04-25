@@ -46,6 +46,7 @@
   --bg:#ffffff;
   --bg-soft:#f7faff;
   --warn:#b23a1d;
+  --success:#16a34a;
   --shadow:0 10px 30px rgba(13,27,42,.08);
   --shadow-sm:0 4px 12px rgba(13,27,42,.06);
   --radius:14px;
@@ -109,6 +110,7 @@ p{margin:0 0 1em;color:var(--ink-2);font-size:1rem}
 .btn-secondary:hover{background:var(--blue-700);color:#fff;text-decoration:none}
 .btn-teal{background:var(--teal);color:#fff}
 .btn-teal:hover{background:var(--teal-dark);color:#fff;text-decoration:none}
+.btn.submitted{background:var(--success)!important;border-color:var(--success)!important;color:#fff!important;cursor:default;opacity:1;transform:none!important;box-shadow:none!important}
 
 /* ---- Header / Nav (mobile-first) ---- */
 .site-header{
@@ -152,15 +154,18 @@ p{margin:0 0 1em;color:var(--ink-2);font-size:1rem}
   z-index:60;
 }
 .nav-links.open{display:flex}
-.nav-links a{
+.nav-links a,
+.nav-links button.nav-login{
   color:var(--ink);font-weight:600;font-size:1rem;
   padding:14px 20px;
   border-bottom:1px solid var(--line);
   min-height:var(--tap);
   display:flex;align-items:center;
+  background:transparent;border-left:0;border-right:0;border-top:0;
+  font-family:inherit;cursor:pointer;width:100%;text-align:left;
 }
-.nav-links a:last-child{border-bottom:0}
-.nav-links a:hover{color:var(--blue-700);text-decoration:none}
+.nav-links a:hover,
+.nav-links button.nav-login:hover{color:var(--blue-700);text-decoration:none}
 .nav-links a.nav-cta{
   background:var(--blue-700);color:#fff;
   margin:10px 20px 0;
@@ -461,6 +466,18 @@ footer a:hover{color:#fff}
 .service-block li{margin-bottom:6px}
 .service-block .btn{margin-top:10px}
 
+/* ---- Login modal ---- */
+.login-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:18px}
+.login-modal[hidden]{display:none !important}
+.login-modal:not([hidden]){display:flex}
+.login-backdrop{position:absolute;inset:0;background:rgba(13,27,42,.55);backdrop-filter:blur(2px)}
+.login-card{position:relative;background:#fff;border-radius:16px;padding:28px 24px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center}
+.login-card h3{margin-bottom:6px}
+.login-card p{color:var(--muted);margin-bottom:20px}
+.login-close{position:absolute;top:10px;right:14px;background:transparent;border:0;font-size:1.6rem;color:var(--muted);cursor:pointer;line-height:1}
+.login-options{display:flex;flex-direction:column;gap:10px}
+.login-options .btn{width:100%}
+
 /* ---- Hide desktop-only utilities on mobile ---- */
 .show-desktop{display:none}
 
@@ -502,8 +519,10 @@ footer a:hover{color:#fff}
     display:flex;position:static;flex-direction:row;gap:22px;
     background:transparent;border:0;padding:0;box-shadow:none;
   }
-  .nav-links a{
+  .nav-links a,
+  .nav-links button.nav-login{
     padding:8px 4px;border-bottom:0;min-height:auto;font-size:.94rem;
+    width:auto;background:transparent;border:0;
   }
   .nav-links a.nav-cta{
     margin:0;padding:10px 18px;border-radius:999px;font-weight:700;
@@ -567,6 +586,7 @@ footer a:hover{color:#fff}
       <a href="about.html">About</a>
       <a href="blog.html">Blog</a>
       <a href="contact.html">Contact</a>
+      <button type="button" class="nav-login" data-open-login>Member Login</button>
       <a class="nav-cta" href="get-a-quote.html">Get a Quote</a>
     </nav>
   </div>
@@ -604,7 +624,7 @@ footer a:hover{color:#fff}
         <h3>Send us a message</h3>
         <p>Tell us a little about what you need. We reply within one business day.</p>
         <form class="stepped-form" data-mailto="bvilsainthealth@gmail.com">
-          
+
       <div class="step-indicator" aria-hidden="true">
         <span class="dot active"></span><span class="dot"></span>
       </div>
@@ -637,7 +657,7 @@ footer a:hover{color:#fff}
       </div>
 
           <div class="form-step" hidden>
-            
+
       <button type="button" class="back-to-picker">&larr; Change coverage type</button>
       <div class="picked-badge">Coverage: <span class="picked-badge-value">Individual / Family</span></div>
       <input type="hidden" name="coverage_type" value="Individual / Family" />
@@ -698,6 +718,7 @@ footer a:hover{color:#fff}
           <li><a href="blog.html">Blog</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li><a href="get-a-quote.html">Get a Quote</a></li>
+          <li><a href="#" data-open-login>Member Login</a></li>
           <li><a href="privacy.html">Privacy Policy</a></li>
           <li><a href="terms.html">Terms &amp; Conditions</a></li>
         </ul>
@@ -719,12 +740,39 @@ footer a:hover{color:#fff}
   </div>
 </footer>
 
+<div class="login-modal" id="login-modal" hidden>
+  <div class="login-backdrop" data-close-login></div>
+  <div class="login-card" role="dialog" aria-modal="true" aria-labelledby="login-title">
+    <button type="button" class="login-close" data-close-login aria-label="Close">&times;</button>
+    <h3 id="login-title">Member Login</h3>
+    <p>Choose your portal</p>
+    <div class="login-options">
+      <a class="btn btn-primary" href="https://vs-benefits-c1da9.web.app/client" target="_blank" rel="noopener">Client Portal</a>
+      <a class="btn btn-secondary" href="https://vs-benefits-c1da9.web.app/admin" target="_blank" rel="noopener">Admin Portal</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <script>
 /* VS Benefits - vshealthbenefits.com
    Mobile-first interactivity: nav, countdown, coverage picker, form submit.
-   Replace the Make.com webhook URL below to enable webhook delivery.     */
+   ============================================================
+   MAKE.COM WEBHOOK
+   Form submissions POST JSON to this URL in the background.
+   The user sees instant success (green button + confetti) regardless
+   of network latency or webhook errors.
+   ============================================================ */
 
-window.MAKE_WEBHOOK_URL = window.MAKE_WEBHOOK_URL || "https://hook.us2.make.com/a3uul2eecj9hm77ryzwecbt7e0sx8908";
+window.MAKE_WEBHOOK_URL = window.MAKE_WEBHOOK_URL || "---";
+
+function fireConfetti(){
+  if (typeof window.confetti !== "function") return;
+  var colors=['#1e5ab0','#0db5a6','#16a34a','#2f7de0','#ffc857'];
+  window.confetti({particleCount:120,spread:70,origin:{y:.6},colors:colors});
+  setTimeout(function(){window.confetti({particleCount:80,angle:60,spread:60,origin:{x:0,y:.7},colors:colors});},150);
+  setTimeout(function(){window.confetti({particleCount:80,angle:120,spread:60,origin:{x:1,y:.7},colors:colors});},300);
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   "use strict";
@@ -830,53 +878,72 @@ document.addEventListener("DOMContentLoaded", function () {
     if(back){back.addEventListener("click",function(e){e.preventDefault();setStep(1);});}
   });
 
-  /* ---------- Form submission: webhook with mailto fallback ---------- */
+  /* ---------- Form submission: instant success UI + background webhook ---------- */
   document.querySelectorAll("form[data-webhook], form.stepped-form, form[data-mailto]").forEach(function(form){
     form.addEventListener("submit",function(e){
       e.preventDefault();
+
+      // Build the payload from form fields + helpful metadata
       var data={};
       new FormData(form).forEach(function(v,k){data[k]=v;});
       data._source="vshealthbenefits.com";
       data._page  =window.location.pathname;
       data._ts    =new Date().toISOString();
-      var webhook=form.getAttribute("data-webhook")||window.MAKE_WEBHOOK_URL;
-      var mailto =form.getAttribute("data-mailto") ||"bvilsainthealth@gmail.com";
+
       var btn=form.querySelector('button[type="submit"],input[type="submit"]');
-      var orig=btn?btn.textContent:"";
-      if(btn){btn.disabled=true;btn.textContent="Sending...";}
-      function success(){
-        var note=form.querySelector(".form-success");
-        if(!note){
-          note=document.createElement("div");
-          note.className="form-success";
-          note.style.cssText="margin-top:14px;padding:14px 16px;border-radius:10px;background:#e8f7ee;border:1px solid #b7e0c5;color:#165c2e;font-weight:600";
-          form.appendChild(note);
-        }
-        note.textContent="Thanks - your request is in. I will personally reach out within one business day.";
-        form.reset();
-        var s1=form.querySelector(".coverage-step"),s2=form.querySelector(".form-step");
-        if(s1&&s2){s1.hidden=false;s2.hidden=true;}
+
+      // 1) Show success state IMMEDIATELY — green button, "Submitted", confetti.
+      //    The user gets instant feedback regardless of network conditions.
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "\u2713 Submitted";
+        btn.classList.add("submitted");
       }
-      function fallback(){
-        var subj="VS Benefits inquiry - "+(data.coverage_type||"general");
-        var body=Object.keys(data).filter(function(k){return k[0]!=="_"}).map(function(k){
-          return k.replace(/_/g," ").toUpperCase()+": "+data[k];
-        }).join("\n");
-        window.location.href="mailto:"+encodeURIComponent(mailto)+"?subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(body);
+      var note=form.querySelector(".form-success");
+      if(!note){
+        note=document.createElement("div");
+        note.className="form-success";
+        note.style.cssText="margin-top:14px;padding:14px 16px;border-radius:10px;background:#e8f7ee;border:1px solid #b7e0c5;color:#165c2e;font-weight:600";
+        form.appendChild(note);
       }
-      var useWebhook=webhook&&webhook.indexOf("http")===0&&webhook.indexOf("REPLACE_WITH_")===-1;
+      note.textContent="Thanks - your message is in. I will personally reach out within one business day.";
+      fireConfetti();
+
+      // 2) Send to Make.com in the background. Fire-and-forget — we don't
+      //    block the UI on the response, and we silently swallow any errors.
+      var webhook=form.getAttribute("data-webhook")||window.MAKE_WEBHOOK_URL;
+      var useWebhook=webhook && webhook.indexOf("http")===0 && webhook.indexOf("REPLACE_WITH_")===-1;
       if(useWebhook){
-        fetch(webhook,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)})
-          .then(function(r){
-            if(btn){btn.disabled=false;btn.textContent=orig;}
-            if(r.ok)success();else fallback();
-          })
-          .catch(function(){if(btn){btn.disabled=false;btn.textContent=orig;}fallback();});
-      } else {
-        if(btn){btn.disabled=false;btn.textContent=orig;}
-        fallback();
+        try{
+          fetch(webhook,{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(data),
+            keepalive:true
+          }).catch(function(){ /* ignore network errors so the user UX is uninterrupted */ });
+        }catch(err){ /* ignore */ }
       }
     });
+  });
+
+  /* ---------- Login modal open/close ---------- */
+  var loginModal=document.getElementById("login-modal");
+  document.querySelectorAll("[data-open-login]").forEach(function(el){
+    el.addEventListener("click",function(e){
+      e.preventDefault();
+      if(loginModal){loginModal.removeAttribute("hidden");}
+      closeMenu();
+    });
+  });
+  document.querySelectorAll("[data-close-login]").forEach(function(el){
+    el.addEventListener("click",function(){
+      if(loginModal){loginModal.setAttribute("hidden","");}
+    });
+  });
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape"&&loginModal&&!loginModal.hasAttribute("hidden")){
+      loginModal.setAttribute("hidden","");
+    }
   });
 
   /* ---------- Footer year ---------- */
