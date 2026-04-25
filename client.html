@@ -382,6 +382,12 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 /* =========================================================
+   Make.com webhook - hardcoded default so it always fires.
+   Override at runtime: localStorage.setItem("vs_webhook_url", "<new-url>")
+   ========================================================= */
+var MAKE_WEBHOOK_URL = "https://hook.us2.make.com/a3uul2eecj9hm77ryzwecbt7e0sx8908";
+
+/* =========================================================
    Storage keys (must match admin.html)
    ========================================================= */
 var K={
@@ -400,7 +406,7 @@ function uid(){return"id_"+Math.random().toString(36).slice(2,10)+Date.now().toS
 function getAccounts(){try{return JSON.parse(localStorage.getItem(K.accounts)||"[]");}catch(e){return[];}}
 function getMessages(){try{return JSON.parse(localStorage.getItem(K.messages)||"[]");}catch(e){return[];}}
 function getReferrals(){try{return JSON.parse(localStorage.getItem(K.referrals)||"[]");}catch(e){return[];}}
-function getWebhook(){return localStorage.getItem(K.webhook)||"";}
+function getWebhook(){return localStorage.getItem(K.webhook)||MAKE_WEBHOOK_URL;}
 function getSession(){try{return JSON.parse(sessionStorage.getItem(K.session)||"null");}catch(e){return null;}}
 function setSession(s){sessionStorage.setItem(K.session,JSON.stringify(s));}
 function clearSession(){sessionStorage.removeItem(K.session);}
@@ -427,9 +433,38 @@ function showNotice(elId,kind,text){
 }
 function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
 
+/* =========================================================
+   Webhook delivery - sendBeacon primary, keepalive fetch fallback.
+   Make.com webhooks accept JSON and DO honor CORS, but sendBeacon
+   is more reliable for fire-and-forget (survives page navigation,
+   no preflight, can't be blocked by an aggressive ad blocker on
+   the cross-origin path the same way).
+   ========================================================= */
 function webhookFire(payload){
-  var url=getWebhook();if(!url)return;
-  try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});}catch(e){}
+  var url=getWebhook();
+  if(!url||url.indexOf("http")!==0)return false;
+  var json;
+  try{json=JSON.stringify(payload);}catch(e){return false;}
+
+  // 1) sendBeacon - purpose-built for fire-and-forget
+  try{
+    if(navigator&&typeof navigator.sendBeacon==="function"){
+      var blob=new Blob([json],{type:"application/json"});
+      if(navigator.sendBeacon(url,blob))return true;
+    }
+  }catch(e){/* fall through */}
+
+  // 2) keepalive fetch - fallback
+  try{
+    fetch(url,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:json,
+      keepalive:true,
+      mode:"no-cors"
+    }).catch(function(){});
+    return true;
+  }catch(e2){return false;}
 }
 
 /* =========================================================
@@ -524,6 +559,8 @@ $("tab-signup").addEventListener("click",function(){
    Sign up - pulls latest accounts from cloud before checking
    for duplicates, so a user signing up on device B sees the
    account they made on device A.
+   On success: fires Make.com webhook so Bradley's scenario
+   can send a welcome email.
    ========================================================= */
 $("signup-form").addEventListener("submit",async function(e){
   e.preventDefault();
@@ -552,7 +589,23 @@ $("signup-form").addEventListener("submit",async function(e){
   saveAccounts(accts); // pushes to vs_state/accounts -> admin sees it instantly
   setSession({id:acct.id,email:acct.email,since:Date.now()});
 
-  webhookFire({event:"client_signup",account:{id:acct.id,firstName:first,lastName:last,email:email,phone:phone,created:acct.created}});
+  // Fire Make.com webhook for welcome email
+  // Payload is flat & email-friendly so the Make.com scenario can
+  // map directly to a "send email" module without extra parsing.
+  webhookFire({
+    event:"client_signup",
+    account_id:acct.id,
+    first_name:first,
+    last_name:last,
+    full_name:(first+" "+last).trim(),
+    email:email,
+    phone:phone,
+    created:acct.created,
+    created_iso:new Date(acct.created).toISOString(),
+    source:"vshealthbenefits.com",
+    page:"/client.html",
+    user_agent:navigator.userAgent
+  });
 
   showDashboard();
 });
@@ -583,7 +636,7 @@ $("login-form").addEventListener("submit",async function(e){
   saveAccounts(arr);
   setSession({id:acct.id,email:acct.email,since:Date.now()});
 
-  webhookFire({event:"client_signin",accountId:acct.id,email:email,ts:Date.now()});
+  webhookFire({event:"client_signin",account_id:acct.id,email:email,ts:Date.now()});
 
   showDashboard();
 });
@@ -596,7 +649,7 @@ $("delete-account").addEventListener("click",function(){
   if(!confirm("Delete your account? This will remove your sign-in. Your messages and referral history stay with your advisor."))return;
   var s=getSession();if(!s)return;
   saveAccounts(getAccounts().filter(function(a){return a.id!==s.id;}));
-  webhookFire({event:"client_account_deleted",accountId:s.id,email:s.email,ts:Date.now()});
+  webhookFire({event:"client_account_deleted",account_id:s.id,email:s.email,ts:Date.now()});
   clearSession();location.reload();
 });
 
@@ -617,7 +670,7 @@ $("pw-form").addEventListener("submit",async function(e){
   saveAccounts(arr);
   $("pw-form").reset();
   showNotice("pw-msg","ok","Password updated.");
-  webhookFire({event:"client_password_changed",accountId:acct.id,ts:Date.now()});
+  webhookFire({event:"client_password_changed",account_id:acct.id,ts:Date.now()});
 });
 
 /* =========================================================
@@ -643,7 +696,7 @@ $("photo-input").addEventListener("change",function(e){
       saveAccounts(arr);
       paintAvatar(dataUrl);
       showNotice("photo-msg","ok","Profile photo updated.");
-      webhookFire({event:"client_photo_updated",accountId:acct.id,ts:Date.now()});
+      webhookFire({event:"client_photo_updated",account_id:acct.id,ts:Date.now()});
     };
     img.src=reader.result;
   };
@@ -745,7 +798,7 @@ $("msg-form").addEventListener("submit",function(e){
   var text=$("msg-text").value.trim();if(!text)return;
   var m={id:uid(),accountId:acct.id,from:"client",text:text,ts:Date.now(),read:false};
   var arr=getMessages();arr.push(m);saveMessages(arr);
-  webhookFire({event:"client_message",accountId:acct.id,email:acct.email,text:text,ts:Date.now()});
+  webhookFire({event:"client_message",account_id:acct.id,email:acct.email,text:text,ts:Date.now()});
   $("msg-text").value="";
   renderMessages();
 });
@@ -767,7 +820,7 @@ $("ref-form").addEventListener("submit",function(e){
   var r={id:uid(),fromAccountId:acct.id,referralName:name,referralPhone:phone,referralEmail:email,relationship:rel,notes:notes,status:"new",ts:Date.now(),read:false,payout:0,paid:false};
   var arr=getReferrals();arr.unshift(r);saveReferrals(arr);
 
-  webhookFire({event:"client_referral",fromAccountId:acct.id,fromEmail:acct.email,referralName:name,referralPhone:phone,referralEmail:email,relationship:rel,notes:notes,ts:Date.now()});
+  webhookFire({event:"client_referral",from_account_id:acct.id,from_email:acct.email,referral_name:name,referral_phone:phone,referral_email:email,relationship:rel,notes:notes,ts:Date.now()});
 
   showNotice("ref-msg","ok","Thanks! Your referral was sent and you're entered in our gift drawing.");
   $("ref-form").reset();
