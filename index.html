@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>VS Benefits | Independent Health Insurance Advisor in Miami, FL</title>
 <meta name="description" content="VS Benefits is an independent health insurance advisor in Miami, FL serving small employers (10-99 employees), self-employed operators, and families in 40+ states. Group plans, ACA, Medicaid guidance, and dental/vision." />
-<link rel="canonical" href="/index.html" />
+<link rel="canonical" href="https://vshealthbenefits.com/" />
 <meta name="robots" content="index,follow" />
 <meta name="geo.region" content="US-FL" />
 <meta name="geo.placename" content="Miami" />
@@ -602,7 +602,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* ---------- Mobile hamburger ---------- */
   var toggle = document.querySelector(".menu-toggle");
-  var links  = document.querySelector(".nav-links");
+  var links  = document.getElementById("nav-links");
   function closeMenu() {
     if (!links) return;
     links.classList.remove("open");
@@ -676,7 +676,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if(now<=END){
       paint(END,"Time left to enroll in 2027 ACA coverage",
             "Open Enrollment closes Jan 15, 2027. After that you will need a Special Enrollment event to switch plans.");
-      if(elWrap)elWrap.classList.add("closed");
+      if(elWrap)elWrap.classList.remove("closed");
     } else {
       paint(Date.now(),"Open Enrollment is closed for 2027",
             "Special Enrollment may be available if you've had a qualifying life event. Reach out to check.");
@@ -687,9 +687,8 @@ document.addEventListener("DOMContentLoaded", function () {
   setInterval(tick, 1000);
 });
 
-import { SpeedInsights } from "@vercel/speed-insights/next"
-</script>
 
+</script>
 
 </body>
 </html>

@@ -622,33 +622,40 @@ footer a:hover{color:#fff}
 <section class="section">
   <div class="container">
     <div class="post-grid">
+
+      <!-- POST 1 -->
       <a class="post-card" href="blog/small-business-group-health-guide.html">
-        <div class="cover"><img src="./images/smal business.jpg" alt="Small business group health guide cover" loading="lazy" /></div>
+        <div class="cover"><img src="./images/smal business.jpg" alt="Small business owner reviewing group health insurance options" loading="lazy" /></div>
         <div class="body">
-          <div class="meta">Group | 12 min read</div>
+          <div class="meta">Group Health | 12 min read</div>
           <h3>Small business group health insurance: a practical guide for 10-99 employees</h3>
-          <p>Fully insured vs. level-funded vs. ICHRA. What actually moves premiums, what saves on taxes, and what the 3 biggest renewal traps look like.</p>
+          <p>If you run a business with 10 to 99 employees in Florida or anywhere across the country, health benefits are likely your second biggest line item after payroll. That makes the decision you make at renewal one of the most important financial choices you face each year. This guide breaks down the three plan structures worth knowing: fully insured, level-funded, and ICHRA. We explain what actually drives premiums up or down, which tax strategies small employers miss most often, and the three renewal traps that cost business owners thousands without them realizing it. Whether you are shopping for the first time or heading into your next renewal, this is the foundation you need before talking to any carrier.</p>
           <span class="read-more">Read article &rarr;</span>
         </div>
       </a>
+
+      <!-- POST 2 -->
       <a class="post-card" href="blog/aca-open-enrollment-2027-guide.html">
-        <div class="cover"><img src="./images/ACA.jpg" alt="ACA Open Enrollment 2027 guide cover" loading="lazy" /></div>
+        <div class="cover"><img src="./images/ACA.jpg" alt="ACA Open Enrollment 2027 checklist for individuals and families" loading="lazy" /></div>
         <div class="body">
-          <div class="meta">Individual / Family | 9 min read</div>
+          <div class="meta">ACA / Individual | 9 min read</div>
           <h3>ACA Open Enrollment 2027: your plain-English checklist</h3>
-          <p>Key dates, subsidy math, network gotchas, and the 5 mistakes we see every November. Bookmark this before Nov 1, 2026.</p>
+          <p>Open Enrollment for 2027 ACA coverage runs November 1 through January 15, 2027. Miss that window and you will need a qualifying life event to make any changes until 2028. This checklist walks you through the key dates, how to estimate your subsidy using your Modified Adjusted Gross Income, what to watch for with narrow networks that look affordable but leave your doctor out of pocket, and the five mistakes we see clients make every single November. If you are self-employed, between jobs, or buying coverage for your family outside of an employer plan, bookmark this before November 1st. The subsidy cliffs alone could cost you hundreds per month if you guess wrong on your income estimate.</p>
           <span class="read-more">Read article &rarr;</span>
         </div>
       </a>
+
+      <!-- POST 3 -->
       <a class="post-card" href="blog/miami-small-business-health-insurance.html">
-        <div class="cover"><img src="./images/miami.jpg" alt="Miami small business health insurance cover" loading="lazy" /></div>
+        <div class="cover"><img src="./images/miami.jpg" alt="Miami Florida small business health insurance advisor" loading="lazy" /></div>
         <div class="body">
           <div class="meta">Miami / Florida | 8 min read</div>
           <h3>Miami small business health insurance: what is different here</h3>
-          <p>Carrier availability, hurricane season service expectations, and why Florida small groups need a specialized advisor.</p>
+          <p>Buying group health insurance in Miami is not the same as buying it in Atlanta or Chicago. Florida has its own carrier footprint, its own regulatory quirks, and a bilingual workforce dynamic that affects plan selection in ways most national brokers overlook. This article covers which carriers actually have strong networks in Miami-Dade and Broward counties, what small employers need to know about hurricane season and service continuity, why Spanish-language member support matters when building a benefits package your team will actually use, and how working with a locally licensed independent advisor changes what you have access to. If you are a small business owner in South Florida weighing your options, this is written specifically for your situation.</p>
           <span class="read-more">Read article &rarr;</span>
         </div>
       </a>
+
     </div>
   </div>
 </section>
@@ -767,7 +774,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   if (toggle && links) {
     toggle.addEventListener("click", toggleMenu);
-    toggle.addEventListener("touchend", function (e) { toggleMenu(e); }, { passive: false });
     links.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeMenu); });
     document.addEventListener("click", function (e) {
       if (!links.classList.contains("open")) return;
