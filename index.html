@@ -616,7 +616,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   if (toggle && links) {
     toggle.addEventListener("click", toggleMenu);
-    toggle.addEventListener("touchend", function (e) { toggleMenu(e); }, { passive: false });
     links.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeMenu); });
     document.addEventListener("click", function (e) {
       if (!links.classList.contains("open")) return;
@@ -690,6 +689,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 import { SpeedInsights } from "@vercel/speed-insights/next"
 </script>
+
 
 </body>
 </html>
