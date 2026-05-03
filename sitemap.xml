@@ -2,38 +2,42 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://vshealthbenefits.com/</loc>
+    <lastmod>2026-05-02</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://vshealthbenefits.com/about.html</loc>
+    <lastmod>2026-05-02</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://vshealthbenefits.com/services.html</loc>
+    <lastmod>2026-05-02</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://vshealthbenefits.com/blog.html</loc>
+    <lastmod>2026-05-02</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://vshealthbenefits.com/contact.html</loc>
+    <lastmod>2026-05-02</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://vshealthbenefits.com/get-a-quote.html</loc>
+    <lastmod>2026-05-02</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vshealthbenefits.com/blog/small-business-group-health-guide.html</loc>
-    <priority>0.7</priority>
+    <loc>https://vshealthbenefits.com/privacy.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://vshealthbenefits.com/blog/aca-open-enrollment-2027-guide.html</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://vshealthbenefits.com/blog/miami-small-business-health-insurance.html</loc>
-    <priority>0.7</priority>
+    <loc>https://vshealthbenefits.com/terms.html</loc>
+    <lastmod>2026-05-02</lastmod>
+    <priority>0.4</priority>
   </url>
 </urlset>
