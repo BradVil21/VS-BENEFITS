@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Admin Portal | VS Benefits</title>
 <meta name="robots" content="noindex,nofollow" />
-<link rel="icon" type="image/png" href="/images/favicon.png" />
-<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png" />
-<link rel="icon" type="image/png" sizes="192x192" href="/images/favicon.png" />
-<link rel="apple-touch-icon" href="/images/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -23,55 +19,51 @@
   --ok:#0a8754;--warn:#b46b00;--err:#b3261e;
   --shadow-sm:0 1px 2px rgba(11,35,70,.06);
   --shadow-md:0 8px 24px rgba(11,35,70,.10);
-  --r-sm:8px;--r-md:12px;--r-lg:16px;--tap:44px;
+  --r-sm:8px;--r-md:12px;--r-lg:16px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%;font-size:15px}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%;font-size:15px}
 h1,h2,h3,h4{font-family:Poppins,Inter,system-ui,sans-serif;color:var(--blue-900);margin:0 0 .5em}
 a{color:var(--blue-600);text-decoration:none}
 a:hover{text-decoration:underline}
 button{font-family:inherit}
 input,select,textarea{font-family:inherit;font-size:16px}
- 
-.bar{background:var(--blue-900);color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+
+.bar{background:var(--blue-900);color:#fff;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .bar .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-family:Poppins;font-size:15px}
-.bar .brand .b{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem}
+.bar .brand .b{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem;flex-shrink:0}
 .bar .pill{background:rgba(245,179,1,.18);color:#ffd95a;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;letter-spacing:.06em;text-transform:uppercase;margin-left:8px}
-.bar .right{display:flex;align-items:center;gap:10px}
-.bar a.home{color:#cfe1ff;font-size:13px}
+.bar .right{display:flex;align-items:center;gap:8px}
+.bar a.home{color:#cfe1ff;font-size:13px;white-space:nowrap}
 .bar a.home:hover{color:#fff}
 .bar .signout{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px}
 .bar .signout:hover{background:rgba(255,255,255,.2)}
- 
-/* Online/offline sync pill in top bar */
-.bar .sync{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:5px 10px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#e8f0fb}
-.bar .sync .dot{width:8px;height:8px;border-radius:50%;background:#2dbd79;box-shadow:0 0 0 3px rgba(45,189,121,.25)}
+.bar .sync{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);padding:4px 9px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#e8f0fb}
+.bar .sync .dot{width:7px;height:7px;border-radius:50%;background:#2dbd79;box-shadow:0 0 0 3px rgba(45,189,121,.25);flex-shrink:0}
 .bar .sync.off .dot{background:#e5484d;box-shadow:0 0 0 3px rgba(229,72,77,.25)}
 .bar .sync .lbl{color:#cfe1ff}
- 
-/* Per-client online dot */
-.presence-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#d0d7e2;margin-right:6px;vertical-align:middle}
+@media(max-width:480px){.bar .brand span:last-child,.bar .sync .lbl,.bar a.home{display:none}}
+
+.presence-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#d0d7e2;margin-right:5px;vertical-align:middle;flex-shrink:0}
 .presence-dot.on{background:#2dbd79;box-shadow:0 0 0 2px rgba(45,189,121,.22)}
 .presence-dot.off{background:#cfd6df}
- 
-.wrap{max-width:1200px;margin:0 auto;padding:18px 16px 80px}
-.wrap-narrow{max-width:540px;margin:0 auto;padding:30px 16px 80px}
- 
-.card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:22px;margin-bottom:20px}
+
+.wrap{max-width:1200px;margin:0 auto;padding:14px 12px 90px}
+.wrap-narrow{max-width:520px;margin:0 auto;padding:28px 14px 80px}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:20px;margin-bottom:16px}
 .card h2{font-size:20px;margin:0 0 6px}
-.card .lede{color:var(--ink-2);margin:0 0 16px;font-size:14px}
- 
-.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.card .lede{color:var(--ink-2);margin:0 0 14px;font-size:14px}
+
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
 .field label{font-size:13px;font-weight:600;color:var(--ink-2)}
-.field input,.field select,.field textarea{padding:11px 13px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;color:var(--ink);min-height:44px;width:100%}
+.field input,.field select,.field textarea{padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;color:var(--ink);min-height:44px;width:100%}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(47,125,224,.18)}
 .row2{display:grid;grid-template-columns:1fr;gap:0}
-@media(min-width:560px){.row2{grid-template-columns:1fr 1fr;gap:14px}}
-.row3{display:grid;grid-template-columns:1fr;gap:0}
-@media(min-width:560px){.row3{grid-template-columns:1fr 1fr 1fr;gap:14px}}
-.hint{font-size:12.5px;color:var(--muted);margin-top:-2px}
- 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:9px;font-weight:700;font-size:14px;border:0;cursor:pointer;min-height:44px;text-decoration:none;line-height:1}
+@media(min-width:520px){.row2{grid-template-columns:1fr 1fr;gap:12px}}
+.hint{font-size:12px;color:var(--muted);margin-top:-2px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:9px;font-weight:700;font-size:14px;border:0;cursor:pointer;min-height:44px;text-decoration:none;line-height:1;transition:background .15s,opacity .15s}
 .btn:hover{text-decoration:none}
 .btn-primary{background:var(--blue-600);color:#fff}
 .btn-primary:hover{background:var(--blue-700)}
@@ -82,39 +74,72 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .btn-danger{background:#fff;color:var(--err);border:1px solid #f1c2bf}
 .btn-danger:hover{background:#fdf2f1}
 .btn-block{width:100%}
-.btn-sm{padding:7px 11px;min-height:36px;font-size:12.5px;border-radius:7px}
- 
+.btn-sm{padding:7px 11px;min-height:38px;font-size:13px;border-radius:7px}
+.btn-xs{padding:4px 8px;min-height:28px;font-size:11.5px;border-radius:6px}
+
 .notice{padding:10px 12px;border-radius:8px;font-size:13.5px;margin-bottom:12px}
 .notice-err{background:#fdecea;color:var(--err);border:1px solid #f5c6c1}
 .notice-ok{background:#e6f7ef;color:var(--ok);border:1px solid #b9e6cf}
 .notice-info{background:var(--blue-50);color:var(--blue-700);border:1px solid #cfdef6}
- 
-/* Tabs */
-.tabs-bar{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);margin-bottom:18px;overflow:hidden}
-.tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;border-bottom:1px solid var(--line)}
-.tabs button{background:none;border:0;padding:14px 18px;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;min-height:50px;flex-shrink:0;display:flex;align-items:center;gap:7px}
+
+.tabs-bar{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);margin-bottom:14px;overflow:hidden}
+.tabs{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;border-bottom:1px solid var(--line);scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{background:none;border:0;padding:13px 15px;font-size:13.5px;font-weight:600;color:var(--ink-2);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;min-height:50px;flex-shrink:0;display:flex;align-items:center;gap:6px}
 .tabs button .badge{background:var(--blue-100);color:var(--blue-700);font-size:11px;padding:2px 6px;border-radius:10px;font-weight:700}
 .tabs button.active{color:var(--blue-700);border-bottom-color:var(--blue-600)}
 .tabs button.active .badge{background:var(--blue-600);color:#fff}
- 
-.panel{display:none;padding:22px}
+.panel{display:none;padding:16px}
 .panel.active{display:block}
-.panel h3{font-size:17px;margin:0 0 4px}
-.panel .lede{color:var(--muted);font-size:13.5px;margin:0 0 18px}
- 
-.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;align-items:center}
-.toolbar input.search{flex:1;min-width:200px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;min-height:40px}
- 
-/* Tables (cards on mobile) */
+.panel h3{font-size:17px;margin:0 0 3px}
+.panel .lede{color:var(--muted);font-size:13px;margin:0 0 14px}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.toolbar input.search{flex:1;min-width:140px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;min-height:44px;font-size:15px}
+
+/* ── CLEAN STATUS DROPDOWN (replaces filter chips) ── */
+.filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.filter-bar label{font-size:13px;font-weight:600;color:var(--ink-2);white-space:nowrap;flex-shrink:0}
+.status-dropdown{
+  flex:1;
+  min-width:180px;
+  max-width:280px;
+  padding:10px 38px 10px 12px;
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235a6b80' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 11px center;
+  background-size:14px;
+  -webkit-appearance:none;
+  appearance:none;
+  font-size:14px;
+  font-weight:600;
+  color:var(--ink);
+  cursor:pointer;
+  min-height:44px;
+  transition:border-color .15s,box-shadow .15s;
+}
+.status-dropdown:focus{outline:none;border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(47,125,224,.15)}
+
+/* ── PREMIUM BADGE ── */
+.premium-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:#eafaf5;color:#0a7a4a;
+  border:1px solid #a8dfc4;border-radius:6px;
+  padding:4px 10px;font-size:12px;font-weight:700;
+  margin-top:4px;
+}
+
 .tbl{display:flex;flex-direction:column;gap:10px}
-.tbl .row{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:14px}
+.tbl .row{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:14px;transition:box-shadow .15s}
+.tbl .row:hover{box-shadow:var(--shadow-md)}
 .tbl .row .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
 .tbl .row .name{font-weight:700;color:var(--blue-900);font-size:15px}
 .tbl .row .sub{font-size:13px;color:var(--ink-2);margin:2px 0}
 .tbl .row .meta{font-size:12px;color:var(--muted)}
 .tbl .row .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line-2)}
- 
-.status-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+
+.status-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
 .status-new{background:#e7f0ff;color:var(--blue-700)}
 .status-contacted{background:#fff4e1;color:var(--warn)}
 .status-quoted{background:#e7f6ff;color:#0b6996}
@@ -126,37 +151,34 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .status-unpaid{background:#fff4e1;color:var(--warn)}
 .status-in-progress{background:#fff4e1;color:var(--warn)}
 .status-declined{background:#fbe7e7;color:var(--err)}
- 
-.empty{padding:32px 16px;text-align:center;color:var(--muted);font-size:13.5px;background:var(--blue-50);border:1px dashed var(--line);border-radius:var(--r-md)}
- 
-/* Modal */
-.modal-bg{position:fixed;inset:0;background:rgba(11,35,70,.55);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:20px;overflow-y:auto}
+.status-sold{background:#e6f7ef;color:var(--ok)}
+.status-follow-up{background:#fff8e1;color:#7a5000}
+.status-appointment-scheduled{background:#e7f0ff;color:var(--blue-700)}
+.status-no-longer-interested{background:#fbe7e7;color:var(--err)}
+
+.modal-bg{position:fixed;inset:0;background:rgba(11,35,70,.55);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:12px;overflow-y:auto}
 .modal-bg.open{display:flex}
-.modal{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:24px;box-shadow:var(--shadow-md);position:relative;margin:auto}
+.modal{background:#fff;border-radius:14px;max-width:580px;width:100%;padding:22px;box-shadow:var(--shadow-md);position:relative;margin:auto}
 .modal h3{margin:0 0 4px;font-size:18px}
 .modal .lede{color:var(--muted);font-size:13px;margin:0 0 16px}
 .modal .close-x{position:absolute;top:8px;right:10px;background:transparent;border:0;width:36px;height:36px;font-size:1.6rem;color:var(--muted);cursor:pointer;border-radius:8px}
 .modal .close-x:hover{background:var(--blue-50)}
-.modal-acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:8px}
- 
-/* Calendar */
-.cal-wrap{display:grid;grid-template-columns:1fr;gap:18px}
-@media(min-width:880px){.cal-wrap{grid-template-columns:1fr 320px}}
-.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
-.cal-head h3{margin:0;font-size:17px}
-.cal-nav{display:flex;gap:4px}
-.cal-nav button{padding:7px 12px;border:1px solid var(--line);background:#fff;border-radius:8px;cursor:pointer;font-weight:600;color:var(--ink-2);min-height:36px}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px}
-.cal-dow{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;text-align:center;padding:6px 0;background:var(--blue-50);border-radius:6px}
-.cal-day{aspect-ratio:1/1;background:var(--bg);border:1px solid var(--line-2);border-radius:6px;padding:4px;cursor:pointer;display:flex;flex-direction:column;font-size:11px;min-height:46px;transition:background .15s}
+.modal-acts{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;margin-top:12px;padding-top:12px;border-top:1px solid var(--line-2)}
+
+.cal-wrap{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:860px){.cal-wrap{grid-template-columns:1fr 300px}}
+.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px}
+.cal-head h3{margin:0;font-size:16px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px}
+.cal-dow{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;text-align:center;padding:5px 0;background:var(--blue-50);border-radius:6px}
+.cal-day{aspect-ratio:1/1;background:var(--bg);border:1px solid var(--line-2);border-radius:6px;padding:3px;cursor:pointer;display:flex;flex-direction:column;font-size:10px;min-height:40px;transition:background .15s}
 .cal-day:hover{background:var(--blue-50)}
 .cal-day.muted{opacity:.35}
 .cal-day.today{border-color:var(--blue-600);background:#fff;box-shadow:inset 0 0 0 1px var(--blue-600)}
 .cal-day.has{background:var(--blue-50)}
-.cal-day .num{font-weight:700;color:var(--ink);font-size:12px}
-.cal-day .dot{width:6px;height:6px;border-radius:50%;background:var(--blue-600);margin-top:auto;align-self:flex-end}
+.cal-day .num{font-weight:700;color:var(--ink);font-size:11px}
+.cal-day .dot{width:5px;height:5px;border-radius:50%;background:var(--blue-600);margin-top:auto;align-self:flex-end}
 .cal-day.selected{background:var(--blue-100);border-color:var(--blue-600)}
- 
 .evlist{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
 .evlist h4{margin:0 0 10px;font-size:14px;color:var(--blue-900)}
 .ev{padding:10px;border:1px solid var(--line-2);border-radius:8px;margin-bottom:8px;background:var(--bg)}
@@ -164,53 +186,57 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .ev .em{font-size:12px;color:var(--muted);margin:2px 0}
 .ev .ea{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .ev .gtag{display:inline-flex;align-items:center;gap:4px;background:#e6f7ef;color:var(--ok);border:1px solid #b9e6cf;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;margin-top:4px}
- 
-/* Conversation */
-.conv-wrap{display:grid;grid-template-columns:1fr;gap:14px}
-@media(min-width:880px){.conv-wrap{grid-template-columns:280px 1fr}}
-.thread-list{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;max-height:480px;overflow-y:auto}
+
+.conv-wrap{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:760px){.conv-wrap{grid-template-columns:260px 1fr}}
+.thread-list{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;max-height:520px;overflow-y:auto}
 .thread{padding:10px 12px;border-radius:8px;cursor:pointer;border:1px solid transparent;margin-bottom:4px;display:flex;justify-content:space-between;gap:8px;align-items:center}
 .thread:hover{background:var(--blue-50)}
 .thread.active{background:var(--blue-50);border-color:var(--blue-600)}
 .thread .tn{font-weight:700;font-size:13px;color:var(--blue-900)}
 .thread .te{font-size:11px;color:var(--muted)}
 .thread .tu{background:var(--err);color:#fff;border-radius:999px;font-size:10.5px;font-weight:700;padding:1px 7px;min-width:18px;text-align:center}
+.thread.closed-thread{opacity:.55}
 .conv{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column}
-.msgs{max-height:340px;overflow-y:auto;padding:6px;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
-.msg{padding:9px 12px;border-radius:10px;max-width:85%;font-size:13.5px;line-height:1.45}
+.msgs{max-height:320px;overflow-y:auto;padding:6px;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
+.msg{padding:9px 12px;border-radius:10px;max-width:88%;font-size:13.5px;line-height:1.45;position:relative}
 .msg.client{background:#f3f5f8;color:var(--ink);border:1px solid var(--line-2)}
 .msg.advisor{background:var(--blue-50);color:var(--ink);margin-left:auto;border:1px solid #cfdef6}
-.msg .meta{font-size:11px;color:var(--muted);margin-top:3px}
- 
-/* Avatar */
-.avatar{width:42px;height:42px;border-radius:50%;background:var(--blue-100);color:var(--blue-700);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;overflow:hidden;flex-shrink:0}
+.msg .meta{font-size:11px;color:var(--muted);margin-top:3px;display:flex;align-items:center;gap:8px}
+.msg .del-msg{background:none;border:none;cursor:pointer;color:var(--err);font-size:11px;padding:0;opacity:.6}
+.msg .del-msg:hover{opacity:1}
+.closed-banner{background:#fff4e1;border:1px solid #f5d87a;border-radius:8px;padding:8px 12px;font-size:13px;color:var(--warn);font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--blue-100);color:var(--blue-700);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;overflow:hidden;flex-shrink:0}
 .avatar img{width:100%;height:100%;object-fit:cover}
- 
-.kv{display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:14px}
-@media(min-width:560px){.kv{grid-template-columns:1fr 1fr}}
-.kv .item{background:var(--blue-50);border:1px solid var(--line-2);border-radius:8px;padding:10px 12px}
-.kv .item .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
-.kv .item .val{font-size:14px;color:var(--ink);margin-top:2px;word-break:break-word}
- 
-/* Documents manager */
+
 .docmgr{background:var(--bg);border:1px solid var(--line-2);border-radius:10px;padding:12px;margin-top:10px}
 .docmgr h4{margin:0 0 8px;font-size:13.5px;color:var(--blue-900)}
 .docrow{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:6px}
 .docrow .dname{flex:1;min-width:0;font-size:13px;color:var(--ink);word-break:break-word}
 .docrow .dmeta{font-size:11px;color:var(--muted)}
-.docrow .dact{display:flex;gap:4px}
- 
+.docrow .dact{display:flex;gap:4px;flex-shrink:0}
+
 [hidden]{display:none !important}
- 
 .authswitch{text-align:center;margin-top:14px;font-size:13px;color:var(--ink-2)}
 .authswitch a{color:var(--blue-600);cursor:pointer;font-weight:600}
+.empty{padding:28px 16px;text-align:center;color:var(--muted);font-size:13.5px;background:var(--blue-50);border:1px dashed var(--line);border-radius:var(--r-md)}
+
+/* ── MOBILE NAV ── */
+@media(max-width:639px){
+  .wrap{padding-bottom:100px}
+  .mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);z-index:90;box-shadow:0 -4px 12px rgba(11,35,70,.10)}
+  .mobile-nav button{flex:1;background:none;border:0;padding:8px 2px 10px;font-size:9px;font-weight:700;color:var(--muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:56px;position:relative}
+  .mobile-nav button.active{color:var(--blue-600)}
+  .mobile-nav button svg{width:22px;height:22px;flex-shrink:0}
+  .mobile-nav button .mnbadge{background:var(--err);color:#fff;border-radius:999px;font-size:9px;font-weight:700;padding:1px 5px;min-width:16px;text-align:center;position:absolute;top:6px;right:calc(50% - 20px)}
+  .tabs{display:none}
+}
+@media(min-width:640px){.mobile-nav{display:none}}
 </style>
- 
-<!-- Google Identity Services for Calendar push -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
- 
 <div class="bar">
   <a class="brand" href="index.html">
     <span class="b">VS</span>
@@ -225,99 +251,73 @@ input,select,textarea{font-family:inherit;font-size:16px}
     <button id="signout-btn" class="signout" hidden>Sign out</button>
   </div>
 </div>
- 
-<!-- ======================= LOGIN VIEW ======================= -->
+
 <div id="login-view" class="wrap-narrow" hidden>
   <div class="card">
     <h2>Admin sign in</h2>
     <p class="lede">Enter your admin username and password to continue.</p>
     <form id="login-form" autocomplete="off" novalidate>
       <div id="login-msg"></div>
-      <div class="field">
-        <label for="login-user">Username</label>
-        <input type="text" id="login-user" autocomplete="username" required />
-      </div>
-      <div class="field">
-        <label for="login-pw">Password</label>
-        <input type="password" id="login-pw" autocomplete="current-password" required />
-      </div>
+      <div class="field"><label for="login-user">Username</label><input type="text" id="login-user" autocomplete="username" required /></div>
+      <div class="field"><label for="login-pw">Password</label><input type="password" id="login-pw" autocomplete="current-password" required /></div>
       <button class="btn btn-primary btn-block" type="submit">Sign in</button>
     </form>
-    <div class="authswitch">
-      Don't have an admin account? <a id="go-signup">Create admin account</a>
-    </div>
+    <div class="authswitch">Don't have an admin account? <a id="go-signup">Create admin account</a></div>
   </div>
 </div>
- 
-<!-- ======================= SIGNUP VIEW (private, gated) ======================= -->
+
 <div id="signup-view" class="wrap-narrow" hidden>
   <div class="card">
     <h2>Create admin account</h2>
-    <p class="lede">Private page. You need the secret <strong>admin setup code</strong> to create an account.</p>
+    <p class="lede">Private page — you need the secret <strong>admin setup code</strong>.</p>
     <form id="signup-form" autocomplete="off" novalidate>
       <div id="signup-msg"></div>
-      <div class="field">
-        <label for="su-code">Admin setup code</label>
-        <input type="password" id="su-code" autocomplete="off" inputmode="numeric" required />
-        <div class="hint">Don't share this code publicly. Ask an admin if you don't have it.</div>
-      </div>
+      <div class="field"><label for="su-code">Admin setup code</label><input type="password" id="su-code" inputmode="numeric" required /></div>
       <div class="row2">
         <div class="field"><label for="su-first">First name</label><input type="text" id="su-first" required /></div>
         <div class="field"><label for="su-last">Last name</label><input type="text" id="su-last" required /></div>
       </div>
-      <div class="field">
-        <label for="su-user">Username</label>
-        <input type="text" id="su-user" autocomplete="username" required />
-      </div>
-      <div class="field">
-        <label for="su-email">Email (optional)</label>
-        <input type="email" id="su-email" />
-      </div>
-      <div class="field">
-        <label for="su-pw">Create password</label>
-        <input type="password" id="su-pw" autocomplete="new-password" minlength="8" required />
-      </div>
-      <div class="field">
-        <label for="su-pw2">Confirm password</label>
-        <input type="password" id="su-pw2" autocomplete="new-password" minlength="8" required />
-      </div>
+      <div class="field"><label for="su-user">Username</label><input type="text" id="su-user" autocomplete="username" required /></div>
+      <div class="field"><label for="su-email">Email (optional)</label><input type="email" id="su-email" /></div>
+      <div class="field"><label for="su-pw">Create password</label><input type="password" id="su-pw" autocomplete="new-password" minlength="8" required /></div>
+      <div class="field"><label for="su-pw2">Confirm password</label><input type="password" id="su-pw2" autocomplete="new-password" minlength="8" required /></div>
       <button class="btn btn-primary btn-block" type="submit">Create admin account</button>
     </form>
-    <div class="authswitch">
-      Already have an account? <a id="go-login">Back to sign in</a>
-    </div>
+    <div class="authswitch">Already have an account? <a id="go-login">Back to sign in</a></div>
   </div>
 </div>
- 
-<!-- ======================= DASHBOARD ======================= -->
+
 <div id="dash-view" class="wrap" hidden>
- 
   <div class="tabs-bar">
     <div class="tabs" role="tablist">
       <button id="t-leads" class="active" data-tab="leads" type="button">Leads <span class="badge" id="b-leads">0</span></button>
       <button id="t-calendar" data-tab="calendar" type="button">Calendar <span class="badge" id="b-cal">0</span></button>
-      <button id="t-accounts" data-tab="accounts" type="button">Client Accounts <span class="badge" id="b-acct">0</span></button>
+      <button id="t-accounts" data-tab="accounts" type="button">Clients <span class="badge" id="b-acct">0</span></button>
       <button id="t-support" data-tab="support" type="button">Support <span class="badge" id="b-sup">0</span></button>
       <button id="t-referrals" data-tab="referrals" type="button">Referrals <span class="badge" id="b-ref">0</span></button>
       <button id="t-settings" data-tab="settings" type="button">Settings</button>
     </div>
- 
-    <!-- ============== LEADS ============== -->
+
+    <!-- LEADS -->
     <div id="p-leads" class="panel active">
       <h3>Leads</h3>
       <p class="lede">Marketing-form leads from the public site, plus anyone you add manually.</p>
       <div class="toolbar">
-        <input id="lead-search" class="search" type="search" placeholder="Search by name, email, phone, company..." />
+        <input id="lead-search" class="search" type="search" placeholder="Search name, phone, email..." />
         <button id="add-lead-btn" class="btn btn-primary btn-sm" type="button">+ Add lead</button>
         <button id="export-leads-btn" class="btn btn-ghost btn-sm" type="button">Export CSV</button>
       </div>
+      <div class="filter-bar">
+        <label for="lead-filter-sel">Filter:</label>
+        <select id="lead-filter-sel" class="status-dropdown"></select>
+      </div>
       <div id="leads-list" class="tbl"></div>
     </div>
- 
-    <!-- ============== CALENDAR ============== -->
+
+    <!-- CALENDAR -->
     <div id="p-calendar" class="panel">
       <h3>Calendar</h3>
-      <p class="lede">Book consults and client meetings. Connect Google Calendar (Settings) to auto-push every new appointment.</p>
+      <p class="lede">Book consults and client meetings. Connect Google Calendar in Settings to auto-push.</p>
       <div class="toolbar">
         <button id="add-event-btn" class="btn btn-primary btn-sm" type="button">+ Book appointment</button>
         <button id="export-events-btn" class="btn btn-ghost btn-sm" type="button">Export ICS</button>
@@ -337,62 +337,79 @@ input,select,textarea{font-family:inherit;font-size:16px}
         </div>
       </div>
     </div>
- 
-    <!-- ============== CLIENT ACCOUNTS ============== -->
+
+    <!-- CLIENT ACCOUNTS -->
     <div id="p-accounts" class="panel">
       <h3>Client Accounts</h3>
-      <p class="lede">Every member who signed up on the client portal. Green dot = currently online.</p>
+      <p class="lede">All clients. Green dot = online now.</p>
       <div class="toolbar">
-        <input id="acct-search" class="search" type="search" placeholder="Search by name, email, phone..." />
-        <button id="create-acct-btn" class="btn btn-primary btn-sm" type="button">+ Create client account</button>
+        <input id="acct-search" class="search" type="search" placeholder="Search name, email, phone..." />
+        <button id="create-acct-btn" class="btn btn-primary btn-sm" type="button">+ New client</button>
         <button id="export-accts-btn" class="btn btn-ghost btn-sm" type="button">Export CSV</button>
+      </div>
+      <div class="filter-bar">
+        <label for="acct-filter-sel">Filter:</label>
+        <select id="acct-filter-sel" class="status-dropdown"></select>
       </div>
       <div id="accts-list" class="tbl"></div>
     </div>
- 
-    <!-- ============== SUPPORT ============== -->
+
+    <!-- SUPPORT -->
     <div id="p-support" class="panel">
       <h3>Support inbox</h3>
-      <p class="lede">Two-way message threads with each member. Reply directly. The thread list is sorted by most recent activity.</p>
+      <p class="lede">Two-way message threads. Delete individual messages or close threads.</p>
+      <div class="toolbar">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;min-height:44px">
+          <input type="checkbox" id="show-closed" /> Show closed threads
+        </label>
+      </div>
       <div class="conv-wrap">
         <div id="thread-list" class="thread-list"></div>
         <div id="conv" class="conv">
           <div id="conv-empty" class="empty">Pick a conversation on the left to view.</div>
           <div id="conv-active" hidden>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:10px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;flex-wrap:wrap">
               <div>
                 <div id="conv-name" style="font-weight:700;color:var(--blue-900)"></div>
                 <div id="conv-email" style="font-size:12px;color:var(--muted)"></div>
               </div>
-              <button id="conv-mark-read" class="btn btn-ghost btn-sm" type="button">Mark all read</button>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button id="conv-mark-read" class="btn btn-ghost btn-sm" type="button">Mark read</button>
+                <button id="conv-close-thread" class="btn btn-ghost btn-sm" type="button">Close thread</button>
+                <button id="conv-delete-thread" class="btn btn-danger btn-sm" type="button">Delete thread</button>
+              </div>
             </div>
+            <div id="closed-banner" class="closed-banner" hidden>&#128274; This thread is closed. Reopen to reply.</div>
             <div id="msgs" class="msgs"></div>
             <form id="reply-form">
-              <div class="field" style="margin-bottom:10px">
+              <div class="field" style="margin-bottom:8px">
                 <textarea id="reply-text" rows="2" placeholder="Reply to client..." required></textarea>
               </div>
-              <button class="btn btn-primary btn-block" type="submit">Send reply</button>
+              <button class="btn btn-primary btn-block" type="submit" id="reply-btn">Send reply</button>
             </form>
           </div>
         </div>
       </div>
     </div>
- 
-    <!-- ============== REFERRALS ============== -->
+
+    <!-- REFERRALS -->
     <div id="p-referrals" class="panel">
       <h3>Referrals</h3>
-      <p class="lede">When a client submits a referral it starts "in-progress". Update to "paid" (with payout amount) or "declined".</p>
+      <p class="lede">Update status and payout for any referral submitted by clients.</p>
       <div class="toolbar">
         <input id="ref-search" class="search" type="search" placeholder="Search referrals..." />
         <button id="export-refs-btn" class="btn btn-ghost btn-sm" type="button">Export CSV</button>
       </div>
+      <div class="filter-bar">
+        <label for="ref-filter-sel">Filter:</label>
+        <select id="ref-filter-sel" class="status-dropdown"></select>
+      </div>
       <div id="refs-list" class="tbl"></div>
     </div>
- 
-    <!-- ============== SETTINGS ============== -->
+
+    <!-- SETTINGS -->
     <div id="p-settings" class="panel">
       <h3>Settings</h3>
- 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Change my admin password</h4>
         <form id="pw-form" autocomplete="off">
@@ -403,10 +420,9 @@ input,select,textarea{font-family:inherit;font-size:16px}
           <button type="submit" class="btn btn-primary">Update password</button>
         </form>
       </div>
- 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Change admin setup code</h4>
-        <p class="lede">This is the code required to create a new admin account. Default is (hidden in source).</p>
+        <p class="lede">Required to create additional admin accounts.</p>
         <form id="code-form" autocomplete="off">
           <div id="code-msg"></div>
           <div class="field"><label>Current code</label><input type="password" id="code-cur" required /></div>
@@ -415,16 +431,15 @@ input,select,textarea{font-family:inherit;font-size:16px}
           <button type="submit" class="btn btn-primary">Update setup code</button>
         </form>
       </div>
- 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Google Calendar push</h4>
-        <p class="lede">Connect your Google account so every new appointment auto-pushes to your Google Calendar.</p>
+        <p class="lede">Connect your Google account so every new appointment auto-pushes.</p>
         <form id="gcal-cid-form" autocomplete="off">
           <div id="gcal-msg"></div>
           <div class="field">
             <label>Google OAuth Client ID</label>
             <input type="text" id="gcal-cid" placeholder="123456-abc.apps.googleusercontent.com" />
-            <div class="hint">Create at console.cloud.google.com &rarr; Credentials &rarr; OAuth Client ID (Web). Enable "Google Calendar API".</div>
+            <div class="hint">Create at console.cloud.google.com → Credentials → OAuth Client ID (Web). Enable "Google Calendar API".</div>
           </div>
           <button type="submit" class="btn btn-primary btn-sm">Save Client ID</button>
         </form>
@@ -434,164 +449,114 @@ input,select,textarea{font-family:inherit;font-size:16px}
           <button id="gcal-disconnect" class="btn btn-ghost btn-sm" type="button" hidden>Disconnect</button>
         </div>
       </div>
- 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Admin accounts</h4>
-        <p class="lede">Everyone with an admin login. Create additional admins from the sign-in screen using the setup code.</p>
+        <p class="lede">Everyone with an admin login.</p>
         <div id="admins-list" class="tbl"></div>
       </div>
- 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Make.com / Zapier webhook</h4>
-        <p class="lede">If set, key events get POSTed to this URL (fire-and-forget, no-cors).</p>
+        <p class="lede">Key events get POSTed to this URL.</p>
         <form id="wh-form" autocomplete="off">
           <div id="wh-msg"></div>
           <div class="field"><label>Webhook URL</label><input type="url" id="wh-input" placeholder="https://hook.eu1.make.com/..." /></div>
           <button type="submit" class="btn btn-primary">Save webhook</button>
         </form>
       </div>
- 
       <div class="card" style="margin-bottom:14px">
         <h4 style="margin:0 0 6px;font-size:15px">Backup / restore</h4>
-        <p class="lede">Storage size: <strong id="settings-storage">--</strong></p>
+        <p class="lede">Storage: <strong id="settings-storage">--</strong></p>
         <div style="display:flex;flex-wrap:wrap;gap:8px">
-          <button id="export-all-btn" type="button" class="btn btn-ghost">Export all data (JSON)</button>
+          <button id="export-all-btn" type="button" class="btn btn-ghost">Export all (JSON)</button>
           <label class="btn btn-ghost" style="cursor:pointer">Import data<input id="import-file" type="file" accept="application/json" hidden /></label>
         </div>
       </div>
     </div>
- 
   </div>
- 
 </div>
- 
-<!-- ======================= MODAL ======================= -->
+
+<!-- MOBILE NAV (no pipeline) -->
+<nav class="mobile-nav" id="mobile-nav" hidden>
+  <button data-tab="leads" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    Leads<span class="mnbadge" id="mn-leads" hidden></span>
+  </button>
+  <button data-tab="calendar" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Calendar
+  </button>
+  <button data-tab="accounts" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Clients<span class="mnbadge" id="mn-acct" hidden></span>
+  </button>
+  <button data-tab="support" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Support<span class="mnbadge" id="mn-sup" hidden></span>
+  </button>
+  <button data-tab="referrals" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+    Referrals<span class="mnbadge" id="mn-ref" hidden></span>
+  </button>
+  <button data-tab="settings" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    Settings
+  </button>
+</nav>
+
 <div id="modal-bg" class="modal-bg" role="dialog" aria-modal="true">
   <div class="modal" id="modal-box">
     <button class="close-x" type="button" data-close>&times;</button>
     <div id="modal-content"></div>
   </div>
 </div>
- 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
- 
-const firebaseConfig = {
-  apiKey: "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U",
-  authDomain: "vs-benefits-c1da9.firebaseapp.com",
-  projectId: "vs-benefits-c1da9",
-  storageBucket: "vs-benefits-c1da9.firebasestorage.app",
-  messagingSenderId: "487471388882",
-  appId: "1:487471388882:web:63e98e6699d5a823e3f50b"
-};
- 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
- 
-(function(){
-"use strict";
- 
-/* ====================================================================
-   Storage keys
-   ==================================================================== */
-var K={
-  session:"vs_admin_session",setupCode:"vs_admin_setup_code",
-  adminAccts:"vs_admin_accounts",
-  legacyHash:"vs_admin_hash",
-  leads:"vs_leads",accounts:"vs_client_accounts",messages:"vs_messages",
-  referrals:"vs_referrals",appointments:"vs_appointments",
-  webhook:"vs_webhook_url",
-  gcalCid:"vs_gcal_client_id",gcalTok:"vs_gcal_token",gcalEmail:"vs_gcal_email"
-};
- 
-/* ====================================================================
-   Helpers
-   ==================================================================== */
+const firebaseConfig={apiKey:"AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U",authDomain:"vs-benefits-c1da9.firebaseapp.com",projectId:"vs-benefits-c1da9",storageBucket:"vs-benefits-c1da9.firebasestorage.app",messagingSenderId:"487471388882",appId:"1:487471388882:web:63e98e6699d5a823e3f50b"};
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const auth=getAuth(app);
+(function(){"use strict";
+var K={session:"vs_admin_session",setupCode:"vs_admin_setup_code",adminAccts:"vs_admin_accounts",legacyHash:"vs_admin_hash",leads:"vs_leads",accounts:"vs_client_accounts",messages:"vs_messages",referrals:"vs_referrals",appointments:"vs_appointments",webhook:"vs_webhook_url",gcalCid:"vs_gcal_client_id",gcalTok:"vs_gcal_token",gcalEmail:"vs_gcal_email"};
 function $(id){return document.getElementById(id);}
 function uid(){return"id_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
-function el(t,attrs,children){
-  var e=document.createElement(t);
-  if(attrs)Object.keys(attrs).forEach(function(k){
-    if(k==="class")e.className=attrs[k];
-    else if(k==="text")e.textContent=attrs[k];
-    else if(k.indexOf("on")===0)e.addEventListener(k.slice(2),attrs[k]);
-    else e.setAttribute(k,attrs[k]);
-  });
-  if(children)children.forEach(function(c){e.appendChild(c);});
-  return e;
-}
+function el(t,attrs,children){var e=document.createElement(t);if(attrs)Object.keys(attrs).forEach(function(k){if(k==="class")e.className=attrs[k];else if(k==="text")e.textContent=attrs[k];else if(k.indexOf("on")===0)e.addEventListener(k.slice(2),attrs[k]);else e.setAttribute(k,attrs[k]);});if(children)children.forEach(function(c){e.appendChild(c);});return e;}
 function csvEscape(s){s=String(s==null?"":s);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
-function downloadFile(name,content,mime){
-  var blob=new Blob([content],{type:mime||"text/plain"});
-  var url=URL.createObjectURL(blob);
-  var a=el("a",{href:url,download:name});
-  document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
-}
-function fmtDate(ts){if(!ts)return"--";var d=new Date(ts);return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}
-function fmtDateTime(ts){if(!ts)return"--";var d=new Date(ts);return d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
+function downloadFile(name,content,mime){var blob=new Blob([content],{type:mime||"text/plain"});var url=URL.createObjectURL(blob);var a=el("a",{href:url,download:name});document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);}
+function fmtDate(ts){if(!ts)return"--";return new Date(ts).toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}
+function fmtDateTime(ts){if(!ts)return"--";return new Date(ts).toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
+function fmtMoney(v){if(v===null||v===undefined||v==="")return null;var n=parseFloat(v);if(isNaN(n))return null;return"$"+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,",");}
 function normEmail(e){return(e||"").trim().toLowerCase();}
 function normUser(u){return(u||"").trim().toLowerCase();}
 function initials(a){var n=((a.firstName||"")+" "+(a.lastName||"")).trim();if(!n)return"?";var p=n.split(/\s+/);return((p[0]||"").charAt(0)+(p[1]||"").charAt(0)).toUpperCase()||(a.email||"?").charAt(0).toUpperCase();}
 function asArr(k){try{return JSON.parse(localStorage.getItem(k)||"[]");}catch(e){return[];}}
 function setArrLocal(k,v){localStorage.setItem(k,JSON.stringify(v));}
-function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
- 
-/* Accessor/mutator pairs (save* pushes to cloud) */
+function escHtml(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':'&quot;',"\'":"&#39;"}[c];});}
+function fullName(a){return(((a.firstName||"")+" "+(a.lastName||"")).trim()||a.name||a.email||"(no name)");}
 var LOCAL_TO_REMOTE={};
-LOCAL_TO_REMOTE[K.leads]="leads";
-LOCAL_TO_REMOTE[K.accounts]="accounts";
-LOCAL_TO_REMOTE[K.messages]="messages";
-LOCAL_TO_REMOTE[K.referrals]="referrals";
-LOCAL_TO_REMOTE[K.appointments]="appointments";
-LOCAL_TO_REMOTE[K.adminAccts]="admin_accounts";
+LOCAL_TO_REMOTE[K.leads]="leads";LOCAL_TO_REMOTE[K.accounts]="accounts";LOCAL_TO_REMOTE[K.messages]="messages";LOCAL_TO_REMOTE[K.referrals]="referrals";LOCAL_TO_REMOTE[K.appointments]="appointments";LOCAL_TO_REMOTE[K.adminAccts]="admin_accounts";
 function setArr(k,v){setArrLocal(k,v);var r=LOCAL_TO_REMOTE[k];if(r)cloudPush(r,v);}
- 
-function getLeads(){return asArr(K.leads);} function saveLeads(v){setArr(K.leads,v);}
-function getAccounts(){return asArr(K.accounts);} function saveAccounts(v){setArr(K.accounts,v);}
-function getMessages(){return asArr(K.messages);} function saveMessages(v){setArr(K.messages,v);}
-function getReferrals(){return asArr(K.referrals);} function saveReferrals(v){setArr(K.referrals,v);}
-function getAppts(){return asArr(K.appointments);} function saveAppts(v){setArr(K.appointments,v);}
-function getAdmins(){return asArr(K.adminAccts);} function saveAdmins(v){setArr(K.adminAccts,v);}
+function getLeads(){return asArr(K.leads);}function saveLeads(v){setArr(K.leads,v);}
+function getAccounts(){return asArr(K.accounts);}function saveAccounts(v){setArr(K.accounts,v);}
+function getMessages(){return asArr(K.messages);}function saveMessages(v){setArr(K.messages,v);}
+function getReferrals(){return asArr(K.referrals);}function saveReferrals(v){setArr(K.referrals,v);}
+function getAppts(){return asArr(K.appointments);}function saveAppts(v){setArr(K.appointments,v);}
+function getAdmins(){return asArr(K.adminAccts);}function saveAdmins(v){setArr(K.adminAccts,v);}
 function getWebhook(){return localStorage.getItem(K.webhook)||"";}
 function setWebhook(v){localStorage.setItem(K.webhook,v||"");}
- 
 async function sha256(t){var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0");}).join("");}
- 
-function notice(elId,kind,text){var e=$(elId);if(!e)return;e.innerHTML="";if(!text)return;var n=el("div",{class:"notice notice-"+kind,text:text});e.appendChild(n);}
- 
-function webhookFire(payload){
-  var url=getWebhook();if(!url)return;
-  try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});}catch(e){}
-}
- 
-/* ====================================================================
-   Cloud sync (Firestore + Anonymous Auth)
-   ==================================================================== */
+function notice(elId,kind,text){var e=$(elId);if(!e)return;e.innerHTML="";if(!text)return;e.appendChild(el("div",{class:"notice notice-"+kind,text:text}));}
+function webhookFire(payload){var url=getWebhook();if(!url)return;try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});}catch(e){}}
 var cloud={ready:false,suspend:0};
-var presenceMap={}; // clientId -> last ts
+var presenceMap={};
 var REMOTE_KEYS=["leads","accounts","messages","referrals","appointments","admin_accounts"];
 var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts};
- 
-function setSyncPill(state){
-  var p=$("sync-pill");if(!p)return;
-  if(state==="on"){p.classList.remove("off");$("sync-lbl").textContent="Online";}
-  else{p.classList.add("off");$("sync-lbl").textContent="Offline";}
-}
- 
-async function cloudPush(key,items){
-  if(!cloud.ready||cloud.suspend>0)return;
-  try{await setDoc(doc(db,"vs_state",key),{items:items,ts:Date.now()});}
-  catch(e){console.warn("cloud push",key,e);}
-}
- 
+function setSyncPill(state){var p=$("sync-pill");if(!p)return;if(state==="on"){p.classList.remove("off");$("sync-lbl").textContent="Online";}else{p.classList.add("off");$("sync-lbl").textContent="Offline";}}
+async function cloudPush(key,items){if(!cloud.ready||cloud.suspend>0)return;try{await setDoc(doc(db,"vs_state",key),{items:items,ts:Date.now()});}catch(e){console.warn("cloud push",key,e);}}
 async function initCloud(){
-  try{await signInAnonymously(auth);}
-  catch(e){console.warn("anon auth failed",e);setSyncPill("off");return;}
+  try{await signInAnonymously(auth);}catch(e){console.warn("anon auth failed",e);setSyncPill("off");return;}
   cloud.ready=true;setSyncPill("on");
- 
   REMOTE_KEYS.forEach(function(rk){
     onSnapshot(doc(db,"vs_state",rk),function(snap){
       if(!snap.exists())return;
@@ -610,80 +575,37 @@ async function initCloud(){
       }finally{setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},80);}
     },function(err){console.warn("snapshot err",rk,err);setSyncPill("off");});
   });
- 
-  // Presence (all signed-in clients) — shared map
   onSnapshot(doc(db,"vs_state","presence"),function(snap){
     if(!snap.exists())return;
     presenceMap=snap.data().map||{};
     if(!$("dash-view").hidden)renderAccounts();
   });
 }
- 
-async function pullOnce(rk){
-  try{
-    var snap=await getDoc(doc(db,"vs_state",rk));
-    if(snap.exists()){cloud.suspend++;try{setArrLocal(REMOTE_TO_LOCAL[rk],snap.data().items||[]);}finally{setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},60);}}
-  }catch(e){}
-}
- 
-/* Clear a single client's presence entry from the shared map (used on delete) */
-async function clearPresenceEntry(clientId){
-  if(!cloud.ready||!clientId)return;
-  try{
-    var snap=await getDoc(doc(db,"vs_state","presence"));
-    var map=snap.exists()?(snap.data().map||{}):{};
-    if(map[clientId]!==undefined){
-      delete map[clientId];
-      await setDoc(doc(db,"vs_state","presence"),{map:map,ts:Date.now()});
-    }
-    if(presenceMap[clientId]!==undefined)delete presenceMap[clientId];
-  }catch(e){console.warn("clear presence",e);}
-}
- 
-function isOnline(clientId){
-  var ts=presenceMap[clientId]||0;
-  return (Date.now()-ts)<3*60*1000; // online if heartbeat within 3 min
-}
- 
-/* ====================================================================
-   Setup code
-   ==================================================================== */
+async function pullOnce(rk){try{var snap=await getDoc(doc(db,"vs_state",rk));if(snap.exists()){cloud.suspend++;try{setArrLocal(REMOTE_TO_LOCAL[rk],snap.data().items||[]);}finally{setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},60);}}}catch(e){}}
+async function clearPresenceEntry(clientId){if(!cloud.ready||!clientId)return;try{var snap=await getDoc(doc(db,"vs_state","presence"));var map=snap.exists()?(snap.data().map||{}):{};if(map[clientId]!==undefined){delete map[clientId];await setDoc(doc(db,"vs_state","presence"),{map:map,ts:Date.now()});}if(presenceMap[clientId]!==undefined)delete presenceMap[clientId];}catch(e){console.warn("clear presence",e);}}
+function isOnline(clientId){return(Date.now()-(presenceMap[clientId]||0))<3*60*1000;}
 function defaultSetupCode(){try{return atob("MDYwNQ==");}catch(e){return"0605";}}
 function ensureSetupCode(){if(!localStorage.getItem(K.setupCode))localStorage.setItem(K.setupCode,defaultSetupCode());}
 function currentSetupCode(){return localStorage.getItem(K.setupCode)||defaultSetupCode();}
- 
-/* ====================================================================
-   Admin auth: username+password, multi-user
-   ==================================================================== */
 function getSession(){try{return JSON.parse(sessionStorage.getItem(K.session)||"null");}catch(e){return null;}}
 function setSession(s){sessionStorage.setItem(K.session,JSON.stringify(s));}
 function clearSession(){sessionStorage.removeItem(K.session);}
 function currentAdmin(){var s=getSession();if(!s)return null;return getAdmins().filter(function(a){return a.id===s.id;})[0]||null;}
- 
 async function route(){
   ensureSetupCode();
-  $("login-view").hidden=true;$("signup-view").hidden=true;$("dash-view").hidden=true;$("signout-btn").hidden=true;
-  // Pull latest admins from cloud so sign-in works on a fresh device
+  $("login-view").hidden=true;$("signup-view").hidden=true;$("dash-view").hidden=true;$("signout-btn").hidden=true;$("mobile-nav").hidden=true;
   if(cloud.ready){await pullOnce("admin_accounts");await pullOnce("accounts");}
   var admins=getAdmins();
   if(!admins.length){$("signup-view").hidden=false;return;}
   if(!currentAdmin()){$("login-view").hidden=false;return;}
-  $("dash-view").hidden=false;$("signout-btn").hidden=false;
+  $("dash-view").hidden=false;$("signout-btn").hidden=false;$("mobile-nav").hidden=false;
   renderAll();switchTab("leads");
 }
- 
 $("go-signup").addEventListener("click",function(){$("login-view").hidden=true;$("signup-view").hidden=false;});
 $("go-login").addEventListener("click",function(){$("signup-view").hidden=true;$("login-view").hidden=false;});
- 
 $("signup-form").addEventListener("submit",async function(e){
   e.preventDefault();
-  var code=$("su-code").value.trim();
-  var first=$("su-first").value.trim();
-  var last=$("su-last").value.trim();
-  var user=normUser($("su-user").value);
-  var email=normEmail($("su-email").value);
-  var p1=$("su-pw").value;
-  var p2=$("su-pw2").value;
+  var code=$("su-code").value.trim(),first=$("su-first").value.trim(),last=$("su-last").value.trim(),user=normUser($("su-user").value),email=normEmail($("su-email").value),p1=$("su-pw").value,p2=$("su-pw2").value;
   if(code!==currentSetupCode())return notice("signup-msg","err","Wrong setup code.");
   if(!first||!last)return notice("signup-msg","err","Enter your first and last name.");
   if(user.length<3)return notice("signup-msg","err","Username must be at least 3 characters.");
@@ -694,45 +616,25 @@ $("signup-form").addEventListener("submit",async function(e){
   if(admins.some(function(a){return normUser(a.username)===user;}))return notice("signup-msg","err","That username is taken.");
   var hash=await sha256(p1);
   var rec={id:uid(),username:user,firstName:first,lastName:last,email:email,passwordHash:hash,created:Date.now()};
-  admins.push(rec);saveAdmins(admins);
-  setSession({id:rec.id,since:Date.now()});
-  await route();
+  admins.push(rec);saveAdmins(admins);setSession({id:rec.id,since:Date.now()});await route();
 });
- 
 $("login-form").addEventListener("submit",async function(e){
   e.preventDefault();
-  var user=normUser($("login-user").value);
-  var pw=$("login-pw").value;
+  var user=normUser($("login-user").value),pw=$("login-pw").value;
   if(!user||!pw)return notice("login-msg","err","Enter username and password.");
   if(cloud.ready)await pullOnce("admin_accounts");
   var admins=getAdmins();
-  // Legacy single-password fallback
-  if(!admins.length){
-    var legacy=localStorage.getItem(K.legacyHash);
-    if(legacy&&await sha256(pw)===legacy){
-      var rec={id:uid(),username:user,firstName:"Admin",lastName:"",email:"",passwordHash:legacy,created:Date.now()};
-      admins.push(rec);saveAdmins(admins);setSession({id:rec.id,since:Date.now()});return route();
-    }
-    return notice("login-msg","err","No admin accounts yet. Click Create admin account.");
-  }
+  if(!admins.length){var legacy=localStorage.getItem(K.legacyHash);if(legacy&&await sha256(pw)===legacy){var rec={id:uid(),username:user,firstName:"Admin",lastName:"",email:"",passwordHash:legacy,created:Date.now()};admins.push(rec);saveAdmins(admins);setSession({id:rec.id,since:Date.now()});return route();}return notice("login-msg","err","No admin accounts yet. Click Create admin account.");}
   var a=admins.filter(function(x){return normUser(x.username)===user;})[0];
   if(!a)return notice("login-msg","err","Username not found.");
-  var h=await sha256(pw);
-  if(h!==a.passwordHash)return notice("login-msg","err","Wrong password.");
-  setSession({id:a.id,since:Date.now()});
-  route();
+  if(await sha256(pw)!==a.passwordHash)return notice("login-msg","err","Wrong password.");
+  setSession({id:a.id,since:Date.now()});route();
 });
- 
 $("signout-btn").addEventListener("click",function(){clearSession();route();});
- 
-/* ====================================================================
-   Tabs
-   ==================================================================== */
+var ALL_TABS=["leads","calendar","accounts","support","referrals","settings"];
 function switchTab(name){
-  ["leads","calendar","accounts","support","referrals","settings"].forEach(function(n){
-    var btn=$("t-"+n);if(btn)btn.classList.toggle("active",n===name);
-    var pn=$("p-"+n);if(pn)pn.classList.toggle("active",n===name);
-  });
+  ALL_TABS.forEach(function(n){var btn=$("t-"+n);if(btn)btn.classList.toggle("active",n===name);var pn=$("p-"+n);if(pn)pn.classList.toggle("active",n===name);});
+  document.querySelectorAll(".mobile-nav button[data-tab]").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-tab")===name);});
   if(name==="calendar")renderCalendar();
   if(name==="support")renderSupport();
   if(name==="referrals")renderReferrals();
@@ -741,101 +643,155 @@ function switchTab(name){
   if(name==="settings")renderSettings();
 }
 document.querySelectorAll("[data-tab]").forEach(function(b){b.addEventListener("click",function(){switchTab(b.getAttribute("data-tab"));});});
- 
-/* ====================================================================
-   Modal
-   ==================================================================== */
-function openModal(html){
-  $("modal-content").innerHTML="";
-  if(typeof html==="string")$("modal-content").innerHTML=html;
-  else $("modal-content").appendChild(html);
-  $("modal-bg").classList.add("open");document.body.style.overflow="hidden";
-}
+function openModal(html){$("modal-content").innerHTML="";if(typeof html==="string")$("modal-content").innerHTML=html;else $("modal-content").appendChild(html);$("modal-bg").classList.add("open");document.body.style.overflow="hidden";}
 function closeModal(){$("modal-bg").classList.remove("open");document.body.style.overflow="";}
 $("modal-bg").addEventListener("click",function(e){if(e.target===$("modal-bg"))closeModal();});
 document.addEventListener("click",function(e){if(e.target.matches("[data-close]"))closeModal();});
 document.addEventListener("keydown",function(e){if(e.key==="Escape")closeModal();});
- 
-/* ====================================================================
-   LEADS
-   ==================================================================== */
-var LEAD_STATUSES=["new","contacted","quoted","enrolled","lost"];
+
+/* ── STATUS DROPDOWN BUILDER ── */
+function buildDropdown(selId,options,getActive,setActive,onchange){
+  var sel=$(selId);if(!sel)return;
+  var cur=getActive();
+  sel.innerHTML=options.map(function(opt){
+    var label=opt==="all"?"All Statuses":opt.replace(/-/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();});
+    return'<option value="'+opt+'"'+( opt===cur?' selected':'')+">"+ label+"</option>";
+  }).join("");
+  sel.onchange=function(){setActive(sel.value);onchange();};
+}
+
+/* ====== LEADS ====== */
+var LEAD_STATUSES=["new","contacted","quoted","sold","declined","follow-up","appointment-scheduled","no-longer-interested","enrolled","lost"];
+var activeLeadFilter="all";
 function renderLeads(){
+  buildDropdown("lead-filter-sel",["all"].concat(LEAD_STATUSES),function(){return activeLeadFilter;},function(v){activeLeadFilter=v;},renderLeads);
   var q=($("lead-search").value||"").toLowerCase().trim();
-  var rows=getLeads().filter(function(l){if(!q)return true;return[l.name,l.email,l.phone,l.company,l.address].join(" ").toLowerCase().indexOf(q)>=0;});
+  var all=getLeads();
+  $("b-leads").textContent=all.length;
+  var mnb=$("mn-leads");if(mnb){mnb.hidden=all.length===0;mnb.textContent=all.length;}
+  var rows=all.filter(function(l){
+    var matchQ=!q||[l.name,l.firstName,l.lastName,l.email,l.phone,l.company,l.address].join(" ").toLowerCase().indexOf(q)>=0;
+    return matchQ&&(activeLeadFilter==="all"||(l.status||"new")===activeLeadFilter);
+  });
   var box=$("leads-list");box.innerHTML="";
-  $("b-leads").textContent=getLeads().length;
-  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No leads yet. Public-site forms drop in here, or click + Add lead."}));return;}
+  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No leads match this filter."}));return;}
   rows.forEach(function(l){
     var row=el("div",{class:"row"});
     var top=el("div",{class:"top"});
-    var name=el("div",{},[el("div",{class:"name",text:l.name||"(no name)"})]);
-    if(l.company)name.appendChild(el("div",{class:"sub",text:l.company}));
-    top.appendChild(name);
-    top.appendChild(el("span",{class:"status-pill status-"+(l.status||"new"),text:l.status||"new"}));
+    var nameCol=el("div",{style:"flex:1;min-width:0"});
+    nameCol.appendChild(el("div",{class:"name",text:fullName(l)}));
+    if(l.company)nameCol.appendChild(el("div",{class:"sub",text:l.company}));
+    top.appendChild(nameCol);
+    var rightCol=el("div",{style:"display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0"});
+    rightCol.appendChild(el("span",{class:"status-pill status-"+(l.status||"new"),text:(l.status||"new").replace(/-/g," ")}));
+    if(l.monthlyPremium){
+      var pm=fmtMoney(l.monthlyPremium);
+      if(pm)rightCol.appendChild(el("div",{style:"background:linear-gradient(135deg,#eafaf5,#d4f5e9);border:1.5px solid #7dd3b0;border-radius:8px;padding:4px 10px;font-size:13px;font-weight:800;color:#0a5c38;text-align:right",text:"\uD83D\uDCB0 "+pm+"/mo"}));
+    }
+    top.appendChild(rightCol);
     row.appendChild(top);
-    if(l.email)row.appendChild(el("div",{class:"sub",text:l.email}));
-    if(l.phone)row.appendChild(el("div",{class:"sub",text:l.phone}));
-    if(l.address)row.appendChild(el("div",{class:"sub",text:l.address}));
-    if(l.coverage)row.appendChild(el("div",{class:"sub",text:"Coverage: "+l.coverage}));
-    if(l.next)row.appendChild(el("div",{class:"meta",text:"Next: "+l.next}));
+    if(l.email)row.appendChild(el("div",{class:"sub",text:"\u2709 "+l.email}));
+    if(l.phone)row.appendChild(el("div",{class:"sub",text:"\uD83D\uDCDE "+l.phone}));
+    if(l.dob)row.appendChild(el("div",{class:"sub",text:"DOB: "+l.dob}));
+    if(l.address){var addr=[l.address,l.state,l.zipcode].filter(Boolean).join(", ");row.appendChild(el("div",{class:"sub",text:"\uD83D\uDCCD "+addr}));}
+    if(l.notes)row.appendChild(el("div",{class:"meta",text:"Notes: "+l.notes}));
     row.appendChild(el("div",{class:"meta",text:"Added "+fmtDate(l.created)}));
     var acts=el("div",{class:"acts"});
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Edit",onclick:function(){openLeadForm(l);}}));
-    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Advance",onclick:function(){advanceLead(l.id);}}));
+    // Convert / View in Clients button
+    var existingClient=getAccounts().filter(function(a){return a.fromLeadId===l.id;})[0];
+    if(existingClient){
+      acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"\u2192 View in Clients",onclick:function(){switchTab("accounts");}}));
+    }else if((l.status||"new")==="sold"){
+      acts.appendChild(el("button",{class:"btn btn-teal btn-sm",type:"button",text:"\u2192 Add to Clients",onclick:function(){autoConvertLeadToClient(l);}}));
+    }
     acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete",onclick:function(){if(confirm("Delete this lead?")){saveLeads(getLeads().filter(function(x){return x.id!==l.id;}));renderLeads();}}}));
-    row.appendChild(acts);
-    box.appendChild(row);
+    row.appendChild(acts);box.appendChild(row);
   });
-}
-function advanceLead(id){
-  var arr=getLeads().map(function(l){
-    if(l.id!==id)return l;
-    var i=LEAD_STATUSES.indexOf(l.status||"new");
-    l.status=LEAD_STATUSES[Math.min(i+1,LEAD_STATUSES.length-1)];
-    l.updated=Date.now();
-    return l;
-  });
-  saveLeads(arr);renderLeads();
 }
 function openLeadForm(existing){
-  var l=existing||{id:uid(),name:"",company:"",email:"",phone:"",address:"",coverage:"",status:"new",next:"",notes:"",created:Date.now()};
+  var l=existing||{id:uid(),firstName:"",lastName:"",company:"",email:"",phone:"",dob:"",address:"",state:"",zipcode:"",coverage:"",monthlyPremium:"",status:"new",notes:"",created:Date.now()};
+  if(!l.firstName&&!l.lastName&&l.name){var parts=(l.name||"").split(/\s+/);l.firstName=parts[0]||"";l.lastName=parts.slice(1).join(" ");}
+  var stateOpts=["","AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"].map(function(s){return'<option value="'+s+'"'+( s===(l.state||"")?' selected':'')+'>'+s+'</option>';}).join("");
+  var statusOpts=LEAD_STATUSES.map(function(s){return'<option value="'+s+'"'+( s===(l.status||"new")?' selected':'')+'>'+s.replace(/-/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();})+'</option>';}).join("");
+  var premVal=l.monthlyPremium!=null?l.monthlyPremium:"";
   var html=
     '<h3>'+(existing?"Edit lead":"Add lead")+'</h3>'+
     '<form id="lead-form">'+
-    '<div class="row2"><div class="field"><label>Name</label><input id="l-name" required value="'+escapeHtml(l.name||"")+'" /></div>'+
-    '<div class="field"><label>Company</label><input id="l-company" value="'+escapeHtml(l.company||"")+'" /></div></div>'+
-    '<div class="row2"><div class="field"><label>Email</label><input id="l-email" type="email" value="'+escapeHtml(l.email||"")+'" /></div>'+
-    '<div class="field"><label>Phone</label><input id="l-phone" type="tel" value="'+escapeHtml(l.phone||"")+'" /></div></div>'+
-    '<div class="field"><label>Address</label><input id="l-address" value="'+escapeHtml(l.address||"")+'" /></div>'+
-    '<div class="row2"><div class="field"><label>Coverage interest</label><input id="l-coverage" value="'+escapeHtml(l.coverage||"")+'" /></div>'+
-    '<div class="field"><label>Status</label><select id="l-status">'+LEAD_STATUSES.map(function(s){return '<option value="'+s+'"'+(s===(l.status||"new")?" selected":"")+'>'+s+'</option>';}).join("")+'</select></div></div>'+
-    '<div class="field"><label>Next action</label><input id="l-next" value="'+escapeHtml(l.next||"")+'" /></div>'+
-    '<div class="field"><label>Notes</label><textarea id="l-notes" rows="3">'+escapeHtml(l.notes||"")+'</textarea></div>'+
+    '<div class="row2"><div class="field"><label>First name *</label><input id="l-first" required value="'+escHtml(l.firstName||"")+'" /></div>'+
+    '<div class="field"><label>Last name *</label><input id="l-last" required value="'+escHtml(l.lastName||"")+'" /></div></div>'+
+    '<div class="row2"><div class="field"><label>Phone</label><input id="l-phone" type="tel" value="'+escHtml(l.phone||"")+'" /></div>'+
+    '<div class="field"><label>Email</label><input id="l-email" type="email" value="'+escHtml(l.email||"")+'" /></div></div>'+
+    '<div class="row2"><div class="field"><label>Date of birth</label><input id="l-dob" type="date" value="'+( l.dob||"")+'" /></div>'+
+    '<div class="field"><label>Company</label><input id="l-company" value="'+escHtml(l.company||"")+'" /></div></div>'+
+    '<div class="field"><label>Address</label><input id="l-address" value="'+escHtml(l.address||"")+'" /></div>'+
+    '<div class="row2"><div class="field"><label>State</label><select id="l-state">'+stateOpts+'</select></div>'+
+    '<div class="field"><label>Zip code</label><input id="l-zipcode" type="text" inputmode="numeric" maxlength="10" value="'+escHtml(l.zipcode||"")+'" /></div></div>'+
+    '<div class="row2">'+
+    '<div class="field"><label>Coverage interest</label><input id="l-coverage" value="'+escHtml(l.coverage||"")+'" /></div>'+
+    '<div class="field"><label>Monthly premium ($)</label><input id="l-premium" type="number" step="0.01" min="0" placeholder="0.00" value="'+escHtml(String(premVal))+'" /></div>'+
+    '</div>'+
+    '<div class="field"><label>Status</label><select id="l-status">'+statusOpts+'</select></div>'+
+    '<div class="field"><label>Notes</label><textarea id="l-notes" rows="3">'+escHtml(l.notes||"")+'</textarea></div>'+
     '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save lead</button></div>'+
     '</form>';
   openModal(html);
   $("lead-form").addEventListener("submit",function(e){
     e.preventDefault();
-    l.name=$("l-name").value.trim();l.company=$("l-company").value.trim();l.email=$("l-email").value.trim();
-    l.phone=$("l-phone").value.trim();l.address=$("l-address").value.trim();l.coverage=$("l-coverage").value.trim();
-    l.status=$("l-status").value;l.next=$("l-next").value.trim();l.notes=$("l-notes").value.trim();l.updated=Date.now();
+    l.firstName=$("l-first").value.trim();l.lastName=$("l-last").value.trim();
+    l.name=l.firstName+" "+l.lastName;
+    l.email=$("l-email").value.trim();l.phone=$("l-phone").value.trim();
+    l.dob=$("l-dob").value;l.company=$("l-company").value.trim();
+    l.address=$("l-address").value.trim();l.state=$("l-state").value;l.zipcode=$("l-zipcode").value.trim();
+    l.coverage=$("l-coverage").value.trim();
+    var pv=$("l-premium").value;l.monthlyPremium=pv?parseFloat(pv):null;
+    l.status=$("l-status").value;l.notes=$("l-notes").value.trim();l.updated=Date.now();
     var arr=getLeads();var i=arr.findIndex(function(x){return x.id===l.id;});
     if(i>=0)arr[i]=l;else arr.unshift(l);
     saveLeads(arr);closeModal();renderLeads();
+    // Auto-convert to client when marked Sold
+    if(l.status==="sold")autoConvertLeadToClient(l);
   });
 }
+function autoConvertLeadToClient(l){
+  // Don't duplicate if already converted
+  var accts=getAccounts();
+  if(accts.some(function(a){return a.fromLeadId===l.id;})){renderAccounts();return;}
+  var defaultPw="VSBenefits!"+new Date().getFullYear();
+  crypto.subtle.digest("SHA-256",new TextEncoder().encode(defaultPw)).then(function(b){
+    var hash=Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0");}).join("");
+    var arr=getAccounts();
+    arr.push({
+      id:uid(),fromLeadId:l.id,
+      firstName:l.firstName||"",lastName:l.lastName||"",
+      email:l.email||"",phone:l.phone||"",dob:l.dob||"",
+      address:l.address||"",state:l.state||"",zipcode:l.zipcode||"",
+      passwordHash:hash,created:Date.now(),lastSignIn:0,
+      status:"active",
+      plan:{carrier:"",planName:"",effectiveDate:"",renewalDate:"",
+            monthlyPremium:l.monthlyPremium||null,notes:"",updated:Date.now()},
+      photoDataUrl:"",documents:[],notes:l.notes||""
+    });
+    saveAccounts(arr);
+    renderAccounts();
+    // Show a subtle notice — don't block with alert
+    var banner=document.createElement("div");
+    banner.style.cssText="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0a8754;color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.2);max-width:90vw;text-align:center";
+    banner.textContent="✅ "+((l.firstName||"")+" "+(l.lastName||"")).trim()+" moved to Clients! Default pw: "+defaultPw;
+    document.body.appendChild(banner);
+    setTimeout(function(){banner.remove();},5000);
+  });
+}
+
 $("add-lead-btn").addEventListener("click",function(){openLeadForm(null);});
 $("lead-search").addEventListener("input",renderLeads);
 $("export-leads-btn").addEventListener("click",function(){
-  var rows=[["name","company","email","phone","address","coverage","status","next","notes","created","updated"]];
-  getLeads().forEach(function(l){rows.push([l.name,l.company,l.email,l.phone,l.address,l.coverage,l.status,l.next,l.notes,l.created?new Date(l.created).toISOString():"",l.updated?new Date(l.updated).toISOString():""].map(csvEscape));});
+  var rows=[["firstName","lastName","email","phone","dob","address","state","zipcode","company","coverage","monthlyPremium","status","notes","created"]];
+  getLeads().forEach(function(l){rows.push([l.firstName||"",l.lastName||"",l.email,l.phone,l.dob||"",l.address,l.state||"",l.zipcode||"",l.company,l.coverage,l.monthlyPremium||"",l.status,l.notes,l.created?new Date(l.created).toISOString():""].map(csvEscape));});
   downloadFile("leads-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
 });
- 
-/* ====================================================================
-   CALENDAR (+ Google push)
-   ==================================================================== */
+
+/* ====== CALENDAR ====== */
 var calCursor=new Date();calCursor.setDate(1);
 var selectedDate=null;
 function renderCalendar(){
@@ -844,28 +800,18 @@ function renderCalendar(){
   var year=calCursor.getFullYear(),month=calCursor.getMonth();
   $("cal-title").textContent=calCursor.toLocaleString(undefined,{month:"long",year:"numeric"});
   var grid=$("cal-grid");grid.innerHTML="";
-  ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(function(d){grid.appendChild(el("div",{class:"cal-dow",text:d}));});
-  var first=new Date(year,month,1),last=new Date(year,month+1,0);
-  var startWeek=first.getDay();
-  for(var i=0;i<startWeek;i++){
-    var d=new Date(year,month,1-(startWeek-i));
-    grid.appendChild(makeCalDay(d,true,appts));
-  }
-  for(var d2=1;d2<=last.getDate();d2++){
-    grid.appendChild(makeCalDay(new Date(year,month,d2),false,appts));
-  }
+  ["Su","Mo","Tu","We","Th","Fr","Sa"].forEach(function(d){grid.appendChild(el("div",{class:"cal-dow",text:d}));});
+  var first=new Date(year,month,1),last=new Date(year,month+1,0),startWeek=first.getDay();
+  for(var i=0;i<startWeek;i++)grid.appendChild(makeCalDay(new Date(year,month,1-(startWeek-i)),true,appts));
+  for(var d2=1;d2<=last.getDate();d2++)grid.appendChild(makeCalDay(new Date(year,month,d2),false,appts));
   var afterLast=42-(startWeek+last.getDate());
-  for(var i2=1;i2<=afterLast;i2++){
-    grid.appendChild(makeCalDay(new Date(year,month+1,i2),true,appts));
-  }
+  for(var i2=1;i2<=afterLast;i2++)grid.appendChild(makeCalDay(new Date(year,month+1,i2),true,appts));
   if(!selectedDate)selectedDate=isoDate(new Date());
   renderEventList();
 }
 function isoDate(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
 function makeCalDay(date,muted,appts){
-  var iso=isoDate(date);
-  var has=appts.some(function(a){return a.start.slice(0,10)===iso;});
-  var today=isoDate(new Date());
+  var iso=isoDate(date),has=appts.some(function(a){return a.start.slice(0,10)===iso;}),today=isoDate(new Date());
   var c="cal-day"+(muted?" muted":"")+(iso===today?" today":"")+(has?" has":"")+(iso===selectedDate?" selected":"");
   var d=el("div",{class:c,onclick:function(){selectedDate=iso;renderCalendar();}});
   d.appendChild(el("div",{class:"num",text:date.getDate()}));
@@ -880,67 +826,49 @@ function renderEventList(){
   appts.forEach(function(a){
     var ev=el("div",{class:"ev"});
     ev.appendChild(el("div",{class:"et",text:a.title||"(untitled)"}));
-    var when=fmtDateTime(a.start)+(a.end?(" - "+new Date(a.end).toLocaleString(undefined,{hour:"numeric",minute:"2-digit"})):"");
+    var when=fmtDateTime(a.start)+(a.end?(" \u2013 "+new Date(a.end).toLocaleString(undefined,{hour:"numeric",minute:"2-digit"})):"");
     ev.appendChild(el("div",{class:"em",text:when}));
     if(a.with)ev.appendChild(el("div",{class:"em",text:"With: "+a.with}));
-    if(a.location)ev.appendChild(el("div",{class:"em",text:a.location}));
+    if(a.location)ev.appendChild(el("div",{class:"em",text:"\uD83D\uDCCD "+a.location}));
     if(a.notes)ev.appendChild(el("div",{class:"em",text:a.notes}));
-    if(a.googleEventId)ev.appendChild(el("div",{class:"gtag",text:"In Google Calendar"}));
+    if(a.googleEventId)ev.appendChild(el("div",{class:"gtag",text:"\u2713 In Google Calendar"}));
     var acts=el("div",{class:"ea"});
     acts.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:googleCalUrl(a),target:"_blank",rel:"noopener",text:"Open in Google"}));
-    if(!a.googleEventId&&gcal.ready){
-      acts.appendChild(el("button",{class:"btn btn-teal btn-sm",type:"button",text:"Push to Google",onclick:async function(){var gid=await gcalPushEvent(a);if(gid){a.googleEventId=gid;var arr=getAppts().map(function(x){return x.id===a.id?a:x;});saveAppts(arr);renderCalendar();}}}));
-    }
+    if(!a.googleEventId&&gcal.ready){acts.appendChild(el("button",{class:"btn btn-teal btn-sm",type:"button",text:"Push to Google",onclick:async function(){var gid=await gcalPushEvent(a);if(gid){a.googleEventId=gid;var arr=getAppts().map(function(x){return x.id===a.id?a:x;});saveAppts(arr);renderCalendar();}}}));}
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Edit",onclick:function(){openApptForm(a);}}));
-    acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete",onclick:async function(){if(!confirm("Delete event?"))return;if(a.googleEventId&&gcal.ready){await gcalDeleteEvent(a.googleEventId);}saveAppts(getAppts().filter(function(x){return x.id!==a.id;}));renderCalendar();}}));
-    ev.appendChild(acts);
-    box.appendChild(ev);
+    acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete",onclick:async function(){if(!confirm("Delete event?"))return;if(a.googleEventId&&gcal.ready)await gcalDeleteEvent(a.googleEventId);saveAppts(getAppts().filter(function(x){return x.id!==a.id;}));renderCalendar();}}));
+    ev.appendChild(acts);box.appendChild(ev);
   });
 }
 function googleCalUrl(a){
   function fmt(s){var d=new Date(s);return d.getUTCFullYear()+String(d.getUTCMonth()+1).padStart(2,"0")+String(d.getUTCDate()).padStart(2,"0")+"T"+String(d.getUTCHours()).padStart(2,"0")+String(d.getUTCMinutes()).padStart(2,"0")+"00Z";}
   var endIso=a.end||new Date(new Date(a.start).getTime()+30*60000).toISOString();
-  var params={
-    action:"TEMPLATE",
-    text:a.title||"VS Benefits appointment",
-    dates:fmt(a.start)+"/"+fmt(endIso),
-    details:[a.with?"With: "+a.with:"",a.notes||""].filter(Boolean).join("\n\n"),
-    location:a.location||""
-  };
-  var qs=Object.keys(params).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(params[k]);}).join("&");
-  return"https://calendar.google.com/calendar/render?"+qs;
+  var params={action:"TEMPLATE",text:a.title||"VS Benefits appointment",dates:fmt(a.start)+"/"+fmt(endIso),details:[a.with?"With: "+a.with:"",a.notes||""].filter(Boolean).join("\n\n"),location:a.location||""};
+  return"https://calendar.google.com/calendar/render?"+Object.keys(params).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(params[k]);}).join("&");
 }
 function openApptForm(existing){
   var a=existing||{id:uid(),title:"",with:"",accountId:"",start:(selectedDate||isoDate(new Date()))+"T10:00",end:"",location:"",notes:"",created:Date.now(),googleEventId:""};
   var accts=getAccounts();
-  var withOpts='<option value="">-- none --</option>'+accts.map(function(x){return '<option value="'+x.id+'"'+(x.id===a.accountId?" selected":"")+'>'+escapeHtml(((x.firstName||"")+" "+(x.lastName||"")).trim()||x.email)+'</option>';}).join("");
+  var withOpts='<option value="">-- none --</option>'+accts.map(function(x){return'<option value="'+x.id+'"'+( x.id===a.accountId?' selected':'')+'>'+escHtml(fullName(x))+'</option>';}).join("");
   var html=
     '<h3>'+(existing?"Edit appointment":"Book appointment")+'</h3>'+
     '<form id="appt-form">'+
-    '<div class="field"><label>Title</label><input id="a-title" required value="'+escapeHtml(a.title||"")+'" placeholder="Discovery call, ACA review..." /></div>'+
-    '<div class="row2"><div class="field"><label>Start</label><input id="a-start" type="datetime-local" required value="'+(a.start||"")+'" /></div>'+
-    '<div class="field"><label>End</label><input id="a-end" type="datetime-local" value="'+(a.end||"")+'" /></div></div>'+
+    '<div class="field"><label>Title</label><input id="a-title" required value="'+escHtml(a.title||"")+'" placeholder="Discovery call, ACA review..." /></div>'+
+    '<div class="row2"><div class="field"><label>Start</label><input id="a-start" type="datetime-local" required value="'+( a.start||"")+'" /></div>'+
+    '<div class="field"><label>End</label><input id="a-end" type="datetime-local" value="'+( a.end||"")+'" /></div></div>'+
     '<div class="field"><label>With (existing client)</label><select id="a-acct">'+withOpts+'</select></div>'+
-    '<div class="field"><label>Or with (free text)</label><input id="a-with" value="'+escapeHtml(a.with||"")+'" placeholder="Lead name, group contact..." /></div>'+
-    '<div class="field"><label>Location / link</label><input id="a-loc" value="'+escapeHtml(a.location||"")+'" placeholder="Phone, Zoom URL, address..." /></div>'+
-    '<div class="field"><label>Notes</label><textarea id="a-notes" rows="2">'+escapeHtml(a.notes||"")+'</textarea></div>'+
-    (gcal.ready?'<div class="notice notice-info">Connected to Google Calendar. This appointment will auto-push on save.</div>':'<div class="notice notice-info">Google Calendar not connected. Connect it in Settings to auto-push.</div>')+
-    '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div>'+
-    '</form>';
+    '<div class="field"><label>Or with (free text)</label><input id="a-with" value="'+escHtml(a.with||"")+'" placeholder="Lead name, group contact..." /></div>'+
+    '<div class="field"><label>Location / link</label><input id="a-loc" value="'+escHtml(a.location||"")+'" placeholder="Phone, Zoom URL, address..." /></div>'+
+    '<div class="field"><label>Notes</label><textarea id="a-notes" rows="2">'+escHtml(a.notes||"")+'</textarea></div>'+
+    (gcal.ready?'<div class="notice notice-info">Connected to Google Calendar \u2014 will auto-push on save.</div>':'<div class="notice notice-info">Connect Google Calendar in Settings to auto-push.</div>')+
+    '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div></form>';
   openModal(html);
   $("appt-form").addEventListener("submit",async function(e){
     e.preventDefault();
-    a.title=$("a-title").value.trim();
-    a.start=$("a-start").value;a.end=$("a-end").value;
-    a.accountId=$("a-acct").value;
-    a.with=$("a-with").value.trim();
-    a.location=$("a-loc").value.trim();a.notes=$("a-notes").value.trim();
-    if(a.accountId&&!a.with){var ac=accts.filter(function(x){return x.id===a.accountId;})[0];if(ac)a.with=((ac.firstName||"")+" "+(ac.lastName||"")).trim()||ac.email;}
-    // Push to Google if connected and not yet pushed
-    if(gcal.ready&&!a.googleEventId){
-      var gid=await gcalPushEvent(a);
-      if(gid)a.googleEventId=gid;
-    }
+    a.title=$("a-title").value.trim();a.start=$("a-start").value;a.end=$("a-end").value;
+    a.accountId=$("a-acct").value;a.with=$("a-with").value.trim();a.location=$("a-loc").value.trim();a.notes=$("a-notes").value.trim();
+    if(a.accountId&&!a.with){var ac=accts.filter(function(x){return x.id===a.accountId;})[0];if(ac)a.with=fullName(ac);}
+    if(gcal.ready&&!a.googleEventId){var gid=await gcalPushEvent(a);if(gid)a.googleEventId=gid;}
     var arr=getAppts();var i=arr.findIndex(function(x){return x.id===a.id;});
     if(i>=0)arr[i]=a;else arr.push(a);
     saveAppts(arr);closeModal();renderCalendar();
@@ -952,252 +880,155 @@ $("cal-next").addEventListener("click",function(){calCursor.setMonth(calCursor.g
 $("export-events-btn").addEventListener("click",function(){
   var lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//VS Benefits//EN"];
   function fmt(s){var d=new Date(s);return d.getUTCFullYear()+String(d.getUTCMonth()+1).padStart(2,"0")+String(d.getUTCDate()).padStart(2,"0")+"T"+String(d.getUTCHours()).padStart(2,"0")+String(d.getUTCMinutes()).padStart(2,"0")+"00Z";}
-  getAppts().forEach(function(a){
-    lines.push("BEGIN:VEVENT","UID:"+a.id+"@vsbenefits","DTSTAMP:"+fmt(new Date().toISOString()),"DTSTART:"+fmt(a.start),"DTEND:"+fmt(a.end||new Date(new Date(a.start).getTime()+30*60000).toISOString()),"SUMMARY:"+(a.title||"VS Benefits"),"DESCRIPTION:"+((a.with?"With: "+a.with+"\\n":"")+(a.notes||"").replace(/\n/g,"\\n")),"LOCATION:"+(a.location||""),"END:VEVENT");
-  });
+  getAppts().forEach(function(a){lines.push("BEGIN:VEVENT","UID:"+a.id+"@vsbenefits","DTSTAMP:"+fmt(new Date().toISOString()),"DTSTART:"+fmt(a.start),"DTEND:"+fmt(a.end||new Date(new Date(a.start).getTime()+30*60000).toISOString()),"SUMMARY:"+(a.title||"VS Benefits"),"DESCRIPTION:"+((a.with?"With: "+a.with+"\\n":"")+(a.notes||"").replace(/\n/g,"\\n")),"LOCATION:"+(a.location||""),"END:VEVENT");});
   lines.push("END:VCALENDAR");
   downloadFile("vsbenefits-events.ics",lines.join("\r\n"),"text/calendar");
 });
- 
-/* ====================================================================
-   GOOGLE CALENDAR (GIS token client)
-   ==================================================================== */
+
+/* ── Google Calendar ── */
 var gcal={ready:false,token:"",expires:0,email:""};
 function getGcalClientId(){return localStorage.getItem(K.gcalCid)||"";}
 function setGcalClientId(v){localStorage.setItem(K.gcalCid,v||"");}
 function getGcalToken(){try{return JSON.parse(localStorage.getItem(K.gcalTok)||"null");}catch(e){return null;}}
 function setGcalToken(o){if(o)localStorage.setItem(K.gcalTok,JSON.stringify(o));else localStorage.removeItem(K.gcalTok);}
 function clearGcalToken(){gcal.ready=false;gcal.token="";gcal.expires=0;gcal.email="";setGcalToken(null);localStorage.removeItem(K.gcalEmail);}
-function loadGcalFromStorage(){
-  var t=getGcalToken();
-  if(t&&t.access_token&&t.expires>Date.now()+5000){
-    gcal.ready=true;gcal.token=t.access_token;gcal.expires=t.expires;gcal.email=localStorage.getItem(K.gcalEmail)||"";
-  }
-}
-function paintGcalUi(){
-  var box=$("gcal-status");if(!box)return;
-  var cid=getGcalClientId();
-  $("gcal-cid").value=cid;
-  if(!cid){box.innerHTML='<div class="notice notice-info">Save your OAuth Client ID above, then click Connect.</div>';$("gcal-disconnect").hidden=true;return;}
-  if(gcal.ready){
-    box.innerHTML='<div class="notice notice-ok">Connected'+(gcal.email?(" as <strong>"+escapeHtml(gcal.email)+"</strong>"):"")+'. New appointments auto-push.</div>';
-    $("gcal-disconnect").hidden=false;
-  }else{
-    box.innerHTML='<div class="notice notice-info">Not connected. Click Connect Google Calendar.</div>';
-    $("gcal-disconnect").hidden=true;
-  }
-}
-async function gcalFetchEmail(){
-  try{
-    var r=await fetch("https://www.googleapis.com/oauth2/v2/userinfo",{headers:{"Authorization":"Bearer "+gcal.token}});
-    if(!r.ok)return;
-    var d=await r.json();if(d.email){gcal.email=d.email;localStorage.setItem(K.gcalEmail,d.email);}
-  }catch(e){}
-}
-function gcalConnect(){
-  var cid=(getGcalClientId()||"").trim();
-  if(!cid){notice("gcal-msg","err","Save your OAuth Client ID first.");return;}
-  if(typeof google==="undefined"||!google.accounts||!google.accounts.oauth2){
-    notice("gcal-msg","err","Google Identity Services hasn't loaded yet. Try again in a moment.");return;
-  }
-  var client=google.accounts.oauth2.initTokenClient({
-    client_id:cid,
-    scope:"https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.email",
-    callback:async function(resp){
-      if(resp.error){notice("gcal-msg","err","Google error: "+resp.error);return;}
-      var tok={access_token:resp.access_token,expires:Date.now()+(Number(resp.expires_in||3600)*1000)};
-      gcal.ready=true;gcal.token=tok.access_token;gcal.expires=tok.expires;setGcalToken(tok);
-      await gcalFetchEmail();
-      paintGcalUi();
-      notice("gcal-msg","ok","Connected.");
-    }
-  });
-  client.requestAccessToken({prompt:"consent"});
-}
-async function gcalPushEvent(a){
-  if(!gcal.ready)return null;
-  if(Date.now()>gcal.expires){clearGcalToken();paintGcalUi();return null;}
-  var endIso=a.end?new Date(a.end).toISOString():new Date(new Date(a.start).getTime()+30*60000).toISOString();
-  var body={
-    summary:a.title||"VS Benefits appointment",
-    description:[a.with?"With: "+a.with:"",a.notes||""].filter(Boolean).join("\n\n"),
-    location:a.location||"",
-    start:{dateTime:new Date(a.start).toISOString()},
-    end:{dateTime:endIso}
-  };
-  try{
-    var r=await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events",{method:"POST",headers:{"Authorization":"Bearer "+gcal.token,"Content-Type":"application/json"},body:JSON.stringify(body)});
-    if(r.status===401){clearGcalToken();paintGcalUi();return null;}
-    if(!r.ok)return null;
-    var d=await r.json();return d.id||null;
-  }catch(e){return null;}
-}
-async function gcalDeleteEvent(gid){
-  if(!gcal.ready||!gid)return;
-  try{await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events/"+encodeURIComponent(gid),{method:"DELETE",headers:{"Authorization":"Bearer "+gcal.token}});}catch(e){}
-}
- 
-/* ====================================================================
-   CLIENT ACCOUNTS
-   ==================================================================== */
+function loadGcalFromStorage(){var t=getGcalToken();if(t&&t.access_token&&t.expires>Date.now()+5000){gcal.ready=true;gcal.token=t.access_token;gcal.expires=t.expires;gcal.email=localStorage.getItem(K.gcalEmail)||"";}}
+function paintGcalUi(){var box=$("gcal-status");if(!box)return;var cid=getGcalClientId();$("gcal-cid").value=cid;if(!cid){box.innerHTML='<div class="notice notice-info">Save your OAuth Client ID above, then click Connect.</div>';$("gcal-disconnect").hidden=true;return;}if(gcal.ready){box.innerHTML='<div class="notice notice-ok">Connected'+(gcal.email?(" as <strong>"+escHtml(gcal.email)+"</strong>"):"")+'. New appointments auto-push.</div>';$("gcal-disconnect").hidden=false;}else{box.innerHTML='<div class="notice notice-info">Not connected. Click Connect Google Calendar.</div>';$("gcal-disconnect").hidden=true;}}
+async function gcalFetchEmail(){try{var r=await fetch("https://www.googleapis.com/oauth2/v2/userinfo",{headers:{"Authorization":"Bearer "+gcal.token}});if(!r.ok)return;var d=await r.json();if(d.email){gcal.email=d.email;localStorage.setItem(K.gcalEmail,d.email);}}catch(e){}}
+function gcalConnect(){var cid=(getGcalClientId()||"").trim();if(!cid){notice("gcal-msg","err","Save your OAuth Client ID first.");return;}if(typeof google==="undefined"||!google.accounts||!google.accounts.oauth2){notice("gcal-msg","err","Google Identity Services hasn't loaded yet. Try again.");return;}var client=google.accounts.oauth2.initTokenClient({client_id:cid,scope:"https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.email",callback:async function(resp){if(resp.error){notice("gcal-msg","err","Google error: "+resp.error);return;}var tok={access_token:resp.access_token,expires:Date.now()+(Number(resp.expires_in||3600)*1000)};gcal.ready=true;gcal.token=tok.access_token;gcal.expires=tok.expires;setGcalToken(tok);await gcalFetchEmail();paintGcalUi();notice("gcal-msg","ok","Connected.");}});client.requestAccessToken({prompt:"consent"});}
+async function gcalPushEvent(a){if(!gcal.ready)return null;if(Date.now()>gcal.expires){clearGcalToken();paintGcalUi();return null;}var endIso=a.end?new Date(a.end).toISOString():new Date(new Date(a.start).getTime()+30*60000).toISOString();var body={summary:a.title||"VS Benefits appointment",description:[a.with?"With: "+a.with:"",a.notes||""].filter(Boolean).join("\n\n"),location:a.location||"",start:{dateTime:new Date(a.start).toISOString()},end:{dateTime:endIso}};try{var r=await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events",{method:"POST",headers:{"Authorization":"Bearer "+gcal.token,"Content-Type":"application/json"},body:JSON.stringify(body)});if(r.status===401){clearGcalToken();paintGcalUi();return null;}if(!r.ok)return null;var d=await r.json();return d.id||null;}catch(e){return null;}}
+async function gcalDeleteEvent(gid){if(!gcal.ready||!gid)return;try{await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events/"+encodeURIComponent(gid),{method:"DELETE",headers:{"Authorization":"Bearer "+gcal.token}});}catch(e){}}
+$("gcal-cid-form").addEventListener("submit",function(e){e.preventDefault();setGcalClientId($("gcal-cid").value.trim());paintGcalUi();notice("gcal-msg","ok","Client ID saved.");});
+$("gcal-connect").addEventListener("click",gcalConnect);
+$("gcal-disconnect").addEventListener("click",function(){clearGcalToken();paintGcalUi();});
+
+/* ====== CLIENT ACCOUNTS ====== */
+var activeAcctFilter="all";
 function renderAccounts(){
+  buildDropdown("acct-filter-sel",["all","active","revoked"],function(){return activeAcctFilter;},function(v){activeAcctFilter=v;},renderAccounts);
   var q=($("acct-search").value||"").toLowerCase().trim();
   var accts=getAccounts();
   $("b-acct").textContent=accts.length;
-  var rows=accts.filter(function(a){if(!q)return true;return[a.firstName,a.lastName,a.email,a.phone].join(" ").toLowerCase().indexOf(q)>=0;});
+  var mnb=$("mn-acct");if(mnb){mnb.hidden=false;mnb.textContent=accts.length;}
+  var rows=accts.filter(function(a){var matchQ=!q||[a.firstName,a.lastName,a.email,a.phone,a.address].join(" ").toLowerCase().indexOf(q)>=0;return matchQ&&(activeAcctFilter==="all"||(a.status||"active")===activeAcctFilter);});
   var box=$("accts-list");box.innerHTML="";
-  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No client accounts yet. Members who sign up at /client.html appear here automatically, or click + Create client account."}));return;}
+  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No clients match this filter."}));return;}
   rows.forEach(function(a){
     var row=el("div",{class:"row"});
     var top=el("div",{class:"top"});
-    var nameWrap=el("div",{},[]);
+    var nameWrap=el("div",{style:"flex:1;min-width:0"});
     var nameLine=el("div",{style:"display:flex;gap:10px;align-items:center"});
     var av=el("div",{class:"avatar"});
     if(a.photoDataUrl){av.appendChild(el("img",{src:a.photoDataUrl,alt:""}));}else{av.textContent=initials(a);}
     nameLine.appendChild(av);
-    var nameInner=el("div");
-    var nameLbl=el("div",{class:"name"});
-    var dot=el("span",{class:"presence-dot "+(isOnline(a.id)?"on":"off"),title:isOnline(a.id)?"Online":"Offline"});
-    nameLbl.appendChild(dot);nameLbl.appendChild(document.createTextNode(((a.firstName||"")+" "+(a.lastName||"")).trim()||"(no name)"));
-    nameInner.appendChild(nameLbl);
-    nameInner.appendChild(el("div",{class:"sub",text:a.email}));
-    nameLine.appendChild(nameInner);
-    nameWrap.appendChild(nameLine);
-    top.appendChild(nameWrap);
+    var ni=el("div",{style:"min-width:0"});
+    var nl=el("div",{class:"name"});
+    nl.appendChild(el("span",{class:"presence-dot "+(isOnline(a.id)?"on":"off"),title:isOnline(a.id)?"Online":"Offline"}));
+    nl.appendChild(document.createTextNode(fullName(a)));
+    ni.appendChild(nl);ni.appendChild(el("div",{class:"sub",text:a.email}));
+    nameLine.appendChild(ni);nameWrap.appendChild(nameLine);top.appendChild(nameWrap);
     top.appendChild(el("span",{class:"status-pill status-"+(a.status||"active"),text:a.status||"active"}));
     row.appendChild(top);
-    if(a.phone)row.appendChild(el("div",{class:"sub",text:a.phone}));
-    if(a.plan&&(a.plan.carrier||a.plan.planName))row.appendChild(el("div",{class:"sub",text:"Plan: "+[a.plan.carrier,a.plan.planName].filter(Boolean).join(" - ")+(a.plan.effectiveDate?(" (eff. "+fmtDate(a.plan.effectiveDate)+")"):"")}));
+    if(a.phone)row.appendChild(el("div",{class:"sub",text:"\uD83D\uDCDE "+a.phone}));
+    if(a.dob)row.appendChild(el("div",{class:"sub",text:"DOB: "+a.dob}));
+    if(a.address){var addr=[a.address,a.state,a.zipcode].filter(Boolean).join(", ");row.appendChild(el("div",{class:"sub",text:"\uD83D\uDCCD "+addr}));}
+    if(a.plan&&(a.plan.carrier||a.plan.planName))row.appendChild(el("div",{class:"sub",text:"Plan: "+[a.plan.carrier,a.plan.planName].filter(Boolean).join(" \u2013 ")+(a.plan.effectiveDate?(" (eff. "+fmtDate(a.plan.effectiveDate)+")"):"")}));
+    if(a.plan&&a.plan.monthlyPremium){var pm=fmtMoney(a.plan.monthlyPremium);if(pm)row.appendChild(el("span",{class:"premium-badge",text:"\uD83D\uDCB0 "+pm+"/mo premium"}));}
+    if(a.fromLeadId)row.appendChild(el("span",{class:"status-pill status-sold",style:"margin-top:4px;display:inline-flex",text:"\u2714 Converted from lead"}));
     var lastSeenTs=presenceMap[a.id]||a.lastSignIn||0;
-    row.appendChild(el("div",{class:"meta",text:"Joined "+fmtDate(a.created)+(isOnline(a.id)?" - online now":(lastSeenTs?(" - last seen "+fmtDateTime(lastSeenTs)):" - never signed in"))}));
+    row.appendChild(el("div",{class:"meta",text:"Joined "+fmtDate(a.created)+(isOnline(a.id)?" \u00b7 online now":(lastSeenTs?(" \u00b7 last seen "+fmtDateTime(lastSeenTs)):" \u00b7 never signed in"))}));
     var acts=el("div",{class:"acts"});
-    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Set plan & docs",onclick:function(){openPlanForm(a);}}));
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Edit",onclick:function(){openEditAcctForm(a);}}));
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Plan & docs",onclick:function(){openPlanForm(a);}}));
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Message",onclick:function(){msgClient(a);}}));
-    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Change password",onclick:function(){changePw(a);}}));
-    if(a.status==="revoked"){
-      acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Restore",onclick:function(){updateAcct(a.id,{status:"active"});}}));
-    }else{
-      acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Revoke",onclick:function(){if(confirm("Revoke this account? They won't be able to sign in, but their record will be kept."))updateAcct(a.id,{status:"revoked"});}}));
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Change pw",onclick:function(){changePw(a);}}));
+    if(a.status==="revoked"){acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Restore",onclick:function(){updateAcct(a.id,{status:"active"});}}));}
+    else{acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Revoke",onclick:function(){if(confirm("Revoke this account?"))updateAcct(a.id,{status:"revoked"});}}));}
+    if(a.fromLeadId){
+      acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"\u21A9 Back to leads",onclick:function(){
+        if(!confirm("Move "+fullName(a)+" back to Leads? Their client account will be removed."))return;
+        // Find the lead and reset its status
+        var leads=getLeads();
+        var li=leads.findIndex(function(x){return x.id===a.fromLeadId;});
+        if(li>=0){leads[li].status="contacted";leads[li].updated=Date.now();saveLeads(leads);}
+        // Remove client account
+        saveAccounts(getAccounts().filter(function(x){return x.id!==a.id;}));
+        saveMessages(getMessages().filter(function(m){return m.accountId!==a.id;}));
+        renderAccounts();renderLeads();
+        var banner=document.createElement("div");
+        banner.style.cssText="position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1e5ab0;color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.2);max-width:90vw;text-align:center";
+        banner.textContent="\u21A9 "+fullName(a)+" moved back to Leads";
+        document.body.appendChild(banner);setTimeout(function(){banner.remove();},4000);
+      }}));
     }
-    acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete account",onclick:function(){deleteAcct(a);}}));
-    row.appendChild(acts);
-    box.appendChild(row);
+    acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete",onclick:function(){deleteAcct(a);}}));
+    row.appendChild(acts);box.appendChild(row);
   });
 }
-function updateAcct(id,patch){
-  var arr=getAccounts().map(function(a){if(a.id===id)Object.assign(a,patch);return a;});
-  saveAccounts(arr);renderAccounts();
+function openEditAcctForm(a){
+  var stateOpts=["","AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"].map(function(s){return'<option value="'+s+'"'+( s===(a.state||"")?' selected':'')+'>'+s+'</option>';}).join("");
+  var html=
+    '<h3>Edit client \u2014 '+escHtml(fullName(a))+'</h3>'+
+    '<form id="ea-form">'+
+    '<div class="row2"><div class="field"><label>First name</label><input id="ea-first" value="'+escHtml(a.firstName||"")+'" required /></div>'+
+    '<div class="field"><label>Last name</label><input id="ea-last" value="'+escHtml(a.lastName||"")+'" required /></div></div>'+
+    '<div class="row2"><div class="field"><label>Phone</label><input id="ea-phone" type="tel" value="'+escHtml(a.phone||"")+'" /></div>'+
+    '<div class="field"><label>Date of birth</label><input id="ea-dob" type="date" value="'+( a.dob||"")+'" /></div></div>'+
+    '<div class="field"><label>Address</label><input id="ea-address" value="'+escHtml(a.address||"")+'" /></div>'+
+    '<div class="row2"><div class="field"><label>State</label><select id="ea-state">'+stateOpts+'</select></div>'+
+    '<div class="field"><label>Zip code</label><input id="ea-zip" type="text" inputmode="numeric" maxlength="10" value="'+escHtml(a.zipcode||"")+'" /></div></div>'+
+    '<div class="field"><label>Monthly premium ($)</label><input id="ea-prem" type="number" step="0.01" min="0" placeholder="0.00" value="'+(((a.plan||{}).monthlyPremium)||'')+'" /></div>'+
+    '<div class="field"><label>Status</label><select id="ea-status">'+["active","revoked"].map(function(s){return'<option value="'+s+'"'+( s===(a.status||"active")?' selected':'')+'>'+s.replace(/\b\w/g,function(c){return c.toUpperCase();})+'</option>';}).join("")+'</select></div>'+
+    '<div class="field"><label>Notes</label><textarea id="ea-notes" rows="3">'+escHtml(a.notes||"")+'</textarea></div>'+
+    '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div></form>';
+  openModal(html);
+  $("ea-form").addEventListener("submit",function(e){
+    e.preventDefault();
+    var epv=$("ea-prem").value;
+    var existingPlan=a.plan||{};
+    existingPlan.monthlyPremium=epv?parseFloat(epv):null;
+    updateAcct(a.id,{firstName:$("ea-first").value.trim(),lastName:$("ea-last").value.trim(),phone:$("ea-phone").value.trim(),dob:$("ea-dob").value,address:$("ea-address").value.trim(),state:$("ea-state").value,zipcode:$("ea-zip").value.trim(),status:$("ea-status").value,notes:$("ea-notes").value.trim(),plan:existingPlan,updated:Date.now()});
+    closeModal();
+  });
 }
- 
-/* Change password: prompt, hash, save. Admin gets the plain password
-   back so they can share it with the client. */
-async function changePw(a){
-  var nm=((a.firstName||"")+" "+(a.lastName||"")).trim()||a.email||"this client";
-  var pw=prompt("Set a NEW password for "+nm+"\n\n(Minimum 8 characters. Save it somewhere before sharing with the client.)");
-  if(pw===null)return; // cancelled
-  pw=(pw||"").trim();
-  if(pw.length<8){alert("Password must be at least 8 characters. Not saved.");return;}
-  try{
-    var hash=await sha256(pw);
-    updateAcct(a.id,{passwordHash:hash});
-    alert("Password updated for "+nm+".\n\nNew password: "+pw+"\n\nShare this with the client. They can sign in and change it from their portal.");
-  }catch(err){
-    console.warn("changePw",err);
-    alert("Something went wrong saving the password. Try again.");
-  }
-}
- 
-/* Delete account PERMANENTLY. Also removes their messages & referrals,
-   and clears their presence entry so the green dot doesn't linger. */
-async function deleteAcct(a){
-  var nm=((a.firstName||"")+" "+(a.lastName||"")).trim()||a.email||"this client";
-  if(!confirm("PERMANENTLY delete the account for "+nm+"?\n\nThis will remove:\n  - their login and profile\n  - all support messages to/from them\n  - any referrals they submitted\n\nThis cannot be undone. Continue?"))return;
-  // 1) remove the account record itself
-  saveAccounts(getAccounts().filter(function(x){return x.id!==a.id;}));
-  // 2) purge their support messages
-  saveMessages(getMessages().filter(function(m){return m.accountId!==a.id;}));
-  // 3) purge referrals they submitted
-  saveReferrals(getReferrals().filter(function(r){return r.fromAccountId!==a.id;}));
-  // 4) clear their presence entry (best effort)
-  await clearPresenceEntry(a.id);
-  // 5) if an active support thread was theirs, close it
-  if(activeThreadId===a.id)activeThreadId=null;
-  webhookFire({event:"admin_deleted_client",accountId:a.id,email:a.email||"",ts:Date.now()});
-  renderAccounts();renderSupport();renderReferrals();
-  alert("Deleted "+nm+".");
-}
- 
+function updateAcct(id,patch){var arr=getAccounts().map(function(a){if(a.id===id)Object.assign(a,patch);return a;});saveAccounts(arr);renderAccounts();}
+async function changePw(a){var nm=fullName(a),pw=prompt("Set a NEW password for "+nm+"\n\n(Min 8 characters)");if(pw===null)return;pw=(pw||"").trim();if(pw.length<8){alert("Password must be at least 8 characters. Not saved.");return;}try{var hash=await sha256(pw);updateAcct(a.id,{passwordHash:hash});alert("Password updated for "+nm+".\n\nNew password: "+pw+"\n\nShare this with the client.");}catch(err){alert("Something went wrong.");}}
+async function deleteAcct(a){var nm=fullName(a);if(!confirm("PERMANENTLY delete "+nm+"?\n\nThis removes their login, messages, and referrals. Cannot be undone."))return;saveAccounts(getAccounts().filter(function(x){return x.id!==a.id;}));saveMessages(getMessages().filter(function(m){return m.accountId!==a.id;}));saveReferrals(getReferrals().filter(function(r){return r.fromAccountId!==a.id;}));await clearPresenceEntry(a.id);if(activeThreadId===a.id)activeThreadId=null;webhookFire({event:"admin_deleted_client",accountId:a.id,email:a.email||"",ts:Date.now()});renderAccounts();renderSupport();renderReferrals();alert("Deleted "+nm+".");}
 function msgClient(a){switchTab("support");selectThread(a.id);}
 function openPlanForm(a){
   var p=a.plan||{carrier:"",planName:"",effectiveDate:"",renewalDate:"",monthlyPremium:"",notes:""};
   var html=
-    '<h3>Plan & documents for '+escapeHtml(((a.firstName||"")+" "+(a.lastName||"")).trim()||a.email)+'</h3>'+
+    '<h3>Plan & documents \u2014 '+escHtml(fullName(a))+'</h3>'+
     '<form id="plan-form">'+
-    '<div class="row2"><div class="field"><label>Carrier</label><input id="pl-carrier" value="'+escapeHtml(p.carrier||"")+'" /></div>'+
-    '<div class="field"><label>Plan name</label><input id="pl-name" value="'+escapeHtml(p.planName||"")+'" /></div></div>'+
-    '<div class="row2"><div class="field"><label>Effective date</label><input id="pl-eff" type="date" value="'+(p.effectiveDate||"")+'" /></div>'+
-    '<div class="field"><label>Renewal date</label><input id="pl-ren" type="date" value="'+(p.renewalDate||"")+'" /></div></div>'+
-    '<div class="field"><label>Monthly premium ($)</label><input id="pl-prem" type="number" step="0.01" min="0" value="'+(p.monthlyPremium||"")+'" /></div>'+
-    '<div class="field"><label>Notes (deductible, network, member ID...)</label><textarea id="pl-notes" rows="3">'+escapeHtml(p.notes||"")+'</textarea></div>'+
-    '<div class="docmgr">'+
-      '<h4>Documents (client sees these on their Plan tab)</h4>'+
-      '<div id="doc-list"></div>'+
-      '<label class="btn btn-ghost btn-sm" style="cursor:pointer;margin-top:6px">+ Upload document<input id="doc-input" type="file" accept="image/*,.pdf,.doc,.docx" hidden multiple /></label>'+
-      '<div class="hint" style="margin-top:6px">Max ~700KB per file (image, PDF, etc.).</div>'+
-    '</div>'+
-    '<div class="modal-acts">'+(a.plan?'<button type="button" class="btn btn-danger" id="pl-clear">Clear plan</button>':'')+'<button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div>'+
-    '</form>';
+    '<div class="row2"><div class="field"><label>Carrier</label><input id="pl-carrier" value="'+escHtml(p.carrier||"")+'" /></div>'+
+    '<div class="field"><label>Plan name</label><input id="pl-name" value="'+escHtml(p.planName||"")+'" /></div></div>'+
+    '<div class="row2"><div class="field"><label>Effective date</label><input id="pl-eff" type="date" value="'+( p.effectiveDate||"")+'" /></div>'+
+    '<div class="field"><label>Renewal date</label><input id="pl-ren" type="date" value="'+( p.renewalDate||"")+'" /></div></div>'+
+    '<div class="field"><label>Monthly premium ($)</label><input id="pl-prem" type="number" step="0.01" min="0" placeholder="0.00" value="'+( p.monthlyPremium||"")+'" /></div>'+
+    '<div class="field"><label>Notes (deductible, network, member ID\u2026)</label><textarea id="pl-notes" rows="3">'+escHtml(p.notes||"")+'</textarea></div>'+
+    '<div class="docmgr"><h4>&#128206; Documents (client sees these on their Plan tab)</h4><div id="doc-list"></div>'+
+    '<label class="btn btn-ghost btn-sm" style="cursor:pointer;margin-top:6px">+ Upload document<input id="doc-input" type="file" accept="image/*,.pdf,.doc,.docx" hidden multiple /></label>'+
+    '<div class="hint" style="margin-top:6px">Max ~700KB per file.</div></div>'+
+    '<div class="modal-acts">'+(a.plan?'<button type="button" class="btn btn-danger" id="pl-clear">Clear plan</button>':'')+'<button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div></form>';
   openModal(html);
   var docs=(a.documents||[]).slice();
-  function renderDocs(){
-    var box=$("doc-list");box.innerHTML="";
-    if(!docs.length){box.appendChild(el("div",{class:"empty",style:"padding:14px;margin:6px 0",text:"No documents yet."}));return;}
-    docs.slice().sort(function(x,y){return (y.ts||0)-(x.ts||0);}).forEach(function(d){
-      var row=el("div",{class:"docrow"});
-      row.appendChild(el("div",{class:"dname"},[
-        el("div",{text:d.name||"(file)"}),
-        el("div",{class:"dmeta",text:fmtBytes(d.size)+" - "+fmtDate(d.ts)})
-      ]));
-      var act=el("div",{class:"dact"});
-      act.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:d.dataUrl,target:"_blank",download:d.name||"document",text:"View"}));
-      act.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Remove",onclick:function(){docs=docs.filter(function(x){return x.id!==d.id;});renderDocs();}}));
-      row.appendChild(act);
-      box.appendChild(row);
-    });
-  }
+  function renderDocs(){var box=$("doc-list");box.innerHTML="";if(!docs.length){box.appendChild(el("div",{class:"empty",style:"padding:12px;margin:6px 0",text:"No documents uploaded yet."}));return;}docs.slice().sort(function(x,y){return(y.ts||0)-(x.ts||0);}).forEach(function(d){var row=el("div",{class:"docrow"});row.appendChild(el("div",{class:"dname"},[el("div",{text:d.name||"(file)"}),el("div",{class:"dmeta",text:fmtBytes(d.size)+" \u00b7 "+fmtDate(d.ts)})]));var act=el("div",{class:"dact"});act.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:d.dataUrl,target:"_blank",download:d.name||"document",text:"View"}));act.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Remove",onclick:function(){docs=docs.filter(function(x){return x.id!==d.id;});renderDocs();}}));row.appendChild(act);box.appendChild(row);});}
   renderDocs();
-  $("doc-input").addEventListener("change",function(e){
-    var files=Array.from(e.target.files||[]);
-    files.forEach(function(f){
-      if(f.size>700*1024){alert('"'+f.name+'" is over 700KB. Please shrink it first.');return;}
-      var r=new FileReader();
-      r.onload=function(){docs.push({id:uid(),name:f.name,size:f.size,type:f.type,dataUrl:r.result,ts:Date.now()});renderDocs();};
-      r.readAsDataURL(f);
-    });
-    $("doc-input").value="";
-  });
-  $("plan-form").addEventListener("submit",function(e){
-    e.preventDefault();
-    var plan={carrier:$("pl-carrier").value.trim(),planName:$("pl-name").value.trim(),effectiveDate:$("pl-eff").value,renewalDate:$("pl-ren").value,monthlyPremium:$("pl-prem").value,notes:$("pl-notes").value.trim(),updated:Date.now()};
-    updateAcct(a.id,{plan:plan,documents:docs});closeModal();
-  });
+  $("doc-input").addEventListener("change",function(e){Array.from(e.target.files||[]).forEach(function(f){if(f.size>700*1024){alert('"'+f.name+'" is over 700KB.');return;}var r=new FileReader();r.onload=function(){docs.push({id:uid(),name:f.name,size:f.size,type:f.type,dataUrl:r.result,ts:Date.now()});renderDocs();};r.readAsDataURL(f);});$("doc-input").value="";});
+  $("plan-form").addEventListener("submit",function(e){e.preventDefault();var pv=$("pl-prem").value;var plan={carrier:$("pl-carrier").value.trim(),planName:$("pl-name").value.trim(),effectiveDate:$("pl-eff").value,renewalDate:$("pl-ren").value,monthlyPremium:pv?parseFloat(pv):null,notes:$("pl-notes").value.trim(),updated:Date.now()};updateAcct(a.id,{plan:plan,documents:docs});closeModal();});
   if($("pl-clear"))$("pl-clear").addEventListener("click",function(){if(confirm("Remove plan info?")){updateAcct(a.id,{plan:null});closeModal();}});
 }
-function fmtBytes(n){if(!n)return"0 B";if(n<1024)return n+" B";if(n<1048576)return (n/1024).toFixed(1)+" KB";return (n/1048576).toFixed(1)+" MB";}
+function fmtBytes(n){if(!n)return"0 B";if(n<1024)return n+" B";if(n<1048576)return(n/1024).toFixed(1)+" KB";return(n/1048576).toFixed(1)+" MB";}
 function openCreateAcctForm(){
-  var html=
-    '<h3>Create client account</h3>'+
-    '<p class="lede">Set them up an account directly. They can sign in with the email + password you create.</p>'+
-    '<form id="ca-form">'+
-    '<div id="ca-msg"></div>'+
-    '<div class="row2"><div class="field"><label>First name</label><input id="ca-first" required /></div>'+
-    '<div class="field"><label>Last name</label><input id="ca-last" required /></div></div>'+
+  var html='<h3>Create client account</h3><p class="lede">Set up an account so they can sign in to the client portal.</p>'+
+    '<form id="ca-form"><div id="ca-msg"></div>'+
+    '<div class="row2"><div class="field"><label>First name</label><input id="ca-first" required /></div><div class="field"><label>Last name</label><input id="ca-last" required /></div></div>'+
     '<div class="field"><label>Email</label><input id="ca-email" type="email" required /></div>'+
-    '<div class="field"><label>Phone</label><input id="ca-phone" type="tel" required /></div>'+
+    '<div class="field"><label>Phone</label><input id="ca-phone" type="tel" /></div>'+
+    '<div class="field"><label>Monthly premium ($) <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input id="ca-prem" type="number" step="0.01" min="0" placeholder="0.00" /></div>'+
     '<div class="field"><label>Temporary password</label><input id="ca-pw" type="text" minlength="8" required value="VSBenefits!2026" /></div>'+
-    '<p class="hint">Share this with the client; they can change it after signing in.</p>'+
-    '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Create account</button></div>'+
-    '</form>';
+    '<p class="hint">Share this password with the client. They can change it after signing in.</p>'+
+    '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Create account</button></div></form>';
   openModal(html);
   $("ca-form").addEventListener("submit",async function(e){
     e.preventDefault();
@@ -1208,252 +1039,126 @@ function openCreateAcctForm(){
     var accts=getAccounts();
     if(accts.some(function(a){return normEmail(a.email)===email;}))return notice("ca-msg","err","An account with this email already exists.");
     var hash=await sha256(pw);
-    accts.push({id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:0,status:"active",plan:null,photoDataUrl:"",documents:[]});
+    var cpv=$("ca-prem").value;
+    var initPlan=cpv?{carrier:"",planName:"",effectiveDate:"",renewalDate:"",monthlyPremium:parseFloat(cpv),notes:""}:null;
+    accts.push({id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:0,status:"active",plan:initPlan,photoDataUrl:"",documents:[]});
     saveAccounts(accts);webhookFire({event:"admin_created_client",email:email,ts:Date.now()});closeModal();renderAccounts();
   });
 }
 $("create-acct-btn").addEventListener("click",openCreateAcctForm);
 $("acct-search").addEventListener("input",renderAccounts);
 $("export-accts-btn").addEventListener("click",function(){
-  var rows=[["firstName","lastName","email","phone","status","plan_carrier","plan_name","plan_effective","plan_premium","created","lastSignIn"]];
-  getAccounts().forEach(function(a){var p=a.plan||{};rows.push([a.firstName,a.lastName,a.email,a.phone,a.status||"active",p.carrier||"",p.planName||"",p.effectiveDate||"",p.monthlyPremium||"",a.created?new Date(a.created).toISOString():"",a.lastSignIn?new Date(a.lastSignIn).toISOString():""].map(csvEscape));});
+  var rows=[["firstName","lastName","email","phone","dob","address","state","zipcode","status","plan_carrier","plan_name","plan_effective","plan_premium","created","lastSignIn"]];
+  getAccounts().forEach(function(a){var p=a.plan||{};rows.push([a.firstName,a.lastName,a.email,a.phone,a.dob||"",a.address||"",a.state||"",a.zipcode||"",a.status||"active",p.carrier||"",p.planName||"",p.effectiveDate||"",p.monthlyPremium||"",a.created?new Date(a.created).toISOString():"",a.lastSignIn?new Date(a.lastSignIn).toISOString():""].map(csvEscape));});
   downloadFile("clients-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
 });
- 
-/* ====================================================================
-   SUPPORT
-   ==================================================================== */
+
+/* ====== SUPPORT ====== */
 var activeThreadId=null;
+$("show-closed").addEventListener("change",renderSupport);
 function renderSupport(){
-  var msgs=getMessages();
-  $("b-sup").textContent=msgs.filter(function(m){return m.from==="client"&&!m.read;}).length;
-  var byAcct={};
+  var msgs=getMessages(),unreadCount=msgs.filter(function(m){return m.from==="client"&&!m.read;}).length;
+  $("b-sup").textContent=unreadCount;var mnb=$("mn-sup");if(mnb){mnb.hidden=unreadCount===0;mnb.textContent=unreadCount;}
+  var showClosed=$("show-closed").checked,byAcct={};
   msgs.forEach(function(m){(byAcct[m.accountId]=byAcct[m.accountId]||[]).push(m);});
-  var ids=Object.keys(byAcct).sort(function(a,b){
-    var ma=Math.max.apply(null,byAcct[a].map(function(x){return x.ts;}));
-    var mb=Math.max.apply(null,byAcct[b].map(function(x){return x.ts;}));
-    return mb-ma;
-  });
-  var box=$("thread-list");box.innerHTML="";
+  var ids=Object.keys(byAcct).sort(function(a,b){return Math.max.apply(null,byAcct[b].map(function(x){return x.ts;}))-Math.max.apply(null,byAcct[a].map(function(x){return x.ts;}));});
+  var box=$("thread-list");box.innerHTML="";var accts=getAccounts();
+  var closedIds={};getMessages().forEach(function(m){if(m.threadClosed)closedIds[m.accountId]=true;});
   if(!ids.length){box.appendChild(el("div",{class:"empty",text:"No conversations yet."}));$("conv-empty").hidden=false;$("conv-active").hidden=true;return;}
-  var accts=getAccounts();
+  var shown=0;
   ids.forEach(function(id){
-    var ac=accts.filter(function(a){return a.id===id;})[0];
-    var name=ac?(((ac.firstName||"")+" "+(ac.lastName||"")).trim()||ac.email):"(unknown)";
+    var isClosed=!!closedIds[id];if(isClosed&&!showClosed)return;shown++;
+    var ac=accts.filter(function(a){return a.id===id;})[0],name=ac?fullName(ac):"(unknown)";
     var unread=byAcct[id].filter(function(m){return m.from==="client"&&!m.read;}).length;
-    var row=el("div",{class:"thread"+(activeThreadId===id?" active":""),onclick:function(){selectThread(id);}});
-    var left=el("div");
+    var row=el("div",{class:"thread"+(activeThreadId===id?" active":"")+(isClosed?" closed-thread":""),onclick:function(){selectThread(id);}});
+    var left=el("div",{style:"min-width:0;flex:1"});
     var nm=el("div",{class:"tn"});
     if(ac)nm.appendChild(el("span",{class:"presence-dot "+(isOnline(ac.id)?"on":"off")}));
-    nm.appendChild(document.createTextNode(name));
-    left.appendChild(nm);
-    left.appendChild(el("div",{class:"te",text:ac?ac.email:""}));
-    row.appendChild(left);
-    if(unread)row.appendChild(el("div",{class:"tu",text:unread}));
+    nm.appendChild(document.createTextNode(name+(isClosed?" \uD83D\uDD12":"")));
+    left.appendChild(nm);left.appendChild(el("div",{class:"te",text:ac?ac.email:""}));
+    row.appendChild(left);if(unread)row.appendChild(el("div",{class:"tu",text:unread}));
     box.appendChild(row);
   });
-  if(activeThreadId)selectThread(activeThreadId);
-  else{$("conv-empty").hidden=false;$("conv-active").hidden=true;}
+  if(!shown){box.appendChild(el("div",{class:"empty",text:"No open threads. Check \"Show closed threads\" to see closed ones."}));$("conv-empty").hidden=false;$("conv-active").hidden=true;return;}
+  if(activeThreadId)selectThread(activeThreadId);else{$("conv-empty").hidden=false;$("conv-active").hidden=true;}
 }
 function selectThread(id){
-  activeThreadId=id;
-  document.querySelectorAll(".thread").forEach(function(t){t.classList.remove("active");});
-  var accts=getAccounts();var ac=accts.filter(function(a){return a.id===id;})[0];
+  activeThreadId=id;document.querySelectorAll(".thread").forEach(function(t){t.classList.remove("active");});
+  var accts=getAccounts(),ac=accts.filter(function(a){return a.id===id;})[0];
   if(!ac){$("conv-empty").hidden=false;$("conv-active").hidden=true;return;}
   $("conv-empty").hidden=true;$("conv-active").hidden=false;
-  $("conv-name").textContent=((ac.firstName||"")+" "+(ac.lastName||"")).trim()||ac.email;
-  $("conv-email").textContent=ac.email;
-  var msgs=getMessages().filter(function(m){return m.accountId===id;}).sort(function(a,b){return a.ts-b.ts;});
+  $("conv-name").textContent=fullName(ac);$("conv-email").textContent=ac.email;
+  var allMsgs=getMessages(),isClosed=allMsgs.some(function(m){return m.accountId===id&&m.threadClosed;});
+  $("closed-banner").hidden=!isClosed;$("reply-btn").disabled=isClosed;$("reply-text").disabled=isClosed;
+  $("conv-close-thread").textContent=isClosed?"Reopen thread":"Close thread";
+  var msgs=allMsgs.filter(function(m){return m.accountId===id&&!m.threadClosed;}).sort(function(a,b){return a.ts-b.ts;});
   var box=$("msgs");box.innerHTML="";
-  msgs.forEach(function(m){
-    var d=el("div",{class:"msg "+(m.from==="advisor"?"advisor":"client")});
-    d.appendChild(el("div",{text:m.text}));
-    d.appendChild(el("div",{class:"meta",text:(m.from==="advisor"?"You - ":"Client - ")+fmtDateTime(m.ts)}));
-    box.appendChild(d);
-  });
+  msgs.forEach(function(m){var d=el("div",{class:"msg "+(m.from==="advisor"?"advisor":"client")});d.appendChild(el("div",{text:m.text}));var meta=el("div",{class:"meta"});meta.appendChild(el("span",{text:(m.from==="advisor"?"You \u00b7 ":"Client \u00b7 ")+fmtDateTime(m.ts)}));var del=el("button",{class:"del-msg",type:"button",text:"Delete",onclick:function(){if(!confirm("Delete this message?"))return;saveMessages(getMessages().filter(function(x){return x.id!==m.id;}));selectThread(id);renderSupport();}});meta.appendChild(del);d.appendChild(meta);box.appendChild(d);});
   box.scrollTop=box.scrollHeight;
+  var updated=false,arr=getMessages().map(function(m){if(m.accountId===id&&m.from==="client"&&!m.read){m.read=true;updated=true;}return m;});
+  if(updated){saveMessages(arr);renderSupport();}
 }
-$("conv-mark-read").addEventListener("click",function(){
-  if(!activeThreadId)return;
-  var arr=getMessages().map(function(m){if(m.accountId===activeThreadId&&m.from==="client")m.read=true;return m;});
-  saveMessages(arr);renderSupport();
-});
-$("reply-form").addEventListener("submit",function(e){
-  e.preventDefault();
-  if(!activeThreadId)return;
-  var t=$("reply-text").value.trim();if(!t)return;
-  var arr=getMessages();arr.push({id:uid(),accountId:activeThreadId,from:"advisor",text:t,ts:Date.now(),read:true});saveMessages(arr);
-  $("reply-text").value="";
-  webhookFire({event:"advisor_reply",accountId:activeThreadId,text:t,ts:Date.now()});
-  selectThread(activeThreadId);
-});
- 
-/* ====================================================================
-   REFERRALS — status: in-progress / declined / paid
-   ==================================================================== */
+$("conv-close-thread").addEventListener("click",function(){if(!activeThreadId)return;var allMsgs=getMessages(),isClosed=allMsgs.some(function(m){return m.accountId===activeThreadId&&m.threadClosed;});if(isClosed){saveMessages(getMessages().map(function(m){if(m.accountId===activeThreadId)delete m.threadClosed;return m;}));}else{allMsgs.push({id:uid(),accountId:activeThreadId,from:"system",text:"Thread closed by admin",ts:Date.now(),read:true,threadClosed:true});saveMessages(allMsgs);}selectThread(activeThreadId);renderSupport();});
+$("conv-delete-thread").addEventListener("click",function(){if(!activeThreadId)return;if(!confirm("Delete the entire thread? This cannot be undone."))return;saveMessages(getMessages().filter(function(m){return m.accountId!==activeThreadId;}));activeThreadId=null;$("conv-empty").hidden=false;$("conv-active").hidden=true;renderSupport();});
+$("conv-mark-read").addEventListener("click",function(){if(!activeThreadId)return;saveMessages(getMessages().map(function(m){if(m.accountId===activeThreadId&&m.from==="client")m.read=true;return m;}));renderSupport();});
+$("reply-form").addEventListener("submit",function(e){e.preventDefault();if(!activeThreadId)return;var t=$("reply-text").value.trim();if(!t)return;var arr=getMessages();arr.push({id:uid(),accountId:activeThreadId,from:"advisor",text:t,ts:Date.now(),read:true});saveMessages(arr);$("reply-text").value="";webhookFire({event:"advisor_reply",accountId:activeThreadId,text:t,ts:Date.now()});selectThread(activeThreadId);});
+
+/* ====== REFERRALS ====== */
 var REF_STATUSES=["in-progress","declined","paid"];
+var activeRefFilter="all";
 function renderReferrals(){
+  buildDropdown("ref-filter-sel",["all"].concat(REF_STATUSES),function(){return activeRefFilter;},function(v){activeRefFilter=v;},renderReferrals);
   var q=($("ref-search").value||"").toLowerCase().trim();
-  var refs=getReferrals();
-  $("b-ref").textContent=refs.filter(function(r){return!r.read;}).length;
-  var rows=refs.filter(function(r){if(!q)return true;return[r.referralName,r.referralEmail,r.referralPhone,r.notes].join(" ").toLowerCase().indexOf(q)>=0;});
-  var accts=getAccounts();
-  var box=$("refs-list");box.innerHTML="";
-  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No referrals yet."}));return;}
+  var refs=getReferrals(),unread=refs.filter(function(r){return!r.read;}).length;
+  $("b-ref").textContent=unread;var mnb=$("mn-ref");if(mnb){mnb.hidden=unread===0;mnb.textContent=unread;}
+  var rows=refs.filter(function(r){var matchQ=!q||[r.referralName,r.referralEmail,r.referralPhone,r.notes].join(" ").toLowerCase().indexOf(q)>=0;return matchQ&&(activeRefFilter==="all"||(r.status||"in-progress")===activeRefFilter);});
+  var accts=getAccounts(),box=$("refs-list");box.innerHTML="";
+  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No referrals match this filter."}));return;}
   rows.forEach(function(r){
-    var fa=accts.filter(function(a){return a.id===r.fromAccountId;})[0];
-    var fromName=fa?((fa.firstName||"")+" "+(fa.lastName||"")).trim()||fa.email:"(unknown)";
+    var fa=accts.filter(function(a){return a.id===r.fromAccountId;})[0],fromName=fa?fullName(fa):"(unknown)";
     var row=el("div",{class:"row"});
     var top=el("div",{class:"top"});
-    top.appendChild(el("div",{},[
-      el("div",{class:"name",text:r.referralName||"(no name)"}),
-      el("div",{class:"sub",text:"Referred by "+fromName})
-    ]));
-    var pills=el("div",{style:"display:flex;flex-direction:column;gap:4px;align-items:flex-end"});
+    top.appendChild(el("div",{},[el("div",{class:"name",text:r.referralName||"(no name)"}),el("div",{class:"sub",text:"Referred by "+fromName})]));
+    var pills=el("div",{style:"display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0"});
     var st=r.status||"in-progress";
-    pills.appendChild(el("span",{class:"status-pill status-"+st,text:st}));
+    pills.appendChild(el("span",{class:"status-pill status-"+st,text:st.replace(/-/g," ")}));
     if(r.payout)pills.appendChild(el("span",{class:"status-pill status-"+(st==="paid"?"paid":"unpaid"),text:"$"+Number(r.payout).toFixed(2)}));
-    top.appendChild(pills);
-    row.appendChild(top);
-    if(r.referralEmail)row.appendChild(el("div",{class:"sub",text:r.referralEmail}));
-    if(r.referralPhone)row.appendChild(el("div",{class:"sub",text:r.referralPhone}));
+    top.appendChild(pills);row.appendChild(top);
+    if(r.referralEmail)row.appendChild(el("div",{class:"sub",text:"\u2709 "+r.referralEmail}));
+    if(r.referralPhone)row.appendChild(el("div",{class:"sub",text:"\uD83D\uDCDE "+r.referralPhone}));
     if(r.relationship)row.appendChild(el("div",{class:"sub",text:"Relationship: "+r.relationship}));
     if(r.notes)row.appendChild(el("div",{class:"meta",text:"Notes: "+r.notes}));
-    row.appendChild(el("div",{class:"meta",text:"Submitted "+fmtDateTime(r.ts)+(r.paidAt?(" - paid "+fmtDateTime(r.paidAt)):"")}));
+    row.appendChild(el("div",{class:"meta",text:"Submitted "+fmtDateTime(r.ts)+(r.paidAt?(" \u00b7 paid "+fmtDateTime(r.paidAt)):"") }));
     var acts=el("div",{class:"acts"});
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Edit",onclick:function(){openRefForm(r);}}));
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Convert to lead",onclick:function(){convertReferralToLead(r);}}));
-    if(st!=="paid")acts.appendChild(el("button",{class:"btn btn-teal btn-sm",type:"button",text:"Mark paid",onclick:function(){var amt=prompt("Payout amount paid ($):",r.payout||"50");if(amt!==null)updateRef(r.id,{status:"paid",paidAt:Date.now(),payout:Number(amt)||0,read:true});}}));
+    if(st!=="paid")acts.appendChild(el("button",{class:"btn btn-teal btn-sm",type:"button",text:"Mark paid",onclick:function(){openRefPayoutModal(r);}}));
     else acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Undo paid",onclick:function(){updateRef(r.id,{status:"in-progress",paidAt:0});}}));
     if(st!=="declined")acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Decline",onclick:function(){updateRef(r.id,{status:"declined",read:true});}}));
     acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete",onclick:function(){if(confirm("Delete this referral?")){saveReferrals(getReferrals().filter(function(x){return x.id!==r.id;}));renderReferrals();}}}));
-    row.appendChild(acts);
-    box.appendChild(row);
+    row.appendChild(acts);box.appendChild(row);
   });
 }
+function openRefPayoutModal(r){var html='<h3>Mark referral as paid</h3><form id="rp-form"><div class="field"><label>Referral</label><input type="text" value="'+escHtml(r.referralName||"")+'" disabled /></div><div class="field"><label>Payout amount ($) *</label><input id="rp-amt" type="number" step="0.01" min="0" value="'+( r.payout||50)+'" required /></div><div class="field"><label>Notes</label><textarea id="rp-notes" rows="2">'+escHtml(r.notes||"")+'</textarea></div><div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-teal">Mark Paid</button></div></form>';openModal(html);$("rp-form").addEventListener("submit",function(e){e.preventDefault();updateRef(r.id,{status:"paid",paidAt:Date.now(),payout:Number($("rp-amt").value)||0,notes:$("rp-notes").value.trim(),read:true});closeModal();});}
 function updateRef(id,patch){var arr=getReferrals().map(function(r){if(r.id===id)Object.assign(r,patch);return r;});saveReferrals(arr);renderReferrals();}
-function openRefForm(r){
-  var html=
-    '<h3>Edit referral</h3>'+
-    '<form id="r-form">'+
-    '<div class="field"><label>Status</label><select id="r-status">'+REF_STATUSES.map(function(s){return '<option value="'+s+'"'+(s===(r.status||"in-progress")?" selected":"")+'>'+s+'</option>';}).join("")+'</select></div>'+
-    '<div class="field"><label>Payout amount ($)</label><input id="r-payout" type="number" step="0.01" min="0" value="'+(r.payout||0)+'" /></div>'+
-    '<div class="field"><label>Notes</label><textarea id="r-notes" rows="2">'+escapeHtml(r.notes||"")+'</textarea></div>'+
-    '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div>'+
-    '</form>';
-  openModal(html);
-  $("r-form").addEventListener("submit",function(e){
-    e.preventDefault();
-    var st=$("r-status").value;
-    updateRef(r.id,{status:st,payout:Number($("r-payout").value)||0,paidAt:st==="paid"?(r.paidAt||Date.now()):0,notes:$("r-notes").value.trim(),read:true});
-    closeModal();
-  });
-}
-function convertReferralToLead(r){
-  var accts=getAccounts();var fa=accts.filter(function(a){return a.id===r.fromAccountId;})[0];
-  var lead={id:uid(),name:r.referralName||"",company:"",phone:r.referralPhone||"",email:r.referralEmail||"",address:"",coverage:"",status:"new",next:"Referred by "+(fa?((fa.firstName||"")+" "+(fa.lastName||"")).trim():"client"),notes:r.notes||"",created:Date.now(),updated:Date.now()};
-  var leads=getLeads();leads.unshift(lead);saveLeads(leads);
-  updateRef(r.id,{read:true});
-  alert("Added to Leads. Switching to Leads tab.");switchTab("leads");
-}
+function openRefForm(r){var html='<h3>Edit referral</h3><form id="r-form"><div class="field"><label>Referral name</label><input id="r-refname" value="'+escHtml(r.referralName||"")+'" /></div><div class="row2"><div class="field"><label>Phone</label><input id="r-refphone" type="tel" value="'+escHtml(r.referralPhone||"")+'" /></div><div class="field"><label>Email</label><input id="r-refemail" type="email" value="'+escHtml(r.referralEmail||"")+'" /></div></div><div class="row2"><div class="field"><label>Status</label><select id="r-status">'+REF_STATUSES.map(function(s){return'<option value="'+s+'"'+( s===(r.status||"in-progress")?' selected':'')+'>'+s.replace(/-/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();})+'</option>';}).join("")+'</select></div><div class="field"><label>Payout ($)</label><input id="r-payout" type="number" step="0.01" min="0" value="'+( r.payout||0)+'" /></div></div><div class="field"><label>Notes</label><textarea id="r-notes" rows="2">'+escHtml(r.notes||"")+'</textarea></div><div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div></form>';openModal(html);$("r-form").addEventListener("submit",function(e){e.preventDefault();var st=$("r-status").value;updateRef(r.id,{referralName:$("r-refname").value.trim(),referralPhone:$("r-refphone").value.trim(),referralEmail:$("r-refemail").value.trim(),status:st,payout:Number($("r-payout").value)||0,paidAt:st==="paid"?(r.paidAt||Date.now()):0,notes:$("r-notes").value.trim(),read:true});closeModal();});}
+function convertReferralToLead(r){var accts=getAccounts(),fa=accts.filter(function(a){return a.id===r.fromAccountId;})[0],parts=(r.referralName||"").trim().split(/\s+/),lead={id:uid(),firstName:parts[0]||"",lastName:parts.slice(1).join(" ")||"",name:r.referralName||"",company:"",phone:r.referralPhone||"",email:r.referralEmail||"",address:"",state:"",zipcode:"",coverage:"",monthlyPremium:null,status:"new",notes:"Referred by "+(fa?fullName(fa):"client")+(r.notes?"\n"+r.notes:""),created:Date.now(),updated:Date.now()};var leads=getLeads();leads.unshift(lead);saveLeads(leads);updateRef(r.id,{read:true});alert("Added to Leads. Switching to Leads tab.");switchTab("leads");}
 $("ref-search").addEventListener("input",renderReferrals);
-$("export-refs-btn").addEventListener("click",function(){
-  var rows=[["from_name","from_email","ref_name","ref_phone","ref_email","relationship","notes","status","payout","paid_at","submitted"]];
-  var accts=getAccounts();
-  getReferrals().forEach(function(r){var fa=accts.filter(function(a){return a.id===r.fromAccountId;})[0];rows.push([fa?((fa.firstName||"")+" "+(fa.lastName||"")).trim():"",fa?fa.email:"",r.referralName,r.referralPhone,r.referralEmail,r.relationship,r.notes,r.status||"in-progress",r.payout||0,r.paidAt?new Date(r.paidAt).toISOString():"",new Date(r.ts).toISOString()].map(csvEscape));});
-  downloadFile("referrals-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
-});
- 
-/* ====================================================================
-   SETTINGS
-   ==================================================================== */
-function renderSettings(){
-  var bytes=0;Object.keys(K).forEach(function(name){var v=localStorage.getItem(K[name]);if(v)bytes+=v.length;});
-  $("settings-storage").textContent=(bytes/1024).toFixed(1)+" KB";
-  $("wh-input").value=getWebhook();
-  paintGcalUi();
-  renderAdminsList();
-}
-function renderAdminsList(){
-  var box=$("admins-list");if(!box)return;box.innerHTML="";
-  var list=getAdmins();
-  if(!list.length){box.appendChild(el("div",{class:"empty",text:"No admin accounts yet."}));return;}
-  var me=currentAdmin();
-  list.forEach(function(a){
-    var row=el("div",{class:"row"});
-    var top=el("div",{class:"top"});
-    top.appendChild(el("div",{},[
-      el("div",{class:"name",text:(((a.firstName||"")+" "+(a.lastName||"")).trim()||a.username)+(me&&me.id===a.id?" (you)":"")}),
-      el("div",{class:"sub",text:"@"+a.username+(a.email?(" - "+a.email):"")})
-    ]));
-    top.appendChild(el("span",{class:"status-pill status-active",text:"admin"}));
-    row.appendChild(top);
-    row.appendChild(el("div",{class:"meta",text:"Created "+fmtDate(a.created)}));
-    if(!me||me.id!==a.id){
-      var acts=el("div",{class:"acts"});
-      acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Remove",onclick:function(){if(confirm("Remove this admin account?")){saveAdmins(getAdmins().filter(function(x){return x.id!==a.id;}));renderAdminsList();}}}));
-      row.appendChild(acts);
-    }
-    box.appendChild(row);
-  });
-}
-$("pw-form").addEventListener("submit",async function(e){
-  e.preventDefault();
-  var me=currentAdmin();if(!me)return notice("pw-msg","err","Not signed in.");
-  var cur=$("pw-cur").value,n1=$("pw-new").value,n2=$("pw-new2").value;
-  if(await sha256(cur)!==me.passwordHash)return notice("pw-msg","err","Current password is wrong.");
-  if(n1.length<8)return notice("pw-msg","err","New password must be 8+ chars.");
-  if(n1!==n2)return notice("pw-msg","err","Passwords don't match.");
-  var hash=await sha256(n1);
-  var arr=getAdmins().map(function(a){if(a.id===me.id)a.passwordHash=hash;return a;});
-  saveAdmins(arr);$("pw-form").reset();notice("pw-msg","ok","Password updated.");
-});
-$("code-form").addEventListener("submit",function(e){
-  e.preventDefault();
-  var cur=$("code-cur").value,n1=$("code-new").value,n2=$("code-new2").value;
-  if(cur!==currentSetupCode())return notice("code-msg","err","Current code is wrong.");
-  if(!n1)return notice("code-msg","err","New code can't be empty.");
-  if(n1!==n2)return notice("code-msg","err","Codes don't match.");
-  localStorage.setItem(K.setupCode,n1);$("code-form").reset();notice("code-msg","ok","Setup code updated.");
-});
-$("wh-form").addEventListener("submit",function(e){
-  e.preventDefault();setWebhook($("wh-input").value.trim());notice("wh-msg","ok","Webhook saved.");
-});
-$("gcal-cid-form").addEventListener("submit",function(e){
-  e.preventDefault();setGcalClientId($("gcal-cid").value.trim());paintGcalUi();notice("gcal-msg","ok","Client ID saved.");
-});
-$("gcal-connect").addEventListener("click",gcalConnect);
-$("gcal-disconnect").addEventListener("click",function(){clearGcalToken();paintGcalUi();});
- 
-$("export-all-btn").addEventListener("click",function(){
-  var bundle={exported:new Date().toISOString(),leads:getLeads(),accounts:getAccounts(),messages:getMessages(),referrals:getReferrals(),appointments:getAppts(),admins:getAdmins(),webhook:getWebhook(),setupCode:currentSetupCode()};
-  downloadFile("vsbenefits-backup-"+new Date().toISOString().slice(0,10)+".json",JSON.stringify(bundle,null,2),"application/json");
-});
-$("import-file").addEventListener("change",function(e){
-  var f=e.target.files[0];if(!f)return;var r=new FileReader();
-  r.onload=function(){
-    try{
-      var b=JSON.parse(r.result);
-      if(b.leads)saveLeads(b.leads);if(b.accounts)saveAccounts(b.accounts);if(b.messages)saveMessages(b.messages);
-      if(b.referrals)saveReferrals(b.referrals);if(b.appointments)saveAppts(b.appointments);
-      if(b.admins)saveAdmins(b.admins);
-      if(b.webhook)setWebhook(b.webhook);if(b.setupCode)localStorage.setItem(K.setupCode,b.setupCode);
-      alert("Import done.");renderAll();
-    }catch(err){alert("Bad JSON file.");}
-  };
-  r.readAsText(f);
-});
- 
+$("export-refs-btn").addEventListener("click",function(){var rows=[["from_name","from_email","ref_name","ref_phone","ref_email","relationship","notes","status","payout","paid_at","submitted"]];var accts=getAccounts();getReferrals().forEach(function(r){var fa=accts.filter(function(a){return a.id===r.fromAccountId;})[0];rows.push([fa?fullName(fa):"",fa?fa.email:"",r.referralName,r.referralPhone,r.referralEmail,r.relationship,r.notes,r.status||"in-progress",r.payout||0,r.paidAt?new Date(r.paidAt).toISOString():"",new Date(r.ts).toISOString()].map(csvEscape));});downloadFile("referrals-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");});
+
+/* ====== SETTINGS ====== */
+function renderSettings(){var bytes=0;Object.keys(K).forEach(function(name){var v=localStorage.getItem(K[name]);if(v)bytes+=v.length;});$("settings-storage").textContent=(bytes/1024).toFixed(1)+" KB";$("wh-input").value=getWebhook();paintGcalUi();renderAdminsList();}
+function renderAdminsList(){var box=$("admins-list");if(!box)return;box.innerHTML="";var list=getAdmins();if(!list.length){box.appendChild(el("div",{class:"empty",text:"No admin accounts yet."}));return;}var me=currentAdmin();list.forEach(function(a){var row=el("div",{class:"row"});var top=el("div",{class:"top"});top.appendChild(el("div",{},[el("div",{class:"name",text:(fullName(a)||a.username)+(me&&me.id===a.id?" (you)":"")}),el("div",{class:"sub",text:"@"+a.username+(a.email?" \u00b7 "+a.email:"")})]));top.appendChild(el("span",{class:"status-pill status-active",text:"admin"}));row.appendChild(top);row.appendChild(el("div",{class:"meta",text:"Created "+fmtDate(a.created)}));if(!me||me.id!==a.id){var acts=el("div",{class:"acts"});acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Remove",onclick:function(){if(confirm("Remove this admin account?")){saveAdmins(getAdmins().filter(function(x){return x.id!==a.id;}));renderAdminsList();}}}));row.appendChild(acts);}box.appendChild(row);});}
+$("pw-form").addEventListener("submit",async function(e){e.preventDefault();var me=currentAdmin();if(!me)return notice("pw-msg","err","Not signed in.");var cur=$("pw-cur").value,n1=$("pw-new").value,n2=$("pw-new2").value;if(await sha256(cur)!==me.passwordHash)return notice("pw-msg","err","Current password is wrong.");if(n1.length<8)return notice("pw-msg","err","New password must be 8+ chars.");if(n1!==n2)return notice("pw-msg","err","Passwords don't match.");saveAdmins(getAdmins().map(function(a){if(a.id===me.id)a.passwordHash=sha256(n1);return a;}));var hash=await sha256(n1);saveAdmins(getAdmins().map(function(a){if(a.id===me.id)a.passwordHash=hash;return a;}));$("pw-form").reset();notice("pw-msg","ok","Password updated.");});
+$("code-form").addEventListener("submit",function(e){e.preventDefault();var cur=$("code-cur").value,n1=$("code-new").value,n2=$("code-new2").value;if(cur!==currentSetupCode())return notice("code-msg","err","Current code is wrong.");if(!n1)return notice("code-msg","err","New code can't be empty.");if(n1!==n2)return notice("code-msg","err","Codes don't match.");localStorage.setItem(K.setupCode,n1);$("code-form").reset();notice("code-msg","ok","Setup code updated.");});
+$("wh-form").addEventListener("submit",function(e){e.preventDefault();setWebhook($("wh-input").value.trim());notice("wh-msg","ok","Webhook saved.");});
+$("export-all-btn").addEventListener("click",function(){var bundle={exported:new Date().toISOString(),leads:getLeads(),accounts:getAccounts(),messages:getMessages(),referrals:getReferrals(),appointments:getAppts(),admins:getAdmins(),webhook:getWebhook(),setupCode:currentSetupCode()};downloadFile("vsbenefits-backup-"+new Date().toISOString().slice(0,10)+".json",JSON.stringify(bundle,null,2),"application/json");});
+$("import-file").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var b=JSON.parse(r.result);if(b.leads)saveLeads(b.leads);if(b.accounts)saveAccounts(b.accounts);if(b.messages)saveMessages(b.messages);if(b.referrals)saveReferrals(b.referrals);if(b.appointments)saveAppts(b.appointments);if(b.admins)saveAdmins(b.admins);if(b.webhook)setWebhook(b.webhook);if(b.setupCode)localStorage.setItem(K.setupCode,b.setupCode);alert("Import done.");renderAll();}catch(err){alert("Bad JSON file.");}};r.readAsText(f);});
+
 function renderAll(){renderLeads();renderAccounts();renderSupport();renderReferrals();renderSettings();renderCalendar();}
- 
-/* Boot */
 loadGcalFromStorage();
-(async function boot(){
-  await initCloud();
-  await route();
-})();
+(async function boot(){await initCloud();await route();})();
 })();
 </script>
- 
 </body>
 </html>
