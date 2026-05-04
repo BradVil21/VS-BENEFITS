@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Get Your Free Insurance Quote | VS Benefits</title>
+<meta name="description" content="Get a free, personalized health insurance quote in minutes. VS Benefits serves individuals, families, and small businesses in 40+ states." />
+<link rel="canonical" href="https://vshealthbenefits.com/quote-funnel.html" />
+<meta name="robots" content="index,follow" />
+<meta property="og:title" content="Get Your Free Insurance Quote | VS Benefits" />
+<meta property="og:description" content="Compare top plans. No pressure. No cost. Just clarity on your coverage options." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --blue-900:#0b2346;
+  --blue-800:#0f2e5c;
+  --blue-700:#16447f;
+  --blue-600:#1e5ab0;
+  --blue-500:#2f7de0;
+  --blue-100:#e8f0fb;
+  --blue-50:#f4f8fe;
+  --teal:#0db5a6;
+  --teal-dark:#098374;
+  --teal-light:#e0f7f5;
+  --ink:#0d1b2a;
+  --ink-2:#334155;
+  --muted:#5a6b80;
+  --line:#e4e9f2;
+  --bg:#ffffff;
+  --bg-soft:#f7faff;
+  --success:#16a34a;
+  --success-light:#dcfce7;
+  --warn:#b23a1d;
+  --shadow:0 10px 30px rgba(13,27,42,.10);
+  --shadow-sm:0 4px 12px rgba(13,27,42,.07);
+  --shadow-lg:0 20px 50px rgba(13,27,42,.14);
+  --radius:16px;
+  --radius-sm:10px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --tap:44px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'DM Sans',system-ui,-apple-system,sans-serif;
+  color:var(--ink);
+  background:var(--bg-soft);
+  line-height:1.6;
+  font-size:16px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+h1,h2,h3,h4{font-family:'Poppins',sans-serif;color:var(--blue-900);line-height:1.2;}
+p{color:var(--ink-2)}
+
+/* ===== HEADER ===== */
+.funnel-header{
+  background:rgba(255,255,255,.96);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  padding:0 20px;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+.header-inner{
+  max-width:680px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:62px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+}
+.brand-badge{
+  width:36px;height:36px;
+  border-radius:10px;
+  background:linear-gradient(135deg,var(--blue-700),var(--teal));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:800;font-size:.85rem;
+  font-family:'Poppins',sans-serif;
+  flex-shrink:0;
+  box-shadow:var(--shadow-sm);
+}
+.brand-name{
+  font-family:'Poppins',sans-serif;
+  font-weight:700;
+  color:var(--blue-900);
+  font-size:.95rem;
+}
+.header-trust{
+  display:flex;align-items:center;gap:6px;
+  font-size:.78rem;font-weight:600;
+  color:var(--success);
+  background:var(--success-light);
+  padding:5px 10px;border-radius:999px;
+}
+.header-trust svg{flex-shrink:0}
+
+/* ===== PROGRESS ===== */
+.progress-wrap{
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  padding:14px 20px;
+  position:sticky;
+  top:62px;
+  z-index:99;
+  box-shadow:0 2px 8px rgba(13,27,42,.04);
+}
+.progress-inner{max-width:680px;margin:0 auto}
+.progress-meta{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:8px;
+}
+.progress-label{
+  font-size:.78rem;font-weight:700;
+  color:var(--muted);
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.progress-pct{
+  font-size:1rem;font-weight:800;
+  font-family:'Poppins',sans-serif;
+  color:var(--blue-700);
+  transition:color .3s;
+}
+.progress-bar-bg{
+  height:8px;
+  background:var(--blue-100);
+  border-radius:999px;
+  overflow:hidden;
+}
+.progress-bar-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--blue-600),var(--teal));
+  border-radius:999px;
+  transition:width .5s var(--ease);
+  width:0%;
+  position:relative;
+}
+.progress-bar-fill::after{
+  content:'';
+  position:absolute;
+  right:0;top:50%;transform:translateY(-50%);
+  width:14px;height:14px;
+  background:#fff;
+  border:3px solid var(--teal);
+  border-radius:50%;
+  box-shadow:0 0 0 3px rgba(13,181,166,.18);
+}
+
+/* ===== MAIN WRAP ===== */
+.funnel-wrap{
+  max-width:680px;
+  margin:0 auto;
+  padding:28px 20px 60px;
+}
+
+/* ===== PANELS ===== */
+.panel{
+  display:none;
+  animation:slideIn .35s var(--ease);
+}
+.panel.active{display:block}
+@keyframes slideIn{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ===== START SCREEN ===== */
+.start-card{
+  background:#fff;
+  border-radius:24px;
+  padding:36px 24px 32px;
+  box-shadow:var(--shadow-lg);
+  border:1px solid var(--line);
+  text-align:center;
+}
+.start-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,var(--blue-100),var(--teal-light));
+  border:1px solid var(--blue-100);
+  color:var(--blue-700);
+  font-size:.75rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:6px 14px;border-radius:999px;
+  margin-bottom:18px;
+}
+.start-card h1{
+  font-size:clamp(1.6rem,5vw,2.2rem);
+  letter-spacing:-.02em;
+  margin-bottom:12px;
+  color:var(--blue-900);
+}
+.start-card h1 span{
+  background:linear-gradient(90deg,var(--blue-600),var(--teal));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.start-card .sub{
+  font-size:1rem;color:var(--ink-2);
+  max-width:420px;margin:0 auto 28px;
+  line-height:1.7;
+}
+.type-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-bottom:24px;
+}
+.type-card{
+  background:var(--bg-soft);
+  border:2px solid var(--line);
+  border-radius:18px;
+  padding:24px 16px 20px;
+  cursor:pointer;
+  transition:border-color .2s,background .2s,transform .2s var(--ease),box-shadow .2s;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.type-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,var(--blue-700),var(--teal));
+  opacity:0;
+  transition:opacity .2s;
+}
+.type-card:hover{
+  border-color:var(--blue-500);
+  transform:translateY(-3px);
+  box-shadow:0 12px 28px rgba(30,90,176,.14);
+}
+.type-card.selected{
+  border-color:var(--blue-600);
+  background:linear-gradient(135deg,rgba(22,68,127,.06),rgba(13,181,166,.06));
+  box-shadow:0 0 0 3px rgba(22,68,127,.10);
+}
+.type-card .type-icon{
+  width:54px;height:54px;
+  border-radius:16px;
+  background:linear-gradient(135deg,var(--blue-100),var(--teal-light));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;
+  margin:0 auto 12px;
+  position:relative;
+  transition:background .2s;
+}
+.type-card.selected .type-icon{
+  background:linear-gradient(135deg,var(--blue-700),var(--teal));
+}
+.type-card h3{
+  font-size:.95rem;
+  font-family:'Poppins',sans-serif;
+  font-weight:700;
+  color:var(--blue-900);
+  margin-bottom:4px;
+  position:relative;
+}
+.type-card p{
+  font-size:.78rem;
+  color:var(--muted);
+  line-height:1.5;
+  position:relative;
+}
+.start-trust{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:16px;
+  border-top:1px solid var(--line);
+  padding-top:20px;
+}
+.trust-item{
+  display:flex;align-items:center;gap:6px;
+  font-size:.78rem;font-weight:600;color:var(--muted);
+}
+
+/* ===== STEP CARD ===== */
+.step-card{
+  background:#fff;
+  border-radius:20px;
+  padding:28px 24px 24px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--line);
+  margin-bottom:16px;
+}
+.step-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--blue-600);background:var(--blue-100);
+  padding:5px 11px;border-radius:999px;
+  margin-bottom:14px;
+}
+.step-card h2{
+  font-size:clamp(1.2rem,4vw,1.55rem);
+  margin-bottom:6px;
+  letter-spacing:-.01em;
+}
+.step-card .step-sub{
+  font-size:.9rem;color:var(--muted);
+  margin-bottom:22px;
+  line-height:1.6;
+}
+
+/* ===== FIELDS ===== */
+.field{margin-bottom:14px}
+.field label{
+  display:block;
+  font-size:.8rem;font-weight:700;
+  color:var(--ink);
+  margin-bottom:6px;
+  letter-spacing:.02em;
+}
+.field label .req{color:var(--blue-600);margin-left:2px}
+.field input,.field select,.field textarea{
+  width:100%;
+  padding:13px 15px;
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  font-size:16px;
+  font-family:'DM Sans',sans-serif;
+  color:var(--ink);
+  background:#fff;
+  transition:border-color .2s,box-shadow .2s;
+  min-height:var(--tap);
+  appearance:none;
+  -webkit-appearance:none;
+}
+.field input:focus,.field select:focus{
+  outline:none;
+  border-color:var(--blue-600);
+  box-shadow:0 0 0 4px rgba(22,68,127,.10);
+}
+.field input.error,.field select.error{
+  border-color:var(--warn);
+  box-shadow:0 0 0 3px rgba(178,58,29,.08);
+}
+.field .err-msg{
+  font-size:.75rem;color:var(--warn);font-weight:600;
+  margin-top:4px;display:none;
+}
+.field.has-error .err-msg{display:block}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:440px){.field-row{grid-template-columns:1fr}}
+.field select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235a6b80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  padding-right:40px;
+  cursor:pointer;
+}
+
+/* ===== SITUATION CHECKBOXES ===== */
+.situations-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+}
+.sit-item{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--bg-soft);
+  border:1.5px solid var(--line);
+  border-radius:11px;
+  padding:13px 14px;
+  cursor:pointer;
+  transition:border-color .2s,background .2s,box-shadow .15s;
+  position:relative;
+}
+.sit-item:hover{border-color:var(--blue-400,#60a5fa);background:#fff}
+.sit-item input[type="checkbox"]{
+  position:absolute;opacity:0;width:0;height:0;
+}
+.sit-check{
+  width:20px;height:20px;
+  border:2px solid var(--line);
+  border-radius:6px;
+  flex-shrink:0;
+  margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s,border-color .2s;
+  background:#fff;
+}
+.sit-item input:checked ~ .sit-check{
+  background:var(--blue-700);
+  border-color:var(--blue-700);
+}
+.sit-item input:checked ~ .sit-check::after{
+  content:'';
+  display:block;
+  width:5px;height:9px;
+  border:2px solid #fff;
+  border-top:none;border-left:none;
+  transform:rotate(45deg) translate(-1px,-1px);
+}
+.sit-item.checked{
+  border-color:var(--blue-600);
+  background:linear-gradient(135deg,rgba(22,68,127,.04),rgba(13,181,166,.03));
+  box-shadow:0 0 0 3px rgba(22,68,127,.07);
+}
+.sit-text{
+  font-size:.88rem;font-weight:600;
+  color:var(--ink-2);
+  line-height:1.4;
+  padding-top:1px;
+}
+
+/* ===== NAVIGATION BUTTONS ===== */
+.nav-btns{
+  display:flex;gap:10px;margin-top:8px;
+}
+.btn-back{
+  display:flex;align-items:center;gap:6px;
+  background:none;
+  border:1.5px solid var(--line);
+  color:var(--muted);
+  padding:13px 18px;
+  border-radius:999px;
+  font-size:.9rem;font-weight:700;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;
+  transition:border-color .2s,color .2s,background .2s;
+  min-height:var(--tap);
+}
+.btn-back:hover{border-color:var(--ink-2);color:var(--ink)}
+.btn-next{
+  flex:1;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(135deg,var(--blue-700),var(--blue-600));
+  color:#fff;
+  padding:15px 24px;
+  border-radius:999px;
+  font-size:1rem;font-weight:700;
+  font-family:'DM Sans',sans-serif;
+  border:none;cursor:pointer;
+  transition:transform .2s var(--ease),box-shadow .2s,opacity .2s;
+  min-height:var(--tap);
+  box-shadow:0 6px 20px rgba(22,68,127,.28);
+}
+.btn-next:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 28px rgba(22,68,127,.36);
+}
+.btn-next:active{transform:translateY(0)}
+.btn-next svg{flex-shrink:0;transition:transform .2s}
+.btn-next:hover svg{transform:translateX(3px)}
+
+.btn-submit{
+  width:100%;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:linear-gradient(135deg,var(--teal),var(--teal-dark));
+  color:#fff;
+  padding:17px 24px;
+  border-radius:999px;
+  font-size:1.05rem;font-weight:700;
+  font-family:'DM Sans',sans-serif;
+  border:none;cursor:pointer;
+  transition:transform .2s var(--ease),box-shadow .2s,opacity .2s;
+  min-height:52px;
+  box-shadow:0 8px 24px rgba(13,181,166,.32);
+  margin-top:8px;
+}
+.btn-submit:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 32px rgba(13,181,166,.40);
+}
+
+/* ===== SUCCESS SCREEN ===== */
+.success-card{
+  background:#fff;
+  border-radius:24px;
+  padding:48px 24px 40px;
+  box-shadow:var(--shadow-lg);
+  border:1px solid var(--line);
+  text-align:center;
+}
+.success-icon{
+  width:72px;height:72px;
+  background:linear-gradient(135deg,var(--teal),var(--blue-600));
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 20px;
+  box-shadow:0 8px 24px rgba(13,181,166,.28);
+  animation:popIn .5s var(--ease);
+}
+@keyframes popIn{
+  from{transform:scale(.5);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+.success-card h2{
+  font-size:clamp(1.4rem,4vw,1.8rem);
+  margin-bottom:10px;
+}
+.success-card p{
+  font-size:.95rem;color:var(--muted);
+  max-width:380px;margin:0 auto 28px;
+  line-height:1.7;
+}
+.success-steps{
+  display:grid;gap:10px;
+  text-align:left;
+  max-width:400px;
+  margin:0 auto 28px;
+}
+.suc-step{
+  display:flex;align-items:flex-start;gap:12px;
+  background:var(--bg-soft);
+  border-radius:12px;padding:13px 14px;
+  border:1px solid var(--line);
+}
+.suc-num{
+  width:26px;height:26px;
+  background:linear-gradient(135deg,var(--blue-700),var(--teal));
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:.72rem;font-weight:800;
+  flex-shrink:0;margin-top:1px;
+  font-family:'Poppins',sans-serif;
+}
+.suc-step p{font-size:.83rem;color:var(--ink-2);line-height:1.5;margin:0}
+.success-cta{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--blue-700);color:#fff;
+  padding:14px 28px;border-radius:999px;
+  font-weight:700;font-size:.95rem;
+  text-decoration:none;
+  transition:background .2s,transform .2s,box-shadow .2s;
+  box-shadow:0 6px 18px rgba(22,68,127,.22);
+}
+.success-cta:hover{background:var(--blue-600);transform:translateY(-2px);text-decoration:none;color:#fff}
+
+/* ===== INCOME RADIO ===== */
+.income-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:360px){.income-grid{grid-template-columns:1fr}}
+.income-item{
+  background:var(--bg-soft);
+  border:1.5px solid var(--line);
+  border-radius:11px;
+  padding:12px 14px;
+  cursor:pointer;
+  transition:border-color .2s,background .2s,box-shadow .15s;
+  text-align:center;
+  font-size:.85rem;font-weight:600;color:var(--ink-2);
+}
+.income-item:hover{border-color:var(--blue-400,#60a5fa);background:#fff}
+.income-item.selected{
+  border-color:var(--blue-600);
+  background:linear-gradient(135deg,rgba(22,68,127,.04),rgba(13,181,166,.03));
+  box-shadow:0 0 0 3px rgba(22,68,127,.07);
+  color:var(--blue-700);
+}
+
+/* ===== FOOTER ===== */
+.funnel-footer{
+  text-align:center;
+  padding:0 20px 24px;
+}
+.funnel-footer p{
+  font-size:.73rem;color:var(--muted);
+  max-width:580px;margin:0 auto;
+  line-height:1.7;
+}
+.funnel-footer a{color:var(--blue-600);text-decoration:none}
+.funnel-footer a:hover{text-decoration:underline}
+.footer-links{
+  display:flex;justify-content:center;gap:18px;
+  margin-bottom:8px;
+  flex-wrap:wrap;
+}
+.footer-links a{
+  font-size:.75rem;font-weight:600;color:var(--muted);
+  text-decoration:none;transition:color .2s;
+}
+.footer-links a:hover{color:var(--blue-600);text-decoration:none}
+
+/* ===== TOOLTIP / HINT ===== */
+.field-hint{
+  font-size:.75rem;color:var(--muted);
+  margin-top:5px;
+  display:flex;align-items:flex-start;gap:5px;
+}
+
+/* ===== STEP COUNTER DOTS ===== */
+.step-dots{
+  display:flex;justify-content:center;gap:6px;
+  margin-bottom:20px;
+}
+.dot{
+  width:8px;height:8px;
+  border-radius:50%;
+  background:var(--line);
+  transition:background .3s,transform .2s;
+}
+.dot.done{background:var(--teal)}
+.dot.active{background:var(--blue-600);transform:scale(1.3)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="funnel-header">
+  <div class="header-inner">
+    <a href="https://vshealthbenefits.com" class="brand">
+      <div class="brand-badge">VS</div>
+      <span class="brand-name">VS Benefits</span>
+    </a>
+    <div class="header-trust">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Secure &amp; Confidential
+    </div>
+  </div>
+</header>
+
+<!-- PROGRESS BAR -->
+<div class="progress-wrap" id="progressWrap" style="display:none">
+  <div class="progress-inner">
+    <div class="progress-meta">
+      <span class="progress-label" id="progressStep">Step 1</span>
+      <span class="progress-pct" id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FUNNEL -->
+<div class="funnel-wrap">
+
+  <!-- PANEL 0: CHOOSE TYPE -->
+  <div class="panel active" id="panel-0">
+    <div class="start-card">
+      <div class="start-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Free Quote, No Obligation
+      </div>
+      <h1>Find the <span>Right Coverage</span><br/>for Your Situation</h1>
+      <p class="sub">Answer a few quick questions and we will match you with the best health insurance options available in your area. Takes about 2 minutes.</p>
+
+      <div class="type-grid">
+        <div class="type-card" id="typeIndividual" onclick="selectType('individual')">
+          <div class="type-icon">&#128106;</div>
+          <h3>Individual or Family</h3>
+          <p>Coverage for you and your loved ones</p>
+        </div>
+        <div class="type-card" id="typeBusiness" onclick="selectType('business')">
+          <div class="type-icon">&#127970;</div>
+          <h3>Small Business</h3>
+          <p>Group plans for your employees</p>
+        </div>
+      </div>
+
+      <div class="start-trust">
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          Licensed in 40+ States
+        </div>
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          100% Free Service
+        </div>
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          No Spam, Ever
+        </div>
+        <div class="trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          Compare Top Carriers
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== INDIVIDUAL PANELS ======================== -->
+
+  <!-- INDIVIDUAL: Step 1 - Name + DOB -->
+  <div class="panel" id="panel-ind-1">
+    <div class="step-dots" id="dots-ind"></div>
+    <div class="step-card">
+      <div class="step-eyebrow">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        About You
+      </div>
+      <h2>Let's start with the basics</h2>
+      <p class="step-sub">We'll use this to personalize your quote options.</p>
+      <div class="field-row">
+        <div class="field" id="f-ind-firstname">
+          <label>First Name<span class="req">*</span></label>
+          <input type="text" id="ind-firstname" placeholder="Jane" autocomplete="given-name" />
+          <div class="err-msg">Please enter your first name.</div>
+        </div>
+        <div class="field" id="f-ind-lastname">
+          <label>Last Name<span class="req">*</span></label>
+          <input type="text" id="ind-lastname" placeholder="Smith" autocomplete="family-name" />
+          <div class="err-msg">Please enter your last name.</div>
+        </div>
+      </div>
+      <div class="field" id="f-ind-dob">
+        <label>Date of Birth<span class="req">*</span></label>
+        <input type="date" id="ind-dob" autocomplete="bday" />
+        <div class="err-msg">Please enter a valid date of birth.</div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="backTo(0)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn-next" onclick="indNext(1)">
+        Continue
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- INDIVIDUAL: Step 2 - Address -->
+  <div class="panel" id="panel-ind-2">
+    <div class="step-dots" id="dots-ind-2"></div>
+    <div class="step-card">
+      <div class="step-eyebrow">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Location
+      </div>
+      <h2>What is your home address?</h2>
+      <p class="step-sub">Your location helps us find plans available in your area.</p>
+      <div class="field" id="f-ind-address">
+        <label>Street Address<span class="req">*</span></label>
+        <input type="text" id="ind-address" placeholder="123 Main Street" autocomplete="street-address" />
+        <div class="err-msg">Please enter your street address.</div>
+      </div>
+      <div class="field-row">
+        <div class="field" id="f-ind-zip">
+          <label>ZIP Code<span class="req">*</span></label>
+          <input type="text" id="ind-zip" placeholder="33101" maxlength="5" autocomplete="postal-code" inputmode="numeric" />
+          <div class="err-msg">Please enter a valid 5-digit ZIP code.</div>
+        </div>
+        <div class="field" id="f-ind-state">
+          <label>State<span class="req">*</span></label>
+          <select id="ind-state" autocomplete="address-level1">
+            <option value="">Select state...</option>
+            <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option>
+            <option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option>
+            <option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option>
+            <option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option>
+            <option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option>
+            <option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option>
+            <option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option>
+            <option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option>
+            <option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option>
+            <option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
+          </select>
+          <div class="err-msg">Please select your state.</div>
+        </div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="indNav(1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn-next" onclick="indNext(2)">
+        Continue
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- INDIVIDUAL: Step 3 - Contact -->
+  <div class="panel" id="panel-ind-3">
+    <div class="step-card">
+      <div class="step-eyebrow">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        Contact Info
+      </div>
+      <h2>How can we reach you?</h2>
+      <p class="step-sub">Your advisor will use this to share your personalized quote options. We never share your information.</p>
+      <div class="field" id="f-ind-phone">
+        <label>Phone Number<span class="req">*</span></label>
+        <input type="tel" id="ind-phone" placeholder="(305) 555-0100" autocomplete="tel" inputmode="tel" />
+        <div class="err-msg">Please enter a valid phone number.</div>
+      </div>
+      <div class="field" id="f-ind-email">
+        <label>Email Address<span class="req">*</span></label>
+        <input type="email" id="ind-email" placeholder="jane@email.com" autocomplete="email" />
+        <div class="err-msg">Please enter a valid email address.</div>
+      </div>
+      <div class="field-hint">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Your information is 100% secure and never sold.
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="indNav(2)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn-next" onclick="indNext(3)">
+        Continue
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- INDIVIDUAL: Step 4 - Situation -->
+  <div class="panel" id="panel-ind-4">
+    <div class="step-card">
+      <div class="step-eyebrow">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        Your Situation
+      </div>
+      <h2>What's bringing you here today?</h2>
+      <p class="step-sub">Select all that apply. This helps us find the most relevant plan options for you.</p>
+      <div class="situations-grid" id="ind-situations">
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="lost_job_coverage">
+          <span class="sit-check"></span>
+          <span class="sit-text">I recently lost coverage through a job</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="self_employed">
+          <span class="sit-check"></span>
+          <span class="sit-text">I am self-employed or a freelancer</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="marketplace_renewal">
+          <span class="sit-check"></span>
+          <span class="sit-text">My current marketplace plan is up for renewal</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="uninsured">
+          <span class="sit-check"></span>
+          <span class="sit-text">I currently have no health insurance</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="high_premium">
+          <span class="sit-check"></span>
+          <span class="sit-text">My current plan's premium is too expensive</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="new_family">
+          <span class="sit-check"></span>
+          <span class="sit-text">I had a new baby or added a dependent</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="moved">
+          <span class="sit-check"></span>
+          <span class="sit-text">I recently moved to a new state or area</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="spouse_coverage">
+          <span class="sit-check"></span>
+          <span class="sit-text">I lost coverage through a spouse or partner</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="turned_26">
+          <span class="sit-check"></span>
+          <span class="sit-text">I turned 26 and aged off a parent's plan</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="medicare_bridge">
+          <span class="sit-check"></span>
+          <span class="sit-text">I need coverage until I qualify for Medicare</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="better_coverage">
+          <span class="sit-check"></span>
+          <span class="sit-text">I want better coverage or lower deductibles</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="other">
+          <span class="sit-check"></span>
+          <span class="sit-text">Something else</span>
+        </label>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="indNav(3)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn-next" onclick="indNext(4)">
+        Continue
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- INDIVIDUAL: Step 5 - Income -->
+  <div class="panel" id="panel-ind-5">
+    <div class="step-card">
+      <div class="step-eyebrow">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Household Income
+      </div>
+      <h2>What is your estimated annual household income?</h2>
+      <p class="step-sub">This helps determine if you qualify for subsidies or tax credits that can significantly lower your monthly premium.</p>
+      <div class="income-grid" id="ind-income">
+        <div class="income-item" onclick="selectIncome(this,'Under $20,000')">Under $20,000</div>
+        <div class="income-item" onclick="selectIncome(this,'$20,000 - $35,000')">$20,000 - $35,000</div>
+        <div class="income-item" onclick="selectIncome(this,'$35,000 - $50,000')">$35,000 - $50,000</div>
+        <div class="income-item" onclick="selectIncome(this,'$50,000 - $75,000')">$50,000 - $75,000</div>
+        <div class="income-item" onclick="selectIncome(this,'$75,000 - $100,000')">$75,000 - $100,000</div>
+        <div class="income-item" onclick="selectIncome(this,'$100,000 - $150,000')">$100,000 - $150,000</div>
+        <div class="income-item" onclick="selectIncome(this,'$150,000+')">$150,000+</div>
+        <div class="income-item" onclick="selectIncome(this,'Prefer not to say')">Prefer not to say</div>
+      </div>
+      <div class="field-hint" style="margin-top:14px">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        Many people qualify for $0/month plans. Your income helps us find every discount available to you.
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="indNav(4)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn-submit" onclick="submitInd()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        Get My Free Quote
+      </button>
+    </div>
+  </div>
+
+  <!-- ======================== BUSINESS PANELS ======================== -->
+
+  <!-- BUSINESS: Step 1 - Owner Info -->
+  <div class="panel" id="panel-biz-1">
+    <div class="step-card">
+      <div class="step-eyebrow">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Business Owner
+      </div>
+      <h2>Tell us about yourself</h2>
+      <p class="step-sub">We'll assign a dedicated business insurance advisor to your account.</p>
+      <div class="field-row">
+        <div class="field" id="f-biz-firstname">
+          <label>Owner First Name<span class="req">*</span></label>
+          <input type="text" id="biz-firstname" placeholder="John" autocomplete="given-name" />
+          <div class="err-msg">Please enter the owner's first name.</div>
+        </div>
+        <div class="field" id="f-biz-lastname">
+          <label>Owner Last Name<span class="req">*</span></label>
+          <input type="text" id="biz-lastname" placeholder="Doe" autocomplete="family-name" />
+          <div class="err-msg">Please enter the owner's last name.</div>
+        </div>
+      </div>
+      <div class="field" id="f-biz-contact-phone">
+        <label>Best Contact Phone Number<span class="req">*</span></label>
+        <input type="tel" id="biz-contact-phone" placeholder="(305) 555-0200" autocomplete="tel" inputmode="tel" />
+        <div class="err-msg">Please enter a valid phone number.</div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="backTo(0)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn-next" onclick="bizNext(1)">
+        Continue
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- BUSINESS: Step 2 - Business Details -->
+  <div class="panel" id="panel-biz-2">
+    <div class="step-card">
+      <div class="step-eyebrow">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+        Your Business
+      </div>
+      <h2>Tell us about your business</h2>
+      <p class="step-sub">This helps us find group plans sized and priced for your company.</p>
+      <div class="field" id="f-biz-name">
+        <label>Business Name<span class="req">*</span></label>
+        <input type="text" id="biz-name" placeholder="Acme LLC" autocomplete="organization" />
+        <div class="err-msg">Please enter your business name.</div>
+      </div>
+      <div class="field" id="f-biz-employees">
+        <label>Number of Employees (including owners)<span class="req">*</span></label>
+        <select id="biz-employees">
+          <option value="">Select range...</option>
+          <option>1 (just me)</option>
+          <option>2 - 4</option>
+          <option>5 - 9</option>
+          <option>10 - 24</option>
+          <option>25 - 49</option>
+          <option>50 - 99</option>
+          <option>100+</option>
+        </select>
+        <div class="err-msg">Please select employee count.</div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="bizNav(1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn-next" onclick="bizNext(2)">
+        Continue
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- BUSINESS: Step 3 - Situation -->
+  <div class="panel" id="panel-biz-3">
+    <div class="step-card">
+      <div class="step-eyebrow">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        Your Situation
+      </div>
+      <h2>What's driving you to look for coverage now?</h2>
+      <p class="step-sub">Select all that apply. This helps us find the most relevant group plans for your team.</p>
+      <div class="situations-grid" id="biz-situations">
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="no_current_plan">
+          <span class="sit-check"></span>
+          <span class="sit-text">We do not currently offer employee health benefits</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="renewal">
+          <span class="sit-check"></span>
+          <span class="sit-text">Our current group plan is coming up for renewal</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="too_expensive">
+          <span class="sit-check"></span>
+          <span class="sit-text">Our current plan costs too much for what we get</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="attract_talent">
+          <span class="sit-check"></span>
+          <span class="sit-text">We want to attract and retain better talent</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="growing">
+          <span class="sit-check"></span>
+          <span class="sit-text">We are growing and need a scalable plan</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="carrier_dropped">
+          <span class="sit-check"></span>
+          <span class="sit-text">Our carrier dropped or changed our plan</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="employee_complaints">
+          <span class="sit-check"></span>
+          <span class="sit-text">Employees have complained about current coverage</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="new_business">
+          <span class="sit-check"></span>
+          <span class="sit-text">We are a new business setting up benefits for the first time</span>
+        </label>
+        <label class="sit-item" onclick="toggleSit(this)">
+          <input type="checkbox" value="other">
+          <span class="sit-check"></span>
+          <span class="sit-text">Something else</span>
+        </label>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="bizNav(2)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn-next" onclick="bizNext(3)">
+        Continue
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- BUSINESS: Step 4 - Address + Business Phone -->
+  <div class="panel" id="panel-biz-4">
+    <div class="step-card">
+      <div class="step-eyebrow">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Business Location
+      </div>
+      <h2>Where is your business located?</h2>
+      <p class="step-sub">Group plan availability and pricing varies by state. We'll find the best options for your location.</p>
+      <div class="field" id="f-biz-address">
+        <label>Business Street Address<span class="req">*</span></label>
+        <input type="text" id="biz-address" placeholder="456 Commerce Blvd" autocomplete="street-address" />
+        <div class="err-msg">Please enter the business address.</div>
+      </div>
+      <div class="field-row">
+        <div class="field" id="f-biz-zip">
+          <label>ZIP Code<span class="req">*</span></label>
+          <input type="text" id="biz-zip" placeholder="33101" maxlength="5" inputmode="numeric" autocomplete="postal-code" />
+          <div class="err-msg">Please enter a valid ZIP code.</div>
+        </div>
+        <div class="field" id="f-biz-state">
+          <label>State<span class="req">*</span></label>
+          <select id="biz-state" autocomplete="address-level1">
+            <option value="">Select state...</option>
+            <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option>
+            <option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option>
+            <option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option>
+            <option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option>
+            <option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option>
+            <option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option>
+            <option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option>
+            <option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option>
+            <option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option>
+            <option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
+          </select>
+          <div class="err-msg">Please select a state.</div>
+        </div>
+      </div>
+      <div class="field" id="f-biz-phone">
+        <label>Business Phone Number<span class="req">*</span></label>
+        <input type="tel" id="biz-phone" placeholder="(305) 555-0300" autocomplete="tel" inputmode="tel" />
+        <div class="err-msg">Please enter a valid business phone number.</div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="bizNav(3)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn-submit" onclick="submitBiz()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        Get My Business Quote
+      </button>
+    </div>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="panel" id="panel-success">
+    <div class="success-card">
+      <div class="success-icon">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <h2>You're All Set!</h2>
+      <p>Your quote request has been received. A licensed VS Benefits advisor will reach out to you shortly with your personalized plan options.</p>
+      <div class="success-steps">
+        <div class="suc-step">
+          <div class="suc-num">1</div>
+          <p><strong>Review in progress.</strong> We're analyzing your information to match you with the best available plans.</p>
+        </div>
+        <div class="suc-step">
+          <div class="suc-num">2</div>
+          <p><strong>Advisor contact.</strong> A licensed advisor will call or email you within 1 business day, often within hours.</p>
+        </div>
+        <div class="suc-step">
+          <div class="suc-num">3</div>
+          <p><strong>Compare and choose.</strong> Review your options side by side with no pressure and no cost.</p>
+        </div>
+      </div>
+      <a href="https://vshealthbenefits.com" class="success-cta">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Return to VS Benefits
+      </a>
+    </div>
+  </div>
+
+</div><!-- /funnel-wrap -->
+
+<!-- FOOTER -->
+<footer class="funnel-footer">
+  <div class="footer-links">
+    <a href="https://vshealthbenefits.com/privacy.html">Privacy Policy</a>
+    <a href="https://vshealthbenefits.com/terms.html">Terms of Service</a>
+    <a href="https://vshealthbenefits.com/contact.html">Contact Us</a>
+  </div>
+  <p>By submitting this form you agree to our <a href="https://vshealthbenefits.com/privacy.html">Privacy Policy</a> and consent to be contacted by a licensed VS Benefits advisor. We never sell your information. VS Benefits is an independent insurance advisor licensed in 40+ states.</p>
+</footer>
+
+<script>
+(function(){
+  // ---- STATE ----
+  var currentType = null;     // 'individual' | 'business'
+  var indStep = 0;            // 1-5
+  var bizStep = 0;            // 1-4
+  var selectedIncome = null;
+
+  // IND: 5 steps total, BIZ: 4 steps total
+  var IND_STEPS = 5;
+  var BIZ_STEPS = 4;
+
+  // ---- PROGRESS ----
+  function updateProgress(step, total){
+    var pct = Math.round((step / total) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('progressStep').textContent = 'Step ' + step + ' of ' + total;
+  }
+
+  function showProgress(){
+    document.getElementById('progressWrap').style.display = 'block';
+  }
+
+  // ---- PANEL SWITCH ----
+  function showPanel(id){
+    document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+    var el = document.getElementById(id);
+    if(el){
+      el.classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+  }
+
+  // ---- TYPE SELECT ----
+  window.selectType = function(type){
+    currentType = type;
+    document.querySelectorAll('.type-card').forEach(function(c){ c.classList.remove('selected'); });
+    document.getElementById(type === 'individual' ? 'typeIndividual' : 'typeBusiness').classList.add('selected');
+    setTimeout(function(){
+      showProgress();
+      if(type === 'individual'){
+        indStep = 1;
+        updateProgress(1, IND_STEPS);
+        showPanel('panel-ind-1');
+      } else {
+        bizStep = 1;
+        updateProgress(1, BIZ_STEPS);
+        showPanel('panel-biz-1');
+      }
+    }, 200);
+  };
+
+  // ---- BACK TO START ----
+  window.backTo = function(step){
+    if(step === 0){
+      document.getElementById('progressWrap').style.display = 'none';
+      currentType = null;
+      showPanel('panel-0');
+    }
+  };
+
+  // ---- INDIVIDUAL NAVIGATION ----
+  window.indNav = function(toStep){
+    indStep = toStep;
+    updateProgress(toStep, IND_STEPS);
+    showPanel('panel-ind-' + toStep);
+  };
+
+  // ---- BUSINESS NAVIGATION ----
+  window.bizNav = function(toStep){
+    bizStep = toStep;
+    updateProgress(toStep, BIZ_STEPS);
+    showPanel('panel-biz-' + toStep);
+  };
+
+  // ---- VALIDATION ----
+  function isValidPhone(v){ return v.replace(/\D/g,'').length >= 10; }
+  function isValidEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function isValidZip(v){ return /^\d{5}$/.test(v.trim()); }
+  function isValidDate(v){ return v && v.length === 10; }
+
+  function setErr(fieldId, hasErr){
+    var el = document.getElementById(fieldId);
+    if(!el) return;
+    el.classList[hasErr ? 'add' : 'remove']('has-error');
+    var inp = el.querySelector('input,select');
+    if(inp) inp.classList[hasErr ? 'add' : 'remove']('error');
+  }
+
+  // ---- INDIVIDUAL NEXT ----
+  window.indNext = function(fromStep){
+    var ok = true;
+    if(fromStep === 1){
+      var fn = document.getElementById('ind-firstname').value.trim();
+      var ln = document.getElementById('ind-lastname').value.trim();
+      var dob = document.getElementById('ind-dob').value;
+      setErr('f-ind-firstname', !fn);
+      setErr('f-ind-lastname', !ln);
+      setErr('f-ind-dob', !isValidDate(dob));
+      if(!fn || !ln || !isValidDate(dob)) ok = false;
+      if(ok){ indNav(2); }
+    } else if(fromStep === 2){
+      var addr = document.getElementById('ind-address').value.trim();
+      var zip = document.getElementById('ind-zip').value.trim();
+      var state = document.getElementById('ind-state').value;
+      setErr('f-ind-address', !addr);
+      setErr('f-ind-zip', !isValidZip(zip));
+      setErr('f-ind-state', !state);
+      if(!addr || !isValidZip(zip) || !state) ok = false;
+      if(ok){ indNav(3); }
+    } else if(fromStep === 3){
+      var phone = document.getElementById('ind-phone').value.trim();
+      var email = document.getElementById('ind-email').value.trim();
+      setErr('f-ind-phone', !isValidPhone(phone));
+      setErr('f-ind-email', !isValidEmail(email));
+      if(!isValidPhone(phone) || !isValidEmail(email)) ok = false;
+      if(ok){ indNav(4); }
+    } else if(fromStep === 4){
+      // situation optional but nudge if none
+      indNav(5);
+    }
+    if(ok){ updateProgress(fromStep + 1, IND_STEPS); }
+  };
+
+  // ---- BUSINESS NEXT ----
+  window.bizNext = function(fromStep){
+    var ok = true;
+    if(fromStep === 1){
+      var fn = document.getElementById('biz-firstname').value.trim();
+      var ln = document.getElementById('biz-lastname').value.trim();
+      var ph = document.getElementById('biz-contact-phone').value.trim();
+      setErr('f-biz-firstname', !fn);
+      setErr('f-biz-lastname', !ln);
+      setErr('f-biz-contact-phone', !isValidPhone(ph));
+      if(!fn || !ln || !isValidPhone(ph)) ok = false;
+      if(ok){ bizNav(2); }
+    } else if(fromStep === 2){
+      var bn = document.getElementById('biz-name').value.trim();
+      var emp = document.getElementById('biz-employees').value;
+      setErr('f-biz-name', !bn);
+      setErr('f-biz-employees', !emp);
+      if(!bn || !emp) ok = false;
+      if(ok){ bizNav(3); }
+    } else if(fromStep === 3){
+      bizNav(4);
+    }
+    if(ok){ updateProgress(fromStep + 1, BIZ_STEPS); }
+  };
+
+  // ---- SITUATION TOGGLE ----
+  window.toggleSit = function(label){
+    // The click on the label toggles the checkbox, we just sync the class
+    setTimeout(function(){
+      var cb = label.querySelector('input[type="checkbox"]');
+      label.classList.toggle('checked', cb && cb.checked);
+    }, 0);
+  };
+
+  // ---- INCOME SELECT ----
+  window.selectIncome = function(el, val){
+    document.querySelectorAll('#ind-income .income-item').forEach(function(i){ i.classList.remove('selected'); });
+    el.classList.add('selected');
+    selectedIncome = val;
+  };
+
+  // ---- COLLECT DATA ----
+  function collectInd(){
+    var sits = [];
+    document.querySelectorAll('#ind-situations input:checked').forEach(function(cb){ sits.push(cb.value); });
+    return {
+      type: 'individual',
+      firstName: document.getElementById('ind-firstname').value.trim(),
+      lastName: document.getElementById('ind-lastname').value.trim(),
+      dob: document.getElementById('ind-dob').value,
+      address: document.getElementById('ind-address').value.trim(),
+      zip: document.getElementById('ind-zip').value.trim(),
+      state: document.getElementById('ind-state').value,
+      phone: document.getElementById('ind-phone').value.trim(),
+      email: document.getElementById('ind-email').value.trim(),
+      situations: sits,
+      income: selectedIncome
+    };
+  }
+
+  function collectBiz(){
+    var sits = [];
+    document.querySelectorAll('#biz-situations input:checked').forEach(function(cb){ sits.push(cb.value); });
+    return {
+      type: 'business',
+      ownerFirstName: document.getElementById('biz-firstname').value.trim(),
+      ownerLastName: document.getElementById('biz-lastname').value.trim(),
+      contactPhone: document.getElementById('biz-contact-phone').value.trim(),
+      businessName: document.getElementById('biz-name').value.trim(),
+      employees: document.getElementById('biz-employees').value,
+      situations: sits,
+      businessAddress: document.getElementById('biz-address').value.trim(),
+      businessZip: document.getElementById('biz-zip').value.trim(),
+      businessState: document.getElementById('biz-state').value,
+      businessPhone: document.getElementById('biz-phone').value.trim()
+    };
+  }
+
+  // ---- WEBHOOK URL (paste your Zapier or Make URL here) ----
+  var WEBHOOK_URL = 'YOUR_ZAPIER_OR_MAKE_WEBHOOK_URL_HERE';
+
+  // ---- CONFETTI ----
+  function launchConfetti(){
+    var colors = ['#16447f','#0db5a6','#2f7de0','#fbbf24','#f472b6','#34d399'];
+    var canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+    document.body.appendChild(canvas);
+    var ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    var pieces = [];
+    for(var i = 0; i < 160; i++){
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: -20 - Math.random() * 200,
+        w: 8 + Math.random() * 8,
+        h: 6 + Math.random() * 6,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        angle: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * 0.18,
+        vx: (Math.random() - 0.5) * 3.5,
+        vy: 2.5 + Math.random() * 4,
+        opacity: 1
+      });
+    }
+    var start = null;
+    function draw(ts){
+      if(!start) start = ts;
+      var elapsed = ts - start;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(function(p){
+        p.x += p.vx;
+        p.y += p.vy;
+        p.angle += p.spin;
+        p.vy += 0.07;
+        if(elapsed > 2200) p.opacity -= 0.018;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.opacity);
+        ctx.translate(p.x + p.w/2, p.y + p.h/2);
+        ctx.rotate(p.angle);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+      });
+      if(elapsed < 3800 && pieces.some(function(p){ return p.opacity > 0; })){
+        requestAnimationFrame(draw);
+      } else {
+        canvas.remove();
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  // ---- SEND TO WEBHOOK ----
+  function sendToWebhook(data, btnEl){
+    // Turn button green + loading state
+    if(btnEl){
+      btnEl.disabled = true;
+      btnEl.style.background = 'linear-gradient(135deg,#16a34a,#15803d)';
+      btnEl.style.boxShadow = '0 8px 24px rgba(22,163,74,.32)';
+      btnEl.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Sending...';
+    }
+
+    launchConfetti();
+
+    var payload = Object.assign({}, data, { submitted_at: new Date().toISOString(), source: window.location.href });
+
+    fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .catch(function(err){ console.warn('Webhook error:', err); })
+    .finally(function(){
+      setTimeout(function(){
+        updateProgress(data.type === 'individual' ? IND_STEPS : BIZ_STEPS, data.type === 'individual' ? IND_STEPS : BIZ_STEPS);
+        showPanel('panel-success');
+      }, 900);
+    });
+  }
+
+  // ---- SUBMIT ----
+  window.submitInd = function(){
+    var data = collectInd();
+    var btn = document.querySelector('#panel-ind-5 .btn-submit');
+    sendToWebhook(data, btn);
+  };
+
+  window.submitBiz = function(){
+    var addr = document.getElementById('biz-address').value.trim();
+    var zip = document.getElementById('biz-zip').value.trim();
+    var state = document.getElementById('biz-state').value;
+    var ph = document.getElementById('biz-phone').value.trim();
+    setErr('f-biz-address', !addr);
+    setErr('f-biz-zip', !isValidZip(zip));
+    setErr('f-biz-state', !state);
+    setErr('f-biz-phone', !isValidPhone(ph));
+    if(!addr || !isValidZip(zip) || !state || !isValidPhone(ph)) return;
+    var data = collectBiz();
+    var btn = document.querySelector('#panel-biz-4 .btn-submit');
+    sendToWebhook(data, btn);
+  };
+
+  // ---- PHONE FORMATTING ----
+  function formatPhone(inp){
+    inp.addEventListener('input', function(){
+      var v = this.value.replace(/\D/g,'');
+      if(v.length >= 10){
+        this.value = '(' + v.slice(0,3) + ') ' + v.slice(3,6) + '-' + v.slice(6,10);
+      }
+    });
+  }
+  ['ind-phone','biz-contact-phone','biz-phone'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) formatPhone(el);
+  });
+
+  // ---- ZIP NUMERIC ONLY ----
+  ['ind-zip','biz-zip'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el){
+      el.addEventListener('input', function(){
+        this.value = this.value.replace(/\D/g,'').slice(0,5);
+      });
+    }
+  });
+
+})();
+</script>
+</body>
+</html>
