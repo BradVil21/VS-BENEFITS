@@ -155,6 +155,21 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .status-follow-up{background:#fff8e1;color:#7a5000}
 .status-appointment-scheduled{background:#e7f0ff;color:var(--blue-700)}
 .status-no-longer-interested{background:#fbe7e7;color:var(--err)}
+.status-responded{background:#e6f7ef;color:var(--ok)}
+.status-closed{background:#eef2f8;color:var(--muted)}
+
+/* ── SUPPORT TAB SUB-SECTIONS ── */
+.sup-block{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:14px 14px 12px;box-shadow:var(--shadow-sm)}
+.sup-block-head{display:flex;flex-direction:column;gap:2px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--line-2)}
+.sup-block-head h4{margin:0;font-size:15px;color:var(--blue-900);display:flex;align-items:center;gap:8px;line-height:1.25}
+.sup-block-sub{font-size:12px;color:var(--muted)}
+.sup-badge{background:var(--blue-600);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;min-width:22px;text-align:center;line-height:1.4}
+.sup-badge.zero{background:var(--line);color:var(--muted)}
+.cr-row .cr-msg{background:var(--blue-50);border:1px solid #cfdef6;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:13.5px;color:var(--ink);white-space:pre-wrap;line-height:1.5}
+.cr-row .cr-fields{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:6px}
+.cr-row .cr-fields .cr-field{font-size:12.5px;color:var(--ink-2);display:inline-flex;align-items:center;gap:4px}
+.cr-row .cr-fields .cr-field strong{color:var(--ink);font-weight:600}
+@media(max-width:520px){.sup-block{padding:12px}}
 
 .modal-bg{position:fixed;inset:0;background:rgba(11,35,70,.55);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:12px;overflow-y:auto}
 .modal-bg.open{display:flex}
@@ -224,13 +239,29 @@ input,select,textarea{font-family:inherit;font-size:16px}
 
 /* ── MOBILE NAV ── */
 @media(max-width:639px){
-  .wrap{padding-bottom:100px}
+  .wrap{padding-bottom:100px;padding-left:10px;padding-right:10px}
   .mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);z-index:90;box-shadow:0 -4px 12px rgba(11,35,70,.10)}
   .mobile-nav button{flex:1;background:none;border:0;padding:8px 2px 10px;font-size:9px;font-weight:700;color:var(--muted);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:56px;position:relative}
   .mobile-nav button.active{color:var(--blue-600)}
   .mobile-nav button svg{width:22px;height:22px;flex-shrink:0}
   .mobile-nav button .mnbadge{background:var(--err);color:#fff;border-radius:999px;font-size:9px;font-weight:700;padding:1px 5px;min-width:16px;text-align:center;position:absolute;top:6px;right:calc(50% - 20px)}
   .tabs{display:none}
+  .panel{padding:14px 12px}
+  .panel h3{font-size:18px}
+  .panel .lede{font-size:13px;line-height:1.45}
+  .toolbar{gap:6px}
+  .toolbar input.search{font-size:14px;padding:9px 10px;min-width:0;width:100%}
+  .toolbar .btn-sm{flex:0 1 auto}
+  .filter-bar{gap:6px}
+  .status-dropdown{flex:1 1 0;max-width:none}
+  .tbl .row{padding:12px}
+  .tbl .row .acts .btn-sm{font-size:12.5px;padding:7px 10px}
+  .card h2{font-size:18px}
+  .modal{padding:18px 16px;border-radius:12px}
+  .row2{gap:0}
+  .conv-wrap{gap:8px}
+  .thread-list{max-height:260px}
+  .msgs{max-height:280px}
 }
 @media(min-width:640px){.mobile-nav{display:none}}
 </style>
@@ -356,37 +387,62 @@ input,select,textarea{font-family:inherit;font-size:16px}
 
     <!-- SUPPORT -->
     <div id="p-support" class="panel">
-      <h3>Support inbox</h3>
-      <p class="lede">Two-way message threads. Delete individual messages or close threads.</p>
-      <div class="toolbar">
-        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;min-height:44px">
-          <input type="checkbox" id="show-closed" /> Show closed threads
-        </label>
+      <h3>Support</h3>
+      <p class="lede">Contact-form requests come in here as <strong>"needing support"</strong>. Active two-way client message threads live below.</p>
+
+      <!-- ── Contact Requests subsection ── -->
+      <div class="sup-block">
+        <div class="sup-block-head">
+          <h4>&#128231; Contact requests <span class="sup-badge" id="b-cr">0</span></h4>
+          <span class="sup-block-sub">From the public contact form on your website.</span>
+        </div>
+        <div class="toolbar">
+          <input id="cr-search" class="search" type="search" placeholder="Search name, email, phone, message..." />
+          <button id="export-cr-btn" class="btn btn-ghost btn-sm" type="button">Export CSV</button>
+        </div>
+        <div class="filter-bar">
+          <label for="cr-filter-sel">Filter:</label>
+          <select id="cr-filter-sel" class="status-dropdown"></select>
+        </div>
+        <div id="cr-list" class="tbl"></div>
       </div>
-      <div class="conv-wrap">
-        <div id="thread-list" class="thread-list"></div>
-        <div id="conv" class="conv">
-          <div id="conv-empty" class="empty">Pick a conversation on the left to view.</div>
-          <div id="conv-active" hidden>
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;flex-wrap:wrap">
-              <div>
-                <div id="conv-name" style="font-weight:700;color:var(--blue-900)"></div>
-                <div id="conv-email" style="font-size:12px;color:var(--muted)"></div>
+
+      <!-- ── Client message threads subsection ── -->
+      <div class="sup-block" style="margin-top:24px">
+        <div class="sup-block-head">
+          <h4>&#128172; Client message threads</h4>
+          <span class="sup-block-sub">Two-way conversations with signed-in clients.</span>
+        </div>
+        <div class="toolbar">
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer;min-height:44px">
+            <input type="checkbox" id="show-closed" /> Show closed threads
+          </label>
+        </div>
+        <div class="conv-wrap">
+          <div id="thread-list" class="thread-list"></div>
+          <div id="conv" class="conv">
+            <div id="conv-empty" class="empty">Pick a conversation on the left to view.</div>
+            <div id="conv-active" hidden>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;flex-wrap:wrap">
+                <div>
+                  <div id="conv-name" style="font-weight:700;color:var(--blue-900)"></div>
+                  <div id="conv-email" style="font-size:12px;color:var(--muted)"></div>
+                </div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                  <button id="conv-mark-read" class="btn btn-ghost btn-sm" type="button">Mark read</button>
+                  <button id="conv-close-thread" class="btn btn-ghost btn-sm" type="button">Close thread</button>
+                  <button id="conv-delete-thread" class="btn btn-danger btn-sm" type="button">Delete thread</button>
+                </div>
               </div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap">
-                <button id="conv-mark-read" class="btn btn-ghost btn-sm" type="button">Mark read</button>
-                <button id="conv-close-thread" class="btn btn-ghost btn-sm" type="button">Close thread</button>
-                <button id="conv-delete-thread" class="btn btn-danger btn-sm" type="button">Delete thread</button>
-              </div>
+              <div id="closed-banner" class="closed-banner" hidden>&#128274; This thread is closed. Reopen to reply.</div>
+              <div id="msgs" class="msgs"></div>
+              <form id="reply-form">
+                <div class="field" style="margin-bottom:8px">
+                  <textarea id="reply-text" rows="2" placeholder="Reply to client..." required></textarea>
+                </div>
+                <button class="btn btn-primary btn-block" type="submit" id="reply-btn">Send reply</button>
+              </form>
             </div>
-            <div id="closed-banner" class="closed-banner" hidden>&#128274; This thread is closed. Reopen to reply.</div>
-            <div id="msgs" class="msgs"></div>
-            <form id="reply-form">
-              <div class="field" style="margin-bottom:8px">
-                <textarea id="reply-text" rows="2" placeholder="Reply to client..." required></textarea>
-              </div>
-              <button class="btn btn-primary btn-block" type="submit" id="reply-btn">Send reply</button>
-            </form>
           </div>
         </div>
       </div>
@@ -518,7 +574,7 @@ const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 const auth=getAuth(app);
 (function(){"use strict";
-var K={session:"vs_admin_session",setupCode:"vs_admin_setup_code",adminAccts:"vs_admin_accounts",legacyHash:"vs_admin_hash",leads:"vs_leads",accounts:"vs_client_accounts",messages:"vs_messages",referrals:"vs_referrals",appointments:"vs_appointments",webhook:"vs_webhook_url",gcalCid:"vs_gcal_client_id",gcalTok:"vs_gcal_token",gcalEmail:"vs_gcal_email"};
+var K={session:"vs_admin_session",setupCode:"vs_admin_setup_code",adminAccts:"vs_admin_accounts",legacyHash:"vs_admin_hash",leads:"vs_leads",accounts:"vs_client_accounts",messages:"vs_messages",referrals:"vs_referrals",appointments:"vs_appointments",contactRequests:"vs_contact_requests",webhook:"vs_webhook_url",gcalCid:"vs_gcal_client_id",gcalTok:"vs_gcal_token",gcalEmail:"vs_gcal_email"};
 function $(id){return document.getElementById(id);}
 function uid(){return"id_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
 function el(t,attrs,children){var e=document.createElement(t);if(attrs)Object.keys(attrs).forEach(function(k){if(k==="class")e.className=attrs[k];else if(k==="text")e.textContent=attrs[k];else if(k.indexOf("on")===0)e.addEventListener(k.slice(2),attrs[k]);else e.setAttribute(k,attrs[k]);});if(children)children.forEach(function(c){e.appendChild(c);});return e;}
@@ -535,7 +591,7 @@ function setArrLocal(k,v){localStorage.setItem(k,JSON.stringify(v));}
 function escHtml(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':'&quot;',"\'":"&#39;"}[c];});}
 function fullName(a){return(((a.firstName||"")+" "+(a.lastName||"")).trim()||a.name||a.email||"(no name)");}
 var LOCAL_TO_REMOTE={};
-LOCAL_TO_REMOTE[K.leads]="leads";LOCAL_TO_REMOTE[K.accounts]="accounts";LOCAL_TO_REMOTE[K.messages]="messages";LOCAL_TO_REMOTE[K.referrals]="referrals";LOCAL_TO_REMOTE[K.appointments]="appointments";LOCAL_TO_REMOTE[K.adminAccts]="admin_accounts";
+LOCAL_TO_REMOTE[K.leads]="leads";LOCAL_TO_REMOTE[K.accounts]="accounts";LOCAL_TO_REMOTE[K.messages]="messages";LOCAL_TO_REMOTE[K.referrals]="referrals";LOCAL_TO_REMOTE[K.appointments]="appointments";LOCAL_TO_REMOTE[K.adminAccts]="admin_accounts";LOCAL_TO_REMOTE[K.contactRequests]="contact_requests";
 function setArr(k,v){setArrLocal(k,v);var r=LOCAL_TO_REMOTE[k];if(r)cloudPush(r,v);}
 function getLeads(){return asArr(K.leads);}function saveLeads(v){setArr(K.leads,v);}
 function getAccounts(){return asArr(K.accounts);}function saveAccounts(v){setArr(K.accounts,v);}
@@ -543,6 +599,7 @@ function getMessages(){return asArr(K.messages);}function saveMessages(v){setArr
 function getReferrals(){return asArr(K.referrals);}function saveReferrals(v){setArr(K.referrals,v);}
 function getAppts(){return asArr(K.appointments);}function saveAppts(v){setArr(K.appointments,v);}
 function getAdmins(){return asArr(K.adminAccts);}function saveAdmins(v){setArr(K.adminAccts,v);}
+function getContactRequests(){return asArr(K.contactRequests);}function saveContactRequests(v){setArr(K.contactRequests,v);}
 function getWebhook(){return localStorage.getItem(K.webhook)||"";}
 function setWebhook(v){localStorage.setItem(K.webhook,v||"");}
 async function sha256(t){var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0");}).join("");}
@@ -550,8 +607,8 @@ function notice(elId,kind,text){var e=$(elId);if(!e)return;e.innerHTML="";if(!te
 function webhookFire(payload){var url=getWebhook();if(!url)return;try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});}catch(e){}}
 var cloud={ready:false,suspend:0};
 var presenceMap={};
-var REMOTE_KEYS=["leads","accounts","messages","referrals","appointments","admin_accounts"];
-var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts};
+var REMOTE_KEYS=["leads","accounts","messages","referrals","appointments","admin_accounts","contact_requests"];
+var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts,contact_requests:K.contactRequests};
 function setSyncPill(state){var p=$("sync-pill");if(!p)return;if(state==="on"){p.classList.remove("off");$("sync-lbl").textContent="Online";}else{p.classList.add("off");$("sync-lbl").textContent="Offline";}}
 async function cloudPush(key,items){if(!cloud.ready||cloud.suspend>0)return;try{await setDoc(doc(db,"vs_state",key),{items:items,ts:Date.now()});}catch(e){console.warn("cloud push",key,e);}}
 async function initCloud(){
@@ -571,6 +628,7 @@ async function initCloud(){
           if(rk==="referrals")renderReferrals();
           if(rk==="appointments")renderCalendar();
           if(rk==="admin_accounts")renderAdminsList();
+          if(rk==="contact_requests")renderSupport();
         }
       }finally{setTimeout(function(){cloud.suspend=Math.max(0,cloud.suspend-1);},80);}
     },function(err){console.warn("snapshot err",rk,err);setSyncPill("off");});
@@ -694,8 +752,10 @@ function renderLeads(){
     if(l.phone)row.appendChild(el("div",{class:"sub",text:"\uD83D\uDCDE "+l.phone}));
     if(l.dob)row.appendChild(el("div",{class:"sub",text:"DOB: "+l.dob}));
     if(l.address){var addr=[l.address,l.state,l.zipcode].filter(Boolean).join(", ");row.appendChild(el("div",{class:"sub",text:"\uD83D\uDCCD "+addr}));}
-    if(l.notes)row.appendChild(el("div",{class:"meta",text:"Notes: "+l.notes}));
-    row.appendChild(el("div",{class:"meta",text:"Added "+fmtDate(l.created)}));
+    if(l.coverage)row.appendChild(el("div",{class:"sub",text:"Coverage interest: "+l.coverage}));
+    if(l.notes)row.appendChild(el("div",{class:"meta",style:"white-space:pre-wrap",text:l.notes}));
+    var sourceLabel = l.source==="get-a-quote" ? "Quote form" : (l.source==="index-funnel" ? "Homepage funnel" : (l.source||"Manual"));
+    row.appendChild(el("div",{class:"meta",text:"Added "+fmtDate(l.created)+" · Source: "+sourceLabel}));
     var acts=el("div",{class:"acts"});
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Edit",onclick:function(){openLeadForm(l);}}));
     // Convert / View in Clients button
@@ -1053,12 +1113,124 @@ $("export-accts-btn").addEventListener("click",function(){
   downloadFile("clients-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
 });
 
+/* ====== CONTACT REQUESTS (from public contact form) ====== */
+var CR_STATUSES = ["new","responded","closed"];
+var activeCrFilter = "all";
+function renderContactRequests(){
+  if(!$("cr-list")) return;
+  buildDropdown("cr-filter-sel", ["all"].concat(CR_STATUSES),
+    function(){ return activeCrFilter; },
+    function(v){ activeCrFilter = v; },
+    renderContactRequests);
+  var q = ($("cr-search") && $("cr-search").value || "").toLowerCase().trim();
+  var all = getContactRequests();
+  var newCount = all.filter(function(c){ return (c.status||"new") === "new"; }).length;
+  var crBadge = $("b-cr");
+  if(crBadge){ crBadge.textContent = newCount; crBadge.classList.toggle("zero", newCount===0); }
+  var rows = all.filter(function(c){
+    var matchQ = !q || [c.firstName,c.lastName,c.fullName,c.email,c.phone,c.message,c.zip].join(" ").toLowerCase().indexOf(q) >= 0;
+    return matchQ && (activeCrFilter==="all" || (c.status||"new")===activeCrFilter);
+  });
+  var box = $("cr-list"); box.innerHTML = "";
+  if(!rows.length){
+    box.appendChild(el("div",{class:"empty",text: all.length ? "No contact requests match this filter." : "No contact requests yet. They appear here when someone submits the contact form on your site."}));
+    return;
+  }
+  rows.forEach(function(c){
+    var row = el("div",{class:"row cr-row"});
+    var top = el("div",{class:"top"});
+    var nameCol = el("div",{style:"flex:1;min-width:0"});
+    var displayName = c.fullName || ((c.firstName||"") + " " + (c.lastName||"")).trim() || "(no name)";
+    nameCol.appendChild(el("div",{class:"name",text: displayName}));
+    nameCol.appendChild(el("div",{class:"sub",text:"Needs support · from contact form"}));
+    top.appendChild(nameCol);
+    var rightCol = el("div",{style:"display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0"});
+    var st = c.status || "new";
+    rightCol.appendChild(el("span",{class:"status-pill status-"+st,text: st.replace(/-/g," ")}));
+    top.appendChild(rightCol);
+    row.appendChild(top);
+
+    var fields = el("div",{class:"cr-fields"});
+    if(c.email) fields.appendChild(el("div",{class:"cr-field"},[document.createTextNode("✉ "), el("strong",{text:c.email})]));
+    if(c.phone) fields.appendChild(el("div",{class:"cr-field"},[document.createTextNode("📞 "), el("strong",{text:c.phone})]));
+    if(c.zip)   fields.appendChild(el("div",{class:"cr-field"},[document.createTextNode("📍 ZIP "), el("strong",{text:c.zip})]));
+    if(c.sms_opt_in === "yes") fields.appendChild(el("div",{class:"cr-field"},[document.createTextNode("✓ "), el("strong",{text:"SMS opt-in"})]));
+    if(fields.children.length) row.appendChild(fields);
+
+    if(c.message){
+      row.appendChild(el("div",{class:"cr-msg",text:c.message}));
+    }
+
+    var metaBits = [];
+    if(c.created)   metaBits.push("Submitted "+fmtDateTime(c.created));
+    if(c.source)    metaBits.push("Source: "+c.source);
+    if(c.page)      metaBits.push("Page: "+c.page);
+    if(metaBits.length) row.appendChild(el("div",{class:"meta",text: metaBits.join(" · ")}));
+
+    var acts = el("div",{class:"acts"});
+    if(c.email) acts.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:"mailto:"+c.email,text:"✉ Email"}));
+    if(c.phone) acts.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:"tel:"+String(c.phone).replace(/[^0-9+]/g,""),text:"📞 Call"}));
+    if(st === "new") acts.appendChild(el("button",{class:"btn btn-teal btn-sm",type:"button",text:"Mark responded",onclick:function(){updateContactRequest(c.id,{status:"responded",updated:Date.now()});}}));
+    if(st !== "closed") acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Close",onclick:function(){updateContactRequest(c.id,{status:"closed",updated:Date.now()});}}));
+    else acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Reopen",onclick:function(){updateContactRequest(c.id,{status:"new",updated:Date.now()});}}));
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"→ Convert to lead",onclick:function(){convertContactToLead(c);}}));
+    acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete",onclick:function(){
+      if(!confirm("Delete this contact request?")) return;
+      saveContactRequests(getContactRequests().filter(function(x){return x.id!==c.id;}));
+      renderContactRequests(); renderSupport();
+    }}));
+    row.appendChild(acts);
+    box.appendChild(row);
+  });
+}
+function updateContactRequest(id, patch){
+  var arr = getContactRequests().map(function(c){ if(c.id===id) Object.assign(c, patch); return c; });
+  saveContactRequests(arr);
+  renderContactRequests(); renderSupport();
+}
+function convertContactToLead(c){
+  var leads = getLeads();
+  var lead = {
+    id: uid(),
+    firstName: c.firstName || "",
+    lastName:  c.lastName  || "",
+    name:      c.fullName  || ((c.firstName||"")+" "+(c.lastName||"")).trim(),
+    company:   "",
+    phone:     c.phone || "",
+    email:     c.email || "",
+    address:   "",
+    state:     "",
+    zipcode:   c.zip || "",
+    coverage:  "",
+    monthlyPremium: null,
+    status:    "new",
+    notes:     "Converted from contact request" + (c.message ? "\n\n" + c.message : ""),
+    created:   Date.now(),
+    updated:   Date.now()
+  };
+  leads.unshift(lead);
+  saveLeads(leads);
+  updateContactRequest(c.id, {status:"closed", convertedToLeadId:lead.id, updated:Date.now()});
+  switchTab("leads");
+}
+
 /* ====== SUPPORT ====== */
 var activeThreadId=null;
 $("show-closed").addEventListener("change",renderSupport);
+$("cr-search") && $("cr-search").addEventListener("input", renderContactRequests);
+$("export-cr-btn") && $("export-cr-btn").addEventListener("click", function(){
+  var rows = [["firstName","lastName","email","phone","zip","message","sms_opt_in","status","source","submitted"]];
+  getContactRequests().forEach(function(c){
+    rows.push([c.firstName||"",c.lastName||"",c.email||"",c.phone||"",c.zip||"",c.message||"",c.sms_opt_in||"",c.status||"new",c.source||"",c.created?new Date(c.created).toISOString():""].map(csvEscape));
+  });
+  downloadFile("contact-requests-"+new Date().toISOString().slice(0,10)+".csv", rows.map(function(r){return r.join(",");}).join("\n"), "text/csv");
+});
 function renderSupport(){
+  renderContactRequests();
   var msgs=getMessages(),unreadCount=msgs.filter(function(m){return m.from==="client"&&!m.read;}).length;
-  $("b-sup").textContent=unreadCount;var mnb=$("mn-sup");if(mnb){mnb.hidden=unreadCount===0;mnb.textContent=unreadCount;}
+  var newCRs = getContactRequests().filter(function(c){return (c.status||"new")==="new";}).length;
+  var attention = unreadCount + newCRs;
+  $("b-sup").textContent=attention;var mnb=$("mn-sup");if(mnb){mnb.hidden=attention===0;mnb.textContent=attention;}
   var showClosed=$("show-closed").checked,byAcct={};
   msgs.forEach(function(m){(byAcct[m.accountId]=byAcct[m.accountId]||[]).push(m);});
   var ids=Object.keys(byAcct).sort(function(a,b){return Math.max.apply(null,byAcct[b].map(function(x){return x.ts;}))-Math.max.apply(null,byAcct[a].map(function(x){return x.ts;}));});
@@ -1152,8 +1324,8 @@ function renderAdminsList(){var box=$("admins-list");if(!box)return;box.innerHTM
 $("pw-form").addEventListener("submit",async function(e){e.preventDefault();var me=currentAdmin();if(!me)return notice("pw-msg","err","Not signed in.");var cur=$("pw-cur").value,n1=$("pw-new").value,n2=$("pw-new2").value;if(await sha256(cur)!==me.passwordHash)return notice("pw-msg","err","Current password is wrong.");if(n1.length<8)return notice("pw-msg","err","New password must be 8+ chars.");if(n1!==n2)return notice("pw-msg","err","Passwords don't match.");saveAdmins(getAdmins().map(function(a){if(a.id===me.id)a.passwordHash=sha256(n1);return a;}));var hash=await sha256(n1);saveAdmins(getAdmins().map(function(a){if(a.id===me.id)a.passwordHash=hash;return a;}));$("pw-form").reset();notice("pw-msg","ok","Password updated.");});
 $("code-form").addEventListener("submit",function(e){e.preventDefault();var cur=$("code-cur").value,n1=$("code-new").value,n2=$("code-new2").value;if(cur!==currentSetupCode())return notice("code-msg","err","Current code is wrong.");if(!n1)return notice("code-msg","err","New code can't be empty.");if(n1!==n2)return notice("code-msg","err","Codes don't match.");localStorage.setItem(K.setupCode,n1);$("code-form").reset();notice("code-msg","ok","Setup code updated.");});
 $("wh-form").addEventListener("submit",function(e){e.preventDefault();setWebhook($("wh-input").value.trim());notice("wh-msg","ok","Webhook saved.");});
-$("export-all-btn").addEventListener("click",function(){var bundle={exported:new Date().toISOString(),leads:getLeads(),accounts:getAccounts(),messages:getMessages(),referrals:getReferrals(),appointments:getAppts(),admins:getAdmins(),webhook:getWebhook(),setupCode:currentSetupCode()};downloadFile("vsbenefits-backup-"+new Date().toISOString().slice(0,10)+".json",JSON.stringify(bundle,null,2),"application/json");});
-$("import-file").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var b=JSON.parse(r.result);if(b.leads)saveLeads(b.leads);if(b.accounts)saveAccounts(b.accounts);if(b.messages)saveMessages(b.messages);if(b.referrals)saveReferrals(b.referrals);if(b.appointments)saveAppts(b.appointments);if(b.admins)saveAdmins(b.admins);if(b.webhook)setWebhook(b.webhook);if(b.setupCode)localStorage.setItem(K.setupCode,b.setupCode);alert("Import done.");renderAll();}catch(err){alert("Bad JSON file.");}};r.readAsText(f);});
+$("export-all-btn").addEventListener("click",function(){var bundle={exported:new Date().toISOString(),leads:getLeads(),accounts:getAccounts(),messages:getMessages(),referrals:getReferrals(),appointments:getAppts(),admins:getAdmins(),contactRequests:getContactRequests(),webhook:getWebhook(),setupCode:currentSetupCode()};downloadFile("vsbenefits-backup-"+new Date().toISOString().slice(0,10)+".json",JSON.stringify(bundle,null,2),"application/json");});
+$("import-file").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var b=JSON.parse(r.result);if(b.leads)saveLeads(b.leads);if(b.accounts)saveAccounts(b.accounts);if(b.messages)saveMessages(b.messages);if(b.referrals)saveReferrals(b.referrals);if(b.appointments)saveAppts(b.appointments);if(b.admins)saveAdmins(b.admins);if(b.contactRequests)saveContactRequests(b.contactRequests);if(b.webhook)setWebhook(b.webhook);if(b.setupCode)localStorage.setItem(K.setupCode,b.setupCode);alert("Import done.");renderAll();}catch(err){alert("Bad JSON file.");}};r.readAsText(f);});
 
 function renderAll(){renderLeads();renderAccounts();renderSupport();renderReferrals();renderSettings();renderCalendar();}
 loadGcalFromStorage();

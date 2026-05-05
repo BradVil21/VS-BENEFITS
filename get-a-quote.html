@@ -834,13 +834,48 @@ footer a:hover{color:#fff}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<!-- =====================================================================
+     FIREBASE BRIDGE — pushes each quote-form submission into the admin
+     portal as a "New Lead" (status = new). The Zapier/Make webhook below
+     still fires too, so your workflow automation keeps running.
+     ===================================================================== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U",
+  authDomain: "vs-benefits-c1da9.firebaseapp.com",
+  projectId: "vs-benefits-c1da9",
+  storageBucket: "vs-benefits-c1da9.firebasestorage.app",
+  messagingSenderId: "487471388882",
+  appId: "1:487471388882:web:63e98e6699d5a823e3f50b"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+let _authReady = signInAnonymously(auth).catch(function(){});
+window.vsAdminWrite = async function(key, item){
+  try { await _authReady; } catch(e){}
+  var ref = doc(db, "vs_state", key);
+  var items = [];
+  try {
+    var snap = await getDoc(ref);
+    if (snap.exists() && Array.isArray(snap.data().items)) items = snap.data().items;
+  } catch(e){}
+  items.unshift(item);
+  try { await setDoc(ref, { items: items, ts: Date.now() }); } catch(e){}
+};
+</script>
+
 <script>
 /* VS Benefits - vshealthbenefits.com
    Mobile-first interactivity: nav, countdown, coverage picker, form submit.
    ============================================================
-   MAKE.COM WEBHOOK SETUP
-   Replace the URL below with your Make.com webhook URL so every
-   form submission (from any page) is sent to your Make scenario.
+   ZAPIER / MAKE WEBHOOK — paste your URL below.
+   Every quote submission is POSTed here AND added to the admin
+   portal's Leads tab as a new lead.
    ============================================================ */
 
 window.MAKE_WEBHOOK_URL = window.MAKE_WEBHOOK_URL || "https://services.leadconnectorhq.com/hooks/V5Px5jvE14SWLdNrFeGL/webhook-trigger/d9cf69ed-4e52-4c7d-bf11-580204f9cce7";
@@ -966,6 +1001,45 @@ document.addEventListener("DOMContentLoaded", function () {
       data._source="vshealthbenefits.com";
       data._page  =window.location.pathname;
       data._ts    =new Date().toISOString();
+
+      // ALSO push to admin portal's Leads tab
+      try {
+        if (typeof window.vsAdminWrite === "function") {
+          var nameParts = (data.full_name || "").trim().split(/\s+/);
+          var firstName = nameParts.shift() || "";
+          var lastName  = nameParts.join(" ");
+          window.vsAdminWrite("leads", {
+            id: "id_" + Math.random().toString(36).slice(2,10) + Date.now().toString(36),
+            firstName: firstName,
+            lastName:  lastName,
+            name: data.full_name || "",
+            email: data.email || "",
+            phone: data.phone || "",
+            zipcode: data.zip || "",
+            state: "",
+            address: "",
+            company: "",
+            coverage: data.coverage_type || "",
+            household_size: data.household_size || "",
+            effective_date: data.effective_date || "",
+            current_coverage: data.current_coverage || "",
+            monthlyPremium: null,
+            status: "new",
+            notes: [
+              data.coverage_type ? "Coverage: " + data.coverage_type : "",
+              data.household_size ? "Household/team: " + data.household_size : "",
+              data.effective_date ? "Effective: " + data.effective_date : "",
+              data.current_coverage ? "Current: " + data.current_coverage : "",
+              data.notes ? "Notes: " + data.notes : ""
+            ].filter(Boolean).join("\n"),
+            source: "get-a-quote",
+            page: window.location.pathname,
+            created: Date.now(),
+            submitted_at: new Date().toISOString()
+          });
+        }
+      } catch(e2) { /* don't block the user */ }
+
       var webhook=form.getAttribute("data-webhook")||window.MAKE_WEBHOOK_URL;
       var mailto =form.getAttribute("data-mailto") ||"bvilsainthealth@gmail.com";
       var btn=form.querySelector('button[type="submit"],input[type="submit"]');

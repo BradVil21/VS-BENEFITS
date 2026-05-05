@@ -1179,6 +1179,40 @@ p{color:var(--ink-2)}
   <p>By submitting this form you agree to our <a href="https://vshealthbenefits.com/privacy.html">Privacy Policy</a> and consent to be contacted by a licensed VS Benefits advisor. We never sell your information. VS Benefits is an independent insurance advisor licensed in 40+ states.</p>
 </footer>
 
+<!-- =====================================================================
+     FIREBASE BRIDGE — pushes each funnel completion into the admin
+     portal as a "New Lead" (status = new). The Zapier/Make webhook
+     below still fires too, so your workflow automation keeps running.
+     ===================================================================== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U",
+  authDomain: "vs-benefits-c1da9.firebaseapp.com",
+  projectId: "vs-benefits-c1da9",
+  storageBucket: "vs-benefits-c1da9.firebasestorage.app",
+  messagingSenderId: "487471388882",
+  appId: "1:487471388882:web:63e98e6699d5a823e3f50b"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+let _authReady = signInAnonymously(auth).catch(function(){});
+window.vsAdminWrite = async function(key, item){
+  try { await _authReady; } catch(e){}
+  var ref = doc(db, "vs_state", key);
+  var items = [];
+  try {
+    var snap = await getDoc(ref);
+    if (snap.exists() && Array.isArray(snap.data().items)) items = snap.data().items;
+  } catch(e){}
+  items.unshift(item);
+  try { await setDoc(ref, { items: items, ts: Date.now() }); } catch(e){}
+};
+</script>
+
 <script>
 (function(){
   // ---- STATE ----
@@ -1382,8 +1416,12 @@ p{color:var(--ink-2)}
     };
   }
 
-  // ---- WEBHOOK URL (paste your Zapier or Make URL here) ----
-  var WEBHOOK_URL = 'YOUR_ZAPIER_OR_MAKE_WEBHOOK_URL_HERE';
+  // ---- ZAPIER / MAKE WEBHOOK URL ----
+  // Every funnel completion is POSTed here AND added to the admin
+  // portal's Leads tab as a new lead. Replace with your own webhook
+  // URL (Zapier, Make.com, GoHighLevel/LeadConnector, etc.) to
+  // trigger your own workflow automation.
+  var WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/V5Px5jvE14SWLdNrFeGL/webhook-trigger/d9cf69ed-4e52-4c7d-bf11-580204f9cce7';
 
   // ---- CONFETTI ----
   function launchConfetti(){
@@ -1437,6 +1475,61 @@ p{color:var(--ink-2)}
     requestAnimationFrame(draw);
   }
 
+  // ---- BUILD ADMIN-PORTAL LEAD ITEM ----
+  function toAdminLead(data){
+    var firstName, lastName, name, address, zip, state, phone, email, coverage, notes;
+    var extras = [];
+    if(data.type === 'individual'){
+      firstName = data.firstName || '';
+      lastName  = data.lastName  || '';
+      name      = (firstName + ' ' + lastName).trim();
+      address   = data.address || '';
+      zip       = data.zip || '';
+      state     = data.state || '';
+      phone     = data.phone || '';
+      email     = data.email || '';
+      coverage  = 'Individual / Family';
+      if(data.dob)         extras.push('DOB: ' + data.dob);
+      if(data.income)      extras.push('Household income: ' + data.income);
+      if(data.situations && data.situations.length) extras.push('Situation: ' + data.situations.join(', '));
+    } else {
+      firstName = data.ownerFirstName || '';
+      lastName  = data.ownerLastName  || '';
+      name      = (firstName + ' ' + lastName).trim();
+      address   = data.businessAddress || '';
+      zip       = data.businessZip || '';
+      state     = data.businessState || '';
+      phone     = data.contactPhone || data.businessPhone || '';
+      email     = '';
+      coverage  = 'Employer / Group';
+      if(data.businessName) extras.push('Business: ' + data.businessName);
+      if(data.employees)    extras.push('Employees: ' + data.employees);
+      if(data.businessPhone && data.businessPhone !== phone) extras.push('Business phone: ' + data.businessPhone);
+      if(data.situations && data.situations.length) extras.push('Situation: ' + data.situations.join(', '));
+    }
+    return {
+      id: 'id_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36),
+      firstName: firstName,
+      lastName:  lastName,
+      name:      name,
+      email:     email,
+      phone:     phone,
+      dob:       data.dob || '',
+      address:   address,
+      state:     state,
+      zipcode:   zip,
+      company:   data.businessName || '',
+      coverage:  coverage,
+      monthlyPremium: null,
+      status:    'new',
+      notes:     extras.join('\n'),
+      source:    'index-funnel',
+      type:      data.type,
+      created:   Date.now(),
+      submitted_at: new Date().toISOString()
+    };
+  }
+
   // ---- SEND TO WEBHOOK ----
   function sendToWebhook(data, btnEl){
     // Turn button green + loading state
@@ -1451,18 +1544,30 @@ p{color:var(--ink-2)}
 
     var payload = Object.assign({}, data, { submitted_at: new Date().toISOString(), source: window.location.href });
 
+    // Push into admin portal's Leads tab (independent of webhook)
+    try {
+      if (typeof window.vsAdminWrite === 'function') {
+        window.vsAdminWrite('leads', toAdminLead(data));
+      }
+    } catch(e){ /* don't block the user */ }
+
+    var webhookOk = WEBHOOK_URL && WEBHOOK_URL.indexOf('http') === 0 && WEBHOOK_URL.indexOf('YOUR_') === -1;
+    var done = function(){
+      setTimeout(function(){
+        updateProgress(data.type === 'individual' ? IND_STEPS : BIZ_STEPS, data.type === 'individual' ? IND_STEPS : BIZ_STEPS);
+        showPanel('panel-success');
+      }, 900);
+    };
+
+    if(!webhookOk){ done(); return; }
+
     fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
     .catch(function(err){ console.warn('Webhook error:', err); })
-    .finally(function(){
-      setTimeout(function(){
-        updateProgress(data.type === 'individual' ? IND_STEPS : BIZ_STEPS, data.type === 'individual' ? IND_STEPS : BIZ_STEPS);
-        showPanel('panel-success');
-      }, 900);
-    });
+    .finally(done);
   }
 
   // ---- SUBMIT ----

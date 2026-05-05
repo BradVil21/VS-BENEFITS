@@ -354,13 +354,52 @@ footer a:hover{color:#fff}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<!-- =====================================================================
+     FIREBASE BRIDGE — pushes each contact-form submission into the
+     admin portal as a "Support Request" (status = needing support).
+     The Zapier/Make webhook below still fires too, so your workflow
+     automation keeps running.
+     ===================================================================== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U",
+  authDomain: "vs-benefits-c1da9.firebaseapp.com",
+  projectId: "vs-benefits-c1da9",
+  storageBucket: "vs-benefits-c1da9.firebasestorage.app",
+  messagingSenderId: "487471388882",
+  appId: "1:487471388882:web:63e98e6699d5a823e3f50b"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+let _authReady = signInAnonymously(auth).catch(function(){});
+window.vsAdminWrite = async function(key, item){
+  try { await _authReady; } catch(e){}
+  var ref = doc(db, "vs_state", key);
+  var items = [];
+  try {
+    var snap = await getDoc(ref);
+    if (snap.exists() && Array.isArray(snap.data().items)) items = snap.data().items;
+  } catch(e){}
+  items.unshift(item);
+  try { await setDoc(ref, { items: items, ts: Date.now() }); } catch(e){}
+};
+</script>
+
 <script>
 /* VS Benefits - vshealthbenefits.com - contact.html
-   Webhook: LeadConnector / GoHighLevel
-   Delivery strategy: navigator.sendBeacon (primary) + keepalive fetch (fallback) */
+   ============================================================
+   ZAPIER / MAKE WEBHOOK — paste your URL below.
+   Every contact form submission is POSTed to this URL AND
+   added to the admin portal's Support tab as a new request.
+   ============================================================ */
 
 window.LEAD_WEBHOOK_URL = window.LEAD_WEBHOOK_URL ||
-"WEBOOK-URL";
+"https://services.leadconnectorhq.com/hooks/V5Px5jvE14SWLdNrFeGL/webhook-trigger/d9cf69ed-4e52-4c7d-bf11-580204f9cce7";
 
 /* ---------- Webhook delivery ----------
    Why sendBeacon: LeadConnector's webhook-trigger endpoint does NOT return
@@ -473,6 +512,31 @@ document.addEventListener("DOMContentLoaded", function () {
       // Send to LeadConnector (sendBeacon -> fetch fallback)
       var webhook = form.getAttribute("data-webhook") || window.LEAD_WEBHOOK_URL;
       sendWebhook(webhook, data);
+
+      // ALSO push to admin portal's Support tab as a contact request
+      try {
+        if (typeof window.vsAdminWrite === "function") {
+          var nameParts = (data.full_name || "").trim().split(/\s+/);
+          window.vsAdminWrite("contact_requests", {
+            id: "id_" + Math.random().toString(36).slice(2,10) + Date.now().toString(36),
+            firstName: nameParts.shift() || "",
+            lastName: nameParts.join(" "),
+            fullName: data.full_name || "",
+            email: data.email || "",
+            phone: data.phone || "",
+            zip: data.zip || data.postal_code || "",
+            message: data.message || data.notes || "",
+            sms_opt_in: data.sms_opt_in || "no",
+            status: "new",
+            source: "contact-form",
+            page: window.location.pathname,
+            user_agent: navigator.userAgent,
+            referrer: document.referrer || "",
+            created: Date.now(),
+            submitted_at: new Date().toISOString()
+          });
+        }
+      } catch(e) { /* don't block the user */ }
 
       // Friendly inline note
       var note = form.querySelector(".form-success");
