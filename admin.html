@@ -1131,21 +1131,52 @@ async function initCloud(){
     onSnapshot(doc(db,"vs_state",rk),function(snap){
       if(!snap.exists())return;
       var items=snap.data().items||[];
-      var prevCount=asArr(REMOTE_TO_LOCAL[rk]).length;
+      var prevItems=asArr(REMOTE_TO_LOCAL[rk]);
+      var prevCount=prevItems.length;
       cloud.suspend++;
       try{
         setArrLocal(REMOTE_TO_LOCAL[rk],items);
         // Fire notifications for new incoming data
         if(rk==="leads"&&prevCount>=0&&items.length>prevCount&&$("dash-view")&&!$("dash-view").hidden){
-          var newest=items[0];if(newest)addNotif("lead","New lead: "+fullName(newest),"Just arrived from the website","leads");
+          var prevLeadIds={};prevItems.forEach(function(l){if(l&&l.id)prevLeadIds[l.id]=true;});
+          var newLeads=items.filter(function(l){return l&&l.id&&!prevLeadIds[l.id];});
+          if(newLeads.length===1){
+            addNotif("lead","New lead: "+fullName(newLeads[0]),"Just arrived from the website — start their 7-day sequence","leads");
+          }else if(newLeads.length>1){
+            addNotif("lead",newLeads.length+" new leads arrived","Click to review and start their sequences","leads");
+          }else{
+            var newest=items[0];if(newest)addNotif("lead","New lead: "+fullName(newest),"Just arrived from the website","leads");
+          }
         }
         if(rk==="messages"&&$("dash-view")&&!$("dash-view").hidden){
           var newUnread=items.filter(function(m){return m.from==="client"&&!m.read;}).length;
-          var oldUnread=getMessages().filter(function(m){return m.from==="client"&&!m.read;}).length;
-          if(newUnread>oldUnread){addNotif("support","New client message","A client sent you a message","support");}
+          var oldUnread=prevItems.filter(function(m){return m.from==="client"&&!m.read;}).length;
+          if(newUnread>oldUnread){
+            var prevMsgIds={};prevItems.forEach(function(m){if(m&&m.id)prevMsgIds[m.id]=true;});
+            var newMsgs=items.filter(function(m){return m&&m.from==="client"&&!m.read&&!prevMsgIds[m.id];});
+            if(newMsgs.length===1){
+              var who="A client";
+              try{
+                var cid=newMsgs[0].clientId||newMsgs[0].accountId;
+                if(cid){
+                  var acct=getAccounts().filter(function(a){return a.id===cid;})[0];
+                  if(acct)who=fullName(acct);
+                }
+              }catch(e){}
+              var preview=newMsgs[0].text?String(newMsgs[0].text).slice(0,80):"Open support to reply";
+              addNotif("support","New message from "+who,preview,"support");
+            }else if(newMsgs.length>1){
+              addNotif("support",newMsgs.length+" new client messages","Click to review","support");
+            }else{
+              addNotif("support","New client message","A client sent you a message","support");
+            }
+          }
         }
         if(!$("dash-view").hidden){
-          if(rk==="leads"){renderLeads();renderPipeline();renderTasks();}
+          if(rk==="leads"){renderLeads();renderPipeline();renderTasks();
+            // re-evaluate stale leads when lead list changes
+            if(typeof checkTaskNotifications==="function")setTimeout(checkTaskNotifications,300);
+          }
           if(rk==="accounts"){renderAccounts();renderSupport();renderAdminsList();renderPipeline();}
           if(rk==="messages"){renderSupport();if(activeThreadId)selectThread(activeThreadId);}
           if(rk==="referrals")renderReferrals();
@@ -1202,6 +1233,14 @@ async function route(){
   $("dash-view").hidden=false;$("signout-btn").hidden=false;$("mobile-nav").hidden=false;$("bell-btn").hidden=false;
   updateBellBadge();
   renderAll();switchTab("leads");
+  // Check for task-related notifications (stale leads, daily summary) on login
+  // and every 15 minutes after to catch newly stale leads in long sessions.
+  setTimeout(checkTaskNotifications,1500);
+  if(!window._vsTaskNotifTimer){
+    window._vsTaskNotifTimer=setInterval(function(){
+      if($("dash-view")&&!$("dash-view").hidden)checkTaskNotifications();
+    },15*60*1000);
+  }
 }
 
 $("go-signup").addEventListener("click",function(){$("login-view").hidden=true;$("signup-view").hidden=false;});
@@ -2536,6 +2575,53 @@ function renderTasks(){
 function updateTasksBadge(n){
   var b=$("b-tasks");if(b)b.textContent=n;
   var mn=$("mn-tasks");if(mn){mn.hidden=n===0;mn.textContent=n;}
+}
+
+/* ── TASK NOTIFICATIONS ─────────────────────────────────────────────
+   Fires bell-icon notifications for:
+   1. Newly stale leads (7+ days inactive)
+   2. Pending daily task summary (once per day)
+   Tracks what's already been shown in localStorage to avoid duplicates. */
+function getTaskNotifShown(){
+  try{
+    var s=JSON.parse(localStorage.getItem("vs_task_notif_shown")||"{}");
+    if(s.date!==todayStr())return {date:todayStr(),staleLeadIds:[],dailyShown:false};
+    if(!s.staleLeadIds)s.staleLeadIds=[];
+    return s;
+  }catch(e){return {date:todayStr(),staleLeadIds:[],dailyShown:false};}
+}
+function setTaskNotifShown(s){try{localStorage.setItem("vs_task_notif_shown",JSON.stringify(s));}catch(e){}}
+function checkTaskNotifications(){
+  if(!$("dash-view")||$("dash-view").hidden)return;
+  var shown=getTaskNotifShown();
+  var leads=getLeads().filter(function(l){
+    var st=l.status||"new";
+    return st!=="sold"&&st!=="no-longer-interested"&&st!=="lost"&&st!=="declined";
+  });
+  if(!leads.length){setTaskNotifShown(shown);return;}
+  var pendingTotal=0;
+  var newStale=[];
+  leads.forEach(function(lead){
+    var seqState=getLeadSeq(lead.id);
+    if(!seqState)return;
+    if(isSeqStale(lead.id)){
+      if(shown.staleLeadIds.indexOf(lead.id)<0)newStale.push(lead);
+      return;
+    }
+    var curDay=seqDay(lead.id);
+    var dayTasks=SEQ_DAYS[Math.min(curDay-1,6)]||[];
+    var pending=dayTasks.filter(function(t,i){return !isTaskDone(lead.id,curDay,i);}).length;
+    pendingTotal+=pending;
+  });
+  newStale.forEach(function(lead){
+    addNotif("task","⚠️ "+fullName(lead)+" has gone stale","7+ days inactive — needs follow-up","tasks");
+    shown.staleLeadIds.push(lead.id);
+  });
+  if(!shown.dailyShown&&pendingTotal>0){
+    addNotif("task","You have "+pendingTotal+" task"+(pendingTotal===1?"":"s")+" pending today","Click to review your sales sequences","tasks");
+    shown.dailyShown=true;
+  }
+  setTaskNotifShown(shown);
 }
 
 /* ====================================================================
