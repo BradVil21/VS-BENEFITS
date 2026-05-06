@@ -2376,7 +2376,7 @@ document.addEventListener("click",function(e){
     dd.classList.remove("open");
 });
 $("notif-mark-all").addEventListener("click",function(){
-  saveNotifs(getNotifs().map(function(n){n.read=true;return n;}));
+  saveNotifs([]);
   updateBellBadge();renderNotifList();
 });
 
