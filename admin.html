@@ -1191,6 +1191,82 @@ async function initCloud(){
     presenceMap=snap.data().map||{};
     if(!$("dash-view").hidden)renderAccounts();
   });
+
+  /* ── Contact-form → Support tab listener ──────────────────────────────
+     When contact.html submits a "needing support" request it writes to
+     vs_state/contact_requests. We listen here, convert each new item into
+     a real support thread, and fire a bell notification pointing to Support. */
+  var _knownContactIds=null; // null = first snapshot (boot), skip notif
+  onSnapshot(doc(db,"vs_state","contact_requests"),function(snap){
+    if(!snap.exists())return;
+    var items=snap.data().items||[];
+    if(_knownContactIds===null){
+      // First load: just remember existing IDs so we can detect future ones
+      _knownContactIds={};
+      items.forEach(function(r){if(r&&r.id)_knownContactIds[r.id]=true;});
+      return;
+    }
+    // Find items we haven't seen before
+    var newItems=items.filter(function(r){return r&&r.id&&!_knownContactIds[r.id];});
+    if(!newItems.length)return;
+    newItems.forEach(function(r){
+      _knownContactIds[r.id]=true;
+
+      // Create (or reuse) a guest client account for this contact
+      var accts=getAccounts();
+      var email=normEmail(r.email||"");
+      var existing=email?accts.filter(function(a){return normEmail(a.email)===email;})[0]:null;
+      var accountId;
+      if(existing){
+        accountId=existing.id;
+      }else{
+        accountId="cr_"+r.id; // stable ID derived from the contact request
+        var newAcct={
+          id:accountId,
+          firstName:r.firstName||r.fullName||"Contact",
+          lastName:r.lastName||"",
+          email:r.email||"",
+          phone:r.phone||"",
+          zip:r.zip||"",
+          passwordHash:"",
+          created:r.created||Date.now(),
+          lastSignIn:0,
+          status:"active",
+          plan:null,
+          photoDataUrl:"",
+          documents:[],
+          _fromContactForm:true
+        };
+        accts.push(newAcct);
+        saveAccounts(accts);
+      }
+
+      // Add an unread support message so the thread appears in Support tab
+      var msgText="📋 Contact form request"
+        +(r.message?"\n\n"+r.message:"")
+        +(r.zip?"\n\nZIP: "+r.zip:"")
+        +(r.phone?"\n📞 "+r.phone:"")
+        +(r.email?"\n✉ "+r.email:"");
+      var msgs=getMessages();
+      msgs.push({
+        id:r.id,
+        accountId:accountId,
+        from:"client",
+        text:msgText,
+        ts:r.created||Date.now(),
+        read:false,
+        source:"contact-form"
+      });
+      saveMessages(msgs);
+
+      // Fire bell notification → clicking it switches to Support tab
+      var displayName=(r.fullName||((r.firstName||"")+" "+(r.lastName||"")).trim()||r.email||"Someone").trim();
+      addNotif("support","Support request from "+displayName,r.message?String(r.message).slice(0,80):"Submitted via the contact form","support");
+
+      // Refresh Support tab if it's visible
+      if($("dash-view")&&!$("dash-view").hidden){renderSupport();}
+    });
+  });
 }
 
 async function pullOnce(rk){
