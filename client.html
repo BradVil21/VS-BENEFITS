@@ -161,13 +161,13 @@ input,select,textarea{font-family:inherit;font-size:16px}
 <body>
 
 <div class="bar">
-  <a class="brand" href="index.html">
+  <a class="brand" href="/">
     <span class="b">VS</span>
     <span>VS Benefits</span>
   </a>
   <div class="right">
     <span id="sync-pill" class="sync-pill"><span class="dot"></span><span id="sync-label">Connecting</span></span>
-    <a class="home" href="index.html">Home</a>
+    <a class="home" href="/">Home</a>
     <button id="signout-btn" class="signout" hidden>Sign out</button>
   </div>
 </div>
@@ -197,7 +197,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
           <input id="li-pw" type="password" autocomplete="current-password" required />
         </div>
         <button class="btn btn-primary" type="submit">Sign in</button>
-        <p class="muted" style="margin-top:14px;text-align:center">Forgot your password? <a href="contact.html">Contact your advisor</a> to reset it.</p>
+        <p class="muted" style="margin-top:14px;text-align:center">Forgot your password? <a href="/contact">Contact your advisor</a> to reset it.</p>
       </form>
 
       <!-- Sign up -->
@@ -272,7 +272,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
             <div class="item"><div class="lbl">Phone</div><div class="val" id="pv-phone">--</div></div>
             <div class="item"><div class="lbl">Member since</div><div class="val" id="pv-since">--</div></div>
           </div>
-          <div class="notice notice-info">Need to update your name, email, or phone? <a href="contact.html">Send your advisor a message</a> and they'll update your file.</div>
+          <div class="notice notice-info">Need to update your name, email, or phone? <a href="/contact">Send your advisor a message</a> and they'll update your file.</div>
 
           <div class="sec-title"><h3>Change password</h3></div>
           <div class="subcard">
@@ -358,7 +358,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
   </section>
 
   <div class="foot">
-    &copy; <span id="yr"></span> VS Benefits &middot; <a href="index.html">Home</a> &middot; <a href="contact.html">Contact</a>
+    &copy; <span id="yr"></span> VS Benefits &middot; <a href="/">Home</a> &middot; <a href="/contact">Contact</a>
   </div>
 </main>
 
@@ -751,7 +751,7 @@ function renderPlan(){
   if(!p||(!p.carrier&&!p.planName)){
     var d=document.createElement("div");
     d.className="plan-empty";
-    d.innerHTML='<strong>No plan on file yet.</strong><br/>Once your advisor enrolls you, your plan details will appear here. <a href="contact.html">Reach out</a> if you have questions.';
+    d.innerHTML='<strong>No plan on file yet.</strong><br/>Once your advisor enrolls you, your plan details will appear here. <a href="/contact">Reach out</a> if you have questions.';
     box.appendChild(d);
     return;
   }
