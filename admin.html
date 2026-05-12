@@ -124,6 +124,7 @@ html.dark .status-pill{border:1px solid transparent}
 html.dark .status-new{background:#0f2040;color:#7eb6ff;border-color:#1e3a6a}
 html.dark .status-contacted{background:#201500;color:#f0a020;border-color:#3a2800}
 html.dark .status-quoted{background:#0a1e30;color:#5ab8f0;border-color:#1a3a54}
+html.dark .status-60-days-out{background:#1e1400;color:#f0c060;border-color:#3a2800}
 html.dark .status-enrolled{background:#0a2018;color:#22d47a;border-color:#1a4030}
 html.dark .status-lost{background:#200d0d;color:#ff7070;border-color:#4a1818}
 html.dark .status-active{background:#0a2018;color:#22d47a;border-color:#1a4030}
@@ -249,6 +250,8 @@ html.dark .pipe-declined .pipe-header{background:#200d0d;color:#ff8080;border-co
 html.dark .pipe-follow-up .pipe-header{background:#201500;color:#f0a020;border-color:#3a2800 !important}
 html.dark .pipe-appointment-scheduled .pipe-header{background:#0f2040;color:#7eb6ff;border-color:#1e3a6a !important}
 html.dark .pipe-no-longer-interested .pipe-header{background:#1a1f2a;color:#7a9ab8;border-color:#253a54 !important}
+html.dark .pipe-quoted .pipe-header{background:#0f1a3a;color:#7eb6ff;border-color:#1e306a !important}
+html.dark .pipe-60-days-out .pipe-header{background:#201800;color:#f0c060;border-color:#3a2c00 !important}
 
 /* dark mode theme toggle button in top bar */
 .theme-btn{
@@ -367,6 +370,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .status-new{background:#e7f0ff;color:var(--blue-700)}
 .status-contacted{background:#fff4e1;color:var(--warn)}
 .status-quoted{background:#e7f6ff;color:#0b6996}
+.status-60-days-out{background:#fff4e0;color:#8a5000}
 .status-enrolled{background:#e6f7ef;color:var(--ok)}
 .status-lost{background:#fbe7e7;color:var(--err)}
 .status-active{background:#e6f7ef;color:var(--ok)}
@@ -467,6 +471,8 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .pipe-follow-up .pipe-header{background:#fff8e1;color:#7a5000;border-color:#f0d87a}
 .pipe-appointment-scheduled .pipe-header{background:#e7f0ff;color:var(--blue-700);border-color:#b8d0f5}
 .pipe-no-longer-interested .pipe-header{background:#f5f5f5;color:var(--muted);border-color:#d0d7e2}
+.pipe-quoted .pipe-header{background:#f0f4ff;color:#3a5fbf;border-color:#b8c8f5}
+.pipe-60-days-out .pipe-header{background:#fff4e6;color:#8a5000;border-color:#f5d4a0}
 .pipe-col-body{display:flex;flex-direction:column;gap:8px;min-height:80px;padding:6px;border-radius:10px;border:2px dashed transparent;transition:border-color .2s,background .2s}
 .pipe-col-body.drag-over{border-color:var(--blue-500);background:var(--blue-50)}
 .pipe-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:grab;transition:box-shadow .15s;user-select:none;position:relative}
@@ -643,6 +649,65 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .stale-body{padding:14px 16px}
 .stale-body p{margin:0 0 12px;font-size:13.5px;color:var(--ink-2);line-height:1.5}
 .stale-acts{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ── SLOW FOLLOW-UP CARD (after 7-day stale) ── */
+.slow-followup-card{
+  background:#fff;border:2px solid #b8d0f5;border-radius:var(--r-lg);
+  margin-bottom:14px;overflow:hidden;
+}
+.slow-followup-head{
+  background:linear-gradient(135deg,#16447f,#2f7de0);
+  color:#fff;padding:13px 16px;
+  display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.slow-followup-head h3{margin:0;font-size:15px;color:#fff;font-family:Poppins,sans-serif}
+.slow-followup-badge{background:rgba(255,255,255,.2);color:#cfe1ff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+.slow-followup-body{padding:14px 16px}
+.slow-followup-body p{margin:0 0 12px;font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.slow-followup-acts{display:flex;flex-wrap:wrap;gap:8px}
+.slow-followup-sched{
+  background:var(--blue-50);border:1px solid var(--blue-100);border-radius:var(--r-md);
+  padding:10px 14px;margin-bottom:12px;
+}
+.slow-followup-sched .sfs-label{font-size:11px;font-weight:700;color:var(--blue-700);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.slow-followup-task{
+  display:flex;align-items:center;gap:10px;padding:8px 0;
+  border-bottom:1px solid var(--line-2);font-size:13px;
+}
+.slow-followup-task:last-child{border-bottom:none}
+.slow-followup-task .sft-icon{font-size:16px;flex-shrink:0}
+.slow-followup-task .sft-text{flex:1;min-width:0}
+.slow-followup-task .sft-main{font-weight:600;color:var(--ink)}
+.slow-followup-task .sft-sub{font-size:11.5px;color:var(--muted);margin-top:1px}
+
+/* ── NEW LEAD CARD — eye-catching highlight ── */
+.row.row-new-lead{
+  border:2px solid var(--blue-500) !important;
+  background:linear-gradient(135deg,#f0f6ff 0%,#e8f4ff 100%) !important;
+  box-shadow:0 4px 20px rgba(47,125,224,.18),0 0 0 3px rgba(47,125,224,.08) !important;
+  position:relative;
+}
+.new-lead-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  background:linear-gradient(135deg,var(--blue-600),var(--teal));
+  color:#fff;font-size:10px;font-weight:800;padding:3px 9px;border-radius:999px;
+  letter-spacing:.06em;text-transform:uppercase;animation:newleadpulse 2s ease-in-out infinite;
+  margin-left:6px;vertical-align:middle;
+}
+@keyframes newleadpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.85;transform:scale(1.04)}}
+html.dark .row.row-new-lead{
+  border-color:#4a9eff !important;
+  background:linear-gradient(135deg,#162540 0%,#1a2d4a 100%) !important;
+  box-shadow:0 4px 20px rgba(74,158,255,.22),0 0 0 3px rgba(74,158,255,.10) !important;
+}
+html.dark .slow-followup-card{border-color:#1e3a6a}
+html.dark .slow-followup-head{background:linear-gradient(135deg,#1e3a5e,#2456a0)}
+html.dark .slow-followup-body p{color:#b8cce4}
+html.dark .slow-followup-sched{background:#111d2b;border-color:#1a2d4a}
+html.dark .slow-followup-sched .sfs-label{color:#6ab4ff}
+html.dark .slow-followup-task{border-color:#1e3048}
+html.dark .slow-followup-task .sft-main{color:#f0f4fa}
+html.dark .slow-followup-task .sft-sub{color:#7a9ab8}
 
 /* sound / toggle */
 .sound-row{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--blue-50);border:1px solid var(--line);border-radius:10px;margin-top:10px}
@@ -1426,7 +1491,7 @@ function buildFilterChips(containerId,options,getActive,setActive,onchange){
    LEADS
    ==================================================================== */
 var LEAD_STATUSES_FULL=["sold","declined","follow-up","appointment-scheduled","no-longer-interested"];
-var LEAD_STATUSES=["new","contacted","quoted"].concat(LEAD_STATUSES_FULL).concat(["enrolled","lost"]);
+var LEAD_STATUSES=["new","contacted","quoted","60-days-out"].concat(LEAD_STATUSES_FULL).concat(["enrolled","lost"]);
 var activeLeadFilter="all";
 
 function renderLeads(){
@@ -1446,11 +1511,20 @@ function renderLeads(){
   var mnb=$("mn-leads");if(mnb){mnb.hidden=getLeads().length===0;mnb.textContent=getLeads().length;}
   if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No leads match this filter. Try a different one or add a new lead."}));return;}
   rows.forEach(function(l){
-    var row=el("div",{class:"row"});
+    var isNew=(l.status||"new")==="new";
+    var row=el("div",{class:"row"+(isNew?" row-new-lead":"")});
     var top=el("div",{class:"top"});
-    var name=el("div",{},[el("div",{class:"name",text:fullName(l)})]);
-    if(l.company)name.appendChild(el("div",{class:"sub",text:l.company}));
-    top.appendChild(name);
+    var nameWrap=el("div",{});
+    var nameLine=el("div",{class:"name"});
+    nameLine.textContent=fullName(l);
+    if(isNew){
+      var nb=el("span",{class:"new-lead-badge"});
+      nb.innerHTML="✨ New";
+      nameLine.appendChild(nb);
+    }
+    nameWrap.appendChild(nameLine);
+    if(l.company)nameWrap.appendChild(el("div",{class:"sub",text:l.company}));
+    top.appendChild(nameWrap);
     top.appendChild(el("span",{class:"status-pill status-"+(l.status||"new"),text:(l.status||"new").replace(/-/g," ")}));
     row.appendChild(top);
     if(l.email)row.appendChild(el("div",{class:"sub",text:"✉ "+l.email}));
@@ -1461,6 +1535,19 @@ function renderLeads(){
     row.appendChild(el("div",{class:"meta",text:"Added "+fmtDate(l.created)}));
     var acts=el("div",{class:"acts"});
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Edit",onclick:function(){openLeadForm(l);}}));
+    // Tasks add/remove
+    var hasSeq=!!getLeadSeq(l.id);
+    if(hasSeq){
+      acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"✕ Remove from Tasks",onclick:function(){
+        if(!confirm("Remove "+fullName(l)+" from Tasks? Their sequence will be cleared."))return;
+        var seqs=getSeqs();delete seqs[l.id];saveSeqs(seqs);renderLeads();renderTasks();
+      }}));
+    }else{
+      acts.appendChild(el("button",{class:"btn btn-teal btn-sm",type:"button",text:"🎯 Add to Tasks",onclick:function(){
+        initLeadSeq(l.id);renderLeads();renderTasks();
+        addNotif("task","Added to Tasks: "+fullName(l),"7-day follow-up sequence started","tasks");
+      }}));
+    }
     acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"Delete",onclick:function(){if(confirm("Delete this lead?")){saveLeads(getLeads().filter(function(x){return x.id!==l.id;}));renderLeads();renderPipeline();}}}));
     row.appendChild(acts);
     box.appendChild(row);
@@ -1518,8 +1605,8 @@ $("export-leads-btn").addEventListener("click",function(){
 /* ====================================================================
    PIPELINE
    ==================================================================== */
-var PIPE_STAGES=["sold","follow-up","appointment-scheduled","declined","no-longer-interested"];
-var STAGE_LABELS={"sold":"✅ Sold","follow-up":"🔄 Follow Up","appointment-scheduled":"📅 Appointment","declined":"❌ Declined","no-longer-interested":"🚫 Not Interested"};
+var PIPE_STAGES=["quoted","60-days-out","sold","follow-up","appointment-scheduled","declined","no-longer-interested"];
+var STAGE_LABELS={"quoted":"📄 Quoted","60-days-out":"📆 60+ Days Out","sold":"✅ Sold","follow-up":"🔄 Follow Up","appointment-scheduled":"📅 Appointment","declined":"❌ Declined","no-longer-interested":"🚫 Not Interested"};
 var dragId=null;var dragType=null; // "lead" or "account"
 
 function renderPipeline(){
@@ -2542,26 +2629,74 @@ function renderTasks(){
     if(!seqState)seqState=initLeadSeq(lead.id);
     var stale=isSeqStale(lead.id);
     if(stale){
-      var sc=el("div",{class:"stale-card"});
-      var sh=el("div",{class:"stale-head"});
-      sh.appendChild(el("h3",{text:"⚠️ "+fullName(lead)}));
-      sh.appendChild(el("span",{class:"stale-warn",text:"7+ days · Stale"}));
+      // Determine how many days past the 7-day sequence
+      var daysOver=daysSince(seqState.startDate)-7;
+      var isSlowMode=daysOver>=0;
+      // Slow follow-up schedule: bi-weekly attempts
+      var SLOW_TASKS=[
+        {icon:"📞",type:"call",label:"Week 2 check-in call",sub:"Light touch — ask if their situation has changed. Keep it brief.",dayOffset:7},
+        {icon:"✉️",type:"email",label:"Week 2 follow-up email",sub:"Send a value email — a success story or seasonal reminder.",dayOffset:8},
+        {icon:"📞",type:"call",label:"Week 4 call",sub:"Last scheduled outreach. Gauge interest — keep or mark cold.",dayOffset:21},
+        {icon:"✉️",type:"email",label:"Week 4 email",sub:"Final email check-in. Offer an easy way to re-engage.",dayOffset:22},
+      ];
+      var currentSlowTask=null;
+      SLOW_TASKS.forEach(function(st){if(daysOver>=st.dayOffset)currentSlowTask=st;});
+      var nextSlowTask=null;
+      for(var si=0;si<SLOW_TASKS.length;si++){if(daysOver<SLOW_TASKS[si].dayOffset){nextSlowTask=SLOW_TASKS[si];break;}}
+
+      var sc=el("div",{class:"slow-followup-card"});
+      var sh=el("div",{class:"slow-followup-head"});
+      sh.appendChild(el("h3",{text:"🔵 "+fullName(lead)}));
+      var slowLabel=daysOver>=22?"Month+ · Archive?":("Day "+(7+daysOver)+" · Slow Follow-Up");
+      sh.appendChild(el("span",{class:"slow-followup-badge",text:slowLabel}));
       sc.appendChild(sh);
-      var sb=el("div",{class:"stale-body"});
-      sb.appendChild(el("p",{text:STALE_MSG}));
-      var sa=el("div",{class:"stale-acts"});
-      if(lead.phone)sa.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:"tel:"+String(lead.phone).replace(/[^0-9+]/g,""),text:"📞 Last call"}));
-      if(lead.email)sa.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:"mailto:"+lead.email,text:"✉️ Last email"}));
-      sa.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"🔄 Restart sequence",onclick:function(){
+      var sb=el("div",{class:"slow-followup-body"});
+      sb.appendChild(el("p",{text:"The 7-day sequence is complete. Use the slow follow-up schedule below to stay on their radar without being pushy."}));
+
+      // Slow tasks schedule block
+      var schedBox=el("div",{class:"slow-followup-sched"});
+      schedBox.appendChild(el("div",{class:"sfs-label",text:"📅 Slow Follow-Up Schedule"}));
+      SLOW_TASKS.forEach(function(st){
+        var isDue=daysOver>=st.dayOffset;
+        var taskDoneKey="slow_"+lead.id+"_off"+st.dayOffset;
+        var taskDone=!!(seqState.done&&seqState.done[taskDoneKey]);
+        var row2=el("div",{class:"slow-followup-task"+(taskDone?" task-done":"")});
+        row2.appendChild(el("span",{class:"sft-icon",text:taskDone?"✅":(isDue?"⏰":st.icon)}));
+        var txt=el("div",{class:"sft-text"});
+        txt.appendChild(el("div",{class:"sft-main",text:st.label}));
+        txt.appendChild(el("div",{class:"sft-sub",text:isDue?(taskDone?"Done":"Due now — "+st.sub):("In "+(st.dayOffset-daysOver)+" day"+(st.dayOffset-daysOver===1?"":"s")+" — "+st.sub)}));
+        row2.appendChild(txt);
+        if(isDue&&!taskDone){
+          var qa=el("div",{class:"task-quick"});
+          if(st.type==="call"&&lead.phone)qa.appendChild(el("a",{class:"btn btn-teal btn-xs",href:"tel:"+String(lead.phone).replace(/[^0-9+]/g,""),text:"📞 Call"}));
+          if(st.type==="email"&&lead.email)qa.appendChild(el("a",{class:"btn btn-ghost btn-xs",href:"mailto:"+lead.email,text:"✉ Email"}));
+          var doneBtn=el("button",{class:"btn btn-ghost btn-xs",type:"button",text:"✓ Done"});
+          doneBtn.addEventListener("click",function(key){return function(){
+            var seqs=getSeqs();if(!seqs[lead.id])seqs[lead.id]={startDate:seqState.startDate,done:{},lastActivity:todayStr()};
+            if(!seqs[lead.id].done)seqs[lead.id].done={};
+            seqs[lead.id].done[key]=true;seqs[lead.id].lastActivity=todayStr();
+            saveSeqs(seqs);playTaskDoneSound();renderTasks();
+          };}(taskDoneKey));
+          qa.appendChild(doneBtn);
+          row2.appendChild(qa);
+        }
+        schedBox.appendChild(row2);
+      });
+      sb.appendChild(schedBox);
+
+      var sa=el("div",{class:"slow-followup-acts"});
+      if(lead.phone)sa.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:"tel:"+String(lead.phone).replace(/[^0-9+]/g,""),text:"📞 Call now"}));
+      if(lead.email)sa.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:"mailto:"+lead.email,text:"✉️ Email now"}));
+      sa.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"🔄 Restart 7-day sequence",onclick:function(){
         var seqs=getSeqs();seqs[lead.id]={startDate:today,done:{},lastActivity:today};saveSeqs(seqs);renderTasks();
       }}));
       sa.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"🧊 Mark cold",onclick:function(){
         var arr=getLeads().map(function(x){if(x.id===lead.id)x.status="no-longer-interested";return x;});
         saveLeads(arr);renderLeads();renderPipeline();renderTasks();
       }}));
-      sa.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"✕ Remove from tasks",onclick:function(){
-        if(!confirm("Remove "+fullName(lead)+" from tasks? Their sequence will be deleted."))return;
-        var seqs=getSeqs();delete seqs[lead.id];saveSeqs(seqs);renderTasks();
+      sa.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"✕ Remove from Tasks",onclick:function(){
+        if(!confirm("Remove "+fullName(lead)+" from Tasks? Their sequence will be deleted."))return;
+        var seqs=getSeqs();delete seqs[lead.id];saveSeqs(seqs);renderTasks();renderLeads();
       }}));
       sa.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",text:"🗑 Delete lead",onclick:function(){
         if(!confirm("Permanently delete "+fullName(lead)+"?"))return;
