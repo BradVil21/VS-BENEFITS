@@ -921,6 +921,115 @@ html.dark .slow-followup-task .sft-sub{color:#7a9ab8}
   .stale-body{padding:12px 13px}
   .notif-dd{top:52px;right:8px}
 }
+
+/* ══════════════════════════════════════════════════════
+   BIRTHDAY POPUP MODAL
+══════════════════════════════════════════════════════ */
+#bday-modal-bg{
+  position:fixed;inset:0;z-index:500;
+  display:none;align-items:center;justify-content:center;
+  padding:16px;
+  background:rgba(11,35,70,.60);
+  backdrop-filter:blur(4px);
+  animation:bdayFadeIn .3s ease;
+}
+#bday-modal-bg.open{display:flex}
+@keyframes bdayFadeIn{from{opacity:0}to{opacity:1}}
+
+#bday-modal{
+  background:#fff;border-radius:22px;
+  max-width:440px;width:100%;
+  box-shadow:0 24px 80px rgba(11,35,70,.30);
+  overflow:hidden;position:relative;
+  animation:bdaySlideUp .35s cubic-bezier(.22,.68,0,1.2);
+}
+@keyframes bdaySlideUp{from{opacity:0;transform:translateY(28px) scale(.96)}to{opacity:1;transform:none}}
+
+.bday-banner{
+  background:linear-gradient(135deg,#f5b301 0%,#ff8c42 50%,#e8445a 100%);
+  padding:28px 24px 20px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.bday-banner::before{
+  content:"🎉🎂🎈🎁🎊";
+  position:absolute;top:8px;left:0;right:0;
+  font-size:18px;letter-spacing:4px;opacity:.35;
+  white-space:nowrap;overflow:hidden;
+}
+.bday-confetti{font-size:52px;line-height:1;margin-bottom:8px;display:block;
+  animation:bdaySpin 1.5s ease-out;
+}
+@keyframes bdaySpin{0%{transform:rotate(-15deg) scale(.6)}60%{transform:rotate(8deg) scale(1.08)}100%{transform:rotate(0) scale(1)}}
+
+.bday-banner h2{
+  margin:0;color:#fff;font-family:Poppins,sans-serif;
+  font-size:22px;font-weight:800;text-shadow:0 2px 8px rgba(0,0,0,.2);
+}
+.bday-banner .bday-sub{color:rgba(255,255,255,.88);font-size:13.5px;margin-top:4px}
+
+.bday-body{padding:22px 24px 20px;text-align:center}
+.bday-name{
+  font-size:24px;font-weight:800;font-family:Poppins,sans-serif;
+  color:var(--blue-900);margin:0 0 4px;
+}
+.bday-age{font-size:13.5px;color:var(--muted);margin-bottom:16px}
+.bday-msg{
+  font-size:14.5px;color:var(--ink-2);line-height:1.6;
+  background:linear-gradient(135deg,#fff8f0,#fff4fa);
+  border:1px solid #f5d0b0;border-radius:12px;
+  padding:12px 16px;margin-bottom:18px;font-style:italic;
+}
+.bday-actions{display:flex;flex-direction:column;gap:8px}
+.bday-actions .btn{justify-content:center;font-size:14px}
+.bday-actions .btn-primary{
+  background:linear-gradient(135deg,#f5b301,#ff8c42);
+  border:none;box-shadow:0 4px 14px rgba(245,179,1,.4);
+}
+.bday-actions .btn-primary:hover{background:linear-gradient(135deg,#e0a200,#e87030)}
+.bday-dismiss{
+  display:block;text-align:center;margin-top:10px;
+  font-size:12px;color:var(--muted);cursor:pointer;
+  background:none;border:none;width:100%;padding:4px;
+}
+.bday-dismiss:hover{color:var(--ink)}
+.bday-close-x{
+  position:absolute;top:10px;right:12px;
+  background:rgba(255,255,255,.25);border:none;
+  width:32px;height:32px;border-radius:50%;
+  color:#fff;font-size:18px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  line-height:1;transition:background .15s;
+}
+.bday-close-x:hover{background:rgba(255,255,255,.4)}
+
+/* dark mode birthday modal */
+html.dark #bday-modal{background:#1c2d42}
+html.dark .bday-name{color:#d4e8ff}
+html.dark .bday-age{color:#7a9ab8}
+html.dark .bday-msg{background:linear-gradient(135deg,#1e1800,#1e1020);border-color:#3a2800;color:#b8cce4}
+html.dark .bday-dismiss{color:#7a9ab8}
+html.dark .bday-dismiss:hover{color:#b8cce4}
+
+/* multiple birthdays — list style */
+.bday-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;max-height:260px;overflow-y:auto}
+.bday-list-item{
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(135deg,#fff8f0,#fff4fa);
+  border:1px solid #f5d0b0;border-radius:10px;padding:10px 14px;text-align:left;
+}
+html.dark .bday-list-item{background:linear-gradient(135deg,#1e1800,#1e1020);border-color:#3a2800}
+.bday-list-item .bli-av{
+  width:40px;height:40px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:15px;font-family:Poppins,sans-serif;
+  border:2px solid rgba(245,179,1,.4);
+}
+.bday-list-item .bli-info{flex:1;min-width:0}
+.bday-list-item .bli-name{font-weight:700;color:var(--blue-900);font-size:14px}
+html.dark .bday-list-item .bli-name{color:#d4e8ff}
+.bday-list-item .bli-detail{font-size:12px;color:var(--muted);margin-top:2px}
+.bday-list-item .bli-actions{display:flex;gap:5px;flex-shrink:0}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -1278,6 +1387,21 @@ html.dark .slow-followup-task .sft-sub{color:#7a9ab8}
   </div>
 </div>
 
+<!-- ======================= BIRTHDAY POPUP ======================= -->
+<div id="bday-modal-bg" role="dialog" aria-modal="true" aria-label="Birthday reminder">
+  <div id="bday-modal">
+    <button class="bday-close-x" id="bday-close-x" type="button" aria-label="Close">×</button>
+    <div class="bday-banner">
+      <span class="bday-confetti">🎂</span>
+      <h2>🎉 Happy Birthday!</h2>
+      <div class="bday-sub">Today is a special day for your client</div>
+    </div>
+    <div class="bday-body" id="bday-body">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -1568,9 +1692,10 @@ async function route(){
   // Check for task-related notifications (stale leads, daily summary) on login
   // and every 15 minutes after to catch newly stale leads in long sessions.
   setTimeout(checkTaskNotifications,1500);
+  setTimeout(checkBirthdays,2200);
   if(!window._vsTaskNotifTimer){
     window._vsTaskNotifTimer=setInterval(function(){
-      if($("dash-view")&&!$("dash-view").hidden)checkTaskNotifications();
+      if($("dash-view")&&!$("dash-view").hidden){checkTaskNotifications();checkBirthdays();}
     },15*60*1000);
   }
 }
@@ -3081,6 +3206,137 @@ function checkTaskNotifications(){
 /* ====================================================================
    END NEW FEATURE CODE
    ==================================================================== */
+
+/* ====================================================================
+   BIRTHDAY ENGINE
+   Checks all client accounts for today's birthday on login and
+   once per hour. Fires a bell notification + a festive popup modal.
+   ==================================================================== */
+
+function getBdayShownKey(){return"vs_bday_shown_"+todayStr();}
+function getBdayShown(){try{return JSON.parse(localStorage.getItem(getBdayShownKey())||"[]");}catch(e){return[];}}
+function setBdayShown(ids){localStorage.setItem(getBdayShownKey(),JSON.stringify(ids));}
+
+/* Returns today's MM-DD string */
+function todayMMDD(){var d=new Date();return String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+
+/* Calculate age from DOB string YYYY-MM-DD */
+function calcAge(dob){
+  if(!dob)return null;
+  var parts=dob.split("-");if(parts.length<3)return null;
+  var birth=new Date(Number(parts[0]),Number(parts[1])-1,Number(parts[2]));
+  var today=new Date();
+  var age=today.getFullYear()-birth.getFullYear();
+  var m=today.getMonth()-birth.getMonth();
+  if(m<0||(m===0&&today.getDate()<birth.getDate()))age--;
+  return age>=0?age:null;
+}
+
+/* Build and show the birthday popup */
+function showBdayPopup(clients){
+  var bg=$("bday-modal-bg");var body=$("bday-body");
+  if(!bg||!body)return;
+  body.innerHTML="";
+
+  if(clients.length===1){
+    /* Single birthday — rich personal card */
+    var c=clients[0];
+    var age=calcAge(c.dob);
+    var ini=initials(c)||"🎂";
+    body.appendChild(el("div",{class:"bday-name",text:fullName(c)}));
+    body.appendChild(el("div",{class:"bday-age",text:age?"Turning "+age+" today 🎈":"Birthday today! 🎈"}));
+    var msg=el("div",{class:"bday-msg"});
+    msg.textContent="\"Happy Birthday, "+((c.firstName||fullName(c)).split(" ")[0])+"! Wishing you a wonderful day filled with joy. We're grateful to have you as a client. 🎉\"";
+    body.appendChild(msg);
+    var acts=el("div",{class:"bday-actions"});
+    if(c.phone){
+      var callBtn=el("a",{class:"btn btn-primary",href:"tel:"+String(c.phone).replace(/[^0-9+]/g,""),text:"📞 Call to wish them Happy Birthday!"});
+      acts.appendChild(callBtn);
+    }
+    if(c.email){
+      var subj=encodeURIComponent("Happy Birthday, "+(c.firstName||fullName(c))+"! 🎂");
+      var bod=encodeURIComponent("Hi "+(c.firstName||fullName(c))+",\n\nWishing you a very Happy Birthday! Hope your day is filled with joy and celebration.\n\nWarm regards,\nVS Benefits");
+      acts.appendChild(el("a",{class:"btn btn-ghost",href:"mailto:"+c.email+"?subject="+subj+"&body="+bod,text:"✉️ Send Birthday Email"}));
+    }
+    body.appendChild(acts);
+  }else{
+    /* Multiple birthdays — list */
+    body.appendChild(el("div",{class:"bday-name",style:"font-size:19px",text:clients.length+" clients have birthdays today! 🎈"}));
+    var list=el("div",{class:"bday-list"});
+    clients.forEach(function(c){
+      var age=calcAge(c.dob);
+      var item=el("div",{class:"bday-list-item"});
+      var av=el("div",{class:"bli-av",text:initials(c)||"🎂"});
+      item.appendChild(av);
+      var info=el("div",{class:"bli-info"});
+      info.appendChild(el("div",{class:"bli-name",text:fullName(c)}));
+      info.appendChild(el("div",{class:"bli-detail",text:(age?"Turning "+age+" · ":"")+( c.phone||c.email||"")}));
+      item.appendChild(info);
+      var qa=el("div",{class:"bli-actions"});
+      if(c.phone)qa.appendChild(el("a",{class:"btn btn-teal btn-xs",href:"tel:"+String(c.phone).replace(/[^0-9+]/g,""),text:"📞 Call"}));
+      if(c.email){
+        var subj2=encodeURIComponent("Happy Birthday, "+(c.firstName||fullName(c))+"! 🎂");
+        var bod2=encodeURIComponent("Hi "+(c.firstName||fullName(c))+",\n\nWishing you a very Happy Birthday!\n\nWarm regards,\nVS Benefits");
+        qa.appendChild(el("a",{class:"btn btn-ghost btn-xs",href:"mailto:"+c.email+"?subject="+subj2+"&body="+bod2,text:"✉ Email"}));
+      }
+      item.appendChild(qa);
+      list.appendChild(item);
+    });
+    body.appendChild(list);
+  }
+
+  /* Dismiss button */
+  var dismiss=el("button",{class:"bday-dismiss",type:"button",text:"Remind me again later  ·  dismiss",onclick:function(){closeBdayPopup();}});
+  body.appendChild(dismiss);
+
+  bg.classList.add("open");
+  document.body.style.overflow="hidden";
+}
+
+function closeBdayPopup(){
+  var bg=$("bday-modal-bg");
+  if(bg)bg.classList.remove("open");
+  document.body.style.overflow="";
+}
+
+/* Wire up close button + backdrop click */
+document.addEventListener("DOMContentLoaded",function(){
+  var closeX=$("bday-close-x");
+  if(closeX)closeX.addEventListener("click",closeBdayPopup);
+  var bg=$("bday-modal-bg");
+  if(bg)bg.addEventListener("click",function(e){if(e.target===bg)closeBdayPopup();});
+});
+
+/* Main check — called on login and hourly */
+function checkBirthdays(){
+  if(!$("dash-view")||$("dash-view").hidden)return;
+  var today=todayMMDD();
+  var shown=getBdayShown();
+  var accounts=getAccounts();
+
+  var bdays=accounts.filter(function(a){
+    if(!a.dob)return false;
+    var parts=a.dob.split("-");if(parts.length<3)return false;
+    var mm=parts[1].padStart(2,"0");
+    var dd=parts[2].padStart(2,"0");
+    return(mm+"-"+dd)===today&&shown.indexOf(a.id)<0;
+  });
+
+  if(!bdays.length)return;
+
+  /* Mark as shown so we don't re-fire this session */
+  var newShown=shown.concat(bdays.map(function(c){return c.id;}));
+  setBdayShown(newShown);
+
+  /* Fire bell notification for each */
+  bdays.forEach(function(c){
+    var age=calcAge(c.dob);
+    addNotif("lead","🎂 "+fullName(c)+"'s Birthday!",(age?"Turning "+age+" today":"Birthday today!")+" — call or email to wish them well","accounts");
+  });
+
+  /* Show the popup */
+  setTimeout(function(){showBdayPopup(bdays);},600);
+}
 
 function renderAll(){renderLeads();renderAccounts();renderSupport();renderReferrals();renderSettings();renderCalendar();renderPipeline();renderTasks();}
 
