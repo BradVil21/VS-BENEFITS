@@ -1,49 +1,56 @@
-const sharp = require('sharp');
-const fs = require('fs');
-const path = require('path');
+const sharp = require("sharp");
+const fs = require("fs");
+const path = require("path");
 
-const inputFolder = './images';
-const outputFolder = './compressed';
+const inputFolder = "./images";
+const outputFolder = "./compressed";
 
 if (!fs.existsSync(outputFolder)) {
   fs.mkdirSync(outputFolder);
 }
 
-const allowedExtensions = ['.jpg', '.jpeg', '.png'];
+const allowedExtensions = [".jpg", ".jpeg", ".png"];
 
 fs.readdirSync(inputFolder).forEach(file => {
   const ext = path.extname(file).toLowerCase();
-
-  if (!allowedExtensions.includes(ext)) {
-    console.log(`Skipping: ${file}`);
-    return;
-  }
+  if (!allowedExtensions.includes(ext)) return;
 
   const inputPath = path.join(inputFolder, file);
-  const fileName = path.parse(file).name;
 
-  // 🔥 FIX: normalize filenames (spaces → dashes, lowercase)
-  const safeName = fileName
-    .replace(/\s+/g, '-')   // replace spaces with dashes
-    .replace(/[^a-zA-Z0-9\-]/g, '') // remove weird characters
+  const baseName = path.parse(file).name;
+
+  const safeName = baseName
+    .replace(/\s+/g, "-")
+    .replace(/[^a-zA-Z0-9\-]/g, "")
     .toLowerCase();
 
-  sharp(inputPath)
+  const isPNG = ext === ".png";
+
+  const outputFile = isPNG
+    ? `${safeName}.png`
+    : `${safeName}.jpg`;
+
+  const outputPath = path.join(outputFolder, outputFile);
+
+  let pipeline = sharp(inputPath)
     .resize({
-      width: 1400,
+      width: 1200,
       withoutEnlargement: true
-    })
-    .jpeg({
+    });
+
+  if (isPNG) {
+    pipeline = pipeline.png({ compressionLevel: 8 });
+  } else {
+    pipeline = pipeline.jpeg({
       quality: 80,
       mozjpeg: true
-    })
-    .toFile(
-      path.join(outputFolder, `${safeName}.jpg`)
-    )
-    .then(() => {
-      console.log(`Compressed: ${file} → ${safeName}.jpg`);
-    })
-    .catch(err => {
-      console.error(`Error processing ${file}:`, err);
     });
+  }
+
+  pipeline
+    .toFile(outputPath)
+    .then(() => {
+      console.log(`Compressed: ${file} → ${outputFile}`);
+    })
+    .catch(err => console.error(err));
 });
