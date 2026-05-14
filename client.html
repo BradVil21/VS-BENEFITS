@@ -35,19 +35,24 @@ a:hover{text-decoration:underline}
 button{font-family:inherit}
 input,select,textarea{font-family:inherit;font-size:16px}
 
-/* Top bar */
-.bar{background:var(--blue-900);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-.bar .brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-family:Poppins;font-size:15px}
-.bar .brand .b{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.78rem}
-.bar .right{display:flex;align-items:center;gap:8px}
-.bar a.home{color:#cfe1ff;font-size:13px}
-.bar a.home:hover{color:#fff}
-.bar .signout{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.2);padding:8px 12px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px}
-.bar .signout:hover{background:rgba(255,255,255,.2)}
-.sync-pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.1);color:#cfe1ff;border:1px solid rgba(255,255,255,.15);font-weight:600}
+/* ── Site Nav ── */
+.site-nav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.site-nav .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.site-nav .brand .b{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#0a6e8a,#0e4d6e);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;letter-spacing:-.5px;flex-shrink:0}
+.site-nav .brand span{font-weight:700;font-size:17px;color:#0e2a3d}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-links a{text-decoration:none;color:#374151;font-size:14px;font-weight:500}
+.nav-links a:hover{color:#0e2a3d;text-decoration:none}
+.nav-cta{background:#0e2a3d;color:#fff !important;font-size:14px;font-weight:600;padding:9px 20px;border-radius:999px}
+.nav-cta:hover{background:#16447f !important}
+.nav-right{display:flex;align-items:center;gap:12px}
+.sync-pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;padding:4px 10px;border-radius:999px;background:#f1f5f9;color:#5a6b80;border:1px solid #e2e8f0;font-weight:600}
 .sync-pill .dot{width:7px;height:7px;border-radius:50%;background:#9aa3b2}
 .sync-pill.ok .dot{background:#24c08a}
 .sync-pill.warn .dot{background:#f5b301}
+.signout{background:rgba(14,42,61,.08);color:#0e2a3d;border:1px solid #cbd5e1;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px}
+.signout:hover{background:rgba(14,42,61,.14)}
+@media(max-width:700px){.nav-links{display:none}.site-nav{padding:0 16px}}
 
 /* Wrap */
 .wrap{max-width:760px;margin:0 auto;padding:18px 16px 80px}
@@ -151,26 +156,49 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .gift-banner .gi-text strong{display:block;color:#3b2a00;font-size:14px}
 .gift-banner .gi-text span{font-size:12.5px;color:#5a4400}
 
-/* Footer */
-.foot{margin-top:28px;padding-top:16px;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12.5px}
-.foot a{color:var(--muted)}
+/* ── Site Footer ── */
+.site-footer{background:#0b2445;color:#c8d9ec;padding:48px 64px 0;margin-top:40px}
+.ft-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px}
+@media(max-width:760px){.ft-grid{grid-template-columns:1fr 1fr;gap:28px}.site-footer{padding:36px 24px 0}}
+@media(max-width:480px){.ft-grid{grid-template-columns:1fr}}
+.ft-brand{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.ft-brand .b{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#0a6e8a,#0e4d6e);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff}
+.ft-brand span{font-weight:700;font-size:17px;color:#fff}
+.ft-col-title{font-size:11px;font-weight:700;letter-spacing:.08em;color:#5a8ab0;text-transform:uppercase;margin-bottom:16px}
+.ft-links{display:flex;flex-direction:column;gap:10px}
+.ft-links a{color:#c8d9ec;text-decoration:none;font-size:14px}
+.ft-links a:hover{color:#fff;text-decoration:none}
+.ft-contact{display:flex;flex-direction:column;gap:10px;font-size:14px;color:#c8d9ec}
+.ft-socials{display:flex;gap:10px;margin-top:6px}
+.ft-social{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:13px;font-weight:700}
+.ft-social:hover{background:rgba(255,255,255,.2);text-decoration:none;color:#fff}
+.ft-bottom{border-top:1px solid rgba(255,255,255,.1);padding:20px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#5a8ab0;flex-wrap:wrap;gap:8px}
 
 [hidden]{display:none !important}
 </style>
 </head>
 <body>
 
-<div class="bar">
+<!-- ═══════════════════ SITE NAV ═══════════════════ -->
+<nav class="site-nav">
   <a class="brand" href="/">
     <span class="b">VS</span>
     <span>VS Benefits</span>
   </a>
-  <div class="right">
+  <div class="nav-links">
+    <a href="https://vshealthbenefits.com">Home</a>
+    <a href="https://vshealthbenefits.com/services">Services</a>
+    <a href="https://vshealthbenefits.com/about">About</a>
+    <a href="https://vshealthbenefits.com/blog">Blog</a>
+    <a href="https://vshealthbenefits.com/contact">Contact</a>
+    <a href="https://vshealthbenefits.com/member-login">Member Login</a>
+    <a href="https://vshealthbenefits.com/get-a-quote" class="nav-cta">Get a Quote</a>
+  </div>
+  <div class="nav-right">
     <span id="sync-pill" class="sync-pill"><span class="dot"></span><span id="sync-label">Connecting</span></span>
-    <a class="home" href="/">Home</a>
     <button id="signout-btn" class="signout" hidden>Sign out</button>
   </div>
-</div>
+</nav>
 
 <main class="wrap">
 
@@ -357,20 +385,68 @@ input,select,textarea{font-family:inherit;font-size:16px}
 
   </section>
 
-  <div class="foot">
-    &copy; <span id="yr"></span> VS Benefits &middot; <a href="/">Home</a> &middot; <a href="/contact">Contact</a>
-  </div>
 </main>
 
+<!-- ═══════════════════ SITE FOOTER ═══════════════════ -->
+<footer class="site-footer">
+  <div class="ft-grid">
+    <div>
+      <div class="ft-brand">
+        <div class="b">VS</div>
+        <span>VS Benefits</span>
+      </div>
+      <p style="font-size:13px;line-height:1.7;color:#8aaac8;margin:0">Licensed, independent health insurance advisor based in Miami, FL, serving small employers and families in 40+ states. Unbiased guidance, zero-cost consultations.</p>
+    </div>
+    <div>
+      <div class="ft-col-title">Solutions</div>
+      <div class="ft-links">
+        <a href="#">Group 10-99</a>
+        <a href="#">Micro Group 2-9</a>
+        <a href="#">ACA / Individual</a>
+        <a href="#">Family Plans</a>
+        <a href="#">Dental &amp; Vision</a>
+        <a href="#">Medicaid Guidance</a>
+      </div>
+    </div>
+    <div>
+      <div class="ft-col-title">Company</div>
+      <div class="ft-links">
+        <a href="#">About</a>
+        <a href="#">Blog</a>
+        <a href="#">Contact</a>
+        <a href="#">Get a Quote</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Member Login</a>
+      </div>
+    </div>
+    <div>
+      <div class="ft-col-title">Reach Us</div>
+      <div class="ft-contact">
+        <span>(954) 825-1009</span>
+        <span>bvilsainthealth@gmail.com</span>
+        <span>Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET</span>
+        <span>Miami, FL | 40+ states</span>
+        <div class="ft-socials">
+          <a href="#" class="ft-social">in</a>
+          <a href="#" class="ft-social">&#128247;</a>
+          <a href="#" class="ft-social">f</a>
+          <a href="#" class="ft-social">&#9835;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <span>&copy; <span id="yr"></span> VS Benefits. All rights reserved.</span>
+    <span>vshealthbenefits.com | Licensed health insurance advisor</span>
+  </div>
+</footer>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-/* =========================================================
-   Firebase - MUST match admin.html so data syncs both ways
-   ========================================================= */
 const firebaseConfig = {
   apiKey: "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U",
   authDomain: "vs-benefits-c1da9.firebaseapp.com",
@@ -384,15 +460,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-/* =========================================================
-   Make.com webhook - hardcoded default so it always fires.
-   Override at runtime: localStorage.setItem("vs_webhook_url", "<new-url>")
-   ========================================================= */
 var MAKE_WEBHOOK_URL = "https://hook.us2.make.com/a3uul2eecj9hm77ryzwecbt7e0sx8908";
 
-/* =========================================================
-   Storage keys (must match admin.html)
-   ========================================================= */
 var K={
   accounts:"vs_client_accounts",
   session:"vs_client_session",
@@ -401,9 +470,6 @@ var K={
   webhook:"vs_webhook_url"
 };
 
-/* =========================================================
-   Helpers
-   ========================================================= */
 function $(id){return document.getElementById(id);}
 function uid(){return"id_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
 function getAccounts(){try{return JSON.parse(localStorage.getItem(K.accounts)||"[]");}catch(e){return[];}}
@@ -436,44 +502,23 @@ function showNotice(elId,kind,text){
 }
 function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
 
-/* =========================================================
-   Webhook delivery - sendBeacon primary, keepalive fetch fallback.
-   Make.com webhooks accept JSON and DO honor CORS, but sendBeacon
-   is more reliable for fire-and-forget (survives page navigation,
-   no preflight, can't be blocked by an aggressive ad blocker on
-   the cross-origin path the same way).
-   ========================================================= */
 function webhookFire(payload){
   var url=getWebhook();
   if(!url||url.indexOf("http")!==0)return false;
   var json;
   try{json=JSON.stringify(payload);}catch(e){return false;}
-
-  // 1) sendBeacon - purpose-built for fire-and-forget
   try{
     if(navigator&&typeof navigator.sendBeacon==="function"){
       var blob=new Blob([json],{type:"application/json"});
       if(navigator.sendBeacon(url,blob))return true;
     }
-  }catch(e){/* fall through */}
-
-  // 2) keepalive fetch - fallback
+  }catch(e){}
   try{
-    fetch(url,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:json,
-      keepalive:true,
-      mode:"no-cors"
-    }).catch(function(){});
+    fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:json,keepalive:true,mode:"no-cors"}).catch(function(){});
     return true;
   }catch(e2){return false;}
 }
 
-/* =========================================================
-   Cloud sync - mirrors admin.html exactly so data flows
-   both ways (vs_state/{accounts,messages,referrals})
-   ========================================================= */
 var cloud={ready:false,suspend:0,unsubs:[]};
 function setSyncPill(state,label){
   var p=$("sync-pill"),l=$("sync-label");
@@ -526,11 +571,6 @@ function subscribe(which,onChange){
   }catch(e){console.warn("subscribe "+which,e);}
 }
 
-/* =========================================================
-   saveX wrappers - write locally AND push to Firestore.
-   Every client signup, message, referral is mirrored to
-   vs_state/* so admin sees it from any device instantly.
-   ========================================================= */
 function saveAccounts(a){
   localSave("accounts",a);
   if(cloud.ready&&cloud.suspend===0)pushNow("accounts",a);
@@ -544,9 +584,6 @@ function saveReferrals(r){
   if(cloud.ready&&cloud.suspend===0)pushNow("referrals",r);
 }
 
-/* =========================================================
-   Auth tabs
-   ========================================================= */
 $("tab-login").addEventListener("click",function(){
   $("tab-login").classList.add("active");$("tab-signup").classList.remove("active");
   $("login-form").hidden=false;$("signup-form").hidden=true;
@@ -558,13 +595,6 @@ $("tab-signup").addEventListener("click",function(){
   showNotice("login-msg","",""); showNotice("signup-msg","","");
 });
 
-/* =========================================================
-   Sign up - pulls latest accounts from cloud before checking
-   for duplicates, so a user signing up on device B sees the
-   account they made on device A.
-   On success: fires Make.com webhook so Bradley's scenario
-   can send a welcome email.
-   ========================================================= */
 $("signup-form").addEventListener("submit",async function(e){
   e.preventDefault();
   var first=$("su-first").value.trim();
@@ -580,7 +610,6 @@ $("signup-form").addEventListener("submit",async function(e){
   if(pw.length<8)return showNotice("signup-msg","err","Password must be at least 8 characters.");
   if(pw!==pw2)return showNotice("signup-msg","err","Passwords don't match. Please try again.");
 
-  // Pull latest from cloud so dup check is accurate across devices
   await pullOnce("accounts");
 
   var accts=getAccounts();
@@ -589,12 +618,9 @@ $("signup-form").addEventListener("submit",async function(e){
   var hash=await sha256(pw);
   var acct={id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:Date.now(),status:"active",plan:null,photoDataUrl:""};
   accts.push(acct);
-  saveAccounts(accts); // pushes to vs_state/accounts -> admin sees it instantly
+  saveAccounts(accts);
   setSession({id:acct.id,email:acct.email,since:Date.now()});
 
-  // Fire Make.com webhook for welcome email
-  // Payload is flat & email-friendly so the Make.com scenario can
-  // map directly to a "send email" module without extra parsing.
   webhookFire({
     event:"client_signup",
     account_id:acct.id,
@@ -613,10 +639,6 @@ $("signup-form").addEventListener("submit",async function(e){
   showDashboard();
 });
 
-/* =========================================================
-   Sign in - pulls latest accounts first so you can sign in
-   from any device even if that device never saw you sign up.
-   ========================================================= */
 $("login-form").addEventListener("submit",async function(e){
   e.preventDefault();
   var email=normEmail($("li-email").value);
@@ -634,7 +656,6 @@ $("login-form").addEventListener("submit",async function(e){
   var hash=await sha256(pw);
   if(hash!==acct.passwordHash)return showNotice("login-msg","err","Incorrect password. Please try again.");
 
-  // Update lastSignIn and push
   var arr=accts.map(function(a){if(a.id===acct.id)a.lastSignIn=Date.now();return a;});
   saveAccounts(arr);
   setSession({id:acct.id,email:acct.email,since:Date.now()});
@@ -644,9 +665,6 @@ $("login-form").addEventListener("submit",async function(e){
   showDashboard();
 });
 
-/* =========================================================
-   Sign out / delete
-   ========================================================= */
 $("signout-btn").addEventListener("click",function(){clearSession();location.reload();});
 $("delete-account").addEventListener("click",function(){
   if(!confirm("Delete your account? This will remove your sign-in. Your messages and referral history stay with your advisor."))return;
@@ -656,9 +674,6 @@ $("delete-account").addEventListener("click",function(){
   clearSession();location.reload();
 });
 
-/* =========================================================
-   Change password
-   ========================================================= */
 $("pw-form").addEventListener("submit",async function(e){
   e.preventDefault();
   var acct=currentAccount();if(!acct)return;
@@ -676,9 +691,6 @@ $("pw-form").addEventListener("submit",async function(e){
   webhookFire({event:"client_password_changed",account_id:acct.id,ts:Date.now()});
 });
 
-/* =========================================================
-   Photo upload
-   ========================================================= */
 $("photo-input").addEventListener("change",function(e){
   var f=e.target.files[0];if(!f)return;
   if(!/^image\//.test(f.type))return showNotice("photo-msg","err","Please pick an image file.");
@@ -712,9 +724,6 @@ function paintAvatar(dataUrl){
   else{var acct=currentAccount();av.textContent=acct?initials(acct):"VS";}
 }
 
-/* =========================================================
-   Dashboard
-   ========================================================= */
 function currentAccount(){
   var s=getSession();if(!s)return null;
   return getAccounts().filter(function(a){return a.id===s.id;})[0]||null;
@@ -741,9 +750,6 @@ function showDashboard(){
   renderMyReferrals();
 }
 
-/* =========================================================
-   Plan view
-   ========================================================= */
 function renderPlan(){
   var acct=currentAccount();if(!acct)return;
   var box=$("plan-display");box.innerHTML="";
@@ -776,9 +782,6 @@ function renderPlan(){
   }
 }
 
-/* =========================================================
-   Messages
-   ========================================================= */
 function renderMessages(){
   var acct=currentAccount();if(!acct)return;
   var box=$("msgs");
@@ -806,9 +809,6 @@ $("msg-form").addEventListener("submit",function(e){
   renderMessages();
 });
 
-/* =========================================================
-   Referrals
-   ========================================================= */
 $("ref-form").addEventListener("submit",function(e){
   e.preventDefault();
   var acct=currentAccount();if(!acct)return;
@@ -849,9 +849,6 @@ function renderMyReferrals(){
   });
 }
 
-/* =========================================================
-   Tab switching
-   ========================================================= */
 function dswitch(name){
   ["profile","plan","support","refer"].forEach(function(n){
     $("dtab-"+n).classList.toggle("active",n===name);
@@ -866,9 +863,6 @@ $("dtab-plan").addEventListener("click",function(){dswitch("plan");});
 $("dtab-support").addEventListener("click",function(){dswitch("support");});
 $("dtab-refer").addEventListener("click",function(){dswitch("refer");});
 
-/* =========================================================
-   Boot - anonymous auth, pull initial state, subscribe
-   ========================================================= */
 $("yr").textContent=new Date().getFullYear();
 setSyncPill("","Connecting");
 
@@ -876,18 +870,15 @@ onAuthStateChanged(auth,async function(user){
   if(!user){
     try{await signInAnonymously(auth);}
     catch(e){console.warn("anon signin failed",e);setSyncPill("warn","Offline");return;}
-    return; // onAuthStateChanged will fire again with the user
+    return;
   }
 
   cloud.ready=true;
   setSyncPill("ok","Synced");
 
-  // Prime local cache from cloud so login checks work across devices
   await Promise.all([pullOnce("accounts"),pullOnce("messages"),pullOnce("referrals")]);
 
-  // Subscribe to live changes
   subscribe("accounts",function(){
-    // If signed in and any of our data changed, repaint dashboard
     var s=getSession();
     if(s){
       var me=getAccounts().filter(function(a){return a.id===s.id;})[0];
@@ -904,15 +895,12 @@ onAuthStateChanged(auth,async function(user){
   subscribe("messages",function(){if(!$("dash-view").hidden)renderMessages();});
   subscribe("referrals",function(){if(!$("dash-view").hidden)renderMyReferrals();});
 
-  // If we already had a session, show the dashboard now that cloud is ready
   if(getSession())showDashboard();
 });
 
-// If we have a local session, show dashboard immediately (it will refresh when cloud is ready)
 if(getSession())showDashboard();
 </script>
 
-<!-- ====================== BACK TO TOP ====================== -->
 <style>
 #back-to-top{
   position:fixed;bottom:28px;right:22px;z-index:999;
