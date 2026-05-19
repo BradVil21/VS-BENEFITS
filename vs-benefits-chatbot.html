@@ -1,540 +1,447 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>VS Benefits Chat Widget</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>VS Benefits Chat</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',system-ui,sans-serif;background:transparent}
+html,body{background:transparent;font-family:'DM Sans',sans-serif}
 
-/* ── LAUNCHER BUBBLE ── */
-#vs-launcher{
-  position:fixed;bottom:24px;left:24px;z-index:99999;
-  width:60px;height:60px;border-radius:50%;
-  background:linear-gradient(135deg,#0b2346,#0db5a6);
-  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(11,35,70,.35),0 0 0 0 rgba(13,181,166,.4);
-  animation:pulseRing 2.8s ease-in-out infinite;
-  transition:transform .2s,box-shadow .2s;
-}
-#vs-launcher:hover{transform:scale(1.08);box-shadow:0 8px 32px rgba(11,35,70,.4),0 0 0 0 rgba(13,181,166,.3);}
-#vs-launcher svg{pointer-events:none;}
-#vs-launcher .badge{
-  position:absolute;top:-3px;right:-3px;
-  width:18px;height:18px;border-radius:50%;
-  background:#f5b301;border:2px solid #fff;
-  font-size:10px;font-weight:700;color:#0b2346;
+#vsb-launcher{
+  position:fixed;bottom:24px;left:24px;z-index:2147483646;
+  width:62px;height:62px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,#0b2346 0%,#1e5ab0 50%,#0db5a6 100%);
   display:flex;align-items:center;justify-content:center;
-  font-family:'DM Sans',sans-serif;
+  box-shadow:0 6px 24px rgba(11,35,70,.45);
+  transition:transform .2s ease,box-shadow .2s ease;
 }
-@keyframes pulseRing{
-  0%,70%,100%{box-shadow:0 4px 20px rgba(11,35,70,.35),0 0 0 0 rgba(13,181,166,.4)}
-  35%{box-shadow:0 4px 20px rgba(11,35,70,.35),0 0 0 12px rgba(13,181,166,0)}
+#vsb-launcher:hover{transform:scale(1.1);box-shadow:0 10px 32px rgba(11,35,70,.55);}
+.vsb-badge{
+  position:absolute;top:-2px;right:-2px;
+  width:20px;height:20px;border-radius:50%;
+  background:#f5b301;border:2.5px solid #fff;
+  font-size:11px;font-weight:700;color:#0b2346;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+.vsb-pulse{
+  position:absolute;inset:0;border-radius:50%;
+  background:rgba(13,181,166,.35);
+  animation:vsbPulse 2s ease-out infinite;
+  pointer-events:none;
+}
+@keyframes vsbPulse{
+  0%{transform:scale(1);opacity:.7}
+  100%{transform:scale(1.75);opacity:0}
 }
 
-/* ── CHAT WINDOW ── */
-#vs-chat{
-  position:fixed;bottom:100px;left:24px;z-index:99998;
-  width:360px;max-width:calc(100vw - 48px);
-  height:560px;max-height:calc(100vh - 140px);
-  background:#fff;border-radius:20px;
-  box-shadow:0 20px 60px rgba(11,35,70,.22),0 4px 16px rgba(11,35,70,.1);
-  display:flex;flex-direction:column;overflow:hidden;
-  transform-origin:bottom left;
-  transform:scale(0) translateY(20px);opacity:0;
-  transition:transform .28s cubic-bezier(.34,1.56,.64,1),opacity .2s;
-  border:1px solid rgba(11,35,70,.08);
+#vsb-window{
+  position:fixed;bottom:100px;left:24px;z-index:2147483645;
+  width:360px;max-width:calc(100vw - 32px);
+  height:560px;max-height:calc(100vh - 120px);
+  background:#ffffff;border-radius:20px;
+  box-shadow:0 24px 64px rgba(11,35,70,.25),0 4px 16px rgba(11,35,70,.12);
+  border:1px solid rgba(11,35,70,.1);
+  display:none;flex-direction:column;overflow:hidden;
 }
-#vs-chat.open{transform:scale(1) translateY(0);opacity:1;}
+#vsb-window.vsb-open{display:flex;}
 
-/* ── HEADER ── */
-.vsc-head{
-  background:linear-gradient(135deg,#0b2346 0%,#16447f 60%,#0db5a6 100%);
-  padding:16px 16px 14px;display:flex;align-items:center;gap:11px;flex-shrink:0;
-  position:relative;
+.vsb-head{
+  background:linear-gradient(135deg,#0b2346 0%,#16447f 55%,#0db5a6 100%);
+  padding:14px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;
 }
-.vsc-head::after{
-  content:"";position:absolute;bottom:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
-}
-.vsc-avatar{
-  width:42px;height:42px;border-radius:50%;flex-shrink:0;
+.vsb-ava{
+  width:44px;height:44px;border-radius:50%;flex-shrink:0;
   background:linear-gradient(135deg,#0db5a6,#f5b301);
   display:flex;align-items:center;justify-content:center;
-  font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:#fff;
-  box-shadow:0 2px 8px rgba(0,0,0,.2);position:relative;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);position:relative;
 }
-.vsc-online{
-  position:absolute;bottom:1px;right:1px;width:11px;height:11px;
-  border-radius:50%;background:#2dbd79;border:2px solid #fff;
+.vsb-ava-dot{
+  position:absolute;bottom:1px;right:1px;
+  width:12px;height:12px;border-radius:50%;
+  background:#2dbd79;border:2.5px solid #fff;
 }
-.vsc-head-info{flex:1;min-width:0;}
-.vsc-head-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#fff;line-height:1.2;}
-.vsc-head-sub{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px;display:flex;align-items:center;gap:5px;}
-.vsc-head-sub::before{content:"";width:6px;height:6px;border-radius:50%;background:#2dbd79;flex-shrink:0;}
-.vsc-close{
-  background:rgba(255,255,255,.15);border:none;cursor:pointer;
-  width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  color:#fff;font-size:18px;transition:background .15s;flex-shrink:0;
+.vsb-head-info{flex:1;min-width:0;}
+.vsb-head-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#fff;line-height:1.2;}
+.vsb-head-status{font-size:11.5px;color:rgba(255,255,255,.75);margin-top:3px;display:flex;align-items:center;gap:5px;}
+.vsb-head-status::before{content:"";width:7px;height:7px;border-radius:50%;background:#2dbd79;flex-shrink:0;}
+.vsb-closebtn{
+  background:rgba(255,255,255,.18);border:none;cursor:pointer;
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:22px;line-height:1;
+  transition:background .15s;flex-shrink:0;
 }
-.vsc-close:hover{background:rgba(255,255,255,.28);}
+.vsb-closebtn:hover{background:rgba(255,255,255,.32);}
 
-/* ── MESSAGES ── */
-.vsc-msgs{
-  flex:1;overflow-y:auto;padding:16px 14px 8px;
+.vsb-msgs{
+  flex:1;overflow-y:auto;padding:14px 13px 6px;
   display:flex;flex-direction:column;gap:10px;
   scrollbar-width:thin;scrollbar-color:rgba(11,35,70,.12) transparent;
 }
-.vsc-msgs::-webkit-scrollbar{width:4px;}
-.vsc-msgs::-webkit-scrollbar-thumb{background:rgba(11,35,70,.12);border-radius:2px;}
+.vsb-msgs::-webkit-scrollbar{width:4px;}
+.vsb-msgs::-webkit-scrollbar-thumb{background:rgba(11,35,70,.15);border-radius:2px;}
 
-.msg-row{display:flex;gap:8px;align-items:flex-end;animation:msgIn .22s ease-out both;}
-@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.msg-row.user{flex-direction:row-reverse;}
-.msg-av{
+.vsb-row{display:flex;gap:8px;align-items:flex-end;}
+.vsb-user{flex-direction:row-reverse;}
+.vsb-mini-av{
   width:28px;height:28px;border-radius:50%;flex-shrink:0;
   background:linear-gradient(135deg,#0b2346,#0db5a6);
   display:flex;align-items:center;justify-content:center;
-  font-family:'Syne',sans-serif;font-weight:800;font-size:10px;color:#fff;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:9px;color:#fff;
 }
-.msg-bubble{
-  max-width:82%;padding:10px 13px;border-radius:16px;
-  font-size:13.5px;line-height:1.5;color:#0e1726;
-}
-.msg-row:not(.user) .msg-bubble{
-  background:#f3f6fb;border-radius:4px 16px 16px 16px;
-  border:1px solid rgba(11,35,70,.07);
-}
-.msg-row.user .msg-bubble{
-  background:linear-gradient(135deg,#0b2346,#16447f);
-  color:#fff;border-radius:16px 16px 4px 16px;
-}
-.msg-time{font-size:10px;color:#8a9ab5;margin-top:3px;display:block;}
-.msg-row.user .msg-time{text-align:right;}
+.vsb-bubble{max-width:82%;padding:10px 13px;font-size:13.5px;line-height:1.55;word-break:break-word;}
+.vsb-bot-bubble{background:#f2f5fb;border-radius:4px 16px 16px 16px;border:1px solid rgba(11,35,70,.07);color:#0e1726;}
+.vsb-user-bubble{background:linear-gradient(135deg,#0b2346,#16447f);color:#fff;border-radius:16px 16px 4px 16px;}
+.vsb-time{display:block;font-size:10px;color:#9aaac0;margin-top:4px;}
+.vsb-user-bubble .vsb-time{color:rgba(255,255,255,.5);}
 
-/* typing indicator */
-.typing-dot{display:flex;gap:4px;padding:10px 14px;background:#f3f6fb;border-radius:4px 16px 16px 16px;border:1px solid rgba(11,35,70,.07);width:fit-content;}
-.typing-dot span{width:7px;height:7px;border-radius:50%;background:#0db5a6;animation:bounce .8s ease-in-out infinite;}
-.typing-dot span:nth-child(2){animation-delay:.15s;}
-.typing-dot span:nth-child(3){animation-delay:.3s;}
-@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+.vsb-typing{display:flex;gap:5px;padding:11px 14px;background:#f2f5fb;border-radius:4px 16px 16px 16px;border:1px solid rgba(11,35,70,.07);width:fit-content;}
+.vsb-typing span{width:7px;height:7px;border-radius:50%;background:#0db5a6;display:block;animation:vsbBounce .75s ease-in-out infinite;}
+.vsb-typing span:nth-child(2){animation-delay:.15s;}
+.vsb-typing span:nth-child(3){animation-delay:.3s;}
+@keyframes vsbBounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
 
-/* quick replies */
-.quick-replies{display:flex;flex-wrap:wrap;gap:7px;padding:6px 0 2px;}
-.qr-btn{
+.vsb-qr{display:flex;flex-wrap:wrap;gap:7px;padding:5px 0 2px;}
+.vsb-qbtn{
   background:#fff;border:1.5px solid #0db5a6;
   color:#0b2346;font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;
-  padding:7px 13px;border-radius:999px;cursor:pointer;transition:all .15s;line-height:1.2;
+  padding:7px 12px;border-radius:999px;cursor:pointer;transition:all .15s;
 }
-.qr-btn:hover{background:#0db5a6;color:#fff;border-color:#0db5a6;}
+.vsb-qbtn:hover{background:#0db5a6;color:#fff;}
 
-/* ── INPUT AREA ── */
-.vsc-input-area{
-  padding:10px 12px 12px;border-top:1px solid rgba(11,35,70,.07);
-  background:#fff;flex-shrink:0;
+.vsb-bottom{padding:10px 12px 12px;border-top:1px solid rgba(11,35,70,.07);background:#fff;flex-shrink:0;}
+.vsb-inp-row{display:flex;gap:8px;align-items:flex-end;}
+.vsb-inp{
+  flex:1;border:1.5px solid rgba(11,35,70,.18);border-radius:12px;
+  padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:#0e1726;
+  resize:none;outline:none;background:#fafbfd;transition:border-color .15s;
+  min-height:42px;max-height:90px;line-height:1.4;
 }
-.vsc-input-row{display:flex;gap:8px;align-items:flex-end;}
-.vsc-input{
-  flex:1;border:1.5px solid rgba(11,35,70,.15);border-radius:12px;
-  padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:13.5px;
-  color:#0e1726;resize:none;outline:none;background:#fafbfd;
-  transition:border-color .15s;min-height:42px;max-height:100px;line-height:1.4;
-}
-.vsc-input:focus{border-color:#0db5a6;background:#fff;}
-.vsc-input::placeholder{color:#a0aec0;}
-.vsc-send{
-  width:40px;height:40px;border-radius:12px;flex-shrink:0;
+.vsb-inp:focus{border-color:#0db5a6;background:#fff;}
+.vsb-inp::placeholder{color:#b0baca;}
+.vsb-inp:disabled{opacity:.5;cursor:not-allowed;}
+.vsb-sendbtn{
+  width:42px;height:42px;border-radius:12px;flex-shrink:0;
   background:linear-gradient(135deg,#0b2346,#0db5a6);
   border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
   transition:transform .15s,opacity .15s;
 }
-.vsc-send:hover{transform:scale(1.06);}
-.vsc-send:disabled{opacity:.4;cursor:not-allowed;transform:none;}
-.vsc-send svg{pointer-events:none;}
+.vsb-sendbtn:hover{transform:scale(1.06);}
+.vsb-sendbtn:disabled{opacity:.38;cursor:not-allowed;transform:none;}
 
-/* ── FORM FIELDS INSIDE CHAT ── */
-.chat-form{display:flex;flex-direction:column;gap:8px;padding:4px 0;}
-.chat-field{display:flex;flex-direction:column;gap:4px;}
-.chat-field label{font-size:11.5px;font-weight:600;color:#5a6b80;text-transform:uppercase;letter-spacing:.05em;}
-.chat-field input,.chat-field select{
-  padding:9px 11px;border:1.5px solid rgba(11,35,70,.15);border-radius:10px;
-  font-family:'DM Sans',sans-serif;font-size:13.5px;color:#0e1726;
-  background:#fff;outline:none;transition:border-color .15s;
-}
-.chat-field input:focus,.chat-field select:focus{border-color:#0db5a6;}
-.chat-submit{
-  background:linear-gradient(135deg,#0b2346,#0db5a6);color:#fff;
-  border:none;border-radius:10px;padding:11px;font-family:'DM Sans',sans-serif;
-  font-size:14px;font-weight:600;cursor:pointer;margin-top:4px;
-  transition:opacity .15s,transform .15s;
-}
-.chat-submit:hover{opacity:.9;transform:translateY(-1px);}
+.vsb-footer{text-align:center;font-size:10px;color:#b0baca;padding:4px 0 3px;flex-shrink:0;}
+.vsb-footer b{color:#0db5a6;font-weight:600;}
 
-/* ── BRANDING FOOTER ── */
-.vsc-brand{
-  text-align:center;font-size:10.5px;color:#a0aec0;padding:5px 0 3px;
-  letter-spacing:.03em;flex-shrink:0;
-}
-.vsc-brand span{color:#0db5a6;font-weight:600;}
-
-/* ── SUCCESS STATE ── */
-.success-box{
-  background:linear-gradient(135deg,#e6f7ef,#f0fff9);
-  border:1.5px solid #b9e6cf;border-radius:14px;
+.vsb-success{
+  background:linear-gradient(135deg,#e8f7ef,#f0fdf6);
+  border:1.5px solid #9fdabc;border-radius:14px;
   padding:16px;text-align:center;
 }
-.success-box .success-icon{font-size:32px;margin-bottom:8px;}
-.success-box h3{font-family:'Syne',sans-serif;font-size:15px;color:#0a5030;margin-bottom:4px;}
-.success-box p{font-size:12.5px;color:#2d6a4f;line-height:1.5;}
+.vsb-success-icon{font-size:34px;margin-bottom:8px;}
+.vsb-success h3{font-family:'Syne',sans-serif;font-size:15px;color:#065f46;margin-bottom:6px;}
+.vsb-success p{font-size:12.5px;color:#064e3b;line-height:1.6;}
+.vsb-success a{color:#0a8754;font-weight:600;}
 </style>
 </head>
 <body>
 
 <!-- LAUNCHER BUBBLE -->
-<button id="vs-launcher" aria-label="Chat with VS Benefits">
-  <span class="badge">1</span>
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 2C6.48 2 2 6.02 2 11c0 2.65 1.23 5.02 3.18 6.71L4 22l4.44-2.22A10.23 10.23 0 0012 20c5.52 0 10-4.02 10-9S17.52 2 12 2z" fill="rgba(255,255,255,.9)"/>
-    <path d="M8 11h1m3 0h1m3 0h1" stroke="#0b2346" stroke-width="2" stroke-linecap="round"/>
+<button id="vsb-launcher" aria-label="Chat with VS Benefits">
+  <div class="vsb-pulse"></div>
+  <div class="vsb-badge">1</div>
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="pointer-events:none;flex-shrink:0">
+    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" fill="rgba(255,255,255,.92)"/>
+    <path d="M8 10h8M8 14h5" stroke="#0b2346" stroke-width="1.8" stroke-linecap="round"/>
   </svg>
 </button>
 
 <!-- CHAT WINDOW -->
-<div id="vs-chat" role="dialog" aria-label="VS Benefits Chat" aria-modal="false">
-  <!-- HEADER -->
-  <div class="vsc-head">
-    <div class="vsc-avatar">VS<div class="vsc-online"></div></div>
-    <div class="vsc-head-info">
-      <div class="vsc-head-name">VS Benefits Assistant</div>
-      <div class="vsc-head-sub">Online · Typically replies instantly</div>
+<div id="vsb-window">
+  <div class="vsb-head">
+    <div class="vsb-ava">VS<div class="vsb-ava-dot"></div></div>
+    <div class="vsb-head-info">
+      <div class="vsb-head-name">Ava &middot; VS Benefits</div>
+      <div class="vsb-head-status">Online &middot; Health Insurance Specialist</div>
     </div>
-    <button class="vsc-close" id="vs-close" aria-label="Close chat">×</button>
+    <button class="vsb-closebtn" id="vsb-close" aria-label="Close">&times;</button>
   </div>
-
-  <!-- MESSAGES -->
-  <div class="vsc-msgs" id="vs-msgs"></div>
-
-  <!-- INPUT -->
-  <div class="vsc-input-area">
-    <div class="vsc-input-row">
-      <textarea class="vsc-input" id="vs-input" rows="1" placeholder="Type a message…" aria-label="Chat message"></textarea>
-      <button class="vsc-send" id="vs-send" aria-label="Send message">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+  <div class="vsb-msgs" id="vsb-msgs"></div>
+  <div class="vsb-bottom">
+    <div class="vsb-inp-row">
+      <textarea class="vsb-inp" id="vsb-inp" rows="1" placeholder="Type a message…"></textarea>
+      <button class="vsb-sendbtn" id="vsb-send" disabled>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events:none">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
         </svg>
       </button>
     </div>
   </div>
-  <div class="vsc-brand">Powered by <span>VS Benefits</span> · AI Assistant</div>
+  <div class="vsb-footer">Powered by <b>VS Benefits</b> AI &nbsp;&middot;&nbsp; Licensed Health Insurance Advisors</div>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<!-- Firebase compat (global, no ES modules) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U",
-  authDomain: "vs-benefits-c1da9.firebaseapp.com",
-  projectId: "vs-benefits-c1da9",
-  storageBucket: "vs-benefits-c1da9.firebasestorage.app",
-  messagingSenderId: "487471388882",
-  appId: "1:487471388882:web:63e98e6699d5a823e3f50b"
+<script>
+(function(){
+"use strict";
+
+/* ─── FIREBASE INIT ─── */
+var FB_CFG={
+  apiKey:"AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U",
+  authDomain:"vs-benefits-c1da9.firebaseapp.com",
+  projectId:"vs-benefits-c1da9",
+  storageBucket:"vs-benefits-c1da9.firebasestorage.app",
+  messagingSenderId:"487471388882",
+  appId:"1:487471388882:web:63e98e6699d5a823e3f50b"
 };
+var fbApp=firebase.apps.length?firebase.apps[0]:firebase.initializeApp(FB_CFG);
+var db=firebase.firestore(fbApp);
+var fbAuth=firebase.auth(fbApp);
+var dbReady=false;
+fbAuth.signInAnonymously()
+  .then(function(){dbReady=true;})
+  .catch(function(e){console.warn("FB auth:",e);});
 
-const fbApp = initializeApp(firebaseConfig);
-const db = getFirestore(fbApp);
-const auth = getAuth(fbApp);
+function genId(){return"chat_"+Math.random().toString(36).slice(2,9)+Date.now().toString(36);}
 
-let dbReady = false;
-(async () => {
-  try { await signInAnonymously(auth); dbReady = true; } catch(e) { console.warn("Firebase auth failed", e); }
-})();
-
-async function saveLead(lead) {
-  if (!dbReady) return false;
-  try {
-    const leadsDoc = await getDoc(doc(db, "vs_state", "leads"));
-    const existing = leadsDoc.exists() ? (leadsDoc.data().items || []) : [];
-    const newLead = {
-      id: "chat_" + Math.random().toString(36).slice(2,10) + Date.now().toString(36),
-      firstName: lead.firstName || "",
-      lastName: lead.lastName || "",
-      name: ((lead.firstName||"") + " " + (lead.lastName||"")).trim(),
-      email: lead.email || "",
-      phone: lead.phone || "",
-      dob: lead.dob || "",
-      zipcode: lead.zip || "",
-      state: lead.state || "",
-      coverage: lead.coverageType || "",
-      status: "new",
-      notes: "Chat lead. Employees: " + (lead.employees||"N/A") + ". Coverage type: " + (lead.coverageType||"N/A") + ". ZIP: " + (lead.zip||"N/A") + ". Message: " + (lead.extraNotes||""),
-      created: Date.now(),
-      updated: Date.now(),
-      _source: "chatbot"
+function saveLead(lead){
+  if(!dbReady){console.warn("DB not ready yet");return Promise.resolve(false);}
+  return db.collection("vs_state").doc("leads").get().then(function(snap){
+    var items=snap.exists?(snap.data().items||[]):[];
+    var rec={
+      id:genId(),
+      firstName:lead.firstName||"",
+      lastName:lead.lastName||"",
+      name:((lead.firstName||"")+" "+(lead.lastName||"")).trim(),
+      email:lead.email||"",
+      phone:lead.phone||"",
+      dob:lead.dob||"",
+      zipcode:lead.zip||"",
+      state:lead.state||"",
+      coverage:lead.coverageType||"",
+      status:"new",
+      notes:"Chat lead | Coverage: "+(lead.coverageType||"N/A")+" | Employees: "+(lead.employees||"N/A")+" | ZIP: "+(lead.zip||"N/A")+(lead.extraNotes?" | "+lead.extraNotes:""),
+      created:Date.now(),
+      updated:Date.now(),
+      _source:"chatbot"
     };
-    existing.unshift(newLead);
-    await setDoc(doc(db, "vs_state", "leads"), { items: existing, ts: Date.now() });
-    return true;
-  } catch(e) { console.warn("Save lead failed", e); return false; }
+    items.unshift(rec);
+    return db.collection("vs_state").doc("leads").set({items:items,ts:Date.now()});
+  }).then(function(){return true;}).catch(function(e){console.warn("Save lead:",e);return false;});
 }
 
-// ── CHATBOT ENGINE ──
-const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
+/* ─── DOM ─── */
+var launcher=document.getElementById("vsb-launcher");
+var win=document.getElementById("vsb-window");
+var closeBtn=document.getElementById("vsb-close");
+var msgsEl=document.getElementById("vsb-msgs");
+var inpEl=document.getElementById("vsb-inp");
+var sendBtn=document.getElementById("vsb-send");
+var badge=launcher.querySelector(".vsb-badge");
+var pulse=launcher.querySelector(".vsb-pulse");
 
-const SYSTEM_PROMPT = `You are Ava, a friendly and professional health insurance specialist assistant for VS Benefits — a licensed, independent health insurance advisory firm based in Miami, FL, serving individuals, families, and small businesses in 40+ states.
+/* ─── STATE ─── */
+var isOpen=false;
+var isSubmitted=false;
+var isBusy=false;
+var history=[];
+var lead={};
 
-YOUR GOAL: Qualify the visitor as a potential client by having a warm, natural conversation. Gather their information so the VS Benefits team can call them with a personalized quote.
-
-TONE: Warm, confident, helpful, and conversational. Never sound robotic or like a form. Be empathetic. Use first names once you know them.
-
-QUALIFYING FLOW (follow this naturally, not rigidly):
-1. Greet warmly, ask for their first name
-2. Ask what brings them in today (individual/family coverage, group/business, dental, etc.)
-3. Ask how many people need coverage (for business: how many employees)
-4. Ask for their ZIP code or state
-5. Ask for their email address — say "so we can send you plan options"
-6. Ask for their phone number — say "so our advisor can reach you with your personalized quote"
-7. Ask their date of birth or age range (to find accurate rates)
-8. Optional: any specific concerns or questions?
-9. Confirm all info, tell them the team will be in touch within 1 business day
-
-RULES:
-- Collect: first name, last name, email, phone, ZIP/state, DOB or age, coverage type (individual/family/group), number of employees if business
-- NEVER claim you can provide an instant quote — always say the VS Benefits team will call/email with personalized options
-- If they ask about pricing: say rates vary by plan and location, and the advisor will go over exact numbers
-- If they ask about VS Benefits (who you are, services, etc.): answer knowledgeably but end by encouraging them to call (954) 825-1009 or continue the chat
-- If they have complaints or urgent issues: empathize, give the number (954) 825-1009
-- Keep responses SHORT (2-4 sentences max). Don't overwhelm.
-- When you have enough info (name, email, phone, ZIP, coverage type), say you're submitting their info and the team will reach out. Include a JSON block at the END of your message like this (hidden from user, parsed by system):
-<LEAD_DATA>{"firstName":"...","lastName":"...","email":"...","phone":"...","zip":"...","state":"...","dob":"...","coverageType":"...","employees":"...","extraNotes":"..."}</LEAD_DATA>
-
-VS Benefits services: Group insurance (10-99 employees), Micro group (2-9), ACA/Individual, Family plans, Dental & Vision, Medicaid guidance. Based in Miami FL, licensed in 40+ states. Phone: (954) 825-1009. Email: bvilsainthealth@gmail.com. Hours: Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET.`;
-
-let conversationHistory = [];
-let isOpen = false;
-let isSubmitted = false;
-let collectedLead = {};
-
-function uid() { return "id_" + Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
-function now() {
-  const d = new Date();
-  return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+/* ─── TOGGLE ─── */
+function openChat(){
+  isOpen=true;
+  win.classList.add("vsb-open");
+  badge.style.display="none";
+  pulse.style.display="none";
+  inpEl.focus();
+  if(!history.length){setTimeout(startChat,350);}
+}
+function closeChat(){
+  isOpen=false;
+  win.classList.remove("vsb-open");
+  history=[];lead={};isSubmitted=false;isBusy=false;
+  msgsEl.innerHTML="";
+  inpEl.disabled=false;inpEl.value="";inpEl.style.height="auto";
+  inpEl.placeholder="Type a message\u2026";
+  sendBtn.disabled=true;
+  badge.style.display="flex";
+  pulse.style.display="block";
 }
 
-const launcher = document.getElementById("vs-launcher");
-const chat = document.getElementById("vs-chat");
-const closeBtn = document.getElementById("vs-close");
-const msgsEl = document.getElementById("vs-msgs");
-const inputEl = document.getElementById("vs-input");
-const sendBtn = document.getElementById("vs-send");
+launcher.addEventListener("click",function(){isOpen?closeChat():openChat();});
+closeBtn.addEventListener("click",closeChat);
 
-launcher.addEventListener("click", () => {
-  isOpen = !isOpen;
-  chat.classList.toggle("open", isOpen);
-  if (isOpen) {
-    launcher.querySelector(".badge").style.display = "none";
-    inputEl.focus();
-    if (conversationHistory.length === 0) {
-      setTimeout(() => sendBotMessage(null), 400);
-    }
-  }
+/* ─── INPUT ─── */
+inpEl.addEventListener("input",function(){
+  inpEl.style.height="auto";
+  inpEl.style.height=Math.min(inpEl.scrollHeight,90)+"px";
+  sendBtn.disabled=!inpEl.value.trim()||isBusy||isSubmitted;
 });
+inpEl.addEventListener("keydown",function(e){
+  if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();doSend();}
+});
+sendBtn.addEventListener("click",doSend);
 
-closeBtn.addEventListener("click", () => {
-  isOpen = false;
-  chat.classList.remove("open");
-  // Reset session
-  conversationHistory = [];
-  collectedLead = {};
-  isSubmitted = false;
-  msgsEl.innerHTML = "";
-});
-
-sendBtn.addEventListener("click", handleSend);
-inputEl.addEventListener("keydown", e => {
-  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
-});
-inputEl.addEventListener("input", () => {
-  inputEl.style.height = "auto";
-  inputEl.style.height = Math.min(inputEl.scrollHeight, 100) + "px";
-});
-
-function handleSend() {
-  const text = inputEl.value.trim();
-  if (!text || isSubmitted) return;
-  addUserMsg(text);
-  inputEl.value = "";
-  inputEl.style.height = "auto";
-  sendBotMessage(text);
+function doSend(){
+  var txt=(inpEl.value||"").trim();
+  if(!txt||isBusy||isSubmitted)return;
+  inpEl.value="";inpEl.style.height="auto";sendBtn.disabled=true;
+  addUserMsg(txt);
+  chatTurn(txt);
 }
 
-function addUserMsg(text) {
-  const row = document.createElement("div");
-  row.className = "msg-row user";
-  row.innerHTML = `<div class="msg-bubble">${escHtml(text)}<span class="msg-time">${now()}</span></div>`;
+/* ─── UI ─── */
+function esc(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
+function ts(){var d=new Date();return d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});}
+function scroll(){msgsEl.scrollTop=msgsEl.scrollHeight;}
+
+function addUserMsg(txt){
+  removeQR();
+  var row=document.createElement("div");
+  row.className="vsb-row vsb-user";
+  var bub=document.createElement("div");
+  bub.className="vsb-bubble vsb-user-bubble";
+  bub.innerHTML=esc(txt)+'<span class="vsb-time">'+ts()+'</span>';
+  row.appendChild(bub);
   msgsEl.appendChild(row);
-  msgsEl.scrollTop = msgsEl.scrollHeight;
-  conversationHistory.push({ role: "user", content: text });
+  scroll();
+  history.push({role:"user",content:txt});
 }
 
-function addBotMsg(html, isHtml = false) {
-  const row = document.createElement("div");
-  row.className = "msg-row";
-  const av = document.createElement("div");
-  av.className = "msg-av";
-  av.textContent = "VS";
-  const bubble = document.createElement("div");
-  bubble.className = "msg-bubble";
-  if (isHtml) bubble.innerHTML = html + `<span class="msg-time">${now()}</span>`;
-  else bubble.innerHTML = escHtml(html).replace(/\n/g, "<br>") + `<span class="msg-time">${now()}</span>`;
-  row.appendChild(av);
-  row.appendChild(bubble);
-  msgsEl.appendChild(row);
-  msgsEl.scrollTop = msgsEl.scrollHeight;
+function addBotMsg(txt){
+  var row=document.createElement("div");row.className="vsb-row";
+  var av=document.createElement("div");av.className="vsb-mini-av";av.textContent="VS";
+  var bub=document.createElement("div");
+  bub.className="vsb-bubble vsb-bot-bubble";
+  bub.innerHTML=esc(txt).replace(/\n/g,"<br>")+'<span class="vsb-time">'+ts()+'</span>';
+  row.appendChild(av);row.appendChild(bub);
+  msgsEl.appendChild(row);scroll();
 }
 
-function showTyping() {
-  const row = document.createElement("div");
-  row.className = "msg-row";
-  row.id = "typing-indicator";
-  const av = document.createElement("div");
-  av.className = "msg-av";
-  av.textContent = "VS";
-  const dots = document.createElement("div");
-  dots.className = "typing-dot";
-  dots.innerHTML = "<span></span><span></span><span></span>";
-  row.appendChild(av);
-  row.appendChild(dots);
-  msgsEl.appendChild(row);
-  msgsEl.scrollTop = msgsEl.scrollHeight;
+function showTyping(){
+  var row=document.createElement("div");row.className="vsb-row";row.id="vsb-typing";
+  var av=document.createElement("div");av.className="vsb-mini-av";av.textContent="VS";
+  var t=document.createElement("div");t.className="vsb-typing";
+  t.innerHTML="<span></span><span></span><span></span>";
+  row.appendChild(av);row.appendChild(t);
+  msgsEl.appendChild(row);scroll();
 }
+function hideTyping(){var t=document.getElementById("vsb-typing");if(t)t.remove();}
 
-function hideTyping() {
-  const t = document.getElementById("typing-indicator");
-  if (t) t.remove();
-}
-
-function addQuickReplies(options, onSelect) {
-  const qr = document.createElement("div");
-  qr.className = "quick-replies";
-  qr.id = "quick-replies";
-  options.forEach(opt => {
-    const btn = document.createElement("button");
-    btn.className = "qr-btn";
-    btn.textContent = opt;
-    btn.addEventListener("click", () => {
-      document.getElementById("quick-replies")?.remove();
-      addUserMsg(opt);
-      sendBotMessage(opt);
+function addQR(opts){
+  removeQR();
+  var qr=document.createElement("div");qr.className="vsb-qr";qr.id="vsb-qr";
+  opts.forEach(function(opt){
+    var b=document.createElement("button");b.className="vsb-qbtn";b.textContent=opt;
+    b.addEventListener("click",function(){
+      removeQR();addUserMsg(opt);chatTurn(opt);
     });
-    qr.appendChild(btn);
+    qr.appendChild(b);
   });
-  msgsEl.appendChild(qr);
-  msgsEl.scrollTop = msgsEl.scrollHeight;
+  msgsEl.appendChild(qr);scroll();
+}
+function removeQR(){var q=document.getElementById("vsb-qr");if(q)q.remove();}
+
+function showSuccess(){
+  saveLead(lead);
+  var row=document.createElement("div");row.className="vsb-row";
+  var av=document.createElement("div");av.className="vsb-mini-av";av.textContent="VS";
+  var wrap=document.createElement("div");wrap.style.maxWidth="95%";
+  wrap.innerHTML='<div class="vsb-success">'+
+    '<div class="vsb-success-icon">\uD83C\uDF89</div>'+
+    '<h3>You\'re all set, '+esc(lead.firstName||"there")+'!</h3>'+
+    '<p>A licensed VS Benefits advisor will contact you within <strong>1 business day</strong> with your personalized plan options.</p>'+
+    '<p style="margin-top:8px">Need help sooner? Call us now:<br>'+
+    '<a href="tel:+19548251009">(954) 825-1009</a></p>'+
+    '</div><span class="vsb-time">'+ts()+'</span>';
+  row.appendChild(av);row.appendChild(wrap);
+  msgsEl.appendChild(row);scroll();
+  inpEl.disabled=true;
+  inpEl.placeholder="Chat complete \u00B7 Call (954) 825-1009";
+  sendBtn.disabled=true;
 }
 
-function escHtml(s) {
-  return String(s||"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+/* ─── AI ─── */
+var SYSTEM_PROMPT="You are Ava, a warm and knowledgeable health insurance specialist for VS Benefits — a licensed, independent advisory firm based in Miami, FL that serves individuals, families, and small businesses in 40+ states.\n\nYOUR MISSION: Have a friendly, natural conversation to understand the visitor's needs and collect their contact info so a VS Benefits advisor can call them with a personalized quote.\n\nPERSONALITY: Warm, confident, conversational, empathetic. Use their first name once you know it. Keep responses short — 2 to 4 sentences max. Never sound like a form or robot.\n\nQUALIFYING FLOW — collect these naturally across the conversation, not all at once:\n1. Ask their first name to get started\n2. What type of coverage — individual/family, small business, dental/vision, etc.\n3. ZIP code or state (to find available plans)\n4. How many people need coverage (for business: employee count)\n5. Age range or date of birth (for accurate rates)\n6. Email — say 'so I can send you plan options to review'\n7. Phone — say 'so our advisor can reach you directly with your quote'\n8. Any specific concerns or questions?\n\nIMPORTANT RULES:\n- NEVER promise an instant quote — the VS Benefits team will call/email with personalized options\n- If asked about pricing: rates vary by plan, age, and location — the advisor will go over exact numbers on the call\n- If asked about VS Benefits: answer knowledgeably, then redirect to collecting info or calling (954) 825-1009\n- Urgent issue or complaint: empathize and give (954) 825-1009 immediately\n- Services: Group 10-99, Micro group 2-9, ACA/Individual, Family, Dental & Vision, Medicaid guidance\n- Hours: Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET | Miami FL | 40+ states\n- Phone: (954) 825-1009 | Email: bvilsainthealth@gmail.com\n\nWHEN YOU HAVE: name + email + phone + coverage type (minimum required):\nWarmly confirm their info and say the team will reach out within 1 business day.\nAt the very END of your reply append EXACTLY this block — it will NOT be shown to the user:\n<LEAD_DATA>{\"firstName\":\"\",\"lastName\":\"\",\"email\":\"\",\"phone\":\"\",\"zip\":\"\",\"state\":\"\",\"dob\":\"\",\"coverageType\":\"\",\"employees\":\"\",\"extraNotes\":\"\"}</LEAD_DATA>\nFill in every field you collected. Leave others as empty string. Do not invent data.";
+
+function callAPI(messages){
+  return fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      model:"claude-sonnet-4-20250514",
+      max_tokens:600,
+      system:SYSTEM_PROMPT,
+      messages:messages
+    })
+  }).then(function(r){
+    if(!r.ok)throw new Error("HTTP "+r.status);
+    return r.json();
+  }).then(function(d){
+    return((d.content||[]).map(function(b){return b.text||"";}).join("")).trim();
+  });
 }
 
-async function sendBotMessage(userText) {
-  document.getElementById("quick-replies")?.remove();
-  sendBtn.disabled = true;
-  showTyping();
-
-  const messages = userText === null
-    ? [{ role: "user", content: "Hello, I'm visiting the VS Benefits website and I'd like to learn more about health insurance options." }]
-    : conversationHistory;
-
-  try {
-    const resp = await fetch(ANTHROPIC_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        system: SYSTEM_PROMPT,
-        messages: messages
-      })
-    });
-
-    const data = await resp.json();
+function startChat(){
+  isBusy=true;showTyping();
+  var seed=[{role:"user",content:"Hi! I'm visiting the VS Benefits website and want to learn about health insurance options."}];
+  callAPI(seed).then(function(reply){
     hideTyping();
-
-    const fullText = (data.content || []).map(b => b.text || "").join("").trim();
-
-    // Check for lead data
-    const leadMatch = fullText.match(/<LEAD_DATA>([\s\S]*?)<\/LEAD_DATA>/);
-    let displayText = fullText.replace(/<LEAD_DATA>[\s\S]*?<\/LEAD_DATA>/g, "").trim();
-
-    if (leadMatch && !isSubmitted) {
-      try {
-        const parsed = JSON.parse(leadMatch[1]);
-        Object.assign(collectedLead, parsed);
-      } catch(e) {}
-    }
-
-    conversationHistory.push({ role: "assistant", content: fullText });
-
-    if (leadMatch && !isSubmitted && collectedLead.email && collectedLead.phone) {
-      isSubmitted = true;
-      addBotMsg(displayText || "Perfect! I have everything I need.");
-      setTimeout(() => showSuccessState(), 800);
-    } else {
-      addBotMsg(displayText);
-
-      // Suggest quick replies based on context
-      if (userText === null) {
-        setTimeout(() => addQuickReplies(["Individual / Family Plan", "Small Business Group", "Dental & Vision", "Medicare / Medicaid"], null), 300);
-      } else if (fullText.toLowerCase().includes("medicare") || fullText.toLowerCase().includes("medicaid")) {
-        setTimeout(() => addQuickReplies(["Yes, tell me more", "Call me: (954) 825-1009", "I have another question"], null), 300);
-      }
-    }
-  } catch(err) {
+    history=seed.concat([{role:"assistant",content:reply}]);
+    var display=reply.replace(/<LEAD_DATA>[\s\S]*?<\/LEAD_DATA>/g,"").trim();
+    addBotMsg(display||"Hi there! I'm Ava with VS Benefits. I'm here to help you find the right coverage. What type of plan are you looking for?");
+    setTimeout(function(){
+      addQR(["Individual / Family Plan","Small Business Group","Dental & Vision","I have a question"]);
+    },250);
+  }).catch(function(){
     hideTyping();
-    addBotMsg("I'm sorry, I'm having a moment. Please call us directly at (954) 825-1009 and we'll help you right away! 😊");
-  }
-
-  sendBtn.disabled = false;
+    addBotMsg("Hi there! I'm Ava from VS Benefits. I'm here to help you find the right health insurance plan. What brings you in today?");
+    setTimeout(function(){
+      addQR(["Individual / Family Plan","Small Business Group","Dental & Vision","I have a question"]);
+    },250);
+  }).finally(function(){
+    isBusy=false;
+    sendBtn.disabled=!inpEl.value.trim();
+  });
 }
 
-async function showSuccessState() {
-  const saved = await saveLead(collectedLead);
-
-  const successRow = document.createElement("div");
-  successRow.className = "msg-row";
-  const av = document.createElement("div");
-  av.className = "msg-av";
-  av.textContent = "VS";
-  const bubble = document.createElement("div");
-  bubble.className = "msg-bubble";
-  bubble.style.maxWidth = "95%";
-  bubble.style.background = "transparent";
-  bubble.style.border = "none";
-  bubble.style.padding = "4px 0";
-  bubble.innerHTML = `
-    <div class="success-box">
-      <div class="success-icon">🎉</div>
-      <h3>You're all set, ${escHtml(collectedLead.firstName || "there")}!</h3>
-      <p>A licensed VS Benefits advisor will contact you within <strong>1 business day</strong> with your personalized plan options.<br><br>
-      Questions in the meantime? Call us at <a href="tel:+19548251009" style="color:#0a8754;font-weight:600">(954) 825-1009</a></p>
-    </div>
-    <span class="msg-time">${now()}</span>
-  `;
-  successRow.appendChild(av);
-  successRow.appendChild(bubble);
-  msgsEl.appendChild(successRow);
-  msgsEl.scrollTop = msgsEl.scrollHeight;
-  inputEl.disabled = true;
-  inputEl.placeholder = "Chat complete · Call (954) 825-1009 for immediate help";
-  sendBtn.disabled = true;
+function chatTurn(userText){
+  if(isBusy)return;
+  isBusy=true;sendBtn.disabled=true;showTyping();
+  callAPI(history).then(function(reply){
+    hideTyping();
+    var match=reply.match(/<LEAD_DATA>([\s\S]*?)<\/LEAD_DATA>/);
+    var display=reply.replace(/<LEAD_DATA>[\s\S]*?<\/LEAD_DATA>/g,"").trim();
+    if(match){
+      try{Object.assign(lead,JSON.parse(match[1]));}catch(e){}
+    }
+    history.push({role:"assistant",content:reply});
+    if(match&&!isSubmitted&&lead.email&&lead.phone){
+      isSubmitted=true;
+      if(display)addBotMsg(display);
+      setTimeout(showSuccess,500);
+    }else{
+      addBotMsg(display||"I'm here to help! Could you tell me a bit more about what you're looking for?");
+    }
+  }).catch(function(){
+    hideTyping();
+    addBotMsg("I apologize for the hiccup! Please call us at (954) 825-1009 and our team will assist you right away.");
+    history.push({role:"assistant",content:"I apologize for the hiccup! Please call us at (954) 825-1009."});
+  }).finally(function(){
+    isBusy=false;
+    sendBtn.disabled=!inpEl.value.trim()||isSubmitted;
+  });
 }
 
-// Init
+})();
 </script>
 </body>
 </html>
