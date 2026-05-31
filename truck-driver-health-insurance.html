@@ -504,90 +504,107 @@ footer a:hover{color:#fff}
 </section>
 
 <!-- QUOTE FORM -->
-<section class="quote-section" id="quote">
+<section class="qf-section" id="quote">
   <div class="container">
-    <div class="quote-card">
-      <div class="quote-header">
-        <div class="quote-badge">
-          <svg width="13" height="13" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+    <div class="qf-card">
+      <div class="qf-top">
+        <div class="qf-badge">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           Free Quote, No Obligation
         </div>
-        <h2>Find the <span style="color:var(--teal)">Right Coverage</span> for Your Situation</h2>
-        <p>Answer a few quick questions and we will match you with the best health insurance options available. Takes about 2 minutes.</p>
-      </div>
-
-      <div class="quote-choices" id="quote-choices">
-        <button class="choice-btn" onclick="selectType('individual')" id="btn-individual">
-          <div class="choice-icon">&#x1F9D1;</div>
-          <div class="choice-title">Individual or Family</div>
-          <div class="choice-sub">Coverage for you and your loved ones</div>
-        </button>
-        <button class="choice-btn" onclick="selectType('business')" id="btn-business">
-          <div class="choice-icon">&#x1F3E2;</div>
-          <div class="choice-title">Small Business</div>
-          <div class="choice-sub">Group plans for your employees</div>
-        </button>
-      </div>
-
-      <div class="quote-divider"></div>
-
-      <div class="quote-trust">
-        <span><span class="chk">&#10003;</span> Licensed in 40+ States</span>
-        <span><span class="chk">&#10003;</span> 100% Free Service</span>
-        <span><span class="chk">&#10003;</span> No Spam, Ever</span>
-        <span><span class="chk">&#10003;</span> Compare Top Carriers</span>
-      </div>
-
-      <div class="quote-form-fields" id="quote-form">
-        <div class="field-row">
-          <div class="field">
-            <label for="qf-first">First Name</label>
-            <input type="text" id="qf-first" placeholder="John" autocomplete="given-name" />
+        <h2>Find the Right Coverage <span>for Truck Drivers</span></h2>
+        <p class="qf-sub">Answer a few quick questions and we will match you with the best health insurance options for owner-operators and CDL drivers. Takes about 2 minutes.</p>
+        <div class="qf-types">
+          <div class="qf-type" id="qt-ind" onclick="qfSelect('individual')">
+            <div class="qf-type-icon">&#128106;</div>
+            <h3>Individual or Family</h3>
+            <p>Coverage for you and your loved ones</p>
           </div>
-          <div class="field">
-            <label for="qf-last">Last Name</label>
-            <input type="text" id="qf-last" placeholder="Smith" autocomplete="family-name" />
+          <div class="qf-type" id="qt-biz" onclick="qfSelect('business')">
+            <div class="qf-type-icon">&#127970;</div>
+            <h3>Small Fleet / Business</h3>
+            <p>Group plans for your drivers</p>
           </div>
         </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="qf-email">Email</label>
-            <input type="email" id="qf-email" placeholder="john@email.com" autocomplete="email" />
-          </div>
-          <div class="field">
-            <label for="qf-phone">Phone</label>
-            <input type="tel" id="qf-phone" placeholder="(555) 000-0000" autocomplete="tel" />
-          </div>
+      </div>
+
+      <div class="qf-divider"></div>
+      <div class="qf-trust">
+        <span><span class="ck">&#10003;</span> Licensed in 40+ States</span>
+        <span><span class="ck">&#10003;</span> 100% Free Service</span>
+        <span><span class="ck">&#10003;</span> No Spam, Ever</span>
+        <span><span class="ck">&#10003;</span> Compare Top Carriers</span>
+      </div>
+
+      <div class="qf-fields" id="qf-fields-truck">
+        <div class="qf-row">
+          <div class="f"><label>First Name</label><input type="text" id="qf-first-truck" placeholder="Jane" autocomplete="given-name" /></div>
+          <div class="f"><label>Last Name</label><input type="text" id="qf-last-truck" placeholder="Smith" autocomplete="family-name" /></div>
         </div>
-        <div class="field-row">
-          <div class="field">
-            <label for="qf-state">State</label>
-            <select id="qf-state">
-              <option value="">Select state</option>
-              <option>Florida</option><option>Texas</option><option>California</option><option>Georgia</option><option>New York</option><option>Illinois</option><option>Pennsylvania</option><option>Ohio</option><option>North Carolina</option><option>Michigan</option><option>Other</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="qf-size">Household / Team Size</label>
-            <select id="qf-size">
-              <option value="">Select</option>
-              <option>Just me</option>
-              <option>Me + spouse</option>
-              <option>Me + kids</option>
-              <option>Family of 4+</option>
-              <option>2-9 employees</option>
-              <option>10-25 employees</option>
+        <div class="qf-row">
+          <div class="f"><label>Date of Birth</label><input type="date" id="qf-dob-truck" autocomplete="bday" /></div>
+          <div class="f"><label>Phone Number</label><input type="tel" id="qf-phone-truck" placeholder="(305) 555-0100" autocomplete="tel" /></div>
+        </div>
+        <div class="f"><label>Street Address</label><input type="text" id="qf-address-truck" placeholder="123 Main Street" autocomplete="street-address" /></div>
+        <div class="qf-row">
+          <div class="f"><label>ZIP Code</label><input type="text" id="qf-zip-truck" placeholder="33101" maxlength="5" inputmode="numeric" /></div>
+          <div class="f"><label>State</label>
+            <select id="qf-state-truck">
+              <option value="">Select state...</option>
+              <option value="AL">AL</option><option value="AK">AK</option><option value="AZ">AZ</option><option value="AR">AR</option><option value="CA">CA</option><option value="CO">CO</option><option value="CT">CT</option><option value="DE">DE</option><option value="FL">FL</option><option value="GA">GA</option><option value="HI">HI</option><option value="ID">ID</option><option value="IL">IL</option><option value="IN">IN</option><option value="IA">IA</option><option value="KS">KS</option><option value="KY">KY</option><option value="LA">LA</option><option value="ME">ME</option><option value="MD">MD</option><option value="MA">MA</option><option value="MI">MI</option><option value="MN">MN</option><option value="MS">MS</option><option value="MO">MO</option><option value="MT">MT</option><option value="NE">NE</option><option value="NV">NV</option><option value="NH">NH</option><option value="NJ">NJ</option><option value="NM">NM</option><option value="NY">NY</option><option value="NC">NC</option><option value="ND">ND</option><option value="OH">OH</option><option value="OK">OK</option><option value="OR">OR</option><option value="PA">PA</option><option value="RI">RI</option><option value="SC">SC</option><option value="SD">SD</option><option value="TN">TN</option><option value="TX">TX</option><option value="UT">UT</option><option value="VT">VT</option><option value="VA">VA</option><option value="WA">WA</option><option value="WV">WV</option><option value="WI">WI</option><option value="WY">WY</option>
             </select>
           </div>
         </div>
-        <button class="btn btn-primary full-w" onclick="submitQuote()" style="margin-top:8px;font-size:1rem">Get My Free Quote</button>
-        <p class="fine-print">By submitting you agree to our <a href="/privacy">Privacy Policy</a> and consent to be contacted by a licensed VS Benefits advisor. We never sell your information.</p>
+        <div class="f"><label>Email Address</label><input type="email" id="qf-email-truck" placeholder="jane@email.com" autocomplete="email" /></div>
+        <button class="qf-submit" id="qf-btn-truck" onclick="qfSubmit('truck','Get My Free Trucker Quote')">Get My Free Trucker Quote</button>
+        <p class="qf-fine">By submitting you agree to our <a href="/privacy">Privacy Policy</a> and consent to be contacted by a licensed VS Benefits advisor. We never sell your information.</p>
       </div>
 
-      <div class="quote-disclaimer">VS Benefits is an independent insurance advisor licensed in 40+ states.</div>
+      <div class="qf-disclaimer">VS Benefits is an independent insurance advisor licensed in 40+ states.</div>
     </div>
   </div>
 </section>
+
+<style>
+
+/* ── Quote Form (index.html style) ── */
+.qf-section{background:var(--bg-soft,#f7faff);padding:60px 0}
+.qf-card{background:#fff;border-radius:24px;box-shadow:0 20px 60px rgba(13,27,42,.12);max-width:680px;margin:0 auto;overflow:hidden;border:1px solid var(--line,#e4e9f2)}
+.qf-top{padding:36px 32px 24px;text-align:center}
+.qf-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,var(--blue-100,#e8f0fb),#e0f7f5);border:1px solid var(--blue-100,#e8f0fb);border-radius:999px;padding:6px 14px;font-size:.74rem;font-weight:700;color:var(--blue-700,#16447f);letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px}
+.qf-card h2{font-size:clamp(1.5rem,5vw,2rem);letter-spacing:-.02em;margin-bottom:10px}
+.qf-card h2 span{background:linear-gradient(90deg,var(--blue-600,#1e5ab0),var(--teal,#0db5a6));-webkit-background-clip:text;background-clip:text;color:transparent}
+.qf-sub{font-size:.98rem;color:var(--muted,#5a6b80);margin-bottom:28px;line-height:1.7}
+.qf-types{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:4px}
+.qf-type{background:var(--bg-soft,#f7faff);border:2px solid var(--line,#e4e9f2);border-radius:18px;padding:24px 16px 20px;cursor:pointer;transition:border-color .2s,background .2s,transform .18s,box-shadow .2s;text-align:center}
+.qf-type:hover{border-color:var(--blue-500,#2f7de0);transform:translateY(-3px);box-shadow:0 10px 24px rgba(30,90,176,.13)}
+.qf-type.sel{border-color:var(--blue-600,#1e5ab0);background:linear-gradient(135deg,rgba(22,68,127,.05),rgba(13,181,166,.04));box-shadow:0 0 0 3px rgba(22,68,127,.09)}
+.qf-type-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--blue-100,#e8f0fb),#e0f7f5);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 12px;transition:background .2s}
+.qf-type.sel .qf-type-icon{background:linear-gradient(135deg,var(--blue-700,#16447f),var(--teal,#0db5a6))}
+.qf-type h3{font-size:.95rem;font-family:'Poppins',sans-serif;font-weight:700;color:var(--blue-900,#0b2346);margin-bottom:4px}
+.qf-type p{font-size:.78rem;color:var(--muted,#5a6b80);line-height:1.5;margin:0}
+.qf-divider{height:1px;background:var(--line,#e4e9f2);margin:0 32px}
+.qf-trust{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;padding:16px 32px;font-size:.78rem;font-weight:600;color:var(--muted,#5a6b80)}
+.qf-trust span{display:flex;align-items:center;gap:5px}
+.qf-trust .ck{color:var(--teal,#0db5a6)}
+.qf-fields{padding:0 32px 32px;display:none}
+.qf-fields.open{display:block}
+.qf-fields .f{margin-bottom:13px}
+.qf-fields .f label{display:block;font-size:.79rem;font-weight:700;color:var(--ink,#0d1b2a);margin-bottom:6px;letter-spacing:.02em}
+.qf-fields .f input,.qf-fields .f select{width:100%;padding:13px 15px;border:1.5px solid var(--line,#e4e9f2);border-radius:10px;font-size:16px;font-family:inherit;color:var(--ink,#0d1b2a);background:#fff;transition:border-color .2s,box-shadow .2s;min-height:44px;appearance:none;-webkit-appearance:none}
+.qf-fields .f input:focus,.qf-fields .f select:focus{outline:none;border-color:var(--blue-600,#1e5ab0);box-shadow:0 0 0 4px rgba(30,90,176,.10)}
+.qf-fields .f select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235a6b80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;cursor:pointer}
+.qf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.qf-row{grid-template-columns:1fr}}
+.qf-submit{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--teal,#0db5a6),var(--teal-dark,#098374));color:#fff;padding:17px 24px;border-radius:999px;font-size:1.05rem;font-weight:700;font-family:inherit;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s,background .3s;min-height:50px;box-shadow:0 8px 24px rgba(13,181,166,.30);margin-top:6px}
+.qf-submit:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(13,181,166,.38)}
+.qf-fine{font-size:.73rem;color:var(--muted,#5a6b80);margin-top:10px;line-height:1.6;text-align:center}
+.qf-fine a{color:var(--blue-600,#1e5ab0)}
+.qf-disclaimer{padding:0 32px 20px;font-size:.74rem;color:var(--muted,#5a6b80);text-align:center}
+
+</style>
+
+
 
 <!-- TESTIMONIALS -->
 <section class="section">
@@ -760,28 +777,102 @@ document.addEventListener("DOMContentLoaded", function(){
   btn.addEventListener("click", function(){ window.scrollTo({top:0,behavior:"smooth"}); });
 });
 
-var selectedType = "";
-function selectType(type){
-  selectedType = type;
-  document.getElementById("btn-individual").classList.toggle("selected", type==="individual");
-  document.getElementById("btn-business").classList.toggle("selected", type==="business");
-  document.getElementById("quote-form").classList.add("visible");
-  document.getElementById("quote-form").scrollIntoView({behavior:"smooth", block:"nearest"});
+// ── VS Funnel Logic ──
+var qfType = '';
+function qfSelect(t) {
+  qfType = t;
+  document.getElementById('qt-ind').classList.toggle('sel', t === 'individual');
+  document.getElementById('qt-biz').classList.toggle('sel', t === 'business');
+  var f = document.getElementById(document.querySelector('[id^="qf-fields-"]').id);
+  f.classList.add('open');
+  f.scrollIntoView({behavior: 'smooth', block: 'nearest'});
 }
 
-function submitQuote(){
-  var first = document.getElementById("qf-first").value.trim();
-  var last = document.getElementById("qf-last").value.trim();
-  var email = document.getElementById("qf-email").value.trim();
-  var phone = document.getElementById("qf-phone").value.trim();
-  var state = document.getElementById("qf-state").value;
-  var size = document.getElementById("qf-size").value;
-  if(!first||!last||!email||!phone||!state||!size){
-    alert("Please fill in all fields to get your free quote.");
+function qfLaunchConfetti(btn) {
+  var colors = ['#16447f','#0db5a6','#2f7de0','#fbbf24','#f472b6','#34d399'];
+  var canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+  document.body.appendChild(canvas);
+  var ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+  var pieces = [];
+  for (var i = 0; i < 160; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width, y: -20 - Math.random() * 200,
+      w: 8 + Math.random() * 8, h: 6 + Math.random() * 6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      angle: Math.random() * Math.PI * 2,
+      spin: (Math.random() - .5) * .18,
+      vx: (Math.random() - .5) * 3.5, vy: 2.5 + Math.random() * 4, opacity: 1
+    });
+  }
+  var start = null;
+  function draw(ts) {
+    if (!start) start = ts;
+    var e = ts - start;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(function(p) {
+      p.x += p.vx; p.y += p.vy; p.angle += p.spin; p.vy += .07;
+      if (e > 2200) p.opacity -= .018;
+      ctx.save(); ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.translate(p.x + p.w/2, p.y + p.h/2); ctx.rotate(p.angle);
+      ctx.fillStyle = p.color; ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    if (e < 3800 && pieces.some(function(p){return p.opacity > 0;})) requestAnimationFrame(draw);
+    else canvas.remove();
+  }
+  requestAnimationFrame(draw);
+}
+
+function qfSubmit(pid, label) {
+  var first   = document.getElementById('qf-first-'   + pid).value.trim();
+  var last    = document.getElementById('qf-last-'    + pid).value.trim();
+  var dob     = document.getElementById('qf-dob-'     + pid).value;
+  var phone   = document.getElementById('qf-phone-'   + pid).value.trim();
+  var address = document.getElementById('qf-address-' + pid).value.trim();
+  var zip     = document.getElementById('qf-zip-'     + pid).value.trim();
+  var state   = document.getElementById('qf-state-'   + pid).value;
+  var email   = document.getElementById('qf-email-'   + pid).value.trim();
+  if (!first || !last || !dob || !phone || !address || !zip || !state || !email) {
+    alert('Please fill in all fields to get your free quote.');
     return;
   }
-  var params = new URLSearchParams({ first, last, email, phone, state, size, type: selectedType, source: "truck-driver-page" });
-  window.location.href = "/admin?" + params.toString();
+  var btn = document.getElementById('qf-btn-' + pid);
+  btn.disabled = true;
+  btn.style.background = 'linear-gradient(135deg,#16a34a,#15803d)';
+  btn.style.boxShadow = '0 8px 24px rgba(22,163,74,.32)';
+  btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Submitted!';
+  qfLaunchConfetti(btn);
+  var lead = {
+    id: 'id_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36),
+    firstName: first, lastName: last, dob: dob, phone: phone,
+    address: address, zipcode: zip, state: state, email: email,
+    source: pid + '-page', coverageType: qfType,
+    status: 'new', created: Date.now()
+  };
+  try {
+    var ex = JSON.parse(localStorage.getItem('vs_leads') || '[]');
+    ex.unshift(lead);
+    localStorage.setItem('vs_leads', JSON.stringify(ex));
+  } catch(e) {}
+  (async function() {
+    try {
+      var {initializeApp, getApps} = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
+      var {getFirestore, doc, getDoc, setDoc} = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+      var {getAuth, signInAnonymously} = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+      var cfg = {apiKey:'AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U',authDomain:'vs-benefits-c1da9.firebaseapp.com',
+        projectId:'vs-benefits-c1da9',storageBucket:'vs-benefits-c1da9.firebasestorage.app',
+        messagingSenderId:'487471388882',appId:'1:487471388882:web:63e98e6699d5a823e3f50b'};
+      var app = getApps().length ? getApps()[0] : initializeApp(cfg);
+      var db = getFirestore(app), auth = getAuth(app);
+      await signInAnonymously(auth);
+      var snap = await getDoc(doc(db, 'vs_state', 'leads'));
+      var items = snap.exists() ? (snap.data().items || []) : [];
+      items.unshift(lead);
+      await setDoc(doc(db, 'vs_state', 'leads'), {items: items, ts: Date.now()});
+    } catch(e) { console.warn('Firebase push failed', e); }
+  })();
 }
 </script>
 
