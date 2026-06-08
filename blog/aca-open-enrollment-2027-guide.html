@@ -234,7 +234,7 @@ footer a{color:#c9d6ea}footer a:hover{color:#fff}
       <a href="/blog" aria-current="page">Blog</a>
       <a href="/contact">Contact</a>
       <button type="button" class="nav-login" data-open-login>Member Login</button>
-      <a class="nav-cta" href="/get-a-quote">Get a Quote</a>
+      <a class="nav-cta" href="/quote">Get a Quote</a>
     </nav>
   </div>
 </header>
@@ -311,6 +311,12 @@ footer a{color:#c9d6ea}footer a:hover{color:#fff}
         <figcaption>Missing the December 15 deadline means your 2027 coverage will not start until February 1.</figcaption>
       </figure>
 
+      <div class="cta-block">
+        <h3>Not Sure What You Qualify For?</h3>
+        <p>Tell us your zip code and estimated income — we run your subsidy in 2 minutes, free. Most Floridians are surprised by how much they qualify for.</p>
+        <a class="btn btn-teal" href="/quote">Check My 2027 Subsidy →</a>
+      </div>
+
       <h2 id="subsidies">Understanding Your ACA Subsidy</h2>
       <p>This is where most people leave money on the table. ACA subsidies officially called Premium Tax Credits are based on your Modified Adjusted Gross Income (MAGI) relative to the Federal Poverty Level (FPL). The enhanced subsidies introduced by the American Rescue Plan have continued through recent years and are expected to remain in effect for 2027.</p>
 
@@ -374,6 +380,12 @@ footer a{color:#c9d6ea}footer a:hover{color:#fff}
         <figcaption>Confirming your doctor is in-network before enrolling can save thousands in out-of-network bills.</figcaption>
       </figure>
 
+      <div class="cta-block">
+        <h3>Want Us to Check Your Network for Free?</h3>
+        <p>Tell us your doctors and zip code. We verify in-network status across all carriers in your area at no cost — before you enroll.</p>
+        <a class="btn btn-teal" href="/quote">Get Free Network Check →</a>
+      </div>
+
       <h2 id="five-mistakes">The 5 Mistakes We See Every November</h2>
 
       <h3>Mistake 1: Waiting Until January to Enroll</h3>
@@ -394,7 +406,7 @@ footer a{color:#c9d6ea}footer a:hover{color:#fff}
       <div class="cta-block">
         <h3>Don't Navigate Open Enrollment Alone</h3>
         <p>VS Benefits is a licensed, independent advisor based in Miami. We help individuals and families find the right ACA plan at no cost to you.</p>
-        <a class="btn btn-teal" href="/get-a-quote">Get Free Help Enrolling →</a>
+        <a class="btn btn-teal" href="/quote">Get Free Help Enrolling →</a>
       </div>
 
       <h2 id="who-qualifies">Who Qualifies for ACA Marketplace Plans in 2027?</h2>
@@ -453,6 +465,12 @@ footer a{color:#c9d6ea}footer a:hover{color:#fff}
       <h3>Is ACA open enrollment the same as Obamacare open enrollment?</h3>
       <p>Yes. ACA, Obamacare, the marketplace, and the exchange all refer to the same health insurance program. Open enrollment 2027 refers to the annual enrollment window for plans purchased on this marketplace -- November 1, 2026 through January 15, 2027.</p>
 
+      <div class="cta-block">
+        <h3>Still Have Questions? Talk to a Licensed Advisor — Free</h3>
+        <p>We help Floridians enroll in the right 2027 ACA plan every day. No cost, no pressure, no spam. Just answers and the right plan for your situation.</p>
+        <a class="btn btn-teal" href="/quote">Get Free Help Enrolling →</a>
+      </div>
+
       <div style="border-top:1px solid var(--line);margin-top:40px;padding-top:20px;display:flex;flex-wrap:wrap;gap:8px;align-items:center">
         <span style="font-size:.8rem;color:var(--muted)">Topics:</span>
         <a href="/blog" style="font-size:.8rem;background:var(--blue-50);color:var(--blue-700);padding:4px 10px;border-radius:999px;font-weight:600">ACA Open Enrollment 2027</a>
@@ -495,7 +513,7 @@ footer a{color:#c9d6ea}footer a:hover{color:#fff}
       <div class="sidebar-card" style="background:linear-gradient(135deg,var(--blue-700),var(--teal));border:none">
         <h4 style="color:#fff">Free Enrollment Help</h4>
         <p style="color:rgba(255,255,255,.9);font-size:.88rem;margin-bottom:14px">We compare every plan in your zip code at no cost to you.</p>
-        <a class="btn" href="/get-a-quote" style="background:#fff;color:var(--blue-700);width:100%;justify-content:center;font-weight:700">Get Started →</a>
+        <a class="btn" href="/quote" style="background:#fff;color:var(--blue-700);width:100%;justify-content:center;font-weight:700">Get Started →</a>
       </div>
       <div class="sidebar-card">
         <h4>Call Us Directly</h4>
@@ -519,7 +537,7 @@ footer a{color:#c9d6ea}footer a:hover{color:#fff}
       </div>
       <div>
         <h4>Company</h4>
-        <ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li><li><a href="/get-a-quote">Get a Quote</a></li><li><button type="button" class="linklike" data-open-login>Member Login</button></li></ul>
+        <ul><li><a href="/about">About</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li><li><a href="/quote">Get a Quote</a></li><li><button type="button" class="linklike" data-open-login>Member Login</button></li></ul>
       </div>
       <div>
         <h4>Reach Us</h4>
@@ -559,6 +577,25 @@ window.addEventListener("scroll",function(){var t=document.documentElement.scrol
 var btn=document.getElementById("back-to-top");
 window.addEventListener("scroll",function(){btn.classList.toggle("visible",window.scrollY>300);},{passive:true});
 btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});
+</script>
+
+<!-- STICKY MOBILE CTA -->
+<div id="vs-sticky" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:999;background:#0f2e5c;border-top:1px solid rgba(255,255,255,.12);padding:10px 16px;box-shadow:0 -4px 24px rgba(0,0,0,.2)">
+  <div style="max-width:540px;margin:0 auto;display:flex;align-items:center;gap:12px">
+    <div style="flex:1;min-width:0">
+      <div style="font-size:.7rem;color:rgba(255,255,255,.6);font-weight:700;letter-spacing:.06em;text-transform:uppercase">ACA Open Enrollment 2027</div>
+      <div style="font-size:.9rem;color:#fff;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Free broker help — no cost to you ever</div>
+    </div>
+    <a href="/quote" style="flex-shrink:0;background:#0db5a6;color:#fff;font-weight:700;font-size:.88rem;padding:10px 18px;border-radius:999px;text-decoration:none;white-space:nowrap;display:inline-block">Get Help Now →</a>
+  </div>
+</div>
+<script>
+(function(){
+  var bar = document.getElementById('vs-sticky');
+  window.addEventListener('scroll', function(){
+    if (window.scrollY > 380) bar.style.display = 'block';
+  }, {passive:true});
+})();
 </script>
 </body>
 </html>
