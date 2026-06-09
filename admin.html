@@ -767,6 +767,10 @@ html.dark .pl-name{color:#f0f4fa}
 .pl-name .pl-name-lbl{color:var(--muted);font-weight:500}
 .pl-name strong{color:var(--blue-900);font-weight:700}
 html.dark .pl-name strong{color:#d4e8ff}
+.pl-meta{font-size:12px;color:var(--ink-2);margin-top:8px;overflow-wrap:anywhere}
+html.dark .pl-meta{color:#b8cce4}
+.pl-note{font-size:11.5px;color:var(--muted);margin-top:7px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pl-amount-zero{font-size:13px;font-weight:600;color:var(--muted);font-family:Inter,sans-serif}
 .pl-tag{display:inline-block;margin-top:10px;background:var(--blue-50);color:var(--blue-700);border-radius:999px;padding:4px 11px;font-size:12px;font-weight:600}
 html.dark .pl-tag{background:#0f2040;color:#7eb6ff}
 .pl-divider{height:1px;background:var(--line-2);margin:12px 0}
@@ -922,6 +926,58 @@ html.dark .report-row .rr-date{color:#f0f4fa}
 .report-modal-text{width:100%;min-height:340px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.5;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--bg);color:var(--ink);white-space:pre-wrap}
 html.dark .report-modal-text{background:#0e1620;border-color:#253a54;color:#f0f4fa}
 
+</style>
+<style id="sc-style">
+/* ===== Public-site chrome (top nav + footer) added to admin, sc- namespaced ===== */
+#sc-header{position:relative;background:#fff;border-bottom:1px solid var(--line)}
+html.dark #sc-header{background:var(--blue-900);border-color:#253a54}
+.sc-container{width:100%;max-width:1160px;margin:0 auto;padding:0 18px}
+.sc-navwrap{display:flex;align-items:center;justify-content:space-between;min-height:64px;gap:12px}
+.sc-brand{display:flex;align-items:center;gap:8px;font-family:'Poppins',sans-serif;font-weight:700;color:var(--blue-900);font-size:1rem;text-decoration:none}
+html.dark .sc-brand{color:#fff}
+.sc-badge{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.85rem;flex-shrink:0}
+.sc-toggle{display:flex;flex-direction:column;justify-content:center;gap:5px;background:transparent;border:0;padding:10px;cursor:pointer;min-width:44px;min-height:44px}
+.sc-toggle span{width:24px;height:2.5px;background:var(--ink);border-radius:2px;transition:transform .25s,opacity .25s}
+html.dark .sc-toggle span{background:#f0f4fa}
+.sc-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.sc-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.sc-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+.sc-links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgba(13,27,42,.10);padding:6px 0 12px;z-index:60}
+html.dark .sc-links{background:var(--blue-900);border-color:#253a54}
+.sc-links.open{display:flex}
+.sc-links a{color:var(--ink);font-weight:600;font-size:1rem;padding:14px 20px;border-bottom:1px solid var(--line);min-height:44px;display:flex;align-items:center;text-decoration:none}
+html.dark .sc-links a{color:#e6eefb;border-color:#1c2d42}
+.sc-links a:hover{color:var(--blue-700);text-decoration:none}
+.sc-links a.sc-cta{background:var(--blue-700);color:#fff;margin:10px 16px 6px;border-radius:10px;justify-content:center;border-bottom:0}
+.sc-links a.sc-cta:hover{background:var(--blue-600);color:#fff}
+@media(min-width:960px){
+  .sc-toggle{display:none}
+  .sc-links{display:flex;position:static;flex-direction:row;gap:18px;background:transparent;border:0;box-shadow:none;padding:0;align-items:center}
+  html.dark .sc-links{background:transparent}
+  .sc-links a{padding:8px 4px;border-bottom:0;min-height:auto;font-size:.94rem;white-space:nowrap}
+  .sc-links a.sc-cta{margin:0;padding:10px 18px;border-radius:999px}
+}
+.sc-footer{background:var(--blue-900);color:#c9d6ea;padding:40px 0 20px;margin-top:30px}
+.sc-footer a{color:#c9d6ea;text-decoration:none}
+.sc-footer a:hover{color:#fff;text-decoration:underline}
+.sc-footgrid{display:grid;grid-template-columns:1fr;gap:26px;margin-bottom:26px}
+.sc-footgrid h4{color:#fff;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin:0 0 12px;font-family:'Inter',sans-serif}
+.sc-footgrid ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;font-size:.92rem}
+.sc-footbrand{color:#fff;display:flex;align-items:center;gap:8px;font-family:'Poppins',sans-serif;font-weight:700;margin-bottom:10px}
+.sc-foottext{color:rgba(255,255,255,.75);font-size:.9rem;line-height:1.6;margin:0}
+.sc-socials{display:flex;gap:14px;margin-top:18px}
+.sc-soc{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;transition:background .2s}
+.sc-soc:hover{background:rgba(255,255,255,.22)}
+.sc-footbottom{border-top:1px solid rgba(255,255,255,.12);padding-top:18px;font-size:.8rem;color:rgba(255,255,255,.6);display:flex;flex-direction:column;gap:6px}
+.sc-linklike{background:none;border:0;color:#c9d6ea;font-family:inherit;font-size:.92rem;padding:0;cursor:pointer;text-align:left}
+.sc-linklike:hover{color:#fff;text-decoration:underline}
+@media(min-width:640px){
+  .sc-footgrid{grid-template-columns:1fr 1fr}
+  .sc-footbottom{flex-direction:row;justify-content:space-between}
+}
+@media(min-width:960px){
+  .sc-footgrid{grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
+}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -1194,6 +1250,23 @@ html.dark .report-modal-text{background:#0e1620;border-color:#253a54;color:#f0f4
 <div class="shell" id="shell" hidden>
   <main class="main" id="main-content">
 
+    <!-- PUBLIC SITE NAV (matches main website) -->
+    <div id="sc-header">
+      <div class="sc-container sc-navwrap">
+        <a class="sc-brand" href="/"><span class="sc-badge">VS</span><span>VS Benefits</span></a>
+        <button class="sc-toggle" id="sc-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+        <nav class="sc-links" id="sc-links">
+          <a href="/">Home</a>
+          <a href="/services">Services</a>
+          <a href="/about">About</a>
+          <a href="/blog">Blog</a>
+          <a href="/contact">Contact</a>
+          <a href="/client">Member Login</a>
+          <a class="sc-cta" href="/quote">Get a Quote</a>
+        </nav>
+      </div>
+    </div>
+
     <!-- COMMAND CENTER / FOCUS -->
     <div id="p-dashboard" class="panel active">
       <div class="dash-head">
@@ -1402,6 +1475,63 @@ html.dark .report-modal-text{background:#0e1620;border-color:#253a54;color:#f0f4
         <div style="display:flex;flex-wrap:wrap;gap:8px">
           <button id="export-all-btn" type="button" class="btn btn-ghost">Export all (JSON)</button>
           <label class="btn btn-ghost" style="cursor:pointer">Import data<input id="import-file" type="file" accept="application/json" hidden /></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- PUBLIC SITE FOOTER (matches main website) -->
+    <div class="sc-footer" role="contentinfo">
+      <div class="sc-container">
+        <div class="sc-footgrid">
+          <div>
+            <div class="sc-footbrand"><span class="sc-badge">VS</span><span>VS Benefits</span></div>
+            <p class="sc-foottext">Licensed, independent health insurance advisor based in Miami, FL, serving small employers and families in 40+ states. Unbiased guidance, zero-cost consultations.</p>
+          </div>
+          <div>
+            <h4>Solutions</h4>
+            <ul>
+              <li><a href="/truck-driver-health-insurance">Truck Driver Insurance</a></li>
+              <li><a href="/1099-health-insurance.html">1099 Worker Insurance</a></li>
+              <li><a href="/family-health-insurance.html">Family Plans</a></li>
+              <li><a href="/small-business-health-insurance.html">Small Business</a></li>
+              <li><a href="/ppo-health-insurance">PPO Plans</a></li>
+              <li><a href="/services#micro">Micro Group 2-9</a></li>
+              <li><a href="/services#aca">ACA / Individual</a></li>
+              <li><a href="/services#dental-vision">Dental &amp; Vision</a></li>
+              <li><a href="/services#medicaid">Medicaid Guidance</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Company</h4>
+            <ul>
+              <li><a href="/about">About</a></li>
+              <li><a href="/blog">Blog</a></li>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/quote">Get a Quote</a></li>
+              <li><a href="/privacy">Privacy Policy</a></li>
+              <li><a href="/terms">Terms &amp; Conditions</a></li>
+              <li><a href="/client">Member Login</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Reach Us</h4>
+            <ul>
+              <li><a href="tel:+19548251009">(954) 825-1009</a></li>
+              <li><a href="mailto:bvilsaint@vshealthbenefits.com">bvilsaint@vshealthbenefits.com</a></li>
+              <li>Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET</li>
+              <li>Miami, FL · 40+ states</li>
+            </ul>
+            <div class="sc-socials">
+              <a class="sc-soc" href="https://www.linkedin.com/company/vsbenefits/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S.02 4.88.02 3.5 1.13 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5h3.8v2.1h.05C12.85 9.1 14.6 8 16.7 8c4.1 0 4.85 2.7 4.85 6.2V24h-4v-8.8c0-2.1-.04-4.8-2.93-4.8-2.93 0-3.38 2.3-3.38 4.65V24h-4V8.5z"/></svg></a>
+              <a class="sc-soc" href="https://www.instagram.com/vshealthbenefits" target="_blank" rel="noopener" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.975.975 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.975.975-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.975-.975-1.246-2.242-1.308-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608.975-.975 2.242-1.246 3.608-1.308C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.197.157 3.355.673 2.014 2.014.673 3.355.157 5.197.072 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.085 1.855.601 3.697 1.942 5.038 1.341 1.341 3.183 1.857 5.038 1.942C8.332 23.986 8.741 24 12 24s3.668-.014 4.948-.072c1.855-.085 3.697-.601 5.038-1.942 1.341-1.341 1.857-3.183 1.942-5.038.058-1.28.072-1.689.072-4.948s-.014-3.668-.072-4.948c-.085-1.855-.601-3.697-1.942-5.038C20.645.673 18.803.157 16.948.072 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+              <a class="sc-soc" href="https://www.facebook.com/profile.php?id=61588058885222" target="_blank" rel="noopener" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg></a>
+              <a class="sc-soc" href="https://www.tiktok.com/@vsbenefits" target="_blank" rel="noopener" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="sc-footbottom">
+          <span>&copy; <span id="sc-year">2026</span> VS Benefits. All rights reserved.</span>
+          <span>vshealthbenefits.com · Licensed health insurance advisor</span>
         </div>
       </div>
     </div>
@@ -2079,8 +2209,8 @@ function renderPipeline(){
     board.addEventListener("dragleave",function(e){var r=board.getBoundingClientRect();if(e.clientX<=r.left||e.clientX>=r.right||e.clientY<=r.top||e.clientY>=r.bottom)autoStop();});
   }
   var allItems=[];
-  getLeads().forEach(function(l){if(PIPE_STAGES.indexOf(l.status||"")>=0)allItems.push({id:l.id,type:"lead",name:fullName(l),phone:l.phone||"",notes:l.notes||"",coverage:l.coverage||"",status:l.status,value:leadValue(l),updated:l.updated||l.created||0});});
-  getAccounts().forEach(function(a){if(PIPE_STAGES.indexOf(a.pipelineStatus||"")>=0){allItems.push({id:a.id,type:"account",name:fullName(a),phone:a.phone||"",notes:"",coverage:(a.plan&&a.plan.name)||"Client",status:a.pipelineStatus,value:0,updated:a.updated||a.created||0});}});
+  getLeads().forEach(function(l){if(PIPE_STAGES.indexOf(l.status||"")>=0)allItems.push({id:l.id,type:"lead",name:fullName(l),phone:l.phone||"",email:l.email||"",notes:l.notes||"",coverage:l.coverage||"",status:l.status,value:leadValue(l),updated:l.updated||l.created||0});});
+  getAccounts().forEach(function(a){if(PIPE_STAGES.indexOf(a.pipelineStatus||"")>=0){allItems.push({id:a.id,type:"account",name:fullName(a),phone:a.phone||"",email:a.email||"",notes:"",coverage:(a.plan&&a.plan.name)||"Client",status:a.pipelineStatus,value:0,updated:a.updated||a.created||0});}});
 
   var stats=$("pipe-stats");
   if(stats){
@@ -2138,9 +2268,13 @@ function renderPipeline(){
       top.appendChild(nm);
       card.appendChild(top);
       if(item.coverage)card.appendChild(el("span",{class:"pl-tag",text:item.coverage}));
+      var contact=item.phone?("📞 "+item.phone):(item.email?("✉️ "+item.email):"");
+      if(contact)card.appendChild(el("div",{class:"pl-meta",text:contact}));
+      if(item.notes)card.appendChild(el("div",{class:"pl-note",text:item.notes}));
       card.appendChild(el("div",{class:"pl-divider"}));
       var bot=el("div",{class:"pl-card-bottom"});
-      bot.appendChild(el("div",{class:"pl-amount",text:item.value>0?money(item.value):"—"}));
+      if(item.value>0)bot.appendChild(el("div",{class:"pl-amount",text:money(item.value)}));
+      else bot.appendChild(el("div",{class:"pl-amount pl-amount-zero",text:"No value set"}));
       bot.appendChild(el("div",{class:"pl-date",text:fmtDate(item.updated)}));
       card.appendChild(bot);
       var acts=el("div",{class:"pl-acts"});
@@ -3309,6 +3443,16 @@ var btn=$("back-to-top");
 window.addEventListener("scroll",function(){if(btn)btn.classList.toggle("visible",window.scrollY>300);},{passive:true});
 if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});
 
+})();
+</script>
+<script>
+(function(){
+  var t=document.getElementById("sc-toggle"),l=document.getElementById("sc-links");
+  if(t&&l){
+    t.addEventListener("click",function(){var o=l.classList.toggle("open");t.setAttribute("aria-expanded",o?"true":"false");});
+    l.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){l.classList.remove("open");t.setAttribute("aria-expanded","false");});});
+  }
+  var y=document.getElementById("sc-year");if(y)y.textContent=new Date().getFullYear();
 })();
 </script>
 </body>
