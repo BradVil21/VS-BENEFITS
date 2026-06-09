@@ -771,6 +771,35 @@ html.dark .pl-name strong{color:#d4e8ff}
 html.dark .pl-meta{color:#b8cce4}
 .pl-note{font-size:11.5px;color:var(--muted);margin-top:7px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .pl-amount-zero{font-size:13px;font-weight:600;color:var(--muted);font-family:Inter,sans-serif}
+@keyframes plPop{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
+.pl-detail{animation:plPop .22s cubic-bezier(.2,.7,.2,1)}
+.pld-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.pld-av{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;font-family:Poppins,sans-serif;flex-shrink:0}
+.pld-hb{min-width:0}
+.pld-name{font-size:20px;font-weight:800;font-family:Poppins,sans-serif;color:var(--blue-900);line-height:1.2}
+html.dark .pld-name{color:#d4e8ff}
+.pld-pills{display:flex;gap:8px;margin-top:7px;flex-wrap:wrap;align-items:center}
+.pld-type{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;background:var(--blue-50);color:var(--blue-700)}
+html.dark .pld-type{background:#0f2040;color:#7eb6ff}
+.pld-quote{background:linear-gradient(135deg,var(--blue-900),var(--blue-700));color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:16px}
+.pld-quote-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#a8c4f5}
+.pld-quote-val{font-size:26px;font-weight:800;font-family:Poppins,sans-serif;margin-top:2px}
+.pld-info{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:520px){.pld-info{grid-template-columns:1fr 1fr;gap:0 18px}}
+.pld-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-2)}
+html.dark .pld-row{border-color:#253a54}
+.pld-ico{font-size:15px;flex-shrink:0;opacity:.8;width:20px;text-align:center}
+.pld-rc{min-width:0}
+.pld-lbl{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.pld-val{font-size:14px;color:var(--ink);overflow-wrap:anywhere}
+html.dark .pld-val{color:#f0f4fa}
+a.pld-val{color:var(--blue-600)}
+.pld-notes{margin:14px 0 4px;background:var(--blue-50);border:1px solid var(--line-2);border-radius:10px;padding:11px 13px}
+html.dark .pld-notes{background:#111d2b;border-color:#253a54}
+.pld-notes-text{font-size:13px;color:var(--ink-2);line-height:1.5;margin-top:4px;white-space:pre-wrap;overflow-wrap:anywhere}
+html.dark .pld-notes-text{color:#b8cce4}
+.pld-acts-log{margin-top:14px}
+.pld-acts-log .pld-lbl{margin-bottom:6px}
 .pl-tag{display:inline-block;margin-top:10px;background:var(--blue-50);color:var(--blue-700);border-radius:999px;padding:4px 11px;font-size:12px;font-weight:600}
 html.dark .pl-tag{background:#0f2040;color:#7eb6ff}
 .pl-divider{height:1px;background:var(--line-2);margin:12px 0}
@@ -925,6 +954,24 @@ html.dark .report-row{border-color:#253a54}
 html.dark .report-row .rr-date{color:#f0f4fa}
 .report-modal-text{width:100%;min-height:340px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.5;border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--bg);color:var(--ink);white-space:pre-wrap}
 html.dark .report-modal-text{background:#0e1620;border-color:#253a54;color:#f0f4fa}
+
+/* ═══════════════════ CARD VISIBILITY BOOST — leads, clients & tasks (added) ═══════════════════ */
+.tbl .row{
+  border:1.5px solid #c4d2e8;
+  box-shadow:0 3px 12px rgba(11,35,70,.11);
+  border-radius:16px;
+}
+.tbl .row::before{width:6px;opacity:1;border-radius:16px 0 0 16px}
+.tbl .row .card-body{padding-left:22px}
+.tbl .row .acts{padding-left:22px}
+.tbl .row:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(11,35,70,.17);border-color:#a7bcdd}
+html.dark .tbl .row{background:#1c2d42;border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
+html.dark .tbl .row:hover{border-color:#4d6ea0;box-shadow:0 16px 34px rgba(0,0,0,.62)}
+
+/* Tasks sequence cards */
+.seq-card{border:1.5px solid #c4d2e8;box-shadow:0 3px 12px rgba(11,35,70,.11);transition:box-shadow .15s,transform .15s}
+.seq-card:hover{box-shadow:0 12px 28px rgba(11,35,70,.15)}
+html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
 
 </style>
 <style id="sc-style">
@@ -2085,7 +2132,7 @@ function openLeadForm(existing){
     '<div class="field"><label>Zip code</label><input id="l-zipcode" type="text" inputmode="numeric" maxlength="10" value="'+escapeHtml(l.zipcode||"")+'" /></div></div>'+
     '<div class="row2"><div class="field"><label>Status</label><select id="l-status">'+statusOpts+'</select></div>'+
     '<div class="field"><label>Coverage interest</label><input id="l-coverage" value="'+escapeHtml(l.coverage||"")+'" /></div></div>'+
-    '<div class="field"><label>Estimated value ($)</label><input id="l-value" type="number" min="0" step="100" value="'+escapeHtml(l.value||"")+'" placeholder="e.g. 1200" /></div>'+
+    '<div class="field"><label>Quoted amount ($)</label><input id="l-value" type="number" min="0" step="100" value="'+escapeHtml(l.value||"")+'" placeholder="e.g. 1200" /></div>'+
     '<div class="field"><label>Notes</label><textarea id="l-notes" rows="3">'+escapeHtml(l.notes||"")+'</textarea></div>'+
     '<div class="field"><label>Activity log (calls &amp; follow-ups)</label>'+
     '<div class="log-btns">'+
@@ -2177,6 +2224,66 @@ async function convertLeadToClient(leadId){
   },200);
 }
 
+function openPipelineCard(item){
+  var isLead=item.type==="lead";
+  var rec=isLead?getLeads().filter(function(x){return x.id===item.id;})[0]:getAccounts().filter(function(x){return x.id===item.id;})[0];
+  if(!rec)return;
+  var st=isLead?(rec.status||"new"):(rec.pipelineStatus||"active");
+  var wrap=el("div",{class:"pl-detail"});
+  var head=el("div",{class:"pld-head"});
+  head.appendChild(el("div",{class:"pld-av av-"+st,text:initials(rec)}));
+  var hb=el("div",{class:"pld-hb"});
+  hb.appendChild(el("div",{class:"pld-name",text:fullName(rec)}));
+  var pills=el("div",{class:"pld-pills"});
+  pills.appendChild(el("span",{class:"status-pill status-"+st,text:statusLabel(st)}));
+  pills.appendChild(el("span",{class:"pld-type",text:isLead?"Lead":"Client"}));
+  hb.appendChild(pills);head.appendChild(hb);
+  wrap.appendChild(head);
+  var qv=isLead?leadValue(rec):0;
+  var qb=el("div",{class:"pld-quote"});
+  var ql=el("div");ql.appendChild(el("div",{class:"pld-quote-lbl",text:"Quoted amount"}));
+  ql.appendChild(el("div",{class:"pld-quote-val",text:qv>0?money(qv):"Not quoted yet"}));
+  qb.appendChild(ql);wrap.appendChild(qb);
+  var info=el("div",{class:"pld-info"});
+  function row(icon,label,val,href){
+    if(!val)return;
+    var r=el("div",{class:"pld-row"});
+    r.appendChild(el("span",{class:"pld-ico",text:icon}));
+    var c=el("div",{class:"pld-rc"});
+    c.appendChild(el("div",{class:"pld-lbl",text:label}));
+    c.appendChild(href?el("a",{class:"pld-val",href:href,text:val}):el("div",{class:"pld-val",text:val}));
+    r.appendChild(c);info.appendChild(r);
+  }
+  row("📞","Phone",rec.phone,rec.phone?("tel:"+String(rec.phone).replace(/[^0-9+]/g,"")):null);
+  row("✉️","Email",rec.email,rec.email?("mailto:"+rec.email):null);
+  var cov=rec.coverage||(rec.plan&&(rec.plan.planName||rec.plan.carrier))||"";
+  row("🛡️","Coverage",cov);
+  row("🪪","Policy #",rec.policyNumber);
+  row("🎂","Date of birth",rec.dob);
+  if(rec.address)row("📍","Address",[rec.address,rec.state,rec.zipcode].filter(Boolean).join(", "));
+  row("📅",isLead?"Added":"Joined",fmtDate(rec.created));
+  if(rec.updated)row("🕒","Last updated",fmtDate(rec.updated));
+  wrap.appendChild(info);
+  if(rec.notes){
+    var nb=el("div",{class:"pld-notes"});
+    nb.appendChild(el("div",{class:"pld-lbl",text:"Notes"}));
+    nb.appendChild(el("div",{class:"pld-notes-text",text:rec.notes}));
+    wrap.appendChild(nb);
+  }
+  if(isLead&&rec.activity&&rec.activity.length){
+    var ab=el("div",{class:"pld-acts-log"});
+    ab.appendChild(el("div",{class:"pld-lbl",text:"Recent activity"}));
+    var hist=el("div",{class:"activity-history"});renderActivityHistory(hist,rec);
+    ab.appendChild(hist);wrap.appendChild(ab);
+  }
+  var acts=el("div",{class:"modal-acts"});
+  if(rec.phone)acts.appendChild(el("a",{class:"btn btn-teal btn-sm",href:"tel:"+String(rec.phone).replace(/[^0-9+]/g,""),text:"📞 Call"}));
+  if(rec.email)acts.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:"mailto:"+rec.email,text:"✉️ Email"}));
+  acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Close",onclick:closeModal}));
+  acts.appendChild(el("button",{class:"btn btn-primary btn-sm",type:"button",text:"✏️ Edit full record",onclick:function(){if(isLead)openLeadForm(rec);else openEditAcctForm(rec);}}));
+  wrap.appendChild(acts);
+  openModal(wrap);
+}
 function renderPipeline(){
   var board=$("pipeline-board");board.innerHTML="";
   if(!board._panInit){
@@ -2274,7 +2381,7 @@ function renderPipeline(){
       card.appendChild(el("div",{class:"pl-divider"}));
       var bot=el("div",{class:"pl-card-bottom"});
       if(item.value>0)bot.appendChild(el("div",{class:"pl-amount",text:money(item.value)}));
-      else bot.appendChild(el("div",{class:"pl-amount pl-amount-zero",text:"No value set"}));
+      else bot.appendChild(el("div",{class:"pl-amount pl-amount-zero",text:"Not quoted yet"}));
       bot.appendChild(el("div",{class:"pl-date",text:fmtDate(item.updated)}));
       card.appendChild(bot);
       var acts=el("div",{class:"pl-acts"});
@@ -2290,6 +2397,7 @@ function renderPipeline(){
         renderPipeline();renderLeads();renderAccounts();
       }}));
       card.appendChild(acts);
+      card.addEventListener("click",function(e){if(e.target.closest&&e.target.closest("button, a, select"))return;openPipelineCard(item);});
       card.addEventListener("dragstart",function(){dragId=item.id;dragType=item.type;card.classList.add("dragging");});
       card.addEventListener("dragend",function(){dragId=null;dragType=null;card.classList.remove("dragging");});
       card.addEventListener("touchstart",function(){dragId=item.id;dragType=item.type;},{passive:true});
