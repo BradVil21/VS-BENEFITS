@@ -2006,7 +2006,7 @@ function openLeadForm(existing){
     '<div class="field"><label>Zip code</label><input id="l-zipcode" type="text" inputmode="numeric" maxlength="10" value="'+escapeHtml(l.zipcode||"")+'" /></div></div>'+
     '<div class="row2"><div class="field"><label>Status</label><select id="l-status">'+statusOpts+'</select></div>'+
     '<div class="field"><label>Coverage interest</label><input id="l-coverage" value="'+escapeHtml(l.coverage||"")+'" /></div></div>'+
-    '<div class="field"><label>Quoted amount ($)</label><input id="l-value" type="number" min="0" step="100" value="'+escapeHtml(l.value||"")+'" placeholder="e.g. 1200" /></div>'+
+    '<div class="field"><label>Quoted amount ($)</label><input id="l-value" type="number" min="0" step="any" value="'+escapeHtml(l.value||"")+'" placeholder="e.g. 350" /></div>'+
     '<div class="field"><label>Notes</label><textarea id="l-notes" rows="3">'+escapeHtml(l.notes||"")+'</textarea></div>'+
     '<div class="field"><label>Activity log (calls &amp; follow-ups)</label>'+
     '<div class="log-btns">'+
@@ -2116,7 +2116,8 @@ function openPipelineCard(item){
   var qv=isLead?leadValue(rec):0;
   var qb=el("div",{class:"pld-quote"});
   var ql=el("div");ql.appendChild(el("div",{class:"pld-quote-lbl",text:"Quoted amount"}));
-  ql.appendChild(el("div",{class:"pld-quote-val",text:qv>0?money(qv):"Not quoted yet"}));
+  var deadStatus=(st==="declined"||st==="no-longer-interested"||st==="lost");
+  ql.appendChild(el("div",{class:"pld-quote-val",text:deadStatus?"$0.00":(qv>0?money(qv):"Not quoted yet")}));
   qb.appendChild(ql);wrap.appendChild(qb);
   var info=el("div",{class:"pld-info"});
   function row(icon,label,val,href){
@@ -2195,17 +2196,23 @@ function renderPipeline(){
 
   var stats=$("pipe-stats");
   if(stats){
-    var totalVal=allItems.reduce(function(s,x){return s+(Number(x.value)||0);},0);
+    var OPEN_STAGES=["quoted","60-days-out","follow-up","appointment-scheduled"];
+    var openItems=allItems.filter(function(x){return OPEN_STAGES.indexOf(x.status)>=0;});
+    var pipelineVal=openItems.reduce(function(s,x){return s+(Number(x.value)||0);},0);
+    var soldItems=allItems.filter(function(x){return x.status==="sold";});
+    var soldVal=soldItems.reduce(function(s,x){return s+(Number(x.value)||0);},0);
     stats.innerHTML="";
     var mkStat=function(icon,num,lbl){var w=el("div",{class:"pipe-stat"});w.appendChild(el("div",{class:"ps-ico",text:icon}));var t=el("div");t.appendChild(el("div",{class:"ps-num",text:num}));t.appendChild(el("div",{class:"ps-lbl",text:lbl}));w.appendChild(t);return w;};
-    stats.appendChild(mkStat("↗",String(allItems.length),"Active Leads"));
-    stats.appendChild(mkStat("$",money(totalVal),"Pipeline Value"));
+    stats.appendChild(mkStat("↗",String(openItems.length),"Active Leads"));
+    stats.appendChild(mkStat("$",money(pipelineVal),"Pipeline Value"));
+    stats.appendChild(mkStat("✅",soldItems.length+" · "+money(soldVal),"Sold"));
   }
   function initialsOf(name){var p=String(name||"").trim().split(/\s+/);return ((p[0]||"").charAt(0)+(p[1]||"").charAt(0)).toUpperCase()||"?";}
 
   PIPE_STAGES.forEach(function(stage){
     var stageItems=allItems.filter(function(x){return x.status===stage;});
     var stageSum=stageItems.reduce(function(s,x){return s+(Number(x.value)||0);},0);
+    if(stage==="declined"||stage==="no-longer-interested")stageSum=0;
     var col=el("div",{class:"pl-col pl-"+stage});
     col.appendChild(el("div",{class:"pl-accent"}));
     var hdr=el("div",{class:"pl-head"});
@@ -2254,7 +2261,8 @@ function renderPipeline(){
       if(item.notes)card.appendChild(el("div",{class:"pl-note",text:item.notes}));
       card.appendChild(el("div",{class:"pl-divider"}));
       var bot=el("div",{class:"pl-card-bottom"});
-      if(item.value>0)bot.appendChild(el("div",{class:"pl-amount",text:money(item.value)}));
+      if(stage==="declined"||stage==="no-longer-interested")bot.appendChild(el("div",{class:"pl-amount pl-amount-zero",text:"$0.00"}));
+      else if(item.value>0)bot.appendChild(el("div",{class:"pl-amount",text:money(item.value)}));
       else bot.appendChild(el("div",{class:"pl-amount pl-amount-zero",text:"Not quoted yet"}));
       bot.appendChild(el("div",{class:"pl-date",text:fmtDate(item.updated)}));
       card.appendChild(bot);
