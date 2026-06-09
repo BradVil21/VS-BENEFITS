@@ -772,6 +772,22 @@ html.dark .pl-meta{color:#b8cce4}
 .pl-amount-zero{font-size:13px;font-weight:600;color:var(--muted);font-family:Inter,sans-serif}
 @keyframes plPop{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
 .pl-detail{animation:plPop .22s cubic-bezier(.2,.7,.2,1)}
+@keyframes vscFade{from{opacity:0}to{opacity:1}}
+@keyframes vscPop{0%{transform:scale(.8) translateY(12px);opacity:0}60%{transform:scale(1.04)}100%{transform:scale(1) translateY(0);opacity:1}}
+.vs-celebrate-ov{position:fixed;inset:0;background:rgba(11,35,70,.45);display:flex;align-items:center;justify-content:center;z-index:100000;padding:20px;animation:vscFade .2s ease}
+.vs-celebrate{background:#fff;border-radius:20px;padding:30px 34px;max-width:420px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(11,35,70,.4);animation:vscPop .42s cubic-bezier(.2,.8,.2,1);border:1px solid var(--line)}
+html.dark .vs-celebrate{background:#16273d;border-color:#34507a}
+.vsc-emoji{font-size:52px;line-height:1;margin-bottom:6px}
+.vsc-title{font-family:Poppins,sans-serif;font-weight:800;font-size:22px;color:var(--blue-900)}
+html.dark .vsc-title{color:#d4e8ff}
+.vsc-name{font-size:17px;font-weight:700;color:var(--blue-600);margin-top:4px}
+.vsc-sub{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;overflow-wrap:anywhere}
+.vsc-acts{display:flex;gap:10px;justify-content:center;margin-top:20px}
+.focus-item.focus-done{opacity:.6}
+.focus-item.focus-done .focus-name>span:first-child{text-decoration:line-through;text-decoration-color:var(--muted)}
+.focus-rank.done{background:linear-gradient(135deg,#5fd3a6,#2bb3c0)!important;color:#fff!important}
+.fp-donebadge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#1f8a5b;background:#e3f7ee;border:1px solid #b8ebd4;padding:6px 11px;border-radius:8px}
+html.dark .fp-donebadge{background:#0f2e22;border-color:#1f6e4d;color:#6fe0aa}
 .pld-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
 .pld-av{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;font-family:Poppins,sans-serif;flex-shrink:0}
 .pld-hb{min-width:0}
@@ -2069,6 +2085,51 @@ var STAGE_LABELS={"quoted":"📄 Quoted","60-days-out":"📆 60+ Days Out","foll
 var dragId=null;var dragType=null;
 
 /* Convert a lead to a client when dropped into "sold" */
+function confettiBurst(){
+  var c=document.createElement("canvas");
+  c.style.cssText="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:99999";
+  document.body.appendChild(c);
+  var ctx=c.getContext("2d");
+  var W=c.width=window.innerWidth,H=c.height=window.innerHeight;
+  var colors=["#1f7a8c","#2bb3c0","#0b2346","#f5b942","#e85d75","#5fd3a6","#5b8def"];
+  var parts=[];
+  for(var i=0;i<150;i++){
+    parts.push({x:W/2+(Math.random()-0.5)*160,y:H*0.34+(Math.random()-0.5)*60,
+      vx:(Math.random()-0.5)*13,vy:Math.random()*-13-3,g:0.32+Math.random()*0.22,
+      size:6+Math.random()*7,color:colors[Math.floor(Math.random()*colors.length)],
+      rot:Math.random()*Math.PI,vr:(Math.random()-0.5)*0.35,shape:Math.random()<0.5?"rect":"circ"});
+  }
+  var start=Date.now(),dur=2600;
+  (function frame(){
+    var t=Date.now()-start;ctx.clearRect(0,0,W,H);
+    parts.forEach(function(p){
+      p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.vx*=0.99;p.rot+=p.vr;
+      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+      ctx.globalAlpha=Math.max(0,1-t/dur);ctx.fillStyle=p.color;
+      if(p.shape==="rect")ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);
+      else{ctx.beginPath();ctx.arc(0,0,p.size/2,0,Math.PI*2);ctx.fill();}
+      ctx.restore();
+    });
+    if(t<dur)requestAnimationFrame(frame);else c.remove();
+  })();
+}
+function clientCelebrate(name,sub){
+  confettiBurst();
+  try{if(localStorage.getItem("vs_sound_on")!=="false"&&typeof playNotifSound==="function")playNotifSound();}catch(e){}
+  var ov=document.createElement("div");ov.className="vs-celebrate-ov";
+  var card=el("div",{class:"vs-celebrate"});
+  card.appendChild(el("div",{class:"vsc-emoji",text:"🎉"}));
+  card.appendChild(el("div",{class:"vsc-title",text:"New client added"}));
+  card.appendChild(el("div",{class:"vsc-name",text:name}));
+  if(sub)card.appendChild(el("div",{class:"vsc-sub",text:sub}));
+  var acts=el("div",{class:"vsc-acts"});
+  acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Close",onclick:function(){ov.remove();}}));
+  acts.appendChild(el("button",{class:"btn btn-primary btn-sm",type:"button",text:"View clients",onclick:function(){ov.remove();switchTab("accounts");}}));
+  card.appendChild(acts);
+  ov.appendChild(card);
+  ov.addEventListener("click",function(e){if(e.target===ov)ov.remove();});
+  document.body.appendChild(ov);
+}
 async function convertLeadToClient(leadId){
   var lead=getLeads().filter(function(l){return l.id===leadId;})[0];
   if(!lead)return;
@@ -2094,7 +2155,7 @@ async function convertLeadToClient(leadId){
   addNotif("lead","🎉 "+fullName(lead)+" is now a client!","Lead converted to client account with temp password: "+tempPw,"accounts");
   // Show confirmation
   setTimeout(function(){
-    alert("✅ "+fullName(lead)+" has been added to Clients!\n\nTemporary password: "+tempPw+"\n\nShare this with them — they can change it in their portal.");
+    clientCelebrate(fullName(lead),"Temp password: "+tempPw+"  ·  share it so they can log in");
   },200);
 }
 
@@ -2596,6 +2657,7 @@ function openCreateAcctForm(){
     var hash=await sha256(pw);
     accts.push({id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:0,status:"active",plan:null,photoDataUrl:"",documents:[]});
     saveAccounts(accts);webhookFire({event:"admin_created_client",email:email,ts:Date.now()});closeModal();renderAccounts();
+    clientCelebrate((first+" "+last).trim()||email,"");
   });
 }
 $("create-acct-btn").addEventListener("click",openCreateAcctForm);
@@ -2976,6 +3038,11 @@ function leadLastTouch(l){
   return t;
 }
 function daysSinceMs(ms){if(!ms)return 999;return Math.floor((Date.now()-ms)/86400000);}
+function leadCalledToday(l){
+  if(!l||!Array.isArray(l.activity))return false;
+  var t0=new Date();t0.setHours(0,0,0,0);var tm=t0.getTime();
+  return l.activity.some(function(a){return a.type==="call"&&(a.ts||0)>=tm;});
+}
 function leadCadence(l){
   var st=l.status||"new";var v=leadValue(l);var base;
   if(st==="appointment-scheduled"||st==="quoted")base=2;
@@ -3114,12 +3181,14 @@ function renderDashboard(){
   /* FOCUS PRIORITIES */
   var fl=$("focus-list");fl.innerHTML="";
   var topFocus=pris.slice(0,8);
+  topFocus.sort(function(a,b){return (leadCalledToday(a.lead)?1:0)-(leadCalledToday(b.lead)?1:0);});
   $("focus-sub").textContent=active.length?("Top "+topFocus.length+" of "+active.length):"";
   if(!topFocus.length){fl.appendChild(el("div",{class:"focus-empty",text:"No active leads yet. Add leads or move them into a working stage to see priorities here."}));}
   topFocus.forEach(function(p,i){
     var l=p.lead;
-    var item=el("div",{class:"focus-item"});
-    item.appendChild(el("div",{class:"focus-rank "+p.heat,text:String(i+1)}));
+    var done=leadCalledToday(l);
+    var item=el("div",{class:"focus-item"+(done?" focus-done":"")});
+    item.appendChild(el("div",{class:"focus-rank "+(done?"done":p.heat),text:done?"✓":String(i+1)}));
     var main=el("div",{class:"focus-main"});
     var nm=el("div",{class:"focus-name"});
     nm.appendChild(el("span",{text:fullName(l)}));
@@ -3129,13 +3198,22 @@ function renderDashboard(){
     main.appendChild(el("div",{class:"focus-reason",text:p.reason}));
     main.appendChild(el("div",{class:"focus-action",text:p.action+"  ·  follow up every "+p.cadence+(p.cadence===1?" day":" days")}));
     var btns=el("div",{class:"focus-btns"});
-    btns.appendChild(el("button",{class:"btn btn-teal btn-xs",type:"button",text:"📞 Log call",onclick:function(){quickLog(l,"call");renderDashboard();}}));
-    btns.appendChild(el("button",{class:"btn btn-ghost btn-xs",type:"button",text:"🔁 Log follow-up",onclick:function(){quickLog(l,"followup");renderDashboard();}}));
-    btns.appendChild(el("button",{class:"btn btn-ghost btn-xs",type:"button",text:"Open",onclick:function(){openLeadForm(l);}}));
+    if(done){
+      btns.appendChild(el("span",{class:"fp-donebadge",text:"✓ Call logged today"}));
+      btns.appendChild(el("button",{class:"btn btn-ghost btn-xs",type:"button",text:"Open",onclick:function(){openLeadForm(l);}}));
+    }else{
+      btns.appendChild(el("button",{class:"btn btn-teal btn-xs",type:"button",text:"📞 Log call",onclick:function(){quickLog(l,"call");renderDashboard();}}));
+      btns.appendChild(el("button",{class:"btn btn-ghost btn-xs",type:"button",text:"🔁 Log follow-up",onclick:function(){quickLog(l,"followup");renderDashboard();}}));
+      btns.appendChild(el("button",{class:"btn btn-ghost btn-xs",type:"button",text:"Open",onclick:function(){openLeadForm(l);}}));
+    }
     main.appendChild(btns);
     item.appendChild(main);
     var side=el("div",{class:"focus-side"});
-    side.appendChild(el("span",{class:"focus-due "+(p.overdue?"over":"ok"),text:p.overdue?(p.neverTouched?"Reach out":"Overdue "+p.overdueDays+"d"):"Due in "+Math.max(0,p.cadence-p.daysSince)+"d"}));
+    if(done){
+      side.appendChild(el("span",{class:"focus-due ok",text:"Done today"}));
+    }else{
+      side.appendChild(el("span",{class:"focus-due "+(p.overdue?"over":"ok"),text:p.overdue?(p.neverTouched?"Reach out":"Overdue "+p.overdueDays+"d"):"Due in "+Math.max(0,p.cadence-p.daysSince)+"d"}));
+    }
     side.appendChild(el("div",{class:"dash-sub",text:"Score "+p.score}));
     item.appendChild(side);
     fl.appendChild(item);
