@@ -6,9 +6,10 @@
 <title>Admin Portal | VS Benefits</title>
 <meta name="robots" content="noindex,nofollow" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
 :root{
+  /* VS Benefits brand palette · clean LeadDesk-style layout */
   --blue-900:#0b2346;--blue-800:#0f2e5c;--blue-700:#16447f;
   --blue-600:#1e5ab0;--blue-500:#2f7de0;--blue-100:#e8f0fb;--blue-50:#f4f8fe;
   --teal:#0db5a6;--teal-dark:#098374;--gold:#f5b301;
@@ -17,8 +18,8 @@
   --bg:#f6f9fc;--white:#fff;
   --ok:#0a8754;--warn:#b46b00;--err:#b3261e;
   --shadow-sm:0 1px 2px rgba(11,35,70,.06);
-  --shadow-md:0 8px 24px rgba(11,35,70,.10);
-  --r-sm:8px;--r-md:12px;--r-lg:16px;
+  --shadow-md:0 10px 28px rgba(11,35,70,.11);
+  --r-sm:8px;--r-md:12px;--r-lg:14px;
   --sidebar-w:240px;
   --sidebar-collapsed:60px;
   --topbar-h:56px;
@@ -36,7 +37,7 @@ html.dark{
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 html,body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.5;font-size:15px;height:100%}
-h1,h2,h3,h4{font-family:Poppins,Inter,sans-serif;color:var(--blue-900);margin:0 0 .5em}
+h1,h2,h3,h4{font-family:'Inter',system-ui,sans-serif;font-weight:600;letter-spacing:-.011em;color:var(--blue-900);margin:0 0 .5em}
 a{color:var(--blue-600);text-decoration:none}
 button{font-family:inherit;cursor:pointer}
 input,select,textarea{font-family:inherit;font-size:15px}
@@ -65,9 +66,9 @@ html.dark h1,html.dark h2,html.dark h3,html.dark h4{color:#d4e8ff}
   width:32px;height:32px;border-radius:8px;flex-shrink:0;
   background:linear-gradient(135deg,var(--blue-700),var(--teal));
   display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:.78rem;color:#fff;font-family:Poppins,sans-serif;
+  font-weight:800;font-size:.78rem;color:#fff;font-family:'Inter',system-ui,sans-serif;
 }
-.sidebar-brand .brand-text{font-weight:700;font-size:14px;color:#fff;font-family:Poppins,sans-serif;white-space:nowrap;overflow:hidden;opacity:1;transition:opacity .15s}
+.sidebar-brand .brand-text{font-weight:700;font-size:14px;color:#fff;font-family:'Inter',system-ui,sans-serif;white-space:nowrap;overflow:hidden;opacity:1;transition:opacity .15s}
 .sidebar.collapsed .brand-text{opacity:0;pointer-events:none}
 .sidebar-brand .pill{background:rgba(245,179,1,.22);color:#ffd95a;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;flex-shrink:0;opacity:1;transition:opacity .15s}
 .sidebar.collapsed .pill{opacity:0;pointer-events:none}
@@ -136,7 +137,7 @@ html.dark .topbar{background:var(--blue-900);border-color:var(--line)}
 }
 html.dark .topbar-toggle{border-color:var(--line);color:#b8cce4}
 .topbar-toggle:hover{background:var(--blue-50)}
-.topbar-title{font-weight:700;font-size:16px;color:var(--blue-900);font-family:Poppins,sans-serif;flex:1}
+.topbar-title{font-weight:700;font-size:16px;color:var(--blue-900);font-family:'Inter',system-ui,sans-serif;flex:1}
 html.dark .topbar-title{color:#d4e8ff}
 .topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .sync-pill{display:inline-flex;align-items:center;gap:5px;background:var(--bg);border:1px solid var(--line);padding:4px 9px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2)}
@@ -282,7 +283,7 @@ html.dark .empty{background:#111d2b;border-color:#253a54;color:#7a9ab8}
 .row-status-declined::before,.row-status-lost::before,.row-status-revoked::before,.row-status-no-longer-interested::before{background:linear-gradient(180deg,#d94040,#a01818)}
 .tbl .row .card-body{padding:14px 16px 10px 20px}
 .tbl .row .card-header{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-.tbl .row .card-avatar{width:46px;height:46px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;font-family:Poppins,sans-serif;border:2.5px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.14)}
+.tbl .row .card-avatar{width:46px;height:46px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;font-family:'Inter',system-ui,sans-serif;border:2.5px solid rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.14)}
 .tbl .row .card-title-block{flex:1;min-width:0}
 .tbl .row .name{font-weight:700;color:var(--blue-900);font-size:15.5px;line-height:1.25;display:flex;align-items:center;flex-wrap:wrap;gap:6px}
 html.dark .tbl .row .name{color:#d4e8ff}
@@ -496,7 +497,7 @@ html.dark .closed-banner{background:#201500;border-color:#3a2800;color:#f0a020}
 html.dark .seq-card{background:#162030;border-color:#253a54}
 .seq-head{background:linear-gradient(135deg,var(--blue-900),var(--blue-700));color:#fff;padding:13px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .seq-head-left{flex:1;min-width:0}
-.seq-head h3{margin:0;font-size:15px;color:#fff;font-family:Poppins,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seq-head h3{margin:0;font-size:15px;color:#fff;font-family:'Inter',system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .seq-head .seq-meta{font-size:11.5px;color:#a8c4f5;margin-top:2px}
 .seq-day-badge{background:rgba(245,179,1,.22);color:#ffd95a;border:1px solid rgba(245,179,1,.35);font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;flex-shrink:0}
 .seq-pending-badge{background:rgba(229,72,77,.22);color:#ffaaad;border:1px solid rgba(229,72,77,.3);font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap;flex-shrink:0}
@@ -532,7 +533,7 @@ html.dark .seq-footer{background:#111d2b;border-color:#253a54}
 .stale-card{background:#fff;border:2px solid #f5c87a;border-radius:var(--r-lg);margin-bottom:14px;overflow:hidden}
 html.dark .stale-card{border-color:#3a2800}
 .stale-head{background:linear-gradient(135deg,#7a3f00,#b46b00);color:#fff;padding:13px 16px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.stale-head h3{margin:0;font-size:15px;color:#fff;font-family:Poppins,sans-serif}
+.stale-head h3{margin:0;font-size:15px;color:#fff;font-family:'Inter',system-ui,sans-serif}
 .stale-warn{background:rgba(255,255,255,.18);color:#ffd95a;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
 .stale-body{padding:14px 16px}
 html.dark .stale-body{background:#1c2d42;color:#b8cce4}
@@ -542,7 +543,7 @@ html.dark .stale-body p{color:#b8cce4}
 html.dark .slow-followup-card{border-color:#1e3a6a}
 .slow-followup-head{background:linear-gradient(135deg,#16447f,#2f7de0);color:#fff;padding:13px 16px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
 html.dark .slow-followup-head{background:linear-gradient(135deg,#1e3a5e,#2456a0)}
-.slow-followup-head h3{margin:0;font-size:15px;color:#fff;font-family:Poppins,sans-serif}
+.slow-followup-head h3{margin:0;font-size:15px;color:#fff;font-family:'Inter',system-ui,sans-serif}
 .slow-followup-badge{background:rgba(255,255,255,.2);color:#cfe1ff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
 .slow-followup-body{padding:14px 16px}
 .slow-followup-body p{margin:0 0 12px;font-size:13.5px;color:var(--ink-2);line-height:1.5}
@@ -664,10 +665,10 @@ html.dark #bday-modal{background:#1c2d42}
 .bday-banner{background:linear-gradient(135deg,#f5b301,#ff8c42,#e8445a);padding:28px 24px 20px;text-align:center;position:relative;overflow:hidden}
 .bday-banner::before{content:"🎉🎂🎈🎁🎊";position:absolute;top:8px;left:0;right:0;font-size:18px;letter-spacing:4px;opacity:.35;white-space:nowrap;overflow:hidden}
 .bday-confetti{font-size:52px;line-height:1;margin-bottom:8px;display:block}
-.bday-banner h2{margin:0;color:#fff;font-family:Poppins,sans-serif;font-size:22px;font-weight:800}
+.bday-banner h2{margin:0;color:#fff;font-family:'Inter',system-ui,sans-serif;font-size:22px;font-weight:800}
 .bday-banner .bday-sub{color:rgba(255,255,255,.88);font-size:13.5px;margin-top:4px}
 .bday-body{padding:22px 24px 20px;text-align:center}
-.bday-name{font-size:24px;font-weight:800;font-family:Poppins,sans-serif;color:var(--blue-900);margin:0 0 4px}
+.bday-name{font-size:24px;font-weight:800;font-family:'Inter',system-ui,sans-serif;color:var(--blue-900);margin:0 0 4px}
 html.dark .bday-name{color:#d4e8ff}
 .bday-age{font-size:13.5px;color:var(--muted);margin-bottom:16px}
 html.dark .bday-age{color:#7a9ab8}
@@ -682,7 +683,7 @@ html.dark .bday-dismiss{color:#7a9ab8}
 .bday-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;max-height:260px;overflow-y:auto}
 .bday-list-item{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#fff8f0,#fff4fa);border:1px solid #f5d0b0;border-radius:10px;padding:10px 14px;text-align:left}
 html.dark .bday-list-item{background:linear-gradient(135deg,#1e1800,#1e1020);border-color:#3a2800}
-.bday-list-item .bli-av{width:40px;height:40px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;font-family:Poppins,sans-serif;border:2px solid rgba(245,179,1,.4)}
+.bday-list-item .bli-av{width:40px;height:40px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;font-family:'Inter',system-ui,sans-serif;border:2px solid rgba(245,179,1,.4)}
 .bday-list-item .bli-info{flex:1;min-width:0}
 .bday-list-item .bli-name{font-weight:700;color:var(--blue-900);font-size:14px}
 html.dark .bday-list-item .bli-name{color:#d4e8ff}
@@ -702,6 +703,7 @@ html.dark .bday-list-item .bli-name{color:#d4e8ff}
   .stale-body{padding:12px 13px}
 }
 
+
 /* ═══════════════════ $ VALUE + TOTALS + STAGE MOVE + ACTIVITY LOG (added) ═══════════════════ */
 .lead-value{display:inline-flex;align-items:center;gap:4px;background:#e6f7ef;color:var(--ok);border:1px solid #b9e6cf;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;white-space:nowrap}
 .lead-value.zero{background:var(--blue-50);color:var(--muted);border-color:var(--line)}
@@ -709,7 +711,7 @@ html.dark .lead-value{background:#0a2218;color:#22d47a;border-color:#1a4030}
 .card-head-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
 .section-total-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:linear-gradient(135deg,var(--blue-900),var(--blue-700));color:#fff;border-radius:12px;padding:12px 16px;margin-bottom:14px}
 .section-total-bar .stb-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#a8c4f5}
-.section-total-bar .stb-val{font-size:22px;font-weight:800;font-family:Poppins,sans-serif}
+.section-total-bar .stb-val{font-size:22px;font-weight:800;font-family:'Inter',system-ui,sans-serif}
 .section-total-bar .stb-sub{font-size:12px;color:#cdddf5}
 .section-total-bar .stb-pills{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
 .section-total-bar .stb-pill{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:4px 11px;font-size:11.5px;font-weight:700;color:#fff;white-space:nowrap}
@@ -739,7 +741,7 @@ html.dark .modal .activity-history{background:#111d2b;border-color:#253a54}
 .pipe-stat{display:flex;align-items:center;gap:11px}
 .pipe-stat .ps-ico{width:46px;height:46px;border-radius:13px;background:var(--blue-50);color:var(--blue-600);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;flex-shrink:0}
 html.dark .pipe-stat .ps-ico{background:#0f2040;color:#6ab4ff}
-.pipe-stat .ps-num{font-size:21px;font-weight:800;font-family:Poppins,sans-serif;color:var(--blue-900);line-height:1.1}
+.pipe-stat .ps-num{font-size:21px;font-weight:800;font-family:'Inter',system-ui,sans-serif;color:var(--blue-900);line-height:1.1}
 html.dark .pipe-stat .ps-num{color:#d4e8ff}
 .pipe-stat .ps-lbl{font-size:12px;color:var(--muted);margin-top:1px}
 
@@ -747,7 +749,7 @@ html.dark .pipe-stat .ps-num{color:#d4e8ff}
 html.dark .pl-col{background:#121c2b;border-color:#253a54}
 .pl-accent{height:4px;width:100%;background:var(--blue-500)}
 .pl-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 4px;gap:8px}
-.pl-head .pl-title{font-size:15px;font-weight:800;font-family:Poppins,sans-serif;color:var(--blue-900)}
+.pl-head .pl-title{font-size:15px;font-weight:800;font-family:'Inter',system-ui,sans-serif;color:var(--blue-900)}
 html.dark .pl-head .pl-title{color:#d4e8ff}
 .pl-head .pl-count{font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap;flex-shrink:0}
 .pl-substat{padding:0 16px 6px;font-size:11.5px;font-weight:700;color:var(--ok)}
@@ -760,7 +762,7 @@ html.dark .pl-empty{border-color:#253a54;background:rgba(255,255,255,.02)}
 .pl-card.dragging{opacity:.45;transform:rotate(1deg)}
 html.dark .pl-card{background:#1c2d42;border-color:#253a54}
 .pl-card-top{display:flex;align-items:center;gap:10px}
-.pl-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12.5px;font-family:Poppins,sans-serif}
+.pl-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12.5px;font-family:'Inter',system-ui,sans-serif}
 .pl-name{font-size:14px;color:var(--ink);line-height:1.25;min-width:0;overflow-wrap:anywhere}
 html.dark .pl-name{color:#f0f4fa}
 .pl-name .pl-name-lbl{color:var(--muted);font-weight:500}
@@ -772,33 +774,17 @@ html.dark .pl-meta{color:#b8cce4}
 .pl-amount-zero{font-size:13px;font-weight:600;color:var(--muted);font-family:Inter,sans-serif}
 @keyframes plPop{0%{transform:scale(.92);opacity:0}100%{transform:scale(1);opacity:1}}
 .pl-detail{animation:plPop .22s cubic-bezier(.2,.7,.2,1)}
-@keyframes vscFade{from{opacity:0}to{opacity:1}}
-@keyframes vscPop{0%{transform:scale(.8) translateY(12px);opacity:0}60%{transform:scale(1.04)}100%{transform:scale(1) translateY(0);opacity:1}}
-.vs-celebrate-ov{position:fixed;inset:0;background:rgba(11,35,70,.45);display:flex;align-items:center;justify-content:center;z-index:100000;padding:20px;animation:vscFade .2s ease}
-.vs-celebrate{background:#fff;border-radius:20px;padding:30px 34px;max-width:420px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(11,35,70,.4);animation:vscPop .42s cubic-bezier(.2,.8,.2,1);border:1px solid var(--line)}
-html.dark .vs-celebrate{background:#16273d;border-color:#34507a}
-.vsc-emoji{font-size:52px;line-height:1;margin-bottom:6px}
-.vsc-title{font-family:Poppins,sans-serif;font-weight:800;font-size:22px;color:var(--blue-900)}
-html.dark .vsc-title{color:#d4e8ff}
-.vsc-name{font-size:17px;font-weight:700;color:var(--blue-600);margin-top:4px}
-.vsc-sub{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;overflow-wrap:anywhere}
-.vsc-acts{display:flex;gap:10px;justify-content:center;margin-top:20px}
-.focus-item.focus-done{opacity:.6}
-.focus-item.focus-done .focus-name>span:first-child{text-decoration:line-through;text-decoration-color:var(--muted)}
-.focus-rank.done{background:linear-gradient(135deg,#5fd3a6,#2bb3c0)!important;color:#fff!important}
-.fp-donebadge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#1f8a5b;background:#e3f7ee;border:1px solid #b8ebd4;padding:6px 11px;border-radius:8px}
-html.dark .fp-donebadge{background:#0f2e22;border-color:#1f6e4d;color:#6fe0aa}
 .pld-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
-.pld-av{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;font-family:Poppins,sans-serif;flex-shrink:0}
+.pld-av{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;font-family:'Inter',system-ui,sans-serif;flex-shrink:0}
 .pld-hb{min-width:0}
-.pld-name{font-size:20px;font-weight:800;font-family:Poppins,sans-serif;color:var(--blue-900);line-height:1.2}
+.pld-name{font-size:20px;font-weight:800;font-family:'Inter',system-ui,sans-serif;color:var(--blue-900);line-height:1.2}
 html.dark .pld-name{color:#d4e8ff}
 .pld-pills{display:flex;gap:8px;margin-top:7px;flex-wrap:wrap;align-items:center}
 .pld-type{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:4px 10px;border-radius:999px;background:var(--blue-50);color:var(--blue-700)}
 html.dark .pld-type{background:#0f2040;color:#7eb6ff}
 .pld-quote{background:linear-gradient(135deg,var(--blue-900),var(--blue-700));color:#fff;border-radius:14px;padding:14px 18px;margin-bottom:16px}
 .pld-quote-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#a8c4f5}
-.pld-quote-val{font-size:26px;font-weight:800;font-family:Poppins,sans-serif;margin-top:2px}
+.pld-quote-val{font-size:26px;font-weight:800;font-family:'Inter',system-ui,sans-serif;margin-top:2px}
 .pld-info{display:grid;grid-template-columns:1fr;gap:0}
 @media(min-width:520px){.pld-info{grid-template-columns:1fr 1fr;gap:0 18px}}
 .pld-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-2)}
@@ -820,7 +806,7 @@ html.dark .pl-tag{background:#0f2040;color:#7eb6ff}
 .pl-divider{height:1px;background:var(--line-2);margin:12px 0}
 html.dark .pl-divider{background:#253a54}
 .pl-card-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.pl-amount{font-size:19px;font-weight:800;font-family:Poppins,sans-serif;color:var(--blue-900)}
+.pl-amount{font-size:19px;font-weight:800;font-family:'Inter',system-ui,sans-serif;color:var(--blue-900)}
 html.dark .pl-amount{color:#d4e8ff}
 .pl-date{font-size:12.5px;color:var(--muted)}
 .pl-acts{display:flex;gap:6px;margin-top:11px;opacity:0;max-height:0;overflow:hidden;transition:opacity .15s,max-height .15s}
@@ -887,7 +873,7 @@ html.dark .kpi.green .kpi-ico{background:#0a2218;color:#22d47a}
 html.dark .kpi.amber .kpi-ico{background:#201500;color:#f0a020}
 .kpi.red .kpi-ico{background:#fdecea;color:var(--err)}
 html.dark .kpi.red .kpi-ico{background:#200d0d;color:#ff8080}
-.kpi .kpi-num{font-size:20px;font-weight:800;font-family:Poppins,sans-serif;color:var(--blue-900);line-height:1.1}
+.kpi .kpi-num{font-size:20px;font-weight:800;font-family:'Inter',system-ui,sans-serif;color:var(--blue-900);line-height:1.1}
 html.dark .kpi .kpi-num{color:#d4e8ff}
 .kpi .kpi-lbl{font-size:12px;color:var(--muted);margin-top:2px}
 .dash-grid{display:grid;grid-template-columns:1fr;gap:16px}
@@ -896,13 +882,13 @@ html.dark .kpi .kpi-num{color:#d4e8ff}
 .dash-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:0 1px 3px rgba(11,35,70,.05)}
 html.dark .dash-card{background:#1c2d42;border-color:#253a54}
 .dash-card-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
-.dash-card-h h4{margin:0;font-size:15px;font-family:Poppins,sans-serif;color:var(--blue-900)}
+.dash-card-h h4{margin:0;font-size:15px;font-family:'Inter',system-ui,sans-serif;color:var(--blue-900)}
 html.dark .dash-card-h h4{color:#d4e8ff}
 .dash-sub{font-size:12px;color:var(--muted)}
 .focus-item{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid var(--line-2)}
 html.dark .focus-item{border-color:#253a54}
 .focus-item:last-child{border-bottom:none}
-.focus-rank{width:30px;height:30px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;font-family:Poppins,sans-serif}
+.focus-rank{width:30px;height:30px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;font-family:'Inter',system-ui,sans-serif}
 .focus-rank.hot{background:#fdecea;color:#c0362f}
 .focus-rank.warm{background:#fff4e1;color:#9a6700}
 .focus-rank.cool{background:var(--blue-50);color:var(--blue-700)}
@@ -938,7 +924,7 @@ html.dark .chk-text .chk-name{color:#f0f4fa}
 html.dark .perf-row{border-color:#253a54}
 .perf-row:last-child{border-bottom:none}
 .perf-row .pr-lbl{color:var(--muted)}
-.perf-row .pr-val{font-weight:800;color:var(--blue-900);font-family:Poppins,sans-serif}
+.perf-row .pr-val{font-weight:800;color:var(--blue-900);font-family:'Inter',system-ui,sans-serif}
 html.dark .perf-row .pr-val{color:#d4e8ff}
 .stagebar{margin-top:12px}
 .stagebar-row{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:12px}
@@ -988,8 +974,330 @@ html.dark .tbl .row:hover{border-color:#4d6ea0;box-shadow:0 16px 34px rgba(0,0,0
 .seq-card:hover{box-shadow:0 12px 28px rgba(11,35,70,.15)}
 html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
 
-</style>
+/* ═══════════════════════════════════════════════════════════════
+   LEADDESK REDESIGN — clean slate/sky/violet refinement layer
+═══════════════════════════════════════════════════════════════ */
+:root{--sky:#1e5ab0;--sky-2:#16447f;--sky-ink:#16447f;--violet:#0db5a6;--emerald:#0a8754;--amber:#f0a020;--rose:#e5484d;}
 
+/* —— Typography: tighter, calmer —— */
+html,body{font-size:14px}
+.panel h3{font-weight:600;font-size:21px;letter-spacing:-.02em}
+.panel>.lede{color:var(--muted)}
+.card h2{font-weight:600;letter-spacing:-.01em}
+
+/* —— Sidebar: flat slate, pill-style nav, no colored rail —— */
+.sidebar{background:var(--blue-900)}
+.sidebar-brand{border-bottom-color:rgba(255,255,255,.06)}
+.sidebar-brand .b{background:linear-gradient(135deg,var(--blue-700),var(--teal));font-size:.74rem}
+.sidebar-brand .brand-text{font-weight:600}
+.sidebar-brand .pill{background:rgba(245,179,1,.22);color:#ffd95a;font-weight:600}
+.sidebar-nav{padding:10px 0}
+.sidebar-nav-item{height:38px;margin:1px 8px;padding:0 11px;width:auto;border-radius:9px;color:rgba(255,255,255,.55);font-weight:500}
+.sidebar-nav-item:hover{background:rgba(255,255,255,.06);color:#fff}
+.sidebar-nav-item.active{background:rgba(255,255,255,.10);color:#fff;font-weight:600}
+.sidebar-nav-item.active::before{display:none}
+.sidebar.collapsed .sidebar-nav-item{margin:1px 6px}
+.sidebar-section-label{color:rgba(255,255,255,.3)}
+.sidebar-divider{background:rgba(255,255,255,.06)}
+.sidebar-nav-item .sni-badge,.sni-badge{background:var(--rose)}
+.sidebar-bottom{border-top-color:rgba(255,255,255,.06)}
+
+/* —— Topbar: crisp, shadowless —— */
+.topbar{box-shadow:none;backdrop-filter:none}
+.topbar-toggle,.bell-btn,.signout-btn{border-radius:9px}
+.topbar-title{font-weight:600;letter-spacing:-.01em}
+.sync-pill{text-transform:none;letter-spacing:0;font-weight:600;font-size:11.5px;border-radius:999px}
+
+/* —— Buttons: sky primary w/ lighter hover, rounded —— */
+.btn{border-radius:9px;font-weight:600}
+.btn-primary{background:var(--sky)}
+.btn-primary:hover{background:var(--sky-2)}
+.btn-ghost{border-color:var(--line);color:var(--sky-ink)}
+.btn-ghost:hover{background:var(--blue-50)}
+.btn-teal{background:var(--violet)}
+.btn-teal:hover{background:var(--teal-dark)}
+.btn-danger{color:var(--err);border-color:#fbcfe0}
+.btn-danger:hover{background:#fff1f5}
+.btn-sm{border-radius:8px}.btn-xs{border-radius:7px}
+
+/* —— Inputs: rounded, sky focus ring —— */
+.field input,.field select,.field textarea,.toolbar input.search,.filter-select,.move-select{border-radius:9px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--sky-2);box-shadow:0 0 0 3px rgba(14,165,233,.15)}
+
+/* —— Cards: flat, hairline border, gentle shadow —— */
+.card,.dash-card,.kpi{box-shadow:var(--shadow-sm);border:1px solid var(--line);border-radius:var(--r-lg)}
+.notice-info{background:var(--blue-50);color:var(--sky-ink);border-color:#bae6fd}
+.notice-ok{background:#ecfdf5;color:#047857;border-color:#a7f3d0}
+.notice-err{background:#fff1f2;color:#be123c;border-color:#fecdd5}
+.empty{background:var(--blue-50);border-color:var(--line);color:var(--muted)}
+
+/* —— KPI / stat tiles —— */
+.kpi{box-shadow:var(--shadow-sm)}
+.kpi .kpi-ico,.pipe-stat .ps-ico{border-radius:11px;background:var(--blue-50);color:var(--sky-ink)}
+.kpi.green .kpi-ico{background:#ecfdf5;color:var(--emerald)}
+.kpi.amber .kpi-ico{background:#fffbeb;color:var(--amber)}
+.kpi.red .kpi-ico{background:#fff1f2;color:var(--rose)}
+.kpi .kpi-num,.pipe-stat .ps-num,.pl-amount,.perf-row .pr-val,.section-total-bar .stb-val{font-weight:700;letter-spacing:-.01em}
+
+/* —— Flatten heavy gradient panels into clean solid blocks —— */
+.section-total-bar,.pld-quote,.seq-head,.slow-followup-head{background:var(--blue-900)!important}
+.stale-head{background:linear-gradient(135deg,#b45309,#d97706)!important}
+.section-total-bar .stb-label,.pld-quote-lbl{color:#94a3b8}
+.section-total-bar .stb-sub{color:#cbd5e1}
+.stagebar-row .sbr-fill{background:linear-gradient(90deg,var(--sky),var(--violet))!important}
+.spark-bar{background:linear-gradient(180deg,var(--violet),var(--sky))!important}
+.seq-head .seq-meta{color:#93c5fd}
+.seq-day-badge{background:rgba(245,179,1,.18);color:#fcd34d;border-color:rgba(245,179,1,.3)}
+
+/* —— Focus / attention list (dashboard) —— */
+.focus-rank.hot{background:#fff1f2;color:#be123c}
+.focus-rank.warm{background:#fffbeb;color:#b45309}
+.focus-rank.cool{background:var(--blue-50);color:var(--sky-ink)}
+.focus-due.over{background:#fff1f2;color:var(--err)}
+.focus-due.ok{background:#ecfdf5;color:#047857}
+
+/* —— Lead / client list cards: airy, soft —— */
+.tbl .row{border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm)}
+.tbl .row::before{width:4px;opacity:1;border-radius:var(--r-lg) 0 0 var(--r-lg)}
+.tbl .row:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);border-color:#cbd5e1}
+.tbl .row .acts{background:transparent;border-top:1px solid var(--line-2)}
+.row-status-new::before{background:var(--sky)}
+.row-status-contacted::before{background:var(--amber)}
+.row-status-quoted::before{background:var(--violet)}
+.row-status-60-days-out::before,.row-status-follow-up::before{background:var(--amber)}
+.row-status-appointment-scheduled::before{background:var(--sky)}
+.row-status-sold::before,.row-status-enrolled::before,.row-status-active::before{background:var(--emerald)}
+.row-status-declined::before,.row-status-lost::before,.row-status-revoked::before,.row-status-no-longer-interested::before{background:var(--rose)}
+
+/* —— Status pills: soft tint + hairline border (LeadDesk chips) —— */
+.status-pill{letter-spacing:.03em;border:1px solid transparent}
+.status-new{background:var(--blue-50);color:var(--sky-ink);border-color:#bae6fd}
+.status-appointment-scheduled{background:var(--blue-50);color:var(--sky-ink);border-color:#bae6fd}
+.status-quoted{background:#e6f7f5;color:#0a7d72;border-color:#b5e8e2}
+.status-contacted,.status-60-days-out,.status-follow-up,.status-in-progress,.status-unpaid{background:#fffbeb;color:#b45309;border-color:#fde68a}
+.status-enrolled,.status-sold,.status-active,.status-paid{background:#ecfdf5;color:#047857;border-color:#a7f3d0}
+.status-lost,.status-declined,.status-revoked,.status-no-longer-interested{background:#fff1f2;color:#be123c;border-color:#fecdd5}
+.lead-value{background:#ecfdf5;color:#047857;border-color:#a7f3d0}
+.lead-value.zero{background:var(--blue-50);color:var(--muted);border-color:var(--line)}
+
+/* —— Pipeline (live pl-* board): light columns, clean cards —— */
+.pl-col{background:#f8fafc;border:1px solid var(--line);border-radius:var(--r-lg)}
+.pl-head .pl-title{font-weight:600;letter-spacing:-.01em}
+.pl-card{border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-sm)}
+.pl-card:hover{box-shadow:var(--shadow-md)}
+.pl-accent{height:3px}
+.pl-quoted .pl-accent{background:var(--violet)}
+.pl-follow-up .pl-accent,.pl-60-days-out .pl-accent{background:var(--amber)}
+.pl-appointment-scheduled .pl-accent{background:var(--sky)}
+.pl-sold .pl-accent{background:var(--emerald)}
+.pl-declined .pl-accent{background:var(--rose)}
+.pl-no-longer-interested .pl-accent{background:#94a3b8}
+.pl-substat{color:var(--emerald)}
+.pld-type,.pl-tag{background:var(--blue-50);color:var(--sky-ink)}
+.pc-value,.pl-card .pc-value{background:#ecfdf5;color:#047857}
+
+/* —— Legacy pipe-* board (if shown): flatten headers —— */
+.pipe-quoted .pipe-header{background:var(--violet)!important}
+.pipe-follow-up .pipe-header,.pipe-60-days-out .pipe-header{background:var(--amber)!important}
+.pipe-appointment-scheduled .pipe-header{background:var(--sky)!important}
+.pipe-sold .pipe-header{background:var(--emerald)!important}
+.pipe-declined .pipe-header{background:var(--rose)!important}
+.pipe-no-longer-interested .pipe-header{background:#64748b!important}
+
+/* —— Tasks / sequences —— */
+.task-cb.checked{background:var(--emerald);border-color:var(--emerald)}
+.seq-card{border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+.slow-followup-card{border-color:#bae6fd}
+.stale-card{border-color:#fde68a}
+
+/* —— Support / chat —— */
+.thread.active{background:var(--blue-50);border-color:var(--sky-2)}
+.msg.advisor{background:var(--blue-50);border-color:#bae6fd}
+.closed-banner{background:#fffbeb;border-color:#fde68a;color:#b45309}
+
+/* —— Calendar —— */
+.cal-day.today{border-color:var(--sky);box-shadow:inset 0 0 0 2px var(--sky)}
+.cal-day.has{background:linear-gradient(160deg,#eff6ff,var(--blue-50));border-color:#bae6fd}
+.cal-day.appt-pip,.cal-day .appt-pip{background:linear-gradient(135deg,var(--sky),var(--violet))}
+.ev{background:linear-gradient(135deg,#f8fafc,var(--blue-50));border-left-color:var(--sky)}
+
+/* —— Notifications —— */
+.notif-item.unread{background:var(--blue-50)}
+.notif-dot{background:var(--sky)}
+.notif-icon.lead{background:var(--blue-50)}
+.notif-icon.support{background:#ecfdf5}
+.notif-icon.task{background:#fffbeb}
+
+/* —— Toggles / sliders —— */
+.tog input:checked+.tog-sl{background:var(--sky)}
+.vol-row input[type=range]{accent-color:var(--sky)}
+
+/* —— Floating action button —— */
+#back-to-top{background:linear-gradient(135deg,var(--sky),var(--violet))}
+.new-lead-badge{background:linear-gradient(135deg,var(--sky),var(--violet))}
+
+</style>
+<style id="sc-style">
+/* ===== Public-site chrome (top nav + footer) added to admin, sc- namespaced ===== */
+#sc-header{position:relative;background:#fff;border-bottom:1px solid var(--line)}
+html.dark #sc-header{background:var(--blue-900);border-color:#253a54}
+.sc-container{width:100%;max-width:1160px;margin:0 auto;padding:0 18px}
+.sc-navwrap{display:flex;align-items:center;justify-content:space-between;min-height:64px;gap:12px}
+.sc-brand{display:flex;align-items:center;gap:8px;font-family:'Inter',system-ui,sans-serif;font-weight:700;color:var(--blue-900);font-size:1rem;text-decoration:none}
+html.dark .sc-brand{color:#fff}
+.sc-badge{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.85rem;flex-shrink:0}
+.sc-toggle{display:flex;flex-direction:column;justify-content:center;gap:5px;background:transparent;border:0;padding:10px;cursor:pointer;min-width:44px;min-height:44px}
+.sc-toggle span{width:24px;height:2.5px;background:var(--ink);border-radius:2px;transition:transform .25s,opacity .25s}
+html.dark .sc-toggle span{background:#f0f4fa}
+.sc-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.sc-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.sc-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+.sc-links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgba(13,27,42,.10);padding:6px 0 12px;z-index:60}
+html.dark .sc-links{background:var(--blue-900);border-color:#253a54}
+.sc-links.open{display:flex}
+.sc-links a{color:var(--ink);font-weight:600;font-size:1rem;padding:14px 20px;border-bottom:1px solid var(--line);min-height:44px;display:flex;align-items:center;text-decoration:none}
+html.dark .sc-links a{color:#e6eefb;border-color:#1c2d42}
+.sc-links a:hover{color:var(--blue-700);text-decoration:none}
+.sc-links a.sc-cta{background:var(--blue-700);color:#fff;margin:10px 16px 6px;border-radius:10px;justify-content:center;border-bottom:0}
+.sc-links a.sc-cta:hover{background:var(--blue-600);color:#fff}
+@media(min-width:960px){
+  .sc-toggle{display:none}
+  .sc-links{display:flex;position:static;flex-direction:row;gap:18px;background:transparent;border:0;box-shadow:none;padding:0;align-items:center}
+  html.dark .sc-links{background:transparent}
+  .sc-links a{padding:8px 4px;border-bottom:0;min-height:auto;font-size:.94rem;white-space:nowrap}
+  .sc-links a.sc-cta{margin:0;padding:10px 18px;border-radius:999px}
+}
+.sc-footer{background:var(--blue-900);color:#c9d6ea;padding:40px 0 20px;margin-top:30px}
+.sc-footer a{color:#c9d6ea;text-decoration:none}
+.sc-footer a:hover{color:#fff;text-decoration:underline}
+.sc-footgrid{display:grid;grid-template-columns:1fr;gap:26px;margin-bottom:26px}
+.sc-footgrid h4{color:#fff;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin:0 0 12px;font-family:'Inter',sans-serif}
+.sc-footgrid ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;font-size:.92rem}
+.sc-footbrand{color:#fff;display:flex;align-items:center;gap:8px;font-family:'Inter',system-ui,sans-serif;font-weight:700;margin-bottom:10px}
+.sc-foottext{color:rgba(255,255,255,.75);font-size:.9rem;line-height:1.6;margin:0}
+.sc-socials{display:flex;gap:14px;margin-top:18px}
+.sc-soc{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;transition:background .2s}
+.sc-soc:hover{background:rgba(255,255,255,.22)}
+.sc-footbottom{border-top:1px solid rgba(255,255,255,.12);padding-top:18px;font-size:.8rem;color:rgba(255,255,255,.6);display:flex;flex-direction:column;gap:6px}
+.sc-linklike{background:none;border:0;color:#c9d6ea;font-family:inherit;font-size:.92rem;padding:0;cursor:pointer;text-align:left}
+.sc-linklike:hover{color:#fff;text-decoration:underline}
+@media(min-width:640px){
+  .sc-footgrid{grid-template-columns:1fr 1fr}
+  .sc-footbottom{flex-direction:row;justify-content:space-between}
+}
+@media(min-width:960px){
+  .sc-footgrid{grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
+}
+</style>
+<style id="cz-style">
+/* ============ VS Benefits CRM — clean Lead Tracker design ============ */
+#theme-btn{display:none!important}
+html,body{background:#f8fafc;font-size:14px}
+/* shell reskin: slate sidebar, clean topbar, sky accents */
+.sidebar{background:#0f172a}
+.sidebar-nav{padding:10px 0}
+.sidebar-nav-item{height:auto;min-height:40px;margin:2px 10px;padding:10px 12px;width:auto;border-radius:10px;color:#94a3b8;font-weight:500}
+.sidebar-nav-item:hover{background:rgba(30,41,59,.75);color:#fff}
+.sidebar-nav-item.active{background:#1e293b;color:#fff;font-weight:600}
+.sidebar-nav-item.active::before{display:none!important}
+.sidebar-section-label{color:#64748b}
+.sidebar-divider{background:rgba(255,255,255,.07)}
+.sni-badge{background:#f43f5e!important}
+.topbar{background:rgba(255,255,255,.9);backdrop-filter:blur(6px);border-bottom:1px solid #e2e8f0;box-shadow:none}
+.topbar-title{color:#0f172a;font-weight:600;letter-spacing:-.01em}
+.sync-pill{background:#f1f5f9;border-color:#e2e8f0;color:#475569;text-transform:none;font-weight:600;letter-spacing:0}
+.btn{border-radius:10px}
+.btn-primary{background:#0ea5e9}.btn-primary:hover{background:#38bdf8}
+.btn-teal{background:#8b5cf6}.btn-teal:hover{background:#7c3aed}
+.btn-ghost{color:#0284c7;border-color:#e2e8f0}.btn-ghost:hover{background:#f0f9ff}
+/* ---- CRM views (cz- namespaced) ---- */
+.cz-muted{color:#64748b}.cz-faint{color:#94a3b8}
+.cz-row{display:flex;align-items:center;gap:12px}
+.cz-panel{background:#fff;border:1px solid #e2e8f0;border-radius:14px}
+.cz-grid{display:grid;gap:14px}
+.cz-stats{grid-template-columns:repeat(2,1fr)}
+@media(min-width:900px){.cz-stats{grid-template-columns:repeat(4,1fr)}}
+.cz-stat{padding:16px}
+.cz-stat .cz-ico{height:36px;width:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.cz-stat .cz-val{font-size:20px;font-weight:600;letter-spacing:-.01em}
+.cz-stat .cz-lbl{font-size:12px;color:#64748b;margin-top:2px}
+.cz-sec-head{padding:14px 20px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cz-sec-head h2{margin:0;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.cz-link{font-size:12px;color:#0284c7;background:none;border:none;display:inline-flex;align-items:center;gap:2px;cursor:pointer}
+.cz-listitem{padding:12px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;border-top:1px solid #f1f5f9}
+.cz-listitem:hover{background:#f8fafc}
+.cz-nm{font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#1e293b}
+.cz-sub{font-size:12px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cz-pill{font-size:11px;font-weight:600;padding:4px 9px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.cz-dot{height:8px;width:8px;border-radius:999px;display:inline-block;flex-shrink:0}
+.cz-chip{font-size:11px;padding:3px 8px;border-radius:999px;border:1px solid;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.cz-stagegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:20px}
+@media(min-width:640px){.cz-stagegrid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1024px){.cz-stagegrid{grid-template-columns:repeat(6,1fr)}}
+.cz-stagecard{text-align:left;border:1px solid #e2e8f0;border-radius:10px;padding:12px;background:#fff;cursor:pointer}
+.cz-stagecard:hover{border-color:#cbd5e1}
+.cz-stagecard .cz-c{font-size:24px;font-weight:600;letter-spacing:-.01em}
+.cz-hero{background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:14px;padding:28px;color:#fff;display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:24px}
+.cz-hero h2{margin:0;font-size:20px;letter-spacing:-.01em;color:#fff}
+.cz-hero p{margin:4px 0 0;color:#cbd5e1;font-size:14px;max-width:440px}
+.cz-board{display:flex;gap:16px;overflow-x:auto;padding-bottom:16px}
+.cz-col{width:284px;flex-shrink:0;background:rgba(241,245,249,.7);border-radius:14px;border-top:2px solid}
+.cz-col-head{padding:12px;display:flex;align-items:center;justify-content:space-between}
+.cz-col-body{padding:0 8px 8px;display:flex;flex-direction:column;gap:8px;max-height:70vh;overflow-y:auto}
+.cz-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.cz-card .cz-ctop{display:flex;justify-content:space-between;gap:8px;cursor:pointer}
+.cz-card .cz-cctl{display:flex;align-items:center;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid #f1f5f9}
+.cz-card select{font-size:11px;color:#64748b;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:5px 6px;flex:1;outline:none}
+.cz-iconbtn{background:transparent;border:none;color:#94a3b8;padding:6px;border-radius:6px;display:flex;cursor:pointer}
+.cz-iconbtn:hover{color:#0284c7;background:#f0f9ff}
+.cz-empty-col{text-align:center;font-size:12px;color:#94a3b8;padding:20px}
+.cz-table{width:100%;border-collapse:collapse;font-size:14px}
+.cz-table thead th{text-align:left;font-size:12px;color:#64748b;font-weight:500;padding:12px 16px;border-bottom:1px solid #e2e8f0;background:#f8fafc}
+.cz-table tbody td{padding:12px 16px;border-bottom:1px solid #f1f5f9}
+.cz-table tbody tr{cursor:pointer}
+.cz-table tbody tr:hover{background:#f8fafc}
+.cz-tright{text-align:right}
+@media(max-width:768px){.cz-hide-md{display:none}}
+@media(max-width:1024px){.cz-hide-lg{display:none}}
+.cz-only-mobile{display:none}@media(max-width:768px){.cz-only-mobile{display:block}}
+.cz-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.cz-search{position:relative;flex:1;max-width:420px}
+.cz-search input{width:100%;padding:9px 12px 9px 34px;border-radius:10px;background:#f1f5f9;border:1px solid transparent;font-size:14px;outline:none}
+.cz-search input:focus{background:#fff;border-color:#bae6fd}
+.cz-search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#94a3b8}
+.cz-h{font-size:21px;font-weight:600;letter-spacing:-.01em;margin:0 0 4px;color:#0f172a}
+.cz-lede{color:#64748b;font-size:13.5px;margin:0 0 18px}
+.cz-btn-go{font-size:14px;font-weight:500;color:#fff;background:#0ea5e9;border:none;padding:9px 16px;border-radius:10px;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.cz-btn-go:hover{background:#38bdf8}
+.cz-btn-soft{background:#f1f5f9;color:#334155;border:none;font-size:14px;font-weight:500;padding:9px 16px;border-radius:10px;cursor:pointer}
+.cz-btn-soft:hover{background:#e2e8f0}
+.cz-fu-intro{padding:16px;display:flex;gap:12px;align-items:flex-start;margin-bottom:20px}
+.cz-fu-intro .cz-ico{height:36px;width:36px;border-radius:10px;background:#f0f9ff;color:#0284c7;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cz-fu-intro .cz-t{font-size:14px;color:#64748b;line-height:1.5}
+.cz-resetbtn{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:#0284c7;background:#fff;border:1px solid #bae6fd;padding:7px 10px;border-radius:9px;cursor:pointer}
+.cz-resetbtn:hover{background:#0ea5e9;color:#fff;border-color:#0ea5e9}
+.cz-empty{padding:40px;text-align:center}
+.cz-empty .cz-eh{color:#1e293b;font-weight:500;margin:0}
+.cz-empty .cz-es{font-size:14px;color:#94a3b8;margin:4px 0 20px}
+/* modal inner (reuses VS modal shell) */
+.cz-fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:520px){.cz-fgrid{grid-template-columns:1fr}}
+.cz-full{grid-column:1/-1}
+.cz-fld{display:block}
+.cz-fld>span{font-size:12px;font-weight:500;color:#64748b}
+.cz-inp{width:100%;margin-top:4px;padding:9px 12px;border-radius:10px;border:1px solid #e2e8f0;font-size:14px;outline:none;background:#fff;color:#1e293b}
+.cz-inp:focus{border-color:#38bdf8;box-shadow:0 0 0 3px #e0f2fe}
+.cz-moneywrap{position:relative}.cz-moneywrap .cz-s{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94a3b8;margin-top:2px}.cz-moneywrap .cz-inp{padding-left:26px}
+.cz-err{font-size:12px;color:#be123c;background:#fff1f2;border:1px solid #fecdd3;border-radius:10px;padding:8px 12px;margin-top:14px}
+.cz-meta{margin-top:16px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0;padding:16px;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.cz-meta .cz-info{font-size:12px;color:#64748b;flex:1;min-width:160px}.cz-meta .cz-info b{color:#334155}
+.cz-mfoot{display:flex;align-items:center;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid #f1f5f9}
+.cz-del{margin-right:auto;display:inline-flex;align-items:center;gap:6px;font-size:14px;color:#94a3b8;background:none;border:none;padding:8px;border-radius:9px;cursor:pointer}
+.cz-del:hover{color:#f43f5e;background:#fff1f2}
+.cz-btn-del{font-size:12px;font-weight:500;color:#fff;background:#f43f5e;border:none;padding:7px 11px;border-radius:9px;cursor:pointer}
+.cz-btn-ghost{font-size:14px;font-weight:500;color:#475569;background:none;border:none;padding:9px 16px;border-radius:10px;cursor:pointer}
+.cz-btn-ghost:hover{background:#f1f5f9}
+</style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
@@ -1004,23 +1312,27 @@ html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
   </div>
   <nav class="sidebar-nav" id="sidebar-nav">
     <button class="sidebar-nav-item active" data-tab="dashboard" type="button">
-      <span class="sni-icon">🧭</span><span class="sni-label">Focus</span>
-    </button>
-    <button class="sidebar-nav-item" data-tab="leads" type="button">
-      <span class="sni-icon">👥</span><span class="sni-label">Leads</span>
-      <span class="sni-badge" id="b-leads" style="display:none">0</span>
-    </button>
-    <button class="sidebar-nav-item" data-tab="tasks" type="button">
-      <span class="sni-icon">🎯</span><span class="sni-label">Tasks</span>
-      <span class="sni-badge" id="b-tasks" style="display:none">0</span>
+      <span class="sni-icon">🧭</span><span class="sni-label">Dashboard</span>
     </button>
     <button class="sidebar-nav-item" data-tab="pipeline" type="button">
       <span class="sni-icon">📊</span><span class="sni-label">Pipeline</span>
     </button>
+    <button class="sidebar-nav-item" data-tab="leads" type="button">
+      <span class="sni-icon">👥</span><span class="sni-label">Clients</span>
+      <span class="sni-badge" id="b-leads" style="display:none">0</span>
+    </button>
+    <button class="sidebar-nav-item" data-tab="followups" type="button">
+      <span class="sni-icon">📅</span><span class="sni-label">Follow-ups</span>
+      <span class="sni-badge" id="b-followups" style="display:none">0</span>
+    </button>
     <div class="sidebar-divider"></div>
-    <div class="sidebar-section-label">Clients</div>
+    <div class="sidebar-section-label">More</div>
+    <button class="sidebar-nav-item" data-tab="tasks" type="button">
+      <span class="sni-icon">🎯</span><span class="sni-label">Tasks</span>
+      <span class="sni-badge" id="b-tasks" style="display:none">0</span>
+    </button>
     <button class="sidebar-nav-item" data-tab="accounts" type="button">
-      <span class="sni-icon">🏢</span><span class="sni-label">Clients</span>
+      <span class="sni-icon">🏢</span><span class="sni-label">Accounts</span>
       <span class="sni-badge" id="b-acct" style="display:none">0</span>
     </button>
     <button class="sidebar-nav-item" data-tab="support" type="button">
@@ -1058,7 +1370,6 @@ html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
     <span id="sync-pill" class="sync-pill off">
       <span class="dot"></span><span id="sync-lbl">Offline</span>
     </span>
-    <button id="theme-btn" class="theme-btn" type="button" aria-label="Toggle theme">🌙</button>
     <button id="bell-btn" class="bell-btn" type="button" aria-label="Notifications" hidden>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       <span id="bell-badge" class="bell-badge" hidden>0</span>
@@ -1081,7 +1392,7 @@ html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
   <nav style="background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.06)">
     <div style="display:flex;align-items:center;gap:10px">
       <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#0a6e8a,#0e4d6e);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;letter-spacing:-.5px">VS</div>
-      <span style="font-weight:700;font-size:17px;color:#0e2a3d">VS Benefits</span>
+      <span style="font-weight:700;font-size:17px;color:#0b2346">VS Benefits</span>
     </div>
     <div style="display:flex;align-items:center;gap:28px">
       <a href="https://vshealthbenefits.com" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Home</a>
@@ -1090,7 +1401,7 @@ html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
       <a href="https://vshealthbenefits.com/blog" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Blog</a>
       <a href="https://vshealthbenefits.com/contact" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Contact</a>
       <a href="https://vshealthbenefits.com/member-login" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Member Login</a>
-      <a href="https://vshealthbenefits.com/get-a-quote" target="_blank" style="text-decoration:none;background:#0e2a3d;color:#fff;font-size:14px;font-weight:600;padding:9px 20px;border-radius:999px">Get a Quote</a>
+      <a href="https://vshealthbenefits.com/get-a-quote" target="_blank" style="text-decoration:none;background:#0b2346;color:#fff;font-size:14px;font-weight:600;padding:9px 20px;border-radius:999px">Get a Quote</a>
     </div>
   </nav>
   <!-- LOGIN CARD -->
@@ -1108,7 +1419,7 @@ html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
     </div>
   </div>
   <!-- FOOTER -->
-  <footer style="background:#0b2445;color:#c8d9ec;padding:48px 64px 0;flex-shrink:0">
+  <footer style="background:#0b2346;color:#c8d9ec;padding:48px 64px 0;flex-shrink:0">
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px">
       <div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
@@ -1168,7 +1479,7 @@ html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
   <nav style="background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.06)">
     <div style="display:flex;align-items:center;gap:10px">
       <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#0a6e8a,#0e4d6e);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;letter-spacing:-.5px">VS</div>
-      <span style="font-weight:700;font-size:17px;color:#0e2a3d">VS Benefits</span>
+      <span style="font-weight:700;font-size:17px;color:#0b2346">VS Benefits</span>
     </div>
     <div style="display:flex;align-items:center;gap:28px">
       <a href="https://vshealthbenefits.com" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Home</a>
@@ -1177,7 +1488,7 @@ html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
       <a href="https://vshealthbenefits.com/blog" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Blog</a>
       <a href="https://vshealthbenefits.com/contact" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Contact</a>
       <a href="https://vshealthbenefits.com/member-login" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Member Login</a>
-      <a href="https://vshealthbenefits.com/get-a-quote" target="_blank" style="text-decoration:none;background:#0e2a3d;color:#fff;font-size:14px;font-weight:600;padding:9px 20px;border-radius:999px">Get a Quote</a>
+      <a href="https://vshealthbenefits.com/get-a-quote" target="_blank" style="text-decoration:none;background:#0b2346;color:#fff;font-size:14px;font-weight:600;padding:9px 20px;border-radius:999px">Get a Quote</a>
     </div>
   </nav>
   <!-- SIGNUP CARD -->
@@ -1202,7 +1513,7 @@ html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
     </div>
   </div>
   <!-- FOOTER -->
-  <footer style="background:#0b2445;color:#c8d9ec;padding:48px 64px 0;flex-shrink:0">
+  <footer style="background:#0b2346;color:#c8d9ec;padding:48px 64px 0;flex-shrink:0">
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px">
       <div>
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
@@ -1261,57 +1572,31 @@ html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
 <div class="shell" id="shell" hidden>
   <main class="main" id="main-content">
 
-    <!-- COMMAND CENTER / FOCUS -->
-    <div id="p-dashboard" class="panel active">
-      <div class="dash-head">
-        <div>
-          <h3 id="dash-title">Command Center</h3>
-          <p class="lede" style="margin-bottom:0" id="dash-greeting">Your focus for today.</p>
-        </div>
-        <div class="dash-actions">
-          <button id="dash-report-btn" class="btn btn-primary btn-sm" type="button">📋 End-of-day report</button>
-        </div>
-      </div>
-      <div class="dash-kpis" id="dash-kpis"></div>
-      <div class="dash-grid">
-        <div class="dash-col-main">
-          <div class="dash-card">
-            <div class="dash-card-h"><h4>🎯 Focus priorities</h4><span class="dash-sub" id="focus-sub"></span></div>
-            <div id="focus-list"></div>
-          </div>
-          <div class="dash-card">
-            <div class="dash-card-h"><h4>✅ Today's checklist</h4><span class="dash-sub" id="check-sub"></span></div>
-            <div id="check-list"></div>
-          </div>
-        </div>
-        <div class="dash-col-side">
-          <div class="dash-card">
-            <div class="dash-card-h"><h4>📈 Performance</h4></div>
-            <div id="perf-body"></div>
-          </div>
-          <div class="dash-card">
-            <div class="dash-card-h"><h4>🛠 Work on &amp; improve</h4></div>
-            <div id="coach-body"></div>
-          </div>
-          <div class="dash-card">
-            <div class="dash-card-h"><h4>🗓 Progress</h4></div>
-            <div id="progress-body"></div>
-          </div>
-        </div>
+    <!-- PUBLIC SITE NAV (matches main website) -->
+    <div id="sc-header">
+      <div class="sc-container sc-navwrap">
+        <a class="sc-brand" href="/"><span class="sc-badge">VS</span><span>VS Benefits</span></a>
+        <button class="sc-toggle" id="sc-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+        <nav class="sc-links" id="sc-links">
+          <a href="/">Home</a>
+          <a href="/services">Services</a>
+          <a href="/about">About</a>
+          <a href="/blog">Blog</a>
+          <a href="/contact">Contact</a>
+          <a href="/client">Member Login</a>
+          <a class="sc-cta" href="/quote">Get a Quote</a>
+        </nav>
       </div>
     </div>
 
-    <!-- LEADS -->
+    <!-- COMMAND CENTER / FOCUS -->
+    <div id="p-dashboard" class="panel active">
+      <div id="cz-dashboard"></div>
+    </div>
+
+    <!-- CLIENTS (lead list, new CRM design) -->
     <div id="p-leads" class="panel">
-      <h3>Leads</h3>
-      <p class="lede">Marketing-form leads from the public site, plus anyone you add manually.</p>
-      <div class="toolbar">
-        <input id="lead-search" class="search" type="search" placeholder="Search name, phone, email..." />
-        <button id="add-lead-btn" class="btn btn-primary btn-sm" type="button">+ Add lead</button>
-        <button id="export-leads-btn" class="btn btn-ghost btn-sm" type="button">Export CSV</button>
-      </div>
-      <div class="filter-row" id="lead-filter-row"></div>
-      <div id="leads-list" class="tbl"></div>
+      <div id="cz-clients"></div>
     </div>
 
     <!-- TASKS -->
@@ -1321,16 +1606,14 @@ html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
       <div id="tasks-container"></div>
     </div>
 
-    <!-- PIPELINE -->
+    <!-- PIPELINE (new CRM design) -->
     <div id="p-pipeline" class="panel">
-      <div class="pipe-top">
-        <div>
-          <h3>Lead Pipeline</h3>
-          <p class="lede" style="margin-bottom:0">Drag and drop leads between stages. Dropping into <strong>Sold</strong> automatically creates a client account.</p>
-        </div>
-        <div class="pipe-stats" id="pipe-stats"></div>
-      </div>
-      <div class="pipeline-wrap" id="pipeline-board"></div>
+      <div id="cz-pipeline"></div>
+    </div>
+
+    <!-- FOLLOW-UPS (new CRM design) -->
+    <div id="p-followups" class="panel">
+      <div id="cz-followups"></div>
     </div>
 
     <!-- CALENDAR -->
@@ -1401,7 +1684,7 @@ html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
     <div id="p-settings" class="panel">
       <h3>Settings</h3>
 
-      <div class="card">
+      <div class="card" hidden>
         <h4 style="margin:0 0 6px;font-size:15px">🎨 Appearance</h4>
         <p class="lede">Choose your preferred theme.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
@@ -1469,6 +1752,63 @@ html.dark .seq-card{border-color:#37527c;box-shadow:0 3px 14px rgba(0,0,0,.5)}
         <div style="display:flex;flex-wrap:wrap;gap:8px">
           <button id="export-all-btn" type="button" class="btn btn-ghost">Export all (JSON)</button>
           <label class="btn btn-ghost" style="cursor:pointer">Import data<input id="import-file" type="file" accept="application/json" hidden /></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- PUBLIC SITE FOOTER (matches main website) -->
+    <div class="sc-footer" role="contentinfo">
+      <div class="sc-container">
+        <div class="sc-footgrid">
+          <div>
+            <div class="sc-footbrand"><span class="sc-badge">VS</span><span>VS Benefits</span></div>
+            <p class="sc-foottext">Licensed, independent health insurance advisor based in Miami, FL, serving small employers and families in 40+ states. Unbiased guidance, zero-cost consultations.</p>
+          </div>
+          <div>
+            <h4>Solutions</h4>
+            <ul>
+              <li><a href="/truck-driver-health-insurance">Truck Driver Insurance</a></li>
+              <li><a href="/1099-health-insurance.html">1099 Worker Insurance</a></li>
+              <li><a href="/family-health-insurance.html">Family Plans</a></li>
+              <li><a href="/small-business-health-insurance.html">Small Business</a></li>
+              <li><a href="/ppo-health-insurance">PPO Plans</a></li>
+              <li><a href="/services#micro">Micro Group 2-9</a></li>
+              <li><a href="/services#aca">ACA / Individual</a></li>
+              <li><a href="/services#dental-vision">Dental &amp; Vision</a></li>
+              <li><a href="/services#medicaid">Medicaid Guidance</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Company</h4>
+            <ul>
+              <li><a href="/about">About</a></li>
+              <li><a href="/blog">Blog</a></li>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/quote">Get a Quote</a></li>
+              <li><a href="/privacy">Privacy Policy</a></li>
+              <li><a href="/terms">Terms &amp; Conditions</a></li>
+              <li><a href="/client">Member Login</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Reach Us</h4>
+            <ul>
+              <li><a href="tel:+19548251009">(954) 825-1009</a></li>
+              <li><a href="mailto:bvilsaint@vshealthbenefits.com">bvilsaint@vshealthbenefits.com</a></li>
+              <li>Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET</li>
+              <li>Miami, FL · 40+ states</li>
+            </ul>
+            <div class="sc-socials">
+              <a class="sc-soc" href="https://www.linkedin.com/company/vsbenefits/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S.02 4.88.02 3.5 1.13 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5h3.8v2.1h.05C12.85 9.1 14.6 8 16.7 8c4.1 0 4.85 2.7 4.85 6.2V24h-4v-8.8c0-2.1-.04-4.8-2.93-4.8-2.93 0-3.38 2.3-3.38 4.65V24h-4V8.5z"/></svg></a>
+              <a class="sc-soc" href="https://www.instagram.com/vshealthbenefits" target="_blank" rel="noopener" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.975.975 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.975.975-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.975-.975-1.246-2.242-1.308-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608.975-.975 2.242-1.246 3.608-1.308C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.197.157 3.355.673 2.014 2.014.673 3.355.157 5.197.072 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.085 1.855.601 3.697 1.942 5.038 1.341 1.341 3.183 1.857 5.038 1.942C8.332 23.986 8.741 24 12 24s3.668-.014 4.948-.072c1.855-.085 3.697-.601 5.038-1.942 1.341-1.341 1.857-3.183 1.942-5.038.058-1.28.072-1.689.072-4.948s-.014-3.668-.072-4.948c-.085-1.855-.601-3.697-1.942-5.038C20.645.673 18.803.157 16.948.072 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+              <a class="sc-soc" href="https://www.facebook.com/profile.php?id=61588058885222" target="_blank" rel="noopener" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg></a>
+              <a class="sc-soc" href="https://www.tiktok.com/@vsbenefits" target="_blank" rel="noopener" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="sc-footbottom">
+          <span>&copy; <span id="sc-year">2026</span> VS Benefits. All rights reserved.</span>
+          <span>vshealthbenefits.com · Licensed health insurance advisor</span>
         </div>
       </div>
     </div>
@@ -2022,7 +2362,7 @@ function openLeadForm(existing){
     '<div class="field"><label>Zip code</label><input id="l-zipcode" type="text" inputmode="numeric" maxlength="10" value="'+escapeHtml(l.zipcode||"")+'" /></div></div>'+
     '<div class="row2"><div class="field"><label>Status</label><select id="l-status">'+statusOpts+'</select></div>'+
     '<div class="field"><label>Coverage interest</label><input id="l-coverage" value="'+escapeHtml(l.coverage||"")+'" /></div></div>'+
-    '<div class="field"><label>Quoted amount ($)</label><input id="l-value" type="number" min="0" step="any" value="'+escapeHtml(l.value||"")+'" placeholder="e.g. 350" /></div>'+
+    '<div class="field"><label>Quoted amount ($)</label><input id="l-value" type="number" min="0" step="100" value="'+escapeHtml(l.value||"")+'" placeholder="e.g. 1200" /></div>'+
     '<div class="field"><label>Notes</label><textarea id="l-notes" rows="3">'+escapeHtml(l.notes||"")+'</textarea></div>'+
     '<div class="field"><label>Activity log (calls &amp; follow-ups)</label>'+
     '<div class="log-btns">'+
@@ -2068,13 +2408,14 @@ function openLeadForm(existing){
   });
 }
 
-$("add-lead-btn").addEventListener("click",function(){openLeadForm(null);});
-$("lead-search").addEventListener("input",renderLeads);
-$("export-leads-btn").addEventListener("click",function(){
+/* legacy leads-toolbar bindings removed — Clients view is rendered by the new CRM (cz*) code */
+(function(){var a=$("add-lead-btn");if(a)a.addEventListener("click",function(){openLeadForm(null);});
+var s=$("lead-search");if(s)s.addEventListener("input",renderLeads);
+var x=$("export-leads-btn");if(x)x.addEventListener("click",function(){
   var rows=[["firstName","lastName","email","phone","dob","address","state","zipcode","company","coverage","value","status","notes","created"]];
   getLeads().forEach(function(l){rows.push([l.firstName||"",l.lastName||"",l.email,l.phone,l.dob||"",l.address,l.state||"",l.zipcode||"",l.company,l.coverage,l.value||"",l.status,l.notes,l.created?new Date(l.created).toISOString():""].map(csvEscape));});
   downloadFile("leads-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
-});
+});})();
 
 /* ════════════════════════════════════════
    PIPELINE
@@ -2085,51 +2426,6 @@ var STAGE_LABELS={"quoted":"📄 Quoted","60-days-out":"📆 60+ Days Out","foll
 var dragId=null;var dragType=null;
 
 /* Convert a lead to a client when dropped into "sold" */
-function confettiBurst(){
-  var c=document.createElement("canvas");
-  c.style.cssText="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:99999";
-  document.body.appendChild(c);
-  var ctx=c.getContext("2d");
-  var W=c.width=window.innerWidth,H=c.height=window.innerHeight;
-  var colors=["#1f7a8c","#2bb3c0","#0b2346","#f5b942","#e85d75","#5fd3a6","#5b8def"];
-  var parts=[];
-  for(var i=0;i<150;i++){
-    parts.push({x:W/2+(Math.random()-0.5)*160,y:H*0.34+(Math.random()-0.5)*60,
-      vx:(Math.random()-0.5)*13,vy:Math.random()*-13-3,g:0.32+Math.random()*0.22,
-      size:6+Math.random()*7,color:colors[Math.floor(Math.random()*colors.length)],
-      rot:Math.random()*Math.PI,vr:(Math.random()-0.5)*0.35,shape:Math.random()<0.5?"rect":"circ"});
-  }
-  var start=Date.now(),dur=2600;
-  (function frame(){
-    var t=Date.now()-start;ctx.clearRect(0,0,W,H);
-    parts.forEach(function(p){
-      p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.vx*=0.99;p.rot+=p.vr;
-      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);
-      ctx.globalAlpha=Math.max(0,1-t/dur);ctx.fillStyle=p.color;
-      if(p.shape==="rect")ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);
-      else{ctx.beginPath();ctx.arc(0,0,p.size/2,0,Math.PI*2);ctx.fill();}
-      ctx.restore();
-    });
-    if(t<dur)requestAnimationFrame(frame);else c.remove();
-  })();
-}
-function clientCelebrate(name,sub){
-  confettiBurst();
-  try{if(localStorage.getItem("vs_sound_on")!=="false"&&typeof playNotifSound==="function")playNotifSound();}catch(e){}
-  var ov=document.createElement("div");ov.className="vs-celebrate-ov";
-  var card=el("div",{class:"vs-celebrate"});
-  card.appendChild(el("div",{class:"vsc-emoji",text:"🎉"}));
-  card.appendChild(el("div",{class:"vsc-title",text:"New client added"}));
-  card.appendChild(el("div",{class:"vsc-name",text:name}));
-  if(sub)card.appendChild(el("div",{class:"vsc-sub",text:sub}));
-  var acts=el("div",{class:"vsc-acts"});
-  acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Close",onclick:function(){ov.remove();}}));
-  acts.appendChild(el("button",{class:"btn btn-primary btn-sm",type:"button",text:"View clients",onclick:function(){ov.remove();switchTab("accounts");}}));
-  card.appendChild(acts);
-  ov.appendChild(card);
-  ov.addEventListener("click",function(e){if(e.target===ov)ov.remove();});
-  document.body.appendChild(ov);
-}
 async function convertLeadToClient(leadId){
   var lead=getLeads().filter(function(l){return l.id===leadId;})[0];
   if(!lead)return;
@@ -2155,7 +2451,7 @@ async function convertLeadToClient(leadId){
   addNotif("lead","🎉 "+fullName(lead)+" is now a client!","Lead converted to client account with temp password: "+tempPw,"accounts");
   // Show confirmation
   setTimeout(function(){
-    clientCelebrate(fullName(lead),"Temp password: "+tempPw+"  ·  share it so they can log in");
+    alert("✅ "+fullName(lead)+" has been added to Clients!\n\nTemporary password: "+tempPw+"\n\nShare this with them — they can change it in their portal.");
   },200);
 }
 
@@ -2177,8 +2473,7 @@ function openPipelineCard(item){
   var qv=isLead?leadValue(rec):0;
   var qb=el("div",{class:"pld-quote"});
   var ql=el("div");ql.appendChild(el("div",{class:"pld-quote-lbl",text:"Quoted amount"}));
-  var deadStatus=(st==="declined"||st==="no-longer-interested"||st==="lost");
-  ql.appendChild(el("div",{class:"pld-quote-val",text:deadStatus?"$0.00":(qv>0?money(qv):"Not quoted yet")}));
+  ql.appendChild(el("div",{class:"pld-quote-val",text:qv>0?money(qv):"Not quoted yet"}));
   qb.appendChild(ql);wrap.appendChild(qb);
   var info=el("div",{class:"pld-info"});
   function row(icon,label,val,href){
@@ -2257,23 +2552,17 @@ function renderPipeline(){
 
   var stats=$("pipe-stats");
   if(stats){
-    var OPEN_STAGES=["quoted","60-days-out","follow-up","appointment-scheduled"];
-    var openItems=allItems.filter(function(x){return OPEN_STAGES.indexOf(x.status)>=0;});
-    var pipelineVal=openItems.reduce(function(s,x){return s+(Number(x.value)||0);},0);
-    var soldItems=allItems.filter(function(x){return x.status==="sold";});
-    var soldVal=soldItems.reduce(function(s,x){return s+(Number(x.value)||0);},0);
+    var totalVal=allItems.reduce(function(s,x){return s+(Number(x.value)||0);},0);
     stats.innerHTML="";
     var mkStat=function(icon,num,lbl){var w=el("div",{class:"pipe-stat"});w.appendChild(el("div",{class:"ps-ico",text:icon}));var t=el("div");t.appendChild(el("div",{class:"ps-num",text:num}));t.appendChild(el("div",{class:"ps-lbl",text:lbl}));w.appendChild(t);return w;};
-    stats.appendChild(mkStat("↗",String(openItems.length),"Active Leads"));
-    stats.appendChild(mkStat("$",money(pipelineVal),"Pipeline Value"));
-    stats.appendChild(mkStat("✅",soldItems.length+" · "+money(soldVal),"Sold"));
+    stats.appendChild(mkStat("↗",String(allItems.length),"Active Leads"));
+    stats.appendChild(mkStat("$",money(totalVal),"Pipeline Value"));
   }
   function initialsOf(name){var p=String(name||"").trim().split(/\s+/);return ((p[0]||"").charAt(0)+(p[1]||"").charAt(0)).toUpperCase()||"?";}
 
   PIPE_STAGES.forEach(function(stage){
     var stageItems=allItems.filter(function(x){return x.status===stage;});
     var stageSum=stageItems.reduce(function(s,x){return s+(Number(x.value)||0);},0);
-    if(stage==="declined"||stage==="no-longer-interested")stageSum=0;
     var col=el("div",{class:"pl-col pl-"+stage});
     col.appendChild(el("div",{class:"pl-accent"}));
     var hdr=el("div",{class:"pl-head"});
@@ -2322,8 +2611,7 @@ function renderPipeline(){
       if(item.notes)card.appendChild(el("div",{class:"pl-note",text:item.notes}));
       card.appendChild(el("div",{class:"pl-divider"}));
       var bot=el("div",{class:"pl-card-bottom"});
-      if(stage==="declined"||stage==="no-longer-interested")bot.appendChild(el("div",{class:"pl-amount pl-amount-zero",text:"$0.00"}));
-      else if(item.value>0)bot.appendChild(el("div",{class:"pl-amount",text:money(item.value)}));
+      if(item.value>0)bot.appendChild(el("div",{class:"pl-amount",text:money(item.value)}));
       else bot.appendChild(el("div",{class:"pl-amount pl-amount-zero",text:"Not quoted yet"}));
       bot.appendChild(el("div",{class:"pl-date",text:fmtDate(item.updated)}));
       card.appendChild(bot);
@@ -2657,7 +2945,6 @@ function openCreateAcctForm(){
     var hash=await sha256(pw);
     accts.push({id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:0,status:"active",plan:null,photoDataUrl:"",documents:[]});
     saveAccounts(accts);webhookFire({event:"admin_created_client",email:email,ts:Date.now()});closeModal();renderAccounts();
-    clientCelebrate((first+" "+last).trim()||email,"");
   });
 }
 $("create-acct-btn").addEventListener("click",openCreateAcctForm);
@@ -2902,12 +3189,11 @@ $("import-file").addEventListener("change",function(e){
 (function(){
   var THEME_KEY="vs_theme";
   function applyTheme(theme){
-    var html=document.documentElement;
-    if(theme==="dark")html.classList.add("dark");
-    else if(theme==="light")html.classList.remove("dark");
-    else{var prefersDark=window.matchMedia&&window.matchMedia("(prefers-color-scheme:dark)").matches;if(prefersDark)html.classList.add("dark");else html.classList.remove("dark");}
+    /* Dark mode retired — portal is light-only. */
+    document.documentElement.classList.remove("dark");
   }
-  applyTheme(localStorage.getItem(THEME_KEY)||"light");
+  localStorage.setItem(THEME_KEY,"light");
+  applyTheme("light");
   if(window.matchMedia)window.matchMedia("(prefers-color-scheme:dark)").addEventListener("change",function(){if((localStorage.getItem(THEME_KEY)||"light")==="system")applyTheme("system");});
   function getCurrentTheme(){return localStorage.getItem(THEME_KEY)||"light";}
   function setTheme(t){localStorage.setItem(THEME_KEY,t);applyTheme(t);paintThemeUI();}
@@ -3038,11 +3324,6 @@ function leadLastTouch(l){
   return t;
 }
 function daysSinceMs(ms){if(!ms)return 999;return Math.floor((Date.now()-ms)/86400000);}
-function leadCalledToday(l){
-  if(!l||!Array.isArray(l.activity))return false;
-  var t0=new Date();t0.setHours(0,0,0,0);var tm=t0.getTime();
-  return l.activity.some(function(a){return a.type==="call"&&(a.ts||0)>=tm;});
-}
 function leadCadence(l){
   var st=l.status||"new";var v=leadValue(l);var base;
   if(st==="appointment-scheduled"||st==="quoted")base=2;
@@ -3181,14 +3462,12 @@ function renderDashboard(){
   /* FOCUS PRIORITIES */
   var fl=$("focus-list");fl.innerHTML="";
   var topFocus=pris.slice(0,8);
-  topFocus.sort(function(a,b){return (leadCalledToday(a.lead)?1:0)-(leadCalledToday(b.lead)?1:0);});
   $("focus-sub").textContent=active.length?("Top "+topFocus.length+" of "+active.length):"";
   if(!topFocus.length){fl.appendChild(el("div",{class:"focus-empty",text:"No active leads yet. Add leads or move them into a working stage to see priorities here."}));}
   topFocus.forEach(function(p,i){
     var l=p.lead;
-    var done=leadCalledToday(l);
-    var item=el("div",{class:"focus-item"+(done?" focus-done":"")});
-    item.appendChild(el("div",{class:"focus-rank "+(done?"done":p.heat),text:done?"✓":String(i+1)}));
+    var item=el("div",{class:"focus-item"});
+    item.appendChild(el("div",{class:"focus-rank "+p.heat,text:String(i+1)}));
     var main=el("div",{class:"focus-main"});
     var nm=el("div",{class:"focus-name"});
     nm.appendChild(el("span",{text:fullName(l)}));
@@ -3198,22 +3477,13 @@ function renderDashboard(){
     main.appendChild(el("div",{class:"focus-reason",text:p.reason}));
     main.appendChild(el("div",{class:"focus-action",text:p.action+"  ·  follow up every "+p.cadence+(p.cadence===1?" day":" days")}));
     var btns=el("div",{class:"focus-btns"});
-    if(done){
-      btns.appendChild(el("span",{class:"fp-donebadge",text:"✓ Call logged today"}));
-      btns.appendChild(el("button",{class:"btn btn-ghost btn-xs",type:"button",text:"Open",onclick:function(){openLeadForm(l);}}));
-    }else{
-      btns.appendChild(el("button",{class:"btn btn-teal btn-xs",type:"button",text:"📞 Log call",onclick:function(){quickLog(l,"call");renderDashboard();}}));
-      btns.appendChild(el("button",{class:"btn btn-ghost btn-xs",type:"button",text:"🔁 Log follow-up",onclick:function(){quickLog(l,"followup");renderDashboard();}}));
-      btns.appendChild(el("button",{class:"btn btn-ghost btn-xs",type:"button",text:"Open",onclick:function(){openLeadForm(l);}}));
-    }
+    btns.appendChild(el("button",{class:"btn btn-teal btn-xs",type:"button",text:"📞 Log call",onclick:function(){quickLog(l,"call");renderDashboard();}}));
+    btns.appendChild(el("button",{class:"btn btn-ghost btn-xs",type:"button",text:"🔁 Log follow-up",onclick:function(){quickLog(l,"followup");renderDashboard();}}));
+    btns.appendChild(el("button",{class:"btn btn-ghost btn-xs",type:"button",text:"Open",onclick:function(){openLeadForm(l);}}));
     main.appendChild(btns);
     item.appendChild(main);
     var side=el("div",{class:"focus-side"});
-    if(done){
-      side.appendChild(el("span",{class:"focus-due ok",text:"Done today"}));
-    }else{
-      side.appendChild(el("span",{class:"focus-due "+(p.overdue?"over":"ok"),text:p.overdue?(p.neverTouched?"Reach out":"Overdue "+p.overdueDays+"d"):"Due in "+Math.max(0,p.cadence-p.daysSince)+"d"}));
-    }
+    side.appendChild(el("span",{class:"focus-due "+(p.overdue?"over":"ok"),text:p.overdue?(p.neverTouched?"Reach out":"Overdue "+p.overdueDays+"d"):"Due in "+Math.max(0,p.cadence-p.daysSince)+"d"}));
     side.appendChild(el("div",{class:"dash-sub",text:"Score "+p.score}));
     item.appendChild(side);
     fl.appendChild(item);
@@ -3502,6 +3772,311 @@ function checkBirthdays(){
 
 function renderAll(){renderDashboard();renderLeads();renderAccounts();renderSupport();renderReferrals();renderSettings();renderPipeline();renderTasks();}
 
+/* ===================== VS BENEFITS CRM — clean Lead Tracker views ===================== */
+var czFollowupDays=14;
+var czCLOSED=["sold","no_longer_interested"];
+var czSTAGES=[
+  {id:"follow_up",label:"Follow Up",color:"#0ea5e9"},
+  {id:"quoted",label:"Quoted",color:"#8b5cf6"},
+  {id:"sixty_plus",label:"60+ Days Out",color:"#f59e0b"},
+  {id:"ghosted",label:"Ghosted",color:"#f43f5e"},
+  {id:"no_longer_interested",label:"No Longer Interested",color:"#94a3b8"},
+  {id:"sold",label:"Sold",color:"#10b981"}
+];
+var czMETA={};czSTAGES.forEach(function(s){czMETA[s.id]=s;});
+var czUS=["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
+var czQuery="";
+var czSearchSVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>';
+var czFUSTYLE={overdue:"background:#ffe4e6;color:#be123c;border:1px solid #fecdd3",today:"background:#fef3c7;color:#92400e;border:1px solid #fde68a",upcoming:"background:#f1f5f9;color:#475569;border:1px solid #e2e8f0"};
+function czYMD(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function czParseYMD(s){return new Date(s+"T00:00:00");}
+function czAddDays(ymd,n){var d=czParseYMD(ymd);d.setDate(d.getDate()+n);return czYMD(d);}
+function czDaysBetween(a,b){return Math.round((czParseYMD(a)-czParseYMD(b))/86400000);}
+function czPretty(ymd){if(!ymd)return"";return czParseYMD(ymd).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}
+function czName(c){return ((c.firstName||"")+" "+(c.lastName||"")).trim()||c.name||c.email||"(no name)";}
+function czVal(c){var v=(c.quoteValue!=null&&c.quoteValue!=="")?c.quoteValue:leadValue(c);return Number(v)||0;}
+function czStatusToStage(s){s=(s||"new");var m={"new":"follow_up","contacted":"follow_up","follow-up":"follow_up","appointment-scheduled":"follow_up","quoted":"quoted","60-days-out":"sixty_plus","ghosted":"ghosted","sold":"sold","enrolled":"sold","declined":"no_longer_interested","lost":"no_longer_interested","no-longer-interested":"no_longer_interested"};return m[s]||"follow_up";}
+function czStageToStatus(st){var m={"follow_up":"follow-up","quoted":"quoted","sixty_plus":"60-days-out","ghosted":"ghosted","no_longer_interested":"no-longer-interested","sold":"sold"};return m[st]||"follow-up";}
+function czEnsure(){
+  var arr=getLeads();var changed=false;
+  arr.forEach(function(l){
+    if(!l.firstName&&!l.lastName&&l.name){var p=String(l.name).split(/\s+/);l.firstName=p[0]||"";l.lastName=p.slice(1).join(" ");changed=true;}
+    if(!l.stage){l.stage=czStatusToStage(l.status);changed=true;}
+    if(l.quoteValue==null||l.quoteValue===""){l.quoteValue=leadValue(l);changed=true;}
+    if((l.zipCode==null||l.zipCode==="")&&l.zipcode){l.zipCode=l.zipcode;}
+    if(!l.lastContact){l.lastContact=l.updated?czYMD(new Date(l.updated)):(l.created?czYMD(new Date(l.created)):todayStr());changed=true;}
+    if(!l.createdAt){l.createdAt=l.created?czYMD(new Date(l.created)):todayStr();}
+    if(!l.followUpDue&&czCLOSED.indexOf(l.stage)<0){l.followUpDue=czAddDays(l.lastContact||todayStr(),czFollowupDays);changed=true;}
+  });
+  if(changed)saveLeads(arr);
+  return arr;
+}
+function czFU(c){
+  if(czCLOSED.indexOf(c.stage)>=0||!c.followUpDue)return{key:"none",label:""};
+  var diff=czDaysBetween(c.followUpDue,todayStr());
+  if(diff<0)return{key:"overdue",days:-diff,label:(-diff)+"d overdue"};
+  if(diff===0)return{key:"today",days:0,label:"Due today"};
+  return{key:"upcoming",days:diff,label:"in "+diff+"d"};
+}
+function czDotStyle(id){return "background:"+(czMETA[id]?czMETA[id].color:"#94a3b8");}
+function czChipStyle(id){var c=czMETA[id]?czMETA[id].color:"#94a3b8";return "color:"+c+";background:"+c+"1a;border-color:"+c+"33";}
+function czFiltered(){var q=czQuery.trim().toLowerCase();var cs=getLeads();if(!q)return cs;return cs.filter(function(c){return [c.firstName,c.lastName,c.email,c.phone,c.zipCode||c.zipcode,c.state,c.notes].filter(Boolean).join(" ").toLowerCase().indexOf(q)>=0;});}
+function czBadges(){
+  var cs=getLeads();
+  var over=cs.filter(function(c){return ["overdue","today"].indexOf(czFU(c).key)>=0;}).length;
+  var bf=$("b-followups");if(bf){bf.textContent=over;bf.style.display=over>0?"":"none";}
+  var bl=$("b-leads");if(bl){bl.textContent=cs.length;bl.style.display=cs.length>0?"":"none";}
+}
+function czBind(root){
+  root.querySelectorAll("[data-cz-open]").forEach(function(n){n.addEventListener("click",function(e){e.stopPropagation();var id=n.getAttribute("data-cz-open");var c=getLeads().filter(function(x){return x.id===id;})[0];if(c)czOpenModal(c);});});
+  root.querySelectorAll("[data-cz-go]").forEach(function(n){n.addEventListener("click",function(){switchTab(n.getAttribute("data-cz-go"));});});
+  root.querySelectorAll("[data-cz-add]").forEach(function(n){n.addEventListener("click",function(){czOpenModal(null);});});
+  root.querySelectorAll("[data-cz-sample]").forEach(function(n){n.addEventListener("click",function(){czLoadSample();});});
+  root.querySelectorAll("[data-cz-reset]").forEach(function(n){n.addEventListener("click",function(e){e.stopPropagation();czRestart(n.getAttribute("data-cz-reset"));});});
+  root.querySelectorAll("[data-cz-stage]").forEach(function(n){n.addEventListener("change",function(e){e.stopPropagation();czSetStage(n.getAttribute("data-cz-stage"),n.value);});});
+}
+function czCurrentRender(){
+  if($("p-dashboard")&&$("p-dashboard").classList.contains("active"))czDashboard();
+  if($("p-pipeline")&&$("p-pipeline").classList.contains("active"))czPipeline();
+  if($("p-leads")&&$("p-leads").classList.contains("active"))czClients();
+  if($("p-followups")&&$("p-followups").classList.contains("active"))czFollowups();
+  czBadges();
+}
+function czSetStage(id,stage){
+  var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
+  var prev=c.stage;c.stage=stage;c.status=czStageToStatus(stage);c.updated=Date.now();
+  if(czCLOSED.indexOf(stage)<0&&!c.followUpDue){c.followUpDue=czAddDays(c.lastContact||todayStr(),czFollowupDays);}
+  saveLeads(arr);
+  if(stage==="sold"&&prev!=="sold"&&typeof convertLeadToClient==="function"){convertLeadToClient(id);}
+  if(stage==="follow_up"&&prev!=="follow_up"&&typeof getLeadSeq==="function"&&!getLeadSeq(id)&&typeof initLeadSeq==="function"){initLeadSeq(id);}
+  czCurrentRender();if(typeof renderTasks==="function")renderTasks();
+}
+function czRestart(id){
+  var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
+  var t=todayStr();c.lastContact=t;c.followUpDue=czAddDays(t,czFollowupDays);c.updated=Date.now();
+  saveLeads(arr);
+  if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","Logged contact · follow-up reset");
+  czCurrentRender();
+}
+function czUpsert(rec){
+  var arr=getLeads();var i=arr.findIndex(function(x){return x.id===rec.id;});
+  if(i>=0)arr[i]=rec;else arr.unshift(rec);
+  saveLeads(arr);czCurrentRender();if(typeof renderTasks==="function")renderTasks();
+}
+function czRemove(id){saveLeads(getLeads().filter(function(x){return x.id!==id;}));czCurrentRender();if(typeof renderTasks==="function")renderTasks();}
+function czLoadSample(){
+  var t=todayStr();
+  function mk(o){var b={id:uid(),firstName:"",lastName:"",email:"",phone:"",dob:"",address:"",state:"",zipCode:"",notes:"",quoteValue:0,stage:"follow_up",followUpDue:czAddDays(t,czFollowupDays),lastContact:t,createdAt:t,created:Date.now(),activity:[]};for(var k in o)b[k]=o[k];b.status=czStageToStatus(b.stage);b.name=(b.firstName+" "+b.lastName).trim();return b;}
+  var arr=getLeads();
+  [mk({firstName:"Marcus",lastName:"Bell",email:"marcus.bell@email.com",phone:"(561) 555-0142",state:"FL",zipCode:"33404",address:"120 Ocean Ave",quoteValue:2400,stage:"quoted",followUpDue:czAddDays(t,-3),lastContact:czAddDays(t,-17),notes:"Wants term life, comparing two carriers. Call after 5pm."}),
+   mk({firstName:"Dana",lastName:"Reyes",email:"dana.reyes@email.com",phone:"(561) 555-0188",state:"FL",zipCode:"33407",quoteValue:5200,stage:"follow_up",followUpDue:t,notes:"Referral from Marcus. Hot lead."}),
+   mk({firstName:"Tyler",lastName:"Nguyen",email:"tyler.n@email.com",phone:"(561) 555-0110",state:"FL",zipCode:"33410",quoteValue:1800,stage:"ghosted",followUpDue:czAddDays(t,-9),lastContact:czAddDays(t,-23),notes:"Went quiet after quote. Try email + a different time of day."}),
+   mk({firstName:"Priya",lastName:"Shah",email:"priya.shah@email.com",phone:"(561) 555-0173",state:"FL",zipCode:"33401",quoteValue:8900,stage:"sold",lastContact:czAddDays(t,-5),notes:"Closed! Whole life policy. Ask for referrals."}),
+   mk({firstName:"Greg",lastName:"Owens",email:"greg.owens@email.com",phone:"(561) 555-0199",state:"FL",zipCode:"33412",quoteValue:3100,stage:"sixty_plus",followUpDue:czAddDays(t,6),notes:"Renews in ~2 months. Set reminder before renewal window."})
+  ].forEach(function(c){arr.unshift(c);});
+  saveLeads(arr);czCurrentRender();if(typeof renderTasks==="function")renderTasks();
+}
+function czDashboard(){
+  var mount=$("cz-dashboard");if(!mount)return;
+  czEnsure();czBadges();
+  var cs=getLeads();
+  var active=cs.filter(function(c){return czCLOSED.indexOf(c.stage)<0;});
+  var sold=cs.filter(function(c){return c.stage==="sold";});
+  var pipeVal=active.reduce(function(s,c){return s+czVal(c);},0);
+  var soldVal=sold.reduce(function(s,c){return s+czVal(c);},0);
+  var attention=cs.filter(function(c){return ["overdue","today"].indexOf(czFU(c).key)>=0;}).sort(function(a,b){return czDaysBetween(a.followUpDue,b.followUpDue);});
+  var counts={};czSTAGES.forEach(function(s){counts[s.id]=cs.filter(function(c){return c.stage===s.id;}).length;});
+  function stat(ico,bg,fg,val,lbl){return '<div class="cz-panel cz-stat"><div class="cz-ico" style="background:'+bg+';color:'+fg+'">'+ico+'</div><div class="cz-val">'+val+'</div><div class="cz-lbl">'+lbl+'</div></div>';}
+  var hero=cs.length===0?'<div class="cz-hero"><div style="flex:1"><h2>Welcome to your CRM</h2><p>Add your first lead to start tracking. Every active lead gets a 14-day follow-up timer so nobody slips through the cracks.</p></div><button class="cz-btn-go" data-cz-add="1">+ Add your first client</button></div>':'';
+  var att=attention.length===0?'<div style="padding:40px;text-align:center;font-size:14px;color:#94a3b8">You\'re all caught up. Nothing overdue today.</div>':attention.slice(0,6).map(function(c){var fu=czFU(c);return '<div class="cz-listitem" data-cz-open="'+c.id+'"><span class="cz-dot" style="'+czDotStyle(c.stage)+'"></span><div style="min-width:0;flex:1"><div class="cz-nm">'+escapeHtml(czName(c))+'</div><div class="cz-sub">'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+' · '+escapeHtml(c.phone||c.email||"no contact info")+'</div></div><span class="cz-pill" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span></div>';}).join("");
+  mount.innerHTML=hero
+    +'<div class="cz-grid cz-stats" style="margin-bottom:24px">'
+    +stat("📥","#f0f9ff","#0284c7",active.length,"Active leads")
+    +stat("📈","#f5f3ff","#7c3aed",money(pipeVal),"Pipeline value")
+    +stat("✅","#ecfdf5","#059669",sold.length+" · "+money(soldVal),"Sold")
+    +stat("⏰","#fff1f2","#e11d48",attention.length,"Need follow-up now")
+    +'</div>'
+    +'<div class="cz-panel" style="margin-bottom:24px;overflow:hidden"><div class="cz-sec-head"><h2><span style="color:#f43f5e">📅</span> Who to follow up with</h2><button class="cz-link" data-cz-go="followups">View all ›</button></div>'+att+'</div>'
+    +'<div class="cz-panel" style="overflow:hidden"><div class="cz-sec-head"><h2>Pipeline by stage</h2></div><div class="cz-stagegrid">'
+    +czSTAGES.map(function(s){return '<button class="cz-stagecard" data-cz-go="pipeline"><div class="cz-row" style="gap:6px;margin-bottom:6px"><span class="cz-dot" style="'+czDotStyle(s.id)+'"></span><span style="font-size:11px;color:#64748b;line-height:1.1">'+s.label+'</span></div><div class="cz-c">'+counts[s.id]+'</div></button>';}).join("")
+    +'</div></div>';
+  czBind(mount);
+}
+function czPipeline(){
+  var mount=$("cz-pipeline");if(!mount)return;
+  czEnsure();czBadges();
+  mount.innerHTML='<h3 class="cz-h">Pipeline</h3><p class="cz-lede">Move leads between stages. Dropping into Sold creates a client account automatically.</p>'
+    +'<div class="cz-toolbar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search name, email, phone, zip…" value="'+escapeHtml(czQuery)+'"/></div></div>'
+    +'<div id="cz-pipe-results"></div>';
+  var sb=mount.querySelector("[data-cz-search]");if(sb)sb.addEventListener("input",function(){czQuery=sb.value;czPipeResults();});
+  czPipeResults();
+}
+function czPipeResults(){
+  var box=$("cz-pipe-results");if(!box)return;
+  var cs=czFiltered();
+  box.innerHTML='<div class="cz-board">'+czSTAGES.map(function(s){
+    var items=cs.filter(function(c){return c.stage===s.id;});
+    var total=items.reduce(function(a,c){return a+czVal(c);},0);
+    var body=items.length===0?'<div class="cz-empty-col">Empty</div>':items.map(function(c){
+      var fu=czFU(c);
+      var val=czVal(c)>0?'<span style="font-size:12px;font-weight:600;color:#047857;white-space:nowrap">'+money(czVal(c))+'</span>':'';
+      var contact=(c.phone||c.email)?'<div class="cz-sub" style="margin-top:4px">'+escapeHtml(c.phone||c.email)+'</div>':'';
+      var fup=fu.key!=="none"?'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+';margin-top:8px">'+fu.label+'</span>':'';
+      var resetBtn=czCLOSED.indexOf(c.stage)<0?'<button class="cz-iconbtn" data-cz-reset="'+c.id+'" title="Reset 14-day follow-up">↻</button>':'';
+      var opts=czSTAGES.map(function(st){return '<option value="'+st.id+'" '+(st.id===c.stage?"selected":"")+'>'+st.label+'</option>';}).join("");
+      return '<div class="cz-card"><div class="cz-ctop" data-cz-open="'+c.id+'"><div class="cz-nm">'+escapeHtml(czName(c))+'</div>'+val+'</div>'+contact+fup+'<div class="cz-cctl"><select data-cz-stage="'+c.id+'">'+opts+'</select>'+resetBtn+'</div></div>';
+    }).join("");
+    return '<div class="cz-col" style="border-top-color:'+s.color+'"><div class="cz-col-head"><div class="cz-row" style="gap:8px"><span class="cz-dot" style="'+czDotStyle(s.id)+'"></span><span style="font-size:14px;font-weight:600">'+s.label+'</span><span class="cz-faint" style="font-size:12px">'+items.length+'</span></div><span class="cz-faint" style="font-size:11px">'+money(total)+'</span></div><div class="cz-col-body">'+body+'</div></div>';
+  }).join("")+'</div>';
+  czBind(box);
+}
+function czClients(){
+  var mount=$("cz-clients");if(!mount)return;
+  czEnsure();czBadges();
+  if(getLeads().length===0){
+    mount.innerHTML='<h3 class="cz-h">Clients</h3><p class="cz-lede">Your leads and clients.</p><div class="cz-panel cz-empty"><div style="font-size:40px;margin-bottom:6px">👥</div><p class="cz-eh">No clients yet</p><p class="cz-es">Add your first lead, or load sample data to explore.</p><div style="display:flex;gap:8px;justify-content:center"><button class="cz-btn-go" data-cz-add="1">+ Add client</button><button class="cz-btn-soft" data-cz-sample="1">Load sample data</button></div></div>';
+    czBind(mount);return;
+  }
+  mount.innerHTML='<h3 class="cz-h">Clients</h3><p class="cz-lede">Your leads and clients.</p>'
+    +'<div class="cz-toolbar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search name, email, phone, zip…" value="'+escapeHtml(czQuery)+'"/></div><button class="cz-btn-go" data-cz-add="1">+ Add client</button></div>'
+    +'<div id="cz-clients-results"></div>';
+  var sb=mount.querySelector("[data-cz-search]");if(sb)sb.addEventListener("input",function(){czQuery=sb.value;czClientResults();});
+  mount.querySelectorAll("[data-cz-add]").forEach(function(n){n.addEventListener("click",function(){czOpenModal(null);});});
+  czClientResults();
+}
+function czClientResults(){
+  var box=$("cz-clients-results");if(!box)return;
+  var cs=czFiltered();
+  var rows=cs.length===0?'<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:32px">No matches for your search.</td></tr>':cs.map(function(c){
+    var fu=czFU(c);
+    var fup=fu.key==="none"?'<span class="cz-faint" style="font-size:12px">—</span>':'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span>';
+    return '<tr data-cz-open="'+c.id+'"><td><div class="cz-nm">'+escapeHtml(czName(c))+'</div><div class="cz-sub cz-only-mobile">'+escapeHtml(c.phone||c.email||"")+'</div></td>'
+      +'<td><span class="cz-chip" style="'+czChipStyle(c.stage)+'"><span class="cz-dot" style="'+czDotStyle(c.stage)+'"></span>'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></td>'
+      +'<td class="cz-hide-md cz-muted"><div>'+escapeHtml(c.phone||"")+'</div><div class="cz-sub">'+escapeHtml(c.email||"")+'</div></td>'
+      +'<td class="cz-hide-lg cz-muted">'+escapeHtml([c.state,c.zipCode||c.zipcode].filter(Boolean).join(" ")||"—")+'</td>'
+      +'<td class="cz-tright" style="font-weight:500;color:#334155">'+(czVal(c)>0?money(czVal(c)):"—")+'</td>'
+      +'<td>'+fup+'</td></tr>';
+  }).join("");
+  box.innerHTML='<div class="cz-panel" style="overflow:hidden"><div style="overflow-x:auto"><table class="cz-table"><thead><tr><th>Name</th><th>Stage</th><th class="cz-hide-md">Contact</th><th class="cz-hide-lg">Location</th><th class="cz-tright">Value</th><th>Follow-up</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+  czBind(box);
+}
+function czFollowups(){
+  var mount=$("cz-followups");if(!mount)return;
+  czEnsure();czBadges();
+  mount.innerHTML='<h3 class="cz-h">Follow-ups</h3><p class="cz-lede">Stay on top of every active lead.</p>'
+    +'<div class="cz-toolbar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search…" value="'+escapeHtml(czQuery)+'"/></div></div>'
+    +'<div id="cz-fu-results"></div>';
+  var sb=mount.querySelector("[data-cz-search]");if(sb)sb.addEventListener("input",function(){czQuery=sb.value;czFuResults();});
+  czFuResults();
+}
+function czFuResults(){
+  var box=$("cz-fu-results");if(!box)return;
+  var cs=czFiltered();
+  var g={overdue:[],today:[],upcoming:[]};
+  cs.forEach(function(c){var fu=czFU(c);if(g[fu.key])g[fu.key].push({c:c,fu:fu});});
+  g.overdue.sort(function(a,b){return b.fu.days-a.fu.days;});
+  g.upcoming.sort(function(a,b){return a.fu.days-b.fu.days;});
+  var total=g.overdue.length+g.today.length+g.upcoming.length;
+  var intro='<div class="cz-panel cz-fu-intro"><div class="cz-ico">↻</div><div class="cz-t"><b style="color:#334155">How the follow-up system works.</b> Every active lead is on a 14-day timer. When you call, text, or email someone, hit <b style="color:#0284c7">Reset ↻</b> to restart the clock. Anyone trying to ghost you keeps resurfacing in <b style="color:#f43f5e">Overdue</b> until they convert or you mark them out.</div></div>';
+  if(total===0){box.innerHTML=intro+'<div class="cz-panel" style="padding:40px;text-align:center;color:#94a3b8;font-size:14px">No active follow-ups. Sold and "no longer interested" leads don\'t carry tasks.</div>';czBind(box);return;}
+  var secs=[{key:"overdue",title:"Overdue",ico:"⚠️",accent:"#e11d48"},{key:"today",title:"Due today",ico:"⏰",accent:"#d97706"},{key:"upcoming",title:"Upcoming",ico:"📅",accent:"#64748b"}];
+  var blocks=secs.map(function(sec){
+    var list=g[sec.key];if(!list.length)return"";
+    var items=list.map(function(o){var c=o.c,fu=o.fu;
+      return '<div class="cz-listitem" style="cursor:default"><div style="min-width:0;flex:1;cursor:pointer" data-cz-open="'+c.id+'"><div class="cz-row" style="gap:8px"><span class="cz-nm">'+escapeHtml(czName(c))+'</span><span class="cz-chip" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></div><div class="cz-sub" style="margin-top:2px">'+escapeHtml(c.phone||c.email||"no contact info")+' · last contact '+(c.lastContact?czPretty(c.lastContact):"—")+'</div></div><span class="cz-pill cz-hide-md" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span><button class="cz-resetbtn" data-cz-reset="'+c.id+'">↻ Reset</button></div>';
+    }).join("");
+    return '<div class="cz-panel" style="overflow:hidden;margin-bottom:20px"><div class="cz-sec-head"><h2><span style="color:'+sec.accent+'">'+sec.ico+'</span> '+sec.title+' <span class="cz-faint" style="font-size:12px;font-weight:400">'+list.length+'</span></h2></div>'+items+'</div>';
+  }).join("");
+  box.innerHTML=intro+blocks;
+  czBind(box);
+}
+function czF(label,id,val,ph){return '<label class="cz-fld"><span>'+label+'</span><input class="cz-inp" id="'+id+'" value="'+escapeHtml(val||"")+'" placeholder="'+ph+'"/></label>';}
+function czOpenModal(client){
+  var isNew=!client;
+  var c=client||{stage:"follow_up"};
+  var fu=!isNew?czFU(c):null;
+  var fuBadge=(!isNew&&fu.key!=="none")?'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+';margin-top:6px">Follow-up '+fu.label+' · due '+czPretty(c.followUpDue)+'</span>':'';
+  var stateOpts='<option value="">—</option>'+czUS.map(function(s){return '<option value="'+s+'">'+s+'</option>';}).join("");
+  var stageOpts=czSTAGES.map(function(s){return '<option value="'+s.id+'">'+s.label+'</option>';}).join("");
+  var zip=c.zipCode||c.zipcode||"";
+  var qv=(c.quoteValue&&Number(c.quoteValue)>0)?c.quoteValue:"";
+  var metaBlock=!isNew?'<div class="cz-meta"><div class="cz-info"><div>Last contact: <b>'+(c.lastContact?czPretty(c.lastContact):"—")+'</b></div><div>Added: '+(c.createdAt?czPretty(c.createdAt):"—")+'</div></div>'+(czCLOSED.indexOf(c.stage)<0?'<button class="cz-resetbtn" id="cz-mReset">↻ Log contact · reset 14 days</button>':'')+'</div>':'';
+  var delBlock=!isNew?'<button class="cz-del" id="cz-mDel">🗑 Delete</button>':'';
+  var html='<h2 style="margin:0 0 4px;font-size:16px;font-weight:600;letter-spacing:-.01em">'+(isNew?"Add client":escapeHtml(czName(c)))+'</h2>'+fuBadge
+    +'<div class="cz-fgrid" style="margin-top:16px">'
+    +czF("First name","cz_firstName",c.firstName,"Jane")
+    +czF("Last name","cz_lastName",c.lastName,"Doe")
+    +czF("Email","cz_email",c.email,"jane@email.com")
+    +czF("Phone","cz_phone",c.phone,"(561) 555-0100")
+    +'<label class="cz-fld"><span>Date of birth</span><input class="cz-inp" type="date" id="cz_dob" value="'+escapeHtml(c.dob||"")+'"/></label>'
+    +'<label class="cz-fld"><span>Quote / value (USD)</span><div class="cz-moneywrap"><span class="cz-s">$</span><input class="cz-inp" type="number" min="0" id="cz_quoteValue" value="'+escapeHtml(qv)+'" placeholder="0"/></div></label>'
+    +'<label class="cz-fld cz-full"><span>Address</span><input class="cz-inp" id="cz_address" value="'+escapeHtml(c.address||"")+'" placeholder="123 Main St"/></label>'
+    +'<label class="cz-fld"><span>State</span><select class="cz-inp" id="cz_state">'+stateOpts+'</select></label>'
+    +'<label class="cz-fld"><span>Zip code</span><input class="cz-inp" id="cz_zipCode" value="'+escapeHtml(zip)+'" placeholder="33404"/></label>'
+    +'<label class="cz-fld cz-full"><span>Pipeline stage</span><select class="cz-inp" id="cz_stage">'+stageOpts+'</select></label>'
+    +'<label class="cz-fld cz-full"><span>Notes</span><textarea class="cz-inp" id="cz_notes" rows="3" placeholder="Conversation history, preferences, objections, best time to reach…">'+escapeHtml(c.notes||"")+'</textarea></label>'
+    +'</div>'
+    +'<div class="cz-err" id="cz-mErr" style="display:none">Add at least a first or last name so you can find this lead later.</div>'
+    +metaBlock
+    +'<div class="cz-mfoot">'+delBlock+'<button class="cz-btn-ghost" data-close>Cancel</button><button class="cz-btn-go" id="cz-mSave">✓ '+(isNew?"Add client":"Save changes")+'</button></div>';
+  openModal(html);
+  var stEl=$("cz_state");if(stEl)stEl.value=c.state||"";
+  var sgEl=$("cz_stage");if(sgEl)sgEl.value=c.stage||"follow_up";
+  var saveBtn=$("cz-mSave");
+  if(saveBtn)saveBtn.addEventListener("click",function(){
+    var g=function(id){var e=$(id);return e?e.value:"";};
+    var first=g("cz_firstName").trim(),last=g("cz_lastName").trim();
+    if(!first&&!last){var er=$("cz-mErr");if(er)er.style.display="block";return;}
+    var t=todayStr();var ex=client||{};var stage=g("cz_stage")||"follow_up";
+    var rec={};for(var k in ex){rec[k]=ex[k];}
+    rec.id=ex.id||uid();
+    rec.firstName=g("cz_firstName");rec.lastName=g("cz_lastName");rec.name=(rec.firstName+" "+rec.lastName).trim();
+    rec.email=g("cz_email");rec.phone=g("cz_phone");rec.dob=g("cz_dob");
+    rec.address=g("cz_address");rec.state=g("cz_state");
+    rec.zipCode=g("cz_zipCode");rec.zipcode=g("cz_zipCode");
+    rec.notes=g("cz_notes");
+    rec.quoteValue=Number(g("cz_quoteValue"))||0;rec.value=rec.quoteValue;
+    rec.stage=stage;rec.status=czStageToStatus(stage);
+    rec.createdAt=ex.createdAt||t;rec.created=ex.created||Date.now();
+    rec.lastContact=ex.lastContact||t;
+    rec.followUpDue=ex.followUpDue||(czCLOSED.indexOf(stage)<0?czAddDays(t,czFollowupDays):"");
+    if(!Array.isArray(rec.activity))rec.activity=ex.activity||[];
+    rec.updated=Date.now();
+    var wasSold=ex.stage==="sold";var wasFollow=ex.stage==="follow_up";
+    czUpsert(rec);
+    if(stage==="sold"&&!wasSold&&typeof convertLeadToClient==="function")convertLeadToClient(rec.id);
+    if(stage==="follow_up"&&!wasFollow&&typeof getLeadSeq==="function"&&!getLeadSeq(rec.id)&&typeof initLeadSeq==="function")initLeadSeq(rec.id);
+    closeModal();
+  });
+  if(!isNew){
+    var r=$("cz-mReset");if(r)r.addEventListener("click",function(){czRestart(client.id);closeModal();});
+    var d=$("cz-mDel");if(d)d.addEventListener("click",function(){if(confirm("Delete this client?")){czRemove(client.id);closeModal();}});
+  }
+}
+/* ---- route the existing CRM tabs through the new views ---- */
+ALL_TABS=["dashboard","pipeline","leads","followups","tasks","accounts","support","referrals","settings"];
+TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Clients",followups:"Follow-ups",tasks:"Daily Sales Sequences",accounts:"Client Accounts",support:"Support Inbox",referrals:"Referrals",settings:"Settings"};
+function renderDashboard(){czDashboard();}
+function renderLeads(){czClients();}
+function renderPipeline(){czPipeline();}
+function renderFollowups(){czFollowups();}
+function openLeadForm(l){czOpenModal(l||null);}
+function renderAll(){czBadges();czDashboard();czClients();czPipeline();czFollowups();renderAccounts();renderSupport();renderReferrals();renderSettings();renderTasks();}
+function switchTab(name){
+  ALL_TABS.forEach(function(n){var pn=$("p-"+n);if(pn)pn.classList.toggle("active",n===name);});
+  document.querySelectorAll(".sidebar-nav-item[data-tab]").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-tab")===name);});
+  var titleEl=$("topbar-title");if(titleEl)titleEl.textContent=TAB_TITLES[name]||name;
+  if(typeof isMobile==="function"&&isMobile()){var sb=$("sidebar");if(sb)sb.classList.remove("mobile-open");var ov=$("sidebar-overlay");if(ov)ov.classList.remove("open");}
+  if(name==="dashboard")czDashboard();
+  else if(name==="pipeline")czPipeline();
+  else if(name==="leads")czClients();
+  else if(name==="followups")czFollowups();
+  else if(name==="support")renderSupport();
+  else if(name==="referrals")renderReferrals();
+  else if(name==="accounts")renderAccounts();
+  else if(name==="tasks")renderTasks();
+  else if(name==="settings"){renderSettings();if(typeof initSoundSettings==="function")initSoundSettings();}
+}
 /* BOOT */
 loadGcalFromStorage();
 (async function boot(){await initCloud();await route();})();
@@ -3513,6 +4088,15 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
 
 })();
 </script>
-
+<script>
+(function(){
+  var t=document.getElementById("sc-toggle"),l=document.getElementById("sc-links");
+  if(t&&l){
+    t.addEventListener("click",function(){var o=l.classList.toggle("open");t.setAttribute("aria-expanded",o?"true":"false");});
+    l.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){l.classList.remove("open");t.setAttribute("aria-expanded","false");});});
+  }
+  var y=document.getElementById("sc-year");if(y)y.textContent=new Date().getFullYear();
+})();
+</script>
 </body>
 </html>
