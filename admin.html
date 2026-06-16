@@ -1240,7 +1240,10 @@ html,body{background:#f8fafc;font-size:14px}
 .cz-hero{background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:14px;padding:28px;color:#fff;display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-bottom:24px}
 .cz-hero h2{margin:0;font-size:20px;letter-spacing:-.01em;color:#fff}
 .cz-hero p{margin:4px 0 0;color:#cbd5e1;font-size:14px;max-width:440px}
-.cz-board{display:flex;gap:16px;overflow-x:auto;padding-bottom:16px}
+.cz-board{display:flex;gap:16px;overflow-x:auto;padding-bottom:16px;cursor:grab;user-select:none}
+.cz-card[draggable="true"]{cursor:pointer}
+.cz-card[draggable="true"]:active{cursor:grabbing}
+.cz-col-body{min-height:60px}
 .cz-col{width:284px;flex-shrink:0;background:rgba(241,245,249,.7);border-radius:14px;border-top:2px solid}
 .cz-col-head{padding:12px;display:flex;align-items:center;justify-content:space-between}
 .cz-col-body{padding:0 8px 8px;display:flex;flex-direction:column;gap:8px;max-height:70vh;overflow-y:auto}
@@ -1388,22 +1391,6 @@ html,body{background:#f8fafc;font-size:14px}
 
 <!-- ══════════════════════ AUTH VIEWS ══════════════════════ -->
 <div id="login-view" style="position:fixed;inset:0;display:flex;flex-direction:column;background:#f8fafc;z-index:900;overflow-y:auto" hidden>
-  <!-- NAV -->
-  <nav style="background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.06)">
-    <div style="display:flex;align-items:center;gap:10px">
-      <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#0a6e8a,#0e4d6e);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;letter-spacing:-.5px">VS</div>
-      <span style="font-weight:700;font-size:17px;color:#0b2346">VS Benefits</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:28px">
-      <a href="https://vshealthbenefits.com" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Home</a>
-      <a href="https://vshealthbenefits.com/services" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Services</a>
-      <a href="https://vshealthbenefits.com/about" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">About</a>
-      <a href="https://vshealthbenefits.com/blog" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Blog</a>
-      <a href="https://vshealthbenefits.com/contact" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Contact</a>
-      <a href="https://vshealthbenefits.com/member-login" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Member Login</a>
-      <a href="https://vshealthbenefits.com/get-a-quote" target="_blank" style="text-decoration:none;background:#0b2346;color:#fff;font-size:14px;font-weight:600;padding:9px 20px;border-radius:999px">Get a Quote</a>
-    </div>
-  </nav>
   <!-- LOGIN CARD -->
   <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px">
     <div class="card" style="width:100%;max-width:420px">
@@ -1418,79 +1405,9 @@ html,body{background:#f8fafc;font-size:14px}
       <div class="authswitch">Don't have an admin account? <a id="go-signup">Create admin account</a></div>
     </div>
   </div>
-  <!-- FOOTER -->
-  <footer style="background:#0b2346;color:#c8d9ec;padding:48px 64px 0;flex-shrink:0">
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px">
-      <div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-          <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#0a6e8a,#0e4d6e);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff">VS</div>
-          <span style="font-weight:700;font-size:17px;color:#fff">VS Benefits</span>
-        </div>
-        <p style="font-size:13px;line-height:1.7;color:#8aaac8;margin:0">Licensed, independent health insurance advisor based in Miami, FL, serving small employers and families in 40+ states. Unbiased guidance, zero-cost consultations.</p>
-      </div>
-      <div>
-        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:#5a8ab0;text-transform:uppercase;margin-bottom:16px">Solutions</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Group 10-99</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Micro Group 2-9</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">ACA / Individual</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Family Plans</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Dental &amp; Vision</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Medicaid Guidance</a>
-        </div>
-      </div>
-      <div>
-        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:#5a8ab0;text-transform:uppercase;margin-bottom:16px">Company</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">About</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Blog</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Contact</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Get a Quote</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Privacy Policy</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Terms &amp; Conditions</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Member Login</a>
-        </div>
-      </div>
-      <div>
-        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:#5a8ab0;text-transform:uppercase;margin-bottom:16px">Reach Us</div>
-        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px">
-          <span>(954) 825-1009</span>
-          <span>bvilsaint@vshealthbenefits.com</span>
-          <span>Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET</span>
-          <span>Miami, FL | 40+ states</span>
-          <div style="display:flex;gap:10px;margin-top:6px">
-            <a href="#" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:14px">in</a>
-            <a href="#" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:14px">📷</a>
-            <a href="#" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:14px">f</a>
-            <a href="#" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:14px">♪</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div style="border-top:1px solid rgba(255,255,255,.1);padding:20px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#5a8ab0">
-      <span>© 2026 VS Benefits. All rights reserved.</span>
-      <span>vshealthbenefits.com | Licensed health insurance advisor</span>
-    </div>
-  </footer>
 </div>
 
 <div id="signup-view" style="position:fixed;inset:0;display:flex;flex-direction:column;background:#f8fafc;z-index:900;overflow-y:auto" hidden>
-  <!-- NAV -->
-  <nav style="background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,.06)">
-    <div style="display:flex;align-items:center;gap:10px">
-      <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#0a6e8a,#0e4d6e);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;letter-spacing:-.5px">VS</div>
-      <span style="font-weight:700;font-size:17px;color:#0b2346">VS Benefits</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:28px">
-      <a href="https://vshealthbenefits.com" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Home</a>
-      <a href="https://vshealthbenefits.com/services" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Services</a>
-      <a href="https://vshealthbenefits.com/about" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">About</a>
-      <a href="https://vshealthbenefits.com/blog" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Blog</a>
-      <a href="https://vshealthbenefits.com/contact" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Contact</a>
-      <a href="https://vshealthbenefits.com/member-login" target="_blank" style="text-decoration:none;color:#374151;font-size:14px;font-weight:500">Member Login</a>
-      <a href="https://vshealthbenefits.com/get-a-quote" target="_blank" style="text-decoration:none;background:#0b2346;color:#fff;font-size:14px;font-weight:600;padding:9px 20px;border-radius:999px">Get a Quote</a>
-    </div>
-  </nav>
   <!-- SIGNUP CARD -->
   <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px 20px">
     <div class="card" style="width:100%;max-width:420px">
@@ -1512,82 +1429,11 @@ html,body{background:#f8fafc;font-size:14px}
       <div class="authswitch">Already have an account? <a id="go-login">Back to sign in</a></div>
     </div>
   </div>
-  <!-- FOOTER -->
-  <footer style="background:#0b2346;color:#c8d9ec;padding:48px 64px 0;flex-shrink:0">
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px">
-      <div>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-          <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#0a6e8a,#0e4d6e);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff">VS</div>
-          <span style="font-weight:700;font-size:17px;color:#fff">VS Benefits</span>
-        </div>
-        <p style="font-size:13px;line-height:1.7;color:#8aaac8;margin:0">Licensed, independent health insurance advisor based in Miami, FL, serving small employers and families in 40+ states. Unbiased guidance, zero-cost consultations.</p>
-      </div>
-      <div>
-        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:#5a8ab0;text-transform:uppercase;margin-bottom:16px">Solutions</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Group 10-99</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Micro Group 2-9</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">ACA / Individual</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Family Plans</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Dental &amp; Vision</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Medicaid Guidance</a>
-        </div>
-      </div>
-      <div>
-        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:#5a8ab0;text-transform:uppercase;margin-bottom:16px">Company</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">About</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Blog</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Contact</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Get a Quote</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Privacy Policy</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Terms &amp; Conditions</a>
-          <a href="#" style="color:#c8d9ec;text-decoration:none;font-size:14px">Member Login</a>
-        </div>
-      </div>
-      <div>
-        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;color:#5a8ab0;text-transform:uppercase;margin-bottom:16px">Reach Us</div>
-        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px">
-          <span>(954) 825-1009</span>
-          <span>bvilsaint@vshealthbenefits.com</span>
-          <span>Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET</span>
-          <span>Miami, FL | 40+ states</span>
-          <div style="display:flex;gap:10px;margin-top:6px">
-            <a href="#" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:14px">in</a>
-            <a href="#" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:14px">📷</a>
-            <a href="#" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:14px">f</a>
-            <a href="#" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:14px">♪</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div style="border-top:1px solid rgba(255,255,255,.1);padding:20px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#5a8ab0">
-      <span>© 2026 VS Benefits. All rights reserved.</span>
-      <span>vshealthbenefits.com | Licensed health insurance advisor</span>
-    </div>
-  </footer>
 </div>
 
 <!-- ══════════════════════ MAIN SHELL ══════════════════════ -->
 <div class="shell" id="shell" hidden>
   <main class="main" id="main-content">
-
-    <!-- PUBLIC SITE NAV (matches main website) -->
-    <div id="sc-header">
-      <div class="sc-container sc-navwrap">
-        <a class="sc-brand" href="/"><span class="sc-badge">VS</span><span>VS Benefits</span></a>
-        <button class="sc-toggle" id="sc-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
-        <nav class="sc-links" id="sc-links">
-          <a href="/">Home</a>
-          <a href="/services">Services</a>
-          <a href="/about">About</a>
-          <a href="/blog">Blog</a>
-          <a href="/contact">Contact</a>
-          <a href="/client">Member Login</a>
-          <a class="sc-cta" href="/quote">Get a Quote</a>
-        </nav>
-      </div>
-    </div>
 
     <!-- COMMAND CENTER / FOCUS -->
     <div id="p-dashboard" class="panel active">
@@ -1752,63 +1598,6 @@ html,body{background:#f8fafc;font-size:14px}
         <div style="display:flex;flex-wrap:wrap;gap:8px">
           <button id="export-all-btn" type="button" class="btn btn-ghost">Export all (JSON)</button>
           <label class="btn btn-ghost" style="cursor:pointer">Import data<input id="import-file" type="file" accept="application/json" hidden /></label>
-        </div>
-      </div>
-    </div>
-
-    <!-- PUBLIC SITE FOOTER (matches main website) -->
-    <div class="sc-footer" role="contentinfo">
-      <div class="sc-container">
-        <div class="sc-footgrid">
-          <div>
-            <div class="sc-footbrand"><span class="sc-badge">VS</span><span>VS Benefits</span></div>
-            <p class="sc-foottext">Licensed, independent health insurance advisor based in Miami, FL, serving small employers and families in 40+ states. Unbiased guidance, zero-cost consultations.</p>
-          </div>
-          <div>
-            <h4>Solutions</h4>
-            <ul>
-              <li><a href="/truck-driver-health-insurance">Truck Driver Insurance</a></li>
-              <li><a href="/1099-health-insurance.html">1099 Worker Insurance</a></li>
-              <li><a href="/family-health-insurance.html">Family Plans</a></li>
-              <li><a href="/small-business-health-insurance.html">Small Business</a></li>
-              <li><a href="/ppo-health-insurance">PPO Plans</a></li>
-              <li><a href="/services#micro">Micro Group 2-9</a></li>
-              <li><a href="/services#aca">ACA / Individual</a></li>
-              <li><a href="/services#dental-vision">Dental &amp; Vision</a></li>
-              <li><a href="/services#medicaid">Medicaid Guidance</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4>Company</h4>
-            <ul>
-              <li><a href="/about">About</a></li>
-              <li><a href="/blog">Blog</a></li>
-              <li><a href="/contact">Contact</a></li>
-              <li><a href="/quote">Get a Quote</a></li>
-              <li><a href="/privacy">Privacy Policy</a></li>
-              <li><a href="/terms">Terms &amp; Conditions</a></li>
-              <li><a href="/client">Member Login</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4>Reach Us</h4>
-            <ul>
-              <li><a href="tel:+19548251009">(954) 825-1009</a></li>
-              <li><a href="mailto:bvilsaint@vshealthbenefits.com">bvilsaint@vshealthbenefits.com</a></li>
-              <li>Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET</li>
-              <li>Miami, FL · 40+ states</li>
-            </ul>
-            <div class="sc-socials">
-              <a class="sc-soc" href="https://www.linkedin.com/company/vsbenefits/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S.02 4.88.02 3.5 1.13 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5h3.8v2.1h.05C12.85 9.1 14.6 8 16.7 8c4.1 0 4.85 2.7 4.85 6.2V24h-4v-8.8c0-2.1-.04-4.8-2.93-4.8-2.93 0-3.38 2.3-3.38 4.65V24h-4V8.5z"/></svg></a>
-              <a class="sc-soc" href="https://www.instagram.com/vshealthbenefits" target="_blank" rel="noopener" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.975.975 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.975.975-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.975-.975-1.246-2.242-1.308-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608.975-.975 2.242-1.246 3.608-1.308C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.197.157 3.355.673 2.014 2.014.673 3.355.157 5.197.072 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.085 1.855.601 3.697 1.942 5.038 1.341 1.341 3.183 1.857 5.038 1.942C8.332 23.986 8.741 24 12 24s3.668-.014 4.948-.072c1.855-.085 3.697-.601 5.038-1.942 1.341-1.341 1.857-3.183 1.942-5.038.058-1.28.072-1.689.072-4.948s-.014-3.668-.072-4.948c-.085-1.855-.601-3.697-1.942-5.038C20.645.673 18.803.157 16.948.072 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
-              <a class="sc-soc" href="https://www.facebook.com/profile.php?id=61588058885222" target="_blank" rel="noopener" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg></a>
-              <a class="sc-soc" href="https://www.tiktok.com/@vsbenefits" target="_blank" rel="noopener" aria-label="TikTok"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg></a>
-            </div>
-          </div>
-        </div>
-        <div class="sc-footbottom">
-          <span>&copy; <span id="sc-year">2026</span> VS Benefits. All rights reserved.</span>
-          <span>vshealthbenefits.com · Licensed health insurance advisor</span>
         </div>
       </div>
     </div>
@@ -2450,9 +2239,7 @@ async function convertLeadToClient(leadId){
   accts.push(newClient);saveAccounts(accts);
   addNotif("lead","🎉 "+fullName(lead)+" is now a client!","Lead converted to client account with temp password: "+tempPw,"accounts");
   // Show confirmation
-  setTimeout(function(){
-    alert("✅ "+fullName(lead)+" has been added to Clients!\n\nTemporary password: "+tempPw+"\n\nShare this with them — they can change it in their portal.");
-  },200);
+  setTimeout(function(){ czCelebrate(fullName(lead),"Now an active client · temp password "+tempPw+" — share it so they can log in."); },150);
 }
 
 function openPipelineCard(item){
@@ -3760,14 +3547,34 @@ document.addEventListener("DOMContentLoaded",function(){
   var closeX=$("bday-close-x");if(closeX)closeX.addEventListener("click",closeBdayPopup);
   var bg=$("bday-modal-bg");if(bg)bg.addEventListener("click",function(e){if(e.target===bg)closeBdayPopup();});
 });
+function czDaysToBday(dob){
+  if(!dob)return null;var p=String(dob).split("-");if(p.length<3)return null;
+  var mm=Number(p[1]),dd=Number(p[2]);if(!mm||!dd)return null;
+  var now=new Date();now.setHours(0,0,0,0);var y=now.getFullYear();
+  var next=new Date(y,mm-1,dd);if(next<now)next=new Date(y+1,mm-1,dd);
+  return Math.round((next-now)/86400000);
+}
 function checkBirthdays(){
   if(!$("shell")||$("shell").hidden)return;
-  var today=todayMMDD();var shown=getBdayShown();var accounts=getAccounts();
-  var bdays=accounts.filter(function(a){if(!a.dob)return false;var parts=a.dob.split("-");if(parts.length<3)return false;var mm=parts[1].padStart(2,"0");var dd=parts[2].padStart(2,"0");return(mm+"-"+dd)===today&&shown.indexOf(a.id)<0;});
-  if(!bdays.length)return;
-  setBdayShown(shown.concat(bdays.map(function(c){return c.id;})));
-  bdays.forEach(function(c){var age=calcAge(c.dob);addNotif("lead","🎂 "+fullName(c)+"'s Birthday!",(age?"Turning "+age+" today":"Birthday today!")+" — call or email to wish them well","accounts");});
-  setTimeout(function(){showBdayPopup(bdays);},600);
+  /* active clients (accounts) + leads, de-duped by email */
+  var seen={},people=[];
+  getAccounts().concat(getLeads()).forEach(function(c){var k=(c.email||"").toLowerCase()||c.id;if(seen[k])return;seen[k]=1;people.push(c);});
+  var today=todayMMDD();var shown=getBdayShown();
+  /* TODAY — popup + notification */
+  var bdays=people.filter(function(c){if(!c.dob)return false;var parts=String(c.dob).split("-");if(parts.length<3)return false;var mm=parts[1].padStart(2,"0");var dd=parts[2].padStart(2,"0");return(mm+"-"+dd)===today&&shown.indexOf(c.id)<0;});
+  if(bdays.length){
+    setBdayShown(shown.concat(bdays.map(function(c){return c.id;})));
+    bdays.forEach(function(c){var age=calcAge(c.dob);addNotif("lead","🎂 "+fullName(c)+"'s Birthday!",(age?"Turning "+age+" today":"Birthday today!")+" — call or email to wish them well","accounts");});
+    setTimeout(function(){showBdayPopup(bdays);},600);
+  }
+  /* UPCOMING — next 1–7 days, notify once per day per person */
+  var upKey="vs_bday_up_"+todayStr();var upShown;
+  try{upShown=JSON.parse(localStorage.getItem(upKey)||"[]");}catch(e){upShown=[];}
+  var upcoming=people.filter(function(c){var d=czDaysToBday(c.dob);return d!=null&&d>=1&&d<=7&&upShown.indexOf(c.id)<0;});
+  if(upcoming.length){
+    localStorage.setItem(upKey,JSON.stringify(upShown.concat(upcoming.map(function(c){return c.id;}))));
+    upcoming.forEach(function(c){var d=czDaysToBday(c.dob);addNotif("lead","🎂 "+fullName(c)+"'s birthday in "+d+(d===1?" day":" days"),"Coming up — plan a call or message","accounts");});
+  }
 }
 
 function renderAll(){renderDashboard();renderLeads();renderAccounts();renderSupport();renderReferrals();renderSettings();renderPipeline();renderTasks();}
@@ -3911,24 +3718,57 @@ function czPipeline(){
   var sb=mount.querySelector("[data-cz-search]");if(sb)sb.addEventListener("input",function(){czQuery=sb.value;czPipeResults();});
   czPipeResults();
 }
+var czDragId=null,czDragging=false,czPan={down:false,sx:0,sl:0,board:null},czPanWired=false;
 function czPipeResults(){
   var box=$("cz-pipe-results");if(!box)return;
   var cs=czFiltered();
-  box.innerHTML='<div class="cz-board">'+czSTAGES.map(function(s){
+  box.innerHTML='<div class="cz-board" id="cz-board">'+czSTAGES.map(function(s){
     var items=cs.filter(function(c){return c.stage===s.id;});
     var total=items.reduce(function(a,c){return a+czVal(c);},0);
-    var body=items.length===0?'<div class="cz-empty-col">Empty</div>':items.map(function(c){
+    var body=items.length===0?'<div class="cz-empty-col">Drop here</div>':items.map(function(c){
       var fu=czFU(c);
       var val=czVal(c)>0?'<span style="font-size:12px;font-weight:600;color:#047857;white-space:nowrap">'+money(czVal(c))+'</span>':'';
       var contact=(c.phone||c.email)?'<div class="cz-sub" style="margin-top:4px">'+escapeHtml(c.phone||c.email)+'</div>':'';
       var fup=fu.key!=="none"?'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+';margin-top:8px">'+fu.label+'</span>':'';
       var resetBtn=czCLOSED.indexOf(c.stage)<0?'<button class="cz-iconbtn" data-cz-reset="'+c.id+'" title="Reset 14-day follow-up">↻</button>':'';
       var opts=czSTAGES.map(function(st){return '<option value="'+st.id+'" '+(st.id===c.stage?"selected":"")+'>'+st.label+'</option>';}).join("");
-      return '<div class="cz-card"><div class="cz-ctop" data-cz-open="'+c.id+'"><div class="cz-nm">'+escapeHtml(czName(c))+'</div>'+val+'</div>'+contact+fup+'<div class="cz-cctl"><select data-cz-stage="'+c.id+'">'+opts+'</select>'+resetBtn+'</div></div>';
+      return '<div class="cz-card" draggable="true" data-cz-card="'+c.id+'"><div class="cz-ctop"><div class="cz-nm">'+escapeHtml(czName(c))+'</div>'+val+'</div>'+contact+fup+'<div class="cz-cctl"><select data-cz-stage="'+c.id+'">'+opts+'</select>'+resetBtn+'</div></div>';
     }).join("");
-    return '<div class="cz-col" style="border-top-color:'+s.color+'"><div class="cz-col-head"><div class="cz-row" style="gap:8px"><span class="cz-dot" style="'+czDotStyle(s.id)+'"></span><span style="font-size:14px;font-weight:600">'+s.label+'</span><span class="cz-faint" style="font-size:12px">'+items.length+'</span></div><span class="cz-faint" style="font-size:11px">'+money(total)+'</span></div><div class="cz-col-body">'+body+'</div></div>';
+    return '<div class="cz-col" style="border-top-color:'+s.color+'"><div class="cz-col-head"><div class="cz-row" style="gap:8px"><span class="cz-dot" style="'+czDotStyle(s.id)+'"></span><span style="font-size:14px;font-weight:600">'+s.label+'</span><span class="cz-faint" style="font-size:12px">'+items.length+'</span></div><span class="cz-faint" style="font-size:11px">'+money(total)+'</span></div><div class="cz-col-body" data-cz-drop="'+s.id+'">'+body+'</div></div>';
   }).join("")+'</div>';
-  czBind(box);
+  czBind(box);czBindPipe(box);
+}
+function czBindPipe(box){
+  var board=box.querySelector("#cz-board");
+  /* card click opens info; card drag moves between stages */
+  box.querySelectorAll("[data-cz-card]").forEach(function(card){
+    var id=card.getAttribute("data-cz-card");
+    card.addEventListener("click",function(e){
+      if(czDragging)return;
+      if(e.target.closest("select,button,a,option"))return;
+      var c=getLeads().filter(function(x){return x.id===id;})[0];if(c)czOpenModal(c);
+    });
+    card.addEventListener("dragstart",function(e){czDragId=id;czDragging=true;card.style.opacity="0.4";try{e.dataTransfer.setData("text/plain",id);e.dataTransfer.effectAllowed="move";}catch(_){}});
+    card.addEventListener("dragend",function(){card.style.opacity="";czDragId=null;setTimeout(function(){czDragging=false;},60);});
+  });
+  /* columns are drop targets */
+  box.querySelectorAll("[data-cz-drop]").forEach(function(col){
+    col.addEventListener("dragover",function(e){e.preventDefault();try{e.dataTransfer.dropEffect="move";}catch(_){}col.style.background="#eaf4ff";});
+    col.addEventListener("dragleave",function(){col.style.background="";});
+    col.addEventListener("drop",function(e){e.preventDefault();col.style.background="";var stage=col.getAttribute("data-cz-drop");var id=czDragId;czDragId=null;if(id&&stage)czSetStage(id,stage);});
+  });
+  /* click-and-hold to pan the board left/right */
+  if(board){
+    board.addEventListener("mousedown",function(e){
+      if(e.target.closest(".cz-card, select, button, a, input, textarea"))return;
+      czPan.down=true;czPan.sx=e.pageX;czPan.sl=board.scrollLeft;czPan.board=board;board.style.cursor="grabbing";
+    });
+  }
+  if(!czPanWired){
+    czPanWired=true;
+    window.addEventListener("mousemove",function(e){if(!czPan.down||!czPan.board)return;e.preventDefault();czPan.board.scrollLeft=czPan.sl-(e.pageX-czPan.sx);});
+    window.addEventListener("mouseup",function(){if(czPan.down){czPan.down=false;if(czPan.board)czPan.board.style.cursor="";}});
+  }
 }
 function czClients(){
   var mount=$("cz-clients");if(!mount)return;
@@ -4052,6 +3892,33 @@ function czOpenModal(client){
     var r=$("cz-mReset");if(r)r.addEventListener("click",function(){czRestart(client.id);closeModal();});
     var d=$("cz-mDel");if(d)d.addEventListener("click",function(){if(confirm("Delete this client?")){czRemove(client.id);closeModal();}});
   }
+}
+function czConfetti(){
+  try{
+    var c=document.createElement("canvas");
+    c.style.cssText="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:100001";
+    document.body.appendChild(c);
+    var ctx=c.getContext("2d");var W=c.width=window.innerWidth,H=c.height=window.innerHeight;
+    var colors=["#0ea5e9","#8b5cf6","#10b981","#f59e0b","#f43f5e","#38bdf8"];var P=[];
+    for(var i=0;i<150;i++){P.push({x:W/2+(Math.random()-.5)*200,y:H*0.30+(Math.random()-.5)*60,vx:(Math.random()-.5)*13,vy:Math.random()*-13-3,g:.3+Math.random()*.22,s:6+Math.random()*7,col:colors[Math.floor(Math.random()*colors.length)],rot:Math.random()*6,vr:(Math.random()-.5)*.35});}
+    var start=Date.now(),dur=2600;
+    (function frame(){var t=Date.now()-start;ctx.clearRect(0,0,W,H);P.forEach(function(p){p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.vx*=.99;p.rot+=p.vr;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=Math.max(0,1-t/dur);ctx.fillStyle=p.col;ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);ctx.restore();});if(t<dur)requestAnimationFrame(frame);else c.remove();})();
+  }catch(e){}
+}
+function czCelebrate(name,sub){
+  czConfetti();
+  try{if(typeof playNotifSound==="function")playNotifSound();}catch(e){}
+  var html='<div style="text-align:center;padding:6px 4px">'
+    +'<div style="font-size:52px;line-height:1">🎉</div>'
+    +'<h2 style="margin:6px 0 0;font-size:22px;font-weight:700;letter-spacing:-.01em">New client added</h2>'
+    +'<div style="font-size:17px;font-weight:600;color:#0284c7;margin-top:4px">'+escapeHtml(name||"")+'</div>'
+    +(sub?'<div style="font-size:13px;color:#64748b;margin-top:8px;line-height:1.5">'+escapeHtml(sub)+'</div>':'')
+    +'<div class="cz-mfoot" style="justify-content:center;border-top:none;margin-top:18px;padding-top:0">'
+    +'<button class="cz-btn-ghost" data-close>Close</button>'
+    +'<button class="cz-btn-go" id="cz-celeb-view">View clients</button>'
+    +'</div></div>';
+  openModal(html);
+  var v=$("cz-celeb-view");if(v)v.addEventListener("click",function(){closeModal();switchTab("accounts");});
 }
 /* ---- route the existing CRM tabs through the new views ---- */
 ALL_TABS=["dashboard","pipeline","leads","followups","tasks","accounts","support","referrals","settings"];
