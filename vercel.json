@@ -13,7 +13,15 @@
     { "source": "/family-health-insurance.html", "destination": "/family-health-insurance", "permanent": true },
     { "source": "/small-business-health-insurance.html", "destination": "/small-business-health-insurance", "permanent": true },
     { "source": "/services.html", "destination": "/services", "permanent": true },
-    { "source": "/contact.html", "destination": "/contact", "permanent": true }
+    { "source": "/contact.html", "destination": "/contact", "permanent": true },
+    { "source": "/ppo-health-insurance.html", "destination": "/ppo-health-insurance", "permanent": true },
+    { "source": "/truck-driver-health-insurance.html", "destination": "/truck-driver-health-insurance", "permanent": true },
+    { "source": "/health-insurance-uber-drivers.html", "destination": "/health-insurance-uber-drivers", "permanent": true },
+    { "source": "/seguro-de-salud-miami.html", "destination": "/seguro-de-salud-miami", "permanent": true },
+    { "source": "/dental-vision-insurance.html", "destination": "/dental-vision-insurance", "permanent": true },
+    { "source": "/blog.html", "destination": "/blog", "permanent": true },
+    { "source": "/terms.html", "destination": "/terms", "permanent": true },
+    { "source": "/privacy.html", "destination": "/privacy", "permanent": true }
   ],
   "rewrites": [
     {
