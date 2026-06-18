@@ -812,6 +812,7 @@ html.dark .pl-amount{color:#d4e8ff}
 .pl-acts{display:flex;gap:6px;margin-top:11px;opacity:0;max-height:0;overflow:hidden;transition:opacity .15s,max-height .15s}
 .pl-card:hover .pl-acts{opacity:1;max-height:48px}
 @media(max-width:767px){.pl-acts{opacity:1;max-height:48px}}
+.pl-new .pl-accent{background:linear-gradient(90deg,#2f7de0,#0db5a6)}
 .pl-quoted .pl-accent{background:#2f7de0}
 .pl-60-days-out .pl-accent{background:#e8a020}
 .pl-follow-up .pl-accent{background:#f0a020}
@@ -819,6 +820,13 @@ html.dark .pl-amount{color:#d4e8ff}
 .pl-sold .pl-accent{background:#18c97a}
 .pl-declined .pl-accent{background:#e5484d}
 .pl-no-longer-interested .pl-accent{background:#9aa6b6}
+/* ── New Lead column + cards: glow to grab attention ── */
+.pl-col.pl-new{border:2px solid rgba(47,125,224,.55);box-shadow:0 0 0 3px rgba(47,125,224,.10),0 10px 30px rgba(47,125,224,.22);animation:plNewGlow 2.2s ease-in-out infinite}
+.pl-col.pl-new .pl-title{color:#1457b8;font-weight:800}
+.pl-card-new{border:1.5px solid rgba(47,125,224,.55) !important;box-shadow:0 4px 18px rgba(47,125,224,.22) !important;animation:plNewGlow 2.2s ease-in-out infinite}
+@keyframes plNewGlow{0%,100%{box-shadow:0 0 0 3px rgba(47,125,224,.10),0 8px 26px rgba(47,125,224,.16)}50%{box-shadow:0 0 0 4px rgba(47,125,224,.22),0 12px 34px rgba(13,181,166,.32)}}
+.tbl .row.row-new-lead{animation:rowNewGlow 2.2s ease-in-out infinite}
+@keyframes rowNewGlow{0%,100%{box-shadow:0 4px 20px rgba(47,125,224,.16),0 0 0 3px rgba(47,125,224,.07)}50%{box-shadow:0 6px 26px rgba(13,181,166,.26),0 0 0 4px rgba(47,125,224,.16)}}
 .pipeline-wrap{cursor:grab}
 .pipeline-wrap.panning{cursor:grabbing;user-select:none}
 .pipeline-wrap.panning .pl-card{pointer-events:none}
@@ -2229,8 +2237,8 @@ var x=$("export-leads-btn");if(x)x.addEventListener("click",function(){
    PIPELINE
    KEY CHANGE: dropping to "sold" auto-creates a client account
 ════════════════════════════════════════ */
-var PIPE_STAGES=["quoted","60-days-out","follow-up","appointment-scheduled","sold","declined","no-longer-interested"];
-var STAGE_LABELS={"quoted":"📄 Quoted","60-days-out":"📆 60+ Days Out","follow-up":"🔄 Follow Up","appointment-scheduled":"📅 Appointment","sold":"✅ Sold","declined":"❌ Declined","no-longer-interested":"🚫 Not Interested"};
+var PIPE_STAGES=["new","quoted","60-days-out","follow-up","appointment-scheduled","sold","declined","no-longer-interested"];
+var STAGE_LABELS={"new":"✨ New Lead","quoted":"📄 Quoted","60-days-out":"📆 60+ Days Out","follow-up":"🔄 Follow Up","appointment-scheduled":"📅 Appointment Scheduled","sold":"✅ Sold","declined":"❌ Declined","no-longer-interested":"🚫 Not Interested"};
 var dragId=null;var dragType=null;
 
 /* Convert a lead to a client when dropped into "sold" */
