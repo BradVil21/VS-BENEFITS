@@ -8,7 +8,8 @@
       "permanent": true
     },
     { "source": "/about.html", "destination": "/about", "permanent": true },
-    { "source": "/get-a-quote.html", "destination": "/get-a-quote", "permanent": true },
+    { "source": "/get-a-quote", "destination": "/quote", "permanent": true },
+    { "source": "/get-a-quote.html", "destination": "/quote", "permanent": true },
     { "source": "/1099-health-insurance.html", "destination": "/1099-health-insurance", "permanent": true },
     { "source": "/family-health-insurance.html", "destination": "/family-health-insurance", "permanent": true },
     { "source": "/small-business-health-insurance.html", "destination": "/small-business-health-insurance", "permanent": true },
