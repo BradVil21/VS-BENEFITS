@@ -1362,6 +1362,39 @@ html.dark .cz-ac-1{color:#e6eefb}
 .slow-followup-head{padding:9px 13px}
 .slow-followup-body{padding:11px 13px}
 </style>
+<style>
+/* ===== Cleaner Daily Sales Sequences cards (scoped override) ===== */
+#tasks-container .seq-card{border:1px solid #e6ecf5;border-radius:14px;box-shadow:0 1px 3px rgba(11,35,70,.05);margin-bottom:14px;overflow:hidden;transition:box-shadow .15s,transform .15s}
+#tasks-container .seq-card:hover{box-shadow:0 8px 22px rgba(11,35,70,.10);transform:translateY(-1px)}
+html.dark #tasks-container .seq-card{border-color:#253a54}
+/* slim, light header with a colored accent instead of a heavy dark bar */
+#tasks-container .seq-head{background:#fff !important;color:var(--ink) !important;border-bottom:1px solid #eef2f8;border-left:3px solid var(--blue-600);padding:12px 16px 11px}
+html.dark #tasks-container .seq-head{background:#162030 !important;border-bottom-color:#243246}
+#tasks-container .seq-head h3{color:#0e1726 !important;font-size:14.5px;font-weight:700;letter-spacing:-.01em}
+html.dark #tasks-container .seq-head h3{color:#e6eefb !important}
+#tasks-container .seq-head .seq-meta{color:#64748b !important;font-size:11.5px;margin-top:3px}
+html.dark #tasks-container .seq-head .seq-meta{color:#8aa6c4 !important}
+/* soft pill badges */
+#tasks-container .seq-day-badge{background:#eaf2ff !important;color:#1d4ed8 !important;border:1px solid #d6e4fb !important;font-weight:600}
+#tasks-container .seq-pending-badge{background:#fff2ec !important;color:#c2410c !important;border:1px solid #fbd9c8 !important;font-weight:600}
+#tasks-container .seq-done-badge{background:#e9f9f0 !important;color:#0a7d48 !important;border:1px solid #c6ead6 !important;font-weight:600}
+/* tighter, calmer task rows */
+#tasks-container .task-item{padding:9px 16px;gap:12px}
+#tasks-container .task-item:hover{background:#f7faff}
+#tasks-container .task-icon{font-size:15px;opacity:.85}
+#tasks-container .task-main{font-size:13px;font-weight:600;color:#0e1726}
+#tasks-container .task-sub{font-size:11.5px;color:#9aa6b6;margin-top:1px;line-height:1.4}
+#tasks-container .task-cb{width:20px;height:20px;border-radius:6px}
+/* subtle, compact next-day preview */
+#tasks-container .next-day-preview{background:#f8fafc !important;border-top:1px dashed #e6ecf5;padding:8px 16px;gap:3px}
+html.dark #tasks-container .next-day-preview{background:#111d2b !important;border-top-color:#243246}
+#tasks-container .next-day-preview .ndp-label{font-size:9.5px;color:#9aa6b6;letter-spacing:.08em}
+#tasks-container .ndp-task{font-size:11.5px;color:#9aa6b6}
+#tasks-container .ndp-icon{opacity:.6}
+/* clean footer */
+#tasks-container .seq-footer{padding:9px 16px;border-top:1px solid #eef2f8;background:#fff}
+html.dark #tasks-container .seq-footer{background:#162030;border-color:#243246}
+</style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
