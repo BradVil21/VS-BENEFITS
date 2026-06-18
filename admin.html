@@ -1319,6 +1319,17 @@ html,body{background:#f8fafc;font-size:14px}
 .cz-inp{width:100%;margin-top:4px;padding:9px 12px;border-radius:10px;border:1px solid #e2e8f0;font-size:14px;outline:none;background:#fff;color:#1e293b}
 .cz-inp:focus{border-color:#38bdf8;box-shadow:0 0 0 3px #e0f2fe}
 .cz-moneywrap{position:relative}.cz-moneywrap .cz-s{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94a3b8;margin-top:2px}.cz-moneywrap .cz-inp{padding-left:26px}
+.cz-ac-list{position:absolute;left:0;right:0;top:100%;z-index:60;background:#fff;border:1px solid #e2e8f0;border-radius:10px;box-shadow:0 12px 28px rgba(11,35,70,.18);margin-top:4px;max-height:260px;overflow:auto}
+.cz-ac-item{padding:9px 12px;cursor:pointer;border-bottom:1px solid #f1f5f9}
+.cz-ac-item:last-child{border-bottom:0}
+.cz-ac-item:hover{background:#eef5ff}
+.cz-ac-1{font-size:13.5px;font-weight:600;color:#0e1726}
+.cz-ac-2{font-size:12px;color:#64748b;margin-top:1px}
+.cz-ac-hint{font-size:11px;color:#94a3b8;padding:7px 12px;border-top:1px solid #f1f5f9}
+html.dark .cz-ac-list{background:#1c2d42;border-color:#2b3f5a}
+html.dark .cz-ac-item{border-bottom-color:#243246}
+html.dark .cz-ac-item:hover{background:#22344c}
+html.dark .cz-ac-1{color:#e6eefb}
 .cz-err{font-size:12px;color:#be123c;background:#fff1f2;border:1px solid #fecdd3;border-radius:10px;padding:8px 12px;margin-top:14px}
 .cz-meta{margin-top:16px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0;padding:16px;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
 .cz-meta .cz-info{font-size:12px;color:#64748b;flex:1;min-width:160px}.cz-meta .cz-info b{color:#334155}
@@ -3957,6 +3968,55 @@ function czFuResults(){
   czBind(box);
 }
 function czF(label,id,val,ph){return '<label class="cz-fld"><span>'+label+'</span><input class="cz-inp" id="'+id+'" value="'+escapeHtml(val||"")+'" placeholder="'+ph+'"/></label>';}
+
+/* ── Free address autocomplete (OpenStreetMap / Photon, no API key) ── */
+var CZ_STATE_ABBR={"alabama":"AL","alaska":"AK","arizona":"AZ","arkansas":"AR","california":"CA","colorado":"CO","connecticut":"CT","delaware":"DE","district of columbia":"DC","florida":"FL","georgia":"GA","hawaii":"HI","idaho":"ID","illinois":"IL","indiana":"IN","iowa":"IA","kansas":"KS","kentucky":"KY","louisiana":"LA","maine":"ME","maryland":"MD","massachusetts":"MA","michigan":"MI","minnesota":"MN","mississippi":"MS","missouri":"MO","montana":"MT","nebraska":"NE","nevada":"NV","new hampshire":"NH","new jersey":"NJ","new mexico":"NM","new york":"NY","north carolina":"NC","north dakota":"ND","ohio":"OH","oklahoma":"OK","oregon":"OR","pennsylvania":"PA","rhode island":"RI","south carolina":"SC","south dakota":"SD","tennessee":"TN","texas":"TX","utah":"UT","vermont":"VT","virginia":"VA","washington":"WA","west virginia":"WV","wisconsin":"WI","wyoming":"WY"};
+function czStateAbbr(name){if(!name)return"";var n=String(name).trim().toLowerCase();if(n.length===2)return n.toUpperCase();return CZ_STATE_ABBR[n]||"";}
+function czAddrAutocomplete(){
+  var inp=$("cz_address");if(!inp||inp._acWired)return;inp._acWired=true;
+  var box=document.createElement("div");box.className="cz-ac-list";box.style.display="none";
+  inp.parentNode.appendChild(box);
+  var timer=null,ctrl=null;
+  function close(){box.style.display="none";box.innerHTML="";}
+  function fill(p){
+    var num=p.housenumber||"",st=p.street||p.name||"";
+    var street=((num?num+" ":"")+st).trim();
+    if(street)inp.value=street;
+    var city=p.city||p.town||p.village||p.district||p.county||p.locality||"";
+    var cityEl=$("cz_city");if(cityEl&&city)cityEl.value=city;
+    var ab=czStateAbbr(p.state);var stEl=$("cz_state");if(stEl&&ab)stEl.value=ab;
+    var zipEl=$("cz_zipCode");if(zipEl&&p.postcode)zipEl.value=p.postcode;
+    close();
+  }
+  inp.addEventListener("input",function(){
+    var q=inp.value.trim();
+    if(timer)clearTimeout(timer);
+    if(q.length<4){close();return;}
+    timer=setTimeout(function(){
+      if(ctrl){try{ctrl.abort();}catch(e){}}
+      ctrl=("AbortController" in window)?new AbortController():null;
+      fetch("https://photon.komoot.io/api/?limit=6&lang=en&q="+encodeURIComponent(q),ctrl?{signal:ctrl.signal}:{})
+        .then(function(r){return r.json();})
+        .then(function(d){
+          var feats=((d&&d.features)||[]).map(function(f){return f.properties;}).filter(function(p){return p.countrycode==="US"||p.country==="United States";});
+          if(!feats.length){close();return;}
+          box.innerHTML="";
+          feats.forEach(function(p){
+            var num=p.housenumber||"",st=p.street||p.name||"";
+            var line1=((num?num+" ":"")+st).trim()||p.name||"";
+            var bits=[p.city||p.town||p.village||p.district||p.county,czStateAbbr(p.state)||p.state,p.postcode].filter(Boolean).join(", ");
+            var it=document.createElement("div");it.className="cz-ac-item";
+            it.innerHTML='<div class="cz-ac-1">'+escapeHtml(line1||bits||"")+'</div>'+(bits?'<div class="cz-ac-2">'+escapeHtml(bits)+'</div>':"");
+            it.addEventListener("mousedown",function(e){e.preventDefault();fill(p);});
+            box.appendChild(it);
+          });
+          box.style.display="block";
+        })
+        .catch(function(){close();});
+    },280);
+  });
+  inp.addEventListener("blur",function(){setTimeout(close,160);});
+}
 function czOpenModal(client){
   var isNew=!client;
   var c=client||{stage:"follow_up"};
@@ -3976,7 +4036,8 @@ function czOpenModal(client){
     +czF("Phone","cz_phone",c.phone,"(561) 555-0100")
     +'<label class="cz-fld"><span>Date of birth</span><input class="cz-inp" type="date" id="cz_dob" value="'+escapeHtml(c.dob||"")+'"/></label>'
     +'<label class="cz-fld"><span>Quote / value (USD)</span><div class="cz-moneywrap"><span class="cz-s">$</span><input class="cz-inp" type="number" min="0" id="cz_quoteValue" value="'+escapeHtml(qv)+'" placeholder="0"/></div></label>'
-    +'<label class="cz-fld cz-full"><span>Address</span><input class="cz-inp" id="cz_address" value="'+escapeHtml(c.address||"")+'" placeholder="123 Main St"/></label>'
+    +'<label class="cz-fld cz-full" style="position:relative"><span>Address <small style="color:#94a3b8;font-weight:400">(type to autofill city, state, zip)</small></span><input class="cz-inp" id="cz_address" value="'+escapeHtml(c.address||"")+'" placeholder="Start typing a street address" autocomplete="off"/></label>'
+    +'<label class="cz-fld"><span>City</span><input class="cz-inp" id="cz_city" value="'+escapeHtml(c.city||"")+'" placeholder="Miami"/></label>'
     +'<label class="cz-fld"><span>State</span><select class="cz-inp" id="cz_state">'+stateOpts+'</select></label>'
     +'<label class="cz-fld"><span>Zip code</span><input class="cz-inp" id="cz_zipCode" value="'+escapeHtml(zip)+'" placeholder="33404"/></label>'
     +'<label class="cz-fld cz-full"><span>Pipeline stage</span><select class="cz-inp" id="cz_stage">'+stageOpts+'</select></label>'
@@ -3986,6 +4047,7 @@ function czOpenModal(client){
     +metaBlock
     +'<div class="cz-mfoot">'+delBlock+'<button class="cz-btn-ghost" data-close>Cancel</button><button class="cz-btn-go" id="cz-mSave">✓ '+(isNew?"Add client":"Save changes")+'</button></div>';
   openModal(html);
+  czAddrAutocomplete();
   var stEl=$("cz_state");if(stEl)stEl.value=c.state||"";
   var sgEl=$("cz_stage");if(sgEl)sgEl.value=c.stage||"follow_up";
   var saveBtn=$("cz-mSave");
@@ -3998,7 +4060,7 @@ function czOpenModal(client){
     rec.id=ex.id||uid();
     rec.firstName=g("cz_firstName");rec.lastName=g("cz_lastName");rec.name=(rec.firstName+" "+rec.lastName).trim();
     rec.email=g("cz_email");rec.phone=g("cz_phone");rec.dob=g("cz_dob");
-    rec.address=g("cz_address");rec.state=g("cz_state");
+    rec.address=g("cz_address");rec.city=g("cz_city");rec.state=g("cz_state");
     rec.zipCode=g("cz_zipCode");rec.zipcode=g("cz_zipCode");
     rec.notes=g("cz_notes");
     rec.quoteValue=Number(g("cz_quoteValue"))||0;rec.value=rec.quoteValue;
