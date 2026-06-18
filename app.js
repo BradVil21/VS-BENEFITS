@@ -1,4 +1,4 @@
-/* VS Benefits - vshealthbenefits.com
+/* VS Health Benefits - vshealthbenefits.com
    Interactive behaviors: mobile nav, countdown, coverage-picker,
    form submission via Make.com webhook (with mailto fallback). */
 
@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (step1 && step2) { step1.hidden = false; step2.hidden = true; }
       }
       function fallbackMailto() {
-        var subj = "VS Benefits website inquiry - " + (data.coverage_type || "general");
+        var subj = "VS Health Benefits website inquiry - " + (data.coverage_type || "general");
         var body = Object.keys(data).filter(function(k){return k[0]!=="_"}).map(function(k){
           return k.replace(/_/g," ").toUpperCase() + ": " + data[k];
         }).join("\n");

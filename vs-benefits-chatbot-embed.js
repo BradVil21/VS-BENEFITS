@@ -59,7 +59,7 @@
   var root=document.createElement('div');
   root.id='vsb-root';
   root.innerHTML=
-    '<button id="vsb-launcher" aria-label="Chat with VS Benefits">'+
+    '<button id="vsb-launcher" aria-label="Chat with VS Health Benefits">'+
       '<div id="vsb-pulse"></div>'+
       '<div id="vsb-badge">1</div>'+
       '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" style="pointer-events:none;flex-shrink:0">'+
@@ -71,7 +71,7 @@
       '<div class="vsb-head">'+
         '<div class="vsb-ava">VS<div class="vsb-ava-dot"></div></div>'+
         '<div style="flex:1;min-width:0">'+
-          '<div class="vsb-hname">Ava &middot; VS Benefits</div>'+
+          '<div class="vsb-hname">Ava &middot; VS Health Benefits</div>'+
           '<div class="vsb-hsub">Online &middot; Health Insurance Specialist</div>'+
         '</div>'+
         '<button class="vsb-xbtn" id="vsb-close">&times;</button>'+
@@ -87,7 +87,7 @@
           '</button>'+
         '</div>'+
       '</div>'+
-      '<div class="vsb-foot">Powered by <strong style="color:#0db5a6">VS Benefits</strong> AI &middot; Licensed Advisors</div>'+
+      '<div class="vsb-foot">Powered by <strong style="color:#0db5a6">VS Health Benefits</strong> AI &middot; Licensed Advisors</div>'+
     '</div>';
   document.body.appendChild(root);
 
@@ -205,13 +205,13 @@
     var box=document.createElement('div');box.className='vsb-ok';
     box.innerHTML='<div class="vsb-ok-ic">\uD83C\uDF89</div>'+
       '<h3>You\'re all set, '+esc(lead.firstName||'there')+'!</h3>'+
-      '<p>A licensed VS Benefits advisor will reach out within <strong>1 business day</strong> with your personalized plan options.</p>'+
+      '<p>A licensed VS Health Benefits advisor will reach out within <strong>1 business day</strong> with your personalized plan options.</p>'+
       '<p style="margin-top:8px">Need help sooner?<br><a href="tel:+19548251009">(954) 825-1009</a></p>';
     r.appendChild(av);r.appendChild(box);msgs.appendChild(r);scroll();
     inp.disabled=true;inp.placeholder='Chat complete \u00B7 Call (954) 825-1009';snd.disabled=true;
   }
 
-  var SYS='You are Ava, a warm health insurance specialist for VS Benefits (Miami FL, licensed in 40+ states).\n\nMISSION: Qualify visitors through friendly conversation. Collect their info so an advisor can call with a personalized quote.\n\nSTYLE: Warm, short (2-3 sentences), conversational. Use first name once known.\n\nCOLLECT naturally in order:\n1. First name\n2. Coverage type (individual/family, small business, dental/vision)\n3. ZIP or state\n4. Number of people/employees\n5. Age or DOB\n6. Email ("so I can send plan options")\n7. Phone ("so our advisor can call with your quote")\n\nRULES:\n- Never promise instant quote — team will call/email with options\n- Pricing questions: rates vary, advisor covers exact numbers\n- VS Benefits questions: answer then redirect to info collection or (954) 825-1009\n- Urgent issues: give (954) 825-1009 immediately\n- Services: Group 10-99, Micro 2-9, ACA/Individual, Family, Dental & Vision, Medicaid\n- Hours: Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET\n\nWHEN you have name + email + phone + coverage type:\nWarmly confirm all collected info and say the team will be in touch within 1 business day.\nThen append at the very end (never shown to user):\n<LEAD_DATA>{"firstName":"","lastName":"","email":"","phone":"","zip":"","state":"","dob":"","coverageType":"","employees":"","extraNotes":""}</LEAD_DATA>';
+  var SYS='You are Ava, a warm health insurance specialist for VS Health Benefits (Miami FL, licensed in 40+ states).\n\nMISSION: Qualify visitors through friendly conversation. Collect their info so an advisor can call with a personalized quote.\n\nSTYLE: Warm, short (2-3 sentences), conversational. Use first name once known.\n\nCOLLECT naturally in order:\n1. First name\n2. Coverage type (individual/family, small business, dental/vision)\n3. ZIP or state\n4. Number of people/employees\n5. Age or DOB\n6. Email ("so I can send plan options")\n7. Phone ("so our advisor can call with your quote")\n\nRULES:\n- Never promise instant quote — team will call/email with options\n- Pricing questions: rates vary, advisor covers exact numbers\n- VS Health Benefits questions: answer then redirect to info collection or (954) 825-1009\n- Urgent issues: give (954) 825-1009 immediately\n- Services: Group 10-99, Micro 2-9, ACA/Individual, Family, Dental & Vision, Medicaid\n- Hours: Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET\n\nWHEN you have name + email + phone + coverage type:\nWarmly confirm all collected info and say the team will be in touch within 1 business day.\nThen append at the very end (never shown to user):\n<LEAD_DATA>{"firstName":"","lastName":"","email":"","phone":"","zip":"","state":"","dob":"","coverageType":"","employees":"","extraNotes":""}</LEAD_DATA>';
 
   function callAI(m){
     return fetch('https://api.anthropic.com/v1/messages',{
@@ -223,15 +223,15 @@
 
   function start(){
     isBusy=true;showTyp();
-    var seed=[{role:'user',content:'Hi, I\'m on the VS Benefits website and I\'m interested in health insurance.'}];
+    var seed=[{role:'user',content:'Hi, I\'m on the VS Health Benefits website and I\'m interested in health insurance.'}];
     callAI(seed).then(function(r){
       hideTyp();
       history=seed.concat([{role:'assistant',content:r}]);
-      addB(r.replace(/<LEAD_DATA>[\s\S]*?<\/LEAD_DATA>/g,'').trim()||'Hi! I\'m Ava from VS Benefits. What type of coverage are you looking for?');
+      addB(r.replace(/<LEAD_DATA>[\s\S]*?<\/LEAD_DATA>/g,'').trim()||'Hi! I\'m Ava from VS Health Benefits. What type of coverage are you looking for?');
       setTimeout(function(){addQR(['Individual / Family','Small Business','Dental & Vision','I have a question']);},200);
     }).catch(function(){
       hideTyp();
-      addB('Hi! I\'m Ava from VS Benefits \uD83D\uDC4B What type of health coverage are you looking for today?');
+      addB('Hi! I\'m Ava from VS Health Benefits \uD83D\uDC4B What type of health coverage are you looking for today?');
       setTimeout(function(){addQR(['Individual / Family','Small Business','Dental & Vision','I have a question']);},200);
     }).finally(function(){isBusy=false;snd.disabled=!inp.value.trim();});
   }

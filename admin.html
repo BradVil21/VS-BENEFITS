@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Admin Portal | VS Benefits</title>
+<title>Admin Portal | VS Health Benefits</title>
 <meta name="robots" content="noindex,nofollow" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
 :root{
-  /* VS Benefits brand palette · clean LeadDesk-style layout */
+  /* VS Health Benefits brand palette · clean LeadDesk-style layout */
   --blue-900:#0b2346;--blue-800:#0f2e5c;--blue-700:#16447f;
   --blue-600:#1e5ab0;--blue-500:#2f7de0;--blue-100:#e8f0fb;--blue-50:#f4f8fe;
   --teal:#0db5a6;--teal-dark:#098374;--gold:#f5b301;
@@ -1218,7 +1218,7 @@ html.dark .sc-links a{color:#e6eefb;border-color:#1c2d42}
 }
 </style>
 <style id="cz-style">
-/* ============ VS Benefits CRM — clean Lead Tracker design ============ */
+/* ============ VS Health Benefits CRM — clean Lead Tracker design ============ */
 #theme-btn{display:none!important}
 html,body{background:#f8fafc;font-size:14px}
 /* shell reskin: slate sidebar, clean topbar, sky accents */
@@ -1360,7 +1360,7 @@ html,body{background:#f8fafc;font-size:14px}
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-brand">
     <div class="b">VS</div>
-    <span class="brand-text">VS Benefits</span>
+    <span class="brand-text">VS Health Benefits</span>
     <span class="pill">Admin</span>
   </div>
   <nav class="sidebar-nav" id="sidebar-nav">
@@ -2519,7 +2519,7 @@ function renderEventList(){
 function googleCalUrl(a){
   function fmt(s){var d=new Date(s);return d.getUTCFullYear()+String(d.getUTCMonth()+1).padStart(2,"0")+String(d.getUTCDate()).padStart(2,"0")+"T"+String(d.getUTCHours()).padStart(2,"0")+String(d.getUTCMinutes()).padStart(2,"0")+"00Z";}
   var endIso=a.end||new Date(new Date(a.start).getTime()+30*60000).toISOString();
-  var params={action:"TEMPLATE",text:a.title||"VS Benefits appointment",dates:fmt(a.start)+"/"+fmt(endIso),details:[a.with?"With: "+a.with:"",a.notes||""].filter(Boolean).join("\n\n"),location:a.location||""};
+  var params={action:"TEMPLATE",text:a.title||"VS Health Benefits appointment",dates:fmt(a.start)+"/"+fmt(endIso),details:[a.with?"With: "+a.with:"",a.notes||""].filter(Boolean).join("\n\n"),location:a.location||""};
   var qs=Object.keys(params).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(params[k]);}).join("&");
   return"https://calendar.google.com/calendar/render?"+qs;
 }
@@ -2553,9 +2553,9 @@ var _aeb=$("add-event-btn");if(_aeb)_aeb.addEventListener("click",function(){ope
 var _cp=$("cal-prev");if(_cp)_cp.addEventListener("click",function(){calCursor.setMonth(calCursor.getMonth()-1);renderCalendar();});
 var _cn=$("cal-next");if(_cn)_cn.addEventListener("click",function(){calCursor.setMonth(calCursor.getMonth()+1);renderCalendar();});
 var _eeb=$("export-events-btn");if(_eeb)_eeb.addEventListener("click",function(){
-  var lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//VS Benefits//EN"];
+  var lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//VS Health Benefits//EN"];
   function fmt(s){var d=new Date(s);return d.getUTCFullYear()+String(d.getUTCMonth()+1).padStart(2,"0")+String(d.getUTCDate()).padStart(2,"0")+"T"+String(d.getUTCHours()).padStart(2,"0")+String(d.getUTCMinutes()).padStart(2,"0")+"00Z";}
-  getAppts().forEach(function(a){lines.push("BEGIN:VEVENT","UID:"+a.id+"@vsbenefits","DTSTAMP:"+fmt(new Date().toISOString()),"DTSTART:"+fmt(a.start),"DTEND:"+fmt(a.end||new Date(new Date(a.start).getTime()+30*60000).toISOString()),"SUMMARY:"+(a.title||"VS Benefits"),"DESCRIPTION:"+((a.with?"With: "+a.with+"\\n":"")+(a.notes||"").replace(/\n/g,"\\n")),"LOCATION:"+(a.location||""),"END:VEVENT");});
+  getAppts().forEach(function(a){lines.push("BEGIN:VEVENT","UID:"+a.id+"@vsbenefits","DTSTAMP:"+fmt(new Date().toISOString()),"DTSTART:"+fmt(a.start),"DTEND:"+fmt(a.end||new Date(new Date(a.start).getTime()+30*60000).toISOString()),"SUMMARY:"+(a.title||"VS Health Benefits"),"DESCRIPTION:"+((a.with?"With: "+a.with+"\\n":"")+(a.notes||"").replace(/\n/g,"\\n")),"LOCATION:"+(a.location||""),"END:VEVENT");});
   lines.push("END:VCALENDAR");
   downloadFile("vsbenefits-events.ics",lines.join("\r\n"),"text/calendar");
 });
@@ -2589,7 +2589,7 @@ function gcalConnect(){
 async function gcalPushEvent(a){
   if(!gcal.ready)return null;if(Date.now()>gcal.expires){clearGcalToken();paintGcalUi();return null;}
   var endIso=a.end?new Date(a.end).toISOString():new Date(new Date(a.start).getTime()+30*60000).toISOString();
-  var body={summary:a.title||"VS Benefits appointment",description:[a.with?"With: "+a.with:"",a.notes||""].filter(Boolean).join("\n\n"),location:a.location||"",start:{dateTime:new Date(a.start).toISOString()},end:{dateTime:endIso}};
+  var body={summary:a.title||"VS Health Benefits appointment",description:[a.with?"With: "+a.with:"",a.notes||""].filter(Boolean).join("\n\n"),location:a.location||"",start:{dateTime:new Date(a.start).toISOString()},end:{dateTime:endIso}};
   try{var r=await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events",{method:"POST",headers:{"Authorization":"Bearer "+gcal.token,"Content-Type":"application/json"},body:JSON.stringify(body)});if(r.status===401){clearGcalToken();paintGcalUi();return null;}if(!r.ok)return null;var d=await r.json();return d.id||null;}catch(e){return null;}
 }
 async function gcalDeleteEvent(gid){if(!gcal.ready||!gid)return;try{await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events/"+encodeURIComponent(gid),{method:"DELETE",headers:{"Authorization":"Bearer "+gcal.token}});}catch(e){}}
@@ -3188,8 +3188,8 @@ $("notif-mark-all").addEventListener("click",function(){saveNotifs([]);updateBel
    3. Dropping to "follow-up" in pipeline auto-adds
 ════════════════════════════════════════ */
 var SEQ_DAYS=[
-  [{icon:"📞",type:"call",label:"Intro call",sub:"Introduce yourself & VS Benefits. Ask about their coverage needs."},
-   {icon:"✉️",type:"email",label:"Send intro email",sub:"Follow up with overview of VS Benefits and your contact info."},
+  [{icon:"📞",type:"call",label:"Intro call",sub:"Introduce yourself & VS Health Benefits. Ask about their coverage needs."},
+   {icon:"✉️",type:"email",label:"Send intro email",sub:"Follow up with overview of VS Health Benefits and your contact info."},
    {icon:"📋",type:"note",label:"Log call notes",sub:"Record what they said — pain points, interest level, timeline."}],
   [{icon:"📞",type:"call",label:"Follow-up call",sub:"Did they read the email? Any questions? Offer to clarify."},
    {icon:"✉️",type:"email",label:"Send plan comparison",sub:"Email a tailored plan comparison based on their situation."}],
@@ -3646,7 +3646,7 @@ function showBdayPopup(clients){
     body.appendChild(msg);
     var acts=el("div",{class:"bday-actions"});
     if(c.phone)acts.appendChild(el("a",{class:"btn btn-primary",href:"tel:"+String(c.phone).replace(/[^0-9+]/g,""),text:"📞 Call to wish them Happy Birthday!"}));
-    if(c.email){var subj=encodeURIComponent("Happy Birthday, "+(c.firstName||fullName(c))+"! 🎂");var bod=encodeURIComponent("Hi "+(c.firstName||fullName(c))+",\n\nWishing you a very Happy Birthday!\n\nWarm regards,\nVS Benefits");acts.appendChild(el("a",{class:"btn btn-ghost",href:"mailto:"+c.email+"?subject="+subj+"&body="+bod,text:"✉️ Send Birthday Email"}));}
+    if(c.email){var subj=encodeURIComponent("Happy Birthday, "+(c.firstName||fullName(c))+"! 🎂");var bod=encodeURIComponent("Hi "+(c.firstName||fullName(c))+",\n\nWishing you a very Happy Birthday!\n\nWarm regards,\nVS Health Benefits");acts.appendChild(el("a",{class:"btn btn-ghost",href:"mailto:"+c.email+"?subject="+subj+"&body="+bod,text:"✉️ Send Birthday Email"}));}
     body.appendChild(acts);
   }else{
     body.appendChild(el("div",{class:"bday-name",style:"font-size:19px",text:clients.length+" clients have birthdays today! 🎈"}));
@@ -3657,7 +3657,7 @@ function showBdayPopup(clients){
       var info=el("div",{class:"bli-info"});info.appendChild(el("div",{class:"bli-name",text:fullName(c)}));info.appendChild(el("div",{class:"bli-detail",text:(age?"Turning "+age+" · ":"")+(c.phone||c.email||"")}));item.appendChild(info);
       var qa=el("div",{class:"bli-actions"});
       if(c.phone)qa.appendChild(el("a",{class:"btn btn-teal btn-xs",href:"tel:"+String(c.phone).replace(/[^0-9+]/g,""),text:"📞"}));
-      if(c.email){var s2=encodeURIComponent("Happy Birthday, "+(c.firstName||fullName(c))+"! 🎂");var b2=encodeURIComponent("Hi "+(c.firstName||fullName(c))+",\n\nHappy Birthday!\n\nVS Benefits");qa.appendChild(el("a",{class:"btn btn-ghost btn-xs",href:"mailto:"+c.email+"?subject="+s2+"&body="+b2,text:"✉"}));}
+      if(c.email){var s2=encodeURIComponent("Happy Birthday, "+(c.firstName||fullName(c))+"! 🎂");var b2=encodeURIComponent("Hi "+(c.firstName||fullName(c))+",\n\nHappy Birthday!\n\nVS Health Benefits");qa.appendChild(el("a",{class:"btn btn-ghost btn-xs",href:"mailto:"+c.email+"?subject="+s2+"&body="+b2,text:"✉"}));}
       item.appendChild(qa);list.appendChild(item);
     });
     body.appendChild(list);
