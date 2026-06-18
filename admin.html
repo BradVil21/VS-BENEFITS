@@ -1332,6 +1332,9 @@ html,body{background:#f8fafc;font-size:14px}
 /* smaller task cards + bigger pipeline drop zones */
 .cz-col{min-height:200px}
 .cz-col.cz-drop-hot{background:#eaf4ff;outline:2px dashed #38bdf8;outline-offset:-4px}
+.cz-col[data-cz-drop="new_lead"]{box-shadow:0 0 0 2px rgba(47,125,224,.35),0 8px 26px rgba(47,125,224,.20);animation:czNewGlow 2.2s ease-in-out infinite}
+.cz-col[data-cz-drop="new_lead"] .cz-card{border:1px solid rgba(47,125,224,.4)}
+@keyframes czNewGlow{0%,100%{box-shadow:0 0 0 2px rgba(47,125,224,.30),0 8px 24px rgba(47,125,224,.14)}50%{box-shadow:0 0 0 3px rgba(47,125,224,.46),0 12px 32px rgba(20,184,166,.30)}}
 .seq-head{padding:9px 13px}
 .seq-head h3{font-size:13.5px}
 .seq-head .seq-meta{font-size:11px}
@@ -3703,7 +3706,9 @@ function renderAll(){renderDashboard();renderLeads();renderAccounts();renderSupp
 var czFollowupDays=14;
 var czCLOSED=["sold","no_longer_interested"];
 var czSTAGES=[
+  {id:"new_lead",label:"New Lead",color:"#2f7de0"},
   {id:"follow_up",label:"Follow Up",color:"#0ea5e9"},
+  {id:"appointment_scheduled",label:"Appointment Scheduled",color:"#14b8a6"},
   {id:"quoted",label:"Quoted",color:"#8b5cf6"},
   {id:"sixty_plus",label:"60+ Days Out",color:"#f59e0b"},
   {id:"ghosted",label:"Ghosted",color:"#f43f5e"},
@@ -3722,13 +3727,14 @@ function czDaysBetween(a,b){return Math.round((czParseYMD(a)-czParseYMD(b))/8640
 function czPretty(ymd){if(!ymd)return"";return czParseYMD(ymd).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}
 function czName(c){return ((c.firstName||"")+" "+(c.lastName||"")).trim()||c.name||c.email||"(no name)";}
 function czVal(c){var v=(c.quoteValue!=null&&c.quoteValue!=="")?c.quoteValue:leadValue(c);return Number(v)||0;}
-function czStatusToStage(s){s=(s||"new");var m={"new":"follow_up","contacted":"follow_up","follow-up":"follow_up","appointment-scheduled":"follow_up","quoted":"quoted","60-days-out":"sixty_plus","ghosted":"ghosted","sold":"sold","enrolled":"sold","declined":"no_longer_interested","lost":"no_longer_interested","no-longer-interested":"no_longer_interested"};return m[s]||"follow_up";}
-function czStageToStatus(st){var m={"follow_up":"follow-up","quoted":"quoted","sixty_plus":"60-days-out","ghosted":"ghosted","no_longer_interested":"no-longer-interested","sold":"sold"};return m[st]||"follow-up";}
+function czStatusToStage(s){s=(s||"new");var m={"new":"new_lead","contacted":"follow_up","follow-up":"follow_up","appointment-scheduled":"appointment_scheduled","quoted":"quoted","60-days-out":"sixty_plus","ghosted":"ghosted","sold":"sold","enrolled":"sold","declined":"no_longer_interested","lost":"no_longer_interested","no-longer-interested":"no_longer_interested"};return m[s]||"new_lead";}
+function czStageToStatus(st){var m={"new_lead":"new","follow_up":"follow-up","appointment_scheduled":"appointment-scheduled","quoted":"quoted","sixty_plus":"60-days-out","ghosted":"ghosted","no_longer_interested":"no-longer-interested","sold":"sold"};return m[st]||"follow-up";}
 function czEnsure(){
   var arr=getLeads();var changed=false;
   arr.forEach(function(l){
     if(!l.firstName&&!l.lastName&&l.name){var p=String(l.name).split(/\s+/);l.firstName=p[0]||"";l.lastName=p.slice(1).join(" ");changed=true;}
     if(!l.stage){l.stage=czStatusToStage(l.status);changed=true;}
+    else if(l.status==="new"&&l.stage==="follow_up"){l.stage="new_lead";changed=true;}
     if(l.quoteValue==null||l.quoteValue===""){l.quoteValue=leadValue(l);changed=true;}
     if((l.zipCode==null||l.zipCode==="")&&l.zipcode){l.zipCode=l.zipcode;}
     if(!l.lastContact){l.lastContact=l.updated?czYMD(new Date(l.updated)):(l.created?czYMD(new Date(l.created)):todayStr());changed=true;}
