@@ -827,6 +827,26 @@ html.dark .pl-amount{color:#d4e8ff}
 @keyframes plNewGlow{0%,100%{box-shadow:0 0 0 3px rgba(47,125,224,.10),0 8px 26px rgba(47,125,224,.16)}50%{box-shadow:0 0 0 4px rgba(47,125,224,.22),0 12px 34px rgba(13,181,166,.32)}}
 .tbl .row.row-new-lead{animation:rowNewGlow 2.2s ease-in-out infinite}
 @keyframes rowNewGlow{0%,100%{box-shadow:0 4px 20px rgba(47,125,224,.16),0 0 0 3px rgba(47,125,224,.07)}50%{box-shadow:0 6px 26px rgba(13,181,166,.26),0 0 0 4px rgba(47,125,224,.16)}}
+/* ── Support ticket board ── */
+.ticket-board{min-height:300px}
+.tkacc-new{background:linear-gradient(90deg,#2f7de0,#0db5a6)}
+.tkacc-in-progress{background:#2f7de0}
+.tkacc-waiting-on-client{background:#e8a020}
+.tkacc-escalated{background:#e5484d}
+.tkacc-solved{background:#18c97a}
+.tkav-new{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e4db0}
+.tkav-in-progress{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af}
+.tkav-waiting-on-client{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#78350f}
+.tkav-escalated{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b}
+.tkav-solved{background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46}
+.tk-col-new{border:2px solid rgba(47,125,224,.5);box-shadow:0 0 0 3px rgba(47,125,224,.08);animation:plNewGlow 2.2s ease-in-out infinite}
+.tk-card-new{border:1.5px solid rgba(47,125,224,.5) !important;box-shadow:0 4px 16px rgba(47,125,224,.2) !important;animation:plNewGlow 2.2s ease-in-out infinite}
+.tk-detail{display:flex;flex-direction:column;gap:7px}
+.tk-drow{display:flex;justify-content:space-between;gap:14px;font-size:13.5px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.tk-dl{color:var(--muted);font-weight:600;flex-shrink:0}
+.tk-dv{color:var(--ink);text-align:right;word-break:break-word}
+.tk-msg{margin-top:8px}
+.tk-msgbody{margin-top:4px;background:var(--bg-soft,#f7faff);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;color:var(--ink);white-space:pre-wrap;word-break:break-word}
 .pipeline-wrap{cursor:grab}
 .pipeline-wrap.panning{cursor:grabbing;user-select:none}
 .pipeline-wrap.panning .pl-card{pointer-events:none}
@@ -1505,8 +1525,12 @@ html,body{background:#f8fafc;font-size:14px}
 
     <!-- SUPPORT -->
     <div id="p-support" class="panel">
-      <h3>Support inbox</h3>
-      <p class="lede">Two-way message threads.</p>
+      <h3>Support tickets</h3>
+      <p class="lede">Requests from the website contact form. Drag a card between columns, or click a card to see full details.</p>
+      <div id="ticket-board" class="pipeline-wrap ticket-board"></div>
+
+      <h3 style="margin-top:30px">Client conversations</h3>
+      <p class="lede">Two-way message threads with logged-in client portal members.</p>
       <div class="toolbar">
         <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer">
           <input type="checkbox" id="show-closed" /> Show closed threads
@@ -1682,6 +1706,7 @@ var K={
   session:"vs_admin_session",setupCode:"vs_admin_setup_code",
   adminAccts:"vs_admin_accounts",legacyHash:"vs_admin_hash",
   leads:"vs_leads",accounts:"vs_client_accounts",messages:"vs_messages",
+  tickets:"vs_tickets",
   referrals:"vs_referrals",appointments:"vs_appointments",
   webhook:"vs_webhook_url",
   gcalCid:"vs_gcal_client_id",gcalTok:"vs_gcal_token",gcalEmail:"vs_gcal_email",
@@ -1716,12 +1741,14 @@ function fullName(a){return(((a.firstName||"")+" "+(a.lastName||"")).trim()||a.n
 
 var LOCAL_TO_REMOTE={};
 LOCAL_TO_REMOTE[K.leads]="leads";LOCAL_TO_REMOTE[K.accounts]="accounts";LOCAL_TO_REMOTE[K.messages]="messages";
+LOCAL_TO_REMOTE[K.tickets]="contact_requests";
 LOCAL_TO_REMOTE[K.referrals]="referrals";LOCAL_TO_REMOTE[K.appointments]="appointments";LOCAL_TO_REMOTE[K.adminAccts]="admin_accounts";
 
 function setArr(k,v){setArrLocal(k,v);var r=LOCAL_TO_REMOTE[k];if(r)cloudPush(r,v);}
 function getLeads(){return asArr(K.leads);}function saveLeads(v){setArr(K.leads,v);}
 function getAccounts(){return asArr(K.accounts);}function saveAccounts(v){setArr(K.accounts,v);}
 function getMessages(){return asArr(K.messages);}function saveMessages(v){setArr(K.messages,v);}
+function getTickets(){return asArr(K.tickets);}function saveTickets(v){setArr(K.tickets,v);}
 function getReferrals(){return asArr(K.referrals);}function saveReferrals(v){setArr(K.referrals,v);}
 function getAppts(){return asArr(K.appointments);}function saveAppts(v){setArr(K.appointments,v);}
 function getAdmins(){return asArr(K.adminAccts);}function saveAdmins(v){setArr(K.adminAccts,v);}
@@ -1734,8 +1761,8 @@ function webhookFire(payload){var url=getWebhook();if(!url)return;try{fetch(url,
 
 var cloud={ready:false,suspend:0};
 var presenceMap={};
-var REMOTE_KEYS=["leads","accounts","messages","referrals","appointments","admin_accounts"];
-var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts};
+var REMOTE_KEYS=["leads","accounts","messages","contact_requests","referrals","appointments","admin_accounts"];
+var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,contact_requests:K.tickets,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts};
 
 function setSyncPill(state){
   var p=$("sync-pill");if(!p)return;
@@ -1773,10 +1800,18 @@ async function initCloud(){
           var oldUnread=prevItems.filter(function(m){return m.from==="client"&&!m.read;}).length;
           if(newUnread>oldUnread){addNotif("support","New client message","Click to reply","support");}
         }
+        if(rk==="contact_requests"&&$("shell")&&!$("shell").hidden){
+          var prevTicketIds={};prevItems.forEach(function(t){if(t&&t.id)prevTicketIds[t.id]=true;});
+          items.filter(function(t){return t&&t.id&&!prevTicketIds[t.id];}).forEach(function(t){
+            var who=t.fullName||((t.firstName||"")+" "+(t.lastName||"")).trim()||t.email||"Someone";
+            addNotif("support","Support request from "+who,(t.message?String(t.message).slice(0,80):"Submitted via the contact form"),"support");
+          });
+        }
         if(!$("shell").hidden){
           if(rk==="leads"){renderLeads();renderPipeline();renderTasks();if(typeof checkTaskNotifications==="function")setTimeout(checkTaskNotifications,300);}
           if(rk==="accounts"){renderAccounts();renderSupport();renderAdminsList();renderPipeline();}
           if(rk==="messages"){renderSupport();if(activeThreadId)selectThread(activeThreadId);}
+          if(rk==="contact_requests")renderSupport();
           if(rk==="referrals")renderReferrals();
           if(rk==="appointments"){/* calendar removed */}
           if(rk==="admin_accounts")renderAdminsList();
@@ -1790,38 +1825,8 @@ async function initCloud(){
     if(!$("shell").hidden)renderAccounts();
   });
 
-  var _knownContactIds=null;
-  onSnapshot(doc(db,"vs_state","contact_requests"),function(snap){
-    if(!snap.exists())return;
-    var items=snap.data().items||[];
-    if(_knownContactIds===null){
-      _knownContactIds={};
-      items.forEach(function(r){if(r&&r.id)_knownContactIds[r.id]=true;});
-      return;
-    }
-    var newItems=items.filter(function(r){return r&&r.id&&!_knownContactIds[r.id];});
-    if(!newItems.length)return;
-    newItems.forEach(function(r){
-      _knownContactIds[r.id]=true;
-      var accts=getAccounts();
-      var email=normEmail(r.email||"");
-      var existing=email?accts.filter(function(a){return normEmail(a.email)===email;})[0]:null;
-      var accountId;
-      if(existing){accountId=existing.id;}
-      else{
-        accountId="cr_"+r.id;
-        accts.push({id:accountId,firstName:r.firstName||r.fullName||"Contact",lastName:r.lastName||"",email:r.email||"",phone:r.phone||"",zip:r.zip||"",passwordHash:"",created:r.created||Date.now(),lastSignIn:0,status:"active",plan:null,photoDataUrl:"",documents:[],_fromContactForm:true});
-        saveAccounts(accts);
-      }
-      var msgText="📋 Contact form request"+(r.message?"\n\n"+r.message:"")+(r.zip?"\n\nZIP: "+r.zip:"")+(r.phone?"\n📞 "+r.phone:"")+(r.email?"\n✉ "+r.email:"");
-      var msgs=getMessages();
-      msgs.push({id:r.id,accountId:accountId,from:"client",text:msgText,ts:r.created||Date.now(),read:false,source:"contact-form"});
-      saveMessages(msgs);
-      var displayName=(r.fullName||((r.firstName||"")+" "+(r.lastName||"")).trim()||r.email||"Someone").trim();
-      addNotif("support","Support request from "+displayName,r.message?String(r.message).slice(0,80):"Submitted via the contact form","support");
-      if($("shell")&&!$("shell").hidden){renderSupport();}
-    });
-  });
+  /* contact_requests now sync into the tickets store via REMOTE_KEYS above
+     and render as Support tickets. They no longer create client accounts. */
 }
 
 async function pullOnce(rk){
@@ -2774,10 +2779,98 @@ $("export-accts-btn").addEventListener("click",function(){
 ════════════════════════════════════════ */
 var activeThreadId=null;
 $("show-closed").addEventListener("change",renderSupport);
+
+/* ════════════════════════════════════════
+   SUPPORT TICKETS (from website contact form)
+════════════════════════════════════════ */
+var TICKET_STAGES=["new","in-progress","waiting-on-client","escalated","solved"];
+var TICKET_LABELS={"new":"✨ New","in-progress":"🛠️ In Progress","waiting-on-client":"⏳ Waiting on Client","escalated":"⚠️ Escalated","solved":"✅ Solved"};
+var ticketDragId=null;
+function ticketStageOf(t){var s=t&&t.stage||"new";return TICKET_STAGES.indexOf(s)>=0?s:"new";}
+function ticketName(t){return (t.fullName||((t.firstName||"")+" "+(t.lastName||"")).trim()||t.email||"(no name)");}
+/* one-time cleanup: pull old contact-form accounts back out of Clients */
+function migrateContactFormAccounts(){
+  var accts=getAccounts();
+  if(!accts.some(function(a){return a._fromContactForm;}))return false;
+  saveAccounts(accts.filter(function(a){return !a._fromContactForm;}));
+  saveMessages(getMessages().filter(function(m){return m.source!=="contact-form";}));
+  return true;
+}
+function moveTicket(id,stage){
+  if(TICKET_STAGES.indexOf(stage)<0)return;
+  saveTickets(getTickets().map(function(t){if(t.id===id){t.stage=stage;t.updated=Date.now();}return t;}));
+  renderSupport();
+}
+function renderTicketBoard(){
+  var board=$("ticket-board");if(!board)return;
+  board.innerHTML="";
+  var tickets=getTickets();
+  TICKET_STAGES.forEach(function(stage){
+    var items=tickets.filter(function(t){return ticketStageOf(t)===stage;}).sort(function(a,b){return (b.created||0)-(a.created||0);});
+    var col=el("div",{class:"pl-col"+(stage==="new"?" tk-col-new":"")});
+    col.appendChild(el("div",{class:"pl-accent tkacc-"+stage}));
+    var hdr=el("div",{class:"pl-head"});
+    hdr.appendChild(el("span",{class:"pl-title",text:TICKET_LABELS[stage]}));
+    hdr.appendChild(el("span",{class:"pl-count",text:items.length+(items.length===1?" ticket":" tickets")}));
+    col.appendChild(hdr);
+    var body=el("div",{class:"pl-body"});
+    body.addEventListener("dragover",function(e){e.preventDefault();body.classList.add("drag-over");});
+    body.addEventListener("dragleave",function(){body.classList.remove("drag-over");});
+    body.addEventListener("drop",function(e){e.preventDefault();body.classList.remove("drag-over");if(ticketDragId){moveTicket(ticketDragId,stage);ticketDragId=null;}});
+    if(!items.length)body.appendChild(el("div",{class:"pl-empty",text:"Drop tickets here"}));
+    items.forEach(function(t){
+      var card=el("div",{class:"pl-card tk-card"+(stage==="new"?" tk-card-new":""),draggable:"true"});
+      var top=el("div",{class:"pl-card-top"});
+      top.appendChild(el("div",{class:"pl-av tkav-"+stage,text:(ticketName(t).charAt(0)||"?").toUpperCase()}));
+      var nm=el("div",{class:"pl-name"});
+      nm.appendChild(el("span",{class:"pl-name-lbl",text:"Ticket: "}));
+      nm.appendChild(el("strong",{text:ticketName(t)}));
+      top.appendChild(nm);card.appendChild(top);
+      if(t.message){var mt=String(t.message);card.appendChild(el("div",{class:"pl-note",text:mt.slice(0,90)+(mt.length>90?"…":"")}));}
+      var contact=t.phone?("📞 "+t.phone):(t.email?("✉️ "+t.email):"");
+      if(contact)card.appendChild(el("div",{class:"pl-meta",text:contact}));
+      card.appendChild(el("div",{class:"pl-divider"}));
+      var bot=el("div",{class:"pl-card-bottom"});
+      bot.appendChild(el("div",{class:"pl-date",text:fmtDate(t.created)}));
+      card.appendChild(bot);
+      card.addEventListener("click",function(e){if(e.target.closest&&e.target.closest("button,select,a"))return;openTicketDetail(t.id);});
+      card.addEventListener("dragstart",function(){ticketDragId=t.id;card.classList.add("dragging");});
+      card.addEventListener("dragend",function(){ticketDragId=null;card.classList.remove("dragging");});
+      body.appendChild(card);
+    });
+    col.appendChild(body);board.appendChild(col);
+  });
+}
+function openTicketDetail(id){
+  var t=getTickets().filter(function(x){return x.id===id;})[0];if(!t)return;
+  var name=ticketName(t);
+  function row(lbl,val){return val?('<div class="tk-drow"><span class="tk-dl">'+lbl+'</span><span class="tk-dv">'+escapeHtml(val)+'</span></div>'):"";}
+  var rows=row("Name",name)+row("Email",t.email)+row("Phone",t.phone)+row("ZIP",t.zip||t.postal_code)+row("Submitted",fmtDateTime(t.created))+row("Source",t.source||"contact-form")+row("Page",t.page);
+  var msg=t.message?('<div class="tk-msg"><div class="tk-dl">Message</div><div class="tk-msgbody">'+escapeHtml(t.message)+'</div></div>'):"";
+  var opts=TICKET_STAGES.map(function(s){return '<option value="'+s+'"'+(ticketStageOf(t)===s?" selected":"")+'>'+escapeHtml(TICKET_LABELS[s])+'</option>';}).join("");
+  var emailBtn=t.email?'<a class="btn btn-primary btn-sm" href="mailto:'+escapeHtml(t.email)+'">✉ Email</a>':"";
+  var callBtn=t.phone?'<a class="btn btn-ghost btn-sm" href="tel:'+String(t.phone).replace(/[^0-9+]/g,"")+'">📞 Call</a>':"";
+  openModal(
+    '<h3 style="margin:0 0 2px">Support ticket</h3>'+
+    '<div style="font-weight:700;color:var(--blue-900);font-size:16px;margin-bottom:12px">'+escapeHtml(name)+'</div>'+
+    '<div class="tk-detail">'+rows+msg+'</div>'+
+    '<div class="field" style="margin-top:14px"><label style="display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:4px">Ticket stage</label>'+
+    '<select id="tk-stage-sel" class="move-select" style="width:100%">'+opts+'</select></div>'+
+    '<div class="modal-acts" style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">'+emailBtn+callBtn+
+    '<button type="button" class="btn btn-danger btn-sm" id="tk-del">🗑 Delete</button>'+
+    '<button type="button" class="btn btn-ghost btn-sm" data-close>Close</button></div>'
+  );
+  var sel=$("tk-stage-sel");if(sel)sel.addEventListener("change",function(){moveTicket(id,sel.value);});
+  var del=$("tk-del");if(del)del.addEventListener("click",function(){if(!confirm("Delete this ticket?"))return;saveTickets(getTickets().filter(function(x){return x.id!==id;}));closeModal();renderSupport();});
+}
+
 function renderSupport(){
+  if(migrateContactFormAccounts()){if(typeof renderAccounts==="function")renderAccounts();}
+  renderTicketBoard();
   var msgs=getMessages();
   var unreadCount=msgs.filter(function(m){return m.from==="client"&&!m.read;}).length;
-  var bdg=$("b-sup");if(bdg){bdg.textContent=unreadCount;bdg.style.display=unreadCount>0?"":"none";}
+  var openTickets=getTickets().filter(function(t){return ticketStageOf(t)!=="solved";}).length;
+  var bdg=$("b-sup");if(bdg){var sc=unreadCount+openTickets;bdg.textContent=sc;bdg.style.display=sc>0?"":"none";}
   var showClosed=$("show-closed").checked;
   var byAcct={};
   msgs.forEach(function(m){(byAcct[m.accountId]=byAcct[m.accountId]||[]).push(m);});
