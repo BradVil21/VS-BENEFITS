@@ -1394,6 +1394,11 @@ html.dark #tasks-container .next-day-preview{background:#111d2b !important;borde
 /* clean footer */
 #tasks-container .seq-footer{padding:9px 16px;border-top:1px solid #eef2f8;background:#fff}
 html.dark #tasks-container .seq-footer{background:#162030;border-color:#243246}
+/* sort dropdowns for Leads and Active Clients lists */
+.sortsel{border:1px solid #d8e0ee;border-radius:10px;padding:9px 12px;font-size:13px;font-weight:500;background:#fff;color:#1e293b;cursor:pointer;min-height:40px;outline:none}
+.sortsel:focus{border-color:#2f7de0;box-shadow:0 0 0 3px rgba(47,125,224,.15)}
+.cz-toolbar .sortsel{flex-shrink:0}
+html.dark .sortsel{background:#162030;border-color:#2b3f5a;color:#e6eefb}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -1563,6 +1568,12 @@ html.dark #tasks-container .seq-footer{background:#162030;border-color:#243246}
       <p class="lede">All clients. Green dot = online now.</p>
       <div class="toolbar">
         <input id="acct-search" class="search" type="search" placeholder="Search name, email, phone..." />
+        <select id="acct-sort" class="sortsel" aria-label="Sort clients">
+          <option value="az">Name A to Z</option>
+          <option value="za">Name Z to A</option>
+          <option value="new">Newest first</option>
+          <option value="old">Oldest first</option>
+        </select>
         <button id="create-acct-btn" class="btn btn-primary btn-sm" type="button">+ New client</button>
         <button id="export-accts-btn" class="btn btn-ghost btn-sm" type="button">Export CSV</button>
       </div>
@@ -2663,6 +2674,13 @@ function renderAccounts(){
     var matchF=activeAcctFilter==="all"||(a.status||"active")===activeAcctFilter;
     return matchQ&&matchF;
   });
+  var acctSort=($("acct-sort")&&$("acct-sort").value)||"az";
+  rows.sort(function(a,b){
+    if(acctSort==="za")return fullName(b).localeCompare(fullName(a),undefined,{sensitivity:"base"});
+    if(acctSort==="new")return (b.created||0)-(a.created||0);
+    if(acctSort==="old")return (a.created||0)-(b.created||0);
+    return fullName(a).localeCompare(fullName(b),undefined,{sensitivity:"base"});
+  });
   var box=$("accts-list");box.innerHTML="";
   if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No clients match this filter."}));return;}
   rows.forEach(function(a){
@@ -2866,6 +2884,7 @@ function openCreateAcctForm(){
 }
 $("create-acct-btn").addEventListener("click",openCreateAcctForm);
 $("acct-search").addEventListener("input",renderAccounts);
+(function(){var s=$("acct-sort");if(s)s.addEventListener("change",renderAccounts);})();
 $("export-accts-btn").addEventListener("click",function(){
   var rows=[["firstName","lastName","email","phone","dob","address","state","zipcode","status","pipeline_status","plan_carrier","plan_name","plan_effective","plan_premium","created","lastSignIn"]];
   getAccounts().forEach(function(a){var p=a.plan||{};rows.push([a.firstName,a.lastName,a.email,a.phone,a.dob||"",a.address||"",a.state||"",a.zipcode||"",a.status||"active",a.pipelineStatus||"",p.carrier||"",p.planName||"",p.effectiveDate||"",p.monthlyPremium||"",a.created?new Date(a.created).toISOString():"",a.lastSignIn?new Date(a.lastSignIn).toISOString():""].map(csvEscape));});
@@ -3813,6 +3832,18 @@ var czSTAGES=[
 var czMETA={};czSTAGES.forEach(function(s){czMETA[s.id]=s;});
 var czUS=["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
 var czQuery="";
+var czSort="az";
+function czSortCmp(a,b){
+  if(czSort==="za")return czName(b).localeCompare(czName(a),undefined,{sensitivity:"base"});
+  if(czSort==="new")return (b.created||0)-(a.created||0);
+  if(czSort==="old")return (a.created||0)-(b.created||0);
+  if(czSort==="value")return czVal(b)-czVal(a);
+  return czName(a).localeCompare(czName(b),undefined,{sensitivity:"base"});
+}
+function czSortOptions(sel){
+  return [["az","Name A to Z"],["za","Name Z to A"],["new","Newest first"],["old","Oldest first"],["value","Highest value"]]
+    .map(function(o){return '<option value="'+o[0]+'"'+(o[0]===sel?" selected":"")+'>'+o[1]+'</option>';}).join("");
+}
 var czSearchSVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>';
 var czFUSTYLE={overdue:"background:#ffe4e6;color:#be123c;border:1px solid #fecdd3",today:"background:#fef3c7;color:#92400e;border:1px solid #fde68a",upcoming:"background:#f1f5f9;color:#475569;border:1px solid #e2e8f0"};
 function czYMD(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
@@ -3999,15 +4030,16 @@ function czClients(){
     czBind(mount);return;
   }
   mount.innerHTML='<h3 class="cz-h">Leads</h3><p class="cz-lede">Your leads and clients.</p>'
-    +'<div class="cz-toolbar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search name, email, phone, zip…" value="'+escapeHtml(czQuery)+'"/></div><button class="cz-btn-go" data-cz-add="1">+ Add client</button></div>'
+    +'<div class="cz-toolbar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search name, email, phone, zip…" value="'+escapeHtml(czQuery)+'"/></div><select data-cz-sort class="sortsel" aria-label="Sort leads">'+czSortOptions(czSort)+'</select><button class="cz-btn-go" data-cz-add="1">+ Add client</button></div>'
     +'<div id="cz-clients-results"></div>';
   var sb=mount.querySelector("[data-cz-search]");if(sb)sb.addEventListener("input",function(){czQuery=sb.value;czClientResults();});
+  var so=mount.querySelector("[data-cz-sort]");if(so)so.addEventListener("change",function(){czSort=so.value;czClientResults();});
   mount.querySelectorAll("[data-cz-add]").forEach(function(n){n.addEventListener("click",function(){czOpenModal(null);});});
   czClientResults();
 }
 function czClientResults(){
   var box=$("cz-clients-results");if(!box)return;
-  var cs=czFiltered();
+  var cs=czFiltered().slice().sort(czSortCmp);
   var rows=cs.length===0?'<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:32px">No matches for your search.</td></tr>':cs.map(function(c){
     var fu=czFU(c);
     var fup=fu.key==="none"?'<span class="cz-faint" style="font-size:12px">—</span>':'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span>';
