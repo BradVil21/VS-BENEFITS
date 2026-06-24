@@ -2835,15 +2835,33 @@ function openCreateAcctForm(){
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return notice("ca-msg","err","Enter a valid email.");
     if(cloud.ready)await pullOnce("accounts");
     var accts=getAccounts();
-    if(accts.some(function(a){return normEmail(a.email)===email;}))return notice("ca-msg","err","An account with this email already exists.");
     var hash="";try{ if(window.crypto&&crypto.subtle){ hash=await sha256(pw); } }catch(err){ hash=""; }
-    accts.push({id:uid(),firstName:first,lastName:last,name:(first+" "+last).trim(),email:email,phone:phone,address:address,city:city,state:state,zipcode:zip,passwordHash:hash,created:Date.now(),lastSignIn:0,status:"active",plan:null,photoDataUrl:"",documents:[],pipelineStatus:"sold",_convertedFromLead:leadId||undefined});
-    saveAccounts(accts);
+    var existing=email?accts.filter(function(a){return normEmail(a.email)===email;})[0]:null;
+    var displayName=(first+" "+last).trim();
+    if(existing){
+      // Account already exists for this email: make sure it is an active client and filled in
+      existing.firstName=existing.firstName||first;
+      existing.lastName=existing.lastName||last;
+      existing.name=((existing.firstName||"")+" "+(existing.lastName||"")).trim()||existing.name||displayName;
+      existing.phone=existing.phone||phone;
+      existing.address=existing.address||address;existing.city=existing.city||city;
+      existing.state=existing.state||state;existing.zipcode=existing.zipcode||existing.zipCode||zip;
+      existing.status="active";
+      if(!existing.passwordHash&&hash)existing.passwordHash=hash;
+      displayName=((existing.firstName||"")+" "+(existing.lastName||"")).trim()||displayName;
+      saveAccounts(accts);
+    }else{
+      accts.push({id:uid(),firstName:first,lastName:last,name:displayName,email:email,phone:phone,address:address,city:city,state:state,zipcode:zip,passwordHash:hash,created:Date.now(),lastSignIn:0,status:"active",plan:null,photoDataUrl:"",documents:[],pipelineStatus:"sold",_convertedFromLead:leadId||undefined});
+      saveAccounts(accts);
+    }
     if(leadId){var ls=getLeads().map(function(l){if(l.id===leadId){l.status="sold";l.stage="sold";l.updated=Date.now();}return l;});saveLeads(ls);}
     webhookFire({event:"admin_created_client",email:email,ts:Date.now()});
+    // make sure the client is visible regardless of any active filter or search
+    try{activeAcctFilter="all";var sb=$("acct-search");if(sb)sb.value="";}catch(e){}
     closeModal();renderAccounts();
     if(typeof czCurrentRender==="function")czCurrentRender();
     if(typeof renderTasks==="function")renderTasks();
+    try{ czCelebrate(displayName||"Client",existing?"This client is now in your Active Clients list.":"Now an active client."); }catch(e){}
   });
 }
 $("create-acct-btn").addEventListener("click",openCreateAcctForm);
