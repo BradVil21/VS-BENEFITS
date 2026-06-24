@@ -2794,27 +2794,56 @@ function openPlanForm(a){
 }
 function fmtBytes(n){if(!n)return"0 B";if(n<1024)return n+" B";if(n<1048576)return(n/1024).toFixed(1)+" KB";return(n/1048576).toFixed(1)+" MB";}
 function openCreateAcctForm(){
-  var html='<h3>Create client account</h3><p class="lede">Set up an account so they can sign in to the client portal.</p><form id="ca-form">'+
+  var leads=getLeads().slice().sort(function(a,b){return czName(a).localeCompare(czName(b));});
+  var leadOpts='<option value="">— Or enter details manually below —</option>'+leads.map(function(l){
+    var label=czName(l)+(l.email?(" · "+l.email):(l.phone?(" · "+l.phone):""));
+    return '<option value="'+l.id+'">'+escapeHtml(label)+'</option>';
+  }).join("");
+  var stateOpts='<option value="">—</option>'+czUS.map(function(s){return '<option value="'+s+'">'+s+'</option>';}).join("");
+  var html='<h3>Add active client</h3><p class="lede">Enroll one of your existing leads, or enter a new client manually.</p><form id="ca-form">'+
     '<div id="ca-msg"></div>'+
+    '<div class="field"><label>Enroll an existing lead</label><select id="ca-lead">'+leadOpts+'</select></div>'+
     '<div class="row2"><div class="field"><label>First name</label><input id="ca-first" required /></div>'+
     '<div class="field"><label>Last name</label><input id="ca-last" required /></div></div>'+
     '<div class="field"><label>Email</label><input id="ca-email" type="email" required /></div>'+
     '<div class="field"><label>Phone</label><input id="ca-phone" type="tel" /></div>'+
+    '<div class="field" style="position:relative"><label>Address <small style="color:#94a3b8;font-weight:400">(type to autofill city, state, zip)</small></label><input id="ca-address" autocomplete="off" placeholder="Start typing a street address" /></div>'+
+    '<div class="row2"><div class="field"><label>City</label><input id="ca-city" /></div>'+
+    '<div class="field"><label>State</label><select id="ca-state">'+stateOpts+'</select></div></div>'+
+    '<div class="field"><label>Zip code</label><input id="ca-zip" placeholder="33404" /></div>'+
     '<div class="field"><label>Temporary password</label><input id="ca-pw" type="text" minlength="8" required value="VSBenefits!2026" /></div>'+
-    '<p class="hint">Share this password with the client.</p>'+
+    '<p class="hint">Share this password with the client so they can sign in.</p>'+
     '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Create account</button></div></form>';
   openModal(html);
+  czAddrAutocomplete({addr:"ca-address",city:"ca-city",state:"ca-state",zip:"ca-zip"});
+  var leadSel=$("ca-lead");
+  if(leadSel)leadSel.addEventListener("change",function(){
+    var l=getLeads().filter(function(x){return x.id===leadSel.value;})[0];
+    if(!l)return;
+    $("ca-first").value=l.firstName||"";$("ca-last").value=l.lastName||"";
+    $("ca-email").value=l.email||"";$("ca-phone").value=l.phone||"";
+    $("ca-address").value=l.address||"";$("ca-city").value=l.city||"";
+    var stEl=$("ca-state");if(stEl)stEl.value=l.state||"";
+    $("ca-zip").value=l.zipCode||l.zipcode||"";
+  });
   $("ca-form").addEventListener("submit",async function(e){
     e.preventDefault();
+    var leadId=$("ca-lead")?$("ca-lead").value:"";
     var first=$("ca-first").value.trim(),last=$("ca-last").value.trim(),email=normEmail($("ca-email").value),phone=$("ca-phone").value.trim(),pw=$("ca-pw").value;
+    var address=$("ca-address").value.trim(),city=$("ca-city").value.trim(),state=($("ca-state")?$("ca-state").value:""),zip=$("ca-zip").value.trim();
     if(pw.length<8)return notice("ca-msg","err","Password must be at least 8 characters.");
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return notice("ca-msg","err","Enter a valid email.");
     if(cloud.ready)await pullOnce("accounts");
     var accts=getAccounts();
     if(accts.some(function(a){return normEmail(a.email)===email;}))return notice("ca-msg","err","An account with this email already exists.");
-    var hash=await sha256(pw);
-    accts.push({id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:0,status:"active",plan:null,photoDataUrl:"",documents:[]});
-    saveAccounts(accts);webhookFire({event:"admin_created_client",email:email,ts:Date.now()});closeModal();renderAccounts();
+    var hash="";try{ if(window.crypto&&crypto.subtle){ hash=await sha256(pw); } }catch(err){ hash=""; }
+    accts.push({id:uid(),firstName:first,lastName:last,name:(first+" "+last).trim(),email:email,phone:phone,address:address,city:city,state:state,zipcode:zip,passwordHash:hash,created:Date.now(),lastSignIn:0,status:"active",plan:null,photoDataUrl:"",documents:[],pipelineStatus:"sold",_convertedFromLead:leadId||undefined});
+    saveAccounts(accts);
+    if(leadId){var ls=getLeads().map(function(l){if(l.id===leadId){l.status="sold";l.stage="sold";l.updated=Date.now();}return l;});saveLeads(ls);}
+    webhookFire({event:"admin_created_client",email:email,ts:Date.now()});
+    closeModal();renderAccounts();
+    if(typeof czCurrentRender==="function")czCurrentRender();
+    if(typeof renderTasks==="function")renderTasks();
   });
 }
 $("create-acct-btn").addEventListener("click",openCreateAcctForm);
@@ -4009,8 +4038,10 @@ function czF(label,id,val,ph){return '<label class="cz-fld"><span>'+label+'</spa
 /* ── Free address autocomplete (OpenStreetMap / Photon, no API key) ── */
 var CZ_STATE_ABBR={"alabama":"AL","alaska":"AK","arizona":"AZ","arkansas":"AR","california":"CA","colorado":"CO","connecticut":"CT","delaware":"DE","district of columbia":"DC","florida":"FL","georgia":"GA","hawaii":"HI","idaho":"ID","illinois":"IL","indiana":"IN","iowa":"IA","kansas":"KS","kentucky":"KY","louisiana":"LA","maine":"ME","maryland":"MD","massachusetts":"MA","michigan":"MI","minnesota":"MN","mississippi":"MS","missouri":"MO","montana":"MT","nebraska":"NE","nevada":"NV","new hampshire":"NH","new jersey":"NJ","new mexico":"NM","new york":"NY","north carolina":"NC","north dakota":"ND","ohio":"OH","oklahoma":"OK","oregon":"OR","pennsylvania":"PA","rhode island":"RI","south carolina":"SC","south dakota":"SD","tennessee":"TN","texas":"TX","utah":"UT","vermont":"VT","virginia":"VA","washington":"WA","west virginia":"WV","wisconsin":"WI","wyoming":"WY"};
 function czStateAbbr(name){if(!name)return"";var n=String(name).trim().toLowerCase();if(n.length===2)return n.toUpperCase();return CZ_STATE_ABBR[n]||"";}
-function czAddrAutocomplete(){
-  var inp=$("cz_address");if(!inp||inp._acWired)return;inp._acWired=true;
+function czAddrAutocomplete(opts){
+  opts=opts||{};
+  var addrId=opts.addr||"cz_address",cityId=opts.city||"cz_city",stateId=opts.state||"cz_state",zipId=opts.zip||"cz_zipCode";
+  var inp=$(addrId);if(!inp||inp._acWired)return;inp._acWired=true;
   var box=document.createElement("div");box.className="cz-ac-list";box.style.display="none";
   inp.parentNode.appendChild(box);
   var timer=null,ctrl=null;
@@ -4020,9 +4051,9 @@ function czAddrAutocomplete(){
     var street=((num?num+" ":"")+st).trim();
     if(street)inp.value=street;
     var city=p.city||p.town||p.village||p.district||p.county||p.locality||"";
-    var cityEl=$("cz_city");if(cityEl&&city)cityEl.value=city;
-    var ab=czStateAbbr(p.state);var stEl=$("cz_state");if(stEl&&ab)stEl.value=ab;
-    var zipEl=$("cz_zipCode");if(zipEl&&p.postcode)zipEl.value=p.postcode;
+    var cityEl=$(cityId);if(cityEl&&city)cityEl.value=city;
+    var ab=czStateAbbr(p.state);var stEl=$(stateId);if(stEl&&ab)stEl.value=ab;
+    var zipEl=$(zipId);if(zipEl&&p.postcode)zipEl.value=p.postcode;
     close();
   }
   inp.addEventListener("input",function(){
