@@ -3844,6 +3844,22 @@ function czSortOptions(sel){
   return [["az","Name A to Z"],["za","Name Z to A"],["new","Newest first"],["old","Oldest first"],["value","Highest value"]]
     .map(function(o){return '<option value="'+o[0]+'"'+(o[0]===sel?" selected":"")+'>'+o[1]+'</option>';}).join("");
 }
+function czExportLeadsCsv(){
+  var cs=czFiltered().slice().sort(czSortCmp);
+  var header=["First Name","Last Name","Email","Phone","Date of Birth","Address","City","State","Zip","Stage","Status","Quote Value","Source","Notes","Created","Last Contact","Follow-up Due"];
+  var rows=[header];
+  cs.forEach(function(c){
+    rows.push([
+      c.firstName||"", c.lastName||"", c.email||"", c.phone||"", c.dob||"",
+      c.address||"", c.city||"", c.state||"", c.zipCode||c.zipcode||"",
+      (czMETA[c.stage]?czMETA[c.stage].label:(c.stage||"")), c.status||"",
+      (czVal(c)||""), c.source||"", (c.notes||"").replace(/\r?\n/g," "),
+      c.created?new Date(c.created).toISOString().slice(0,10):"",
+      c.lastContact||"", c.followUpDue||""
+    ].map(csvEscape));
+  });
+  downloadFile("leads-"+new Date().toISOString().slice(0,10)+".csv", rows.map(function(r){return r.join(",");}).join("\n"), "text/csv");
+}
 var czSearchSVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>';
 var czFUSTYLE={overdue:"background:#ffe4e6;color:#be123c;border:1px solid #fecdd3",today:"background:#fef3c7;color:#92400e;border:1px solid #fde68a",upcoming:"background:#f1f5f9;color:#475569;border:1px solid #e2e8f0"};
 function czYMD(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
@@ -4030,10 +4046,11 @@ function czClients(){
     czBind(mount);return;
   }
   mount.innerHTML='<h3 class="cz-h">Leads</h3><p class="cz-lede">Your leads and clients.</p>'
-    +'<div class="cz-toolbar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search name, email, phone, zip…" value="'+escapeHtml(czQuery)+'"/></div><select data-cz-sort class="sortsel" aria-label="Sort leads">'+czSortOptions(czSort)+'</select><button class="cz-btn-go" data-cz-add="1">+ Add client</button></div>'
+    +'<div class="cz-toolbar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search name, email, phone, zip…" value="'+escapeHtml(czQuery)+'"/></div><select data-cz-sort class="sortsel" aria-label="Sort leads">'+czSortOptions(czSort)+'</select><button class="cz-btn-soft" data-cz-export="1" title="Download these leads as a CSV">&#11015; Download CSV</button><button class="cz-btn-go" data-cz-add="1">+ Add client</button></div>'
     +'<div id="cz-clients-results"></div>';
   var sb=mount.querySelector("[data-cz-search]");if(sb)sb.addEventListener("input",function(){czQuery=sb.value;czClientResults();});
   var so=mount.querySelector("[data-cz-sort]");if(so)so.addEventListener("change",function(){czSort=so.value;czClientResults();});
+  mount.querySelectorAll("[data-cz-export]").forEach(function(n){n.addEventListener("click",czExportLeadsCsv);});
   mount.querySelectorAll("[data-cz-add]").forEach(function(n){n.addEventListener("click",function(){czOpenModal(null);});});
   czClientResults();
 }
