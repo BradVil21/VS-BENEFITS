@@ -2299,16 +2299,20 @@ async function convertLeadToClient(leadId){
   if(!lead)return;
   var accts=getAccounts();
   var email=normEmail(lead.email||"");
-  // Don't create duplicate if email already exists
-  if(email&&accts.some(function(a){return normEmail(a.email||"")===email;})){return;}
-  // Generate a temp password
+  // Don't create a duplicate if a client with this email already exists
+  if(email&&accts.some(function(a){return normEmail(a.email||"")===email;})){
+    if(typeof renderAccounts==="function"){try{renderAccounts();}catch(e){}}
+    return;
+  }
   var tempPw="VS"+Math.floor(100000+Math.random()*900000);
-  var hash=await sha256(tempPw);
+  // Hash the temp password if we can, but NEVER let hashing block client creation
+  var hash="";
+  try{ if(window.crypto&&crypto.subtle){ hash=await sha256(tempPw); } }catch(e){ hash=""; }
   var newClient={
     id:uid(),
     firstName:lead.firstName||"",lastName:lead.lastName||"",name:fullName(lead),
     email:lead.email||"",phone:lead.phone||"",dob:lead.dob||"",
-    address:lead.address||"",state:lead.state||"",zipcode:lead.zipcode||"",
+    address:lead.address||"",city:lead.city||"",state:lead.state||"",zipcode:lead.zipcode||lead.zipCode||"",
     passwordHash:hash,
     created:Date.now(),lastSignIn:0,status:"active",
     plan:null,photoDataUrl:"",documents:[],
@@ -2316,9 +2320,9 @@ async function convertLeadToClient(leadId){
     _convertedFromLead:leadId
   };
   accts.push(newClient);saveAccounts(accts);
-  addNotif("lead","🎉 "+fullName(lead)+" is now a client!","Lead converted to client account with temp password: "+tempPw,"accounts");
-  // Show confirmation
-  setTimeout(function(){ czCelebrate(fullName(lead),"Now an active client · temp password "+tempPw+" — share it so they can log in."); },150);
+  addNotif("lead","🎉 "+fullName(lead)+" is now a client!","Lead converted to client account. Temp password: "+tempPw,"accounts");
+  if(typeof renderAccounts==="function"){try{renderAccounts();}catch(e){}}
+  try{ czCelebrate(fullName(lead),"Now an active client · temp password "+tempPw+" — share it so they can log in."); }catch(e){}
 }
 
 function openPipelineCard(item){
@@ -4028,16 +4032,23 @@ function czAddrAutocomplete(){
     timer=setTimeout(function(){
       if(ctrl){try{ctrl.abort();}catch(e){}}
       ctrl=("AbortController" in window)?new AbortController():null;
-      fetch("https://photon.komoot.io/api/?limit=6&lang=en&q="+encodeURIComponent(q),ctrl?{signal:ctrl.signal}:{})
+      fetch("https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&countrycodes=us&limit=7&q="+encodeURIComponent(q),ctrl?{signal:ctrl.signal,headers:{"Accept":"application/json"}}:{headers:{"Accept":"application/json"}})
         .then(function(r){return r.json();})
-        .then(function(d){
-          var feats=((d&&d.features)||[]).map(function(f){return f.properties;}).filter(function(p){return p.countrycode==="US"||p.country==="United States";});
+        .then(function(arr){
+          var feats=((arr)||[]).map(function(r){var a=r.address||{};return {
+            housenumber:a.house_number||"",
+            street:a.road||a.pedestrian||a.footway||a.residential||"",
+            name:(r.display_name||"").split(",")[0]||"",
+            city:a.city||a.town||a.village||a.hamlet||a.municipality||a.township||a.suburb||a.county||"",
+            state:a.state||"",
+            postcode:a.postcode||""
+          };}).filter(function(p){return (p.street||p.name);});
           if(!feats.length){close();return;}
           box.innerHTML="";
           feats.forEach(function(p){
             var num=p.housenumber||"",st=p.street||p.name||"";
             var line1=((num?num+" ":"")+st).trim()||p.name||"";
-            var bits=[p.city||p.town||p.village||p.district||p.county,czStateAbbr(p.state)||p.state,p.postcode].filter(Boolean).join(", ");
+            var bits=[p.city,czStateAbbr(p.state)||p.state,p.postcode].filter(Boolean).join(", ");
             var it=document.createElement("div");it.className="cz-ac-item";
             it.innerHTML='<div class="cz-ac-1">'+escapeHtml(line1||bits||"")+'</div>'+(bits?'<div class="cz-ac-2">'+escapeHtml(bits)+'</div>':"");
             it.addEventListener("mousedown",function(e){e.preventDefault();fill(p);});
@@ -4046,7 +4057,7 @@ function czAddrAutocomplete(){
           box.style.display="block";
         })
         .catch(function(){close();});
-    },280);
+    },550);
   });
   inp.addEventListener("blur",function(){setTimeout(close,160);});
 }
