@@ -1399,6 +1399,16 @@ html.dark #tasks-container .seq-footer{background:#162030;border-color:#243246}
 .sortsel:focus{border-color:#2f7de0;box-shadow:0 0 0 3px rgba(47,125,224,.15)}
 .cz-toolbar .sortsel{flex-shrink:0}
 html.dark .sortsel{background:#162030;border-color:#2b3f5a;color:#e6eefb}
+/* lead modal: call action bar + quick call notes */
+.cz-callbar{display:flex;gap:8px;margin:12px 0 2px;flex-wrap:wrap}
+.cz-callbtn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;font-size:13.5px;font-weight:700;text-decoration:none;border:1px solid transparent;cursor:pointer}
+.cz-callbtn:hover{text-decoration:none;opacity:.92}
+.cz-callbtn.cz-call{background:#0db5a6;color:#fff}
+.cz-callbtn.cz-soft{background:#eef2f8;color:#0e2a3d;border-color:#dbe3ef}
+html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3f5a}
+.cz-quicknote{display:flex;gap:8px;margin:4px 0 8px}
+.cz-quicknote .cz-inp{flex:1;margin-top:0}
+.cz-quicknote button{flex-shrink:0;white-space:nowrap}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -4170,7 +4180,13 @@ function czOpenModal(client){
   var qv=(c.quoteValue&&Number(c.quoteValue)>0)?c.quoteValue:"";
   var metaBlock=!isNew?'<div class="cz-meta"><div class="cz-info"><div>Last contact: <b>'+(c.lastContact?czPretty(c.lastContact):"—")+'</b></div><div>Added: '+(c.createdAt?czPretty(c.createdAt):"—")+'</div></div>'+(czCLOSED.indexOf(c.stage)<0?'<button class="cz-resetbtn" id="cz-mReset">↻ Log contact · reset 14 days</button>':'')+'</div>':'';
   var delBlock=!isNew?'<button class="cz-del" id="cz-mDel">🗑 Delete</button>':'';
-  var html='<h2 style="margin:0 0 4px;font-size:16px;font-weight:600;letter-spacing:-.01em">'+(isNew?"Add client":escapeHtml(czName(c)))+'</h2>'+fuBadge
+  var telNum=c.phone?String(c.phone).replace(/[^0-9+]/g,""):"";
+  var callBar=(!isNew&&(c.phone||c.email))?('<div class="cz-callbar">'
+    +(c.phone?'<a class="cz-callbtn cz-call" href="tel:'+escapeHtml(telNum)+'">&#128222; Call</a>':'')
+    +(c.phone?'<a class="cz-callbtn cz-soft" href="sms:'+escapeHtml(telNum)+'">&#128172; Text</a>':'')
+    +(c.email?'<a class="cz-callbtn cz-soft" href="mailto:'+escapeHtml(c.email)+'">&#9993; Email</a>':'')
+    +'</div>'):'';
+  var html='<h2 style="margin:0 0 4px;font-size:16px;font-weight:600;letter-spacing:-.01em">'+(isNew?"Add client":escapeHtml(czName(c)))+'</h2>'+fuBadge+callBar
     +'<div class="cz-fgrid" style="margin-top:16px">'
     +czF("First name","cz_firstName",c.firstName,"Jane")
     +czF("Last name","cz_lastName",c.lastName,"Doe")
@@ -4183,7 +4199,7 @@ function czOpenModal(client){
     +'<label class="cz-fld"><span>State</span><select class="cz-inp" id="cz_state">'+stateOpts+'</select></label>'
     +'<label class="cz-fld"><span>Zip code</span><input class="cz-inp" id="cz_zipCode" value="'+escapeHtml(zip)+'" placeholder="33404"/></label>'
     +'<label class="cz-fld cz-full"><span>Pipeline stage</span><select class="cz-inp" id="cz_stage">'+stageOpts+'</select></label>'
-    +'<label class="cz-fld cz-full"><span>Notes</span><textarea class="cz-inp" id="cz_notes" rows="3" placeholder="Conversation history, preferences, objections, best time to reach…">'+escapeHtml(c.notes||"")+'</textarea></label>'
+    +'<div class="cz-fld cz-full"><span>Call notes</span><div class="cz-quicknote"><input class="cz-inp" id="cz_quicknote" placeholder="Jot a note during the call, hit Add (timestamps it)"/><button type="button" class="cz-btn-go" id="cz-addnote">Add</button></div><textarea class="cz-inp" id="cz_notes" rows="5" placeholder="Conversation history, preferences, objections, best time to reach…">'+escapeHtml(c.notes||"")+'</textarea></div>'
     +'</div>'
     +'<div class="cz-err" id="cz-mErr" style="display:none">Add at least a first or last name so you can find this lead later.</div>'
     +metaBlock
@@ -4192,6 +4208,23 @@ function czOpenModal(client){
   czAddrAutocomplete();
   var stEl=$("cz_state");if(stEl)stEl.value=c.state||"";
   var sgEl=$("cz_stage");if(sgEl)sgEl.value=c.stage||"follow_up";
+  // Live timestamped call notes: appends a stamped line and saves immediately for existing leads
+  (function(){
+    var addBtn=$("cz-addnote"),qn=$("cz_quicknote"),ta=$("cz_notes");
+    if(!addBtn||!qn||!ta)return;
+    function addNote(){
+      var txt=qn.value.trim();if(!txt)return;
+      var stamp=new Date().toLocaleString(undefined,{month:"numeric",day:"numeric",hour:"numeric",minute:"2-digit"});
+      ta.value=("["+stamp+"] "+txt+"\n"+(ta.value||"")).replace(/\n+$/,"")+"\n";
+      qn.value="";qn.focus();
+      if(!isNew&&client&&client.id){
+        var arr=getLeads();var i=arr.findIndex(function(x){return x.id===client.id;});
+        if(i>=0){arr[i].notes=ta.value;arr[i].lastContact=todayStr();arr[i].updated=Date.now();saveLeads(arr);if(typeof czCurrentRender==="function")czCurrentRender();}
+      }
+    }
+    addBtn.addEventListener("click",addNote);
+    qn.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();addNote();}});
+  })();
   var saveBtn=$("cz-mSave");
   if(saveBtn)saveBtn.addEventListener("click",function(){
     var g=function(id){var e=$(id);return e?e.value:"";};
