@@ -1427,30 +1427,6 @@ html.dark .note-card{background:#162030;border-color:#253a54}
 .note-del:hover{opacity:1}
 .note-body{font-size:14px;color:#0e1726;line-height:1.5;white-space:pre-wrap;word-break:break-word}
 html.dark .note-body{color:#e6eefb}
-/* Business Leads tab */
-.biz-stagebar{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 14px}
-.biz-stagechip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid #d8e0ee;background:#fff;color:#334155;font-size:12.5px;font-weight:600;cursor:pointer}
-.biz-stagechip.active{background:#0e2a3d;color:#fff;border-color:#0e2a3d}
-.biz-stagechip .biz-dot{width:8px;height:8px;border-radius:50%}
-html.dark .biz-stagechip{background:#162030;border-color:#2b3f5a;color:#cdd9ec}
-.biz-cards{display:flex;flex-direction:column;gap:10px}
-.biz-card{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fff;border:1px solid #e6ecf5;border-radius:12px;padding:14px 16px;cursor:pointer;transition:box-shadow .15s,border-color .15s}
-.biz-card:hover{border-color:#8fb0e6;box-shadow:0 6px 18px rgba(11,35,70,.10)}
-html.dark .biz-card{background:#162030;border-color:#253a54}
-.biz-co{font-size:14.5px;font-weight:700;color:#0e1726}
-html.dark .biz-co{color:#e6eefb}
-.biz-sub{font-size:12px;color:#64748b;margin-top:2px}
-.biz-contact{font-size:12px;color:#94a3b8;margin-top:2px}
-.biz-card-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
-.biz-chip{font-size:11.5px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
-.biz-fu{font-size:11px;color:#b45309;background:#fff7ed;border:1px solid #fed7aa;padding:2px 8px;border-radius:999px;white-space:nowrap}
-.biz-playbook-wrap{background:#fff;border:1px solid #e6ecf5;border-radius:14px;padding:16px 18px;margin-bottom:14px;max-height:520px;overflow:auto}
-html.dark .biz-playbook-wrap{background:#162030;border-color:#253a54}
-.biz-pb-h{font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#1d4ed8;margin:16px 0 8px}
-.biz-pb-h:first-child{margin-top:0}
-.biz-pb-block{background:#f7faff;border:1px solid #e6ecf5;border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:13px;color:#0e1726;white-space:pre-wrap;line-height:1.5}
-html.dark .biz-pb-block{background:#0f1a28;border-color:#253a54;color:#dce7f5}
-.biz-pb-label{font-size:11px;font-weight:700;color:#64748b;margin:0 0 4px}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -1698,23 +1674,12 @@ html.dark .biz-pb-block{background:#0f1a28;border-color:#253a54;color:#dce7f5}
     <!-- BUSINESS LEADS (B2B / 1099 companies) -->
     <div id="p-bizleads" class="panel">
       <h3>Business Leads <span style="font-size:13px;font-weight:500;color:var(--muted)">(1099 companies)</span></h3>
-      <p class="lede">Your B2B prospects, tracked separately from individual leads.</p>
+      <p class="lede">Move business leads between stages. Drag a card or use its dropdown to change stage.</p>
       <div class="toolbar">
-        <input id="biz-search" class="search" type="search" placeholder="Search company, contact, niche..." />
-        <select id="biz-sort" class="sortsel" aria-label="Sort business leads">
-          <option value="new">Newest</option>
-          <option value="old">Oldest</option>
-          <option value="az">Company A to Z</option>
-          <option value="za">Company Z to A</option>
-          <option value="fu">Follow-up soonest</option>
-        </select>
+        <input id="biz-search" class="search" type="search" placeholder="Search company, contact, phone..." />
         <button id="biz-add" class="btn btn-primary btn-sm" type="button">+ Add business lead</button>
         <button id="biz-export" class="btn btn-ghost btn-sm" type="button">&#11015; CSV</button>
-        <a href="/group-health-quote-template.xlsx" download class="btn btn-ghost btn-sm" style="text-decoration:none">&#128196; Quote template</a>
-        <button id="biz-playbook-btn" class="btn btn-ghost btn-sm" type="button">&#128218; Playbook</button>
       </div>
-      <div id="biz-stagebar" class="biz-stagebar"></div>
-      <div id="biz-playbook" style="display:none"></div>
       <div id="biz-list"></div>
     </div>
 
@@ -4437,42 +4402,55 @@ var BIZ_STAGES=[
  {id:"lost",label:"Lost",color:"#ef4444"}
 ];
 var BIZ_NICHES=["Small business","Solopreneur / Freelancer","Independent contractor","Trades / Construction","Real estate","Professional services","Retail / Restaurant","Health / Wellness","Transportation / Trucking","Agency / Creative","Other"];
-var bizStageFilter="";
 function bizStageMeta(id){return BIZ_STAGES.filter(function(s){return s.id===id;})[0]||BIZ_STAGES[0];}
+var bizDragId=null,bizDragging=false,bizPan={down:false,sx:0,sl:0,board:null},bizPanWired=false;
+function bizSetStage(id,stage){
+  saveBizLeads(getBizLeads().map(function(b){if(b.id===id){b.stage=stage;b.updated=Date.now();}return b;}));
+  renderBizLeads();
+}
 function renderBizLeads(){
-  if(!$("biz-list"))return;
+  var box=$("biz-list");if(!box)return;
   var all=getBizLeads();
   var bdg=$("b-biz");if(bdg){var open=all.filter(function(b){return b.stage!=="won"&&b.stage!=="lost";}).length;bdg.textContent=open;bdg.style.display=open>0?"":"none";}
-  var counts={};BIZ_STAGES.forEach(function(s){counts[s.id]=all.filter(function(b){return (b.stage||"prospect")===s.id;}).length;});
-  var sbar=$("biz-stagebar");
-  if(sbar){
-    sbar.innerHTML='<button class="biz-stagechip'+(bizStageFilter===""?" active":"")+'" data-biz-stage="">All '+all.length+'</button>'
-      +BIZ_STAGES.map(function(s){return '<button class="biz-stagechip'+(bizStageFilter===s.id?" active":"")+'" data-biz-stage="'+s.id+'"><span class="biz-dot" style="background:'+s.color+'"></span>'+s.label+' '+counts[s.id]+'</button>';}).join("");
-    sbar.querySelectorAll("[data-biz-stage]").forEach(function(b){b.addEventListener("click",function(){bizStageFilter=b.getAttribute("data-biz-stage");renderBizLeads();});});
-  }
   var q=(($("biz-search")&&$("biz-search").value)||"").toLowerCase().trim();
-  var sort=($("biz-sort")&&$("biz-sort").value)||"new";
-  var rows=all.filter(function(b){
-    var mq=!q||[b.company,b.contact,b.email,b.phone,b.niche].join(" ").toLowerCase().indexOf(q)>=0;
-    var mf=!bizStageFilter||(b.stage||"prospect")===bizStageFilter;
-    return mq&&mf;
-  }).slice().sort(function(a,b){
-    if(sort==="az")return (a.company||"").localeCompare(b.company||"",undefined,{sensitivity:"base"});
-    if(sort==="za")return (b.company||"").localeCompare(a.company||"",undefined,{sensitivity:"base"});
-    if(sort==="old")return (a.created||0)-(b.created||0);
-    if(sort==="fu")return (a.nextFollowUp||"9999-99").localeCompare(b.nextFollowUp||"9999-99");
-    return (b.created||0)-(a.created||0);
-  });
-  var box=$("biz-list");
-  if(!rows.length){box.innerHTML='<div class="empty" style="padding:34px;text-align:center;color:#94a3b8">No business leads'+(q||bizStageFilter?" match this view.":" yet. Click + Add business lead to start.")+'</div>';return;}
-  box.innerHTML='<div class="biz-cards">'+rows.map(function(b){
-    var st=bizStageMeta(b.stage||"prospect");
-    var sub=[b.contact,b.niche,(b.employees?b.employees+" 1099 workers":"")].filter(Boolean).join(" · ");
-    var fu=b.nextFollowUp?'<span class="biz-fu">&#9200; '+escapeHtml(b.nextFollowUp)+'</span>':'';
-    var contact=(b.phone||b.email)?'<div class="biz-contact">'+escapeHtml(b.phone||b.email)+'</div>':'';
-    return '<div class="biz-card" data-biz-open="'+b.id+'"><div class="biz-card-main"><div class="biz-co">'+escapeHtml(b.company||"(no company)")+'</div>'+(sub?'<div class="biz-sub">'+escapeHtml(sub)+'</div>':'')+contact+'</div><div class="biz-card-right"><span class="biz-chip" style="color:'+st.color+';background:'+st.color+'1a;border:1px solid '+st.color+'40">'+st.label+'</span>'+fu+'</div></div>';
+  var cs=all.filter(function(b){return !q||[b.company,b.contact,b.email,b.phone,b.niche].join(" ").toLowerCase().indexOf(q)>=0;});
+  box.innerHTML='<div class="cz-board" id="biz-board">'+BIZ_STAGES.map(function(s){
+    var items=cs.filter(function(b){return (b.stage||"prospect")===s.id;});
+    var body=items.length===0?'<div class="cz-empty-col">Drop here</div>':items.map(function(b){
+      var emp=b.employees?'<span style="font-size:12px;font-weight:600;color:#047857;white-space:nowrap">'+escapeHtml(b.employees)+' EEs</span>':'';
+      var sub=[b.contact,b.niche].filter(Boolean).join(" · ");
+      var contact=(b.phone||b.email)?'<div class="cz-sub" style="margin-top:4px">'+escapeHtml(b.phone||b.email)+'</div>':'';
+      var fu=b.nextFollowUp?'<span class="cz-pill" style="background:#fff7ed;color:#b45309;border:1px solid #fed7aa;margin-top:8px">&#9200; '+escapeHtml(b.nextFollowUp)+'</span>':'';
+      var opts=BIZ_STAGES.map(function(st){return '<option value="'+st.id+'"'+((b.stage||"prospect")===st.id?" selected":"")+'>'+st.label+'</option>';}).join("");
+      return '<div class="cz-card" draggable="true" data-bizcard="'+b.id+'"><div class="cz-ctop"><div class="cz-nm">'+escapeHtml(b.company||"(no company)")+'</div>'+emp+'</div>'+(sub?'<div class="cz-sub">'+escapeHtml(sub)+'</div>':'')+contact+fu+'<div class="cz-cctl"><select data-bizstage="'+b.id+'">'+opts+'</select></div></div>';
+    }).join("");
+    return '<div class="cz-col" data-bizdrop="'+s.id+'" style="border-top-color:'+s.color+'"><div class="cz-col-head"><div class="cz-row" style="gap:8px"><span class="cz-dot" style="background:'+s.color+'"></span><span style="font-size:14px;font-weight:600">'+s.label+'</span><span class="cz-faint" style="font-size:12px">'+items.length+'</span></div></div><div class="cz-col-body">'+body+'</div></div>';
   }).join("")+'</div>';
-  box.querySelectorAll("[data-biz-open]").forEach(function(c){c.addEventListener("click",function(){openBizLeadForm(getBizLeads().filter(function(x){return x.id===c.getAttribute("data-biz-open");})[0]);});});
+  var board=box.querySelector("#biz-board");
+  box.querySelectorAll("[data-bizcard]").forEach(function(card){
+    var id=card.getAttribute("data-bizcard");
+    card.addEventListener("click",function(e){if(bizDragging)return;if(e.target.closest("select,button,a,option"))return;var b=getBizLeads().filter(function(x){return x.id===id;})[0];if(b)openBizLeadForm(b);});
+    card.addEventListener("dragstart",function(e){bizDragId=id;bizDragging=true;card.style.opacity="0.4";try{e.dataTransfer.setData("text/plain",id);e.dataTransfer.effectAllowed="move";}catch(_){}});
+    card.addEventListener("dragend",function(){card.style.opacity="";bizDragId=null;setTimeout(function(){bizDragging=false;},60);});
+  });
+  box.querySelectorAll("[data-bizstage]").forEach(function(sel){sel.addEventListener("change",function(e){e.stopPropagation();bizSetStage(sel.getAttribute("data-bizstage"),sel.value);});});
+  box.querySelectorAll("[data-bizdrop]").forEach(function(col){
+    col.addEventListener("dragover",function(e){e.preventDefault();try{e.dataTransfer.dropEffect="move";}catch(_){}col.classList.add("cz-drop-hot");});
+    col.addEventListener("dragleave",function(){col.classList.remove("cz-drop-hot");});
+    col.addEventListener("drop",function(e){e.preventDefault();col.classList.remove("cz-drop-hot");var stage=col.getAttribute("data-bizdrop");var id=bizDragId;bizDragId=null;if(id&&stage)bizSetStage(id,stage);});
+  });
+  if(board){
+    board.addEventListener("mousedown",function(e){
+      if(e.target.closest(".cz-card, select, button, a, input, textarea"))return;
+      if(board.scrollWidth<=board.clientWidth)return;
+      bizPan.down=true;bizPan.sx=e.pageX;bizPan.sl=board.scrollLeft;bizPan.board=board;board.style.cursor="grabbing";e.preventDefault();
+    });
+  }
+  if(!bizPanWired){
+    bizPanWired=true;
+    window.addEventListener("mousemove",function(e){if(!bizPan.down||!bizPan.board)return;e.preventDefault();bizPan.board.scrollLeft=bizPan.sl-(e.pageX-bizPan.sx);});
+    window.addEventListener("mouseup",function(){if(bizPan.down){bizPan.down=false;if(bizPan.board)bizPan.board.style.cursor="grab";}});
+  }
 }
 function openBizLeadForm(b){
   var isNew=!b;b=b||{stage:"prospect"};
@@ -4493,7 +4471,7 @@ function openBizLeadForm(b){
    +'<label class="cz-fld"><span>Next follow-up</span><input class="cz-inp" id="bz_followup" type="date" value="'+escapeHtml(b.nextFollowUp||"")+'"/></label>'
    +'<div class="cz-fld cz-full"><span>Notes</span><div class="cz-quicknote"><input class="cz-inp" id="bz_quicknote" placeholder="Quick note during a call, hit Add (timestamps it)"/><button type="button" class="cz-btn-go" id="bz-addnote">Add</button></div><textarea class="cz-inp" id="bz_notes" rows="4" placeholder="Meeting notes, objections, decision makers, plan interest...">'+escapeHtml(b.notes||"")+'</textarea></div>'
    +'</div>'
-   +'<div class="cz-mfoot">'+(!isNew?'<button class="cz-del" id="bz-del">&#128465; Delete</button>':'')+'<a href="/group-health-quote-template.xlsx" download class="cz-btn-ghost" style="text-decoration:none">&#128196; Quote template</a><button class="cz-btn-ghost" data-close>Cancel</button><button class="cz-btn-go" id="bz-save">&#10003; '+(isNew?"Add lead":"Save")+'</button></div>';
+   +'<div class="cz-mfoot">'+(!isNew?'<button class="cz-del" id="bz-del">&#128465; Delete</button>':'')+'<button class="cz-btn-ghost" data-close>Cancel</button><button class="cz-btn-go" id="bz-save">&#10003; '+(isNew?"Add lead":"Save")+'</button></div>';
   openModal(html);
   (function(){var addb=$("bz-addnote"),qn=$("bz_quicknote"),ta=$("bz_notes");if(!addb||!qn||!ta)return;function add(){var t=qn.value.trim();if(!t)return;var s=new Date().toLocaleString(undefined,{month:"numeric",day:"numeric",hour:"numeric",minute:"2-digit"});ta.value=("["+s+"] "+t+"\n"+(ta.value||"")).replace(/\n+$/,"")+"\n";qn.value="";qn.focus();if(!isNew&&b.id){var arr=getBizLeads();var i=arr.findIndex(function(x){return x.id===b.id;});if(i>=0){arr[i].notes=ta.value;arr[i].updated=Date.now();saveBizLeads(arr);}}}addb.addEventListener("click",add);qn.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();add();}});})();
   var save=$("bz-save");if(save)save.addEventListener("click",function(){
@@ -4517,41 +4495,10 @@ function bizExportCsv(){
   all.forEach(function(b){rows.push([b.company||"",b.contact||"",b.niche||"",b.employees||"",bizStageMeta(b.stage||"prospect").label,b.email||"",b.phone||"",b.source||"",b.nextFollowUp||"",(b.notes||"").replace(/\r?\n/g," "),b.created?new Date(b.created).toISOString().slice(0,10):""].map(csvEscape));});
   downloadFile("business-leads-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
 }
-function bizPlaybookHtml(){
-  function blk(label,text){return '<div class="biz-pb-label">'+label+'</div><div class="biz-pb-block">'+escapeHtml(text)+'</div>';}
-  var h='<div class="biz-playbook-wrap">';
-  h+='<div class="biz-pb-h">Value-first offer (use one)</div>';
-  h+=blk("Hook A — Coverage Gap Check","Free 15-min 1099 Coverage Gap Check. I look at what you and your crew have now, flag gaps and overpayments, and show what better looks like. No pitch. You keep the breakdown either way.");
-  h+=blk("Hook B — Savings Comparison","I run a free side-by-side: what you pay now vs. 3 plans built for irregular 1099 income. If I cannot beat it, I will tell you straight and you lose nothing.");
-  h+=blk("Hook C — Owner + Crew Benefits Snapshot","One-page snapshot for [Business]: simple coverage options for you and your 1099 workers, with real monthly numbers. Takes me 15 minutes, saves you hours.");
-  h+='<div class="biz-pb-h">Cold email 1 — the gap</div>';
-  h+=blk("Subject: quick question about [Business]'s coverage","Hi [Name], saw you run [Business]. Most 1099 owners I meet are either overpaying or have a gap they did not know about. I do a free 15-min Coverage Gap Check for owners like you, no pitch. Want me to run yours this week? Either way you keep the breakdown. — [You], VS Health Benefits");
-  h+='<div class="biz-pb-h">Cold email 2 — the crew angle</div>';
-  h+=blk("Subject: health coverage for your 1099 crew","Hi [Name], offering simple health coverage is one of the easiest ways to keep good 1099 workers from leaving. I help [niche] owners set it up with no HR and no big cost. Open to a 15-min look at what fits [Business]? I will bring real numbers. — [You]");
-  h+='<div class="biz-pb-h">DM / text openers</div>';
-  h+=blk("DM opener 1","Hey [Name], not selling anything here. I help [niche] owners plug health-coverage gaps for themselves and their 1099 crew. Mind if I send a quick free breakdown for [Business]?");
-  h+=blk("Text opener 2","Hi [Name], it is [You] with VS Health Benefits. I do free 15-min coverage checks for 1099 owners. Worth a look for [Business]? No pressure either way.");
-  h+='<div class="biz-pb-h">Voicemail (under 20 sec)</div>';
-  h+=blk("Voicemail","Hey [Name], [You] with VS Health Benefits. I help [niche] owners get simple health coverage for themselves and their 1099 crew without the HR headache. I do a free 15-min gap check. If it is useful, call or text me back at [number]. Either way, have a good one.");
-  h+='<div class="biz-pb-h">In-person / referral ask</div>';
-  h+=blk("Referral ask","Quick favor — I help 1099 owners like you with health coverage. Who is one other owner you know who is winging it on insurance? I will give them the same free gap check I gave you, no strings.");
-  h+='<div class="biz-pb-h">6-touch follow-up sequence (gone quiet)</div>';
-  h+=blk("1. Thank You — day 1 · Subject: great talking today","Hey [Name], thanks for the time today. No agenda here, just glad we connected. I will pull together a couple of quick ideas for [Business] and send them your way.");
-  h+=blk("2. Permission Ask — day 2 · Subject: ok if I send a few ideas?","Hi [Name], mind if I send over a couple of coverage ideas for [Business] over the next few days? Quick reads, no pressure. Just say the word.");
-  h+=blk("3. New Idea — ~1 week · Subject: idea for [Business]","Hey [Name], had an idea that fits irregular 1099 income, e.g. a level-funded plan that can refund you if your crew stays healthy. Worth 10 minutes today at [time]?");
-  h+=blk("4. Priority Check — ~1 month · Subject: still on your radar?","Hi [Name], quick gut-check: is sorting out [XYZ] still a priority right now, or has it slid down the list? Totally fine either way, just want to respect your time.");
-  h+=blk("5. Breakup — ~2 months · Subject: close the loop?","Hey [Name], should I assume you have moved on from solving [XYZ] for now? No worries if so. If timing is just off, tell me when to circle back.");
-  h+=blk("6. New Year Reset — January · Subject: happy new year, [Name]","Happy New Year [Name]. Hope you got a real break. Whenever you are ready to revisit coverage for [Business], I am here. Want me to send a fresh 2-min snapshot?");
-  h+='<div class="biz-pb-block" style="background:#eef6ff;border-color:#cfe1fb;color:#1d4ed8;font-weight:600">Timing: 1) day 1  2) day 2  3) ~day 7  4) ~day 30  5) ~day 60  6) early January.</div>';
-  h+='</div>';
-  return h;
-}
 (function wireBiz(){
   var s=$("biz-search");if(s)s.addEventListener("input",renderBizLeads);
-  var so=$("biz-sort");if(so)so.addEventListener("change",renderBizLeads);
   var a=$("biz-add");if(a)a.addEventListener("click",function(){openBizLeadForm(null);});
   var x=$("biz-export");if(x)x.addEventListener("click",bizExportCsv);
-  var pb=$("biz-playbook-btn");if(pb)pb.addEventListener("click",function(){var p=$("biz-playbook");if(!p)return;if(p.style.display==="none"||!p.style.display){p.innerHTML=bizPlaybookHtml();p.style.display="block";}else{p.style.display="none";}});
 })();
 function renderAll(){czBadges();czDashboard();czClients();czPipeline();czFollowups();renderAccounts();renderSupport();renderReferrals();renderSettings();renderTasks();renderNotes();renderBizLeads();}
 function switchTab(name){
