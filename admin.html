@@ -2652,7 +2652,7 @@ function makeCalDay(date,muted,appts){
   var c="cal-day"+(muted?" muted":"")+(iso===today?" today":"")+(has?" has":"")+(iso===selectedDate?" selected":"");
   var d=el("div",{class:c,onclick:function(){selectedDate=iso;renderCalendar();}});
   d.appendChild(el("div",{class:"num",text:date.getDate()}));
-  if(has){var pip=el("div",{class:"appt-pip"+(dayAppts.length>1?" multi":"")});pip.textContent="<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='3' y='4' width='18' height='18' rx='2'/><path d='M16 2v4M8 2v4M3 10h18'/></svg> "+(dayAppts.length===1?(dayAppts[0].title||"Appt").slice(0,12):dayAppts.length+" appts");d.appendChild(pip);}
+  if(has){var pip=el("div",{class:"appt-pip"+(dayAppts.length>1?" multi":"")});pip.innerHTML="<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='3' y='4' width='18' height='18' rx='2'/><path d='M16 2v4M8 2v4M3 10h18'/></svg> "+escapeHtml(dayAppts.length===1?(dayAppts[0].title||"Appt").slice(0,12):dayAppts.length+" appts");d.appendChild(pip);}
   return d;
 }
 function renderEventList(){
@@ -3439,8 +3439,9 @@ function initSoundSettings(){
 ════════════════════════════════════════ */
 function getNotifs(){try{return JSON.parse(localStorage.getItem(K.notifications)||"[]");}catch(e){return[];}}
 function saveNotifs(v){localStorage.setItem(K.notifications,JSON.stringify(v));}
+function stripIco(s){return String(s==null?"":s).replace(/<svg[\s\S]*?<\/svg>\s*/g,"");}
 function addNotif(type,title,sub,tab){
-  var notifs=getNotifs();notifs.unshift({id:uid(),type:type,title:title,sub:sub||"",tab:tab||"",read:false,ts:Date.now()});
+  var notifs=getNotifs();notifs.unshift({id:uid(),type:type,title:stripIco(title),sub:stripIco(sub||""),tab:tab||"",read:false,ts:Date.now()});
   if(notifs.length>60)notifs=notifs.slice(0,60);saveNotifs(notifs);
   var ctx=_getCtx();if(ctx&&ctx.state==="suspended")ctx.resume().then(playNotifSound);else playNotifSound();
   updateBellBadge();
@@ -3459,10 +3460,10 @@ function renderNotifList(){
       var arr=getNotifs().map(function(x){if(x.id===n.id)x.read=true;return x;});saveNotifs(arr);updateBellBadge();renderNotifList();
       if(n.tab)switchTab(n.tab);$("notif-dd").classList.remove("open");
     }});
-    item.appendChild(el("div",{class:"notif-icon "+(n.type||"lead"),text:icons[n.type]||"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9'/><path d='M13.7 21a2 2 0 0 1-3.4 0'/></svg>"}));
+    item.appendChild(el("div",{class:"notif-icon "+(n.type||"lead"),html:icons[n.type]||"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9'/><path d='M13.7 21a2 2 0 0 1-3.4 0'/></svg>"}));
     var body=el("div",{class:"notif-body"});
-    body.appendChild(el("div",{class:"notif-title",text:n.title}));
-    body.appendChild(el("div",{class:"notif-sub",text:(n.sub?n.sub+" · ":"")+fmtDateTime(n.ts)}));
+    body.appendChild(el("div",{class:"notif-title",text:stripIco(n.title)}));
+    body.appendChild(el("div",{class:"notif-sub",text:(n.sub?stripIco(n.sub)+" · ":"")+fmtDateTime(n.ts)}));
     item.appendChild(body);if(!n.read)item.appendChild(el("div",{class:"notif-dot"}));
     box.appendChild(item);
   });

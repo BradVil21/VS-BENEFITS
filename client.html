@@ -959,14 +959,16 @@ function renderGettingStarted(acct,s){
 }
 function checkSoldReferrals(){
   var acct=currentAccount();if(!acct)return;
-  var arr=getReferrals();var changed=false;var newly=null;
+  var arr=getReferrals();var changed=false;var newly=null;var paid=null;
   arr.forEach(function(r){
     if(r.fromAccountId===acct.id&&r.status==="sold"&&!r.soldNotified){r.soldNotified=true;changed=true;newly=r;}
+    if(r.fromAccountId===acct.id&&r.status==="paid"&&!r.paidNotified){r.paidNotified=true;changed=true;paid=r;}
   });
   if(changed){
     saveReferrals(arr);
     if(!$("dash-view").hidden){renderRefStats();renderMyReferrals();}
     if(newly){showSoldCelebration(newly);try{webhookFire({event:"referral_sold_seen",account_id:acct.id,referralId:newly.id,ts:Date.now()});}catch(e){}}
+    if(paid){showPaymentCelebration(paid);try{webhookFire({event:"referral_paid_seen",account_id:acct.id,referralId:paid.id,ts:Date.now()});}catch(e){}}
   }
 }
 function clientConfetti(){
@@ -992,6 +994,23 @@ function showSoldCelebration(r){
   function close(){bg.remove();}
   bg.addEventListener("click",function(e){if(e.target===bg)close();});
   var ok=bg.querySelector("#sold-ok");if(ok)ok.addEventListener("click",close);
+}
+function showPaymentCelebration(r){
+  clientConfetti();
+  var earned=Number(r.payout)||0;
+  var bg=document.createElement("div");
+  bg.style.cssText="position:fixed;inset:0;background:rgba(11,35,70,.55);display:flex;align-items:center;justify-content:center;z-index:100002;padding:20px";
+  bg.innerHTML='<div style="background:#fff;border-radius:18px;max-width:430px;width:100%;padding:30px 26px;text-align:center;box-shadow:0 24px 60px rgba(11,35,70,.3)">'
+    +'<div style="width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:linear-gradient(135deg,var(--blue-700),var(--teal));color:#fff;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9v.01M18 15v.01"/></svg></div>'
+    +'<h2 style="margin:4px 0 6px;color:var(--blue-900);font-size:22px">Payment on the way!</h2>'
+    +(earned>0?'<p style="font-weight:700;color:var(--ok);font-size:22px;margin:0 0 4px">$'+earned.toFixed(2)+'</p>':'')
+    +'<p style="color:var(--ink-2);margin:0 0 4px">Your referral payout for '+escapeHtml(r.referralName||"your referral")+' has been approved.</p>'
+    +'<p style="color:var(--muted);font-size:13.5px;margin:0 0 18px">You will receive your funds within 3 to 5 business days.</p>'
+    +'<button class="btn btn-primary" id="pay-ok" style="width:100%">Got it</button></div>';
+  document.body.appendChild(bg);
+  function close(){bg.remove();}
+  bg.addEventListener("click",function(e){if(e.target===bg)close();});
+  var ok=bg.querySelector("#pay-ok");if(ok)ok.addEventListener("click",close);
 }
 function showReferralCongrats(name,appt){
   clientConfetti();
