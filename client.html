@@ -193,6 +193,68 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .gs-step .gs-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
 .gs-step.done{color:var(--muted)}
 .gs-step.done .gs-check{background:var(--ok);border-color:var(--ok)}
+/* ── Client portal app shell ── */
+#dash-view{position:fixed;inset:0;z-index:100;display:flex;background:#f6f9fc}
+.cp-sidebar{width:248px;flex-shrink:0;background:#0e1726;color:#cdd9ec;display:flex;flex-direction:column;padding:18px 14px;z-index:30;transition:transform .25s}
+.cp-brand{display:flex;align-items:center;gap:10px;padding:4px 6px 16px}
+.cp-logo{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#16447f,#0db5a6);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0}
+.cp-bname{font-weight:700;font-size:14px;color:#fff;line-height:1.1}
+.cp-bsub{font-size:11px;color:#8aa0bd}
+.cp-nav{display:flex;flex-direction:column;gap:3px;margin-top:8px}
+.cp-navitem{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:10px;border:0;background:none;color:#aab9d0;font-size:14.5px;font-weight:500;cursor:pointer;font-family:inherit;text-align:left;width:100%}
+.cp-navitem:hover{background:rgba(255,255,255,.05);color:#fff}
+.cp-navitem.active{background:rgba(47,125,224,.2);color:#fff}
+.cp-navitem .cp-ic{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.cp-navbadge{margin-left:auto;background:#ef4444;color:#fff;font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.cp-user{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 6px 8px;border-top:1px solid rgba(255,255,255,.08)}
+.cp-uava{width:36px;height:36px;border-radius:50%;background:#1e5ab0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;overflow:hidden;flex-shrink:0}
+.cp-uava img{width:100%;height:100%;object-fit:cover}
+.cp-uinfo{min-width:0}
+.cp-uname{font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cp-uemail{font-size:11px;color:#8aa0bd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cp-signout{margin-top:8px;background:rgba(255,255,255,.06);color:#cdd9ec;border:1px solid rgba(255,255,255,.1);border-radius:9px;padding:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.cp-signout:hover{background:rgba(255,255,255,.12)}
+.cp-overlay{display:none;position:fixed;inset:0;background:rgba(11,35,70,.45);z-index:25}
+.cp-overlay.show{display:block}
+.cp-main{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.cp-topbar{height:56px;flex-shrink:0;display:flex;align-items:center;gap:10px;padding:0 18px;background:#0b1220;border-bottom:1px solid rgba(255,255,255,.06)}
+.cp-burger{display:none;background:none;border:0;color:#cdd9ec;font-size:20px;cursor:pointer;padding:6px}
+.cp-bell-wrap{position:relative}
+.cp-bell{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#e6eefb;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:16px;position:relative}
+.cp-bell-count{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.cp-notif{position:absolute;right:0;top:46px;width:320px;max-width:88vw;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px rgba(11,35,70,.22);z-index:60;max-height:380px;overflow:auto}
+.cp-notif-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.cp-notif-head strong{font-size:14px;color:var(--ink)}
+.cp-link{background:none;border:0;color:var(--blue-600);font-size:12px;font-weight:600;cursor:pointer}
+.cp-notif-empty{padding:26px 16px;text-align:center;color:var(--muted);font-size:13px}
+.cp-notif-item{display:flex;gap:10px;padding:11px 14px;border-bottom:1px solid #f1f5f9;cursor:pointer;align-items:center}
+.cp-notif-item:hover{background:#f7faff}
+.cp-ni-ic{width:34px;height:34px;border-radius:9px;background:#eef2f8;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.cp-ni-ic.payment,.cp-ni-ic.sold{background:#e9f9f0}
+.cp-ni-ic.support{background:#eaf2ff}
+.cp-ni-tx{min-width:0}
+.cp-ni-t{font-size:13.5px;font-weight:600;color:var(--ink)}
+.cp-ni-s{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cp-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.cp-hero{background:linear-gradient(120deg,#3b2fd6,#6d4ae0 55%,#7b3fe4);color:#fff;padding:30px 28px}
+.cp-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.16);color:#fff;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;margin-bottom:14px}
+.cp-eyedot{width:7px;height:7px;border-radius:50%;background:#34d399}
+.cp-hero h1{color:#fff;font-size:clamp(1.6rem,4.5vw,2.1rem);margin:0 0 16px;font-weight:800;letter-spacing:-.02em}
+.cp-hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.cp-hbtn{background:#fff;color:#3b2fd6;border:0;border-radius:10px;padding:10px 18px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit}
+.cp-hbtn.ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.cp-content{padding:22px;max-width:1080px}
+.cp-content .ref-stats{margin-top:0}
+.cp-sec{display:none}
+.cp-sec.active{display:block;animation:cpFade .2s}
+@keyframes cpFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media(max-width:860px){
+  .cp-sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-100%);box-shadow:0 0 40px rgba(0,0,0,.3)}
+  .cp-sidebar.open{transform:none}
+  .cp-burger{display:block}
+  .cp-hero{padding:24px 18px}
+  .cp-content{padding:16px}
+}
 </style>
 </head>
 <body>
@@ -283,136 +345,118 @@ input,select,textarea{font-family:inherit;font-size:16px}
 
   <!-- ====================== DASHBOARD VIEW ====================== -->
   <section id="dash-view" hidden>
-
-    <div class="dash-head">
-      <div class="photo-wrap">
-        <div id="dh-avatar" class="avatar">VS</div>
-        <label class="photo-edit" for="photo-input" title="Update photo">+</label>
-        <input id="photo-input" type="file" accept="image/*" hidden />
+    <aside class="cp-sidebar" id="cp-sidebar">
+      <div class="cp-brand"><span class="cp-logo">VS</span><div><div class="cp-bname">VS Health Benefits</div><div class="cp-bsub">Member Portal</div></div></div>
+      <nav class="cp-nav">
+        <button class="cp-navitem active" data-sec="dashboard" type="button"><span class="cp-ic">&#9638;</span><span>Dashboard</span></button>
+        <button class="cp-navitem" data-sec="send" type="button"><span class="cp-ic">&#9992;</span><span>Send Referral</span></button>
+        <button class="cp-navitem" data-sec="referrals" type="button"><span class="cp-ic">&#9776;</span><span>Referrals</span></button>
+        <button class="cp-navitem" data-sec="plan" type="button"><span class="cp-ic">&#128737;</span><span>My Plan</span></button>
+        <button class="cp-navitem" data-sec="support" type="button"><span class="cp-ic">&#128172;</span><span>Support</span><span class="cp-navbadge" id="nav-sup-badge" hidden>0</span></button>
+        <button class="cp-navitem" data-sec="settings" type="button"><span class="cp-ic">&#9881;</span><span>Settings</span></button>
+      </nav>
+      <div class="cp-user">
+        <div class="cp-uava avatar" id="dh-avatar">VS</div>
+        <div class="cp-uinfo"><div class="cp-uname" id="dh-name">Member</div><div class="cp-uemail" id="dh-email"></div></div>
       </div>
-      <div class="who">
-        <div class="hi">Welcome back,</div>
-        <h1 id="dh-name">Member</h1>
-        <div class="em" id="dh-email"></div>
+      <button class="cp-signout" id="cp-signout" type="button">Sign out</button>
+    </aside>
+    <div class="cp-overlay" id="cp-overlay"></div>
+    <div class="cp-main">
+      <div class="cp-topbar">
+        <button class="cp-burger" id="cp-burger" type="button" aria-label="Open menu">&#9776;</button>
+        <div style="flex:1"></div>
+        <div class="cp-bell-wrap">
+          <button class="cp-bell" id="cp-bell" type="button" aria-label="Notifications">&#128276;<span class="cp-bell-count" id="cp-bell-count" hidden>0</span></button>
+          <div class="cp-notif" id="cp-notif" hidden></div>
+        </div>
+      </div>
+      <div class="cp-scroll">
+        <div class="cp-hero">
+          <span class="cp-eyebrow"><span class="cp-eyedot"></span> Dashboard Overview</span>
+          <h1 id="cp-greeting">Welcome back</h1>
+          <div class="cp-hero-actions">
+            <button class="cp-hbtn" data-sec="send" type="button">+ New Referral</button>
+            <button class="cp-hbtn ghost" data-sec="plan" type="button">View My Plan</button>
+          </div>
+        </div>
+        <div class="cp-content">
+
+          <div class="cp-sec active" id="sec-dashboard">
+            <div class="ref-stats" id="ref-stats"></div>
+            <div id="getting-started"></div>
+          </div>
+
+          <div class="cp-sec" id="sec-send">
+            <div class="card">
+              <div class="gift-banner"><div class="gi-ic">&#127873;</div><div class="gi-text"><strong>Refer someone who needs health insurance.</strong><span>Send their info and we will take care of the rest. Track every referral right here.</span></div></div>
+              <h3 style="font-size:16px;margin:0 0 4px">Send a referral</h3>
+              <p class="muted" style="margin:0 0 14px">Share their info and we will reach out.</p>
+              <form id="ref-form">
+                <div id="ref-msg"></div>
+                <div class="row2"><div class="field"><label>Their name</label><input id="ref-name" type="text" required /></div><div class="field"><label>Their phone</label><input id="ref-phone" type="tel" inputmode="tel" /></div></div>
+                <div class="row2"><div class="field"><label>Their email</label><input id="ref-email" type="email" /></div><div class="field"><label>Relationship</label><input id="ref-rel" type="text" placeholder="Friend, brother, coworker..." /></div></div>
+                <div class="field"><label>Notes (optional)</label><textarea id="ref-notes" rows="2" placeholder="Best time to reach them, what they are looking for..."></textarea></div>
+                <button class="btn btn-primary" type="submit">Send referral</button>
+              </form>
+            </div>
+          </div>
+
+          <div class="cp-sec" id="sec-referrals">
+            <div class="card"><div class="sec-title" style="margin-top:0"><h3>Your referrals</h3></div><div id="my-refs"></div></div>
+          </div>
+
+          <div class="cp-sec" id="sec-plan">
+            <div class="card"><div id="plan-display"></div><div class="sec-title"><h3>Why this matters</h3></div><p class="muted">Your enrollment information is updated by your advisor. If anything looks wrong, <a href="#" data-goto="support">message support</a> and someone will fix it.</p></div>
+          </div>
+
+          <div class="cp-sec" id="sec-support">
+            <div class="card">
+              <h3 style="font-size:16px;margin:0 0 4px">Message your advisor</h3>
+              <p class="muted" style="margin:0 0 14px">Support typically responds within 24 hours.</p>
+              <div id="msgs" class="msgs"></div>
+              <form id="msg-form"><div class="field"><label for="msg-text">Your message</label><textarea id="msg-text" rows="3" placeholder="Type your question or update here..." required></textarea></div><button class="btn btn-primary" type="submit">Send message</button></form>
+            </div>
+          </div>
+
+          <div class="cp-sec" id="sec-settings">
+            <div class="card">
+              <div id="photo-msg"></div>
+              <div class="sec-title" style="margin-top:0"><h3>Profile photo</h3></div>
+              <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px">
+                <div class="photo-wrap"><div id="dh-avatar2" class="avatar">VS</div><label class="photo-edit" for="photo-input" title="Update photo">+</label><input id="photo-input" type="file" accept="image/*" hidden /></div>
+                <div class="muted" style="font-size:13px">Upload a photo for your account.</div>
+              </div>
+              <div class="sec-title"><h3>Your information</h3></div>
+              <div class="kv">
+                <div class="item"><div class="lbl">Name</div><div class="val" id="pv-name">--</div></div>
+                <div class="item"><div class="lbl">Email</div><div class="val" id="pv-email">--</div></div>
+                <div class="item"><div class="lbl">Phone</div><div class="val" id="pv-phone">--</div></div>
+                <div class="item"><div class="lbl">Member since</div><div class="val" id="pv-since">--</div></div>
+              </div>
+              <form id="prof-form" autocomplete="off" style="margin-top:4px">
+                <div id="prof-msg"></div>
+                <div class="row2"><div class="field"><label for="prof-first">First name</label><input id="prof-first" type="text" autocomplete="given-name" /></div><div class="field"><label for="prof-last">Last name</label><input id="prof-last" type="text" autocomplete="family-name" /></div></div>
+                <div class="field"><label for="prof-phone">Phone</label><input id="prof-phone" type="tel" autocomplete="tel" /></div>
+                <button class="btn btn-primary" type="submit">Save profile</button>
+                <p class="hint" style="margin-top:8px">Your email is your login. To change it, message your advisor.</p>
+              </form>
+              <div class="sec-title"><h3>Change password</h3></div>
+              <div class="subcard"><form id="pw-form" autocomplete="off">
+                <div id="pw-msg"></div>
+                <div class="field"><label for="pw-cur">Current password</label><input id="pw-cur" type="password" autocomplete="current-password" required /></div>
+                <div class="field"><label for="pw-new">New password</label><input id="pw-new" type="password" autocomplete="new-password" minlength="8" required /><p class="hint">At least 8 characters.</p></div>
+                <div class="field"><label for="pw-new2">Confirm new password</label><input id="pw-new2" type="password" autocomplete="new-password" minlength="8" required /></div>
+                <button class="btn btn-primary" type="submit">Update password</button>
+              </form></div>
+              <div class="sec-title"><h3>Account</h3></div>
+              <button id="delete-account" class="btn btn-danger" type="button">Delete my account</button>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
-
-    <div class="ref-stats" id="ref-stats"></div>
-    <div id="getting-started"></div>
-
-    <div class="card" style="padding:0">
-      <div class="dtabs" role="tablist">
-        <button id="dtab-profile" class="active" type="button" role="tab">Profile</button>
-        <button id="dtab-plan" type="button" role="tab">My Plan</button>
-        <button id="dtab-support" type="button" role="tab">Support</button>
-        <button id="dtab-refer" type="button" role="tab">Refer for a Gift</button>
-      </div>
-
-      <div style="padding:18px">
-
-        <!-- ============ Profile ============ -->
-        <div id="panel-profile" class="panel active">
-          <div id="photo-msg"></div>
-
-          <div class="sec-title"><h3>Your information</h3></div>
-          <div class="kv">
-            <div class="item"><div class="lbl">Name</div><div class="val" id="pv-name">--</div></div>
-            <div class="item"><div class="lbl">Email</div><div class="val" id="pv-email">--</div></div>
-            <div class="item"><div class="lbl">Phone</div><div class="val" id="pv-phone">--</div></div>
-            <div class="item"><div class="lbl">Member since</div><div class="val" id="pv-since">--</div></div>
-          </div>
-          <form id="prof-form" autocomplete="off" style="margin-top:4px">
-            <div id="prof-msg"></div>
-            <div class="row2">
-              <div class="field"><label for="prof-first">First name</label><input id="prof-first" type="text" autocomplete="given-name" /></div>
-              <div class="field"><label for="prof-last">Last name</label><input id="prof-last" type="text" autocomplete="family-name" /></div>
-            </div>
-            <div class="field"><label for="prof-phone">Phone</label><input id="prof-phone" type="tel" autocomplete="tel" /></div>
-            <button class="btn btn-primary" type="submit">Save profile</button>
-            <p class="hint" style="margin-top:8px">Your email is your login. To change it, message your advisor.</p>
-          </form>
-
-          <div class="sec-title"><h3>Change password</h3></div>
-          <div class="subcard">
-            <form id="pw-form" autocomplete="off">
-              <div id="pw-msg"></div>
-              <div class="field">
-                <label for="pw-cur">Current password</label>
-                <input id="pw-cur" type="password" autocomplete="current-password" required />
-              </div>
-              <div class="field">
-                <label for="pw-new">New password</label>
-                <input id="pw-new" type="password" autocomplete="new-password" minlength="8" required />
-                <p class="hint">At least 8 characters.</p>
-              </div>
-              <div class="field">
-                <label for="pw-new2">Confirm new password</label>
-                <input id="pw-new2" type="password" autocomplete="new-password" minlength="8" required />
-              </div>
-              <button class="btn btn-primary" type="submit">Update password</button>
-            </form>
-          </div>
-
-          <div class="sec-title"><h3>Account</h3></div>
-          <button id="delete-account" class="btn btn-danger" type="button">Delete my account</button>
-        </div>
-
-        <!-- ============ Plan ============ -->
-        <div id="panel-plan" class="panel">
-          <div id="plan-display"></div>
-          <div class="sec-title"><h3>Why this matters</h3></div>
-          <p class="muted">Your enrollment information is updated by your advisor. If anything looks wrong - effective date, premium, plan name - <a href="#" onclick="document.getElementById('dtab-support').click();return false;">message support</a> and someone will fix it.</p>
-        </div>
-
-        <!-- ============ Support ============ -->
-        <div id="panel-support" class="panel">
-          <h3 style="font-size:16px;margin:0 0 4px">Message your advisor</h3>
-          <p class="muted" style="margin:0 0 14px">Support typically responds within 24 hours.</p>
-          <div id="msgs" class="msgs"></div>
-          <form id="msg-form">
-            <div class="field">
-              <label for="msg-text">Your message</label>
-              <textarea id="msg-text" rows="3" placeholder="Type your question or update here..." required></textarea>
-            </div>
-            <button class="btn btn-primary" type="submit">Send message</button>
-          </form>
-        </div>
-
-        <!-- ============ Refer ============ -->
-        <div id="panel-refer" class="panel">
-          <div class="gift-banner">
-            <div class="gi-ic">&#127873;</div>
-            <div class="gi-text">
-              <strong>Refer a friend that needs health insurance for a chance to win a gift!</strong>
-              <span>Every referral that becomes a client enters you in our quarterly gift drawing.</span>
-            </div>
-          </div>
-          <h3 style="font-size:16px;margin:0 0 4px">Send a referral</h3>
-          <p class="muted" style="margin:0 0 14px">Share their info and we'll reach out. You'll receive a thank-you and a gift entry for every qualified referral.</p>
-          <form id="ref-form">
-            <div id="ref-msg"></div>
-            <div class="row2">
-              <div class="field"><label>Their name</label><input id="ref-name" type="text" required /></div>
-              <div class="field"><label>Their phone</label><input id="ref-phone" type="tel" inputmode="tel" /></div>
-            </div>
-            <div class="row2">
-              <div class="field"><label>Their email</label><input id="ref-email" type="email" /></div>
-              <div class="field"><label>Relationship</label><input id="ref-rel" type="text" placeholder="Friend, brother, coworker..." /></div>
-            </div>
-            <div class="field">
-              <label>Notes (optional)</label>
-              <textarea id="ref-notes" rows="2" placeholder="Best time to reach them, what they're looking for..."></textarea>
-            </div>
-            <button class="btn btn-gold" type="submit">Send referral &amp; enter to win</button>
-          </form>
-
-          <div class="sec-title"><h3>Your referrals</h3></div>
-          <div id="my-refs"></div>
-        </div>
-
-      </div>
-    </div>
-
   </section>
 
 </main>
@@ -750,9 +794,12 @@ $("photo-input").addEventListener("change",function(e){
   $("photo-input").value="";
 });
 function paintAvatar(dataUrl){
-  var av=$("dh-avatar");av.innerHTML="";
-  if(dataUrl){var img=document.createElement("img");img.src=dataUrl;img.alt="Profile photo";av.appendChild(img);}
-  else{var acct=currentAccount();av.textContent=acct?initials(acct):"VS";}
+  var acct=currentAccount();
+  ["dh-avatar","dh-avatar2"].forEach(function(id){
+    var av=$(id);if(!av)return;av.innerHTML="";
+    if(dataUrl){var img=document.createElement("img");img.src=dataUrl;img.alt="Profile photo";av.appendChild(img);}
+    else{av.textContent=acct?initials(acct):"VS";}
+  });
 }
 
 function currentAccount(){
@@ -769,6 +816,7 @@ function showDashboard(){
 
   $("dh-name").textContent=((acct.firstName||"")+" "+(acct.lastName||"")).trim()||"Member";
   $("dh-email").textContent=acct.email;
+  var gEl=$("cp-greeting");if(gEl)gEl.textContent=cpGreeting(acct.firstName||"there");
   paintAvatar(acct.photoDataUrl);
 
   $("pv-name").textContent=((acct.firstName||"")+" "+(acct.lastName||"")).trim()||"--";
@@ -785,6 +833,7 @@ function showDashboard(){
   renderMyReferrals();
   renderRefStats();
   checkSoldReferrals();
+  cpRenderNotifs();
 }
 function refStats(acct){
   var mine=getReferrals().filter(function(r){return r.fromAccountId===acct.id;});
@@ -962,19 +1011,77 @@ function renderMyReferrals(){
   });
 }
 
-function dswitch(name){
-  ["profile","plan","support","refer"].forEach(function(n){
-    $("dtab-"+n).classList.toggle("active",n===name);
-    $("panel-"+n).classList.toggle("active",n===name);
-  });
-  if(name==="support")renderMessages();
-  if(name==="plan")renderPlan();
-  if(name==="refer")renderMyReferrals();
+/* ── App-shell navigation ── */
+function cpNav(sec){
+  document.querySelectorAll(".cp-sec").forEach(function(s){s.classList.toggle("active",s.id==="sec-"+sec);});
+  document.querySelectorAll(".cp-navitem").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-sec")===sec);});
+  var sb=$("cp-sidebar");if(sb)sb.classList.remove("open");var ov=$("cp-overlay");if(ov)ov.classList.remove("show");
+  var sc=$("cp-scroll");if(sc)sc.scrollTop=0;
+  if(sec==="support"){renderMessages();cpMarkSeen("msgs");}
+  if(sec==="plan")renderPlan();
+  if(sec==="referrals"){renderMyReferrals();renderRefStats();cpMarkSeen("refs");}
+  if(sec==="dashboard"){renderRefStats();cpMarkSeen("refs");}
+  cpRenderNotifs();
 }
-$("dtab-profile").addEventListener("click",function(){dswitch("profile");});
-$("dtab-plan").addEventListener("click",function(){dswitch("plan");});
-$("dtab-support").addEventListener("click",function(){dswitch("support");});
-$("dtab-refer").addEventListener("click",function(){dswitch("refer");});
+document.querySelectorAll("[data-sec]").forEach(function(b){b.addEventListener("click",function(){cpNav(b.getAttribute("data-sec"));});});
+document.addEventListener("click",function(e){var g=e.target.closest&&e.target.closest("[data-goto]");if(g){e.preventDefault();cpNav(g.getAttribute("data-goto"));}});
+(function(){
+  var burger=$("cp-burger"),sb=$("cp-sidebar"),ov=$("cp-overlay");
+  if(burger)burger.addEventListener("click",function(){sb.classList.toggle("open");ov.classList.toggle("show");});
+  if(ov)ov.addEventListener("click",function(){sb.classList.remove("open");ov.classList.remove("show");});
+  var so=$("cp-signout");if(so)so.addEventListener("click",function(){clearSession();location.reload();});
+})();
+
+/* ── Notifications (driven by admin actions) ── */
+function cpSeenMsgs(){try{return JSON.parse(localStorage.getItem("cp_seen_msgs")||"[]");}catch(e){return[];}}
+function cpSaveSeenMsgs(a){try{localStorage.setItem("cp_seen_msgs",JSON.stringify(a));}catch(e){}}
+function cpSeenRef(){try{return JSON.parse(localStorage.getItem("cp_seen_refstatus")||"{}");}catch(e){return{};}}
+function cpSaveSeenRef(o){try{localStorage.setItem("cp_seen_refstatus",JSON.stringify(o));}catch(e){}}
+function cpBuildNotifs(){
+  var acct=currentAccount();if(!acct)return[];
+  var out=[];
+  var seenM=cpSeenMsgs();
+  getMessages().filter(function(m){return m.accountId===acct.id&&m.from==="advisor";}).forEach(function(m){
+    if(seenM.indexOf(m.id)<0)out.push({type:"support",text:"New reply from your advisor",sub:(m.text||"").slice(0,70),ts:m.ts,sec:"support"});
+  });
+  var seenR=cpSeenRef();
+  getReferrals().filter(function(r){return r.fromAccountId===acct.id;}).forEach(function(r){
+    var st=r.status||"new";
+    if(st!=="new"&&st!=="in-progress"&&seenR[r.id]!==st){
+      var nm=r.referralName||"your referral";
+      var text=st==="paid"?("Payment sent for "+nm):st==="sold"?(nm+" was sold!"):("Update: "+nm+" is now "+st.replace(/-/g," "));
+      out.push({type:st==="paid"?"payment":(st==="sold"?"sold":"status"),text:text,sub:r.payout?("$"+Number(r.payout).toFixed(2)):"",ts:r.paidAt||r.soldAt||r.ts,sec:"referrals"});
+    }
+  });
+  out.sort(function(a,b){return(b.ts||0)-(a.ts||0);});
+  return out;
+}
+function cpRenderNotifs(){
+  var notifs=cpBuildNotifs();
+  var cnt=$("cp-bell-count");if(cnt){cnt.textContent=notifs.length;cnt.hidden=notifs.length===0;}
+  var supN=notifs.filter(function(n){return n.type==="support";}).length;
+  var sb2=$("nav-sup-badge");if(sb2){sb2.textContent=supN;sb2.hidden=supN===0;}
+  var box=$("cp-notif");if(!box)return;
+  if(!notifs.length){box.innerHTML='<div class="cp-notif-empty">You are all caught up.</div>';return;}
+  box.innerHTML='<div class="cp-notif-head"><strong>Notifications</strong><button id="cp-notif-clear" class="cp-link" type="button">Mark all read</button></div>'+notifs.map(function(n){
+    var ic=n.type==="support"?"&#128172;":n.type==="payment"?"&#128176;":n.type==="sold"?"&#127881;":"&#128226;";
+    return '<div class="cp-notif-item" data-nsec="'+n.sec+'"><div class="cp-ni-ic '+n.type+'">'+ic+'</div><div style="min-width:0"><div class="cp-ni-t">'+escapeHtml(n.text)+'</div>'+(n.sub?'<div class="cp-ni-s">'+escapeHtml(n.sub)+'</div>':'')+'</div></div>';
+  }).join("");
+  box.querySelectorAll(".cp-notif-item").forEach(function(it){it.addEventListener("click",function(){cpMarkSeen("all");$("cp-notif").hidden=true;cpNav(it.getAttribute("data-nsec"));});});
+  var cl=$("cp-notif-clear");if(cl)cl.addEventListener("click",function(){cpMarkSeen("all");cpRenderNotifs();});
+}
+function cpMarkSeen(kind){
+  var acct=currentAccount();if(!acct)return;
+  if(kind==="msgs"||kind==="all"){var sm=cpSeenMsgs();getMessages().filter(function(m){return m.accountId===acct.id&&m.from==="advisor";}).forEach(function(m){if(sm.indexOf(m.id)<0)sm.push(m.id);});cpSaveSeenMsgs(sm);}
+  if(kind==="refs"||kind==="all"){var sr=cpSeenRef();getReferrals().filter(function(r){return r.fromAccountId===acct.id;}).forEach(function(r){sr[r.id]=r.status||"new";});cpSaveSeenRef(sr);}
+  cpRenderNotifs();
+}
+(function(){
+  var bell=$("cp-bell");
+  if(bell)bell.addEventListener("click",function(e){e.stopPropagation();var n=$("cp-notif");n.hidden=!n.hidden;if(!n.hidden)cpRenderNotifs();});
+  document.addEventListener("click",function(e){var n=$("cp-notif");if(n&&!n.hidden&&!(e.target.closest&&e.target.closest(".cp-bell-wrap")))n.hidden=true;});
+})();
+function cpGreeting(name){var h=new Date().getHours();var g=h<12?"Good morning":h<18?"Good afternoon":"Good evening";return g+", "+(name||"there");}
 
 $("yr").textContent=new Date().getFullYear();
 setSyncPill("","Connecting");
@@ -1005,8 +1112,8 @@ onAuthStateChanged(auth,async function(user){
       }
     }
   });
-  subscribe("messages",function(){if(!$("dash-view").hidden)renderMessages();});
-  subscribe("referrals",function(){checkSoldReferrals();if(!$("dash-view").hidden){renderMyReferrals();renderRefStats();}});
+  subscribe("messages",function(){if(!$("dash-view").hidden){renderMessages();cpRenderNotifs();}});
+  subscribe("referrals",function(){checkSoldReferrals();if(!$("dash-view").hidden){renderMyReferrals();renderRefStats();cpRenderNotifs();}});
 
   if(getSession())showDashboard();
 });
