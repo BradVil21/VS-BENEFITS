@@ -323,6 +323,7 @@ html.dark .tbl .row:hover{box-shadow:0 8px 28px rgba(0,0,0,.5)}
 .status-follow-up{background:#fff8e1;color:#7a5000}
 .status-appointment-scheduled{background:#e7f0ff;color:var(--blue-700)}
 .status-in-progress,.status-unpaid{background:#fff4e1;color:var(--warn)}
+.status-being-reviewed{background:#e7f6ff;color:#0b6996}
 html.dark .status-new{background:#0f2040;color:#7eb6ff;border:1px solid #1e3a6a}
 html.dark .status-sold,.html.dark .status-enrolled,.html.dark .status-active{background:#0a2018;color:#22d47a;border:1px solid #1a4030}
 html.dark .status-declined,.html.dark .status-lost,.html.dark .status-revoked{background:#200d0d;color:#ff7070;border:1px solid #4a1818}
@@ -3169,7 +3170,7 @@ $("reply-form").addEventListener("submit",function(e){
 /* ════════════════════════════════════════
    REFERRALS
 ════════════════════════════════════════ */
-var REF_STATUSES=["in-progress","sold","declined","paid"];
+var REF_STATUSES=["in-progress","being-reviewed","sold","declined","paid"];
 var activeRefFilter="all";
 function renderReferrals(){
   buildFilterChips("ref-filter-row",["all"].concat(REF_STATUSES),function(){return activeRefFilter;},function(v){activeRefFilter=v;},renderReferrals);
