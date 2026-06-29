@@ -343,6 +343,30 @@ html.dark .presence-dot.off{background:#3a5470}
 .modal-bg{position:fixed;inset:0;background:rgba(11,35,70,.55);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;z-index:400;padding:12px;overflow-y:auto}
 .modal-bg.open{display:flex}
 .modal{background:#fff;border-radius:14px;max-width:580px;width:100%;padding:22px;box-shadow:var(--shadow-md);position:relative;margin:auto}
+.modal.wide{max-width:1080px;padding:0;overflow:hidden}
+.modal.wide .close-x{color:#fff;z-index:5}
+.rd-head{background:linear-gradient(120deg,#2f5fe0,#6d4ae0 60%,#7b3fe4);color:#fff;padding:24px 26px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.rd-head .div{border-left:1px solid rgba(255,255,255,.25);padding-left:18px}
+.rd-eyebrow{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.rd-name{font-size:1.6rem;font-weight:800;color:#fff;line-height:1.1}
+.rd-meta{font-size:13px;color:rgba(255,255,255,.92);margin-top:8px;display:flex;align-items:center;gap:7px}
+.rd-sent{font-size:1.05rem;font-weight:700;color:#fff}
+.rd-body{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;padding:18px}
+.rd-card{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.rd-cardhead{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;color:#fff;font-weight:700;font-size:14px;background:linear-gradient(120deg,#3f53d8,#6d4ae0)}
+.rd-cardhead .tag{font-size:11px;font-weight:600;color:rgba(255,255,255,.85)}
+.rd-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:14px}
+.rd-grid.two{grid-template-columns:1fr 1fr}
+.rd-fld .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;display:flex;align-items:center;gap:5px;margin-bottom:4px}
+.rd-fld .v{font-size:14px;color:var(--ink);background:#f6f8fc;border:1px solid var(--line);border-radius:8px;padding:8px 10px;min-height:18px}
+.rd-appt{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:14px}
+.rd-appt .left{display:flex;align-items:center;gap:9px;color:var(--ink-2);font-size:14px;font-weight:600}
+.rd-notes{padding:14px;font-size:14px;color:var(--ink-2);line-height:1.6;white-space:pre-wrap;min-height:120px}
+.rd-foot{display:flex;gap:18px;flex-wrap:wrap;padding:6px 20px 18px;font-size:12.5px;color:var(--muted)}
+.rd-foot .dot{display:inline-flex;align-items:center;gap:6px}
+.rd-foot .dot::before{content:"";width:8px;height:8px;border-radius:50%;background:#22c55e}
+.rd-foot .dot.blue::before{background:#3b82f6}
+@media(max-width:760px){.modal.wide{max-width:100%}.rd-head,.rd-body{grid-template-columns:1fr}.rd-head .div{border-left:0;padding-left:0}.rd-grid,.rd-grid.two{grid-template-columns:1fr 1fr}}
 html.dark .modal{background:#1c2d42;border:1px solid #253a54}
 html.dark .modal h3{color:#d4e8ff}
 .modal h3{margin:0 0 4px;font-size:18px}
@@ -2157,6 +2181,7 @@ $("signout-btn").addEventListener("click",function(){clearSession();route();});
 
 /* ── MODAL ── */
 function openModal(html){
+  $("modal-box").classList.remove("wide");
   $("modal-content").innerHTML="";
   if(typeof html==="string")$("modal-content").innerHTML=html;
   else $("modal-content").appendChild(html);
@@ -3162,7 +3187,9 @@ function renderReferrals(){
     var fromName=fa?fullName(fa):"(unknown)";
     var row=el("div",{class:"row"});
     var top=el("div",{class:"top"});
-    top.appendChild(el("div",{},[el("div",{class:"name",text:r.referralName||"(no name)"}),el("div",{class:"sub",text:"Referred by "+fromName})]));
+    var nameDiv=el("div",{class:"name",text:r.referralName||((r.firstName||"")+" "+(r.lastName||"")).trim()||"(no name)",style:"cursor:pointer",onclick:function(){openRefDetail(r);}});
+    var locBits=[r.leadType,(r.state||r.zip)?((r.state||"")+(r.zip?" "+r.zip:"")).trim():""].filter(Boolean).join(" · ");
+    top.appendChild(el("div",{},[nameDiv,el("div",{class:"sub",text:"Referred by "+fromName+(locBits?(" · "+locBits):"")})]));
     var pills=el("div",{style:"display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0"});
     var st=r.status||"in-progress";
     pills.appendChild(el("span",{class:"status-pill status-"+st,text:st.replace(/-/g," ")}));
@@ -3173,6 +3200,7 @@ function renderReferrals(){
     if(r.notes)row.appendChild(el("div",{class:"meta",text:"Notes: "+r.notes}));
     row.appendChild(el("div",{class:"meta",text:"Submitted "+fmtDateTime(r.ts)+(r.paidAt?(" · paid "+fmtDateTime(r.paidAt)):"")}));
     var acts=el("div",{class:"acts"});
+    acts.appendChild(el("button",{class:"btn btn-primary btn-sm",type:"button",text:"View",onclick:function(){openRefDetail(r);}}));
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Edit",onclick:function(){openRefForm(r);}}));
     acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Convert to lead",onclick:function(){convertReferralToLead(r);}}));
     if(st!=="sold"&&st!=="paid")acts.appendChild(el("button",{class:"btn btn-primary btn-sm",type:"button",text:"💰 Mark Sold",onclick:function(){openRefSoldModal(r);}}));
@@ -3193,6 +3221,44 @@ function openRefPayoutModal(r){
   $("rp-form").addEventListener("submit",function(e){e.preventDefault();updateRef(r.id,{status:"paid",paidAt:Date.now(),payout:Number($("rp-amt").value)||0,notes:$("rp-notes").value.trim(),read:true});closeModal();});
 }
 function updateRef(id,patch){var arr=getReferrals().map(function(r){if(r.id===id)Object.assign(r,patch);return r;});saveReferrals(arr);renderReferrals();}
+function openRefDetail(r){
+  var fa=getAccounts().filter(function(a){return a.id===r.fromAccountId;})[0];
+  var nm=r.referralName||((r.firstName||"")+" "+(r.lastName||"")).trim()||"(no name)";
+  var st=r.status||"in-progress";
+  var income=r.income?("$"+r.income):"";
+  var budget=r.monthlyBudget?("$"+r.monthlyBudget):"";
+  var apptTxt=r.noAppt?"No appointment":(r.appointment||"No appointment");
+  var fld=function(ic,l,v){return '<div class="rd-fld"><div class="l">'+ic+" "+l+'</div><div class="v">'+escapeHtml(v||"--")+'</div></div>';};
+  var statusOpts=REF_STATUSES.map(function(s){return'<option value="'+s+'"'+(s===st?" selected":"")+'>'+s.replace(/-/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();})+'</option>';}).join("");
+  var html=''+
+    '<div class="rd-head">'+
+      '<div><div class="rd-eyebrow">&#128100; Name of Referral</div><div class="rd-name">'+escapeHtml(nm)+'</div>'+
+        '<div class="rd-meta">&#128197; '+escapeHtml(fmtDateTime(r.ts))+'</div><div class="rd-meta">&#128188; '+escapeHtml(r.leadType||"Insurance")+'</div></div>'+
+      '<div class="div"><div class="rd-eyebrow">&#127970; Sent To</div><div class="rd-sent">VS Health Benefits</div>'+(fa?('<div class="rd-meta">Referred by '+escapeHtml(fullName(fa))+'</div>'):"")+'</div>'+
+      '<div class="div"><div class="rd-eyebrow">&#128176; Status</div><select id="rd-status" class="select" style="margin-top:4px">'+statusOpts+'</select>'+(r.payout?('<div class="rd-meta">Payout: $'+Number(r.payout).toFixed(2)+'</div>'):"")+'</div>'+
+    '</div>'+
+    '<div class="rd-body">'+
+      '<div>'+
+        '<div class="rd-card"><div class="rd-cardhead">&#128100; Contact Info <span class="tag">Read only</span></div>'+
+          '<div class="rd-grid">'+fld("&#9993;","Email",r.referralEmail)+fld("&#128222;","Phone",r.referralPhone)+fld("&#127874;","DOB",r.dob)+'</div>'+
+          '<div class="rd-grid two" style="padding-top:0">'+fld("&#128205;","ZIP",r.zip)+fld("&#127758;","State",r.state)+'</div>'+
+        '</div>'+
+        '<div class="rd-card" style="margin-top:14px"><div class="rd-cardhead">&#128196; Custom Details</div>'+
+          '<div class="rd-grid two">'+fld("&#128181;","Income",income)+fld("&#128178;","Monthly Budget",budget)+'</div>'+
+        '</div>'+
+        '<div class="rd-appt"><div class="left">&#128197; '+escapeHtml(apptTxt)+(r.noAppt?'':'')+'</div>'+(r.noAppt?'<button type="button" class="btn btn-ghost btn-sm" id="rd-sched">Schedule</button>':'')+'</div>'+
+      '</div>'+
+      '<div class="rd-card"><div class="rd-cardhead">&#128221; Notes <span class="tag" id="rd-notecount"></span></div><div class="rd-notes" id="rd-notes">'+(r.notes?escapeHtml(r.notes):'<span style="color:var(--muted)">No notes added.</span>')+'</div></div>'+
+    '</div>'+
+    '<div class="rd-foot"><span class="dot">Permission to share</span><span class="dot blue">Preferred contact: '+escapeHtml(r.preferredContact||"Phone Call")+'</span></div>';
+  openModal(html);
+  $("modal-box").classList.add("wide");
+  var sel=$("rd-status");if(sel)sel.addEventListener("change",function(){
+    var ns=sel.value;
+    updateRef(r.id,{status:ns,read:true,paidAt:ns==="paid"?(r.paidAt||Date.now()):(ns==="paid"?Date.now():0),soldAt:ns==="sold"?(r.soldAt||Date.now()):(r.soldAt||0),soldNotified:(ns==="sold"&&r.status!=="sold")?false:(r.soldNotified||false)});
+    r.status=ns;
+  });
+}
 function openRefSoldModal(r){
   var html='<h3>Mark referral as SOLD</h3><p class="lede" style="margin-bottom:14px">This updates the client portal live, shows them confetti, and flags the sold email.</p><form id="rs-form">'
     +'<div class="field"><label>Referral</label><input type="text" value="'+escapeHtml(r.referralName||"")+'" disabled /></div>'
@@ -3210,18 +3276,25 @@ function openRefSoldModal(r){
   });
 }
 function openRefForm(r){
+  var nm=r.referralName||((r.firstName||"")+" "+(r.lastName||"")).trim();
   var html='<h3>Edit referral</h3><form id="r-form">'+
-    '<div class="field"><label>Referral name</label><input id="r-refname" value="'+escapeHtml(r.referralName||"")+'" /></div>'+
+    '<div class="field"><label>Referral name</label><input id="r-refname" value="'+escapeHtml(nm)+'" /></div>'+
     '<div class="row2"><div class="field"><label>Phone</label><input id="r-refphone" type="tel" value="'+escapeHtml(r.referralPhone||"")+'" /></div>'+
     '<div class="field"><label>Email</label><input id="r-refemail" type="email" value="'+escapeHtml(r.referralEmail||"")+'" /></div></div>'+
+    '<div class="row2"><div class="field"><label>Lead Type</label><input id="r-leadtype" value="'+escapeHtml(r.leadType||"Insurance")+'" /></div>'+
+    '<div class="field"><label>Date of Birth</label><input id="r-dob" value="'+escapeHtml(r.dob||"")+'" placeholder="MM/DD/YYYY" /></div></div>'+
+    '<div class="row2"><div class="field"><label>ZIP</label><input id="r-zip" value="'+escapeHtml(r.zip||"")+'" /></div>'+
+    '<div class="field"><label>State</label><input id="r-state" value="'+escapeHtml(r.state||"")+'" maxlength="2" /></div></div>'+
+    '<div class="row2"><div class="field"><label>Income</label><input id="r-income" value="'+escapeHtml(r.income||"")+'" /></div>'+
+    '<div class="field"><label>Monthly Budget</label><input id="r-budget" value="'+escapeHtml(r.monthlyBudget||"")+'" /></div></div>'+
     '<div class="row2"><div class="field"><label>Status</label><select id="r-status">'+REF_STATUSES.map(function(s){return'<option value="'+s+'"'+(s===(r.status||"in-progress")?" selected":"")+'>'+s.replace(/-/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();})+'</option>';}).join("")+'</select></div>'+
     '<div class="field"><label>Payout ($)</label><input id="r-payout" type="number" step="0.01" min="0" value="'+(r.payout||0)+'" /></div></div>'+
-    '<div class="field"><label>Notes</label><textarea id="r-notes" rows="2">'+escapeHtml(r.notes||"")+'</textarea></div>'+
+    '<div class="field"><label>Notes</label><textarea id="r-notes" rows="3">'+escapeHtml(r.notes||"")+'</textarea></div>'+
     '<div class="modal-acts"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">Save</button></div></form>';
   openModal(html);
   $("r-form").addEventListener("submit",function(e){
     e.preventDefault();var st=$("r-status").value;
-    updateRef(r.id,{referralName:$("r-refname").value.trim(),referralPhone:$("r-refphone").value.trim(),referralEmail:$("r-refemail").value.trim(),status:st,payout:Number($("r-payout").value)||0,paidAt:st==="paid"?(r.paidAt||Date.now()):0,soldAt:st==="sold"?(r.soldAt||Date.now()):(r.soldAt||0),soldNotified:(st==="sold"&&r.status!=="sold")?false:(r.soldNotified||false),notes:$("r-notes").value.trim(),read:true});
+    updateRef(r.id,{referralName:$("r-refname").value.trim(),referralPhone:$("r-refphone").value.trim(),referralEmail:$("r-refemail").value.trim(),leadType:$("r-leadtype").value.trim(),dob:$("r-dob").value.trim(),zip:$("r-zip").value.trim(),state:$("r-state").value.trim().toUpperCase(),income:$("r-income").value.trim(),monthlyBudget:$("r-budget").value.trim(),status:st,payout:Number($("r-payout").value)||0,paidAt:st==="paid"?(r.paidAt||Date.now()):0,soldAt:st==="sold"?(r.soldAt||Date.now()):(r.soldAt||0),soldNotified:(st==="sold"&&r.status!=="sold")?false:(r.soldNotified||false),notes:$("r-notes").value.trim(),read:true});
     closeModal();
   });
 }

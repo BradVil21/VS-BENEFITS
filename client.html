@@ -248,6 +248,46 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .cp-sec{display:none}
 .cp-sec.active{display:block;animation:cpFade .2s}
 @keyframes cpFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* ── Referral wizard ── */
+.wiz{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-md)}
+.wiz-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:13px 20px;background:#f8fafd;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted)}
+.wiz-ref strong{color:var(--ink)}
+.wiz-ico{opacity:.7}
+.wiz-appt{color:var(--muted)}
+.wiz-hero{display:flex;align-items:center;gap:14px;padding:22px 20px;background:linear-gradient(120deg,#3b2fd6,#6d4ae0 55%,#7b3fe4);color:#fff}
+.wiz-hero-ic{width:46px;height:46px;border-radius:12px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.wiz-hero h2{margin:0;color:#fff;font-size:1.25rem;font-weight:800}
+.wiz-hero p{margin:3px 0 0;color:rgba(255,255,255,.9);font-size:13.5px}
+.wiz-prog{height:4px;background:#eef2f8}
+.wiz-prog-fill{display:block;height:100%;width:25%;background:linear-gradient(90deg,#3b2fd6,#7b3fe4);transition:width .3s}
+.wiz-tabs{display:flex;gap:8px;flex-wrap:wrap;padding:16px 18px 4px}
+.wiz-tab{flex:1;min-width:130px;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 12px;border-radius:10px;border:0;background:#f1f5f9;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.wiz-tab.active{background:linear-gradient(120deg,#5b46e0,#7b3fe4);color:#fff}
+.wiz-tab.done{background:#e9f9f0;color:var(--ok)}
+.wiz form{padding:8px 20px 18px}
+.wiz-pane{display:none}
+.wiz-pane.active{display:block;animation:cpFade .2s}
+.wiz-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:6px}
+.wiz-grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.wiz .field label{font-size:13px;font-weight:600;color:var(--ink-2)}
+.req{color:#ef4444}
+.wiz-card{border:1px solid var(--line);border-radius:12px;padding:16px;background:#fcfdff;margin-top:6px}
+.wiz-money{display:flex;align-items:center;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#f6f8fc}
+.wiz-money span{padding:0 12px;color:var(--muted);font-weight:600;background:#eef2f8;align-self:stretch;display:flex;align-items:center}
+.wiz-money input{border:0;background:transparent;flex:1}
+.wiz-check{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;background:#fcfdff}
+.wiz-check input{margin-top:3px;width:18px;height:18px;flex-shrink:0}
+.wiz-check strong{display:block;font-size:14px;color:var(--ink)}
+.wiz-check span{font-size:12.5px;color:var(--muted)}
+.wiz-review{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px}
+.wiz-rv{font-size:13px}
+.wiz-rv .l{color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.03em}
+.wiz-rv .v{color:var(--ink);font-weight:600}
+.wiz-nav{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.wiz-back{background:none;border:0;color:var(--muted);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.wiz-back:disabled{opacity:.4;cursor:default}
+.wiz-next{background:linear-gradient(120deg,#5b46e0,#7b3fe4);color:#fff;border:0;border-radius:10px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+@media(max-width:640px){.wiz-grid3,.wiz-grid2,.wiz-review{grid-template-columns:1fr}.wiz-tab{min-width:0;flex:1 1 46%}.wiz-hero h2{font-size:1.1rem}}
 @media(max-width:860px){
   .cp-sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-100%);box-shadow:0 0 40px rgba(0,0,0,.3)}
   .cp-sidebar.open{transform:none}
@@ -388,16 +428,74 @@ input,select,textarea{font-family:inherit;font-size:16px}
           </div>
 
           <div class="cp-sec" id="sec-send">
-            <div class="card">
-              <div class="gift-banner"><div class="gi-ic">&#127873;</div><div class="gi-text"><strong>Refer someone who needs health insurance.</strong><span>Send their info and we will take care of the rest. Track every referral right here.</span></div></div>
-              <h3 style="font-size:16px;margin:0 0 4px">Send a referral</h3>
-              <p class="muted" style="margin:0 0 14px">Share their info and we will reach out.</p>
-              <form id="ref-form">
-                <div id="ref-msg"></div>
-                <div class="row2"><div class="field"><label>Their name</label><input id="ref-name" type="text" required /></div><div class="field"><label>Their phone</label><input id="ref-phone" type="tel" inputmode="tel" /></div></div>
-                <div class="row2"><div class="field"><label>Their email</label><input id="ref-email" type="email" /></div><div class="field"><label>Relationship</label><input id="ref-rel" type="text" placeholder="Friend, brother, coworker..." /></div></div>
-                <div class="field"><label>Notes (optional)</label><textarea id="ref-notes" rows="2" placeholder="Best time to reach them, what they are looking for..."></textarea></div>
-                <button class="btn btn-primary" type="submit">Send referral</button>
+            <div class="wiz" id="ref-wiz">
+              <div class="wiz-top"><span class="wiz-ref">Referring to <span class="wiz-ico">&#127970;</span> <strong>VS Health Benefits</strong></span><span class="wiz-appt" id="wiz-appt-state">&#128336; No appointment</span></div>
+              <div class="wiz-hero">
+                <div class="wiz-hero-ic">&#9992;</div>
+                <div><h2>Submit a Referral</h2><p>Share the referral details and confirm permission to send the lead to VS Health Benefits.</p></div>
+              </div>
+              <div class="wiz-prog"><span class="wiz-prog-fill" id="wiz-prog"></span></div>
+              <div class="wiz-tabs">
+                <button class="wiz-tab active" data-step="1" type="button"><span>&#128100;</span> Personal Info</button>
+                <button class="wiz-tab" data-step="2" type="button"><span>&#128196;</span> Custom Fields</button>
+                <button class="wiz-tab" data-step="3" type="button"><span>&#128197;</span> Appointment</button>
+                <button class="wiz-tab" data-step="4" type="button"><span>&#9989;</span> Confirmation</button>
+              </div>
+              <form id="ref-form" autocomplete="off">
+                <div id="ref-msg" style="padding:0 4px"></div>
+
+                <div class="wiz-pane active" data-pane="1">
+                  <div class="wiz-grid3">
+                    <div class="field"><label>First Name</label><input id="rf-first" type="text" placeholder="John" /></div>
+                    <div class="field"><label>Last Name</label><input id="rf-last" type="text" placeholder="Doe" /></div>
+                    <div class="field"><label>Lead Type</label><select id="rf-leadtype"><option>Insurance</option><option>Medical</option><option>Dental &amp; Vision</option><option>Medicare</option><option>Life</option><option>Other</option></select></div>
+                  </div>
+                  <div class="wiz-grid3">
+                    <div class="field"><label>Phone Number <span class="req">*</span></label><input id="rf-phone" type="tel" inputmode="tel" placeholder="(555) 123-4567" /></div>
+                    <div class="field"><label>Email</label><input id="rf-email" type="email" placeholder="john@example.com" /></div>
+                    <div class="field"><label>ZIP Code</label><input id="rf-zip" type="text" inputmode="numeric" maxlength="5" placeholder="12345" /></div>
+                  </div>
+                  <div class="wiz-grid3">
+                    <div class="field"><label>State</label><input id="rf-state" type="text" maxlength="2" placeholder="MS" style="text-transform:uppercase" /></div>
+                    <div class="field"><label>Date of Birth</label><input id="rf-dob" type="text" inputmode="numeric" placeholder="MM/DD/YYYY" /></div>
+                    <div></div>
+                  </div>
+                </div>
+
+                <div class="wiz-pane" data-pane="2">
+                  <div class="wiz-card">
+                    <div class="wiz-grid2">
+                      <div class="field"><label>Income</label><div class="wiz-money"><span>$</span><input id="rf-income" type="text" inputmode="decimal" placeholder="0.00" /></div></div>
+                      <div class="field"><label>Monthly Budget</label><div class="wiz-money"><span>$</span><input id="rf-budget" type="text" inputmode="decimal" placeholder="0.00" /></div></div>
+                    </div>
+                    <div class="field" style="margin-top:4px"><label>Notes for VS Health Benefits</label><textarea id="rf-notes" rows="3" placeholder="Coverage needs, current situation, anything that helps us serve them..."></textarea></div>
+                  </div>
+                </div>
+
+                <div class="wiz-pane" data-pane="3">
+                  <label class="wiz-check" for="rf-noappt"><input id="rf-noappt" type="checkbox" checked /><div><strong>No appointment needed</strong><span>Leave this checked if VS Health Benefits should schedule directly after receiving the referral.</span></div></label>
+                  <div id="rf-appt-fields" hidden>
+                    <div class="field" style="margin-top:14px"><label>Referral Timezone <span class="req">*</span></label>
+                      <select id="rf-tz"><option value="">Select timezone...</option><option value="ET">Eastern (ET)</option><option value="CT">Central (CT)</option><option value="MT">Mountain (MT)</option><option value="PT">Pacific (PT)</option><option value="AKT">Alaska (AKT)</option><option value="HT">Hawaii (HT)</option></select>
+                    </div>
+                    <div class="field"><label>Preferred day &amp; time</label><input id="rf-appttime" type="text" placeholder="e.g. Weekdays after 5pm, or Tue Mar 24 at 2pm" /></div>
+                  </div>
+                </div>
+
+                <div class="wiz-pane" data-pane="4">
+                  <div class="wiz-card">
+                    <h4 style="margin:0 0 10px;font-size:15px">Review &amp; confirm</h4>
+                    <div class="wiz-review" id="rf-review"></div>
+                    <label class="wiz-check" for="rf-perm" style="margin-top:14px"><input id="rf-perm" type="checkbox" /><div><strong>Permission to share</strong><span>I confirm I have this person's permission to share their information with VS Health Benefits.</span></div></label>
+                    <div class="field" style="margin-top:12px"><label>Preferred contact method</label><select id="rf-contact"><option>Phone Call</option><option>Text Message</option><option>Email</option></select></div>
+                  </div>
+                </div>
+
+                <div class="wiz-nav">
+                  <button class="wiz-back" id="wiz-prev" type="button" disabled>&#8249; Previous</button>
+                  <button class="wiz-next" id="wiz-next" type="button">Next &#8250;</button>
+                  <button class="wiz-next" id="wiz-submit" type="submit" hidden>Submit Referral</button>
+                </div>
               </form>
             </div>
           </div>
@@ -958,24 +1056,64 @@ $("msg-form").addEventListener("submit",function(e){
   renderMessages();
 });
 
+/* ── Referral wizard ── */
+var wizStep=1;var WIZ_MAX=4;
+function wizGo(n){
+  n=Math.max(1,Math.min(WIZ_MAX,n));
+  if(n>wizStep&&!wizValidate(wizStep))return;
+  wizStep=n;
+  document.querySelectorAll(".wiz-pane").forEach(function(p){p.classList.toggle("active",p.getAttribute("data-pane")==String(n));});
+  document.querySelectorAll(".wiz-tab").forEach(function(t){var s=Number(t.getAttribute("data-step"));t.classList.toggle("active",s===n);t.classList.toggle("done",s<n);});
+  var pf=$("wiz-prog");if(pf)pf.style.width=(n/WIZ_MAX*100)+"%";
+  $("wiz-prev").disabled=n===1;
+  $("wiz-next").hidden=n===WIZ_MAX;
+  $("wiz-submit").hidden=n!==WIZ_MAX;
+  if(n===4)wizRenderReview();
+  var sc=$("cp-scroll");if(sc)sc.scrollTop=0;
+}
+function wizValidate(step){
+  showNotice("ref-msg","","");
+  if(step===1){
+    if(!$("rf-first").value.trim()&&!$("rf-last").value.trim())return showNotice("ref-msg","err","Please add the person's name."),false;
+    if(!$("rf-phone").value.trim()&&!$("rf-email").value.trim())return showNotice("ref-msg","err","Please add at least a phone number or email."),false;
+  }
+  if(step===3&&!$("rf-noappt").checked&&!$("rf-tz").value)return showNotice("ref-msg","err","Pick a timezone, or check No appointment needed."),false;
+  return true;
+}
+function wizRenderReview(){
+  function row(l,v){return '<div class="wiz-rv"><div class="l">'+l+'</div><div class="v">'+escapeHtml(v||"--")+'</div></div>';}
+  var nm=($("rf-first").value.trim()+" "+$("rf-last").value.trim()).trim();
+  var appt=$("rf-noappt").checked?"No appointment needed":(($("rf-tz").value||"")+" "+($("rf-appttime").value.trim()||"")).trim();
+  $("rf-review").innerHTML=row("Name",nm)+row("Lead Type",$("rf-leadtype").value)+row("Phone",$("rf-phone").value.trim())+row("Email",$("rf-email").value.trim())+row("ZIP / State",($("rf-zip").value.trim()+" "+$("rf-state").value.trim().toUpperCase()).trim())+row("Date of Birth",$("rf-dob").value.trim())+row("Income",$("rf-income").value.trim()?("$"+$("rf-income").value.trim()):"")+row("Monthly Budget",$("rf-budget").value.trim()?("$"+$("rf-budget").value.trim()):"")+row("Appointment",appt);
+}
+$("wiz-next").addEventListener("click",function(){wizGo(wizStep+1);});
+$("wiz-prev").addEventListener("click",function(){wizGo(wizStep-1);});
+document.querySelectorAll(".wiz-tab").forEach(function(t){t.addEventListener("click",function(){var s=Number(t.getAttribute("data-step"));if(s<=wizStep||wizValidate(wizStep))wizGo(s);});});
+$("rf-noappt").addEventListener("change",function(){
+  $("rf-appt-fields").hidden=this.checked;
+  $("wiz-appt-state").innerHTML=this.checked?"&#128336; No appointment":"&#128197; Appointment requested";
+});
+
 $("ref-form").addEventListener("submit",function(e){
   e.preventDefault();
   var acct=currentAccount();if(!acct)return;
-  var name=$("ref-name").value.trim();
-  var phone=$("ref-phone").value.trim();
-  var email=$("ref-email").value.trim();
-  var rel=$("ref-rel").value.trim();
-  var notes=$("ref-notes").value.trim();
-  if(!name)return showNotice("ref-msg","err","Please add the person's name.");
-  if(!phone&&!email)return showNotice("ref-msg","err","Please add at least a phone number or email.");
-
-  var r={id:uid(),fromAccountId:acct.id,referralName:name,referralPhone:phone,referralEmail:email,relationship:rel,notes:notes,status:"new",ts:Date.now(),read:false,payout:0,paid:false};
+  if(!wizValidate(1)){wizGo(1);return;}
+  if(!$("rf-perm").checked)return showNotice("ref-msg","err","Please confirm you have permission to share their information.");
+  var first=$("rf-first").value.trim(),last=$("rf-last").value.trim();
+  var name=(first+" "+last).trim();
+  var phone=$("rf-phone").value.trim(),email=$("rf-email").value.trim();
+  var noAppt=$("rf-noappt").checked;
+  var appt=noAppt?"":(($("rf-tz").value||"")+" "+($("rf-appttime").value.trim()||"")).trim();
+  var r={id:uid(),fromAccountId:acct.id,referralName:name,firstName:first,lastName:last,referralPhone:phone,referralEmail:email,
+    leadType:$("rf-leadtype").value,zip:$("rf-zip").value.trim(),state:$("rf-state").value.trim().toUpperCase(),dob:$("rf-dob").value.trim(),
+    income:$("rf-income").value.trim(),monthlyBudget:$("rf-budget").value.trim(),notes:$("rf-notes").value.trim(),
+    appointment:appt,noAppt:noAppt,permission:true,preferredContact:$("rf-contact").value,relationship:"",
+    status:"new",ts:Date.now(),read:false,payout:0,paid:false};
   var arr=getReferrals();arr.unshift(r);saveReferrals(arr);
-
-  webhookFire({event:"client_referral",from_account_id:acct.id,from_email:acct.email,referral_name:name,referral_phone:phone,referral_email:email,relationship:rel,notes:notes,ts:Date.now()});
-
-  showNotice("ref-msg","ok","Thanks! Your referral was sent. We'll reach out to them shortly.");
-  $("ref-form").reset();
+  webhookFire({event:"client_referral",from_account_id:acct.id,from_email:acct.email,referral_name:name,referral_phone:phone,referral_email:email,lead_type:r.leadType,zip:r.zip,state:r.state,dob:r.dob,income:r.income,monthly_budget:r.monthlyBudget,appointment:appt,preferred_contact:r.preferredContact,notes:r.notes,ts:Date.now()});
+  $("ref-form").reset();$("rf-appt-fields").hidden=true;$("wiz-appt-state").innerHTML="&#128336; No appointment";
+  wizGo(1);
+  showNotice("ref-msg","ok","Thanks! Your referral was sent to VS Health Benefits. We will reach out to them shortly.");
   renderMyReferrals();renderRefStats();
 });
 
