@@ -175,6 +175,24 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .ft-bottom{border-top:1px solid rgba(255,255,255,.1);padding:20px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#5a8ab0;flex-wrap:wrap;gap:8px}
 
 [hidden]{display:none !important}
+/* Referral stat cards */
+.ref-stats{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:16px}
+@media(min-width:560px){.ref-stats{grid-template-columns:repeat(3,1fr)}}
+.rstat{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:18px 20px}
+.rstat-ic{font-size:22px;margin-bottom:8px}
+.rstat-num{font-size:30px;font-weight:800;color:var(--blue-900);line-height:1.1;letter-spacing:-.02em}
+.rstat-lbl{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+/* Getting started */
+.gs-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:18px 20px;margin-bottom:16px}
+.gs-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.gs-head strong{color:var(--blue-900);font-size:15px}
+.gs-sub{font-size:12.5px;color:var(--muted)}
+.gs-bar{height:8px;background:#eef2f8;border-radius:999px;overflow:hidden;margin-bottom:14px}
+.gs-fill{height:100%;background:linear-gradient(90deg,var(--blue-600),var(--teal));border-radius:999px;transition:width .4s}
+.gs-step{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-2);padding:6px 0}
+.gs-step .gs-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.gs-step.done{color:var(--muted)}
+.gs-step.done .gs-check{background:var(--ok);border-color:var(--ok)}
 </style>
 </head>
 <body>
@@ -279,6 +297,9 @@ input,select,textarea{font-family:inherit;font-size:16px}
       </div>
     </div>
 
+    <div class="ref-stats" id="ref-stats"></div>
+    <div id="getting-started"></div>
+
     <div class="card" style="padding:0">
       <div class="dtabs" role="tablist">
         <button id="dtab-profile" class="active" type="button" role="tab">Profile</button>
@@ -300,7 +321,16 @@ input,select,textarea{font-family:inherit;font-size:16px}
             <div class="item"><div class="lbl">Phone</div><div class="val" id="pv-phone">--</div></div>
             <div class="item"><div class="lbl">Member since</div><div class="val" id="pv-since">--</div></div>
           </div>
-          <div class="notice notice-info">Need to update your name, email, or phone? <a href="/contact">Send your advisor a message</a> and they'll update your file.</div>
+          <form id="prof-form" autocomplete="off" style="margin-top:4px">
+            <div id="prof-msg"></div>
+            <div class="row2">
+              <div class="field"><label for="prof-first">First name</label><input id="prof-first" type="text" autocomplete="given-name" /></div>
+              <div class="field"><label for="prof-last">Last name</label><input id="prof-last" type="text" autocomplete="family-name" /></div>
+            </div>
+            <div class="field"><label for="prof-phone">Phone</label><input id="prof-phone" type="tel" autocomplete="tel" /></div>
+            <button class="btn btn-primary" type="submit">Save profile</button>
+            <p class="hint" style="margin-top:8px">Your email is your login. To change it, message your advisor.</p>
+          </form>
 
           <div class="sec-title"><h3>Change password</h3></div>
           <div class="subcard">
@@ -746,9 +776,78 @@ function showDashboard(){
   $("pv-phone").textContent=acct.phone||"--";
   $("pv-since").textContent=fmtDate(acct.created);
 
+  $("prof-first").value=acct.firstName||"";
+  $("prof-last").value=acct.lastName||"";
+  $("prof-phone").value=acct.phone||"";
+
   renderPlan();
   renderMessages();
   renderMyReferrals();
+  renderRefStats();
+  checkSoldReferrals();
+}
+function refStats(acct){
+  var mine=getReferrals().filter(function(r){return r.fromAccountId===acct.id;});
+  var sold=mine.filter(function(r){return r.status==="sold"||r.status==="paid";});
+  var earned=sold.reduce(function(s,r){return s+(Number(r.payout)||0);},0);
+  return {sent:mine.length,sold:sold.length,earned:earned};
+}
+function rstatCard(label,val,ic){return '<div class="rstat"><div class="rstat-ic">'+ic+'</div><div class="rstat-num">'+val+'</div><div class="rstat-lbl">'+label+'</div></div>';}
+function renderRefStats(){
+  var acct=currentAccount();if(!acct)return;
+  var s=refStats(acct);
+  var box=$("ref-stats");if(box)box.innerHTML=rstatCard("Referrals Sent",s.sent,"📨")+rstatCard("Sold",s.sold,"🎯")+rstatCard("Earned","$"+s.earned.toFixed(2),"💰");
+  renderGettingStarted(acct,s);
+}
+function renderGettingStarted(acct,s){
+  var box=$("getting-started");if(!box)return;
+  var steps=[
+    {label:"Complete your profile (name, email, phone)",done:!!(acct.firstName&&acct.lastName&&acct.email&&acct.phone)},
+    {label:"Send your first referral",done:s.sent>0},
+    {label:"Close your first deal",done:s.sold>0}
+  ];
+  var done=steps.filter(function(x){return x.done;}).length;
+  if(done>=steps.length){box.innerHTML="";return;}
+  var pct=Math.round(done/steps.length*100);
+  box.innerHTML='<div class="gs-card"><div class="gs-head"><strong>Getting Started</strong><span class="gs-sub">'+done+' of '+steps.length+' complete &middot; '+pct+'%</span></div>'
+    +'<div class="gs-bar"><div class="gs-fill" style="width:'+pct+'%"></div></div>'
+    +steps.map(function(st){return '<div class="gs-step'+(st.done?" done":"")+'"><span class="gs-check">'+(st.done?"✓":"")+'</span>'+st.label+'</div>';}).join("")+'</div>';
+}
+function checkSoldReferrals(){
+  var acct=currentAccount();if(!acct)return;
+  var arr=getReferrals();var changed=false;var newly=null;
+  arr.forEach(function(r){
+    if(r.fromAccountId===acct.id&&r.status==="sold"&&!r.soldNotified){r.soldNotified=true;changed=true;newly=r;}
+  });
+  if(changed){
+    saveReferrals(arr);
+    if(!$("dash-view").hidden){renderRefStats();renderMyReferrals();}
+    if(newly){showSoldCelebration(newly);try{webhookFire({event:"referral_sold_seen",account_id:acct.id,referralId:newly.id,ts:Date.now()});}catch(e){}}
+  }
+}
+function clientConfetti(){
+  try{
+    var c=document.createElement("canvas");c.style.cssText="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:100001";document.body.appendChild(c);
+    var x=c.getContext("2d"),W=c.width=innerWidth,H=c.height=innerHeight,cols=["#16447f","#0db5a6","#2f7de0","#f5b301","#f472b6","#34d399"],P=[];
+    for(var i=0;i<160;i++)P.push({x:Math.random()*W,y:-20-Math.random()*200,w:7+Math.random()*7,h:6+Math.random()*6,c:cols[i%cols.length],a:Math.random()*6,s:(Math.random()-.5)*.3,vx:(Math.random()-.5)*3.5,vy:2.5+Math.random()*4,o:1});
+    var t0=Date.now();(function f(){var e=Date.now()-t0;x.clearRect(0,0,W,H);P.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.07;p.a+=p.s;if(e>2200)p.o-=.018;x.save();x.globalAlpha=Math.max(0,p.o);x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore();});if(e<3800&&P.some(function(p){return p.o>0;}))requestAnimationFrame(f);else c.remove();})();
+  }catch(e){}
+}
+function showSoldCelebration(r){
+  clientConfetti();
+  var earned=Number(r.payout)||0;
+  var bg=document.createElement("div");
+  bg.style.cssText="position:fixed;inset:0;background:rgba(11,35,70,.55);display:flex;align-items:center;justify-content:center;z-index:100002;padding:20px";
+  bg.innerHTML='<div style="background:#fff;border-radius:18px;max-width:420px;width:100%;padding:30px 26px;text-align:center;box-shadow:0 24px 60px rgba(11,35,70,.3)">'
+    +'<div style="font-size:54px;line-height:1">🎉</div>'
+    +'<h2 style="margin:8px 0 4px;color:var(--blue-900);font-size:22px">Your referral sold!</h2>'
+    +'<p style="color:var(--ink-2);margin:0 0 6px">'+escapeHtml(r.referralName||"Your referral")+' just became a client.</p>'
+    +(earned>0?'<p style="font-weight:700;color:var(--ok);font-size:18px;margin:0 0 16px">You earned $'+earned.toFixed(2)+'</p>':'<div style="height:10px"></div>')
+    +'<button class="btn btn-primary" id="sold-ok" style="width:100%">Awesome!</button></div>';
+  document.body.appendChild(bg);
+  function close(){bg.remove();}
+  bg.addEventListener("click",function(e){if(e.target===bg)close();});
+  var ok=bg.querySelector("#sold-ok");if(ok)ok.addEventListener("click",close);
 }
 
 function renderPlan(){
@@ -826,9 +925,22 @@ $("ref-form").addEventListener("submit",function(e){
 
   webhookFire({event:"client_referral",from_account_id:acct.id,from_email:acct.email,referral_name:name,referral_phone:phone,referral_email:email,relationship:rel,notes:notes,ts:Date.now()});
 
-  showNotice("ref-msg","ok","Thanks! Your referral was sent and you're entered in our gift drawing.");
+  showNotice("ref-msg","ok","Thanks! Your referral was sent. We'll reach out to them shortly.");
   $("ref-form").reset();
-  renderMyReferrals();
+  renderMyReferrals();renderRefStats();
+});
+
+$("prof-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  var acct=currentAccount();if(!acct)return;
+  var first=$("prof-first").value.trim(),last=$("prof-last").value.trim(),phone=$("prof-phone").value.trim();
+  var arr=getAccounts().map(function(a){if(a.id===acct.id){a.firstName=first;a.lastName=last;a.phone=phone;a.updated=Date.now();}return a;});
+  saveAccounts(arr);
+  $("dh-name").textContent=(first+" "+last).trim()||"Member";
+  $("pv-name").textContent=(first+" "+last).trim()||"--";$("pv-phone").textContent=phone||"--";
+  renderRefStats();
+  showNotice("prof-msg","ok","Profile saved.");
+  try{webhookFire({event:"client_profile_updated",account_id:acct.id,ts:Date.now()});}catch(e){}
 });
 
 function renderMyReferrals(){
@@ -839,7 +951,7 @@ function renderMyReferrals(){
   mine.forEach(function(r){
     var d=document.createElement("div");d.className="subcard";d.style.padding="12px 14px";
     var status=r.status||"new";
-    var statusColor={"new":"#1e5ab0","contacted":"#b46b00","quoted":"#0b6996","enrolled":"#0a8754","lost":"#b3261e","in-progress":"#1e5ab0","declined":"#b3261e","paid":"#0a8754"}[status]||"#1e5ab0";
+    var statusColor={"new":"#1e5ab0","contacted":"#b46b00","quoted":"#0b6996","enrolled":"#0a8754","sold":"#0a8754","lost":"#b3261e","in-progress":"#1e5ab0","declined":"#b3261e","paid":"#0a8754"}[status]||"#1e5ab0";
     d.innerHTML=
       '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px">'+
         '<strong style="color:var(--blue-900)">'+escapeHtml(r.referralName||"(no name)")+'</strong>'+
@@ -894,7 +1006,7 @@ onAuthStateChanged(auth,async function(user){
     }
   });
   subscribe("messages",function(){if(!$("dash-view").hidden)renderMessages();});
-  subscribe("referrals",function(){if(!$("dash-view").hidden)renderMyReferrals();});
+  subscribe("referrals",function(){checkSoldReferrals();if(!$("dash-view").hidden){renderMyReferrals();renderRefStats();}});
 
   if(getSession())showDashboard();
 });
