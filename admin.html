@@ -1997,6 +1997,13 @@ async function initCloud(){
             addNotif("support","Support request from "+who,(t.message?String(t.message).slice(0,80):"Submitted via the contact form"),"support");
           });
         }
+        if(rk==="accounts"&&$("shell")&&!$("shell").hidden){
+          var prevAcctIds={};prevItems.forEach(function(a){if(a&&a.id)prevAcctIds[a.id]=true;});
+          items.filter(function(a){return a&&a.id&&!prevAcctIds[a.id]&&a.selfSignup&&(Date.now()-(a.created||0))<15*60*1000;}).forEach(function(a){
+            var nm=((a.firstName||"")+" "+(a.lastName||"")).trim()||a.email||"New user";
+            addNotif("lead","New account created: "+nm,(a.email||"")+(a.phone?(" · "+a.phone):"")+" signed up for the client portal","users");
+          });
+        }
         if(!$("shell").hidden){
           if(rk==="leads"){renderLeads();renderPipeline();renderTasks();if(typeof checkTaskNotifications==="function")setTimeout(checkTaskNotifications,300);}
           if(rk==="accounts"){renderAccounts();renderSupport();renderAdminsList();renderPipeline();if(typeof renderUsers==="function")renderUsers();}

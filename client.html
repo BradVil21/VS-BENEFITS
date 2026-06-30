@@ -826,7 +826,7 @@ $("signup-form").addEventListener("submit",async function(e){
   if(accts.some(function(a){return normEmail(a.email)===email;}))return showNotice("signup-msg","err","An account with this email already exists. Try signing in instead.");
 
   var hash=await sha256(pw);
-  var acct={id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:Date.now(),status:"active",plan:null,photoDataUrl:"",welcomePending:true};
+  var acct={id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:Date.now(),status:"active",plan:null,photoDataUrl:"",welcomePending:true,selfSignup:true};
   accts.push(acct);
   saveAccounts(accts);
   setSession({id:acct.id,email:acct.email,since:Date.now()});
