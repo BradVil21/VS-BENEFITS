@@ -819,7 +819,14 @@ $("signup-form").addEventListener("submit",async function(e){
     created_iso:new Date(acct.created).toISOString(),
     source:"vshealthbenefits.com",
     page:"/client.html",
-    user_agent:navigator.userAgent
+    user_agent:navigator.userAgent,
+    // Account-created confirmation email to the new member
+    notify:"account_created",
+    send_email:true,
+    to_email:email,
+    to_name:(first+" "+last).trim(),
+    email_subject:"Welcome to VS Health Benefits — your account is ready",
+    email_body:"Hi "+first+",\n\nYour VS Health Benefits member account was created successfully. You can sign in any time at https://www.vshealthbenefits.com/client to view your plan, send referrals, and message your advisor.\n\nIf you did not create this account, please reply to this email or call (954) 825-1009.\n\nThank you,\nVS Health Benefits"
   });
 
   showDashboard();
