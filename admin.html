@@ -3060,6 +3060,17 @@ function moveTicket(id,stage){
 }
 function renderTicketBoard(){
   var board=$("ticket-board");if(!board)return;
+  if(!board._panInit){
+    board._panInit=true;
+    var isDown=false,startX=0,startScroll=0;
+    board.addEventListener("mousedown",function(e){
+      var t=e.target;
+      if(t.closest&&t.closest(".pl-card, button, select, a, input, textarea, .move-select"))return;
+      isDown=true;startX=e.pageX;startScroll=board.scrollLeft;board.classList.add("panning");
+    });
+    window.addEventListener("mousemove",function(e){if(!isDown)return;e.preventDefault();board.scrollLeft=startScroll-(e.pageX-startX);});
+    window.addEventListener("mouseup",function(){if(isDown){isDown=false;board.classList.remove("panning");}});
+  }
   board.innerHTML="";
   var tickets=getTickets();
   TICKET_STAGES.forEach(function(stage){
@@ -3976,11 +3987,11 @@ function showBdayPopup(clients){
     var c=clients[0];var age=calcAge(c.dob);
     body.appendChild(el("div",{class:"bday-name",text:fullName(c)}));
     body.appendChild(el("div",{class:"bday-age",html:age?"Turning "+age+" today <svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M12 14c3 0 5-2.5 5-6s-2-6-5-6-5 2.5-5 6 2 6 5 6z'/><path d='M12 14v3M11 20s1-1 1-3'/></svg>":"Birthday today! <svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M12 14c3 0 5-2.5 5-6s-2-6-5-6-5 2.5-5 6 2 6 5 6z'/><path d='M12 14v3M11 20s1-1 1-3'/></svg>"}));
-    var msg=el("div",{class:"bday-msg"});msg.textContent="\"Happy Birthday, "+((c.firstName||fullName(c)).split(" ")[0])+"! Wishing you a wonderful day. We're grateful to have you as a client. <svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M3 21l5-13 8 8-13 5z'/><path d='M14 6c1-1 3-1 4 0M16 3v3M20 8c1 0 2 1 2 2M13 11l6 6'/></svg>\"";
+    var msg=el("div",{class:"bday-msg"});msg.textContent="\"Happy Birthday, "+((c.firstName||fullName(c)).split(" ")[0])+"! Wishing you a wonderful day. We're grateful to have you as a client.\"";
     body.appendChild(msg);
     var acts=el("div",{class:"bday-actions"});
     if(c.phone)acts.appendChild(el("a",{class:"btn btn-primary",href:"tel:"+String(c.phone).replace(/[^0-9+]/g,""),html:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z'/></svg> Call to wish them Happy Birthday!"}));
-    if(c.email){var subj=encodeURIComponent("Happy Birthday, "+(c.firstName||fullName(c))+"! <svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M4 21h16M5 21v-7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7M3 14c1 0 1.5-1 3-1s2 1 3 1 1.5-1 3-1 2 1 3 1 1.5-1 3-1M12 8v3M12 4v1'/></svg>");var bod=encodeURIComponent("Hi "+(c.firstName||fullName(c))+",\n\nWishing you a very Happy Birthday!\n\nWarm regards,\nVS Health Benefits");acts.appendChild(el("a",{class:"btn btn-ghost",href:"mailto:"+c.email+"?subject="+subj+"&body="+bod,html:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/></svg>️ Send Birthday Email"}));}
+    if(c.email){var subj=encodeURIComponent("Happy Birthday, "+(c.firstName||fullName(c))+"!");var bod=encodeURIComponent("Hi "+(c.firstName||fullName(c))+",\n\nWishing you a very Happy Birthday!\n\nWarm regards,\nVS Health Benefits");acts.appendChild(el("a",{class:"btn btn-ghost",href:"mailto:"+c.email+"?subject="+subj+"&body="+bod,html:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/></svg>️ Send Birthday Email"}));}
     body.appendChild(acts);
   }else{
     body.appendChild(el("div",{class:"bday-name",style:"font-size:19px",html:clients.length+" clients have birthdays today! <svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M12 14c3 0 5-2.5 5-6s-2-6-5-6-5 2.5-5 6 2 6 5 6z'/><path d='M12 14v3M11 20s1-1 1-3'/></svg>"}));
@@ -3991,7 +4002,7 @@ function showBdayPopup(clients){
       var info=el("div",{class:"bli-info"});info.appendChild(el("div",{class:"bli-name",text:fullName(c)}));info.appendChild(el("div",{class:"bli-detail",text:(age?"Turning "+age+" · ":"")+(c.phone||c.email||"")}));item.appendChild(info);
       var qa=el("div",{class:"bli-actions"});
       if(c.phone)qa.appendChild(el("a",{class:"btn btn-teal btn-xs",href:"tel:"+String(c.phone).replace(/[^0-9+]/g,""),html:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z'/></svg>"}));
-      if(c.email){var s2=encodeURIComponent("Happy Birthday, "+(c.firstName||fullName(c))+"! <svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M4 21h16M5 21v-7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7M3 14c1 0 1.5-1 3-1s2 1 3 1 1.5-1 3-1 2 1 3 1 1.5-1 3-1M12 8v3M12 4v1'/></svg>");var b2=encodeURIComponent("Hi "+(c.firstName||fullName(c))+",\n\nHappy Birthday!\n\nVS Health Benefits");qa.appendChild(el("a",{class:"btn btn-ghost btn-xs",href:"mailto:"+c.email+"?subject="+s2+"&body="+b2,html:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/></svg>"}));}
+      if(c.email){var s2=encodeURIComponent("Happy Birthday, "+(c.firstName||fullName(c))+"!");var b2=encodeURIComponent("Hi "+(c.firstName||fullName(c))+",\n\nHappy Birthday!\n\nVS Health Benefits");qa.appendChild(el("a",{class:"btn btn-ghost btn-xs",href:"mailto:"+c.email+"?subject="+s2+"&body="+b2,html:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/></svg>"}));}
       item.appendChild(qa);list.appendChild(item);
     });
     body.appendChild(list);
