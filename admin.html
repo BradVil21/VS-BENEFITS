@@ -2579,7 +2579,7 @@ function renderPipeline(){
     var col=el("div",{class:"pl-col pl-"+stage});
     col.appendChild(el("div",{class:"pl-accent"}));
     var hdr=el("div",{class:"pl-head"});
-    hdr.appendChild(el("span",{class:"pl-title",text:STAGE_LABELS[stage]}));
+    hdr.appendChild(el("span",{class:"pl-title",html:STAGE_LABELS[stage]}));
     hdr.appendChild(el("span",{class:"pl-count",text:stageItems.length+(stageItems.length===1?" lead":" leads")}));
     col.appendChild(hdr);
     if(stageSum>0)col.appendChild(el("div",{class:"pl-substat",text:money(stageSum)+" total"}));
@@ -2619,8 +2619,8 @@ function renderPipeline(){
       top.appendChild(nm);
       card.appendChild(top);
       if(item.coverage)card.appendChild(el("span",{class:"pl-tag",text:item.coverage}));
-      var contact=item.phone?("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z'/></svg> "+item.phone):(item.email?("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/></svg>️ "+item.email):"");
-      if(contact)card.appendChild(el("div",{class:"pl-meta",text:contact}));
+      var contact=item.phone?("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z'/></svg> "+escapeHtml(item.phone)):(item.email?("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/></svg>️ "+escapeHtml(item.email)):"");
+      if(contact)card.appendChild(el("div",{class:"pl-meta",html:contact}));
       if(item.notes)card.appendChild(el("div",{class:"pl-note",text:item.notes}));
       card.appendChild(el("div",{class:"pl-divider"}));
       var bot=el("div",{class:"pl-card-bottom"});
@@ -3081,8 +3081,8 @@ function renderTicketBoard(){
       nm.appendChild(el("strong",{text:ticketName(t)}));
       top.appendChild(nm);card.appendChild(top);
       if(t.message){var mt=String(t.message);card.appendChild(el("div",{class:"pl-note",text:mt.slice(0,90)+(mt.length>90?"…":"")}));}
-      var contact=t.phone?("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z'/></svg> "+t.phone):(t.email?("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/></svg>️ "+t.email):"");
-      if(contact)card.appendChild(el("div",{class:"pl-meta",text:contact}));
+      var contact=t.phone?("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z'/></svg> "+escapeHtml(t.phone)):(t.email?("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/></svg>️ "+escapeHtml(t.email)):"");
+      if(contact)card.appendChild(el("div",{class:"pl-meta",html:contact}));
       card.appendChild(el("div",{class:"pl-divider"}));
       var bot=el("div",{class:"pl-card-bottom"});
       bot.appendChild(el("div",{class:"pl-date",text:fmtDate(t.created)}));
@@ -3891,8 +3891,8 @@ function renderTasks(){
     var hl=el("div",{class:"seq-head-left"});
     hl.appendChild(el("h3",{html:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><circle cx='12' cy='12' r='9'/><circle cx='12' cy='12' r='5'/><circle cx='12' cy='12' r='1.5'/></svg> "+fullName(lead)}));
     var meta=el("div",{class:"seq-meta"});
-    var bits=[];if(lead.phone)bits.push("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z'/></svg> "+lead.phone);if(lead.email)bits.push("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/></svg> "+lead.email);
-    meta.textContent=bits.join("  ·  ");hl.appendChild(meta);head.appendChild(hl);
+    var bits=[];if(lead.phone)bits.push("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z'/></svg> "+escapeHtml(lead.phone));if(lead.email)bits.push("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/></svg> "+escapeHtml(lead.email));
+    meta.innerHTML=bits.join("  ·  ");hl.appendChild(meta);head.appendChild(hl);
     var badges=el("div",{style:"display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0"});
     badges.appendChild(el("span",{class:"seq-day-badge",text:"Day "+curDay+" of 7"}));
     if(pending>0)badges.appendChild(el("span",{class:"seq-pending-badge",text:pending+" left today"}));
