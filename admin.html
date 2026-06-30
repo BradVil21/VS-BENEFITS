@@ -328,6 +328,9 @@ html.dark .tbl .row:hover{box-shadow:0 8px 28px rgba(0,0,0,.5)}
 .users-stats .ustat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;text-align:center}
 html.dark .users-stats .ustat{background:#1c2d42;border-color:#253a54}
 .users-stats .un{font-size:24px;font-weight:800;color:var(--blue-900);line-height:1.1}
+.ustat-live .un{display:flex;align-items:center;justify-content:center;gap:8px}
+.live-dot{width:9px;height:9px;border-radius:50%;background:#2dbd79;box-shadow:0 0 0 0 rgba(45,189,121,.6);animation:livePulse 1.6s ease-out infinite}
+@keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(45,189,121,.55)}70%{box-shadow:0 0 0 8px rgba(45,189,121,0)}100%{box-shadow:0 0 0 0 rgba(45,189,121,0)}}
 html.dark .users-stats .un{color:#d4e8ff}
 .users-stats .ul{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-top:2px}
 @media(max-width:560px){.users-stats{grid-template-columns:1fr}}
@@ -3903,7 +3906,7 @@ function renderTasks(){
       var done=isTaskDone(lead.id,curDay,i);
       var item=el("div",{class:"task-item"+(done?" task-done":"")});
       var cb=el("div",{class:"task-cb"+(done?" checked":""),onclick:function(){if(done)return;markTaskDone(lead.id,curDay,i);item.classList.add("task-done");cb.classList.add("checked");renderTasks();}});
-      item.appendChild(cb);item.appendChild(el("div",{class:"task-icon",text:task.icon}));
+      item.appendChild(cb);item.appendChild(el("div",{class:"task-icon",html:task.icon}));
       var txt=el("div",{class:"task-text"});txt.appendChild(el("div",{class:"task-main",text:task.label}));txt.appendChild(el("div",{class:"task-sub",text:task.sub}));item.appendChild(txt);
       var qa=el("div",{class:"task-quick"});
       if(task.type==="call"&&lead.phone)qa.appendChild(el("a",{class:"btn btn-teal btn-xs",href:"tel:"+String(lead.phone).replace(/[^0-9+]/g,""),html:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z'/></svg> Call"}));
@@ -3916,7 +3919,7 @@ function renderTasks(){
       var nextDay=curDay+1;var nextTasks=SEQ_DAYS[Math.min(nextDay-1,6)];
       var preview=el("div",{class:"next-day-preview"});
       preview.appendChild(el("div",{class:"ndp-label",html:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='3' y='4' width='18' height='18' rx='2'/><path d='M16 2v4M8 2v4M3 10h18'/></svg> Day "+nextDay+" preview"}));
-      nextTasks.forEach(function(nt){var row=el("div",{class:"ndp-task"});row.appendChild(el("span",{class:"ndp-icon",text:nt.icon}));row.appendChild(document.createTextNode(nt.label));preview.appendChild(row);});
+      nextTasks.forEach(function(nt){var row=el("div",{class:"ndp-task"});row.appendChild(el("span",{class:"ndp-icon",html:nt.icon}));row.appendChild(document.createTextNode(nt.label));preview.appendChild(row);});
       card.appendChild(preview);
     }
     var footer=el("div",{class:"seq-footer"});
@@ -4679,7 +4682,7 @@ function renderUsers(){
   var newN=accts.filter(function(a){return (a.created||0)>=Date.now()-7*864e5;}).length;
   var stats=$("users-stats");
   if(stats)stats.innerHTML='<div class="ustat"><div class="un">'+accts.length+'</div><div class="ul">Total users</div></div>'+
-    '<div class="ustat"><div class="un" style="color:#0a8754">'+onlineN+'</div><div class="ul">Online now</div></div>'+
+    '<div class="ustat ustat-live"><div class="un" style="color:#0a8754"><span class="live-dot"></span>'+onlineN+'</div><div class="ul">Online now</div></div>'+
     '<div class="ustat"><div class="un">'+newN+'</div><div class="ul">New this week</div></div>';
   var rows=accts.filter(function(a){return !q||[a.firstName,a.lastName,a.email,a.phone].join(" ").toLowerCase().indexOf(q)>=0;});
   var sort=($("users-sort")&&$("users-sort").value)||"active";
@@ -4733,6 +4736,11 @@ function renderUsers(){
     getAccounts().forEach(function(a){var lt=userLastTs(a);rows.push([fullName(a),a.email||"",a.phone||"",a.status||"active",a.created?new Date(a.created).toISOString():"",lt?new Date(lt).toISOString():""].map(csvEscape));});
     downloadFile("users-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
   });
+  // Keep the online-now count live while viewing the Users tab
+  setInterval(function(){
+    var p=$("p-users");var sh=$("shell");
+    if(p&&p.classList.contains("active")&&sh&&!sh.hidden)renderUsers();
+  },20000);
 })();
 function switchTab(name){
   ALL_TABS.forEach(function(n){var pn=$("p-"+n);if(pn)pn.classList.toggle("active",n===name);});
