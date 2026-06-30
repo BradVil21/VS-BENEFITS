@@ -295,6 +295,30 @@ input,select,textarea{font-family:inherit;font-size:16px}
   .cp-hero{padding:24px 18px}
   .cp-content{padding:16px}
 }
+/* ── First-login onboarding ── */
+.cp-onboard{position:fixed;inset:0;z-index:100050;background:linear-gradient(135deg,#0b2346,#16447f 58%,#0db5a6);display:flex;align-items:center;justify-content:center;padding:24px}
+.cp-onboard-card{max-width:540px;width:100%;text-align:center;color:#fff}
+.cp-onboard-logo{width:64px;height:64px;border-radius:16px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;margin:0 auto 22px}
+.cp-onboard-card h2{color:#fff;font-size:clamp(1.45rem,4.4vw,2.1rem);min-height:1.3em;margin:0 0 12px;font-weight:800;line-height:1.25}
+.cp-onboard-card .cp-type2{color:rgba(255,255,255,.92);font-size:1.08rem;min-height:1.4em;margin:0 0 28px}
+.cp-onboard-acts{display:flex;flex-direction:column;gap:12px;align-items:center}
+.cp-onboard-acts .btn{min-width:230px}
+.cp-skip{background:none;border:0;color:rgba(255,255,255,.82);font-size:13.5px;cursor:pointer;font-family:inherit;text-decoration:underline}
+.cp-caret::after{content:"";display:inline-block;width:2px;height:1em;background:#fff;margin-left:3px;animation:cpCaret .8s steps(1) infinite;vertical-align:-2px}
+@keyframes cpCaret{50%{opacity:0}}
+.cp-tour-backdrop{position:fixed;inset:0;z-index:100040;background:rgba(11,35,70,.42)}
+.cp-tour-card{position:fixed;z-index:100041;left:50%;bottom:26px;transform:translateX(-50%);width:min(450px,calc(100vw - 28px));background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(11,35,70,.3);padding:20px 22px}
+.cp-tour-step{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-dark);margin-bottom:6px}
+.cp-tour-card h3{margin:0 0 6px;color:var(--blue-900);font-size:1.2rem}
+.cp-tour-card p{margin:0 0 14px;color:var(--ink-2);font-size:14.5px;line-height:1.55}
+.cp-tour-dots{display:flex;gap:6px;margin-bottom:16px}
+.cp-tdot{width:7px;height:7px;border-radius:50%;background:#dfe6f1;transition:width .2s,background .2s}
+.cp-tdot.on{background:var(--blue-600);width:20px;border-radius:999px}
+.cp-tour-nav{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cp-tbtn{border:0;border-radius:10px;padding:10px 18px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;background:#eef2f8;color:var(--ink-2)}
+.cp-tbtn.primary{background:linear-gradient(120deg,#16447f,#0db5a6);color:#fff}
+.cp-navitem.tour-hi{outline:2px solid #34d399;outline-offset:-2px;background:rgba(52,211,153,.18)!important;border-radius:10px}
+@media(max-width:860px){.cp-tour-card{bottom:14px}}
 </style>
 </head>
 <body>
@@ -802,7 +826,7 @@ $("signup-form").addEventListener("submit",async function(e){
   if(accts.some(function(a){return normEmail(a.email)===email;}))return showNotice("signup-msg","err","An account with this email already exists. Try signing in instead.");
 
   var hash=await sha256(pw);
-  var acct={id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:Date.now(),status:"active",plan:null,photoDataUrl:""};
+  var acct={id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:Date.now(),status:"active",plan:null,photoDataUrl:"",welcomePending:true};
   accts.push(acct);
   saveAccounts(accts);
   setSession({id:acct.id,email:acct.email,since:Date.now()});
@@ -953,6 +977,7 @@ function showDashboard(){
   checkSoldReferrals();
   cpRenderNotifs();
   touchPresence();
+  if(acct.welcomePending&&!window.__cpOnboarded){window.__cpOnboarded=true;setTimeout(function(){cpStartOnboarding(acct.firstName||"there");},450);}
 }
 function refStats(acct){
   var mine=getReferrals().filter(function(r){return r.fromAccountId===acct.id;});
@@ -1288,6 +1313,72 @@ function cpMarkSeen(kind){
   document.addEventListener("click",function(e){var n=$("cp-notif");if(n&&!n.hidden&&!(e.target.closest&&e.target.closest(".cp-bell-wrap")))n.hidden=true;});
 })();
 function cpGreeting(name){var h=new Date().getHours();var g=h<12?"Good morning":h<18?"Good afternoon":"Good evening";return g+", "+(name||"there");}
+
+/* ── First-login onboarding (welcome + guided tour) ── */
+function cpClearWelcome(){
+  var acct=currentAccount();if(!acct)return;
+  var arr=getAccounts().map(function(a){if(a.id===acct.id)a.welcomePending=false;return a;});
+  saveAccounts(arr);
+}
+function cpTypeText(node,text,cb){
+  if(!node)return;node.textContent="";node.classList.add("cp-caret");var i=0;
+  (function step(){
+    if(i<=text.length){node.textContent=text.slice(0,i);i++;setTimeout(step,36);}
+    else{node.classList.remove("cp-caret");if(cb)setTimeout(cb,250);}
+  })();
+}
+function cpStartOnboarding(name){
+  if(document.querySelector(".cp-onboard"))return;
+  var bg=document.createElement("div");bg.className="cp-onboard";
+  bg.innerHTML='<div class="cp-onboard-card">'
+    +'<div class="cp-onboard-logo">VS</div>'
+    +'<h2 id="cp-type1"></h2>'
+    +'<p class="cp-type2" id="cp-type2"></p>'
+    +'<div class="cp-onboard-acts" id="cp-onboard-acts" style="opacity:0">'
+    +'<button class="btn btn-primary" id="cp-tour-start" type="button">Take the quick tour</button>'
+    +'<button class="cp-skip" id="cp-tour-skip" type="button">Skip tutorial</button>'
+    +'</div></div>';
+  document.body.appendChild(bg);
+  cpTypeText($("cp-type1"),"Welcome "+name+" to the VS Health Benefits client portal",function(){
+    cpTypeText($("cp-type2"),"We are glad to have you as a client.",function(){
+      var acts=$("cp-onboard-acts");if(acts){acts.style.transition="opacity .45s";acts.style.opacity="1";}
+    });
+  });
+  $("cp-tour-start").addEventListener("click",function(){bg.remove();cpTour();});
+  $("cp-tour-skip").addEventListener("click",function(){bg.remove();cpClearWelcome();});
+}
+var CP_TOUR=[
+  {sec:"dashboard",t:"Your dashboard",b:"See your referrals sent, sold, and total earned at a glance, and finish setting up your account."},
+  {sec:"send",t:"Send a referral",b:"Refer anyone who needs health insurance. Add their details and we take care of the rest. You earn when they enroll."},
+  {sec:"referrals",t:"Track your referrals",b:"Every referral you send appears here with its live status, from In Progress to Paid."},
+  {sec:"plan",t:"Your plan",b:"View your current coverage and plan details. Your advisor keeps this up to date for you."},
+  {sec:"support",t:"Message support",b:"Reach your advisor directly with any question. We typically reply within 24 hours."},
+  {sec:"settings",t:"Your settings",b:"Update your profile, add a photo, and change your password any time."}
+];
+function cpTour(){
+  var step=0;
+  var bd=document.createElement("div");bd.className="cp-tour-backdrop";document.body.appendChild(bd);
+  var card=document.createElement("div");card.className="cp-tour-card";document.body.appendChild(card);
+  function clearHi(){document.querySelectorAll(".cp-navitem.tour-hi").forEach(function(n){n.classList.remove("tour-hi");});}
+  function finish(){clearHi();card.remove();bd.remove();cpClearWelcome();cpNav("dashboard");}
+  function render(){
+    var s=CP_TOUR[step];cpNav(s.sec);clearHi();
+    var nav=document.querySelector('.cp-navitem[data-sec="'+s.sec+'"]');if(nav)nav.classList.add("tour-hi");
+    var dots=CP_TOUR.map(function(_,i){return '<span class="cp-tdot'+(i===step?" on":"")+'"></span>';}).join("");
+    card.innerHTML='<div class="cp-tour-step">Step '+(step+1)+' of '+CP_TOUR.length+'</div>'
+      +'<h3>'+s.t+'</h3><p>'+s.b+'</p>'
+      +'<div class="cp-tour-dots">'+dots+'</div>'
+      +'<div class="cp-tour-nav"><button class="cp-skip" id="cp-tour-end" type="button" style="color:var(--muted)">Skip tour</button>'
+      +'<div style="display:flex;gap:8px">'
+      +(step>0?'<button class="cp-tbtn" id="cp-tour-back" type="button">Back</button>':'')
+      +'<button class="cp-tbtn primary" id="cp-tour-next" type="button">'+(step===CP_TOUR.length-1?"Finish":"Next")+'</button>'
+      +'</div></div>';
+    $("cp-tour-next").addEventListener("click",function(){if(step<CP_TOUR.length-1){step++;render();}else finish();});
+    var bk=$("cp-tour-back");if(bk)bk.addEventListener("click",function(){if(step>0){step--;render();}});
+    $("cp-tour-end").addEventListener("click",finish);
+  }
+  render();
+}
 
 $("yr").textContent=new Date().getFullYear();
 setSyncPill("","Connecting");
