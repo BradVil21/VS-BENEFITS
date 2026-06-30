@@ -725,6 +725,22 @@ async function pushNow(which,items){
   }catch(e){console.warn("pushNow "+which,e);}
 }
 
+/* Record this user's last-active time so the admin can see it */
+async function touchPresence(){
+  if(!cloud.ready)return;
+  var acct=(typeof currentAccount==="function")?currentAccount():null;
+  if(!acct||!acct.id)return;
+  try{
+    var ref=doc(db,"vs_state","presence");
+    var snap=await getDoc(ref);
+    var map=(snap.exists()&&snap.data().map)?snap.data().map:{};
+    map[acct.id]=Date.now();
+    await setDoc(ref,{map:map,ts:Date.now()});
+  }catch(e){}
+}
+setInterval(function(){touchPresence();},90000);
+document.addEventListener("visibilitychange",function(){if(!document.hidden)touchPresence();});
+
 function subscribe(which,onChange){
   if(!cloud.ready)return;
   try{
@@ -929,6 +945,7 @@ function showDashboard(){
   renderRefStats();
   checkSoldReferrals();
   cpRenderNotifs();
+  touchPresence();
 }
 function refStats(acct){
   var mine=getReferrals().filter(function(r){return r.fromAccountId===acct.id;});

@@ -324,6 +324,13 @@ html.dark .tbl .row:hover{box-shadow:0 8px 28px rgba(0,0,0,.5)}
 .status-appointment-scheduled{background:#e7f0ff;color:var(--blue-700)}
 .status-in-progress,.status-unpaid{background:#fff4e1;color:var(--warn)}
 .status-being-reviewed{background:#e7f6ff;color:#0b6996}
+.users-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.users-stats .ustat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;text-align:center}
+html.dark .users-stats .ustat{background:#1c2d42;border-color:#253a54}
+.users-stats .un{font-size:24px;font-weight:800;color:var(--blue-900);line-height:1.1}
+html.dark .users-stats .un{color:#d4e8ff}
+.users-stats .ul{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+@media(max-width:560px){.users-stats{grid-template-columns:1fr}}
 html.dark .status-new{background:#0f2040;color:#7eb6ff;border:1px solid #1e3a6a}
 html.dark .status-sold,.html.dark .status-enrolled,.html.dark .status-active{background:#0a2018;color:#22d47a;border:1px solid #1a4030}
 html.dark .status-declined,.html.dark .status-lost,.html.dark .status-revoked{background:#200d0d;color:#ff7070;border:1px solid #4a1818}
@@ -1504,6 +1511,10 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg></span><span class="sni-label">Active Clients</span>
       <span class="sni-badge" id="b-acct" style="display:none">0</span>
     </button>
+    <button class="sidebar-nav-item" data-tab="users" type="button">
+      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="sni-label">Users</span>
+      <span class="sni-badge" id="b-users" style="display:none">0</span>
+    </button>
     <button class="sidebar-nav-item" data-tab="support" type="button">
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.9-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 4 11.5a8.5 8.5 0 0 1 17 0z"/></svg></span><span class="sni-label">Support</span>
       <span class="sni-badge" id="b-sup" style="display:none">0</span>
@@ -1654,6 +1665,24 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
       </div>
       <div class="filter-row" id="acct-filter-row"></div>
       <div id="accts-list" class="tbl"></div>
+    </div>
+
+    <!-- USERS -->
+    <div id="p-users" class="panel">
+      <h3>Users</h3>
+      <p class="lede">Everyone who created an account. Green dot = online now.</p>
+      <div class="users-stats" id="users-stats"></div>
+      <div class="toolbar">
+        <input id="users-search" class="search" type="search" placeholder="Search name, email, phone..." />
+        <select id="users-sort" class="sortsel" aria-label="Sort users">
+          <option value="active">Recently active</option>
+          <option value="new">Newest first</option>
+          <option value="old">Oldest first</option>
+          <option value="az">Name A to Z</option>
+        </select>
+        <button id="export-users-btn" class="btn btn-ghost btn-sm" type="button">Export CSV</button>
+      </div>
+      <div id="users-list" class="tbl"></div>
     </div>
 
     <!-- SUPPORT -->
@@ -1967,7 +1996,7 @@ async function initCloud(){
         }
         if(!$("shell").hidden){
           if(rk==="leads"){renderLeads();renderPipeline();renderTasks();if(typeof checkTaskNotifications==="function")setTimeout(checkTaskNotifications,300);}
-          if(rk==="accounts"){renderAccounts();renderSupport();renderAdminsList();renderPipeline();}
+          if(rk==="accounts"){renderAccounts();renderSupport();renderAdminsList();renderPipeline();if(typeof renderUsers==="function")renderUsers();}
           if(rk==="messages"){renderSupport();if(activeThreadId)selectThread(activeThreadId);}
           if(rk==="contact_requests")renderSupport();
           if(rk==="quick_notes"&&typeof renderNotes==="function")renderNotes();
@@ -1982,7 +2011,7 @@ async function initCloud(){
   onSnapshot(doc(db,"vs_state","presence"),function(snap){
     if(!snap.exists())return;
     presenceMap=snap.data().map||{};
-    if(!$("shell").hidden)renderAccounts();
+    if(!$("shell").hidden){renderAccounts();if(typeof renderUsers==="function")renderUsers();}
   });
 
   /* contact_requests now sync into the tickets store via REMOTE_KEYS above
@@ -4459,8 +4488,8 @@ function czCelebrate(name,sub){
   var v=$("cz-celeb-view");if(v)v.addEventListener("click",function(){closeModal();switchTab("accounts");});
 }
 /* ---- route the existing CRM tabs through the new views ---- */
-ALL_TABS=["dashboard","pipeline","leads","followups","tasks","accounts","support","referrals","bizleads","notes","settings"];
-TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",accounts:"Active Clients",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",notes:"Notes",settings:"Settings"};
+ALL_TABS=["dashboard","pipeline","leads","followups","tasks","accounts","users","support","referrals","bizleads","notes","settings"];
+TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",accounts:"Active Clients",users:"Users",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",notes:"Notes",settings:"Settings"};
 function renderDashboard(){czDashboard();}
 function renderLeads(){czClients();}
 function renderPipeline(){czPipeline();}
@@ -4626,6 +4655,80 @@ function bizExportCsv(){
   var x=$("biz-export");if(x)x.addEventListener("click",bizExportCsv);
 })();
 function renderAll(){czBadges();czDashboard();czClients();czPipeline();czFollowups();renderAccounts();renderSupport();renderReferrals();renderSettings();renderTasks();renderNotes();renderBizLeads();}
+function fmtAgo(ts){
+  if(!ts)return "";
+  var d=Date.now()-ts;if(d<0)d=0;var m=Math.floor(d/60000);
+  if(m<1)return "just now";
+  if(m<60)return m+(m===1?" min ago":" mins ago");
+  var h=Math.floor(m/60);if(h<24)return h+(h===1?" hour ago":" hours ago");
+  var days=Math.floor(h/24);if(days<30)return days+(days===1?" day ago":" days ago");
+  return fmtDate(ts);
+}
+function userLastTs(a){return presenceMap[a.id]||a.lastActive||a.lastSignIn||0;}
+function renderUsers(){
+  if(!$("users-list"))return;
+  var q=($("users-search")&&$("users-search").value||"").toLowerCase().trim();
+  var accts=getAccounts();
+  var bdg=$("b-users");if(bdg){bdg.textContent=accts.length;bdg.style.display=accts.length>0?"":"none";}
+  var onlineN=accts.filter(function(a){return isOnline(a.id);}).length;
+  var newN=accts.filter(function(a){return (a.created||0)>=Date.now()-7*864e5;}).length;
+  var stats=$("users-stats");
+  if(stats)stats.innerHTML='<div class="ustat"><div class="un">'+accts.length+'</div><div class="ul">Total users</div></div>'+
+    '<div class="ustat"><div class="un" style="color:#0a8754">'+onlineN+'</div><div class="ul">Online now</div></div>'+
+    '<div class="ustat"><div class="un">'+newN+'</div><div class="ul">New this week</div></div>';
+  var rows=accts.filter(function(a){return !q||[a.firstName,a.lastName,a.email,a.phone].join(" ").toLowerCase().indexOf(q)>=0;});
+  var sort=($("users-sort")&&$("users-sort").value)||"active";
+  rows.sort(function(a,b){
+    if(sort==="new")return (b.created||0)-(a.created||0);
+    if(sort==="old")return (a.created||0)-(b.created||0);
+    if(sort==="az")return fullName(a).localeCompare(fullName(b),undefined,{sensitivity:"base"});
+    return userLastTs(b)-userLastTs(a);
+  });
+  var box=$("users-list");box.innerHTML="";
+  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No users yet. Accounts created from the client portal show up here."}));return;}
+  rows.forEach(function(a){
+    var on=isOnline(a.id);var lt=userLastTs(a);
+    var row=el("div",{class:"row"});
+    var body=el("div",{class:"card-body"});
+    var hdr=el("div",{class:"card-header"});
+    var av=el("div",{class:"card-avatar av-active"});
+    if(a.photoDataUrl)av.appendChild(el("img",{src:a.photoDataUrl,alt:"",style:"width:100%;height:100%;object-fit:cover;border-radius:50%"}));
+    else av.textContent=initials(a);
+    hdr.appendChild(av);
+    var tb=el("div",{class:"card-title-block"});
+    var nm=el("div",{class:"name"});
+    nm.appendChild(el("span",{class:"presence-dot "+(on?"on":"off")}));
+    nm.appendChild(el("span",{text:fullName(a)}));
+    tb.appendChild(nm);
+    tb.appendChild(el("div",{class:"sub",text:on?"Online now":(lt?("Last active "+fmtAgo(lt)):"Never signed in")}));
+    hdr.appendChild(tb);
+    var hr=el("div",{class:"card-head-right"});
+    hr.appendChild(el("span",{class:"status-pill status-"+(a.status||"active"),text:(a.status||"active").replace(/-/g," ")}));
+    hdr.appendChild(hr);
+    body.appendChild(hdr);
+    var info=el("div",{class:"card-info"});
+    function uci(inner,val){if(!val)return;var c=el("div",{class:"ci"});c.appendChild(el("span",{class:"ci-icon",html:ico(inner)}));c.appendChild(el("span",{class:"ci-val",text:val}));info.appendChild(c);}
+    uci("<rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/>",a.email);
+    uci("<path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z'/>",a.phone);
+    uci("<rect x='3' y='4' width='18' height='18' rx='2'/><path d='M16 2v4M8 2v4M3 10h18'/>","Joined "+fmtDate(a.created));
+    uci("<circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/>",on?"Online now":(lt?("Last active "+fmtDateTime(lt)):"Never signed in"));
+    body.appendChild(info);
+    row.appendChild(body);
+    var acts=el("div",{class:"acts"});
+    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"View in Clients",onclick:function(){switchTab("accounts");var s=$("acct-search");if(s){s.value=a.email||fullName(a);}renderAccounts();}}));
+    row.appendChild(acts);
+    box.appendChild(row);
+  });
+}
+(function(){
+  var s=$("users-search");if(s)s.addEventListener("input",renderUsers);
+  var so=$("users-sort");if(so)so.addEventListener("change",renderUsers);
+  var ex=$("export-users-btn");if(ex)ex.addEventListener("click",function(){
+    var rows=[["name","email","phone","status","joined","last_active"]];
+    getAccounts().forEach(function(a){var lt=userLastTs(a);rows.push([fullName(a),a.email||"",a.phone||"",a.status||"active",a.created?new Date(a.created).toISOString():"",lt?new Date(lt).toISOString():""].map(csvEscape));});
+    downloadFile("users-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
+  });
+})();
 function switchTab(name){
   ALL_TABS.forEach(function(n){var pn=$("p-"+n);if(pn)pn.classList.toggle("active",n===name);});
   document.querySelectorAll(".sidebar-nav-item[data-tab]").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-tab")===name);});
@@ -4638,6 +4741,7 @@ function switchTab(name){
   else if(name==="support")renderSupport();
   else if(name==="referrals")renderReferrals();
   else if(name==="accounts")renderAccounts();
+  else if(name==="users")renderUsers();
   else if(name==="tasks")renderTasks();
   else if(name==="bizleads")renderBizLeads();
   else if(name==="notes")renderNotes();
