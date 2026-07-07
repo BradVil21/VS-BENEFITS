@@ -1,0 +1,7 @@
+# Filesystem / editor junk (never commit)
+.fuse_hidden*
+*.tmp
+__deltest.tmp
+.DS_Store
+Thumbs.db
+node_modules/
