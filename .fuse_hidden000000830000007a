@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Member Portal | VS Health Benefits</title>
+<meta name="description" content="VS Health Benefits member portal. Sign in or create an account to view your plan, message your advisor, refer friends for a gift, and update your profile." />
+<link rel="canonical" href="https://vshealthbenefits.com/client.html" />
+<meta name="robots" content="index,follow" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --blue-900:#0b2346;--blue-800:#0f2e5c;--blue-700:#16447f;
+  --blue-600:#1e5ab0;--blue-500:#2f7de0;--blue-100:#e8f0fb;--blue-50:#f4f8fe;
+  --teal:#0db5a6;--teal-dark:#098374;--gold:#f5b301;
+  --ink:#0e1726;--ink-2:#314056;--muted:#5a6b80;
+  --line:#dfe6f1;--line-2:#eef2f8;
+  --bg:#f6f9fc;--white:#fff;
+  --ok:#0a8754;--warn:#b46b00;--err:#b3261e;
+  --shadow-sm:0 1px 2px rgba(11,35,70,.06);
+  --shadow-md:0 8px 24px rgba(11,35,70,.10);
+  --r-sm:8px;--r-md:12px;--r-lg:16px;--tap:44px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%}
+h1,h2,h3,h4{font-family:Poppins,Inter,system-ui,sans-serif;color:var(--blue-900);margin:0 0 .5em}
+a{color:var(--blue-600);text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:inherit}
+input,select,textarea{font-family:inherit;font-size:16px}
+
+/* ── Site Nav ── */
+.site-nav{background:#fff;border-bottom:1px solid #e2e8f0;padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.site-nav .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.site-nav .brand .b{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#0a6e8a,#0e4d6e);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;letter-spacing:-.5px;flex-shrink:0}
+.site-nav .brand span{font-weight:700;font-size:17px;color:#0e2a3d}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-links a{text-decoration:none;color:#374151;font-size:14px;font-weight:500}
+.nav-links a:hover{color:#0e2a3d;text-decoration:none}
+.nav-cta{background:#0e2a3d;color:#fff !important;font-size:14px;font-weight:600;padding:9px 20px;border-radius:999px}
+.nav-cta:hover{background:#16447f !important}
+.nav-right{display:flex;align-items:center;gap:12px}
+.sync-pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;padding:4px 10px;border-radius:999px;background:#f1f5f9;color:#5a6b80;border:1px solid #e2e8f0;font-weight:600}
+.sync-pill .dot{width:7px;height:7px;border-radius:50%;background:#9aa3b2}
+.sync-pill.ok .dot{background:#24c08a}
+.sync-pill.warn .dot{background:#f5b301}
+.signout{background:rgba(14,42,61,.08);color:#0e2a3d;border:1px solid #cbd5e1;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px}
+.signout:hover{background:rgba(14,42,61,.14)}
+@media(max-width:700px){.nav-links{display:none}.site-nav{padding:0 16px}}
+
+/* Wrap */
+.wrap{max-width:760px;margin:0 auto;padding:18px 16px 80px}
+
+/* Card */
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:20px;margin-bottom:18px}
+.card h2{font-size:20px;margin:0 0 6px}
+.card .lede{color:var(--ink-2);margin:0 0 16px;font-size:14px}
+
+/* Auth tabs */
+.tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:18px;gap:4px}
+.tabs button{flex:1;background:none;border:0;padding:12px 8px;font-size:15px;font-weight:600;color:var(--ink-2);cursor:pointer;border-bottom:3px solid transparent;min-height:44px}
+.tabs button.active{color:var(--blue-700);border-bottom-color:var(--blue-600)}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field label{font-size:13px;font-weight:600;color:var(--ink-2)}
+.field input,.field select,.field textarea{padding:12px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:#fff;color:var(--ink);min-height:44px;width:100%}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue-500);box-shadow:0 0 0 3px rgba(47,125,224,.18)}
+.row2{display:grid;grid-template-columns:1fr;gap:0}
+@media(min-width:560px){.row2{grid-template-columns:1fr 1fr;gap:14px}.row2 .field{margin-bottom:14px}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:10px;font-weight:700;font-size:14.5px;border:0;cursor:pointer;min-height:44px;width:100%;text-decoration:none;line-height:1}
+.btn:hover{text-decoration:none}
+.btn-primary{background:var(--blue-600);color:#fff}
+.btn-primary:hover{background:var(--blue-700)}
+.btn-ghost{background:transparent;color:var(--blue-700);border:1px solid var(--line)}
+.btn-ghost:hover{background:var(--blue-50)}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:var(--teal-dark)}
+.btn-danger{background:#fff;color:var(--err);border:1px solid #f1c2bf}
+.btn-danger:hover{background:#fdf2f1}
+.btn-gold{background:var(--gold);color:#3b2a00}
+.btn-gold:hover{background:#e0a601}
+
+.notice{padding:10px 12px;border-radius:8px;font-size:13.5px;margin-bottom:12px}
+.notice-err{background:#fdecea;color:var(--err);border:1px solid #f5c6c1}
+.notice-ok{background:#e6f7ef;color:var(--ok);border:1px solid #b9e6cf}
+.notice-info{background:var(--blue-50);color:var(--blue-700);border:1px solid #cfdef6}
+.notice-gold{background:#fef6da;color:#7a5500;border:1px solid #f4dd8d}
+
+.hint{font-size:12.5px;color:var(--muted);margin-top:-2px;margin-bottom:14px}
+.muted{color:var(--muted);font-size:13px}
+
+/* Dashboard head */
+.dash-head{display:flex;flex-direction:row;gap:14px;align-items:center;margin-bottom:16px;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:16px;box-shadow:var(--shadow-sm)}
+.dash-head .photo-wrap{position:relative;flex-shrink:0}
+.avatar{width:64px;height:64px;border-radius:50%;background:var(--blue-100);color:var(--blue-700);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.photo-wrap label.photo-edit{position:absolute;bottom:-2px;right:-2px;background:var(--blue-600);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:2px solid #fff;font-size:14px;font-weight:700;box-shadow:var(--shadow-sm)}
+.photo-wrap label.photo-edit:hover{background:var(--blue-700)}
+.dash-head .who{flex:1;min-width:0}
+.dash-head .who .hi{font-size:12px;color:var(--muted)}
+.dash-head .who h1{font-size:18px;margin:0;line-height:1.25;word-break:break-word}
+.dash-head .who .em{font-size:12.5px;color:var(--ink-2);word-break:break-word}
+
+/* Dashboard tabs */
+.dtabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.dtabs button{background:none;border:0;padding:12px 14px;font-size:14px;font-weight:600;color:var(--ink-2);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;min-height:44px}
+.dtabs button.active{color:var(--blue-700);border-bottom-color:var(--blue-600)}
+
+.panel{display:none}
+.panel.active{display:block}
+
+/* Profile blocks */
+.kv{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:14px}
+@media(min-width:560px){.kv{grid-template-columns:1fr 1fr}}
+.kv .item{background:var(--blue-50);border:1px solid var(--line-2);border-radius:10px;padding:12px 14px}
+.kv .item .lbl{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.kv .item .val{font-size:15px;color:var(--ink);margin-top:2px;word-break:break-word}
+
+/* Plan card */
+.plan-card{background:linear-gradient(135deg,var(--blue-700),var(--teal));color:#fff;border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:var(--shadow-md)}
+.plan-card .pl-eyebrow{font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.85;font-weight:700}
+.plan-card .pl-name{font-family:Poppins;font-size:20px;font-weight:700;margin:4px 0 2px}
+.plan-card .pl-carrier{font-size:14px;opacity:.95;margin-bottom:14px}
+.plan-card .pl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.plan-card .pl-cell .lbl{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;opacity:.8;font-weight:700}
+.plan-card .pl-cell .val{font-size:14.5px;font-weight:600;margin-top:2px}
+.plan-empty{background:var(--blue-50);border:1px dashed var(--line);border-radius:12px;padding:18px;text-align:center;color:var(--muted);font-size:13.5px;margin-bottom:16px}
+
+/* Section */
+.sec-title{display:flex;justify-content:space-between;align-items:center;margin:18px 0 10px}
+.sec-title h3{font-size:15.5px;margin:0;color:var(--blue-900)}
+.sec-title small{color:var(--muted);font-size:12px}
+
+.subcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.subcard h4{margin:0 0 8px;font-size:14.5px;color:var(--blue-900)}
+
+/* Messages */
+.msgs{border:1px solid var(--line);border-radius:12px;background:#fff;max-height:360px;overflow-y:auto;padding:12px;margin-bottom:14px}
+.msg{padding:10px 12px;border-radius:10px;margin-bottom:8px;max-width:85%;font-size:14px;line-height:1.45}
+.msg.client{background:var(--blue-50);color:var(--ink);margin-left:auto;border:1px solid #cfdef6}
+.msg.advisor{background:#f3f5f8;color:var(--ink);border:1px solid var(--line-2)}
+.msg .meta{font-size:11px;color:var(--muted);margin-top:4px}
+.empty{padding:24px;text-align:center;color:var(--muted);font-size:13.5px}
+
+/* Gift banner */
+.gift-banner{background:linear-gradient(135deg,#fff5d8,#fbecc1);border:1px solid #f0d98c;border-radius:12px;padding:14px;margin-bottom:16px;display:flex;gap:12px;align-items:center}
+.gift-banner .gi-ic{width:42px;height:42px;border-radius:50%;background:var(--gold);color:#3b2a00;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;flex-shrink:0}
+.gift-banner .gi-text{flex:1}
+.gift-banner .gi-text strong{display:block;color:#3b2a00;font-size:14px}
+.gift-banner .gi-text span{font-size:12.5px;color:#5a4400}
+
+/* ── Site Footer ── */
+.site-footer{background:#0b2445;color:#c8d9ec;padding:48px 64px 0;margin-top:40px}
+.ft-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px}
+@media(max-width:760px){.ft-grid{grid-template-columns:1fr 1fr;gap:28px}.site-footer{padding:36px 24px 0}}
+@media(max-width:480px){.ft-grid{grid-template-columns:1fr}}
+.ft-brand{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.ft-brand .b{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#0a6e8a,#0e4d6e);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff}
+.ft-brand span{font-weight:700;font-size:17px;color:#fff}
+.ft-col-title{font-size:11px;font-weight:700;letter-spacing:.08em;color:#5a8ab0;text-transform:uppercase;margin-bottom:16px}
+.ft-links{display:flex;flex-direction:column;gap:10px}
+.ft-links a{color:#c8d9ec;text-decoration:none;font-size:14px}
+.ft-links a:hover{color:#fff;text-decoration:none}
+.ft-contact{display:flex;flex-direction:column;gap:10px;font-size:14px;color:#c8d9ec}
+.ft-socials{display:flex;gap:10px;margin-top:6px}
+.ft-social{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;font-size:13px;font-weight:700}
+.ft-social:hover{background:rgba(255,255,255,.2);text-decoration:none;color:#fff}
+.ft-bottom{border-top:1px solid rgba(255,255,255,.1);padding:20px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#5a8ab0;flex-wrap:wrap;gap:8px}
+
+[hidden]{display:none !important}
+/* Referral stat cards */
+.ref-stats{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:16px}
+@media(min-width:560px){.ref-stats{grid-template-columns:repeat(3,1fr)}}
+.rstat{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:18px 20px}
+.rstat-ic{font-size:22px;margin-bottom:8px}
+.rstat-num{font-size:30px;font-weight:800;color:var(--blue-900);line-height:1.1;letter-spacing:-.02em}
+.rstat-lbl{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+/* Getting started */
+.gs-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:18px 20px;margin-bottom:16px}
+.gs-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.gs-head strong{color:var(--blue-900);font-size:15px}
+.gs-sub{font-size:12.5px;color:var(--muted)}
+.gs-bar{height:8px;background:#eef2f8;border-radius:999px;overflow:hidden;margin-bottom:14px}
+.gs-fill{height:100%;background:linear-gradient(90deg,var(--blue-600),var(--teal));border-radius:999px;transition:width .4s}
+.gs-step{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-2);padding:6px 0}
+.gs-step .gs-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.gs-step.done{color:var(--muted)}
+.gs-step.done .gs-check{background:var(--ok);border-color:var(--ok)}
+/* ── Client portal app shell ── */
+#dash-view{position:fixed;inset:0;z-index:100;display:flex;background:#f6f9fc}
+.cp-sidebar{width:248px;flex-shrink:0;background:#0e1726;color:#cdd9ec;display:flex;flex-direction:column;padding:18px 14px;z-index:30;transition:transform .25s}
+.cp-brand{display:flex;align-items:center;gap:10px;padding:4px 6px 16px}
+.cp-logo{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#16447f,#0db5a6);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0}
+.cp-bname{font-weight:700;font-size:14px;color:#fff;line-height:1.1}
+.cp-bsub{font-size:11px;color:#8aa0bd}
+.cp-nav{display:flex;flex-direction:column;gap:3px;margin-top:8px}
+.cp-navitem{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:10px;border:0;background:none;color:#aab9d0;font-size:14.5px;font-weight:500;cursor:pointer;font-family:inherit;text-align:left;width:100%}
+.cp-navitem:hover{background:rgba(255,255,255,.05);color:#fff}
+.cp-navitem.active{background:rgba(47,125,224,.2);color:#fff}
+.cp-navitem .cp-ic{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.cp-navbadge{margin-left:auto;background:#ef4444;color:#fff;font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.cp-user{margin-top:auto;display:flex;align-items:center;gap:10px;padding:12px 6px 8px;border-top:1px solid rgba(255,255,255,.08)}
+.cp-uava{width:36px;height:36px;border-radius:50%;background:#1e5ab0;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;overflow:hidden;flex-shrink:0}
+.cp-uava img{width:100%;height:100%;object-fit:cover}
+.cp-uinfo{min-width:0}
+.cp-uname{font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cp-uemail{font-size:11px;color:#8aa0bd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cp-signout{margin-top:8px;background:rgba(255,255,255,.06);color:#cdd9ec;border:1px solid rgba(255,255,255,.1);border-radius:9px;padding:9px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.cp-signout:hover{background:rgba(255,255,255,.12)}
+.cp-overlay{display:none;position:fixed;inset:0;background:rgba(11,35,70,.45);z-index:25}
+.cp-overlay.show{display:block}
+.cp-main{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.cp-topbar{height:56px;flex-shrink:0;display:flex;align-items:center;gap:10px;padding:0 18px;background:#0b1220;border-bottom:1px solid rgba(255,255,255,.06)}
+.cp-burger{display:none;background:none;border:0;color:#cdd9ec;font-size:20px;cursor:pointer;padding:6px}
+.cp-bell-wrap{position:relative}
+.cp-bell{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#e6eefb;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:16px;position:relative}
+.cp-bell-count{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.cp-notif{position:absolute;right:0;top:46px;width:320px;max-width:88vw;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px rgba(11,35,70,.22);z-index:60;max-height:380px;overflow:auto}
+.cp-notif-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
+.cp-notif-head strong{font-size:14px;color:var(--ink)}
+.cp-link{background:none;border:0;color:var(--blue-600);font-size:12px;font-weight:600;cursor:pointer}
+.cp-notif-empty{padding:26px 16px;text-align:center;color:var(--muted);font-size:13px}
+.cp-notif-item{display:flex;gap:10px;padding:11px 14px;border-bottom:1px solid #f1f5f9;cursor:pointer;align-items:center}
+.cp-notif-item:hover{background:#f7faff}
+.cp-ni-ic{width:34px;height:34px;border-radius:9px;background:#eef2f8;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.cp-ni-ic.payment,.cp-ni-ic.sold{background:#e9f9f0}
+.cp-ni-ic.support{background:#eaf2ff}
+.cp-ni-tx{min-width:0}
+.cp-ni-t{font-size:13.5px;font-weight:600;color:var(--ink)}
+.cp-ni-s{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cp-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.cp-hero{background:linear-gradient(120deg,#0b2346,#16447f 55%,#0db5a6);color:#fff;padding:30px 28px}
+.cp-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.16);color:#fff;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;margin-bottom:14px}
+.cp-eyedot{width:7px;height:7px;border-radius:50%;background:#34d399}
+.cp-hero h1{color:#fff;font-size:clamp(1.6rem,4.5vw,2.1rem);margin:0 0 16px;font-weight:800;letter-spacing:-.02em}
+.cp-hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.cp-hbtn{background:#fff;color:#16447f;border:0;border-radius:10px;padding:10px 18px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit}
+.cp-hbtn.ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.cp-content{padding:22px;max-width:1080px}
+.cp-content .ref-stats{margin-top:0}
+.cp-sec{display:none}
+.cp-sec.active{display:block;animation:cpFade .2s}
+@keyframes cpFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* ── Referral wizard ── */
+.wiz{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow-md)}
+.wiz-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:13px 20px;background:#f8fafd;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted)}
+.wiz-ref strong{color:var(--ink)}
+.wiz-ico{opacity:.7}
+.wiz-appt{color:var(--muted)}
+.wiz-hero{display:flex;align-items:center;gap:14px;padding:22px 20px;background:linear-gradient(120deg,#0b2346,#16447f 55%,#0db5a6);color:#fff}
+.wiz-hero-ic{width:46px;height:46px;border-radius:12px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.wiz-hero h2{margin:0;color:#fff;font-size:1.25rem;font-weight:800}
+.wiz-hero p{margin:3px 0 0;color:rgba(255,255,255,.9);font-size:13.5px}
+.wiz-prog{height:4px;background:#eef2f8}
+.wiz-prog-fill{display:block;height:100%;width:25%;background:linear-gradient(90deg,#16447f,#0db5a6);transition:width .3s}
+.wiz-tabs{display:flex;gap:8px;flex-wrap:wrap;padding:16px 18px 4px}
+.wiz-tab{flex:1;min-width:130px;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 12px;border-radius:10px;border:0;background:#f1f5f9;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.wiz-tab.active{background:linear-gradient(120deg,#16447f,#0db5a6);color:#fff}
+.wiz-tab.done{background:#e9f9f0;color:var(--ok)}
+.wiz form{padding:8px 20px 18px}
+.wiz-pane{display:none}
+.wiz-pane.active{display:block;animation:cpFade .2s}
+.wiz-grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:6px}
+.wiz-grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.wiz .field label{font-size:13px;font-weight:600;color:var(--ink-2)}
+.req{color:#ef4444}
+.wiz-card{border:1px solid var(--line);border-radius:12px;padding:16px;background:#fcfdff;margin-top:6px}
+.wiz-money{display:flex;align-items:center;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#f6f8fc}
+.wiz-money span{padding:0 12px;color:var(--muted);font-weight:600;background:#eef2f8;align-self:stretch;display:flex;align-items:center}
+.wiz-money input{border:0;background:transparent;flex:1}
+.wiz-check{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;background:#fcfdff}
+.wiz-check input{margin-top:3px;width:18px;height:18px;flex-shrink:0}
+.wiz-check strong{display:block;font-size:14px;color:var(--ink)}
+.wiz-check span{font-size:12.5px;color:var(--muted)}
+.wiz-review{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px}
+.wiz-rv{font-size:13px}
+.wiz-rv .l{color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.03em}
+.wiz-rv .v{color:var(--ink);font-weight:600}
+.wiz-nav{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.wiz-back{background:none;border:0;color:var(--muted);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.wiz-back:disabled{opacity:.4;cursor:default}
+.wiz-next{background:linear-gradient(120deg,#16447f,#0db5a6);color:#fff;border:0;border-radius:10px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+@media(max-width:640px){.wiz-grid3,.wiz-grid2,.wiz-review{grid-template-columns:1fr}.wiz-tab{min-width:0;flex:1 1 46%}.wiz-hero h2{font-size:1.1rem}}
+@media(max-width:860px){
+  .cp-sidebar{position:fixed;left:0;top:0;bottom:0;transform:translateX(-100%);box-shadow:0 0 40px rgba(0,0,0,.3)}
+  .cp-sidebar.open{transform:none}
+  .cp-burger{display:block}
+  .cp-hero{padding:24px 18px}
+  .cp-content{padding:16px}
+}
+/* ── First-login onboarding ── */
+.cp-onboard{position:fixed;inset:0;z-index:100050;background:linear-gradient(135deg,#0b2346,#16447f 58%,#0db5a6);display:flex;align-items:center;justify-content:center;padding:24px}
+.cp-onboard-card{max-width:540px;width:100%;text-align:center;color:#fff}
+.cp-onboard-logo{width:64px;height:64px;border-radius:16px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;margin:0 auto 22px}
+.cp-onboard-card h2{color:#fff;font-size:clamp(1.45rem,4.4vw,2.1rem);min-height:1.3em;margin:0 0 12px;font-weight:800;line-height:1.25}
+.cp-onboard-card .cp-type2{color:rgba(255,255,255,.92);font-size:1.08rem;min-height:1.4em;margin:0 0 28px}
+.cp-onboard-acts{display:flex;flex-direction:column;gap:12px;align-items:center}
+.cp-onboard-acts .btn{min-width:230px}
+.cp-skip{background:none;border:0;color:rgba(255,255,255,.82);font-size:13.5px;cursor:pointer;font-family:inherit;text-decoration:underline}
+.cp-caret::after{content:"";display:inline-block;width:2px;height:1em;background:#fff;margin-left:3px;animation:cpCaret .8s steps(1) infinite;vertical-align:-2px}
+@keyframes cpCaret{50%{opacity:0}}
+.cp-tour-backdrop{position:fixed;inset:0;z-index:100040;background:rgba(11,35,70,.42)}
+.cp-tour-card{position:fixed;z-index:100041;left:50%;bottom:26px;transform:translateX(-50%);width:min(450px,calc(100vw - 28px));background:#fff;border-radius:16px;box-shadow:0 24px 60px rgba(11,35,70,.3);padding:20px 22px}
+.cp-tour-step{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-dark);margin-bottom:6px}
+.cp-tour-card h3{margin:0 0 6px;color:var(--blue-900);font-size:1.2rem}
+.cp-tour-card p{margin:0 0 14px;color:var(--ink-2);font-size:14.5px;line-height:1.55}
+.cp-tour-dots{display:flex;gap:6px;margin-bottom:16px}
+.cp-tdot{width:7px;height:7px;border-radius:50%;background:#dfe6f1;transition:width .2s,background .2s}
+.cp-tdot.on{background:var(--blue-600);width:20px;border-radius:999px}
+.cp-tour-nav{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cp-tbtn{border:0;border-radius:10px;padding:10px 18px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;background:#eef2f8;color:var(--ink-2)}
+.cp-tbtn.primary{background:linear-gradient(120deg,#16447f,#0db5a6);color:#fff}
+.cp-navitem.tour-hi{outline:2px solid #34d399;outline-offset:-2px;background:rgba(52,211,153,.18)!important;border-radius:10px}
+@media(max-width:860px){.cp-tour-card{bottom:14px}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ SITE NAV ═══════════════════ -->
+<nav class="site-nav">
+  <a class="brand" href="/">
+    <span class="b">VS</span>
+    <span>VS Health Benefits</span>
+  </a>
+  <div class="nav-links">
+    <a href="https://vshealthbenefits.com">Home</a>
+    <a href="https://vshealthbenefits.com/services">Services</a>
+    <a href="https://vshealthbenefits.com/about">About</a>
+    <a href="https://vshealthbenefits.com/blog">Blog</a>
+    <a href="https://vshealthbenefits.com/contact">Contact</a>
+    <a href="/client">Member Login</a>
+    <a href="/quote" class="nav-cta">Get a Quote</a>
+  </div>
+  <div class="nav-right">
+    <span id="sync-pill" class="sync-pill"><span class="dot"></span><span id="sync-label">Connecting</span></span>
+    <button id="signout-btn" class="signout" hidden>Sign out</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- ====================== AUTH VIEW ====================== -->
+  <section id="auth-view">
+    <div class="card">
+      <h2>Member portal</h2>
+      <p class="lede">Sign in to view your plan, message your advisor, and refer friends for a chance to win a gift.</p>
+
+      <div class="tabs" role="tablist">
+        <button id="tab-login" class="active" type="button" role="tab">Sign in</button>
+        <button id="tab-signup" type="button" role="tab">Create account</button>
+      </div>
+
+      <!-- Sign in -->
+      <form id="login-form" autocomplete="on" novalidate>
+        <div id="login-msg"></div>
+        <div class="field">
+          <label for="li-email">Email</label>
+          <input id="li-email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="li-pw">Password</label>
+          <input id="li-pw" type="password" autocomplete="current-password" required />
+        </div>
+        <button class="btn btn-primary" type="submit">Sign in</button>
+        <p class="muted" style="margin-top:14px;text-align:center">Forgot your password? <a href="/contact">Contact your advisor</a> to reset it.</p>
+      </form>
+
+      <!-- Sign up -->
+      <form id="signup-form" autocomplete="on" novalidate hidden>
+        <div id="signup-msg"></div>
+        <div class="row2">
+          <div class="field">
+            <label for="su-first">First name</label>
+            <input id="su-first" type="text" autocomplete="given-name" required />
+          </div>
+          <div class="field">
+            <label for="su-last">Last name</label>
+            <input id="su-last" type="text" autocomplete="family-name" required />
+          </div>
+        </div>
+        <div class="field">
+          <label for="su-email">Email</label>
+          <input id="su-email" type="email" autocomplete="email" required />
+        </div>
+        <div class="field">
+          <label for="su-phone">Phone</label>
+          <input id="su-phone" type="tel" autocomplete="tel" inputmode="tel" required />
+        </div>
+        <div class="field">
+          <label for="su-pw">Create password</label>
+          <input id="su-pw" type="password" autocomplete="new-password" minlength="8" required />
+          <p class="hint">At least 8 characters.</p>
+        </div>
+        <div class="field">
+          <label for="su-pw2">Confirm password</label>
+          <input id="su-pw2" type="password" autocomplete="new-password" minlength="8" required />
+        </div>
+        <button class="btn btn-primary" type="submit">Create account</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ====================== DASHBOARD VIEW ====================== -->
+  <section id="dash-view" hidden>
+    <aside class="cp-sidebar" id="cp-sidebar">
+      <div class="cp-brand"><span class="cp-logo">VS</span><div><div class="cp-bname">VS Health Benefits</div><div class="cp-bsub">Member Portal</div></div></div>
+      <nav class="cp-nav">
+        <button class="cp-navitem active" data-sec="dashboard" type="button"><span class="cp-ic">&#9638;</span><span>Dashboard</span></button>
+        <button class="cp-navitem" data-sec="send" type="button"><span class="cp-ic"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></span><span>Send Referral</span></button>
+        <button class="cp-navitem" data-sec="referrals" type="button"><span class="cp-ic"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></span><span>Referrals</span></button>
+        <button class="cp-navitem" data-sec="plan" type="button"><span class="cp-ic"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><span>My Plan</span></button>
+        <button class="cp-navitem" data-sec="support" type="button"><span class="cp-ic"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.9-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 4 11.5a8.5 8.5 0 0 1 17 0z"/></svg></span><span>Support</span><span class="cp-navbadge" id="nav-sup-badge" hidden>0</span></button>
+        <button class="cp-navitem" data-sec="settings" type="button"><span class="cp-ic"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg></span><span>Settings</span></button>
+      </nav>
+      <div class="cp-user">
+        <div class="cp-uava avatar" id="dh-avatar">VS</div>
+        <div class="cp-uinfo"><div class="cp-uname" id="dh-name">Member</div><div class="cp-uemail" id="dh-email"></div></div>
+      </div>
+      <button class="cp-signout" id="cp-signout" type="button">Sign out</button>
+    </aside>
+    <div class="cp-overlay" id="cp-overlay"></div>
+    <div class="cp-main">
+      <div class="cp-topbar">
+        <button class="cp-burger" id="cp-burger" type="button" aria-label="Open menu"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+        <div style="flex:1"></div>
+        <div class="cp-bell-wrap">
+          <button class="cp-bell" id="cp-bell" type="button" aria-label="Notifications"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="cp-bell-count" id="cp-bell-count" hidden>0</span></button>
+          <div class="cp-notif" id="cp-notif" hidden></div>
+        </div>
+      </div>
+      <div class="cp-scroll">
+        <div class="cp-hero">
+          <span class="cp-eyebrow"><span class="cp-eyedot"></span> Dashboard Overview</span>
+          <h1 id="cp-greeting">Welcome back</h1>
+          <div class="cp-hero-actions">
+            <button class="cp-hbtn" data-sec="send" type="button">+ New Referral</button>
+            <button class="cp-hbtn ghost" data-sec="plan" type="button">View My Plan</button>
+          </div>
+        </div>
+        <div class="cp-content">
+
+          <div class="cp-sec active" id="sec-dashboard">
+            <div class="ref-stats" id="ref-stats"></div>
+            <div id="getting-started"></div>
+          </div>
+
+          <div class="cp-sec" id="sec-send">
+            <div class="wiz" id="ref-wiz">
+              <div class="wiz-top"><span class="wiz-ref">Referring to <span class="wiz-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg></span> <strong>VS Health Benefits</strong></span><span class="wiz-appt" id="wiz-appt-state"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> No appointment</span></div>
+              <div class="wiz-hero">
+                <div class="wiz-hero-ic"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+                <div><h2>Submit a Referral</h2><p>Share the referral details and confirm permission to send the lead to VS Health Benefits.</p></div>
+              </div>
+              <div class="wiz-prog"><span class="wiz-prog-fill" id="wiz-prog"></span></div>
+              <div class="wiz-tabs">
+                <button class="wiz-tab active" data-step="1" type="button"><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span> Personal Info</button>
+                <button class="wiz-tab" data-step="2" type="button"><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></span> Custom Fields</button>
+                <button class="wiz-tab" data-step="3" type="button"><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span> Appointment</button>
+                <button class="wiz-tab" data-step="4" type="button"><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="m9 11 3 3L22 4"/></svg></span> Confirmation</button>
+              </div>
+              <form id="ref-form" autocomplete="off">
+                <div id="ref-msg" style="padding:0 4px"></div>
+
+                <div class="wiz-pane active" data-pane="1">
+                  <div class="wiz-grid3">
+                    <div class="field"><label>First Name</label><input id="rf-first" type="text" placeholder="John" /></div>
+                    <div class="field"><label>Last Name</label><input id="rf-last" type="text" placeholder="Doe" /></div>
+                    <div class="field"><label>Lead Type</label><select id="rf-leadtype"><option>Insurance</option><option>Medical</option><option>Dental &amp; Vision</option><option>Medicare</option><option>Life</option><option>Other</option></select></div>
+                  </div>
+                  <div class="wiz-grid3">
+                    <div class="field"><label>Phone Number <span class="req">*</span></label><input id="rf-phone" type="tel" inputmode="tel" placeholder="(555) 123-4567" /></div>
+                    <div class="field"><label>Email</label><input id="rf-email" type="email" placeholder="john@example.com" /></div>
+                    <div class="field"><label>ZIP Code</label><input id="rf-zip" type="text" inputmode="numeric" maxlength="5" placeholder="12345" /></div>
+                  </div>
+                  <div class="wiz-grid3">
+                    <div class="field"><label>State</label><input id="rf-state" type="text" maxlength="2" placeholder="MS" style="text-transform:uppercase" /></div>
+                    <div class="field"><label>Date of Birth</label><input id="rf-dob" type="text" inputmode="numeric" placeholder="MM/DD/YYYY" /></div>
+                    <div></div>
+                  </div>
+                </div>
+
+                <div class="wiz-pane" data-pane="2">
+                  <div class="wiz-card">
+                    <div class="field"><label>Income (optional)</label><div class="wiz-money"><span>$</span><input id="rf-income" type="text" inputmode="decimal" placeholder="0.00" /></div></div>
+                    <div class="field" style="margin-top:10px"><label>Notes about this person (optional)</label><textarea id="rf-notes" rows="4" placeholder="Anything that helps us serve them: their coverage needs, current situation, health concerns, best time to reach them..."></textarea></div>
+                  </div>
+                </div>
+
+                <div class="wiz-pane" data-pane="3">
+                  <label class="wiz-check" for="rf-noappt"><input id="rf-noappt" type="checkbox" checked /><div><strong>No appointment needed</strong><span>Leave this checked if VS Health Benefits should schedule directly after receiving the referral.</span></div></label>
+                  <div id="rf-appt-fields" hidden>
+                    <div class="field" style="margin-top:14px"><label>Referral Timezone <span class="req">*</span></label>
+                      <select id="rf-tz"><option value="">Select timezone...</option><option value="ET">Eastern (ET)</option><option value="CT">Central (CT)</option><option value="MT">Mountain (MT)</option><option value="PT">Pacific (PT)</option><option value="AKT">Alaska (AKT)</option><option value="HT">Hawaii (HT)</option></select>
+                    </div>
+                    <div class="field"><label>Preferred day &amp; time</label><input id="rf-appttime" type="text" placeholder="e.g. Weekdays after 5pm, or Tue Mar 24 at 2pm" /></div>
+                  </div>
+                </div>
+
+                <div class="wiz-pane" data-pane="4">
+                  <div class="wiz-card">
+                    <h4 style="margin:0 0 10px;font-size:15px">Review &amp; confirm</h4>
+                    <div class="wiz-review" id="rf-review"></div>
+                    <label class="wiz-check" for="rf-perm" style="margin-top:14px"><input id="rf-perm" type="checkbox" /><div><strong>Permission to share</strong><span>I confirm I have this person's permission to share their information with VS Health Benefits.</span></div></label>
+                    <div class="field" style="margin-top:12px"><label>Preferred contact method</label><select id="rf-contact"><option>Phone Call</option><option>Text Message</option><option>Email</option></select></div>
+                  </div>
+                </div>
+
+                <div class="wiz-nav">
+                  <button class="wiz-back" id="wiz-prev" type="button" disabled>&#8249; Previous</button>
+                  <button class="wiz-next" id="wiz-next" type="button">Next &#8250;</button>
+                  <button class="wiz-next" id="wiz-submit" type="submit" hidden>Submit Referral</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="cp-sec" id="sec-referrals">
+            <div class="card"><div class="sec-title" style="margin-top:0"><h3>Your referrals</h3></div><div id="my-refs"></div></div>
+          </div>
+
+          <div class="cp-sec" id="sec-plan">
+            <div class="card"><div id="plan-display"></div><div class="sec-title"><h3>Why this matters</h3></div><p class="muted">Your enrollment information is updated by your advisor. If anything looks wrong, <a href="#" data-goto="support">message support</a> and someone will fix it.</p></div>
+          </div>
+
+          <div class="cp-sec" id="sec-support">
+            <div class="card">
+              <h3 style="font-size:16px;margin:0 0 4px">Message your advisor</h3>
+              <p class="muted" style="margin:0 0 14px">Support typically responds within 24 hours.</p>
+              <div id="msgs" class="msgs"></div>
+              <form id="msg-form"><div class="field"><label for="msg-text">Your message</label><textarea id="msg-text" rows="3" placeholder="Type your question or update here..." required></textarea></div><button class="btn btn-primary" type="submit">Send message</button></form>
+            </div>
+          </div>
+
+          <div class="cp-sec" id="sec-settings">
+            <div class="card">
+              <div id="photo-msg"></div>
+              <div class="sec-title" style="margin-top:0"><h3>Profile photo</h3></div>
+              <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px">
+                <div class="photo-wrap"><div id="dh-avatar2" class="avatar">VS</div><label class="photo-edit" for="photo-input" title="Update photo">+</label><input id="photo-input" type="file" accept="image/*" hidden /></div>
+                <div class="muted" style="font-size:13px">Upload a photo for your account.</div>
+              </div>
+              <div class="sec-title"><h3>Your information</h3></div>
+              <div class="kv">
+                <div class="item"><div class="lbl">Name</div><div class="val" id="pv-name">--</div></div>
+                <div class="item"><div class="lbl">Email</div><div class="val" id="pv-email">--</div></div>
+                <div class="item"><div class="lbl">Phone</div><div class="val" id="pv-phone">--</div></div>
+                <div class="item"><div class="lbl">Member since</div><div class="val" id="pv-since">--</div></div>
+              </div>
+              <form id="prof-form" autocomplete="off" style="margin-top:4px">
+                <div id="prof-msg"></div>
+                <div class="row2"><div class="field"><label for="prof-first">First name</label><input id="prof-first" type="text" autocomplete="given-name" /></div><div class="field"><label for="prof-last">Last name</label><input id="prof-last" type="text" autocomplete="family-name" /></div></div>
+                <div class="field"><label for="prof-phone">Phone</label><input id="prof-phone" type="tel" autocomplete="tel" /></div>
+                <button class="btn btn-primary" type="submit">Save profile</button>
+                <p class="hint" style="margin-top:8px">Your email is your login. To change it, message your advisor.</p>
+              </form>
+              <div class="sec-title"><h3>Change password</h3></div>
+              <div class="subcard"><form id="pw-form" autocomplete="off">
+                <div id="pw-msg"></div>
+                <div class="field"><label for="pw-cur">Current password</label><input id="pw-cur" type="password" autocomplete="current-password" required /></div>
+                <div class="field"><label for="pw-new">New password</label><input id="pw-new" type="password" autocomplete="new-password" minlength="8" required /><p class="hint">At least 8 characters.</p></div>
+                <div class="field"><label for="pw-new2">Confirm new password</label><input id="pw-new2" type="password" autocomplete="new-password" minlength="8" required /></div>
+                <button class="btn btn-primary" type="submit">Update password</button>
+              </form></div>
+              <div class="sec-title"><h3>Account</h3></div>
+              <button id="delete-account" class="btn btn-danger" type="button">Delete my account</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════ SITE FOOTER ═══════════════════ -->
+<footer class="site-footer">
+  <div class="ft-grid">
+    <div>
+      <div class="ft-brand">
+        <div class="b">VS</div>
+        <span>VS Health Benefits</span>
+      </div>
+      <p style="font-size:13px;line-height:1.7;color:#8aaac8;margin:0">Licensed, independent health insurance advisor based in Miami, FL, serving small employers and families in 40+ states. Unbiased guidance, zero-cost consultations.</p>
+    </div>
+    <div>
+      <div class="ft-col-title">Solutions</div>
+      <div class="ft-links">
+        <a href="#">Group 10-99</a>
+        <a href="#">Micro Group 2-9</a>
+        <a href="#">ACA / Individual</a>
+        <a href="#">Family Plans</a>
+        <a href="#">Dental &amp; Vision</a>
+        <a href="#">Medicaid Guidance</a>
+      </div>
+    </div>
+    <div>
+      <div class="ft-col-title">Company</div>
+      <div class="ft-links">
+        <a href="#">About</a>
+        <a href="#">Blog</a>
+        <a href="#">Contact</a>
+        <a href="#">Get a Quote</a>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms &amp; Conditions</a>
+        <a href="/client">Member Login</a>
+      </div>
+    </div>
+    <div>
+      <div class="ft-col-title">Reach Us</div>
+      <div class="ft-contact">
+        <span>(954) 825-1009</span>
+        <span>bvilsaint@vshealthbenefits.com</span>
+        <span>Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET</span>
+        <span>Miami, FL | 40+ states</span>
+        <div class="ft-socials">
+          <a href="#" class="ft-social">in</a>
+          <a href="#" class="ft-social"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></a>
+          <a href="#" class="ft-social">f</a>
+          <a href="#" class="ft-social"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="foot-disclaimer" style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.55;max-width:760px;margin-bottom:16px">VS Health Benefits only sends official enrollment materials after direct client confirmation. We do not mail unsolicited insurance packages.</div>
+  <div class="ft-bottom">
+    <span>&copy; <span id="yr"></span> VS Health Benefits. All rights reserved.</span>
+    <span>vshealthbenefits.com | Licensed health insurance advisor</span>
+  </div>
+</footer>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U",
+  authDomain: "vs-benefits-c1da9.firebaseapp.com",
+  projectId: "vs-benefits-c1da9",
+  storageBucket: "vs-benefits-c1da9.firebasestorage.app",
+  messagingSenderId: "487471388882",
+  appId: "1:487471388882:web:63e98e6699d5a823e3f50b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+var MAKE_WEBHOOK_URL = "https://hook.us2.make.com/a3uul2eecj9hm77ryzwecbt7e0sx8908";
+
+var K={
+  accounts:"vs_client_accounts",
+  session:"vs_client_session",
+  messages:"vs_messages",
+  referrals:"vs_referrals",
+  webhook:"vs_webhook_url"
+};
+
+function $(id){return document.getElementById(id);}
+function uid(){return"id_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
+function getAccounts(){try{return JSON.parse(localStorage.getItem(K.accounts)||"[]");}catch(e){return[];}}
+function getMessages(){try{return JSON.parse(localStorage.getItem(K.messages)||"[]");}catch(e){return[];}}
+function getReferrals(){try{return JSON.parse(localStorage.getItem(K.referrals)||"[]");}catch(e){return[];}}
+function getWebhook(){return localStorage.getItem(K.webhook)||MAKE_WEBHOOK_URL;}
+function getSession(){try{return JSON.parse(sessionStorage.getItem(K.session)||"null");}catch(e){return null;}}
+function setSession(s){sessionStorage.setItem(K.session,JSON.stringify(s));}
+function clearSession(){sessionStorage.removeItem(K.session);}
+
+async function sha256(text){
+  var enc=new TextEncoder().encode(text);
+  var buf=await crypto.subtle.digest("SHA-256",enc);
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,"0");}).join("");
+}
+
+function fmtDate(ts){if(!ts)return"--";var d=new Date(ts);return d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});}
+function fmtTime(ts){if(!ts)return"";var d=new Date(ts);return d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
+function normEmail(e){return(e||"").trim().toLowerCase();}
+function initials(a){var n=((a.firstName||"")+" "+(a.lastName||"")).trim();if(!n)return"?";var p=n.split(/\s+/);return((p[0]||"").charAt(0)+(p[1]||"").charAt(0)).toUpperCase()||(a.email||"?").charAt(0).toUpperCase();}
+
+function showNotice(elId,kind,text){
+  var el=$(elId);if(!el)return;
+  el.innerHTML="";
+  if(!text){return;}
+  var n=document.createElement("div");
+  n.className="notice notice-"+kind;
+  n.textContent=text;
+  el.appendChild(n);
+}
+function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
+
+function webhookFire(payload){
+  var url=getWebhook();
+  if(!url||url.indexOf("http")!==0)return false;
+  var json;
+  try{json=JSON.stringify(payload);}catch(e){return false;}
+  try{
+    if(navigator&&typeof navigator.sendBeacon==="function"){
+      var blob=new Blob([json],{type:"application/json"});
+      if(navigator.sendBeacon(url,blob))return true;
+    }
+  }catch(e){}
+  try{
+    fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:json,keepalive:true,mode:"no-cors"}).catch(function(){});
+    return true;
+  }catch(e2){return false;}
+}
+
+var cloud={ready:false,suspend:0,unsubs:[]};
+function setSyncPill(state,label){
+  var p=$("sync-pill"),l=$("sync-label");
+  if(!p||!l)return;
+  p.classList.remove("ok","warn");
+  if(state==="ok")p.classList.add("ok");
+  else if(state==="warn")p.classList.add("warn");
+  l.textContent=label;
+}
+
+function localSave(which,arr){
+  var key=K[which];
+  if(!key)return;
+  try{localStorage.setItem(key,JSON.stringify(arr));}catch(e){}
+}
+
+async function pullOnce(which){
+  if(!cloud.ready)return;
+  try{
+    var snap=await getDoc(doc(db,"vs_state",which));
+    if(snap.exists()){
+      var items=snap.data().items||[];
+      cloud.suspend++;
+      localSave(which,items);
+      cloud.suspend--;
+    }
+  }catch(e){console.warn("pullOnce "+which,e);}
+}
+
+async function pushNow(which,items){
+  if(!cloud.ready)return;
+  try{
+    await setDoc(doc(db,"vs_state",which),{items:items||[],ts:Date.now()});
+  }catch(e){console.warn("pushNow "+which,e);}
+}
+
+/* Record this user's last-active time so the admin can see it */
+async function touchPresence(){
+  if(!cloud.ready)return;
+  var acct=(typeof currentAccount==="function")?currentAccount():null;
+  if(!acct||!acct.id)return;
+  try{
+    var ref=doc(db,"vs_state","presence");
+    var snap=await getDoc(ref);
+    var map=(snap.exists()&&snap.data().map)?snap.data().map:{};
+    map[acct.id]=Date.now();
+    await setDoc(ref,{map:map,ts:Date.now()});
+  }catch(e){}
+}
+setInterval(function(){touchPresence();},90000);
+document.addEventListener("visibilitychange",function(){if(!document.hidden)touchPresence();});
+
+function subscribe(which,onChange){
+  if(!cloud.ready)return;
+  try{
+    var unsub=onSnapshot(doc(db,"vs_state",which),function(snap){
+      if(cloud.suspend>0)return;
+      if(!snap.exists())return;
+      var items=snap.data().items||[];
+      cloud.suspend++;
+      localSave(which,items);
+      cloud.suspend--;
+      if(typeof onChange==="function")try{onChange(items);}catch(e){}
+    },function(err){console.warn("onSnapshot "+which,err);setSyncPill("warn","Sync paused");});
+    cloud.unsubs.push(unsub);
+  }catch(e){console.warn("subscribe "+which,e);}
+}
+
+function saveAccounts(a){
+  localSave("accounts",a);
+  if(cloud.ready&&cloud.suspend===0)pushNow("accounts",a);
+}
+function saveMessages(m){
+  localSave("messages",m);
+  if(cloud.ready&&cloud.suspend===0)pushNow("messages",m);
+}
+function saveReferrals(r){
+  localSave("referrals",r);
+  if(cloud.ready&&cloud.suspend===0)pushNow("referrals",r);
+}
+
+$("tab-login").addEventListener("click",function(){
+  $("tab-login").classList.add("active");$("tab-signup").classList.remove("active");
+  $("login-form").hidden=false;$("signup-form").hidden=true;
+  showNotice("login-msg","",""); showNotice("signup-msg","","");
+});
+$("tab-signup").addEventListener("click",function(){
+  $("tab-signup").classList.add("active");$("tab-login").classList.remove("active");
+  $("signup-form").hidden=false;$("login-form").hidden=true;
+  showNotice("login-msg","",""); showNotice("signup-msg","","");
+});
+
+$("signup-form").addEventListener("submit",async function(e){
+  e.preventDefault();
+  var first=$("su-first").value.trim();
+  var last=$("su-last").value.trim();
+  var email=normEmail($("su-email").value);
+  var phone=$("su-phone").value.trim();
+  var pw=$("su-pw").value;
+  var pw2=$("su-pw2").value;
+
+  if(!first||!last)return showNotice("signup-msg","err","Please enter your first and last name.");
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return showNotice("signup-msg","err","Please enter a valid email address.");
+  if(phone.replace(/\D/g,"").length<7)return showNotice("signup-msg","err","Please enter a valid phone number.");
+  if(pw.length<8)return showNotice("signup-msg","err","Password must be at least 8 characters.");
+  if(pw!==pw2)return showNotice("signup-msg","err","Passwords don't match. Please try again.");
+
+  await pullOnce("accounts");
+
+  var accts=getAccounts();
+  if(accts.some(function(a){return normEmail(a.email)===email;}))return showNotice("signup-msg","err","An account with this email already exists. Try signing in instead.");
+
+  var hash=await sha256(pw);
+  var acct={id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:Date.now(),status:"active",plan:null,photoDataUrl:"",welcomePending:true,selfSignup:true};
+  accts.push(acct);
+  saveAccounts(accts);
+  setSession({id:acct.id,email:acct.email,since:Date.now()});
+
+  webhookFire({
+    event:"client_signup",
+    account_id:acct.id,
+    first_name:first,
+    last_name:last,
+    full_name:(first+" "+last).trim(),
+    email:email,
+    phone:phone,
+    created:acct.created,
+    created_iso:new Date(acct.created).toISOString(),
+    source:"vshealthbenefits.com",
+    page:"/client.html",
+    user_agent:navigator.userAgent,
+    // Account-created confirmation email to the new member
+    notify:"account_created",
+    send_email:true,
+    to_email:email,
+    to_name:(first+" "+last).trim(),
+    email_subject:"Welcome to VS Health Benefits — your account is ready",
+    email_body:"Hi "+first+",\n\nYour VS Health Benefits member account was created successfully. You can sign in any time at https://www.vshealthbenefits.com/client to view your plan, send referrals, and message your advisor.\n\nIf you did not create this account, please reply to this email or call (954) 825-1009.\n\nThank you,\nVS Health Benefits"
+  });
+
+  showDashboard();
+});
+
+$("login-form").addEventListener("submit",async function(e){
+  e.preventDefault();
+  var email=normEmail($("li-email").value);
+  var pw=$("li-pw").value;
+  if(!email||!pw)return showNotice("login-msg","err","Please enter your email and password.");
+
+  await pullOnce("accounts");
+
+  var accts=getAccounts();
+  var acct=accts.filter(function(a){return normEmail(a.email)===email;})[0];
+  if(!acct)return showNotice("login-msg","err","No account found for that email. Create an account to get started.");
+  if(acct.status==="revoked")return showNotice("login-msg","err","This account has been revoked. Please contact your advisor.");
+  if(!acct.passwordHash)return showNotice("login-msg","err","Your password was reset. Please contact your advisor for a new one.");
+
+  var hash=await sha256(pw);
+  if(hash!==acct.passwordHash)return showNotice("login-msg","err","Incorrect password. Please try again.");
+
+  var arr=accts.map(function(a){if(a.id===acct.id)a.lastSignIn=Date.now();return a;});
+  saveAccounts(arr);
+  setSession({id:acct.id,email:acct.email,since:Date.now()});
+
+  webhookFire({event:"client_signin",account_id:acct.id,email:email,ts:Date.now()});
+
+  showDashboard();
+});
+
+$("signout-btn").addEventListener("click",function(){clearSession();location.reload();});
+$("delete-account").addEventListener("click",function(){
+  if(!confirm("Delete your account? This will remove your sign-in. Your messages and referral history stay with your advisor."))return;
+  var s=getSession();if(!s)return;
+  saveAccounts(getAccounts().filter(function(a){return a.id!==s.id;}));
+  webhookFire({event:"client_account_deleted",account_id:s.id,email:s.email,ts:Date.now()});
+  clearSession();location.reload();
+});
+
+$("pw-form").addEventListener("submit",async function(e){
+  e.preventDefault();
+  var acct=currentAccount();if(!acct)return;
+  var cur=$("pw-cur").value,n1=$("pw-new").value,n2=$("pw-new2").value;
+  if(!cur||!n1||!n2)return showNotice("pw-msg","err","Fill all fields.");
+  if(n1.length<8)return showNotice("pw-msg","err","New password must be at least 8 characters.");
+  if(n1!==n2)return showNotice("pw-msg","err","New passwords don't match.");
+  var curHash=await sha256(cur);
+  if(curHash!==acct.passwordHash)return showNotice("pw-msg","err","Current password is wrong.");
+  var newHash=await sha256(n1);
+  var arr=getAccounts().map(function(a){if(a.id===acct.id)a.passwordHash=newHash;return a;});
+  saveAccounts(arr);
+  $("pw-form").reset();
+  showNotice("pw-msg","ok","Password updated.");
+  webhookFire({event:"client_password_changed",account_id:acct.id,ts:Date.now()});
+});
+
+$("photo-input").addEventListener("change",function(e){
+  var f=e.target.files[0];if(!f)return;
+  if(!/^image\//.test(f.type))return showNotice("photo-msg","err","Please pick an image file.");
+  if(f.size>3*1024*1024)return showNotice("photo-msg","err","Image is over 3MB. Try a smaller one.");
+  var reader=new FileReader();
+  reader.onload=function(){
+    var img=new Image();
+    img.onload=function(){
+      var maxSize=256;
+      var w=img.width,h=img.height;
+      if(w>h){if(w>maxSize){h=Math.round(h*maxSize/w);w=maxSize;}}
+      else{if(h>maxSize){w=Math.round(w*maxSize/h);h=maxSize;}}
+      var c=document.createElement("canvas");c.width=w;c.height=h;
+      c.getContext("2d").drawImage(img,0,0,w,h);
+      var dataUrl=c.toDataURL("image/jpeg",0.85);
+      var acct=currentAccount();if(!acct)return;
+      var arr=getAccounts().map(function(a){if(a.id===acct.id)a.photoDataUrl=dataUrl;return a;});
+      saveAccounts(arr);
+      paintAvatar(dataUrl);
+      showNotice("photo-msg","ok","Profile photo updated.");
+      webhookFire({event:"client_photo_updated",account_id:acct.id,ts:Date.now()});
+    };
+    img.src=reader.result;
+  };
+  reader.readAsDataURL(f);
+  $("photo-input").value="";
+});
+function paintAvatar(dataUrl){
+  var acct=currentAccount();
+  ["dh-avatar","dh-avatar2"].forEach(function(id){
+    var av=$(id);if(!av)return;av.innerHTML="";
+    if(dataUrl){var img=document.createElement("img");img.src=dataUrl;img.alt="Profile photo";av.appendChild(img);}
+    else{av.textContent=acct?initials(acct):"VS";}
+  });
+}
+
+function currentAccount(){
+  var s=getSession();if(!s)return null;
+  return getAccounts().filter(function(a){return a.id===s.id;})[0]||null;
+}
+
+function showDashboard(){
+  var acct=currentAccount();
+  if(!acct){clearSession();return;}
+  $("auth-view").hidden=true;
+  $("dash-view").hidden=false;
+  $("signout-btn").hidden=false;
+
+  $("dh-name").textContent=((acct.firstName||"")+" "+(acct.lastName||"")).trim()||"Member";
+  $("dh-email").textContent=acct.email;
+  var gEl=$("cp-greeting");if(gEl)gEl.textContent=cpGreeting(acct.firstName||"there");
+  paintAvatar(acct.photoDataUrl);
+
+  $("pv-name").textContent=((acct.firstName||"")+" "+(acct.lastName||"")).trim()||"--";
+  $("pv-email").textContent=acct.email;
+  $("pv-phone").textContent=acct.phone||"--";
+  $("pv-since").textContent=fmtDate(acct.created);
+
+  $("prof-first").value=acct.firstName||"";
+  $("prof-last").value=acct.lastName||"";
+  $("prof-phone").value=acct.phone||"";
+
+  renderPlan();
+  renderMessages();
+  renderMyReferrals();
+  renderRefStats();
+  checkSoldReferrals();
+  cpRenderNotifs();
+  touchPresence();
+  if(acct.welcomePending&&!window.__cpOnboarded){window.__cpOnboarded=true;setTimeout(function(){cpStartOnboarding(acct.firstName||"there");},450);}
+}
+function refStats(acct){
+  var mine=getReferrals().filter(function(r){return r.fromAccountId===acct.id;});
+  var sold=mine.filter(function(r){return r.status==="sold"||r.status==="paid";});
+  var earned=sold.reduce(function(s,r){return s+(Number(r.payout)||0);},0);
+  return {sent:mine.length,sold:sold.length,earned:earned};
+}
+function rstatCard(label,val,ic){return '<div class="rstat"><div class="rstat-ic">'+ic+'</div><div class="rstat-num">'+val+'</div><div class="rstat-lbl">'+label+'</div></div>';}
+function renderRefStats(){
+  var acct=currentAccount();if(!acct)return;
+  var s=refStats(acct);
+  var box=$("ref-stats");if(box)box.innerHTML=rstatCard("Referrals Sent",s.sent,"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/></svg>")+rstatCard("Sold",s.sold,"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><circle cx='12' cy='12' r='9'/><circle cx='12' cy='12' r='5'/><circle cx='12' cy='12' r='1.5'/></svg>")+rstatCard("Earned","$"+s.earned.toFixed(2),"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><circle cx='12' cy='13' r='8'/><path d='M12 9v8M9.5 10.5h3a1.5 1.5 0 0 1 0 3h-1a1.5 1.5 0 0 0 0 3h3'/></svg>");
+  renderGettingStarted(acct,s);
+}
+function renderGettingStarted(acct,s){
+  var box=$("getting-started");if(!box)return;
+  var steps=[
+    {label:"Complete your profile (name, email, phone)",done:!!(acct.firstName&&acct.lastName&&acct.email&&acct.phone)},
+    {label:"Send your first referral",done:s.sent>0},
+    {label:"Close your first deal",done:s.sold>0}
+  ];
+  var done=steps.filter(function(x){return x.done;}).length;
+  if(done>=steps.length){box.innerHTML="";return;}
+  var pct=Math.round(done/steps.length*100);
+  box.innerHTML='<div class="gs-card"><div class="gs-head"><strong>Getting Started</strong><span class="gs-sub">'+done+' of '+steps.length+' complete &middot; '+pct+'%</span></div>'
+    +'<div class="gs-bar"><div class="gs-fill" style="width:'+pct+'%"></div></div>'
+    +steps.map(function(st){return '<div class="gs-step'+(st.done?" done":"")+'"><span class="gs-check">'+(st.done?"✓":"")+'</span>'+st.label+'</div>';}).join("")+'</div>';
+}
+function checkSoldReferrals(){
+  var acct=currentAccount();if(!acct)return;
+  var arr=getReferrals();var changed=false;var newly=null;var paid=null;
+  arr.forEach(function(r){
+    if(r.fromAccountId===acct.id&&r.status==="sold"&&!r.soldNotified){r.soldNotified=true;changed=true;newly=r;}
+    if(r.fromAccountId===acct.id&&r.status==="paid"&&!r.paidNotified){r.paidNotified=true;changed=true;paid=r;}
+  });
+  if(changed){
+    saveReferrals(arr);
+    if(!$("dash-view").hidden){renderRefStats();renderMyReferrals();}
+    if(newly){showSoldCelebration(newly);try{webhookFire({event:"referral_sold_seen",account_id:acct.id,referralId:newly.id,ts:Date.now()});}catch(e){}}
+    if(paid){showPaymentCelebration(paid);try{webhookFire({event:"referral_paid_seen",account_id:acct.id,referralId:paid.id,ts:Date.now()});}catch(e){}}
+  }
+}
+function clientConfetti(){
+  try{
+    var c=document.createElement("canvas");c.style.cssText="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:100001";document.body.appendChild(c);
+    var x=c.getContext("2d"),W=c.width=innerWidth,H=c.height=innerHeight,cols=["#16447f","#0db5a6","#2f7de0","#f5b301","#f472b6","#34d399"],P=[];
+    for(var i=0;i<160;i++)P.push({x:Math.random()*W,y:-20-Math.random()*200,w:7+Math.random()*7,h:6+Math.random()*6,c:cols[i%cols.length],a:Math.random()*6,s:(Math.random()-.5)*.3,vx:(Math.random()-.5)*3.5,vy:2.5+Math.random()*4,o:1});
+    var t0=Date.now();(function f(){var e=Date.now()-t0;x.clearRect(0,0,W,H);P.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.07;p.a+=p.s;if(e>2200)p.o-=.018;x.save();x.globalAlpha=Math.max(0,p.o);x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore();});if(e<3800&&P.some(function(p){return p.o>0;}))requestAnimationFrame(f);else c.remove();})();
+  }catch(e){}
+}
+function showSoldCelebration(r){
+  clientConfetti();
+  var earned=Number(r.payout)||0;
+  var bg=document.createElement("div");
+  bg.style.cssText="position:fixed;inset:0;background:rgba(11,35,70,.55);display:flex;align-items:center;justify-content:center;z-index:100002;padding:20px";
+  bg.innerHTML='<div style="background:#fff;border-radius:18px;max-width:420px;width:100%;padding:30px 26px;text-align:center;box-shadow:0 24px 60px rgba(11,35,70,.3)">'
+    +'<div style="font-size:54px;line-height:1"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M3 21l5-13 8 8-13 5z"/><path d="M14 6c1-1 3-1 4 0M16 3v3M20 8c1 0 2 1 2 2M13 11l6 6"/></svg></div>'
+    +'<h2 style="margin:8px 0 4px;color:var(--blue-900);font-size:22px">Your referral sold!</h2>'
+    +'<p style="color:var(--ink-2);margin:0 0 6px">'+escapeHtml(r.referralName||"Your referral")+' just became a client.</p>'
+    +(earned>0?'<p style="font-weight:700;color:var(--ok);font-size:18px;margin:0 0 16px">You earned $'+earned.toFixed(2)+'</p>':'<div style="height:10px"></div>')
+    +'<button class="btn btn-primary" id="sold-ok" style="width:100%">Awesome!</button></div>';
+  document.body.appendChild(bg);
+  function close(){bg.remove();}
+  bg.addEventListener("click",function(e){if(e.target===bg)close();});
+  var ok=bg.querySelector("#sold-ok");if(ok)ok.addEventListener("click",close);
+}
+function showPaymentCelebration(r){
+  clientConfetti();
+  var earned=Number(r.payout)||0;
+  var bg=document.createElement("div");
+  bg.style.cssText="position:fixed;inset:0;background:rgba(11,35,70,.55);display:flex;align-items:center;justify-content:center;z-index:100002;padding:20px";
+  bg.innerHTML='<div style="background:#fff;border-radius:18px;max-width:430px;width:100%;padding:30px 26px;text-align:center;box-shadow:0 24px 60px rgba(11,35,70,.3)">'
+    +'<div style="width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:linear-gradient(135deg,var(--blue-700),var(--teal));color:#fff;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9v.01M18 15v.01"/></svg></div>'
+    +'<h2 style="margin:4px 0 6px;color:var(--blue-900);font-size:22px">Payment on the way!</h2>'
+    +(earned>0?'<p style="font-weight:700;color:var(--ok);font-size:22px;margin:0 0 4px">$'+earned.toFixed(2)+'</p>':'')
+    +'<p style="color:var(--ink-2);margin:0 0 4px">Your referral payout for '+escapeHtml(r.referralName||"your referral")+' has been approved.</p>'
+    +'<p style="color:var(--muted);font-size:13.5px;margin:0 0 18px">You will receive your funds within 3 to 5 business days.</p>'
+    +'<button class="btn btn-primary" id="pay-ok" style="width:100%">Got it</button></div>';
+  document.body.appendChild(bg);
+  function close(){bg.remove();}
+  bg.addEventListener("click",function(e){if(e.target===bg)close();});
+  var ok=bg.querySelector("#pay-ok");if(ok)ok.addEventListener("click",close);
+}
+function showReferralCongrats(name,appt){
+  clientConfetti();
+  var when=appt?("We will reach out at the time you provided: "+escapeHtml(appt)+"."):"Please allow 24 to 48 hours for a response, or we will reach out at the time you provided for us to call.";
+  var bg=document.createElement("div");
+  bg.style.cssText="position:fixed;inset:0;background:rgba(11,35,70,.55);display:flex;align-items:center;justify-content:center;z-index:100002;padding:20px";
+  bg.innerHTML='<div style="background:#fff;border-radius:18px;max-width:430px;width:100%;padding:30px 26px;text-align:center;box-shadow:0 24px 60px rgba(11,35,70,.3)">'
+    +'<div style="width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:linear-gradient(135deg,var(--blue-700),var(--teal));color:#fff;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:32px;height:32px" aria-hidden="true"><path d="M3 21l5-13 8 8-13 5z"/><path d="M14 6c1-1 3-1 4 0M16 3v3M20 8c1 0 2 1 2 2M13 11l6 6"/></svg></div>'
+    +'<h2 style="margin:4px 0 6px;color:var(--blue-900);font-size:22px">Referral submitted!</h2>'
+    +'<p style="color:var(--ink-2);margin:0 0 6px">Thank you for referring '+escapeHtml(name||"someone")+' to VS Health Benefits.</p>'
+    +'<p style="color:var(--muted);font-size:13.5px;margin:0 0 18px">'+when+'</p>'
+    +'<button class="btn btn-primary" id="ref-ok" style="width:100%">Done</button></div>';
+  document.body.appendChild(bg);
+  function close(){bg.remove();}
+  bg.addEventListener("click",function(e){if(e.target===bg)close();});
+  var ok=bg.querySelector("#ref-ok");if(ok)ok.addEventListener("click",close);
+}
+
+function renderPlan(){
+  var acct=currentAccount();if(!acct)return;
+  var box=$("plan-display");box.innerHTML="";
+  var p=acct.plan;
+  if(!p||(!p.carrier&&!p.planName)){
+    var d=document.createElement("div");
+    d.className="plan-empty";
+    d.innerHTML='<strong>No plan on file yet.</strong><br/>Once your advisor enrolls you, your plan details will appear here. <a href="/contact">Reach out</a> if you have questions.';
+    box.appendChild(d);
+    return;
+  }
+  var card=document.createElement("div");card.className="plan-card";
+  card.innerHTML=
+    '<div class="pl-eyebrow">Active enrollment</div>'+
+    '<div class="pl-name">'+escapeHtml(p.planName||"Your plan")+'</div>'+
+    '<div class="pl-carrier">'+escapeHtml(p.carrier||"")+'</div>'+
+    '<div class="pl-grid">'+
+      '<div class="pl-cell"><div class="lbl">Effective date</div><div class="val">'+(p.effectiveDate?fmtDate(new Date(p.effectiveDate+"T00:00:00").getTime()):"--")+'</div></div>'+
+      '<div class="pl-cell"><div class="lbl">Renewal date</div><div class="val">'+(p.renewalDate?fmtDate(new Date(p.renewalDate+"T00:00:00").getTime()):"--")+'</div></div>'+
+      '<div class="pl-cell"><div class="lbl">Monthly premium</div><div class="val">'+(p.monthlyPremium?("$"+Number(p.monthlyPremium).toFixed(2)):"--")+'</div></div>'+
+      '<div class="pl-cell"><div class="lbl">Updated</div><div class="val">'+(p.updated?fmtDate(p.updated):"--")+'</div></div>'+
+    '</div>';
+  box.appendChild(card);
+
+  if(p.notes){
+    var n=document.createElement("div");
+    n.className="subcard";
+    n.innerHTML='<h4>Plan notes from your advisor</h4><div style="font-size:13.5px;color:var(--ink-2);white-space:pre-wrap">'+escapeHtml(p.notes)+'</div>';
+    box.appendChild(n);
+  }
+}
+
+function renderMessages(){
+  var acct=currentAccount();if(!acct)return;
+  var box=$("msgs");
+  var msgs=getMessages().filter(function(m){return m.accountId===acct.id;}).sort(function(a,b){return a.ts-b.ts;});
+  if(!msgs.length){box.innerHTML='<div class="empty">No messages yet. Send your first message below - Someone will get back to you within 24 hours.</div>';return;}
+  box.innerHTML="";
+  msgs.forEach(function(m){
+    var d=document.createElement("div");
+    d.className="msg "+(m.from==="advisor"?"advisor":"client");
+    var t=document.createElement("div");t.textContent=m.text;
+    var meta=document.createElement("div");meta.className="meta";meta.textContent=(m.from==="advisor"?"Bradley - ":"You - ")+fmtTime(m.ts);
+    d.appendChild(t);d.appendChild(meta);box.appendChild(d);
+  });
+  box.scrollTop=box.scrollHeight;
+}
+
+$("msg-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  var acct=currentAccount();if(!acct)return;
+  var text=$("msg-text").value.trim();if(!text)return;
+  var m={id:uid(),accountId:acct.id,from:"client",text:text,ts:Date.now(),read:false};
+  var arr=getMessages();arr.push(m);saveMessages(arr);
+  webhookFire({event:"client_message",account_id:acct.id,email:acct.email,text:text,ts:Date.now()});
+  $("msg-text").value="";
+  renderMessages();
+});
+
+/* ── Referral wizard ── */
+var wizStep=1;var WIZ_MAX=4;
+function wizGo(n){
+  n=Math.max(1,Math.min(WIZ_MAX,n));
+  if(n>wizStep&&!wizValidate(wizStep))return;
+  wizStep=n;
+  document.querySelectorAll(".wiz-pane").forEach(function(p){p.classList.toggle("active",p.getAttribute("data-pane")==String(n));});
+  document.querySelectorAll(".wiz-tab").forEach(function(t){var s=Number(t.getAttribute("data-step"));t.classList.toggle("active",s===n);t.classList.toggle("done",s<n);});
+  var pf=$("wiz-prog");if(pf)pf.style.width=(n/WIZ_MAX*100)+"%";
+  $("wiz-prev").disabled=n===1;
+  $("wiz-next").hidden=n===WIZ_MAX;
+  $("wiz-submit").hidden=n!==WIZ_MAX;
+  if(n===4)wizRenderReview();
+  var sc=$("cp-scroll");if(sc)sc.scrollTop=0;
+}
+function wizValidate(step){
+  showNotice("ref-msg","","");
+  if(step===1){
+    if(!$("rf-first").value.trim()&&!$("rf-last").value.trim())return showNotice("ref-msg","err","Please add the person's name."),false;
+    if(!$("rf-phone").value.trim()&&!$("rf-email").value.trim())return showNotice("ref-msg","err","Please add at least a phone number or email."),false;
+  }
+  if(step===3&&!$("rf-noappt").checked&&!$("rf-tz").value)return showNotice("ref-msg","err","Pick a timezone, or check No appointment needed."),false;
+  return true;
+}
+function wizRenderReview(){
+  function row(l,v){return '<div class="wiz-rv"><div class="l">'+l+'</div><div class="v">'+escapeHtml(v||"--")+'</div></div>';}
+  var nm=($("rf-first").value.trim()+" "+$("rf-last").value.trim()).trim();
+  var appt=$("rf-noappt").checked?"No appointment needed":(($("rf-tz").value||"")+" "+($("rf-appttime").value.trim()||"")).trim();
+  $("rf-review").innerHTML=row("Name",nm)+row("Lead Type",$("rf-leadtype").value)+row("Phone",$("rf-phone").value.trim())+row("Email",$("rf-email").value.trim())+row("ZIP / State",($("rf-zip").value.trim()+" "+$("rf-state").value.trim().toUpperCase()).trim())+row("Date of Birth",$("rf-dob").value.trim())+row("Income",$("rf-income").value.trim()?("$"+$("rf-income").value.trim()):"")+row("Notes",$("rf-notes").value.trim())+row("Appointment",appt);
+}
+$("wiz-next").addEventListener("click",function(){wizGo(wizStep+1);});
+$("wiz-prev").addEventListener("click",function(){wizGo(wizStep-1);});
+document.querySelectorAll(".wiz-tab").forEach(function(t){t.addEventListener("click",function(){var s=Number(t.getAttribute("data-step"));if(s<=wizStep||wizValidate(wizStep))wizGo(s);});});
+$("rf-noappt").addEventListener("change",function(){
+  $("rf-appt-fields").hidden=this.checked;
+  $("wiz-appt-state").innerHTML=this.checked?"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/></svg> No appointment":"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='3' y='4' width='18' height='18' rx='2'/><path d='M16 2v4M8 2v4M3 10h18'/></svg> Appointment requested";
+});
+
+$("ref-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  var acct=currentAccount();if(!acct)return;
+  if(!wizValidate(1)){wizGo(1);return;}
+  if(!$("rf-perm").checked)return showNotice("ref-msg","err","Please confirm you have permission to share their information.");
+  var first=$("rf-first").value.trim(),last=$("rf-last").value.trim();
+  var name=(first+" "+last).trim();
+  var phone=$("rf-phone").value.trim(),email=$("rf-email").value.trim();
+  var noAppt=$("rf-noappt").checked;
+  var appt=noAppt?"":(($("rf-tz").value||"")+" "+($("rf-appttime").value.trim()||"")).trim();
+  var r={id:uid(),fromAccountId:acct.id,referralName:name,firstName:first,lastName:last,referralPhone:phone,referralEmail:email,
+    leadType:$("rf-leadtype").value,zip:$("rf-zip").value.trim(),state:$("rf-state").value.trim().toUpperCase(),dob:$("rf-dob").value.trim(),
+    income:$("rf-income").value.trim(),notes:$("rf-notes").value.trim(),
+    appointment:appt,noAppt:noAppt,permission:true,preferredContact:$("rf-contact").value,relationship:"",
+    status:"in-progress",ts:Date.now(),read:false,payout:0,paid:false};
+  var arr=getReferrals();arr.unshift(r);saveReferrals(arr);
+  webhookFire({event:"client_referral",from_account_id:acct.id,from_email:acct.email,referral_name:name,referral_phone:phone,referral_email:email,lead_type:r.leadType,zip:r.zip,state:r.state,dob:r.dob,income:r.income,appointment:appt,preferred_contact:r.preferredContact,notes:r.notes,ts:Date.now()});
+  $("ref-form").reset();$("rf-appt-fields").hidden=true;$("wiz-appt-state").innerHTML="<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/></svg> No appointment";
+  wizGo(1);
+  showNotice("ref-msg","ok","Thanks! Your referral was sent to VS Health Benefits.");
+  renderMyReferrals();renderRefStats();
+  showReferralCongrats(name,appt);
+});
+
+$("prof-form").addEventListener("submit",function(e){
+  e.preventDefault();
+  var acct=currentAccount();if(!acct)return;
+  var first=$("prof-first").value.trim(),last=$("prof-last").value.trim(),phone=$("prof-phone").value.trim();
+  var arr=getAccounts().map(function(a){if(a.id===acct.id){a.firstName=first;a.lastName=last;a.phone=phone;a.updated=Date.now();}return a;});
+  saveAccounts(arr);
+  $("dh-name").textContent=(first+" "+last).trim()||"Member";
+  $("pv-name").textContent=(first+" "+last).trim()||"--";$("pv-phone").textContent=phone||"--";
+  renderRefStats();
+  showNotice("prof-msg","ok","Profile saved.");
+  try{webhookFire({event:"client_profile_updated",account_id:acct.id,ts:Date.now()});}catch(e){}
+});
+
+function refStatusPill(status){
+  var map={
+    "new":{l:"In Progress",c:"#9a6b00",bg:"#fff3cd"},
+    "in-progress":{l:"In Progress",c:"#9a6b00",bg:"#fff3cd"},
+    "being-reviewed":{l:"Being Reviewed",c:"#0b6996",bg:"#e2f2fb"},
+    "sold":{l:"Sold",c:"#0a8754",bg:"#e6f7ef"},
+    "paid":{l:"Paid",c:"#0a8754",bg:"#e6f7ef"},
+    "declined":{l:"Declined",c:"#b3261e",bg:"#fdeaea"}
+  };
+  var m=map[status]||{l:status.replace(/-/g," ").replace(/\b\w/g,function(c){return c.toUpperCase();}),c:"#1e5ab0",bg:"#eaf1fb"};
+  return '<span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:'+m.c+';background:'+m.bg+';padding:3px 10px;border-radius:999px;white-space:nowrap">'+m.l+'</span>';
+}
+function renderMyReferrals(){
+  var acct=currentAccount();if(!acct)return;
+  var box=$("my-refs");if(!box)return;box.innerHTML="";
+  var mine=getReferrals().filter(function(r){return r.fromAccountId===acct.id;}).sort(function(a,b){return b.ts-a.ts;});
+  if(!mine.length){box.appendChild(Object.assign(document.createElement("div"),{className:"empty",textContent:"No referrals yet. Send your first one above!"}));return;}
+  mine.forEach(function(r){
+    var d=document.createElement("div");d.className="subcard";d.style.padding="12px 14px";
+    var status=r.status||"in-progress";
+    d.innerHTML=
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px">'+
+        '<strong style="color:var(--blue-900)">'+escapeHtml(r.referralName||"(no name)")+'</strong>'+
+        refStatusPill(status)+
+      '</div>'+
+      '<div style="font-size:12.5px;color:var(--muted)">Sent '+fmtTime(r.ts)+(r.payout?(' &middot; <span style="color:var(--ok);font-weight:600">Payout: $'+Number(r.payout).toFixed(2)+'</span>'):"")+(r.paid?(' &middot; <span style="color:var(--ok);font-weight:600">Gift entered</span>'):"")+'</div>';
+    box.appendChild(d);
+  });
+}
+
+/* ── App-shell navigation ── */
+function cpNav(sec){
+  document.querySelectorAll(".cp-sec").forEach(function(s){s.classList.toggle("active",s.id==="sec-"+sec);});
+  document.querySelectorAll(".cp-navitem").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-sec")===sec);});
+  var sb=$("cp-sidebar");if(sb)sb.classList.remove("open");var ov=$("cp-overlay");if(ov)ov.classList.remove("show");
+  var sc=$("cp-scroll");if(sc)sc.scrollTop=0;
+  if(sec==="support"){renderMessages();cpMarkSeen("msgs");}
+  if(sec==="plan")renderPlan();
+  if(sec==="referrals"){renderMyReferrals();renderRefStats();cpMarkSeen("refs");}
+  if(sec==="dashboard"){renderRefStats();cpMarkSeen("refs");}
+  cpRenderNotifs();
+}
+document.querySelectorAll("[data-sec]").forEach(function(b){b.addEventListener("click",function(){cpNav(b.getAttribute("data-sec"));});});
+document.addEventListener("click",function(e){var g=e.target.closest&&e.target.closest("[data-goto]");if(g){e.preventDefault();cpNav(g.getAttribute("data-goto"));}});
+(function(){
+  var burger=$("cp-burger"),sb=$("cp-sidebar"),ov=$("cp-overlay");
+  if(burger)burger.addEventListener("click",function(){sb.classList.toggle("open");ov.classList.toggle("show");});
+  if(ov)ov.addEventListener("click",function(){sb.classList.remove("open");ov.classList.remove("show");});
+  var so=$("cp-signout");if(so)so.addEventListener("click",function(){clearSession();location.reload();});
+})();
+
+/* ── Notifications (driven by admin actions) ── */
+function cpSeenMsgs(){try{return JSON.parse(localStorage.getItem("cp_seen_msgs")||"[]");}catch(e){return[];}}
+function cpSaveSeenMsgs(a){try{localStorage.setItem("cp_seen_msgs",JSON.stringify(a));}catch(e){}}
+function cpSeenRef(){try{return JSON.parse(localStorage.getItem("cp_seen_refstatus")||"{}");}catch(e){return{};}}
+function cpSaveSeenRef(o){try{localStorage.setItem("cp_seen_refstatus",JSON.stringify(o));}catch(e){}}
+function cpBuildNotifs(){
+  var acct=currentAccount();if(!acct)return[];
+  var out=[];
+  var seenM=cpSeenMsgs();
+  getMessages().filter(function(m){return m.accountId===acct.id&&m.from==="advisor";}).forEach(function(m){
+    if(seenM.indexOf(m.id)<0)out.push({type:"support",text:"New reply from your advisor",sub:(m.text||"").slice(0,70),ts:m.ts,sec:"support"});
+  });
+  var seenR=cpSeenRef();
+  getReferrals().filter(function(r){return r.fromAccountId===acct.id;}).forEach(function(r){
+    var st=r.status||"new";
+    if(st!=="new"&&st!=="in-progress"&&seenR[r.id]!==st){
+      var nm=r.referralName||"your referral";
+      var text=st==="paid"?("Payment sent for "+nm):st==="sold"?(nm+" was sold!"):("Update: "+nm+" is now "+st.replace(/-/g," "));
+      out.push({type:st==="paid"?"payment":(st==="sold"?"sold":"status"),text:text,sub:r.payout?("$"+Number(r.payout).toFixed(2)):"",ts:r.paidAt||r.soldAt||r.ts,sec:"referrals"});
+    }
+  });
+  out.sort(function(a,b){return(b.ts||0)-(a.ts||0);});
+  return out;
+}
+function cpRenderNotifs(){
+  var notifs=cpBuildNotifs();
+  var cnt=$("cp-bell-count");if(cnt){cnt.textContent=notifs.length;cnt.hidden=notifs.length===0;}
+  var supN=notifs.filter(function(n){return n.type==="support";}).length;
+  var sb2=$("nav-sup-badge");if(sb2){sb2.textContent=supN;sb2.hidden=supN===0;}
+  var box=$("cp-notif");if(!box)return;
+  if(!notifs.length){box.innerHTML='<div class="cp-notif-empty">You are all caught up.</div>';return;}
+  box.innerHTML='<div class="cp-notif-head"><strong>Notifications</strong><button id="cp-notif-clear" class="cp-link" type="button">Mark all read</button></div>'+notifs.map(function(n){
+    var ic=n.type==="support"?"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.9-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 4 11.5a8.5 8.5 0 0 1 17 0z'/></svg>":n.type==="payment"?"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><circle cx='12' cy='13' r='8'/><path d='M12 9v8M9.5 10.5h3a1.5 1.5 0 0 1 0 3h-1a1.5 1.5 0 0 0 0 3h3'/></svg>":n.type==="sold"?"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M3 21l5-13 8 8-13 5z'/><path d='M14 6c1-1 3-1 4 0M16 3v3M20 8c1 0 2 1 2 2M13 11l6 6'/></svg>":"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M3 11v3a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z'/><path d='M16 8a5 5 0 0 1 0 8'/></svg>";
+    return '<div class="cp-notif-item" data-nsec="'+n.sec+'"><div class="cp-ni-ic '+n.type+'">'+ic+'</div><div style="min-width:0"><div class="cp-ni-t">'+escapeHtml(n.text)+'</div>'+(n.sub?'<div class="cp-ni-s">'+escapeHtml(n.sub)+'</div>':'')+'</div></div>';
+  }).join("");
+  box.querySelectorAll(".cp-notif-item").forEach(function(it){it.addEventListener("click",function(){cpMarkSeen("all");$("cp-notif").hidden=true;cpNav(it.getAttribute("data-nsec"));});});
+  var cl=$("cp-notif-clear");if(cl)cl.addEventListener("click",function(){cpMarkSeen("all");cpRenderNotifs();});
+}
+function cpMarkSeen(kind){
+  var acct=currentAccount();if(!acct)return;
+  if(kind==="msgs"||kind==="all"){var sm=cpSeenMsgs();getMessages().filter(function(m){return m.accountId===acct.id&&m.from==="advisor";}).forEach(function(m){if(sm.indexOf(m.id)<0)sm.push(m.id);});cpSaveSeenMsgs(sm);}
+  if(kind==="refs"||kind==="all"){var sr=cpSeenRef();getReferrals().filter(function(r){return r.fromAccountId===acct.id;}).forEach(function(r){sr[r.id]=r.status||"new";});cpSaveSeenRef(sr);}
+  cpRenderNotifs();
+}
+(function(){
+  var bell=$("cp-bell");
+  if(bell)bell.addEventListener("click",function(e){e.stopPropagation();var n=$("cp-notif");n.hidden=!n.hidden;if(!n.hidden)cpRenderNotifs();});
+  document.addEventListener("click",function(e){var n=$("cp-notif");if(n&&!n.hidden&&!(e.target.closest&&e.target.closest(".cp-bell-wrap")))n.hidden=true;});
+})();
+function cpGreeting(name){var h=new Date().getHours();var g=h<12?"Good morning":h<18?"Good afternoon":"Good evening";return g+", "+(name||"there");}
+
+/* ── First-login onboarding (welcome + guided tour) ── */
+function cpClearWelcome(){
+  var acct=currentAccount();if(!acct)return;
+  var arr=getAccounts().map(function(a){if(a.id===acct.id)a.welcomePending=false;return a;});
+  saveAccounts(arr);
+}
+function cpTypeText(node,text,cb){
+  if(!node)return;node.textContent="";node.classList.add("cp-caret");var i=0;
+  (function step(){
+    if(i<=text.length){node.textContent=text.slice(0,i);i++;setTimeout(step,36);}
+    else{node.classList.remove("cp-caret");if(cb)setTimeout(cb,250);}
+  })();
+}
+function cpStartOnboarding(name){
+  if(document.querySelector(".cp-onboard"))return;
+  var bg=document.createElement("div");bg.className="cp-onboard";
+  bg.innerHTML='<div class="cp-onboard-card">'
+    +'<div class="cp-onboard-logo">VS</div>'
+    +'<h2 id="cp-type1"></h2>'
+    +'<p class="cp-type2" id="cp-type2"></p>'
+    +'<div class="cp-onboard-acts" id="cp-onboard-acts" style="opacity:0">'
+    +'<button class="btn btn-primary" id="cp-tour-start" type="button">Take the quick tour</button>'
+    +'<button class="cp-skip" id="cp-tour-skip" type="button">Skip tutorial</button>'
+    +'</div></div>';
+  document.body.appendChild(bg);
+  cpTypeText($("cp-type1"),"Welcome "+name+" to the VS Health Benefits client portal",function(){
+    cpTypeText($("cp-type2"),"We are glad to have you as a client.",function(){
+      var acts=$("cp-onboard-acts");if(acts){acts.style.transition="opacity .45s";acts.style.opacity="1";}
+    });
+  });
+  $("cp-tour-start").addEventListener("click",function(){bg.remove();cpTour();});
+  $("cp-tour-skip").addEventListener("click",function(){bg.remove();cpClearWelcome();});
+}
+var CP_TOUR=[
+  {sec:"dashboard",t:"Your dashboard",b:"See your referrals sent, sold, and total earned at a glance, and finish setting up your account."},
+  {sec:"send",t:"Send a referral",b:"Refer anyone who needs health insurance. Add their details and we take care of the rest. You earn when they enroll."},
+  {sec:"referrals",t:"Track your referrals",b:"Every referral you send appears here with its live status, from In Progress to Paid."},
+  {sec:"plan",t:"Your plan",b:"View your current coverage and plan details. Your advisor keeps this up to date for you."},
+  {sec:"support",t:"Message support",b:"Reach your advisor directly with any question. We typically reply within 24 hours."},
+  {sec:"settings",t:"Your settings",b:"Update your profile, add a photo, and change your password any time."}
+];
+function cpTour(){
+  var step=0;
+  var bd=document.createElement("div");bd.className="cp-tour-backdrop";document.body.appendChild(bd);
+  var card=document.createElement("div");card.className="cp-tour-card";document.body.appendChild(card);
+  function clearHi(){document.querySelectorAll(".cp-navitem.tour-hi").forEach(function(n){n.classList.remove("tour-hi");});}
+  function finish(){clearHi();card.remove();bd.remove();cpClearWelcome();cpNav("dashboard");}
+  function render(){
+    var s=CP_TOUR[step];cpNav(s.sec);clearHi();
+    var nav=document.querySelector('.cp-navitem[data-sec="'+s.sec+'"]');if(nav)nav.classList.add("tour-hi");
+    var dots=CP_TOUR.map(function(_,i){return '<span class="cp-tdot'+(i===step?" on":"")+'"></span>';}).join("");
+    card.innerHTML='<div class="cp-tour-step">Step '+(step+1)+' of '+CP_TOUR.length+'</div>'
+      +'<h3>'+s.t+'</h3><p>'+s.b+'</p>'
+      +'<div class="cp-tour-dots">'+dots+'</div>'
+      +'<div class="cp-tour-nav"><button class="cp-skip" id="cp-tour-end" type="button" style="color:var(--muted)">Skip tour</button>'
+      +'<div style="display:flex;gap:8px">'
+      +(step>0?'<button class="cp-tbtn" id="cp-tour-back" type="button">Back</button>':'')
+      +'<button class="cp-tbtn primary" id="cp-tour-next" type="button">'+(step===CP_TOUR.length-1?"Finish":"Next")+'</button>'
+      +'</div></div>';
+    $("cp-tour-next").addEventListener("click",function(){if(step<CP_TOUR.length-1){step++;render();}else finish();});
+    var bk=$("cp-tour-back");if(bk)bk.addEventListener("click",function(){if(step>0){step--;render();}});
+    $("cp-tour-end").addEventListener("click",finish);
+  }
+  render();
+}
+
+$("yr").textContent=new Date().getFullYear();
+setSyncPill("","Connecting");
+
+onAuthStateChanged(auth,async function(user){
+  if(!user){
+    try{await signInAnonymously(auth);}
+    catch(e){console.warn("anon signin failed",e);setSyncPill("warn","Offline");return;}
+    return;
+  }
+
+  cloud.ready=true;
+  setSyncPill("ok","Synced");
+
+  await Promise.all([pullOnce("accounts"),pullOnce("messages"),pullOnce("referrals")]);
+
+  subscribe("accounts",function(){
+    var s=getSession();
+    if(s){
+      var me=getAccounts().filter(function(a){return a.id===s.id;})[0];
+      if(!me){clearSession();location.reload();return;}
+      if(me.status==="revoked"){clearSession();alert("Your account was revoked by your advisor.");location.reload();return;}
+      if($("dash-view")&&!$("dash-view").hidden){
+        $("pv-name").textContent=((me.firstName||"")+" "+(me.lastName||"")).trim()||"--";
+        $("pv-email").textContent=me.email;
+        $("pv-phone").textContent=me.phone||"--";
+        renderPlan();
+      }
+    }
+  });
+  subscribe("messages",function(){if(!$("dash-view").hidden){renderMessages();cpRenderNotifs();}});
+  subscribe("referrals",function(){checkSoldReferrals();if(!$("dash-view").hidden){renderMyReferrals();renderRefStats();cpRenderNotifs();}});
+
+  if(getSession())showDashboard();
+});
+
+if(getSession())showDashboard();
+</script>
+
+<style>
+#back-to-top{
+  position:fixed;bottom:28px;right:22px;z-index:999;
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue-700),var(--teal));
+  color:#fff;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(13,27,42,.22);
+  opacity:0;transform:translateY(12px);
+  transition:opacity .3s ease,transform .3s ease,box-shadow .2s ease;
+  pointer-events:none;
+}
+#back-to-top.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+#back-to-top:hover{box-shadow:0 8px 24px rgba(13,27,42,.28);transform:translateY(-2px);}
+</style>
+
+<button id="back-to-top" aria-label="Back to top">
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9 14V4M4 9l5-5 5 5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<script>
+(function(){
+  var btn = document.getElementById("back-to-top");
+  window.addEventListener("scroll", function(){
+    btn.classList.toggle("visible", window.scrollY > 300);
+  }, {passive:true});
+  btn.addEventListener("click", function(){
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+})();
+</script>
+</body>
+</html>

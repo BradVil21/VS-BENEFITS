@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z6EVXL76GG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Z6EVXL76GG');
+</script>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Careers at VS Health Benefits | Join Our Team</title>
+<meta name="description" content="Explore careers at VS Health Benefits, a licensed independent health insurance brokerage in Miami serving 40+ states. There are no active job openings at the moment. Check back soon as new roles are posted here when they open." />
+<link rel="canonical" href="https://www.vshealthbenefits.com/careers" />
+<meta name="robots" content="index,follow" />
+<meta name="geo.region" content="US-FL" />
+<meta name="geo.placename" content="Miami" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/favicon.png" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Careers at VS Health Benefits | Join Our Team" />
+<meta property="og:description" content="No active jobs at the moment. Check back soon as new roles are posted here when they open." />
+<meta property="og:url" content="https://www.vshealthbenefits.com/careers" />
+<meta property="og:site_name" content="VS Health Benefits" />
+<meta property="og:image" content="https://www.vshealthbenefits.com/images/og-default.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Careers at VS Health Benefits" />
+<meta name="twitter:description" content="No active jobs at the moment. Check back soon for new openings." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --blue-900:#0b2346; --blue-800:#0f2e5c; --blue-700:#16447f; --blue-600:#1e5ab0;
+  --blue-500:#2f7de0; --blue-100:#e8f0fb; --blue-50:#f4f8fe;
+  --teal:#0db5a6; --teal-dark:#098374;
+  --ink:#0d1b2a; --ink-2:#334155; --muted:#5a6b80;
+  --line:#e4e9f2; --bg:#ffffff; --bg-soft:#f7faff;
+  --warn:#b23a1d; --success:#16a34a;
+  --shadow:0 10px 30px rgba(13,27,42,.08);
+  --shadow-sm:0 4px 12px rgba(13,27,42,.06);
+  --radius:14px; --radius-sm:10px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --container:1160px; --tap:44px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block;height:auto}
+a{color:var(--blue-700);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3,h4{font-family:'Poppins','Inter',system-ui,sans-serif;color:var(--blue-900);line-height:1.2;margin:0 0 .5em}
+h1{font-size:clamp(1.8rem,6vw,3rem);letter-spacing:-.02em}
+h2{font-size:clamp(1.5rem,5vw,2.2rem);letter-spacing:-.01em}
+h3{font-size:clamp(1.15rem,3.6vw,1.3rem)}
+p{margin:0 0 1em;color:var(--ink-2);font-size:1rem}
+.container{width:100%;padding:0 18px;margin:0 auto;max-width:var(--container)}
+.center{text-align:center}
+.section{padding:48px 0}
+.section-tight{padding:32px 0}
+.bg-soft{background:var(--bg-soft)}
+.eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-600);background:var(--blue-100);padding:6px 12px;border-radius:999px;margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:var(--tap);padding:13px 20px;border-radius:999px;font-weight:700;font-size:.98rem;border:2px solid transparent;transition:transform .2s var(--ease),box-shadow .2s var(--ease),background .2s,color .2s;cursor:pointer;text-decoration:none;line-height:1.1;max-width:100%}
+.btn-primary{background:var(--blue-700);color:#fff}
+.btn-primary:hover{background:var(--blue-600);box-shadow:0 8px 20px rgba(30,90,176,.28);transform:translateY(-1px);text-decoration:none;color:#fff}
+.btn-secondary{background:#fff;color:var(--blue-700);border-color:var(--blue-700)}
+.btn-secondary:hover{background:var(--blue-700);color:#fff;text-decoration:none}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:var(--teal-dark);color:#fff;text-decoration:none}
+.btn.submitted{background:var(--success)!important;border-color:var(--success)!important;color:#fff!important;cursor:default;opacity:1;transform:none!important;box-shadow:none!important}
+.site-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:saturate(160%) blur(10px);border-bottom:1px solid var(--line)}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:8px;font-family:'Poppins',sans-serif;font-weight:700;color:var(--blue-900);font-size:1rem}
+.brand-badge{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.88rem;box-shadow:var(--shadow-sm);flex-shrink:0}
+.brand img{width:34px;height:34px;border-radius:9px}
+.menu-toggle{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;background:transparent;border:0;padding:10px;cursor:pointer;min-width:var(--tap);min-height:var(--tap)}
+.menu-toggle span{width:24px;height:2.5px;background:var(--ink);border-radius:2px;transition:transform .25s,opacity .25s}
+.menu-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.menu-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+.nav-links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgba(13,27,42,.08);padding:6px 0 12px;z-index:60}
+.nav-links.open{display:flex}
+.nav-links a,.nav-links button.nav-login{color:var(--ink);font-weight:600;font-size:1rem;padding:14px 20px;border-bottom:1px solid var(--line);min-height:var(--tap);display:flex;align-items:center;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left;cursor:pointer;font-family:inherit}
+.nav-links a:last-child{border-bottom:0}
+.nav-links a:hover,.nav-links button.nav-login:hover{color:var(--blue-700);text-decoration:none}
+.nav-links a.nav-cta{background:var(--blue-700);color:#fff;margin:10px 20px 0;border-radius:10px;text-align:center;padding:14px 16px;border-bottom:0;width:calc(100% - 40px);display:block;}
+.nav-links a.nav-cta:hover{background:var(--blue-600);color:#fff}
+.hero{position:relative;background:radial-gradient(1200px 500px at 20% -10%,rgba(30,90,176,.14),transparent 60%),radial-gradient(900px 450px at 90% 10%,rgba(13,181,166,.12),transparent 55%),linear-gradient(180deg,#f4f8fe 0%,#ffffff 85%);padding:44px 0 36px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:28px;align-items:center}
+.hero .eyebrow{background:#fff;border:1px solid var(--blue-100)}
+.hero h1 span{background:linear-gradient(90deg,var(--blue-700),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{font-size:1.02rem;color:var(--ink-2);margin-bottom:22px}
+.hero-card{background:#fff;border-radius:16px;padding:20px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.hero-card h3{margin-bottom:4px}
+.hero-card p{font-size:.9rem;color:var(--muted);margin-bottom:16px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:.02em}
+.field input,.field select,.field textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:10px;font-size:16px;font-family:inherit;color:var(--ink);background:#fff;transition:border-color .2s,box-shadow .2s;min-height:var(--tap)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:0;border-color:var(--blue-600);box-shadow:0 0 0 4px rgba(30,90,176,.15)}
+.field textarea{resize:vertical;min-height:100px}
+.field-row{display:grid;grid-template-columns:1fr;gap:10px}
+.fine-print{font-size:.78rem;color:var(--muted);margin-top:10px}
+.stepped-form{display:block}
+.step-indicator{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px}
+.step-indicator .dot{width:9px;height:9px;border-radius:50%;background:var(--line);transition:background .2s,transform .2s}
+.step-indicator .dot.active{background:var(--blue-600);transform:scale(1.3)}
+.coverage-step h3{margin-top:0}
+.coverage-step .sub{font-size:.92rem;color:var(--muted);margin-bottom:14px}
+.coverage-picker{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:14px}
+.coverage-picker .choice{text-align:left;background:#fff;border:2px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;transition:border-color .18s,background .18s,transform .15s;font-family:inherit;display:flex;flex-direction:column;gap:4px;min-height:var(--tap)}
+.coverage-picker .choice:hover{border-color:var(--blue-500);background:var(--blue-50)}
+.coverage-picker .choice:active{transform:scale(.98)}
+.coverage-picker .choice.selected{border-color:var(--blue-600);background:var(--blue-50);box-shadow:0 0 0 3px rgba(30,90,176,.15)}
+.coverage-picker .choice .label{font-weight:700;color:var(--blue-900);font-size:.98rem}
+.coverage-picker .choice .desc{font-size:.82rem;color:var(--muted);line-height:1.35}
+.coverage-picker .choice .icon{font-size:1.35rem;margin-bottom:2px}
+.form-step[hidden],.coverage-step[hidden]{display:none!important}
+.back-to-picker{background:transparent;border:0;color:var(--blue-700);font-weight:600;font-size:.9rem;cursor:pointer;padding:6px 0;margin-bottom:8px;min-height:var(--tap)}
+.back-to-picker:hover{text-decoration:underline}
+.picked-badge{display:inline-flex;align-items:center;gap:6px;background:var(--blue-50);color:var(--blue-700);font-weight:600;font-size:.78rem;padding:4px 10px;border-radius:999px;margin-bottom:10px}
+.contact-grid{display:grid;grid-template-columns:1fr;gap:28px;align-items:start}
+.contact-info h3{margin-bottom:6px}
+.info-list{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-direction:column;gap:14px}
+.info-list li{display:flex;gap:12px;align-items:flex-start;color:var(--ink-2)}
+.info-list .icon{width:36px;height:36px;border-radius:10px;background:var(--blue-100);color:var(--blue-700);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem}
+.info-list strong{display:block;color:var(--ink);margin-bottom:2px;font-size:.95rem}
+footer{background:var(--blue-900);color:#ffffff;padding:40px 0 20px}
+footer a{color:#ffffff}
+footer a:hover{color:#fff}
+.foot-grid{display:grid;grid-template-columns:1fr;gap:26px;margin-bottom:26px}
+.foot-grid h4{color:#fff;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-family:'Inter',sans-serif;margin-bottom:12px}
+.foot-grid ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;font-size:.92rem}
+.foot-grid .brand{color:#fff;margin-bottom:10px}
+.foot-brand-text{color:rgba(255,255,255,.95);font-size:.9rem;line-height:1.6}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.12);padding-top:18px;font-size:.8rem;color:rgba(255,255,255,.6);display:flex;flex-direction:column;gap:6px}
+.foot-grid button.linklike{background:none;border:0;color:#ffffff;font-family:inherit;font-size:.92rem;padding:0;cursor:pointer;text-align:left}
+.foot-grid button.linklike:hover{color:#fff;text-decoration:underline}
+.modal-backdrop{position:fixed;inset:0;background:rgba(13,27,42,.55);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;overflow-y:auto}
+.modal-backdrop.open{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:440px;width:100%;padding:28px 24px;box-shadow:0 20px 48px rgba(13,27,42,.25);position:relative;margin:auto}
+.modal h2{margin-bottom:6px;font-size:1.4rem}
+.modal p.lede{color:var(--muted);margin-bottom:20px;font-size:.95rem}
+.modal .close-x{position:absolute;top:10px;right:12px;background:transparent;border:0;width:36px;height:36px;font-size:1.6rem;color:var(--muted);cursor:pointer;line-height:1;border-radius:8px}
+.modal .close-x:hover{background:var(--blue-50);color:var(--ink)}
+.modal .choice-row{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.modal .choice-row .btn{width:100%;padding:14px 18px}
+.modal .small{font-size:.82rem;color:var(--muted);text-align:center}
+.modal .small a{color:var(--blue-700);font-weight:600}
+.show-desktop{display:none}
+.space-8{height:8px}.space-16{height:16px}.space-24{height:24px}
+/* ---- Mobile-first overrides ---- */
+.contact-grid{display:flex;flex-direction:column-reverse;gap:24px} /* form appears first on mobile */
+.field-row{grid-template-columns:1fr} /* stack fields on mobile */
+.hero-card{padding:20px 16px}
+.contact-map{display:none} /* hide map on small screens */
+.field input,.field select,.field textarea{font-size:16px} /* prevent iOS zoom on focus */
+#c-sms-opt{width:22px;height:22px;min-width:22px}
+
+@media (min-width:480px){
+  .hero-card{padding:24px 20px}
+}
+@media (min-width:640px){
+  .container{padding:0 24px}
+  .section{padding:60px 0}
+  .hero{padding:60px 0 52px}
+  .field-row{grid-template-columns:1fr 1fr}
+  .coverage-picker{grid-template-columns:1fr 1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .foot-bottom{flex-direction:row;justify-content:space-between}
+  .contact-map{display:block}
+}
+@media (min-width:960px){
+  .section{padding:72px 0}
+  .hero{padding:84px 0 72px}
+  .nav-wrap{height:72px}
+  .nav-links{display:flex;position:static;flex-direction:row;gap:22px;background:transparent;border:0;padding:0;box-shadow:none}
+  .nav-links a,.nav-links button.nav-login{padding:8px 4px;border-bottom:0;min-height:auto;font-size:.94rem;width:auto;background:transparent;border:0;white-space:nowrap}
+  .nav-links a.nav-cta{margin:0;padding:10px 18px;border-radius:999px;font-weight:700}
+  .menu-toggle{display:none}
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;flex-direction:unset}
+  .foot-grid{grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
+  .show-desktop{display:initial}
+  .hero-card{padding:28px 24px}
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "InsuranceAgency",
+  "@id": "https://www.vshealthbenefits.com/#org",
+  "name": "VS Health Benefits",
+  "url": "https://www.vshealthbenefits.com/",
+  "telephone": "+19548251009",
+  "email": "bvilsaint@vshealthbenefits.com",
+  "areaServed": "US",
+  "address": {"@type":"PostalAddress","addressLocality":"Miami","addressRegion":"FL","addressCountry":"US"},
+  "openingHours": ["Mo-Fr 08:00-18:00","Sa-Su 08:00-13:00"]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="/" aria-label="VS Health Benefits home">
+      <span class="brand-badge">VS</span>
+      <span>VS Health Benefits</span>
+    </a>
+    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="nav-links" class="nav-links">
+      <a href="/">Home</a>
+      <a href="/services">Services</a>
+      <a href="/about">About</a>
+      <a href="/blog">Blog</a>
+      <a href="/contact">Contact</a>
+      <a href="/refer-and-earn">Refer &amp; Earn</a>
+      <button type="button" class="nav-login" data-open-login>Member Login</button>
+      <a class="nav-cta" href="/quote">Get a Quote</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" style="padding-bottom:20px;padding-top:28px">
+  <div class="container">
+    <span class="eyebrow">Careers</span>
+    <h1>Build a career with <span>purpose.</span></h1>
+    <p class="hero-sub">VS Health Benefits is a licensed independent health insurance brokerage built on one idea: take care of people. We are not always hiring, but we are always glad to hear from great people.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container" style="max-width:640px">
+    <div style="text-align:center;background:#fff;border:1px solid var(--line,#e4e9f2);border-radius:18px;padding:40px 28px;box-shadow:var(--shadow,0 10px 30px rgba(13,27,42,.08))">
+      <div style="width:64px;height:64px;margin:0 auto 18px;border-radius:16px;background:var(--blue-50,#f4f8fe);color:var(--blue-700,#16447f);display:flex;align-items:center;justify-content:center">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:30px;height:30px" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      </div>
+      <h2 style="margin:0 0 8px">No active jobs at the moment</h2>
+      <p style="color:var(--ink-2,#334155);margin:0 0 4px">We do not have any open positions right now. Please check back soon, as new roles are posted here when they open.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="brand">
+          <span class="brand-badge">VS</span>
+          <span style="color:#fff">VS Health Benefits</span>
+        </div>
+        <p class="foot-brand-text">Licensed, independent health insurance advisor based in Miami, FL, serving small employers and families in 40+ states. Unbiased guidance, zero-cost consultations.</p>
+      </div>
+      <div>
+        <h4>Solutions</h4>
+        <ul>
+          <li><a href="/services#group">Group 10-99</a></li>
+          <li><a href="/services#micro">Micro-Group 2-9</a></li>
+          <li><a href="/services#aca">ACA / Individual</a></li>
+          <li><a href="/services#family">Family Plans</a></li>
+          <li><a href="/dental-vision-insurance">Dental &amp; Vision</a></li>
+          <li><a href="/services#medicaid">Medicaid Guidance</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="/about">About</a></li><li><a href="/bradley-vilsaint">Our Founder</a></li><li><a href="/careers">Careers</a></li><li><a href="/refer-and-earn">Refer &amp; Earn</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/quote">Get a Quote</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms &amp; Conditions</a></li>
+          <li><button type="button" class="linklike" data-open-login>Member Login</button></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Reach Us</h4>
+        <ul>
+          <li><a href="tel:+19548251009">(954) 825-1009</a></li>
+          <li><a href="mailto:bvilsaint@vshealthbenefits.com">bvilsaint@vshealthbenefits.com</a></li>
+          <li>Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET</li>
+          <li>Miami, FL | 40+ states</li>
+        </ul>
+                <div style="display:flex;gap:14px;margin-top:18px;">
+          <a href="https://www.linkedin.com/company/vsbenefits/" target="_blank" rel="noopener" aria-label="LinkedIn" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;transition:background .2s;" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S.02 4.88.02 3.5 1.13 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5h3.8v2.1h.05C12.85 9.1 14.6 8 16.7 8c4.1 0 4.85 2.7 4.85 6.2V24h-4v-8.8c0-2.1-.04-4.8-2.93-4.8-2.93 0-3.38 2.3-3.38 4.65V24h-4V8.5z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/vshealthbenefits" target="_blank" rel="noopener" aria-label="Instagram" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;transition:background .2s;" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.975.975 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.975.975-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.975-.975-1.246-2.242-1.308-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608.975-.975 2.242-1.246 3.608-1.308C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.197.157 3.355.673 2.014 2.014.673 3.355.157 5.197.072 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.085 1.855.601 3.697 1.942 5.038 1.341 1.341 3.183 1.857 5.038 1.942C8.332 23.986 8.741 24 12 24s3.668-.014 4.948-.072c1.855-.085 3.697-.601 5.038-1.942 1.341-1.341 1.857-3.183 1.942-5.038.058-1.28.072-1.689.072-4.948s-.014-3.668-.072-4.948c-.085-1.855-.601-3.697-1.942-5.038C20.645.673 18.803.157 16.948.072 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=61588058885222" target="_blank" rel="noopener" aria-label="Facebook" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;transition:background .2s;" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@vshealthbenefits" target="_blank" rel="noopener" aria-label="TikTok" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;transition:background .2s;" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-disclaimer" style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.55;max-width:760px;margin-bottom:16px">VS Health Benefits only sends official enrollment materials after direct client confirmation. We do not mail unsolicited insurance packages.</div>
+    <div class="foot-bottom">
+      <span>&copy; <span id="year">2026</span> VS Health Benefits. All rights reserved.</span>
+      <span>vshealthbenefits.com | Licensed health insurance advisor</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ====================== LOGIN MODAL ====================== -->
+<div class="modal-backdrop" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
+  <div class="modal">
+    <button class="close-x" type="button" aria-label="Close" data-close-login>&times;</button>
+    <h2 id="login-modal-title">Sign in</h2>
+    <p class="lede">Choose where you'd like to go.</p>
+    <div class="choice-row">
+      <a class="btn btn-primary" href="/client">Client / Member Portal</a>
+      <a class="btn btn-secondary" href="/admin">Admin Portal</a>
+    </div>
+    <p class="small">Not a member yet? <a href="/client">Create a client account</a></p>
+  </div>
+</div>
+
+<script src="https//cdn.jsdelivr.net/npm/canvas-confetti1.9.3/dist/confetti.browser.min.js"></script>
+
+<!-- =====================================================================
+     FIREBASE BRIDGE - pushes each contact-form submission into the
+     admin portal as a "Support Request" (status = needing support).
+     The Zapier/Make webhook below still fires too, so your workflow
+     automation keeps running.
+     ===================================================================== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U",
+  authDomain: "vs-benefits-c1da9.firebaseapp.com",
+  projectId: "vs-benefits-c1da9",
+  storageBucket: "vs-benefits-c1da9.firebasestorage.app",
+  messagingSenderId: "487471388882",
+  appId: "1:487471388882:web:63e98e6699d5a823e3f50b"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+let _authReady = signInAnonymously(auth).catch(function(){});
+window.vsAdminWrite = async function(key, item){
+  try { await _authReady; } catch(e){}
+  var ref = doc(db, "vs_state", key);
+  var items = [];
+  try {
+    var snap = await getDoc(ref);
+    if (snap.exists() && Array.isArray(snap.data().items)) items = snap.data().items;
+  } catch(e){}
+  items.unshift(item);
+  try { await setDoc(ref, { items: items, ts: Date.now() }); } catch(e){}
+};
+</script>
+
+<script>
+/* VS Health Benefits - vshealthbenefits.com - contact.html
+   ============================================================
+   ZAPIER / MAKE WEBHOOK - paste your URL below.
+   Every contact form submission is POSTed to this URL AND
+   added to the admin portal's Support tab as a new request.
+   ============================================================ */
+
+window.LEAD_WEBHOOK_URL = window.LEAD_WEBHOOK_URL ||
+"https://services.leadconnectorhq.com/hooks/V5Px5jvE14SWLdNrFeGL/webhook-trigger/d9cf69ed-4e52-4c7d-bf11-580204f9cce7";
+
+/* ---------- Webhook delivery ----------
+   Why sendBeacon: LeadConnector's webhook-trigger endpoint does NOT return
+   CORS headers for browser origins. A regular fetch() will be blocked.
+   Using mode:"no-cors" silently strips Content-Type:application/json, so the
+   server can't parse the body. sendBeacon sidesteps both: it sends a Blob
+   with the correct Content-Type, doesn't preflight, and survives navigation. */
+function sendWebhook(url, payload){
+  if (!url || url.indexOf("http") !== 0) return false;
+  var json;
+  try { json = JSON.stringify(payload); } catch (e) { return false; }
+
+  // 1) sendBeacon - primary path
+  try {
+    if (navigator && typeof navigator.sendBeacon === "function") {
+      var blob = new Blob([json], { type: "application/json" });
+      if (navigator.sendBeacon(url, blob)) return true;
+    }
+  } catch (e) { /* fall through */ }
+
+  // 2) keepalive fetch - fallback, will at minimum deliver the bytes server-side
+  try {
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: json,
+      keepalive: true,
+      mode: "no-cors"
+    }).catch(function(){});
+    return true;
+  } catch (e2) { return false; }
+}
+
+/* ---------- Confetti burst (brand colors) ---------- */
+function fireConfetti(){
+  if (typeof confetti !== "function") return;
+  var colors = ["#1e5ab0","#0db5a6","#16a34a","#2f7de0","#ffc857"];
+  confetti({ particleCount: 90, spread: 70, origin: { y: 0.6 }, colors: colors });
+  setTimeout(function(){
+    confetti({ particleCount: 60, angle: 60,  spread: 55, origin: { x: 0, y: 0.7 }, colors: colors });
+  }, 180);
+  setTimeout(function(){
+    confetti({ particleCount: 60, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors: colors });
+  }, 360);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+
+  /* ---------- Mobile hamburger ---------- */
+  var toggle = document.querySelector(".menu-toggle");
+  var links  = document.querySelector(".nav-links");
+  function closeMenu(){ if(!links)return; links.classList.remove("open"); if(toggle)toggle.setAttribute("aria-expanded","false"); }
+  function toggleMenu(e){ if(e){e.preventDefault();e.stopPropagation();} if(!links)return; var open=links.classList.toggle("open"); if(toggle)toggle.setAttribute("aria-expanded",open?"true":"false"); }
+  if (toggle && links) {
+    toggle.addEventListener("click", toggleMenu);
+    toggle.addEventListener("touchend", function(e){ toggleMenu(e); }, { passive:false });
+    links.querySelectorAll("a").forEach(function(a){ a.addEventListener("click", closeMenu); });
+    document.addEventListener("click", function(e){
+      if (!links.classList.contains("open")) return;
+      if (toggle.contains(e.target) || links.contains(e.target)) return;
+      closeMenu();
+    });
+    document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeMenu(); });
+  }
+
+  /* ---------- (stepped form logic removed - single-step form) ---------- */
+
+  /* ---------- Form submission: instant green + confetti, LeadConnector via sendBeacon ---------- */
+  document.querySelectorAll("form[data-webhook], form.stepped-form, form[data-mailto]").forEach(function(form){
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+
+      // Build payload (LeadConnector-friendly: flat keys, named the way GHL custom fields expect)
+      var data = {};
+      new FormData(form).forEach(function(v, k){ data[k] = v; });
+
+      // Friendly aliases LeadConnector / GHL commonly map to standard contact fields
+      if (data.full_name && !data.name) data.name = data.full_name;
+      if (data.full_name && !data.first_name) {
+        var parts = String(data.full_name).trim().split(/\s+/);
+        data.first_name = parts.shift() || "";
+        data.last_name  = parts.join(" ");
+      }
+      if (data.zip && !data.postal_code) data.postal_code = data.zip;
+      if (data.message && !data.notes) data.notes = data.message;
+      data.sms_opt_in = data.sms_opt_in === "on" ? "yes" : "no";
+
+      // Metadata
+      data.source       = "vshealthbenefits.com";
+      data.page         = window.location.pathname;
+      data.submitted_at = new Date().toISOString();
+      data.user_agent   = navigator.userAgent;
+      data.referrer     = document.referrer || "";
+
+      // Flip Send Message button to green "Submitted" right away
+      var btn = form.querySelector('button[type="submit"], input[type="submit"]');
+      var origLabel = "";
+      if (btn) {
+        origLabel = btn.tagName === "INPUT" ? btn.value : btn.innerHTML;
+        btn.disabled = true;
+        btn.classList.add("submitted");
+        if (btn.tagName === "INPUT") { btn.value = "\u2713 Submitted"; }
+        else { btn.innerHTML = "\u2713 Submitted"; }
+      }
+
+      // Pop the confetti
+      fireConfetti();
+
+      // Send to LeadConnector (sendBeacon -> fetch fallback)
+      var webhook = form.getAttribute("data-webhook") || window.LEAD_WEBHOOK_URL;
+      sendWebhook(webhook, data);
+
+      // ALSO push to admin portal's Support tab as a contact request
+      try {
+        if (typeof window.vsAdminWrite === "function") {
+          var nameParts = (data.full_name || "").trim().split(/\s+/);
+          window.vsAdminWrite("contact_requests", {
+            id: "id_" + Math.random().toString(36).slice(2,10) + Date.now().toString(36),
+            firstName: nameParts.shift() || "",
+            lastName: nameParts.join(" "),
+            fullName: data.full_name || "",
+            email: data.email || "",
+            phone: data.phone || "",
+            zip: data.zip || data.postal_code || "",
+            message: "[CAREER APPLICATION] Role: "+(data.role||"General interest")+(data.linkedin?(" | Link: "+data.linkedin):"")+"\n\n"+(data.message||""),
+            sms_opt_in: data.sms_opt_in || "no",
+            status: "new",
+            source: "careers-form",
+            page: window.location.pathname,
+            user_agent: navigator.userAgent,
+            referrer: document.referrer || "",
+            created: Date.now(),
+            submitted_at: new Date().toISOString()
+          });
+        }
+      } catch(e) { /* don't block the user */ }
+
+      // Friendly inline note
+      var note = form.querySelector(".form-success");
+      if (!note) {
+        note = document.createElement("div");
+        note.className = "form-success";
+        note.style.cssText = "margin-top:14px;padding:14px 16px;border-radius:10px;background:#e8f7ee;border:1px solid #b7e0c5;color:#165c2e;font-weight:600";
+        form.appendChild(note);
+      }
+      note.textContent = "Thank you! Your application is in. We will reach out when a role opens that fits.";
+
+      // Reset fields
+      try { form.reset(); } catch (e2) {}
+
+      // Restore button after 6s
+      setTimeout(function(){
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove("submitted");
+          if (btn.tagName === "INPUT") { btn.value = origLabel || "Submit Application"; }
+          else { btn.innerHTML = origLabel || "Submit Application"; }
+        }
+        if (note && note.parentNode) { note.parentNode.removeChild(note); }
+      }, 6000);
+    });
+  });
+
+  /* ---------- Login modal ---------- */
+  var modal = document.getElementById("login-modal");
+  function openModal(){ if(modal){ modal.classList.add("open"); document.body.style.overflow="hidden"; } closeMenu(); }
+  function closeModal(){ if(modal){ modal.classList.remove("open"); document.body.style.overflow=""; } }
+  document.querySelectorAll("[data-open-login]").forEach(function(b){
+    b.addEventListener("click", function(e){ e.preventDefault(); openModal(); });
+  });
+  document.querySelectorAll("[data-close-login]").forEach(function(b){
+    b.addEventListener("click", function(e){ e.preventDefault(); closeModal(); });
+  });
+  if (modal) {
+    modal.addEventListener("click", function(e){ if (e.target === modal) closeModal(); });
+  }
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeModal(); });
+
+  /* ---------- Footer year ---------- */
+  var y = document.getElementById("year");
+  if (y) y.textContent = new Date().getFullYear();
+});
+</script>
+
+<!-- ====================== SCROLL ANIMATIONS ====================== -->
+<style>
+[data-reveal]{opacity:0;transition:opacity .65s cubic-bezier(.2,.7,.2,1),transform .65s cubic-bezier(.2,.7,.2,1),filter .65s cubic-bezier(.2,.7,.2,1);}
+[data-reveal="fade-up"]{transform:translateY(38px);}
+[data-reveal="fade-down"]{transform:translateY(-30px);}
+[data-reveal="fade-left"]{transform:translateX(-40px);}
+[data-reveal="fade-right"]{transform:translateX(40px);}
+[data-reveal="zoom"]{transform:scale(.92);}
+[data-reveal="flip"]{transform:perspective(600px) rotateX(14deg);}
+[data-reveal].revealed{opacity:1;transform:none;filter:none;}
+
+[data-stagger]>*{opacity:0;transform:translateY(28px);transition:opacity .55s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1);}
+[data-stagger]>*.revealed{opacity:1;transform:none;}
+
+@keyframes countPop{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
+.count-pop{animation:countPop .45s ease-out;}
+
+.card,[class*="feature-card"],[class*="service-card"]{
+  transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s cubic-bezier(.2,.7,.2,1),border-color .2s;
+}
+</style>
+<script>
+(function(){
+  "use strict";
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(!entry.isIntersecting) return;
+      var el = entry.target;
+      var delay = parseFloat(el.getAttribute("data-delay")||0);
+      setTimeout(function(){ el.classList.add("revealed"); }, delay);
+      io.unobserve(el);
+    });
+  },{threshold:0.12, rootMargin:"0px 0px -40px 0px"});
+
+  var ioStagger = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(!entry.isIntersecting) return;
+      var parent = entry.target;
+      var children = Array.from(parent.children);
+      children.forEach(function(child, i){
+        setTimeout(function(){ child.classList.add("revealed"); }, i * 110);
+      });
+      ioStagger.unobserve(parent);
+    });
+  },{threshold:0.08, rootMargin:"0px 0px -30px 0px"});
+
+  function tagElements(){
+    document.querySelectorAll(".hero h1,.hero-sub,.hero-ctas,.hero-meta,.hero-card").forEach(function(el,i){
+      if(!el.hasAttribute("data-reveal")){
+        el.setAttribute("data-reveal","fade-up");
+        el.setAttribute("data-delay", i * 90);
+      }
+    });
+
+    document.querySelectorAll(".hero-image,.hero-visual").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal","zoom");
+    });
+
+    document.querySelectorAll(".eyebrow,.section h2,.section-tight h2,.page-hero h1,.page-hero h2").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal","fade-up");
+    });
+
+    document.querySelectorAll(".cards,.service-grid,.features-grid,.steps-grid,.why-grid,.team-grid,.blog-grid,.process-steps,.stat-row,.values-grid,.timeline,.cta-pair,.choice-row,.step-cards").forEach(function(el){
+      if(!el.hasAttribute("data-stagger")) el.setAttribute("data-stagger","");
+    });
+
+    document.querySelectorAll(".card,.service-card,.feature-card,.step,.timeline-item,.value-item,.stat-item,.why-item,.process-step,.cta-card,.alert-card,.cd-wrap,.coverage-card,.benefit-item,.check-card").forEach(function(el){
+      if(!el.hasAttribute("data-reveal") && !el.closest("[data-stagger]")){
+        el.setAttribute("data-reveal","fade-up");
+      }
+    });
+
+    document.querySelectorAll(".section>div>p:first-of-type,.lede,.intro-text,.section-intro,.hero-sub").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal","fade-up");
+    });
+
+    document.querySelectorAll("aside,.sidebar,.side-panel,.sticky-form").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")){
+        el.setAttribute("data-reveal","fade-left");
+        el.setAttribute("data-delay","160");
+      }
+    });
+
+    document.querySelectorAll(".cta-banner,.cta-section,.cta-block,.enroll-banner,.countdown-banner").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal","zoom");
+    });
+
+    document.querySelectorAll(".testimonial,.quote,.review").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal","fade-up");
+    });
+
+    document.querySelectorAll(".carriers").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")){
+        el.setAttribute("data-reveal","fade-up");
+        el.setAttribute("data-delay","200");
+      }
+    });
+
+    document.querySelectorAll(".blog-body img,.article-body img,.page-img,.feature-img").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal","zoom");
+    });
+
+    document.querySelectorAll(".footer-grid>.foot-col,.footer-cols>.foot-col").forEach(function(el,i){
+      if(!el.hasAttribute("data-reveal")){
+        el.setAttribute("data-reveal","fade-up");
+        el.setAttribute("data-delay", i * 70);
+      }
+    });
+
+    document.querySelectorAll("form.stepped-form,.form-card,.contact-form,.quote-form,.lead-form").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")){
+        el.setAttribute("data-reveal","fade-up");
+        el.setAttribute("data-delay","120");
+      }
+    });
+  }
+
+  function animateNumber(el){
+    var raw = el.getAttribute("data-count") || el.textContent.replace(/[^0-9.]/g,"");
+    var suffix = el.textContent.replace(/[0-9.,]/g,"");
+    var target = parseFloat(raw)||0;
+    var isInt = String(raw).indexOf(".")===-1;
+    var duration = 1200;
+    var start = performance.now();
+    function step(now){
+      var p = Math.min((now-start)/duration,1);
+      var ease = 1-Math.pow(1-p,3);
+      var val = target*ease;
+      el.textContent = (isInt ? Math.round(val) : val.toFixed(1)) + suffix;
+      if(p<1){ requestAnimationFrame(step); }
+      else {
+        el.textContent = (isInt ? target : target.toFixed(1)) + suffix;
+        el.classList.add("count-pop");
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  var ioCount = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(!entry.isIntersecting) return;
+      animateNumber(entry.target);
+      ioCount.unobserve(entry.target);
+    });
+  },{threshold:0.5});
+
+  var bar = document.createElement("div");
+  bar.id = "vs-scroll-bar";
+  bar.style.cssText = "position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--blue-600),var(--teal));z-index:9999;pointer-events:none;transition:width .1s linear;border-radius:0 2px 2px 0;";
+  document.body.appendChild(bar);
+
+  window.addEventListener("scroll", function(){
+    var scrolled = window.scrollY;
+    var total = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = total > 0 ? ((scrolled/total)*100)+"%" : "0%";
+  }, {passive:true});
+
+  var hdr = document.querySelector(".site-header");
+  if(hdr){
+    window.addEventListener("scroll",function(){
+      hdr.style.boxShadow = window.scrollY > 10 ? "0 4px 20px rgba(13,27,42,.10)" : "";
+    },{passive:true});
+  }
+
+  function init(){
+    tagElements();
+    document.querySelectorAll("[data-reveal]").forEach(function(el){ io.observe(el); });
+    document.querySelectorAll("[data-stagger]").forEach(function(el){ ioStagger.observe(el); });
+    document.querySelectorAll(".stat-num,.counter,[data-count],.cd-num").forEach(function(el){
+      if(el.textContent.match(/\d/)) ioCount.observe(el);
+    });
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+
+<!-- ====================== BACK TO TOP ====================== -->
+<style>
+#back-to-top{
+  position:fixed;bottom:28px;right:22px;z-index:999;
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue-700),var(--teal));
+  color:#fff;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(13,27,42,.22);
+  opacity:0;transform:translateY(12px);
+  transition:opacity .3s ease,transform .3s ease,box-shadow .2s ease;
+  pointer-events:none;
+}
+#back-to-top.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+#back-to-top:hover{box-shadow:0 8px 24px rgba(13,27,42,.28);transform:translateY(-2px);}
+</style>
+
+<button id="back-to-top" aria-label="Back to top">
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9 14V4M4 9l5-5 5 5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<script>
+(function(){
+  var btn = document.getElementById("back-to-top");
+  window.addEventListener("scroll", function(){
+    btn.classList.toggle("visible", window.scrollY > 300);
+  }, {passive:true});
+  btn.addEventListener("click", function(){
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+})();
+</script>
+
+</body>
+</html>

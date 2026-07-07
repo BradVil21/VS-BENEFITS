@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z6EVXL76GG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Z6EVXL76GG');
+</script>
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Services | Group, ACA, Family, Dental/Vision & Medicaid | VS Health Benefits</title>
+<meta name="description" content="Group 10-99, micro-group 2-9, ACA/marketplace, family, dental & vision, Medicaid guidance, ancillary benefits. Licensed in 40+ states." />
+<link rel="canonical" href="https://vshealthbenefits.com/services.html" />
+<meta name="robots" content="index,follow" />
+<meta name="geo.region" content="US-FL" />
+<meta name="geo.placename" content="Miami" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/favicon.png" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Services | Group, ACA, Family, Dental/Vision & Medicaid | VS Health Benefits" />
+<meta property="og:description" content="Group 10-99, micro-group 2-9, ACA/marketplace, family, dental & vision, Medicaid guidance, ancillary benefits. Licensed in 40+ states." />
+<meta property="og:url" content="https://vshealthbenefits.com/services.html" />
+<meta property="og:site_name" content="VS Health Benefits" />
+<meta property="og:image" content="https://www.vshealthbenefits.com/images/og-default.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Services | Group, ACA, Family, Dental/Vision & Medicaid | VS Health Benefits" />
+<meta name="twitter:description" content="Group 10-99, micro-group 2-9, ACA/marketplace, family, dental & vision, Medicaid guidance, ancillary benefits. Licensed in 40+ states." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --blue-900:#0b2346; --blue-800:#0f2e5c; --blue-700:#16447f;
+  --blue-600:#1e5ab0; --blue-500:#2f7de0; --blue-100:#e8f0fb; --blue-50:#f4f8fe;
+  --teal:#0db5a6; --teal-dark:#098374;
+  --ink:#0d1b2a; --ink-2:#334155; --muted:#5a6b80;
+  --line:#e4e9f2; --bg:#ffffff; --bg-soft:#f7faff;
+  --warn:#b23a1d; --success:#16a34a;
+  --shadow:0 10px 30px rgba(13,27,42,.08);
+  --shadow-sm:0 4px 12px rgba(13,27,42,.06);
+  --radius:14px; --radius-sm:10px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --container:1160px;
+  --tap:44px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block;height:auto}
+a{color:var(--blue-700);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3,h4{font-family:'Poppins','Inter',system-ui,sans-serif;color:var(--blue-900);line-height:1.2;margin:0 0 .5em}
+h1{font-size:clamp(1.8rem,6vw,3rem);letter-spacing:-.02em}
+h2{font-size:clamp(1.5rem,5vw,2.2rem);letter-spacing:-.01em}
+h3{font-size:clamp(1.15rem,3.6vw,1.3rem)}
+p{margin:0 0 1em;color:var(--ink-2);font-size:1rem}
+
+.container{width:100%;padding:0 18px;margin:0 auto;max-width:var(--container)}
+.center{text-align:center}
+.section{padding:48px 0}
+.bg-soft{background:var(--bg-soft)}
+.eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-600);background:var(--blue-100);padding:6px 12px;border-radius:999px;margin-bottom:14px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:var(--tap);padding:13px 20px;border-radius:999px;font-weight:700;font-size:.98rem;border:2px solid transparent;transition:transform .2s var(--ease),box-shadow .2s var(--ease),background .2s,color .2s,border-color .2s;cursor:pointer;text-decoration:none;line-height:1.1;max-width:100%}
+.btn-primary{background:var(--blue-700);color:#fff}
+.btn-primary:hover{background:var(--blue-600);box-shadow:0 8px 20px rgba(30,90,176,.28);transform:translateY(-1px);text-decoration:none;color:#fff}
+.btn-secondary{background:#fff;color:var(--blue-700);border-color:var(--blue-700)}
+.btn-secondary:hover{background:var(--blue-700);color:#fff;text-decoration:none}
+.btn-teal{background:var(--teal);color:#fff}
+.btn-teal:hover{background:var(--teal-dark);color:#fff;text-decoration:none}
+.btn.submitted{background:var(--success)!important;border-color:var(--success)!important;color:#fff!important;cursor:default;opacity:1}
+
+.site-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:saturate(160%) blur(10px);border-bottom:1px solid var(--line)}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:8px;font-family:'Poppins',sans-serif;font-weight:700;color:var(--blue-900);font-size:1rem}
+.brand-badge{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.88rem;box-shadow:var(--shadow-sm);flex-shrink:0}
+.brand img{width:34px;height:34px;border-radius:9px}
+
+.menu-toggle{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;background:transparent;border:0;padding:10px;cursor:pointer;min-width:var(--tap);min-height:var(--tap)}
+.menu-toggle span{width:24px;height:2.5px;background:var(--ink);border-radius:2px;transition:transform .25s,opacity .25s}
+.menu-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.menu-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+
+.nav-links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;gap:0;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgba(13,27,42,.08);padding:6px 0 12px;z-index:60}
+.nav-links.open{display:flex}
+.nav-links a,.nav-links button.nav-login{color:var(--ink);font-weight:600;font-size:1rem;padding:14px 20px;border-bottom:1px solid var(--line);min-height:var(--tap);display:flex;align-items:center;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left;cursor:pointer;font-family:inherit}
+.nav-links a:hover,.nav-links button.nav-login:hover{color:var(--blue-700);text-decoration:none}
+.nav-links a.nav-cta{background:var(--blue-700);color:#fff;margin:10px 20px 0;border-radius:10px;text-align:center;padding:14px 16px;border-bottom:0;justify-content:center;width:calc(100% - 40px)}
+.nav-links a.nav-cta:hover{background:var(--blue-600);color:#fff}
+
+.hero{position:relative;background:radial-gradient(1200px 500px at 20% -10%,rgba(30,90,176,.14),transparent 60%),radial-gradient(900px 450px at 90% 10%,rgba(13,181,166,.12),transparent 55%),linear-gradient(180deg,#f4f8fe 0%,#ffffff 85%);padding:44px 0 36px;overflow:hidden}
+.hero .eyebrow{background:#fff;border:1px solid var(--blue-100)}
+.hero h1 span{background:linear-gradient(90deg,var(--blue-700),var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{font-size:1.02rem;color:var(--ink-2);margin-bottom:22px}
+
+.cta-strip{background:linear-gradient(135deg,var(--blue-700),var(--blue-500));color:#fff;border-radius:18px;padding:28px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px}
+.cta-strip h2{color:#fff}
+.cta-strip p{color:rgba(255,255,255,.92)}
+
+.service-block{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:18px;display:grid;grid-template-columns:1fr}
+.service-block .img{aspect-ratio:16/9;width:100%;background:var(--blue-50);overflow:hidden}
+.service-block .img img{width:100%;height:100%;object-fit:cover}
+.service-block .body{padding:22px}
+.service-block h2{font-size:clamp(1.3rem,4.8vw,1.7rem);margin-top:6px}
+.service-block ul{padding-left:20px;color:var(--ink-2)}
+.service-block li{margin-bottom:6px}
+.service-block .btn{margin-top:10px}
+
+footer{background:var(--blue-900);color:#ffffff;padding:40px 0 20px}
+footer a{color:#ffffff}
+footer a:hover{color:#fff}
+.foot-grid{display:grid;grid-template-columns:1fr;gap:26px;margin-bottom:26px}
+.foot-grid h4{color:#fff;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-family:'Inter',sans-serif;margin-bottom:12px}
+.foot-grid ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;font-size:.92rem}
+.foot-grid .brand{color:#fff;margin-bottom:10px}
+.foot-brand-text{color:rgba(255,255,255,.95);font-size:.9rem;line-height:1.6}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.12);padding-top:18px;font-size:.8rem;color:rgba(255,255,255,.9);display:flex;flex-direction:column;gap:6px}
+.foot-grid button.linklike{background:none;border:0;color:#ffffff;font-family:inherit;font-size:.92rem;padding:0;cursor:pointer;text-align:left}
+.foot-grid button.linklike:hover{color:#fff;text-decoration:underline}
+
+/* Login modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(13,27,42,.55);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;overflow-y:auto}
+.modal-backdrop.open{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:440px;width:100%;padding:28px 24px;box-shadow:0 20px 48px rgba(13,27,42,.25);position:relative;margin:auto}
+.modal h2{margin-bottom:6px;font-size:1.4rem}
+.modal p.lede{color:var(--muted);margin-bottom:20px;font-size:.95rem}
+.modal .close-x{position:absolute;top:10px;right:12px;background:transparent;border:0;width:36px;height:36px;font-size:1.6rem;color:var(--muted);cursor:pointer;line-height:1;border-radius:8px}
+.modal .close-x:hover{background:var(--blue-50);color:var(--ink)}
+.modal .choice-row{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.modal .choice-row .btn{width:100%;padding:14px 18px}
+.modal .small{font-size:.82rem;color:var(--muted);text-align:center}
+.modal .small a{color:var(--blue-700);font-weight:600}
+
+.space-8{height:8px}.space-16{height:16px}.space-24{height:24px}
+
+@media (min-width:640px){
+  .container{padding:0 24px}
+  .section{padding:60px 0}
+  .hero{padding:60px 0 52px}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .foot-bottom{flex-direction:row;justify-content:space-between}
+  .service-block{grid-template-columns:.9fr 1.1fr}
+  .service-block .img{aspect-ratio:auto;height:100%;min-height:260px}
+}
+
+@media (min-width:960px){
+  .section{padding:72px 0}
+  .hero{padding:84px 0 72px}
+  .nav-wrap{height:72px}
+  .nav-links{display:flex;position:static;flex-direction:row;gap:18px;background:transparent;border:0;padding:0;box-shadow:none;align-items:center}
+  .nav-links a,.nav-links button.nav-login{padding:8px 4px;border-bottom:0;min-height:auto;font-size:.94rem;width:auto;text-align:left}
+  .nav-links a.nav-cta{margin:0;padding:10px 18px;border-radius:999px;font-weight:700;width:auto}
+  .menu-toggle{display:none}
+  .foot-grid{grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
+  .cta-strip{padding:42px 32px;border-radius:20px}
+}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"InsuranceAgency","@id":"https://www.vshealthbenefits.com/#org","name":"VS Health Benefits","url":"https://www.vshealthbenefits.com/","telephone":"+19548251009","email":"bvilsaint@vshealthbenefits.com","areaServed":"US","address":{"@type":"PostalAddress","addressLocality":"Miami","addressRegion":"FL","addressCountry":"US"},"openingHours":["Mo-Fr 08:00-18:00","Sa-Su 08:00-13:00"]}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="/" aria-label="VS Health Benefits home">
+      <span class="brand-badge">VS</span>
+      <span>VS Health Benefits</span>
+    </a>
+    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="nav-links" class="nav-links">
+      <a href="/">Home</a>
+      <a href="/services">Services</a>
+      <a href="/about">About</a>
+      <a href="/blog">Blog</a>
+      <a href="/contact">Contact</a>
+      <a href="/refer-and-earn">Refer &amp; Earn</a>
+      <button type="button" class="nav-login" data-open-login>Member Login</button>
+      <a class="nav-cta" href="/quote">Get a Quote</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" style="padding-bottom:28px">
+  <div class="container">
+    <span class="eyebrow">Services</span>
+    <h1>Group, individual, family <span> all under one advisor.</span></h1>
+    <p class="hero-sub">Every service below is priced the same to you (zero) because carriers pay our commission. Your job is to pick the advisor who will actually shop the market.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div id="group" class="service-block">
+      <div class="img"><img src="/compressed/servicesmeeting.jpg" alt="Group health insurance planning" loading="lazy" /></div>
+      <div class="body">
+        <span class="eyebrow">Our specialty</span>
+        <h2>Group Health Insurance 10 to 25 Employees</h2>
+        <p>The sweet spot for real optimization. We model fully insured, level-funded, and self-funded options against your actual census and claims history. For multi-state teams we quote carriers in every zip code you have employees.</p>
+        <ul>
+          <li>Fully insured, level-funded, self-funded &amp; ICHRA modeling</li>
+          <li>Census-based quoting across all A-rated carriers</li>
+          <li>Renewal negotiation &amp; plan-year audits</li>
+          <li>Employee onboarding &amp; open enrollment support</li>
+          <li>Compliance guidance (ACA, ERISA, Section 125, COBRA)</li>
+        </ul>
+        <a class="btn btn-primary" href="/quote">Quote My Group</a>
+      </div>
+    </div>
+
+    <div id="micro" class="service-block">
+      <div class="img"><img src="/compressed/microgroup.jpg" alt="Small team health insurance" loading="lazy" /></div>
+      <div class="body">
+        <span class="eyebrow">Small team</span>
+        <h2>Micro-Group 2-9 Employees</h2>
+        <p>Smaller teams often get squeezed between individual market prices and group minimums. We focus on creative structures - PEOs, QSEHRA, small-group fully insured - that fit a tight payroll without sacrificing coverage.</p>
+        <ul>
+          <li>QSEHRA &amp; ICHRA design for very small teams</li>
+          <li>Small-group carrier shopping where it beats ACA</li>
+          <li>Spouse / dependent optimization</li>
+        </ul>
+        <a class="btn btn-primary" href="/quote">See My Options</a>
+      </div>
+    </div>
+
+    <div id="family" class="service-block">
+      <div class="img"><img src="/compressed/familyhappy.jpg" alt="Family and individual coverage" loading="lazy" /></div>
+      <div class="body">
+        <span class="eyebrow">Households</span>
+        <h2>Family &amp; Individual Coverage</h2>
+        <p>We make sure every subsidy, tax credit, and network option is on the table. Whether you are between jobs, newly self-employed, or shopping during Open Enrollment, we quote every plan available in your zip code.</p>
+        <ul>
+          <li>ACA marketplace plans (all tiers)</li>
+          <li>Off-exchange individual plans when they beat ACA</li>
+          <li>Dental, vision, short-term &amp; supplemental</li>
+          <li>Subsidy &amp; APTC calculation done right</li>
+        </ul>
+        <a class="btn btn-primary" href="/quote">Find My Plan</a>
+      </div>
+    </div>
+
+    <div id="aca" class="service-block">
+      <div class="img"><img src="/compressed/ACAphoto.jpg" alt="ACA marketplace comparison" loading="lazy" /></div>
+      <div class="body">
+        <span class="eyebrow">Marketplace</span>
+        <h2>ACA / Individual Marketplace</h2>
+        <p>Most ACA shoppers leave money on the table because they do not check every subsidy path. We do. We also flag when an off-exchange plan quietly beats the marketplace.</p>
+        <ul>
+          <li>Full marketplace comparison across carriers</li>
+          <li>Premium tax credit (APTC) &amp; cost-sharing reduction review</li>
+          <li>Special Enrollment eligibility check</li>
+          <li>Year-round income reconciliation guidance</li>
+        </ul>
+        <a class="btn btn-primary" href="/quote">Compare Marketplace Plans</a>
+      </div>
+    </div>
+
+    <div id="dental-vision" class="service-block">
+      <div class="img"><img src="/compressed/dental.jpg" alt="Dental and vision insurance plans" loading="lazy" /></div>
+      <div class="body">
+        <span class="eyebrow">Every household</span>
+        <h2>Dental &amp; Vision Insurance</h2>
+        <p>Dental and vision are where small monthly premiums buy real peace of mind. We build these standalone or bundled with your medical plan, and we actually check provider networks before you sign.</p>
+        <ul>
+          <li>Standalone dental (PPO, HMO, or discount) for individuals and families</li>
+          <li>Standalone vision plans including allowance for frames/contacts</li>
+          <li>Employer-paid, voluntary, and hybrid funding for groups</li>
+          <li>Network check against your current dentist and optometrist</li>
+          <li>Bundled savings when paired with medical coverage</li>
+        </ul>
+        <a class="btn btn-primary" href="/quote">Add Dental &amp; Vision</a>
+      </div>
+    </div>
+
+    <div id="medicaid" class="service-block">
+      <div class="img"><img src="/compressed/kidsplaying.jpg" alt="Medicaid eligibility guidance" loading="lazy" /></div>
+      <div class="body">
+        <span class="eyebrow">Public programs</span>
+        <h2>Medicaid Guidance</h2>
+        <p>If you or a family member is below the subsidy cliff, Medicaid is often the right answer. We help you understand eligibility by state, complete applications correctly, and transition if income changes.</p>
+        <ul>
+          <li>State-specific eligibility review</li>
+          <li>Application support &amp; documentation checklist</li>
+          <li>Transition planning if you move above the cutoff</li>
+        </ul>
+        <a class="btn btn-primary" href="/contact">Ask About Medicaid</a>
+      </div>
+    </div>
+
+    <div id="ancillary" class="service-block">
+      <div class="img"><img src="/compressed/brokenarm.jpg" alt="Ancillary benefits options" loading="lazy" /></div>
+      <div class="body">
+        <span class="eyebrow">Round it out</span>
+        <h2>Ancillary Benefits</h2>
+        <p>Life, disability, critical illness, accident. On their own they are small. Bundled with medical and dental/vision, they become a real retention tool for employers and a meaningful safety net for families.</p>
+        <ul>
+          <li>Short-term &amp; long-term disability</li>
+          <li>Life insurance (term &amp; permanent)</li>
+          <li>Accident &amp; critical illness riders</li>
+          <li>Group voluntary worksite benefits</li>
+        </ul>
+        <a class="btn btn-primary" href="/quote">Bundle &amp; Save</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-soft">
+  <div class="container">
+    <div class="cta-strip">
+      <h2>Not sure which service fits?</h2>
+      <p>Tell us your situation in 15 minutes. We will tell you which applies - and which does not.</p>
+      <a class="btn btn-teal" href="/contact">Book a Call</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="brand">
+          <span class="brand-badge">VS</span>
+          <span style="color:#fff">VS Health Benefits</span>
+        </div>
+        <p class="foot-brand-text">Licensed, independent health insurance advisor based in Miami, FL, serving small employers and families in 40+ states. Unbiased guidance, zero-cost consultations.</p>
+      </div>
+      <div>
+        <h4>Solutions</h4>
+        <ul>
+          <li><a href="/services#group">Group 10-99</a></li>
+          <li><a href="/services#micro">Micro-Group 2-9</a></li>
+          <li><a href="/services#aca">ACA / Individual</a></li>
+          <li><a href="/services#family">Family Plans</a></li>
+          <li><a href="/dental-vision-insurance">Dental &amp; Vision</a></li>
+          <li><a href="/services#medicaid">Medicaid Guidance</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="/about">About</a></li><li><a href="/bradley-vilsaint">Our Founder</a></li><li><a href="/careers">Careers</a></li><li><a href="/refer-and-earn">Refer &amp; Earn</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/quote">Get a Quote</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms &amp; Conditions</a></li>
+          <li><button type="button" class="linklike" data-open-login>Member Login</button></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Reach Us</h4>
+        <ul>
+          <li><a href="tel:+19548251009">(954) 825-1009</a></li>
+          <li><a href="mailto:bvilsaint@vshealthbenefits.com">bvilsaint@vshealthbenefits.com</a></li>
+          <li>Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET</li>
+          <li>Miami, FL | 40+ states</li>
+        </ul>
+                <div style="display:flex;gap:14px;margin-top:18px;">
+          <a href="https://www.linkedin.com/company/vsbenefits/" target="_blank" rel="noopener" aria-label="LinkedIn" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;transition:background .2s;" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S.02 4.88.02 3.5 1.13 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V24h-4V8.5zM8.5 8.5h3.8v2.1h.05C12.85 9.1 14.6 8 16.7 8c4.1 0 4.85 2.7 4.85 6.2V24h-4v-8.8c0-2.1-.04-4.8-2.93-4.8-2.93 0-3.38 2.3-3.38 4.65V24h-4V8.5z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/vshealthbenefits" target="_blank" rel="noopener" aria-label="Instagram" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;transition:background .2s;" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.975.975 1.246 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.975.975-2.242 1.246-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.975-.975-1.246-2.242-1.308-3.608C2.175 15.584 2.163 15.204 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608.975-.975 2.242-1.246 3.608-1.308C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.014 7.052.072 5.197.157 3.355.673 2.014 2.014.673 3.355.157 5.197.072 7.052.014 8.332 0 8.741 0 12c0 3.259.014 3.668.072 4.948.085 1.855.601 3.697 1.942 5.038 1.341 1.341 3.183 1.857 5.038 1.942C8.332 23.986 8.741 24 12 24s3.668-.014 4.948-.072c1.855-.085 3.697-.601 5.038-1.942 1.341-1.341 1.857-3.183 1.942-5.038.058-1.28.072-1.689.072-4.948s-.014-3.668-.072-4.948c-.085-1.855-.601-3.697-1.942-5.038C20.645.673 18.803.157 16.948.072 15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=61588058885222" target="_blank" rel="noopener" aria-label="Facebook" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;transition:background .2s;" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@vshealthbenefits" target="_blank" rel="noopener" aria-label="TikTok" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;transition:background .2s;" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-disclaimer" style="font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.55;max-width:760px;margin-bottom:16px">VS Health Benefits only sends official enrollment materials after direct client confirmation. We do not mail unsolicited insurance packages.</div>
+    <div class="foot-bottom">
+      <span>&copy; <span id="year">2026</span> VS Health Benefits. All rights reserved.</span>
+      <span>vshealthbenefits.com | Licensed health insurance advisor</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Login modal -->
+<div class="modal-backdrop" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
+  <div class="modal">
+    <button class="close-x" type="button" aria-label="Close" data-close-login>&times;</button>
+    <h2 id="login-modal-title">Sign in</h2>
+    <p class="lede">Choose where you'd like to go.</p>
+    <div class="choice-row">
+      <a class="btn btn-primary" href="/client">Client / Member Portal</a>
+      <a class="btn btn-secondary" href="/admin">Admin Portal</a>
+    </div>
+    <p class="small">Not a member yet? <a href="/client">Create a client account</a></p>
+  </div>
+</div>
+
+<script src="https//cdn.jsdelivr.net/npm/canvas-confetti1.9.3/dist/confetti.browser.min.js"></script>
+<script>
+/* === MAKE.COM WEBHOOK ===
+   Paste your full Make.com webhook URL between the quotes below.
+   Get it from: Make.com -> your scenario -> Webhooks module -> "Copy address to clipboard" */
+window.MAKE_WEBHOOK_URL = "REPLACE_WITH_YOUR_MAKE_WEBHOOK_URL";
+
+document.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+
+  /* Mobile hamburger */
+  var toggle = document.querySelector(".menu-toggle");
+  var links  = document.querySelector(".nav-links");
+  function closeMenu() { if (!links) return; links.classList.remove("open"); if (toggle) toggle.setAttribute("aria-expanded","false"); }
+  function toggleMenu(e) { if (e) { e.preventDefault(); e.stopPropagation(); } if (!links) return; var open = links.classList.toggle("open"); if (toggle) toggle.setAttribute("aria-expanded", open ? "true" : "false"); }
+  if (toggle && links) {
+    toggle.addEventListener("click", toggleMenu);
+    toggle.addEventListener("touchend", function (e) { toggleMenu(e); }, { passive: false });
+    links.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeMenu); });
+    document.addEventListener("click", function (e) {
+      if (!links.classList.contains("open")) return;
+      if (toggle.contains(e.target) || links.contains(e.target)) return;
+      closeMenu();
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+  }
+
+  /* Login modal */
+  var modal = document.getElementById("login-modal");
+  function openModal(){ if(modal){ modal.classList.add("open"); document.body.style.overflow="hidden"; } closeMenu(); }
+  function closeModal(){ if(modal){ modal.classList.remove("open"); document.body.style.overflow=""; } }
+  document.querySelectorAll("[data-open-login]").forEach(function(b){ b.addEventListener("click", function(e){ e.preventDefault(); openModal(); }); });
+  document.querySelectorAll("[data-close-login]").forEach(function(b){ b.addEventListener("click", function(e){ e.preventDefault(); closeModal(); }); });
+  if (modal) modal.addEventListener("click", function(e){ if (e.target === modal) closeModal(); });
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape") closeModal(); });
+
+  /* Confetti + green submitted */
+  function fireConfetti(){
+    if(typeof window.confetti!=="function")return;
+    var colors=['#1e5ab0','#0db5a6','#16a34a','#2f7de0','#ffc857'];
+    window.confetti({particleCount:120,spread:70,origin:{y:.6},colors:colors});
+    setTimeout(function(){window.confetti({particleCount:80,angle:60,spread:60,origin:{x:0,y:.7},colors:colors});},150);
+    setTimeout(function(){window.confetti({particleCount:80,angle:120,spread:60,origin:{x:1,y:.7},colors:colors});},300);
+  }
+
+  /* Form submission: Make.com webhook with mailto fallback */
+  document.querySelectorAll("form[data-webhook], form.stepped-form, form[data-mailto]").forEach(function(form){
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var data={};
+      new FormData(form).forEach(function(v,k){ data[k]=v; });
+      data._source="vshealthbenefits.com";
+      data._page=window.location.pathname;
+      data._ts=new Date().toISOString();
+      var webhook = form.getAttribute("data-webhook") || window.MAKE_WEBHOOK_URL;
+      var mailto  = form.getAttribute("data-mailto")  || "bvilsaint@vshealthbenefits.com";
+      var btn = form.querySelector('button[type="submit"], input[type="submit"]');
+      var orig = btn ? btn.textContent : "";
+      if (btn) { btn.disabled=true; btn.textContent="Sending..."; }
+      function success(){
+        if (btn) { btn.disabled=true; btn.textContent="\u2713 Submitted"; btn.classList.add("submitted"); }
+        var note = form.querySelector(".form-success");
+        if (!note) {
+          note = document.createElement("div");
+          note.className = "form-success";
+          note.style.cssText = "margin-top:14px;padding:14px 16px;border-radius:10px;background:#e8f7ee;border:1px solid #b7e0c5;color:#165c2e;font-weight:600";
+          form.appendChild(note);
+        }
+        note.textContent = "Thanks - your request is in. I will personally reach out within one business day.";
+        fireConfetti();
+      }
+      function fallback(){
+        var subj = "VS Health Benefits inquiry - " + (data.coverage_type || "general");
+        var body = Object.keys(data).filter(function(k){return k[0]!=="_"}).map(function(k){
+          return k.replace(/_/g," ").toUpperCase() + ": " + data[k];
+        }).join("\n");
+        window.location.href = "mailto:"+encodeURIComponent(mailto)+"?subject="+encodeURIComponent(subj)+"&body="+encodeURIComponent(body);
+      }
+      var useWebhook = webhook && webhook.indexOf("http")===0 && webhook.indexOf("REPLACE_WITH_")===-1;
+      if (useWebhook) {
+        fetch(webhook, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data) })
+          .then(function(r){
+            if (r.ok) { success(); }
+            else { if (btn) { btn.disabled=false; btn.textContent=orig; } fallback(); }
+          })
+          .catch(function(){ if (btn) { btn.disabled=false; btn.textContent=orig; } fallback(); });
+      } else {
+        if (btn) { btn.disabled=false; btn.textContent=orig; }
+        fallback();
+      }
+    });
+  });
+
+  /* Footer year */
+  var y = document.getElementById("year"); if (y) y.textContent = new Date().getFullYear();
+});
+</script>
+
+<!-- ====================== SCROLL ANIMATIONS ====================== -->
+<style>
+[data-reveal]{opacity:0;transition:opacity .65s cubic-bezier(.2,.7,.2,1),transform .65s cubic-bezier(.2,.7,.2,1),filter .65s cubic-bezier(.2,.7,.2,1);}
+[data-reveal="fade-up"]{transform:translateY(38px);}
+[data-reveal="fade-down"]{transform:translateY(-30px);}
+[data-reveal="fade-left"]{transform:translateX(-40px);}
+[data-reveal="fade-right"]{transform:translateX(40px);}
+[data-reveal="zoom"]{transform:scale(.92);}
+[data-reveal="flip"]{transform:perspective(600px) rotateX(14deg);}
+[data-reveal].revealed{opacity:1;transform:none;filter:none;}
+
+[data-stagger]>*{opacity:0;transform:translateY(28px);transition:opacity .55s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1);}
+[data-stagger]>*.revealed{opacity:1;transform:none;}
+
+@keyframes countPop{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
+.count-pop{animation:countPop .45s ease-out;}
+
+.card,[class*="feature-card"],[class*="service-card"]{
+  transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s cubic-bezier(.2,.7,.2,1),border-color .2s;
+}
+</style>
+<script>
+(function(){
+  "use strict";
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(!entry.isIntersecting) return;
+      var el = entry.target;
+      var delay = parseFloat(el.getAttribute("data-delay")||0);
+      setTimeout(function(){ el.classList.add("revealed"); }, delay);
+      io.unobserve(el);
+    });
+  },{threshold:0.12, rootMargin:"0px 0px -40px 0px"});
+
+  var ioStagger = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(!entry.isIntersecting) return;
+      var parent = entry.target;
+      var children = Array.from(parent.children);
+      children.forEach(function(child, i){
+        setTimeout(function(){ child.classList.add("revealed"); }, i * 110);
+      });
+      ioStagger.unobserve(parent);
+    });
+  },{threshold:0.08, rootMargin:"0px 0px -30px 0px"});
+
+  function tagElements(){
+    document.querySelectorAll(".hero h1,.hero-sub,.hero-ctas,.hero-meta,.hero-card").forEach(function(el,i){
+      if(!el.hasAttribute("data-reveal")){
+        el.setAttribute("data-reveal","fade-up");
+        el.setAttribute("data-delay", i * 90);
+      }
+    });
+
+    document.querySelectorAll(".hero-image,.hero-visual").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal","zoom");
+    });
+
+    document.querySelectorAll(".eyebrow,.section h2,.section-tight h2,.page-hero h1,.page-hero h2").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal","fade-up");
+    });
+
+    document.querySelectorAll(".cards,.service-grid,.features-grid,.steps-grid,.why-grid,.team-grid,.blog-grid,.process-steps,.stat-row,.values-grid,.timeline,.cta-pair,.choice-row,.step-cards").forEach(function(el){
+      if(!el.hasAttribute("data-stagger")) el.setAttribute("data-stagger","");
+    });
+
+    document.querySelectorAll(".card,.service-card,.feature-card,.step,.timeline-item,.value-item,.stat-item,.why-item,.process-step,.cta-card,.alert-card,.cd-wrap,.coverage-card,.benefit-item,.check-card").forEach(function(el){
+      if(!el.hasAttribute("data-reveal") && !el.closest("[data-stagger]")){
+        el.setAttribute("data-reveal","fade-up");
+      }
+    });
+
+    document.querySelectorAll(".section>div>p:first-of-type,.lede,.intro-text,.section-intro,.hero-sub").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal","fade-up");
+    });
+
+    document.querySelectorAll("aside,.sidebar,.side-panel,.sticky-form").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")){
+        el.setAttribute("data-reveal","fade-left");
+        el.setAttribute("data-delay","160");
+      }
+    });
+
+    document.querySelectorAll(".cta-banner,.cta-section,.cta-block,.enroll-banner,.countdown-banner").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal","zoom");
+    });
+
+    document.querySelectorAll(".testimonial,.quote,.review").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal","fade-up");
+    });
+
+    document.querySelectorAll(".carriers").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")){
+        el.setAttribute("data-reveal","fade-up");
+        el.setAttribute("data-delay","200");
+      }
+    });
+
+    document.querySelectorAll(".blog-body img,.article-body img,.page-img,.feature-img").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")) el.setAttribute("data-reveal","zoom");
+    });
+
+    document.querySelectorAll(".footer-grid>.foot-col,.footer-cols>.foot-col").forEach(function(el,i){
+      if(!el.hasAttribute("data-reveal")){
+        el.setAttribute("data-reveal","fade-up");
+        el.setAttribute("data-delay", i * 70);
+      }
+    });
+
+    document.querySelectorAll("form.stepped-form,.form-card,.contact-form,.quote-form,.lead-form").forEach(function(el){
+      if(!el.hasAttribute("data-reveal")){
+        el.setAttribute("data-reveal","fade-up");
+        el.setAttribute("data-delay","120");
+      }
+    });
+  }
+
+  function animateNumber(el){
+    var raw = el.getAttribute("data-count") || el.textContent.replace(/[^0-9.]/g,"");
+    var suffix = el.textContent.replace(/[0-9.,]/g,"");
+    var target = parseFloat(raw)||0;
+    var isInt = String(raw).indexOf(".")===-1;
+    var duration = 1200;
+    var start = performance.now();
+    function step(now){
+      var p = Math.min((now-start)/duration,1);
+      var ease = 1-Math.pow(1-p,3);
+      var val = target*ease;
+      el.textContent = (isInt ? Math.round(val) : val.toFixed(1)) + suffix;
+      if(p<1){ requestAnimationFrame(step); }
+      else {
+        el.textContent = (isInt ? target : target.toFixed(1)) + suffix;
+        el.classList.add("count-pop");
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  var ioCount = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(!entry.isIntersecting) return;
+      animateNumber(entry.target);
+      ioCount.unobserve(entry.target);
+    });
+  },{threshold:0.5});
+
+  var bar = document.createElement("div");
+  bar.id = "vs-scroll-bar";
+  bar.style.cssText = "position:fixed;top:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,var(--blue-600),var(--teal));z-index:9999;pointer-events:none;transition:width .1s linear;border-radius:0 2px 2px 0;";
+  document.body.appendChild(bar);
+
+  window.addEventListener("scroll", function(){
+    var scrolled = window.scrollY;
+    var total = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = total > 0 ? ((scrolled/total)*100)+"%" : "0%";
+  }, {passive:true});
+
+  var hdr = document.querySelector(".site-header");
+  if(hdr){
+    window.addEventListener("scroll",function(){
+      hdr.style.boxShadow = window.scrollY > 10 ? "0 4px 20px rgba(13,27,42,.10)" : "";
+    },{passive:true});
+  }
+
+  function init(){
+    tagElements();
+    document.querySelectorAll("[data-reveal]").forEach(function(el){ io.observe(el); });
+    document.querySelectorAll("[data-stagger]").forEach(function(el){ ioStagger.observe(el); });
+    document.querySelectorAll(".stat-num,.counter,[data-count],.cd-num").forEach(function(el){
+      if(el.textContent.match(/\d/)) ioCount.observe(el);
+    });
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+
+})();
+</script>
+</body>
+
+<!-- ====================== BACK TO TOP ====================== -->
+<style>
+#back-to-top{
+  position:fixed;bottom:28px;right:22px;z-index:999;
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue-700),var(--teal));
+  color:#fff;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(13,27,42,.22);
+  opacity:0;transform:translateY(12px);
+  transition:opacity .3s ease,transform .3s ease,box-shadow .2s ease;
+  pointer-events:none;
+}
+#back-to-top.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
+#back-to-top:hover{box-shadow:0 8px 24px rgba(13,27,42,.28);transform:translateY(-2px);}
+</style>
+
+<button id="back-to-top" aria-label="Back to top">
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9 14V4M4 9l5-5 5 5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<script>
+(function(){
+  var btn = document.getElementById("back-to-top");
+  window.addEventListener("scroll", function(){
+    btn.classList.toggle("visible", window.scrollY > 300);
+  }, {passive:true});
+  btn.addEventListener("click", function(){
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+})();
+</script>
+
+
+</html>

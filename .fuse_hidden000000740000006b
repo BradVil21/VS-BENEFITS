@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z6EVXL76GG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Z6EVXL76GG');
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ACA Subsidy Calculator 2025 | Estimate Your Health Insurance Cost | VS Health Benefits</title>
+<meta name="description" content="Free ACA subsidy calculator. Estimate your health insurance premium tax credit and your monthly cost in seconds, with Bronze, Silver, and Gold plan estimates. No email required. From VS Health Benefits, licensed in 40+ states." />
+<meta name="keywords" content="ACA subsidy calculator, health insurance subsidy calculator, premium tax credit calculator, obamacare subsidy calculator, health insurance cost estimator, marketplace subsidy calculator, how much is health insurance, aca calculator 2025, health insurance quote estimator" />
+<link rel="canonical" href="https://www.vshealthbenefits.com/aca-subsidy-calculator" />
+<meta name="robots" content="index,follow" />
+<meta name="geo.region" content="US-FL" />
+<meta name="geo.placename" content="Miami" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="ACA Subsidy Calculator | Estimate Your Health Insurance Cost" />
+<meta property="og:description" content="See your estimated health insurance subsidy and monthly cost in seconds, with Bronze, Silver, and Gold estimates. Free tool from VS Health Benefits." />
+<meta property="og:url" content="https://www.vshealthbenefits.com/aca-subsidy-calculator" />
+<meta property="og:site_name" content="VS Health Benefits" />
+<meta property="og:image" content="https://www.vshealthbenefits.com/compressed/familyhappy.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="ACA Subsidy Calculator | Estimate Your Health Insurance Cost" />
+<meta name="twitter:description" content="Estimate your health insurance subsidy and monthly cost in seconds. Free from VS Health Benefits." />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --blue-900:#0b2346;--blue-800:#0f2e5c;--blue-700:#16447f;--blue-600:#1e5ab0;--blue-500:#2f7de0;
+  --blue-100:#e8f0fb;--blue-50:#f4f8fe;--teal:#0db5a6;--teal-dark:#098374;
+  --ink:#0d1b2a;--ink-2:#334155;--muted:#5a6b80;--line:#e4e9f2;--bg:#fff;--bg-soft:#f7faff;--ok:#0a8754;
+  --shadow:0 10px 30px rgba(13,27,42,.08);--shadow-sm:0 4px 12px rgba(13,27,42,.06);--tap:44px;--container:1160px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;font-size:16px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:var(--blue-700);text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3,h4{font-family:'Poppins','Inter',sans-serif;color:var(--blue-900);line-height:1.2;margin:0 0 .5em}
+h1{font-size:clamp(1.8rem,5.5vw,2.9rem);letter-spacing:-.02em}
+h2{font-size:clamp(1.5rem,4.5vw,2.1rem)}
+p{margin:0 0 1em;color:var(--ink-2)}
+.container{width:100%;max-width:var(--container);margin:0 auto;padding:0 18px}
+.center{text-align:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:var(--tap);padding:13px 22px;border-radius:999px;font-weight:700;font-size:.98rem;border:2px solid transparent;cursor:pointer;font-family:inherit;text-decoration:none;line-height:1.1;transition:transform .15s,box-shadow .15s,background .2s}
+.btn-primary{background:var(--blue-700);color:#fff}
+.btn-primary:hover{background:var(--blue-600);color:#fff;text-decoration:none;transform:translateY(-1px)}
+.btn-secondary{background:#fff;color:var(--blue-700);border-color:var(--blue-700)}
+.btn-secondary:hover{background:var(--blue-700);color:#fff;text-decoration:none}
+/* Header */
+.site-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:saturate(160%) blur(10px);border-bottom:1px solid var(--line)}
+.nav-wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:8px;font-family:'Poppins',sans-serif;font-weight:700;color:var(--blue-900);font-size:1rem}
+.brand-badge{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue-700),var(--teal));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.88rem;flex-shrink:0}
+.menu-toggle{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;background:transparent;border:0;padding:10px;cursor:pointer;min-width:var(--tap);min-height:var(--tap)}
+.menu-toggle span{width:24px;height:2.5px;background:var(--ink);border-radius:2px;transition:transform .25s,opacity .25s}
+.menu-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
+.menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+.menu-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
+.nav-links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgba(13,27,42,.08);padding:6px 0 12px;z-index:60}
+.nav-links.open{display:flex}
+.nav-links a,.nav-links button.nav-login{color:var(--ink);font-weight:600;font-size:1rem;padding:14px 20px;border-bottom:1px solid var(--line);min-height:var(--tap);display:flex;align-items:center;background:none;border:0;width:100%;text-align:left;cursor:pointer;font-family:inherit}
+.nav-links a.nav-cta{background:var(--blue-700);color:#fff;margin:10px 16px 6px;border-radius:10px;justify-content:center;width:calc(100% - 32px);border-bottom:0}
+.nav-links a.nav-cta:hover{background:var(--blue-600);color:#fff}
+/* Hero */
+.hero{background:radial-gradient(1100px 460px at 15% -10%,rgba(30,90,176,.14),transparent 60%),radial-gradient(820px 400px at 92% 0,rgba(13,181,166,.12),transparent 55%),linear-gradient(180deg,#f4f8fe,#fff);padding:40px 0 20px}
+.hero-inner{max-width:760px;margin:0 auto;text-align:center}
+.eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-600);background:#fff;border:1px solid var(--blue-100);padding:6px 14px;border-radius:999px;margin-bottom:16px}
+.hero-inner p.sub{font-size:1.08rem;color:var(--ink-2);max-width:620px;margin:0 auto}
+/* Calculator */
+.calc{max-width:760px;margin:26px auto 0;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;text-align:left}
+.calc-bar{background:linear-gradient(120deg,var(--blue-900),var(--blue-700) 58%,var(--teal));color:#fff;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.calc-bar .t{display:flex;align-items:center;gap:11px}
+.calc-bar .ic{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center}
+.calc-bar h2{color:#fff;font-size:1.15rem;margin:0;line-height:1.15}
+.calc-bar .sub{color:rgba(255,255,255,.85);font-size:.82rem}
+.calc-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);color:#fff;font-size:.72rem;font-weight:700;padding:5px 11px;border-radius:999px}
+.calc-body{padding:24px 26px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field label{display:block;font-size:.85rem;font-weight:700;color:var(--ink);margin-bottom:6px}
+.field label .hint{font-weight:400;color:var(--muted);font-size:.78rem}
+.field input,.field select{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;font-size:16px;font-family:inherit;color:var(--ink);background:#fff;min-height:var(--tap)}
+.field input:focus,.field select:focus{outline:0;border-color:var(--blue-600);box-shadow:0 0 0 4px rgba(30,90,176,.14)}
+.inp-money{position:relative}
+.inp-money span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-weight:600}
+.inp-money input{padding-left:26px}
+.calc-btn{margin-top:14px;width:100%;min-height:54px;font-size:1.06rem;background:linear-gradient(120deg,var(--blue-700),var(--teal));color:#fff;border:0;border-radius:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.calc-btn:hover{filter:brightness(1.05)}
+.results{display:none;margin-top:24px;border-top:1px solid var(--line);padding-top:22px}
+.results.show{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.res-hl{background:linear-gradient(135deg,#e9f9f4,#f4f8fe);border:1px solid #bfe8dd;border-radius:16px;padding:20px;text-align:center;margin-bottom:16px}
+.res-hl .big{font-family:'Poppins',sans-serif;font-weight:800;font-size:2.6rem;line-height:1;color:var(--ok)}
+.res-hl .lbl{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-top:6px}
+.breakdown{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:16px}
+.breakdown .row{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;font-size:.92rem;border-bottom:1px solid var(--line-2,#eef2f8)}
+.breakdown .row:last-child{border-bottom:0}
+.breakdown .row .k{color:var(--ink-2)}
+.breakdown .row .v{font-weight:700;color:var(--blue-900)}
+.breakdown .row.total{background:var(--blue-50)}
+.tiers{margin-bottom:16px}
+.tiers h4{font-size:.9rem;color:var(--blue-900);margin:0 0 8px}
+.tier-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.tier{border:1px solid var(--line);border-radius:12px;padding:14px 10px;text-align:center}
+.tier.mid{border-color:#bfe8dd;background:#f4fbf9}
+.tier .name{font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.tier .amt{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.35rem;color:var(--blue-900);margin-top:4px}
+.tier .per{font-size:.7rem;color:var(--muted)}
+.res-note{background:var(--blue-50);border:1px solid var(--blue-100);border-radius:12px;padding:13px 16px;font-size:.9rem;color:var(--ink-2);margin-bottom:16px}
+.res-cta{background:linear-gradient(135deg,var(--blue-700),var(--teal));color:#fff;border-radius:16px;padding:22px;text-align:center}
+.res-cta h3{color:#fff;margin:0 0 6px}
+.res-cta p{color:rgba(255,255,255,.92);margin:0 0 14px;font-size:.92rem}
+.res-cta .btn{background:#fff;color:var(--blue-700)}
+.res-cta .btn:hover{color:var(--blue-700);filter:brightness(.98)}
+.disc-mini{font-size:.76rem;color:var(--muted);margin-top:14px;line-height:1.5}
+.trust-row{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;margin-top:16px;font-size:.82rem;color:var(--muted)}
+.trust-row span{display:inline-flex;align-items:center;gap:6px}
+.trust-row .chk{color:var(--ok);font-weight:800}
+/* Advisor yes/no */
+.advisor{background:linear-gradient(135deg,var(--blue-700),var(--teal));color:#fff;border-radius:16px;padding:22px;text-align:center;margin-bottom:16px}
+.advisor h3{color:#fff;margin:0 0 6px}
+.advisor p{color:rgba(255,255,255,.92);margin:0 0 8px;font-size:.93rem}
+.advisor .ask{font-weight:700;color:#fff;margin:12px 0 14px;font-size:1.02rem}
+.advisor-btns{display:flex;flex-direction:column;gap:10px;max-width:380px;margin:0 auto}
+.advisor-btns .btn-yes{background:#fff;color:var(--blue-700);border:0;border-radius:999px;min-height:52px;font-weight:700;font-size:1rem;cursor:pointer;font-family:inherit;padding:0 20px}
+.advisor-btns .btn-yes:hover{filter:brightness(.97)}
+.advisor-btns .btn-no{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.6);border-radius:999px;min-height:46px;font-weight:600;font-size:.95rem;cursor:pointer;font-family:inherit}
+.advisor-btns .btn-no:hover{background:rgba(255,255,255,.12)}
+.advisor-form{border:1px solid #bfe8dd;background:#f4fbf9;border-radius:16px;padding:20px;margin-bottom:16px}
+.advisor-form h3{margin:0 0 4px;font-size:1.18rem}
+.advisor-form>p{font-size:.9rem;margin:0 0 14px;color:var(--ink-2)}
+.advisor-success{margin-top:14px;padding:14px 16px;border-radius:10px;background:#e8f7ee;border:1px solid #b7e0c5;color:#165c2e;font-weight:600}
+.advisor-declined{background:var(--blue-50);border:1px solid var(--blue-100);border-radius:12px;padding:16px 18px;font-size:.93rem;color:var(--ink-2);margin-bottom:16px}
+[hidden]{display:none!important}
+/* Sections */
+.section{padding:52px 0}
+.bg-soft{background:var(--bg-soft)}
+.section h2{text-align:center;margin-bottom:8px}
+.section .lead{text-align:center;max-width:640px;margin:0 auto 26px;color:var(--muted)}
+.steps{display:grid;grid-template-columns:1fr;gap:14px;max-width:760px;margin:0 auto}
+.step{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}
+.step .n{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue-700),var(--teal));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step h3{margin:0 0 3px;font-size:1.05rem}
+.step p{margin:0;font-size:.93rem}
+.faq{max-width:760px;margin:20px auto 0}
+details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:6px 18px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:700;color:var(--blue-900);padding:12px 0;list-style:none;display:flex;justify-content:space-between;gap:10px;font-size:.98rem}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--teal);font-size:1.4rem;line-height:1}
+details[open] summary::after{content:"\2013"}
+details p{margin:0 0 14px;font-size:.93rem}
+/* Footer */
+footer{background:var(--blue-900);color:#ffffff;padding:40px 0 20px}
+footer a{color:#ffffff}
+footer a:hover{color:#fff}
+.foot-grid{display:grid;grid-template-columns:1fr;gap:26px;margin-bottom:24px}
+.foot-grid h4{color:#fff;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.foot-grid ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;font-size:.92rem}
+.foot-grid .fbrand{display:flex;align-items:center;gap:9px;color:#fff;font-family:'Poppins',sans-serif;font-weight:700;margin-bottom:10px}
+.foot-brand-text{color:rgba(255,255,255,.75);font-size:.9rem;line-height:1.6}
+.foot-disc{font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.55;border-top:1px solid rgba(255,255,255,.12);padding-top:18px;margin-bottom:14px}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.12);padding-top:16px;font-size:.8rem;color:rgba(255,255,255,.6);display:flex;flex-direction:column;gap:6px}
+/* Login modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(13,27,42,.55);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:200;padding:20px}
+.modal-backdrop.open{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:420px;width:100%;padding:26px 22px;position:relative}
+.modal h2{margin-bottom:6px;font-size:1.3rem}
+.modal .lede{color:var(--muted);margin-bottom:18px;font-size:.94rem}
+.modal .close-x{position:absolute;top:10px;right:12px;background:transparent;border:0;font-size:1.6rem;color:var(--muted);cursor:pointer;width:36px;height:36px;border-radius:8px}
+.modal .choice-row{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.modal .choice-row .btn{width:100%}
+.modal .small{font-size:.82rem;color:var(--muted);text-align:center}
+@media(min-width:640px){.foot-grid{grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px}.foot-bottom{flex-direction:row;justify-content:space-between}}
+@media(min-width:960px){
+  .nav-links{display:flex;position:static;flex-direction:row;gap:18px;background:transparent;border:0;padding:0;box-shadow:none;align-items:center}
+  .nav-links a,.nav-links button.nav-login{padding:8px 4px;border-bottom:0;min-height:auto;font-size:.94rem;width:auto;white-space:nowrap}
+  .nav-links a.nav-cta{margin:0;padding:10px 18px;border-radius:999px}
+  .menu-toggle{display:none}
+}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.tier-grid{grid-template-columns:1fr}}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"ACA Subsidy Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Web","url":"https://www.vshealthbenefits.com/aca-subsidy-calculator","description":"Free calculator that estimates your ACA health insurance subsidy (premium tax credit) and monthly cost based on income and household size.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@type":"Organization","name":"VS Health Benefits","url":"https://www.vshealthbenefits.com/"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.vshealthbenefits.com/"},{"@type":"ListItem","position":2,"name":"ACA Subsidy Calculator"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How does the ACA subsidy calculator work?","acceptedAnswer":{"@type":"Answer","text":"It estimates your premium tax credit by comparing your household income to the federal poverty level, then applying the ACA formula for how much you are expected to pay. Your subsidy is the difference between a benchmark plan's cost and your expected contribution."}},
+{"@type":"Question","name":"Is the subsidy estimate accurate?","acceptedAnswer":{"@type":"Answer","text":"It is a close estimate for planning. Your exact subsidy depends on your zip code and the specific plans available in your area. A licensed VS Health Benefits advisor can give you the precise number for free."}},
+{"@type":"Question","name":"Who qualifies for an ACA subsidy?","acceptedAnswer":{"@type":"Answer","text":"Most people who buy their own coverage and do not have affordable employer insurance qualify for some subsidy based on income. There is currently no hard income cap, so even higher earners may get help."}},
+{"@type":"Question","name":"How much can I save with a subsidy?","acceptedAnswer":{"@type":"Answer","text":"Savings vary by income, age, and household size. Many people pay far less than the sticker price, and some qualify for a very low or even zero dollar premium. Run the calculator to see your estimate."}}
+]}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="/" aria-label="VS Health Benefits home"><span class="brand-badge">VS</span><span>VS Health Benefits</span></a>
+    <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <nav id="nav-links" class="nav-links">
+      <a href="/">Home</a>
+      <a href="/services">Services</a>
+      <a href="/about">About</a>
+      <a href="/blog">Blog</a>
+      <a href="/contact">Contact</a>
+      <a href="/refer-and-earn">Refer &amp; Earn</a>
+      <button type="button" class="nav-login" data-open-login>Member Login</button>
+      <a class="nav-cta" href="/quote">Get a Quote</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-inner">
+    <span class="eyebrow">Free Estimator Tool</span>
+    <h1>ACA Subsidy &amp; Health Insurance Cost Calculator</h1>
+    <p class="sub">See how much you could save on health insurance. Estimate your subsidy and your monthly cost in under a minute, with Bronze, Silver, and Gold plan estimates. No email required.</p>
+
+    <div class="calc">
+      <div class="calc-bar">
+        <div class="t">
+          <div class="ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M8 14h5"/></svg></div>
+          <div><h2>Instant Subsidy Estimate</h2><div class="sub">Powered by the ACA premium tax credit formula</div></div>
+        </div>
+        <span class="calc-chip"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> No email required</span>
+      </div>
+      <div class="calc-body">
+        <div class="grid">
+          <div class="field"><label>Household income <span class="hint">(yearly, pre-tax)</span></label><div class="inp-money"><span>$</span><input id="income" type="text" inputmode="numeric" placeholder="55,000" /></div></div>
+          <div class="field"><label>Household size <span class="hint">(on your taxes)</span></label>
+            <select id="household"><option value="1">1 person</option><option value="2" selected>2 people</option><option value="3">3 people</option><option value="4">4 people</option><option value="5">5 people</option><option value="6">6 people</option><option value="7">7 people</option><option value="8">8 people</option></select></div>
+          <div class="field"><label>Your age</label><input id="age1" type="number" min="18" max="64" inputmode="numeric" placeholder="40" /></div>
+          <div class="field"><label>Spouse age <span class="hint">(if applying together)</span></label><input id="age2" type="number" min="18" max="64" inputmode="numeric" placeholder="Optional" /></div>
+          <div class="field"><label>Children under 21 <span class="hint">(on the plan)</span></label><input id="kids" type="number" min="0" max="8" inputmode="numeric" placeholder="0" /></div>
+          <div class="field"><label>ZIP code <span class="hint">(optional)</span></label><input id="zip" type="text" inputmode="numeric" maxlength="5" placeholder="33101" /></div>
+        </div>
+        <button class="calc-btn" id="calc-btn" type="button">Calculate My Estimate</button>
+
+        <div class="results" id="results">
+          <div class="res-hl"><div class="big" id="r-subsidy">$0/mo</div><div class="lbl">Estimated monthly subsidy</div></div>
+          <div class="breakdown" id="r-breakdown"></div>
+          <div class="tiers">
+            <h4>Estimated monthly cost by plan type, after your subsidy</h4>
+            <div class="tier-grid">
+              <div class="tier"><div class="name">Bronze</div><div class="amt" id="r-bronze">$0</div><div class="per">per month</div></div>
+              <div class="tier mid"><div class="name">Silver</div><div class="amt" id="r-silver">$0</div><div class="per">per month</div></div>
+              <div class="tier"><div class="name">Gold</div><div class="amt" id="r-gold">$0</div><div class="per">per month</div></div>
+            </div>
+          </div>
+          <div class="res-note" id="r-note"></div>
+
+          <div class="advisor" id="advisor-prompt">
+            <h3>Want help setting up the right plan?</h3>
+            <p>This is an estimate. A licensed VS Health Benefits advisor can review your real options and set you up with the plan that best fits your needs, at no cost to you.</p>
+            <p class="ask">Would you like an advisor to reach out and assist you?</p>
+            <div class="advisor-btns">
+              <button type="button" class="btn-yes" id="advisor-yes">Yes, have an advisor contact me</button>
+              <button type="button" class="btn-no" id="advisor-no-btn">No thanks</button>
+            </div>
+          </div>
+
+          <div class="advisor-form" id="advisor-form" hidden>
+            <h3>Great, where can your advisor reach you?</h3>
+            <p>Enter your details and a licensed advisor will contact you shortly. Your estimate is sent along so they can jump right in.</p>
+            <div class="grid">
+              <div class="field"><label>Full name</label><input id="ad-name" type="text" placeholder="Your name" /></div>
+              <div class="field"><label>Phone</label><input id="ad-phone" type="tel" inputmode="tel" placeholder="(555) 555-5555" /></div>
+              <div class="field"><label>Email</label><input id="ad-email" type="email" placeholder="you@email.com" /></div>
+              <div class="field"><label>Best time to reach you</label>
+                <select id="ad-time"><option>Anytime</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select></div>
+            </div>
+            <button class="calc-btn" id="advisor-submit" type="button">Request My Callback</button>
+            <div class="advisor-success" id="advisor-success" hidden></div>
+          </div>
+
+          <div class="advisor-declined" id="advisor-declined" hidden>
+            <p><strong>No problem at all.</strong> Your estimate is saved above whenever you are ready. If you change your mind, you can <a href="/quote">get a full quote</a> or call us at <a href="tel:+19548251009">(954) 825-1009</a> anytime.</p>
+          </div>
+
+          <p class="disc-mini" id="r-disclaimer"></p>
+        </div>
+
+        <div class="trust-row">
+          <span><span class="chk">&#10003;</span> Licensed in 40+ states</span>
+          <span><span class="chk">&#10003;</span> 100% free service</span>
+          <span><span class="chk">&#10003;</span> No spam, ever</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section bg-soft">
+  <div class="container">
+    <h2>How the ACA subsidy works</h2>
+    <p class="lead">The government caps how much of your income you should pay for health insurance. If a benchmark plan costs more than that cap, the difference is your subsidy.</p>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div><h3>Your income vs the poverty level</h3><p>Your subsidy is based on your household income compared to the federal poverty level for your household size.</p></div></div>
+      <div class="step"><div class="n">2</div><div><h3>Your expected contribution</h3><p>The ACA sets a percentage of income you are expected to pay, on a sliding scale. Lower income means a smaller percentage.</p></div></div>
+      <div class="step"><div class="n">3</div><div><h3>The subsidy fills the gap</h3><p>If the benchmark Silver plan costs more than your expected contribution, a premium tax credit covers the rest. That credit is your subsidy.</p></div></div>
+      <div class="step"><div class="n">4</div><div><h3>You pick any plan</h3><p>Apply your subsidy to a Bronze, Silver, or Gold plan. A Bronze plan is often cheaper, sometimes even zero dollars per month after the subsidy.</p></div></div>
+    </div>
+    <div class="center" style="margin-top:26px"><a class="btn btn-primary" href="/quote">Get My Free Quote</a></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <details><summary>How accurate is this ACA subsidy calculator?</summary><p>It gives a close estimate for planning using the ACA subsidy formula and household size. Your exact subsidy depends on your zip code and the specific plans sold in your area. For the precise number and real plan prices, a licensed advisor can check it for you at no cost.</p></details>
+      <details><summary>Who qualifies for a health insurance subsidy?</summary><p>Most people who buy their own coverage and do not have affordable insurance through an employer qualify for some subsidy based on income. There is currently no hard upper income cutoff, so even higher earners may receive help. Very low income households may qualify for Medicaid instead.</p></details>
+      <details><summary>Do I have to enter my email or phone to use this?</summary><p>No. The calculator gives you an instant estimate with no signup. If you want your exact quote and plan options, you can reach out to a VS Health Benefits advisor when you are ready.</p></details>
+      <details><summary>What is a benchmark or Silver plan?</summary><p>Subsidies are calculated using the second-lowest-cost Silver plan in your area, called the benchmark. You can apply the same subsidy to a cheaper Bronze plan to lower your monthly cost, or a Gold plan for richer coverage.</p></details>
+      <details><summary>Can a broker help me for free?</summary><p>Yes. VS Health Benefits is a licensed independent brokerage paid by the insurance carriers, not by you. Comparing plans and enrolling with an advisor costs the same as doing it yourself, so you get expert help at no extra charge.</p></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="fbrand"><span class="brand-badge">VS</span><span>VS Health Benefits</span></div>
+        <p class="foot-brand-text">Licensed, independent health insurance brokerage based in Miami, FL, serving individuals, families, and small businesses in 40+ states.</p>
+      </div>
+      <div>
+        <h4>Popular</h4>
+        <ul>
+          <li><a href="/quote">Get a Quote</a></li>
+          <li><a href="/aca-subsidy-calculator">Subsidy Calculator</a></li>
+          <li><a href="/1099-health-insurance">Self-Employed</a></li>
+          <li><a href="/family-health-insurance">Family Plans</a></li>
+          <li><a href="/dental-vision-insurance">Dental &amp; Vision</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul>
+          <li><a href="/about">About</a></li>
+          <li><a href="/bradley-vilsaint">Our Founder</a></li>
+          <li><a href="/careers">Careers</a></li>
+          <li><a href="/refer-and-earn">Refer &amp; Earn</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Reach Us</h4>
+        <ul>
+          <li><a href="tel:+19548251009">(954) 825-1009</a></li>
+          <li><a href="mailto:bvilsaint@vshealthbenefits.com">bvilsaint@vshealthbenefits.com</a></li>
+          <li>Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET</li>
+          <li>Miami, FL | 40+ states</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-disc">This calculator provides estimates for educational purposes only and is not an offer of insurance, a quote, or tax advice. Estimates are based on the federal poverty guidelines and the ACA premium tax credit formula and do not reflect the exact plans or prices in your area. Subsidy rules and enhanced credits are subject to change. VS Health Benefits only sends official enrollment materials after direct client confirmation. We do not mail unsolicited insurance packages.</div>
+    <div class="foot-bottom">
+      <span>&copy; <span id="year">2026</span> VS Health Benefits. All rights reserved.</span>
+      <span>vshealthbenefits.com | Licensed independent health insurance brokerage</span>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-backdrop" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
+  <div class="modal">
+    <button class="close-x" type="button" aria-label="Close" data-close-login>&times;</button>
+    <h2 id="login-modal-title">Sign in</h2>
+    <p class="lede">Choose where you would like to go.</p>
+    <div class="choice-row">
+      <a class="btn btn-primary" href="/client">Client / Member Portal</a>
+      <a class="btn btn-secondary" href="/admin">Admin Portal</a>
+    </div>
+    <p class="small">Not a member yet? <a href="/client">Create a client account</a></p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<!-- Firebase bridge: routes advisor callback requests into the admin portal Support tab -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+const firebaseConfig = { apiKey:"AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U", authDomain:"vs-benefits-c1da9.firebaseapp.com", projectId:"vs-benefits-c1da9", storageBucket:"vs-benefits-c1da9.firebasestorage.app", messagingSenderId:"487471388882", appId:"1:487471388882:web:63e98e6699d5a823e3f50b" };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+let _authReady = signInAnonymously(auth).catch(function(){});
+window.vsAdminWrite = async function(key, item){
+  try { await _authReady; } catch(e){}
+  var ref = doc(db, "vs_state", key);
+  var items = [];
+  try { var snap = await getDoc(ref); if (snap.exists() && Array.isArray(snap.data().items)) items = snap.data().items; } catch(e){}
+  items.unshift(item);
+  try { await setDoc(ref, { items: items, ts: Date.now() }); } catch(e){}
+};
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+  "use strict";
+  var toggle=document.querySelector(".menu-toggle"),links=document.getElementById("nav-links");
+  function closeMenu(){if(!links)return;links.classList.remove("open");if(toggle)toggle.setAttribute("aria-expanded","false");}
+  function toggleMenu(e){if(e){e.preventDefault();e.stopPropagation();}if(!links)return;var o=links.classList.toggle("open");if(toggle)toggle.setAttribute("aria-expanded",o?"true":"false");}
+  if(toggle&&links){toggle.addEventListener("click",toggleMenu);links.querySelectorAll("a").forEach(function(a){a.addEventListener("click",closeMenu);});document.addEventListener("keydown",function(e){if(e.key==="Escape")closeMenu();});}
+  var modal=document.getElementById("login-modal");
+  function openM(){if(modal){modal.classList.add("open");document.body.style.overflow="hidden";}closeMenu();}
+  function closeM(){if(modal){modal.classList.remove("open");document.body.style.overflow="";}}
+  document.querySelectorAll("[data-open-login]").forEach(function(b){b.addEventListener("click",function(e){e.preventDefault();openM();});});
+  document.querySelectorAll("[data-close-login]").forEach(function(b){b.addEventListener("click",function(e){e.preventDefault();closeM();});});
+  if(modal)modal.addEventListener("click",function(e){if(e.target===modal)closeM();});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")closeM();});
+  var y=document.getElementById("year");if(y)y.textContent=new Date().getFullYear();
+});
+
+(function(){
+  "use strict";
+  var lastEstimate={};
+  var FPL_BASE=15060,FPL_ADD=5380;
+  function fpl(size){return FPL_BASE+(size-1)*FPL_ADD;}
+  function lerp(x,x0,x1,y0,y1){return y0+(y1-y0)*(x-x0)/(x1-x0);}
+  function applicablePct(p){if(p<=150)return 0;if(p<=200)return lerp(p,150,200,0,2);if(p<=250)return lerp(p,200,250,2,4);if(p<=300)return lerp(p,250,300,4,6);if(p<=400)return lerp(p,300,400,6,8.5);return 8.5;}
+  function ageFactor(a){if(a<21)return 0.765;if(a>=64)return 3.0;var pts=[[21,1.0],[25,1.004],[30,1.135],[35,1.222],[40,1.278],[45,1.444],[50,1.786],[55,2.230],[60,2.714],[64,3.0]];for(var i=0;i<pts.length-1;i++){if(a>=pts[i][0]&&a<pts[i+1][0])return lerp(a,pts[i][0],pts[i+1][0],pts[i][1],pts[i+1][1]);}return 1.0;}
+  var BASE21=375;
+  function prem(a){return BASE21*ageFactor(a);}
+  function money(n){return "$"+Math.round(n).toLocaleString();}
+  function row(k,v){return '<div class="row"><span class="k">'+k+'</span><span class="v">'+v+'</span></div>';}
+
+  function calc(){
+    var income=parseFloat((document.getElementById("income").value||"").replace(/[^0-9.]/g,""))||0;
+    var size=parseInt(document.getElementById("household").value,10)||1;
+    var age1=parseInt(document.getElementById("age1").value,10);
+    var age2=parseInt(document.getElementById("age2").value,10);
+    var kids=parseInt(document.getElementById("kids").value,10)||0;
+    if(!income||!age1){alert("Please enter your household income and your age.");return;}
+    if(age1<18)age1=18;if(age1>64)age1=64;
+
+    var poverty=fpl(size),fplPct=income/poverty*100;
+    var bench=prem(age1)+((age2&&age2>=18)?prem(Math.min(Math.max(age2,18),64)):0)+Math.min(kids,3)*(BASE21*0.765);
+    var appl=applicablePct(fplPct);
+    var expectedMonthly=(income*(appl/100))/12;
+    var subsidy=Math.max(0,bench-expectedMonthly);
+
+    // plan tier full-premium estimates relative to benchmark Silver
+    var silverFull=bench, bronzeFull=bench*0.78, goldFull=bench*1.22;
+    var silver=Math.max(0,silverFull-subsidy);
+    var bronze=Math.max(0,bronzeFull-subsidy);
+    var gold=Math.max(0,goldFull-subsidy);
+
+    var note="";
+    if(fplPct<100){
+      note="<strong>Your income may qualify you for Medicaid</strong> at little or no cost, depending on your state. In states that did not expand Medicaid, you may fall into a coverage gap. An advisor can check your options for free.";
+      subsidy=0;bronze=silver=gold=0;
+    } else if(subsidy<=0){
+      note="Based on this income a subsidy may not apply, but plan prices vary a lot by area and you may still find affordable coverage. An advisor can find your real options at no cost.";
+    } else if(bronze<=1){
+      note="<strong>You may qualify for a $0 per month Bronze plan</strong> after your subsidy. An advisor can confirm the exact plans available to you.";
+    } else {
+      note="Your subsidy applies to any plan tier. A Bronze plan gives you the lowest monthly cost, Silver adds richer benefits, and Gold has the lowest out-of-pocket costs when you use care.";
+    }
+
+    document.getElementById("r-subsidy").textContent=money(subsidy)+"/mo";
+    document.getElementById("r-breakdown").innerHTML=
+      row("Estimated benchmark Silver premium",money(bench)+"/mo")+
+      row("Your income vs poverty level",Math.round(fplPct)+"% of FPL")+
+      row("Your expected contribution",money(expectedMonthly)+"/mo")+
+      '<div class="row total"><span class="k"><strong>Your estimated subsidy</strong></span><span class="v" style="color:var(--ok)">'+money(subsidy)+"/mo</span></div>";
+    document.getElementById("r-bronze").textContent=money(bronze);
+    document.getElementById("r-silver").textContent=money(silver);
+    document.getElementById("r-gold").textContent=money(gold);
+    document.getElementById("r-note").innerHTML=note;
+    document.getElementById("r-disclaimer").textContent=
+      "Estimate only. Based on the ACA premium tax credit formula and an estimated benchmark Silver premium of "+money(bench)+"/mo for your household. Tier costs are approximate. Actual subsidies and plan prices depend on your zip code and the plans available. This is not a quote or tax advice.";
+    lastEstimate={income:income,size:size,age1:age1,age2:(age2&&age2>=18)?age2:"",kids:kids,zip:(document.getElementById("zip").value||""),fplPct:fplPct,bench:bench,subsidy:subsidy,bronze:bronze,silver:silver,gold:gold};
+    resetAdvisor();
+
+    var r=document.getElementById("results");r.classList.add("show");
+    r.scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
+
+  function resetAdvisor(){
+    show("advisor-prompt",true); show("advisor-form",false); show("advisor-declined",false); show("advisor-success",false);
+    var b=document.getElementById("advisor-submit"); if(b){b.disabled=false;b.textContent="Request My Callback";}
+  }
+  function show(id,on){var el=document.getElementById(id); if(el){el.hidden=!on;}}
+  function val(id){var el=document.getElementById(id); return el?el.value.trim():"";}
+
+  var LEAD_WEBHOOK_URL="https://services.leadconnectorhq.com/hooks/V5Px5jvE14SWLdNrFeGL/webhook-trigger/d9cf69ed-4e52-4c7d-bf11-580204f9cce7";
+  function sendWebhook(url,payload){
+    if(!url||url.indexOf("http")!==0) return false;
+    var json; try{json=JSON.stringify(payload);}catch(e){return false;}
+    try{ if(navigator&&typeof navigator.sendBeacon==="function"){ if(navigator.sendBeacon(url,new Blob([json],{type:"application/json"}))) return true; } }catch(e){}
+    try{ fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:json,keepalive:true,mode:"no-cors"}).catch(function(){}); return true; }catch(e2){return false;}
+  }
+  function fireConfetti(){
+    if(typeof confetti!=="function") return;
+    var colors=["#1e5ab0","#0db5a6","#16a34a","#2f7de0","#ffc857"];
+    try{confetti({particleCount:90,spread:70,origin:{y:.6},colors:colors});}catch(e){}
+  }
+
+  function submitAdvisor(){
+    var name=val("ad-name"),phone=val("ad-phone"),email=val("ad-email"),time=val("ad-time");
+    if(!name||(!phone&&!email)){ alert("Please enter your name and a phone or email so an advisor can reach you."); return; }
+    var e=lastEstimate;
+    var summary="Est. subsidy "+money(e.subsidy||0)+"/mo (Bronze "+money(e.bronze||0)+", Silver "+money(e.silver||0)+", Gold "+money(e.gold||0)+"/mo). Income $"+(e.income||0).toLocaleString()+", household "+(e.size||"")+", age "+(e.age1||"")+(e.age2?"/"+e.age2:"")+", "+(e.kids||0)+" kids, "+Math.round(e.fplPct||0)+"% FPL.";
+    var parts=name.split(/\s+/), first=parts.shift()||"", last=parts.join(" ");
+    var ticketMsg="[Advisor callback request from the ACA Subsidy Calculator] Best time to reach: "+time+". "+summary;
+    var payload={ full_name:name, name:name, first_name:first, last_name:last, phone:phone, email:email, zip:e.zip||"", postal_code:e.zip||"", best_time:time, lead_type:"advisor_callback", message:ticketMsg, notes:summary, source:"vshealthbenefits.com", page:location.pathname, submitted_at:new Date().toISOString(), user_agent:navigator.userAgent, referrer:document.referrer||"" };
+    sendWebhook(LEAD_WEBHOOK_URL,payload);
+    try{
+      if(typeof window.vsAdminWrite==="function"){
+        window.vsAdminWrite("contact_requests",{ id:"id_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36), firstName:first, lastName:last, fullName:name, email:email, phone:phone, zip:e.zip||"", bestTime:time, message:payload.message, estimate:summary, status:"new", source:"subsidy-calculator", page:location.pathname, user_agent:navigator.userAgent, referrer:document.referrer||"", created:Date.now(), submitted_at:new Date().toISOString() });
+      }
+    }catch(_){}
+    var b=document.getElementById("advisor-submit"); if(b){b.disabled=true;b.textContent="✓ Request Sent";}
+    var s=document.getElementById("advisor-success"); if(s){s.hidden=false;s.textContent="Thank you"+(first?", "+first:"")+"! A licensed advisor will reach out shortly to help set up the plan that best fits your needs.";}
+    fireConfetti();
+  }
+
+  var yBtn=document.getElementById("advisor-yes"), nBtn=document.getElementById("advisor-no-btn"), sBtn=document.getElementById("advisor-submit");
+  if(yBtn) yBtn.addEventListener("click",function(){ show("advisor-prompt",false); show("advisor-declined",false); show("advisor-form",true); var el=document.getElementById("advisor-form"); if(el)el.scrollIntoView({behavior:"smooth",block:"nearest"}); });
+  if(nBtn) nBtn.addEventListener("click",function(){ show("advisor-prompt",false); show("advisor-form",false); show("advisor-declined",true); });
+  if(sBtn) sBtn.addEventListener("click",submitAdvisor);
+
+  document.getElementById("calc-btn").addEventListener("click",calc);
+  var inc=document.getElementById("income");
+  inc.addEventListener("input",function(){var v=this.value.replace(/[^0-9]/g,"");this.value=v?parseInt(v,10).toLocaleString():"";});
+})();
+</script>
+</body>
+</html>
