@@ -334,6 +334,36 @@ html.dark .users-stats .ustat{background:#1c2d42;border-color:#253a54}
 html.dark .users-stats .un{color:#d4e8ff}
 .users-stats .ul{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-top:2px}
 @media(max-width:560px){.users-stats{grid-template-columns:1fr}}
+/* Analytics */
+.an-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}
+.an-kpi{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+html.dark .an-kpi{background:#1c2d42;border-color:#253a54}
+.an-kpi .n{font-size:26px;font-weight:800;color:var(--blue-900);line-height:1.1}
+html.dark .an-kpi .n{color:#d4e8ff}
+.an-kpi .l{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.an-section{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:16px}
+html.dark .an-section{background:#1c2d42;border-color:#253a54}
+.an-section h4{margin:0 0 3px;font-size:15px;color:var(--blue-900)}
+html.dark .an-section h4{color:#d4e8ff}
+.an-section .sub{font-size:12.5px;color:var(--muted);margin:0 0 14px}
+.an-row{display:grid;grid-template-columns:132px 1fr 74px;align-items:center;gap:10px;margin-bottom:9px}
+.an-row .lab{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.dark .an-row .lab{color:#cfe0f5}
+.an-track{background:var(--blue-50);border-radius:999px;height:14px;overflow:hidden}
+html.dark .an-track{background:#16283e}
+.an-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--blue-600),var(--teal))}
+.an-row .ct{font-size:12.5px;font-weight:800;color:var(--blue-700);text-align:right;white-space:nowrap}
+html.dark .an-row .ct{color:#7fb2ff}
+.an-weeks{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:6px}
+.an-week{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;justify-content:flex-end}
+.an-week .bar{width:100%;max-width:34px;background:linear-gradient(180deg,var(--blue-500),var(--teal));border-radius:6px 6px 0 0;min-height:3px}
+.an-week .wl{font-size:10px;color:var(--muted);white-space:nowrap}
+.an-week .wv{font-size:11px;font-weight:800;color:var(--blue-700)}
+html.dark .an-week .wv{color:#7fb2ff}
+.an-empty{color:var(--muted);font-size:13px;padding:8px 0}
+.an-note{font-size:12.5px;color:var(--muted);background:var(--blue-50);border:1px solid var(--blue-100);border-radius:12px;padding:12px 14px;line-height:1.5}
+html.dark .an-note{background:#16283e;border-color:#253a54}
+@media(min-width:720px){.an-kpis{grid-template-columns:repeat(4,1fr)}}
 html.dark .status-new{background:#0f2040;color:#7eb6ff;border:1px solid #1e3a6a}
 html.dark .status-sold,.html.dark .status-enrolled,.html.dark .status-active{background:#0a2018;color:#22d47a;border:1px solid #1a4030}
 html.dark .status-declined,.html.dark .status-lost,.html.dark .status-revoked{background:#200d0d;color:#ff7070;border:1px solid #4a1818}
@@ -1534,6 +1564,9 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span><span class="sni-label">Notes</span>
       <span class="sni-badge" id="b-notes" style="display:none">0</span>
     </button>
+    <button class="sidebar-nav-item" data-tab="analytics" type="button">
+      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></span><span class="sni-label">Analytics</span>
+    </button>
     <div class="sidebar-divider"></div>
     <button class="sidebar-nav-item" data-tab="settings" type="button">
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>️</span><span class="sni-label">Settings</span>
@@ -1757,6 +1790,13 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
     <!-- NOTES -->
     <div id="p-notes" class="panel">
       <div id="notes-mount"></div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div id="p-analytics" class="panel">
+      <h3>Analytics</h3>
+      <p class="lede">Where your leads come from and which pages bring them in. Covers quote requests, contact form, and calculator leads.</p>
+      <div id="analytics-mount"></div>
     </div>
 
     <!-- SETTINGS -->
@@ -4514,8 +4554,8 @@ function czCelebrate(name,sub){
   var v=$("cz-celeb-view");if(v)v.addEventListener("click",function(){closeModal();switchTab("accounts");});
 }
 /* ---- route the existing CRM tabs through the new views ---- */
-ALL_TABS=["dashboard","pipeline","leads","followups","tasks","accounts","users","support","referrals","bizleads","notes","settings"];
-TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",accounts:"Active Clients",users:"Users",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",notes:"Notes",settings:"Settings"};
+ALL_TABS=["dashboard","pipeline","leads","followups","tasks","accounts","users","support","referrals","bizleads","notes","analytics","settings"];
+TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",accounts:"Active Clients",users:"Users",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",notes:"Notes",analytics:"Analytics",settings:"Settings"};
 function renderDashboard(){czDashboard();}
 function renderLeads(){czClients();}
 function renderPipeline(){czPipeline();}
@@ -4760,6 +4800,127 @@ function renderUsers(){
     if(p&&p.classList.contains("active")&&sh&&!sh.hidden)renderUsers();
   },20000);
 })();
+/* ============================ ANALYTICS ============================ */
+function anPathFromUrl(u){
+  if(!u)return"";
+  try{
+    var url=new URL(u, "https://www.vshealthbenefits.com");
+    var host=(url.hostname||"").replace(/^www\./,"");
+    if(host && host.indexOf("vshealthbenefits.com")===-1) return "ext:"+host; // external referrer
+    var p=(url.pathname||"/").replace(/\/+$/,"");
+    return p===""?"/":p;
+  }catch(e){
+    var s=String(u).replace(/[?#].*$/,"").replace(/\/+$/,"");
+    return s||"";
+  }
+}
+function anSourceLabel(s){
+  var map={"get-a-quote":"Quote Page","contact-form":"Contact Form","subsidy-calculator":"Subsidy Calculator","advisor_callback":"Subsidy Calculator","referral":"Client Referral","manual":"Added Manually","":"Added Manually"};
+  return map[s]||s;
+}
+function anPageLabel(p){
+  if(!p)return"Unknown";
+  if(p.indexOf("ext:")===0)return p.slice(4)+" (external)";
+  var names={"/":"Homepage","/quote":"Quote Page","/get-a-quote":"Quote Page","/hmo-vs-ppo":"HMO vs PPO","/aca-subsidy-calculator":"Subsidy Calculator","/1099-health-insurance":"1099 / Self-Employed","/health-insurance-for-small-business-owners":"Small Business","/health-insurance-for-real-estate-agents":"Real Estate Agents","/family-health-insurance":"Family Plans","/dental-vision-insurance":"Dental & Vision","/contact":"Contact","/truck-driver-health-insurance":"Truck Drivers"};
+  return names[p]||p;
+}
+function anAgo(days){return Date.now()-days*864e5;}
+function renderAnalytics(){
+  var mount=$("analytics-mount");if(!mount)return;
+  var leads=(typeof getLeads==="function")?getLeads():[];
+  var tickets=(typeof getTickets==="function")?getTickets():[];
+
+  // Build unified inbound events: quote leads, referral leads, manual leads, contact/calculator tickets
+  var events=[];
+  leads.forEach(function(l){
+    var src=l.source||"";
+    if(!src){ src=/^referred by/i.test(l.notes||"")?"referral":"manual"; }
+    var origin;
+    if(l.referrer){ origin=anPathFromUrl(l.referrer); if(origin==="/quote"||origin==="/get-a-quote"||origin==="") origin=""; }
+    if(!origin){ origin=(src==="referral")?"referral":anPathFromUrl(l.page)||"/quote"; }
+    events.push({kind:"lead",source:src,origin:origin,created:l.created||0,sold:(l.status==="sold")});
+  });
+  tickets.forEach(function(t){
+    var src=t.source||"contact-form";
+    events.push({kind:"ticket",source:src,origin:anPathFromUrl(t.page)||"",created:t.created||0,sold:false});
+  });
+
+  var total=events.length;
+  var wk=events.filter(function(e){return e.created>=anAgo(7);}).length;
+  var mo=events.filter(function(e){return e.created>=anAgo(30);}).length;
+  var soldCount=events.filter(function(e){return e.sold;}).length;
+  var convRate=total?Math.round(soldCount/total*100):0;
+
+  function tally(key){
+    var m={};
+    events.forEach(function(e){var k=e[key]||"";m[k]=(m[k]||0)+1;});
+    return Object.keys(m).map(function(k){return {k:k,n:m[k]};}).sort(function(a,b){return b.n-a.n;});
+  }
+  var bySource=tally("source");
+  var byOrigin=tally("origin").filter(function(r){return r.k!=="referral"&&r.k!=="";}).slice(0,10);
+
+  // last 8 weeks
+  var weeks=[];
+  for(var i=7;i>=0;i--){
+    var start=anAgo((i+1)*7), end=anAgo(i*7);
+    var c=events.filter(function(e){return e.created>=start&&e.created<end;}).length;
+    var d=new Date(end);
+    weeks.push({label:(d.getMonth()+1)+"/"+d.getDate(),n:c});
+  }
+  var weekMax=Math.max(1,Math.max.apply(null,weeks.map(function(w){return w.n;})));
+
+  mount.innerHTML="";
+  // KPIs
+  var kpis=el("div",{class:"an-kpis"});
+  [["Total leads",total],["New this week",wk],["New this month",mo],["Converted ("+convRate+"%)",soldCount]].forEach(function(p){
+    kpis.appendChild(el("div",{class:"an-kpi"},[el("div",{class:"n",text:String(p[1])}),el("div",{class:"l",text:p[0]})]));
+  });
+  mount.appendChild(kpis);
+
+  if(!total){
+    mount.appendChild(el("div",{class:"an-section"},[el("div",{class:"an-empty",text:"No lead data yet. As quote requests, contact form messages, and calculator leads come in, this page will show where they come from and which pages bring them in."})]));
+    return;
+  }
+
+  function barSection(title,sub,rows,labeler){
+    var sec=el("div",{class:"an-section"});
+    sec.appendChild(el("h4",{text:title}));
+    sec.appendChild(el("p",{class:"sub",text:sub}));
+    var max=Math.max.apply(null,rows.map(function(r){return r.n;}))||1;
+    rows.forEach(function(r){
+      var row=el("div",{class:"an-row"});
+      row.appendChild(el("div",{class:"lab",text:labeler(r.k)}));
+      var track=el("div",{class:"an-track"});
+      track.appendChild(el("div",{class:"an-fill",html:"&nbsp;"}));
+      track.firstChild.style.width=Math.max(4,Math.round(r.n/max*100))+"%";
+      row.appendChild(track);
+      row.appendChild(el("div",{class:"ct",text:r.n+" ("+Math.round(r.n/total*100)+"%)"}));
+      sec.appendChild(row);
+    });
+    return sec;
+  }
+  mount.appendChild(barSection("Where your leads come from","Grouped by how each lead reached you.",bySource,anSourceLabel));
+  if(byOrigin.length) mount.appendChild(barSection("Top pages driving leads","The page a lead was on before they reached out. Quote requests show their originating landing page when available.",byOrigin,anPageLabel));
+
+  // weeks chart
+  var wsec=el("div",{class:"an-section"});
+  wsec.appendChild(el("h4",{text:"Leads over the last 8 weeks"}));
+  wsec.appendChild(el("p",{class:"sub",text:"Weekly volume of new leads and inquiries."}));
+  var chart=el("div",{class:"an-weeks"});
+  weeks.forEach(function(w){
+    var col=el("div",{class:"an-week"});
+    col.appendChild(el("div",{class:"wv",text:String(w.n)}));
+    var bar=el("div",{class:"bar"});bar.style.height=Math.round(w.n/weekMax*88)+"px";
+    col.appendChild(bar);
+    col.appendChild(el("div",{class:"wl",text:w.label}));
+    chart.appendChild(col);
+  });
+  wsec.appendChild(chart);
+  mount.appendChild(wsec);
+
+  mount.appendChild(el("div",{class:"an-note",html:"Tip: this shows leads and inquiries captured in your portal. For raw pageviews and total visitor clicks across the whole site, check your Google Analytics dashboard, which tracks every visit even when someone does not fill out a form."}));
+}
+
 function switchTab(name){
   ALL_TABS.forEach(function(n){var pn=$("p-"+n);if(pn)pn.classList.toggle("active",n===name);});
   document.querySelectorAll(".sidebar-nav-item[data-tab]").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-tab")===name);});
@@ -4776,6 +4937,7 @@ function switchTab(name){
   else if(name==="tasks")renderTasks();
   else if(name==="bizleads")renderBizLeads();
   else if(name==="notes")renderNotes();
+  else if(name==="analytics")renderAnalytics();
   else if(name==="settings"){renderSettings();if(typeof initSoundSettings==="function")initSoundSettings();}
 }
 /* BOOT */

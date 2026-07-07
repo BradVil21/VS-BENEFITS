@@ -1047,6 +1047,7 @@ document.addEventListener("DOMContentLoaded", function () {
             ].filter(Boolean).join("\n"),
             source: "get-a-quote",
             page: window.location.pathname,
+            referrer: document.referrer || "",
             created: Date.now(),
             submitted_at: new Date().toISOString()
           });
