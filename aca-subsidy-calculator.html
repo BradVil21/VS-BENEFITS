@@ -410,6 +410,32 @@ window.vsAdminWrite = async function(key, item){
   items.unshift(item);
   try { await setDoc(ref, { items: items, ts: Date.now() }); } catch(e){}
 };
+
+/* Mirror each website submission into HubSpot (in addition to the admin portal).
+   Uses a hidden HubSpot form — no API key in the page. New contacts land as
+   "Lead"; pipeline status goes to "Website Lead Stage". */
+window.hubspotSyncLead = window.hubspotSyncLead || function(l){
+  try{
+    if(!l) return;
+    var email=(l.email||"").trim(); if(!email) return; // HubSpot requires an email
+    var first=(l.firstName||"").trim()||String(l.name||l.fullName||"").split(/\s+/)[0]||"";
+    var last =(l.lastName||"").trim()||String(l.name||l.fullName||"").split(/\s+/).slice(1).join(" ")||"";
+    var fields=[];
+    function add(n,v){ v=(v==null?"":String(v)).trim(); if(v) fields.push({name:n,value:v}); }
+    add("email",email); add("firstname",first); add("lastname",last);
+    add("phone",l.phone); add("address",l.address); add("state",l.state);
+    add("zip",l.zipcode||l.zip); add("date_of_birth",l.dob);
+    add("website_lead_stage",l.status||l.stage);
+    var n=String(l.notes||l.message||"").trim(); var extra=[];
+    if(l.coverage && n.indexOf(l.coverage)===-1) extra.push("Coverage: "+l.coverage);
+    if(l.estimate && n.indexOf(l.estimate)===-1) extra.push(String(l.estimate));
+    if(l.value||l.monthlyPremium) extra.push("Quoted: $"+(l.value||l.monthlyPremium));
+    var notes=[n, extra.join(" | ")].filter(Boolean).join(" | ");
+    add("notes",notes);
+    fetch("https://api-na2.hsforms.com/submissions/v3/integration/submit/246725050/ffec0159-e792-4827-854c-acab34314ddc",
+      {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fields:fields})}).catch(function(){});
+  }catch(e){}
+};
 </script>
 
 <script>
@@ -525,7 +551,9 @@ document.addEventListener("DOMContentLoaded",function(){
     sendWebhook(LEAD_WEBHOOK_URL,payload);
     try{
       if(typeof window.vsAdminWrite==="function"){
-        window.vsAdminWrite("contact_requests",{ id:"id_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36), firstName:first, lastName:last, fullName:name, email:email, phone:phone, zip:e.zip||"", bestTime:time, message:payload.message, estimate:summary, status:"new", source:"subsidy-calculator", page:location.pathname, user_agent:navigator.userAgent, referrer:document.referrer||"", created:Date.now(), submitted_at:new Date().toISOString() });
+        var _lead={ id:"id_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36), firstName:first, lastName:last, fullName:name, email:email, phone:phone, zip:e.zip||"", bestTime:time, message:payload.message, estimate:summary, status:"new", source:"subsidy-calculator", page:location.pathname, user_agent:navigator.userAgent, referrer:document.referrer||"", created:Date.now(), submitted_at:new Date().toISOString() };
+        window.vsAdminWrite("contact_requests",_lead);
+        if(typeof window.hubspotSyncLead==="function") window.hubspotSyncLead(_lead);
       }
     }catch(_){}
     var b=document.getElementById("advisor-submit"); if(b){b.disabled=true;b.textContent="✓ Request Sent";}
