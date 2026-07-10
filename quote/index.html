@@ -1226,6 +1226,31 @@ window.vsAdminWrite = async function(key, item){
   items.unshift(item);
   try { await setDoc(ref, { items: items, ts: Date.now() }); } catch(e){}
 };
+
+/* Mirror each website lead into HubSpot (in addition to the admin portal).
+   Uses a hidden HubSpot form — no API key in the page. New contacts land
+   as "Lead"; the pipeline status goes to "Website Lead Stage". */
+window.hubspotSyncLead = window.hubspotSyncLead || function(l){
+  try{
+    if(!l) return;
+    var email=(l.email||"").trim(); if(!email) return; // HubSpot requires an email
+    var first=(l.firstName||"").trim()||String(l.name||"").split(/\s+/)[0]||"";
+    var last =(l.lastName||"").trim()||String(l.name||"").split(/\s+/).slice(1).join(" ")||"";
+    var fields=[];
+    function add(n,v){ v=(v==null?"":String(v)).trim(); if(v) fields.push({name:n,value:v}); }
+    add("email",email); add("firstname",first); add("lastname",last);
+    add("phone",l.phone); add("address",l.address); add("state",l.state);
+    add("zip",l.zipcode||l.zip); add("date_of_birth",l.dob);
+    add("website_lead_stage",l.status||l.stage);
+    var n=String(l.notes||"").trim(); var extra=[];
+    if(l.coverage && n.indexOf(l.coverage)===-1) extra.push("Coverage: "+l.coverage);
+    if(l.value||l.monthlyPremium) extra.push("Quoted: $"+(l.value||l.monthlyPremium));
+    var notes=[n, extra.join(" | ")].filter(Boolean).join(" | ");
+    add("notes",notes);
+    fetch("https://api-na2.hsforms.com/submissions/v3/integration/submit/246725050/ffec0159-e792-4827-854c-acab34314ddc",
+      {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fields:fields})}).catch(function(){});
+  }catch(e){}
+};
 </script>
 
 <script>
@@ -1562,7 +1587,9 @@ window.vsAdminWrite = async function(key, item){
     // Push into admin portal's Leads tab (independent of webhook)
     try {
       if (typeof window.vsAdminWrite === 'function') {
-        window.vsAdminWrite('leads', toAdminLead(data));
+        var _lead = toAdminLead(data);
+        window.vsAdminWrite('leads', _lead);
+        if (typeof window.hubspotSyncLead === 'function') window.hubspotSyncLead(_lead);
       }
     } catch(e){ /* don't block the user */ }
 
