@@ -973,6 +973,11 @@ p{color:var(--ink-2)}
         <input type="tel" id="biz-contact-phone" placeholder="(305) 555-0200" autocomplete="tel" inputmode="tel" />
         <div class="err-msg">Please enter a valid phone number.</div>
       </div>
+      <div class="field" id="f-biz-email">
+        <label>Business Email<span class="req">*</span></label>
+        <input type="email" id="biz-email" placeholder="owner@company.com" autocomplete="email" inputmode="email" />
+        <div class="err-msg">Please enter a valid business email.</div>
+      </div>
     </div>
     <div class="nav-btns">
       <button class="btn-back" onclick="backTo(0)">
@@ -1241,6 +1246,7 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
     add("email",email); add("firstname",first); add("lastname",last);
     add("phone",l.phone); add("address",l.address); add("state",l.state);
     add("zip",l.zipcode||l.zip); add("date_of_birth",l.dob);
+    add("company",l.company); add("numemployees",l.employees||l.num_employees); add("num_employees",l.employees||l.num_employees);
     add("website_lead_stage",l.status||l.stage);
     var n=String(l.notes||"").trim(); var extra=[];
     if(l.coverage && n.indexOf(l.coverage)===-1) extra.push("Coverage: "+l.coverage);
@@ -1385,10 +1391,13 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
       var fn = document.getElementById('biz-firstname').value.trim();
       var ln = document.getElementById('biz-lastname').value.trim();
       var ph = document.getElementById('biz-contact-phone').value.trim();
+      var em = document.getElementById('biz-email').value.trim();
+      var emOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
       setErr('f-biz-firstname', !fn);
       setErr('f-biz-lastname', !ln);
       setErr('f-biz-contact-phone', !isValidPhone(ph));
-      if(!fn || !ln || !isValidPhone(ph)) ok = false;
+      setErr('f-biz-email', !emOk);
+      if(!fn || !ln || !isValidPhone(ph) || !emOk) ok = false;
       if(ok){ bizNav(2); }
     } else if(fromStep === 2){
       var bn = document.getElementById('biz-name').value.trim();
@@ -1446,6 +1455,7 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
       ownerFirstName: document.getElementById('biz-firstname').value.trim(),
       ownerLastName: document.getElementById('biz-lastname').value.trim(),
       contactPhone: document.getElementById('biz-contact-phone').value.trim(),
+      contactEmail: document.getElementById('biz-email').value.trim(),
       businessName: document.getElementById('biz-name').value.trim(),
       employees: document.getElementById('biz-employees').value,
       situations: sits,
@@ -1570,6 +1580,37 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
     };
   }
 
+  // Build a Business Lead record for the admin portal's Business Leads tab
+  function toBizLead(data){
+    var extras = [];
+    if(data.businessName) extras.push('Business: ' + data.businessName);
+    if(data.employees) extras.push('Employees: ' + data.employees);
+    if(data.situations && data.situations.length) extras.push('Situation: ' + data.situations.join(', '));
+    if(data.businessAddress) extras.push('Address: ' + data.businessAddress + (data.businessState ? ', ' + data.businessState : '') + (data.businessZip ? ' ' + data.businessZip : ''));
+    if(data.businessPhone && data.businessPhone !== data.contactPhone) extras.push('Business phone: ' + data.businessPhone);
+    return {
+      id: 'id_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36),
+      company:   data.businessName || '',
+      contact:   ((data.ownerFirstName || '') + ' ' + (data.ownerLastName || '')).trim(),
+      firstName: data.ownerFirstName || '',
+      lastName:  data.ownerLastName || '',
+      email:     data.contactEmail || '',
+      phone:     data.contactPhone || data.businessPhone || '',
+      employees: data.employees || '',
+      niche:     '',
+      stage:     'new',
+      status:    'new',
+      state:     data.businessState || '',
+      zipcode:   data.businessZip || '',
+      address:   data.businessAddress || '',
+      notes:     extras.join('\n'),
+      source:    'index-funnel-business',
+      created:   Date.now(),
+      updated:   Date.now(),
+      submitted_at: new Date().toISOString()
+    };
+  }
+
   // ---- SEND TO WEBHOOK ----
   function sendToWebhook(data, btnEl){
     // Turn button green + loading state
@@ -1587,9 +1628,15 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
     // Push into admin portal's Leads tab (independent of webhook)
     try {
       if (typeof window.vsAdminWrite === 'function') {
-        var _lead = toAdminLead(data);
-        window.vsAdminWrite('leads', _lead);
-        if (typeof window.hubspotSyncLead === 'function') window.hubspotSyncLead(_lead);
+        if (data.type === 'business') {
+          var _biz = toBizLead(data);
+          window.vsAdminWrite('biz_leads', _biz);
+          if (typeof window.hubspotSyncLead === 'function') window.hubspotSyncLead(_biz);
+        } else {
+          var _lead = toAdminLead(data);
+          window.vsAdminWrite('leads', _lead);
+          if (typeof window.hubspotSyncLead === 'function') window.hubspotSyncLead(_lead);
+        }
       }
     } catch(e){ /* don't block the user */ }
 
