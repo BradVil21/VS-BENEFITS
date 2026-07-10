@@ -585,6 +585,21 @@ document.addEventListener("DOMContentLoaded", function () {
           };
           window.vsAdminWrite("contact_requests", _lead);
           if (typeof window.hubspotSyncLead === "function") window.hubspotSyncLead(_lead);
+          // Also create a HubSpot ticket via our secure serverless endpoint (best-effort)
+          try {
+            fetch("/api/hubspot-ticket", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                name: _lead.fullName || ((_lead.firstName + " " + _lead.lastName).trim()),
+                email: _lead.email,
+                phone: _lead.phone,
+                message: _lead.message,
+                page: _lead.page
+              }),
+              keepalive: true
+            }).catch(function(){});
+          } catch(e) { /* never block the user */ }
         }
       } catch(e) { /* don't block the user */ }
 
