@@ -2342,7 +2342,7 @@ function buildFilterChips(containerId,options,getActive,setActive,onchange){
 /* ════════════════════════════════════════
    LEADS
 ════════════════════════════════════════ */
-var LEAD_STATUSES=["new","contacted","quoted","60-days-out","sold","declined","follow-up","appointment-scheduled","affordable-care-act","no-longer-interested","enrolled","lost"];
+var LEAD_STATUSES=["new","contacted","quoted","60-days-out","sold","declined","follow-up","appointment-scheduled","affordable-care-act","disqualified","no-longer-interested","enrolled","lost"];
 var activeLeadFilter="all";
 
 function renderLeads(){
@@ -4141,15 +4141,17 @@ function renderAll(){renderDashboard();renderLeads();renderAccounts();renderSupp
 
 /* ===================== VS BENEFITS CRM — clean Lead Tracker views ===================== */
 var czFollowupDays=14;
-var czCLOSED=["sold","no_longer_interested"];
+var czCLOSED=["sold","no_longer_interested","disqualified"];
 var czSTAGES=[
   {id:"new_lead",label:"New Lead",color:"#2f7de0"},
   {id:"follow_up",label:"Follow Up",color:"#0ea5e9"},
   {id:"appointment_scheduled",label:"Appointment Scheduled",color:"#14b8a6"},
   {id:"quoted",label:"Quoted",color:"#8b5cf6"},
   {id:"sixty_plus",label:"60+ Days Out",color:"#f59e0b"},
+  {id:"affordable_care_act",label:"Affordable Care Act",color:"#0891b2"},
   {id:"ghosted",label:"Ghosted",color:"#f43f5e"},
   {id:"no_longer_interested",label:"No Longer Interested",color:"#94a3b8"},
+  {id:"disqualified",label:"Disqualified",color:"#64748b"},
   {id:"sold",label:"Sold",color:"#10b981"}
 ];
 var czMETA={};czSTAGES.forEach(function(s){czMETA[s.id]=s;});
@@ -4192,8 +4194,8 @@ function czDaysBetween(a,b){return Math.round((czParseYMD(a)-czParseYMD(b))/8640
 function czPretty(ymd){if(!ymd)return"";return czParseYMD(ymd).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}
 function czName(c){return ((c.firstName||"")+" "+(c.lastName||"")).trim()||c.name||c.email||"(no name)";}
 function czVal(c){var v=(c.quoteValue!=null&&c.quoteValue!=="")?c.quoteValue:leadValue(c);return Number(v)||0;}
-function czStatusToStage(s){s=(s||"new");var m={"new":"new_lead","contacted":"follow_up","follow-up":"follow_up","appointment-scheduled":"appointment_scheduled","quoted":"quoted","60-days-out":"sixty_plus","ghosted":"ghosted","sold":"sold","enrolled":"sold","declined":"no_longer_interested","lost":"no_longer_interested","no-longer-interested":"no_longer_interested"};return m[s]||"new_lead";}
-function czStageToStatus(st){var m={"new_lead":"new","follow_up":"follow-up","appointment_scheduled":"appointment-scheduled","quoted":"quoted","sixty_plus":"60-days-out","ghosted":"ghosted","no_longer_interested":"no-longer-interested","sold":"sold"};return m[st]||"follow-up";}
+function czStatusToStage(s){s=(s||"new");var m={"new":"new_lead","contacted":"follow_up","follow-up":"follow_up","appointment-scheduled":"appointment_scheduled","quoted":"quoted","60-days-out":"sixty_plus","ghosted":"ghosted","sold":"sold","enrolled":"sold","declined":"no_longer_interested","lost":"no_longer_interested","no-longer-interested":"no_longer_interested","affordable-care-act":"affordable_care_act","disqualified":"disqualified"};return m[s]||"new_lead";}
+function czStageToStatus(st){var m={"new_lead":"new","follow_up":"follow-up","appointment_scheduled":"appointment-scheduled","quoted":"quoted","sixty_plus":"60-days-out","ghosted":"ghosted","no_longer_interested":"no-longer-interested","sold":"sold","affordable_care_act":"affordable-care-act","disqualified":"disqualified"};return m[st]||"follow-up";}
 function czEnsure(){
   var arr=getLeads();var changed=false;
   arr.forEach(function(l){
