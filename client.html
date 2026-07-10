@@ -825,6 +825,37 @@ window.hubspotSyncAccount = function(a){
   }catch(e){}
 };
 
+/* ── Account welcome email via EmailJS (transactional, from info@vshealthbenefits.com) ──
+   Paste the three IDs from your EmailJS dashboard below. Until they are filled
+   in, this quietly no-ops so signups still work. All three IDs are safe to
+   expose in client-side code (that's how EmailJS is designed). */
+window.EMAILJS_SERVICE_ID  = "REPLACE_SERVICE_ID";
+window.EMAILJS_TEMPLATE_ID = "REPLACE_TEMPLATE_ID";
+window.EMAILJS_PUBLIC_KEY  = "REPLACE_PUBLIC_KEY";
+function loadEmailJS(){
+  return new Promise(function(resolve,reject){
+    if(window.emailjs) return resolve(window.emailjs);
+    var s=document.createElement("script");
+    s.src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+    s.onload=function(){ resolve(window.emailjs); };
+    s.onerror=reject;
+    document.head.appendChild(s);
+  });
+}
+window.sendWelcomeEmail = async function(acct){
+  try{
+    if(!acct || !acct.email) return;
+    if(String(window.EMAILJS_SERVICE_ID).indexOf("REPLACE_")===0) return; // not configured yet
+    var ejs = await loadEmailJS();
+    await ejs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TEMPLATE_ID, {
+      to_email:  acct.email,
+      to_name:   acct.firstName || "there",
+      from_name: "VS Health Benefits",
+      reply_to:  "info@vshealthbenefits.com"
+    }, { publicKey: window.EMAILJS_PUBLIC_KEY });
+  }catch(e){ /* never block signup if the email fails */ }
+};
+
 $("signup-form").addEventListener("submit",async function(e){
   e.preventDefault();
   var first=$("su-first").value.trim();
@@ -850,6 +881,7 @@ $("signup-form").addEventListener("submit",async function(e){
   accts.push(acct);
   saveAccounts(accts);
   window.hubspotSyncAccount(acct);
+  window.sendWelcomeEmail(acct);
   setSession({id:acct.id,email:acct.email,since:Date.now()});
 
   webhookFire({
