@@ -808,6 +808,23 @@ $("tab-signup").addEventListener("click",function(){
   showNotice("login-msg","",""); showNotice("signup-msg","","");
 });
 
+/* Push each new client-portal account into HubSpot via a dedicated hidden
+   HubSpot signup form (no API key in the page). That form also triggers the
+   account welcome email. Password hashes are never sent. */
+window.hubspotSyncAccount = function(a){
+  try{
+    if(!a || !a.email) return;
+    var fields=[
+      {name:"email",     value:String(a.email||"").trim()},
+      {name:"firstname", value:String(a.firstName||"").trim()},
+      {name:"lastname",  value:String(a.lastName||"").trim()},
+      {name:"phone",     value:String(a.phone||"").trim()}
+    ].filter(function(f){return f.value;});
+    fetch("https://api-na2.hsforms.com/submissions/v3/integration/submit/246725050/44178a65-c328-4ee4-aea2-61ceb6c10d23",
+      {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fields:fields})}).catch(function(){});
+  }catch(e){}
+};
+
 $("signup-form").addEventListener("submit",async function(e){
   e.preventDefault();
   var first=$("su-first").value.trim();
@@ -832,6 +849,7 @@ $("signup-form").addEventListener("submit",async function(e){
   var acct={id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:Date.now(),status:"active",plan:null,photoDataUrl:"",welcomePending:true,selfSignup:true};
   accts.push(acct);
   saveAccounts(accts);
+  window.hubspotSyncAccount(acct);
   setSession({id:acct.id,email:acct.email,since:Date.now()});
 
   webhookFire({
