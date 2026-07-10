@@ -1019,6 +1019,29 @@ p{color:var(--ink-2)}
         </select>
         <div class="err-msg">Please select employee count.</div>
       </div>
+      <div class="field" id="f-biz-coverage">
+        <label>Requested Coverage<span class="req">*</span></label>
+        <select id="biz-coverage">
+          <option value="">Select plan type...</option>
+          <option value="PPO">PPO</option>
+          <option value="HMO">HMO</option>
+          <option value="Not sure yet">Not sure yet</option>
+        </select>
+        <div class="err-msg">Please select a coverage type.</div>
+      </div>
+      <div class="field" id="f-biz-insured">
+        <label>Currently Insured?<span class="req">*</span></label>
+        <select id="biz-insured">
+          <option value="">Select...</option>
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+        <div class="err-msg">Please select an option.</div>
+      </div>
+      <div class="field" id="f-biz-start">
+        <label>Desired Coverage Start Date</label>
+        <input type="date" id="biz-start" />
+      </div>
     </div>
     <div class="nav-btns">
       <button class="btn-back" onclick="bizNav(1)">
@@ -1402,9 +1425,13 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
     } else if(fromStep === 2){
       var bn = document.getElementById('biz-name').value.trim();
       var emp = document.getElementById('biz-employees').value;
+      var cov = document.getElementById('biz-coverage').value;
+      var ins = document.getElementById('biz-insured').value;
       setErr('f-biz-name', !bn);
       setErr('f-biz-employees', !emp);
-      if(!bn || !emp) ok = false;
+      setErr('f-biz-coverage', !cov);
+      setErr('f-biz-insured', !ins);
+      if(!bn || !emp || !cov || !ins) ok = false;
       if(ok){ bizNav(3); }
     } else if(fromStep === 3){
       bizNav(4);
@@ -1458,6 +1485,9 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
       contactEmail: document.getElementById('biz-email').value.trim(),
       businessName: document.getElementById('biz-name').value.trim(),
       employees: document.getElementById('biz-employees').value,
+      requestedCoverage: document.getElementById('biz-coverage').value,
+      currentlyInsured: document.getElementById('biz-insured').value,
+      coverageStart: document.getElementById('biz-start').value,
       situations: sits,
       businessAddress: document.getElementById('biz-address').value.trim(),
       businessZip: document.getElementById('biz-zip').value.trim(),
@@ -1585,6 +1615,9 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
     var extras = [];
     if(data.businessName) extras.push('Business: ' + data.businessName);
     if(data.employees) extras.push('Employees: ' + data.employees);
+    if(data.requestedCoverage) extras.push('Requested coverage: ' + data.requestedCoverage);
+    if(data.currentlyInsured) extras.push('Currently insured: ' + data.currentlyInsured);
+    if(data.coverageStart) extras.push('Coverage start: ' + data.coverageStart);
     if(data.situations && data.situations.length) extras.push('Situation: ' + data.situations.join(', '));
     if(data.businessAddress) extras.push('Address: ' + data.businessAddress + (data.businessState ? ', ' + data.businessState : '') + (data.businessZip ? ' ' + data.businessZip : ''));
     if(data.businessPhone && data.businessPhone !== data.contactPhone) extras.push('Business phone: ' + data.businessPhone);
@@ -1597,6 +1630,10 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
       email:     data.contactEmail || '',
       phone:     data.contactPhone || data.businessPhone || '',
       employees: data.employees || '',
+      requestedCoverage: data.requestedCoverage || '',
+      currentlyInsured:  data.currentlyInsured || '',
+      coverageStart:     data.coverageStart || '',
+      coverage:  data.requestedCoverage || '',
       niche:     '',
       stage:     'new',
       status:    'new',

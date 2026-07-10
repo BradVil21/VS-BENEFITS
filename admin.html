@@ -4730,7 +4730,10 @@ function openBizLeadForm(b){
    +'<label class="cz-fld cz-full"><span>Company</span><input class="cz-inp" id="bz_company" value="'+escapeHtml(b.company||"")+'" placeholder="Acme Realty"/></label>'
    +'<label class="cz-fld"><span>Owner / contact</span><input class="cz-inp" id="bz_contact" value="'+escapeHtml(b.contact||"")+'" placeholder="Jane Smith"/></label>'
    +'<label class="cz-fld"><span>Type / niche</span><input class="cz-inp" id="bz_niche" list="bz_niche_list" value="'+escapeHtml(b.niche||"")+'" placeholder="Anything, e.g. small business"/><datalist id="bz_niche_list">'+nicheDatalist+'</datalist></label>'
-   +'<label class="cz-fld"><span>1099 workers</span><input class="cz-inp" id="bz_employees" type="number" min="0" value="'+escapeHtml(b.employees||"")+'" placeholder="5"/></label>'
+   +'<label class="cz-fld"><span>Employees</span><input class="cz-inp" id="bz_employees" value="'+escapeHtml(b.employees||"")+'" placeholder="5 - 9"/></label>'
+   +'<label class="cz-fld"><span>Requested coverage</span><select class="cz-inp" id="bz_coverage"><option value="">-</option><option'+(b.requestedCoverage==="PPO"?" selected":"")+'>PPO</option><option'+(b.requestedCoverage==="HMO"?" selected":"")+'>HMO</option><option'+(b.requestedCoverage==="Not sure yet"?" selected":"")+'>Not sure yet</option></select></label>'
+   +'<label class="cz-fld"><span>Currently insured</span><select class="cz-inp" id="bz_insured"><option value="">-</option><option'+(b.currentlyInsured==="No"?" selected":"")+'>No</option><option'+(b.currentlyInsured==="Yes"?" selected":"")+'>Yes</option></select></label>'
+   +'<label class="cz-fld"><span>Coverage start</span><input class="cz-inp" id="bz_start" type="date" value="'+escapeHtml(b.coverageStart||"")+'"/></label>'
    +'<label class="cz-fld"><span>Stage</span><select class="cz-inp" id="bz_stage">'+stageOpts+'</select></label>'
    +'<label class="cz-fld"><span>Email</span><input class="cz-inp" id="bz_email" value="'+escapeHtml(b.email||"")+'" placeholder="jane@acme.com"/></label>'
    +'<label class="cz-fld"><span>Phone</span><input class="cz-inp" id="bz_phone" value="'+escapeHtml(b.phone||"")+'" placeholder="(561) 555-0100"/></label>'
@@ -4748,6 +4751,7 @@ function openBizLeadForm(b){
     var arr=getBizLeads();
     var rec=isNew?{id:uid(),created:Date.now()}:(arr.filter(function(x){return x.id===b.id;})[0]||{id:b.id||uid(),created:b.created||Date.now()});
     rec.company=company;rec.contact=contact;rec.niche=g("bz_niche");rec.employees=g("bz_employees");
+    rec.requestedCoverage=g("bz_coverage");rec.currentlyInsured=g("bz_insured");rec.coverageStart=g("bz_start");
     rec.stage=g("bz_stage")||"prospect";rec.email=g("bz_email").trim();rec.phone=g("bz_phone").trim();
     rec.source=g("bz_source").trim();rec.nextFollowUp=g("bz_followup");rec.notes=g("bz_notes");rec.updated=Date.now();
     if(isNew)arr.unshift(rec);
@@ -4757,9 +4761,9 @@ function openBizLeadForm(b){
 }
 function bizExportCsv(){
   var all=getBizLeads();
-  var header=["Company","Contact","Niche","1099 Workers","Stage","Email","Phone","Source","Next Follow-up","Notes","Created"];
+  var header=["Company","Contact","Niche","Employees","Requested Coverage","Currently Insured","Coverage Start","Stage","Email","Phone","Source","Next Follow-up","Notes","Created"];
   var rows=[header];
-  all.forEach(function(b){rows.push([b.company||"",b.contact||"",b.niche||"",b.employees||"",bizStageMeta(b.stage||"prospect").label,b.email||"",b.phone||"",b.source||"",b.nextFollowUp||"",(b.notes||"").replace(/\r?\n/g," "),b.created?new Date(b.created).toISOString().slice(0,10):""].map(csvEscape));});
+  all.forEach(function(b){rows.push([b.company||"",b.contact||"",b.niche||"",b.employees||"",b.requestedCoverage||"",b.currentlyInsured||"",b.coverageStart||"",bizStageMeta(b.stage||"prospect").label,b.email||"",b.phone||"",b.source||"",b.nextFollowUp||"",(b.notes||"").replace(/\r?\n/g," "),b.created?new Date(b.created).toISOString().slice(0,10):""].map(csvEscape));});
   downloadFile("business-leads-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
 }
 (function wireBiz(){
