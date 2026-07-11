@@ -151,6 +151,356 @@
       "source": "/truck-driver-health-insurance-north-carolina",
       "destination": "/truck-driver-health-insurance-raleigh-nc",
       "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-alabama",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-arizona",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-arkansas",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-colorado",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-illinois",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-indiana",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-iowa",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-kansas",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-kentucky",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-louisiana",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-michigan",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-minnesota",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-mississippi",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-missouri",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-montana",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-nebraska",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-nevada",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-north-dakota",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-ohio",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-oklahoma",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-south-carolina",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-south-dakota",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-tennessee",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-utah",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-virginia",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-west-virginia",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-wisconsin",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-wyoming",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-nevada",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-wyoming",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-iowa",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-tennessee",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-arizona",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-illinois",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-minnesota",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-alabama",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-south-carolina",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-west-virginia",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-oklahoma",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-louisiana",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-indiana",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-virginia",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-montana",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-kansas",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-utah",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-michigan",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-wisconsin",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-kentucky",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-mississippi",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-nebraska",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-ohio",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-north-dakota",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-arkansas",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-missouri",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-south-dakota",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-colorado",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-auto-repair-shops",
+      "destination": "/small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-cleaning-companies",
+      "destination": "/small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-construction-companies",
+      "destination": "/small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-real-estate-agents",
+      "destination": "/small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-retail-businesses",
+      "destination": "/small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-salons-and-spas",
+      "destination": "/small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-cost-faq",
+      "destination": "/how-much-does-health-insurance-cost",
+      "permanent": true
+    },
+    {
+      "source": "/blog/how-much-does-health-insurance-cost-2026",
+      "destination": "/how-much-does-health-insurance-cost",
+      "permanent": true
+    },
+    {
+      "source": "/blog/dental-vision-insurance-guide",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/dental-vision-insurance-guide.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-florida",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-texas",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-north-carolina",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-georgia",
+      "destination": "/",
+      "permanent": true
     }
   ],
   "rewrites": [
