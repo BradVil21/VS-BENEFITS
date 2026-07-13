@@ -3460,6 +3460,7 @@ function convertReferralToLead(r){
   var nameParts=(r.referralName||"").trim().split(/\s+/);
   var lead={id:uid(),firstName:nameParts[0]||"",lastName:nameParts.slice(1).join(" ")||"",name:r.referralName||"",company:"",phone:r.referralPhone||"",email:r.referralEmail||"",address:"",state:"",zipcode:"",coverage:"",status:"new",notes:"Referred by "+(fa?fullName(fa):"client")+(r.notes?"\n"+r.notes:""),created:Date.now(),updated:Date.now()};
   var leads=getLeads();leads.unshift(lead);saveLeads(leads);
+  hubspotSyncLead(lead);
   updateRef(r.id,{read:true});
   alert("Added to Leads.");switchTab("leads");
 }
@@ -3521,9 +3522,16 @@ $("import-file").addEventListener("change",function(e){
   var f=e.target.files[0];if(!f)return;var r=new FileReader();
   r.onload=function(){
     try{var b=JSON.parse(r.result);
+      var prevIds={};getLeads().forEach(function(l){if(l&&l.id)prevIds[l.id]=1;});
       if(b.leads)saveLeads(b.leads);if(b.accounts)saveAccounts(b.accounts);if(b.messages)saveMessages(b.messages);
       if(b.referrals)saveReferrals(b.referrals);if(b.appointments)saveAppts(b.appointments);
       if(b.admins)saveAdmins(b.admins);if(b.webhook)setWebhook(b.webhook);if(b.setupCode)localStorage.setItem(K.setupCode,b.setupCode);
+      /* Auto-sync newly imported leads to HubSpot (staggered to stay under rate limits) */
+      if(b.leads){
+        var toSync=b.leads.filter(function(l){return l&&(l.email||"").trim()&&!prevIds[l.id];});
+        toSync.forEach(function(l,i){setTimeout(function(){hubspotSyncLead(l);},i*250);});
+        if(toSync.length)addNotif("lead",toSync.length+" imported lead"+(toSync.length>1?"s":"")+" syncing to HubSpot","Contacts are being created in your CRM","leads");
+      }
       alert("Import done.");renderAll();
     }catch(err){alert("Bad JSON file.");}
   };r.readAsText(f);

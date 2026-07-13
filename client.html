@@ -825,6 +825,45 @@ window.hubspotSyncAccount = function(a){
   }catch(e){}
 };
 
+/* ── HubSpot referral sync ──────────────────────────────────────────
+   Every referral submitted in the portal is pushed to HubSpot via a
+   dedicated hidden "Client Referral" form (no API key in the page).
+   The form lives in HubSpot (Marketing → Forms → "Client Referral")
+   with fields: email, firstname, lastname, phone, zip, state, notes.
+   Submission notifications email bvilsaint@vshealthbenefits.com
+   (configured in the form's Submission settings).
+   Portal 246725050, region na2. */
+window.HUBSPOT_PORTAL_ID        = "246725050";
+window.HUBSPOT_LEAD_FORM_GUID   = "ffec0159-e792-4827-854c-acab34314ddc";
+window.HUBSPOT_REFERRAL_FORM_GUID = "b659a509-cfad-4294-9caa-04a7bfb93cec";
+window.hubspotSyncReferral = function(r, fromAcct){
+  try{
+    if(!r) return;
+    var guid = String(window.HUBSPOT_REFERRAL_FORM_GUID||"");
+    if(guid.indexOf("REPLACE_")===0) guid = window.HUBSPOT_LEAD_FORM_GUID;
+    var fields=[];
+    function add(n,v){ v=(v==null?"":String(v)).trim(); if(v) fields.push({name:n,value:v}); }
+    add("email",     r.referralEmail);
+    add("firstname", r.firstName || String(r.referralName||"").split(/\s+/)[0]);
+    add("lastname",  r.lastName  || String(r.referralName||"").split(/\s+/).slice(1).join(" "));
+    add("phone",     r.referralPhone);
+    add("zip",       r.zip);
+    add("state",     r.state);
+    var extra=["Client referral — referred by "+((fromAcct&&((fromAcct.firstName||"")+" "+(fromAcct.lastName||"")).trim())||"client")+(fromAcct&&fromAcct.email?" ("+fromAcct.email+")":"")];
+    if(r.leadType)  extra.push("Lead type: "+r.leadType);
+    if(r.dob)       extra.push("DOB: "+r.dob);
+    if(r.income)    extra.push("Income: $"+r.income);
+    extra.push(r.appointment?("Appointment: "+r.appointment):"No appointment needed");
+    if(r.preferredContact) extra.push("Preferred contact: "+r.preferredContact);
+    if(r.notes)     extra.push("Notes: "+r.notes);
+    add("notes", extra.join(" | "));
+    if(!fields.length) return;
+    fetch("https://api-na2.hsforms.com/submissions/v3/integration/submit/"+window.HUBSPOT_PORTAL_ID+"/"+guid,
+      {method:"POST",headers:{"Content-Type":"application/json"},
+       body:JSON.stringify({fields:fields,context:{pageUri:location.href,pageName:"Client Portal — Referral"}})}).catch(function(){});
+  }catch(e){ /* never block the referral flow on a sync failure */ }
+};
+
 /* ── Account welcome email via EmailJS (transactional, from info@vshealthbenefits.com) ──
    Paste the three IDs from your EmailJS dashboard below. Until they are filled
    in, this quietly no-ops so signups still work. All three IDs are safe to
@@ -1244,6 +1283,7 @@ $("ref-form").addEventListener("submit",function(e){
     appointment:appt,noAppt:noAppt,permission:true,preferredContact:$("rf-contact").value,relationship:"",
     status:"in-progress",ts:Date.now(),read:false,payout:0,paid:false};
   var arr=getReferrals();arr.unshift(r);saveReferrals(arr);
+  window.hubspotSyncReferral(r,acct);
   webhookFire({event:"client_referral",from_account_id:acct.id,from_email:acct.email,referral_name:name,referral_phone:phone,referral_email:email,lead_type:r.leadType,zip:r.zip,state:r.state,dob:r.dob,income:r.income,appointment:appt,preferred_contact:r.preferredContact,notes:r.notes,ts:Date.now()});
   $("ref-form").reset();$("rf-appt-fields").hidden=true;$("wiz-appt-state").innerHTML="<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/></svg> No appointment";
   wizGo(1);
