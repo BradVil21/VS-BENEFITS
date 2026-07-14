@@ -458,11 +458,6 @@
       "permanent": true
     },
     {
-      "source": "/health-insurance-for-salons-and-spas",
-      "destination": "/small-business-health-insurance",
-      "permanent": true
-    },
-    {
       "source": "/health-insurance-cost-faq",
       "destination": "/how-much-does-health-insurance-cost",
       "permanent": true
