@@ -1,10 +1,4 @@
 User-agent: *
 Allow: /
 
-# Keep private portals out of search results
-Disallow: /admin
-Disallow: /admin.html
-Disallow: /client
-Disallow: /client.html
-
 Sitemap: https://www.vshealthbenefits.com/sitemap.xml
