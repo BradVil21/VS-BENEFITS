@@ -1373,5 +1373,17 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
+<script>
+(function vsPrefillZip(){
+  try{
+    var z=new URLSearchParams(location.search).get("zip");
+    if(z&&/^[0-9]{5}$/.test(z)){
+      var el=document.getElementById("q-zip");
+      if(el){el.value=z;}
+      else{document.addEventListener("DOMContentLoaded",function(){var e2=document.getElementById("q-zip");if(e2)e2.value=z;});}
+    }
+  }catch(e){}
+})();
+</script>
 </body>
 </html>
