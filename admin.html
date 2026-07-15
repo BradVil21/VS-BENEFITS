@@ -5008,6 +5008,67 @@ var btn=$("back-to-top");
 window.addEventListener("scroll",function(){if(btn)btn.classList.toggle("visible",window.scrollY>300);},{passive:true});
 if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});
 
+/* ── Keep your place: remember tab, preserve scroll, Enter saves ── */
+(function(){
+  var KEY_TAB="vs_admin_last_tab", KEY_SCR="vs_admin_scrolls";
+  function sc(){return document.scrollingElement||document.documentElement;}
+  function scrolls(){try{return JSON.parse(sessionStorage.getItem(KEY_SCR)||"{}");}catch(e){return{};}}
+  function curTab(){try{return localStorage.getItem(KEY_TAB)||"dashboard";}catch(e){return "dashboard";}}
+
+  /* continuously remember scroll position per tab */
+  var t;window.addEventListener("scroll",function(){
+    clearTimeout(t);
+    t=setTimeout(function(){
+      var s=scrolls();s[curTab()]=sc().scrollTop;
+      try{sessionStorage.setItem(KEY_SCR,JSON.stringify(s));}catch(e){}
+    },100);
+  },{passive:true});
+
+  /* wrap switchTab: remember last tab, restore its scroll; first boot call goes to the saved tab */
+  var booted=false;
+  var _switchTab=switchTab;
+  switchTab=function(name){
+    if(!booted){booted=true;var saved=curTab();if(saved&&saved!==name)name=saved;}
+    try{localStorage.setItem(KEY_TAB,name);}catch(e){}
+    _switchTab(name);
+    var y=scrolls()[name]||0;
+    requestAnimationFrame(function(){sc().scrollTop=y;});
+  };
+
+  /* wrap re-renders so saving or closing a card keeps your spot */
+  function keepPlace(fn){
+    return function(){
+      var y=sc().scrollTop;
+      var r=fn.apply(this,arguments);
+      requestAnimationFrame(function(){sc().scrollTop=y;});
+      return r;
+    };
+  }
+  if(typeof czCurrentRender==="function")czCurrentRender=keepPlace(czCurrentRender);
+  if(typeof czClients==="function")czClients=keepPlace(czClients);
+  if(typeof czPipeline==="function")czPipeline=keepPlace(czPipeline);
+  if(typeof czFollowups==="function")czFollowups=keepPlace(czFollowups);
+  if(typeof renderAccounts==="function")renderAccounts=keepPlace(renderAccounts);
+  if(typeof renderReferrals==="function")renderReferrals=keepPlace(renderReferrals);
+  if(typeof renderSupport==="function")renderSupport=keepPlace(renderSupport);
+  if(typeof renderTasks==="function")renderTasks=keepPlace(renderTasks);
+
+  /* Enter inside the client card saves it (textarea and quick-note keep their own behavior) */
+  document.addEventListener("keydown",function(e){
+    if(e.key!=="Enter")return;
+    var save=document.getElementById("cz-mSave");
+    var bg=document.getElementById("modal-bg");
+    if(!save||!bg||!bg.classList.contains("open"))return;
+    var tg=e.target;
+    if(!tg)return;
+    if(tg.tagName==="TEXTAREA")return;
+    if(tg.id==="cz_quicknote")return;
+    if(tg.tagName!=="INPUT"&&tg.tagName!=="SELECT")return;
+    e.preventDefault();
+    save.click();
+  });
+})();
+
 })();
 </script>
 <script>
