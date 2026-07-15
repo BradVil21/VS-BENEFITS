@@ -1079,7 +1079,30 @@ document.addEventListener("DOMContentLoaded", function () {
             created: Date.now(),
             submitted_at: new Date().toISOString()
           };
-          window.vsAdminWrite("leads", _lead);
+          if ((data.coverage_type || "") === "Employer / Group") {
+            // Business inquiry: route to the Business Leads pipeline as a Prospect
+            var _biz = {
+              id: _lead.id,
+              company: "",
+              contact: data.full_name || "",
+              niche: "",
+              employees: data.household_size || "",
+              requestedCoverage: "Group health",
+              currentlyInsured: data.current_coverage || "",
+              coverageStart: data.effective_date || "",
+              stage: "prospect",
+              email: data.email || "",
+              phone: data.phone || "",
+              source: "Website quote form",
+              nextFollowUp: "",
+              notes: _lead.notes,
+              created: Date.now(),
+              updated: Date.now()
+            };
+            window.vsAdminWrite("biz_leads", _biz);
+          } else {
+            window.vsAdminWrite("leads", _lead);
+          }
           if (typeof window.hubspotSyncLead === "function") window.hubspotSyncLead(_lead);
         }
       } catch(e2) { /* don't block the user */ }

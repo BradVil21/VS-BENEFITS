@@ -2070,6 +2070,12 @@ async function initCloud(){
           if(newLeads.length===1){addNotif("lead","New lead: "+fullName(newLeads[0]),"Just arrived from the website","leads");}
           else if(newLeads.length>1){addNotif("lead",newLeads.length+" new leads arrived","Click to review","leads");}
         }
+        if(rk==="biz_leads"&&items.length>prevCount&&$("shell")&&!$("shell").hidden){
+          var prevBizIds={};prevItems.forEach(function(b){if(b&&b.id)prevBizIds[b.id]=true;});
+          var newBiz=items.filter(function(b){return b&&b.id&&!prevBizIds[b.id];});
+          if(newBiz.length===1){var bn=newBiz[0].company||newBiz[0].contact||newBiz[0].email||"New business";addNotif("lead","New business lead: "+bn,(newBiz[0].employees?newBiz[0].employees+" employees · ":"")+"Landed in Prospect from the website","bizleads");}
+          else if(newBiz.length>1){addNotif("lead",newBiz.length+" new business leads arrived","Click to review the Prospect column","bizleads");}
+        }
         if(rk==="messages"&&$("shell")&&!$("shell").hidden){
           var newUnread=items.filter(function(m){return m.from==="client"&&!m.read;}).length;
           var oldUnread=prevItems.filter(function(m){return m.from==="client"&&!m.read;}).length;
