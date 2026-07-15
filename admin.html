@@ -4696,7 +4696,7 @@ function renderBizLeads(){
   var q=(($("biz-search")&&$("biz-search").value)||"").toLowerCase().trim();
   var cs=all.filter(function(b){return !q||[b.company,b.contact,b.email,b.phone,b.niche].join(" ").toLowerCase().indexOf(q)>=0;});
   box.innerHTML='<div class="cz-board" id="biz-board">'+BIZ_STAGES.map(function(s){
-    var items=cs.filter(function(b){return (b.stage||"prospect")===s.id;});
+    var items=cs.filter(function(b){var st=b.stage||"prospect";if(BIZ_STAGES.map(function(x){return x.id;}).indexOf(st)<0)st="prospect";return st===s.id;});
     var body=items.length===0?'<div class="cz-empty-col">Drop here</div>':items.map(function(b){
       var emp=b.employees?'<span style="font-size:12px;font-weight:600;color:#047857;white-space:nowrap">'+escapeHtml(b.employees)+' EEs</span>':'';
       var sub=[b.contact,b.niche].filter(Boolean).join(" · ");
