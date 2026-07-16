@@ -285,7 +285,17 @@ footer a{color:#ffffff}footer a:hover{color:#fff}
       <p>For 2027 coverage, open enrollment runs from <strong>November 1, 2026 through January 15, 2027</strong>. Outside of that window, you can only enroll if you experience a qualifying life event such as losing job-based coverage, getting married, or having a baby.</p>
       <p>The ACA marketplace is available to most US residents who are not eligible for Medicare, Medicaid, or coverage through an employer. This includes self-employed workers, 1099 contractors, gig workers, early retirees, and anyone whose employer does not offer affordable group coverage.</p>
 
-      <h2 id="key-dates">Key Dates for 2027 Coverage</h2>
+      <h2 id="key-dates">Open Enrollment Deadlines for 2027 Coverage</h2>
+      <div class="highlight-box"><h4>The health insurance open enrollment deadline, in one line</h4><p style="margin:0">Open enrollment closes <strong>January 15, 2027</strong>. To have coverage start January 1, the deadline is <strong>December 15, 2026</strong>. Miss both and you need a <a href="/qualifying-life-events-health-insurance">qualifying life event</a> to enroll.</p></div>
+<div id="oe-capture" style="background:linear-gradient(135deg,#16447f,#0db5a6);border-radius:14px;padding:22px 20px;margin:26px 0">
+  <div style="font-family:'Poppins',sans-serif;font-weight:700;color:#fff;font-size:1.05rem;margin-bottom:4px">Not enrolling today? Do not miss the deadline.</div>
+  <div style="color:rgba(255,255,255,.88);font-size:.9rem;margin-bottom:12px">Drop your email and we will remind you before open enrollment closes, plus send a one page checklist so you enroll right the first time.</div>
+  <form onsubmit="(function(f){var em=f.email.value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){f.email.focus();return;}fetch('https://api-na2.hsforms.com/submissions/v3/integration/submit/246725050/ffec0159-e792-4827-854c-acab34314ddc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fields:[{name:'email',value:em},{name:'notes',value:'Requested open enrollment 2027 deadline reminder (guide)'}]})}).catch(function(){});f.innerHTML='<div style=\'color:#fff;font-weight:700\'>You are on the list. We will remind you before the deadline.</div>';})(this);return false" style="display:flex;flex-wrap:wrap;gap:10px">
+    <input name="email" type="email" placeholder="Your email" aria-label="Email address" required style="flex:1;min-width:170px;padding:12px 15px;border-radius:999px;border:none;font-size:.95rem;font-family:inherit" />
+    <button type="submit" style="background:#0b2346;color:#fff;font-weight:700;font-size:.92rem;padding:12px 22px;border-radius:999px;border:none;cursor:pointer;font-family:inherit">Remind Me</button>
+  </form>
+  <div style="color:rgba(255,255,255,.75);font-size:.76rem;margin-top:10px">One reminder and one checklist. No spam, unsubscribe any time.</div>
+</div>
       <table class="dates-table" aria-label="ACA 2027 open enrollment dates">
         <thead>
           <tr><th>Date</th><th>What Happens</th></tr>

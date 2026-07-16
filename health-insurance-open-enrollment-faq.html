@@ -211,7 +211,16 @@ footer{background:var(--blue-900);color:#ffffff;padding:48px 0 24px}footer a{col
       <div>
         <span class="eyebrow">Open Enrollment FAQ</span>
         <h1>Health Insurance Open Enrollment <span>Questions Answered</span></h1>
-        <p class="hero-sub">Everything you need to know about enrolling in a 2027 health plan, including the new shorter deadline, special enrollment periods, and how a licensed broker helps you do it for free. For the full calendar, see our guide to <a href="/blog/aca-open-enrollment-2027-guide">when open enrollment for health insurance 2027 starts</a>.</p>
+        <p class="hero-sub">Everything you need to know about enrolling in a 2027 health plan, including the new shorter deadline, special enrollment periods, and how a licensed broker helps you do it for free. For the full calendar, see our guide to <a href="/blog/aca-open-enrollment-2027-guide">when open enrollment for health insurance 2027 starts</a>.
+<div id="oe-capture" style="background:linear-gradient(135deg,#16447f,#0db5a6);border-radius:14px;padding:22px 20px;margin:26px 0">
+  <div style="font-family:'Poppins',sans-serif;font-weight:700;color:#fff;font-size:1.05rem;margin-bottom:4px">Not enrolling today? Do not miss the deadline.</div>
+  <div style="color:rgba(255,255,255,.88);font-size:.9rem;margin-bottom:12px">Drop your email and we will remind you before open enrollment closes, plus send a one page checklist so you enroll right the first time.</div>
+  <form onsubmit="(function(f){var em=f.email.value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){f.email.focus();return;}fetch('https://api-na2.hsforms.com/submissions/v3/integration/submit/246725050/ffec0159-e792-4827-854c-acab34314ddc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fields:[{name:'email',value:em},{name:'notes',value:'Requested open enrollment 2027 deadline reminder (faq)'}]})}).catch(function(){});f.innerHTML='<div style=\'color:#fff;font-weight:700\'>You are on the list. We will remind you before the deadline.</div>';})(this);return false" style="display:flex;flex-wrap:wrap;gap:10px">
+    <input name="email" type="email" placeholder="Your email" aria-label="Email address" required style="flex:1;min-width:170px;padding:12px 15px;border-radius:999px;border:none;font-size:.95rem;font-family:inherit" />
+    <button type="submit" style="background:#0b2346;color:#fff;font-weight:700;font-size:.92rem;padding:12px 22px;border-radius:999px;border:none;cursor:pointer;font-family:inherit">Remind Me</button>
+  </form>
+  <div style="color:rgba(255,255,255,.75);font-size:.76rem;margin-top:10px">One reminder and one checklist. No spam, unsubscribe any time.</div>
+</div></p>
         <div class="hero-ctas">
           <a class="btn btn-primary" href="/quote">Get a Free Quote</a>
           <a href="tel:+19548251009" class="btn btn-secondary">Call an Advisor</a>
