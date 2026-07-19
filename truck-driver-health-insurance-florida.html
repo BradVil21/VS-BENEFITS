@@ -1024,15 +1024,49 @@ function qfLaunchConfetti(btn) {
   requestAnimationFrame(draw);
 }
 
-function qfFunnelRedirect() {
-  var zip   = (document.getElementById('qf-zip-truck')   || {}).value || '';
-  var phone = (document.getElementById('qf-phone-truck') || {}).value || '';
-  var params = new URLSearchParams();
-  if (zip)   params.set('zip',   zip.trim());
-  if (phone) params.set('phone', phone.trim());
-  params.set('from', 'truck-driver');
+async function qfFunnelRedirect() {
+  var zip   = ((document.getElementById('qf-zip-truck')   || {}).value || '').trim();
+  var phone = ((document.getElementById('qf-phone-truck') || {}).value || '').trim();
   var btn = document.getElementById('qf-btn-truck');
-  if (btn) { btn.disabled = true; btn.textContent = 'Loading your plans…'; }
+  if (btn) { btn.disabled = true; btn.textContent = 'Loading your plans\u2026'; }
+
+  // Save a NEW LEAD to the admin portal the moment they submit (so a phone typed
+  // here is never lost even if they do not finish the full /quote funnel).
+  if (phone || zip) {
+    var lead = {
+      id: 'id_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36),
+      firstName: '', lastName: '', phone: phone, zipcode: zip, state: '',
+      source: 'truck-driver-quickform', coverageType: 'truck-driver',
+      status: 'new', created: Date.now(),
+      notes: 'Quick quote form (ZIP + phone) on truck driver page'
+    };
+    try { var ex = JSON.parse(localStorage.getItem('vs_leads') || '[]'); ex.unshift(lead); localStorage.setItem('vs_leads', JSON.stringify(ex)); } catch(e) {}
+    // Fire into GoHighLevel pipeline (fire-and-forget)
+    try { fetch('https://services.leadconnectorhq.com/hooks/V5Px5jvE14SWLdNrFeGL/webhook-trigger/d9cf69ed-4e52-4c7d-bf11-580204f9cce7', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(lead)}); } catch(e) {}
+    // Write to the admin portal (Firestore vs_state/leads), same pattern as the main form
+    var save = (async function() {
+      try {
+        var {initializeApp, getApps} = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
+        var {getFirestore, doc, getDoc, setDoc} = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+        var {getAuth, signInAnonymously} = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
+        var cfg = {apiKey:'AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U',authDomain:'vs-benefits-c1da9.firebaseapp.com',projectId:'vs-benefits-c1da9',storageBucket:'vs-benefits-c1da9.firebasestorage.app',messagingSenderId:'487471388882',appId:'1:487471388882:web:63e98e6699d5a823e3f50b'};
+        var app = getApps().length ? getApps()[0] : initializeApp(cfg);
+        var db = getFirestore(app), auth = getAuth(app);
+        await signInAnonymously(auth);
+        var snap = await getDoc(doc(db, 'vs_state', 'leads'));
+        var items = snap.exists() ? (snap.data().items || []) : [];
+        items.unshift(lead);
+        await setDoc(doc(db, 'vs_state', 'leads'), {items: items, ts: Date.now()});
+      } catch(e) { console.warn('admin lead save failed', e); }
+    })();
+    // Make sure the write has a chance to finish, but never block the user > 2.5s
+    try { await Promise.race([save, new Promise(function(r){ setTimeout(r, 2500); })]); } catch(e) {}
+  }
+
+  var params = new URLSearchParams();
+  if (zip)   params.set('zip', zip);
+  if (phone) params.set('phone', phone);
+  params.set('from', 'truck-driver');
   window.location.href = '/quote' + (params.toString() ? '?' + params.toString() : '');
 }
 
