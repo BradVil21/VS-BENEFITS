@@ -1379,7 +1379,65 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
     if(area.charAt(1) === "9" && area.charAt(2) === "9") return false; // reserved x99 area codes
     return true;
   }
-  function isValidEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  function isValidEmail(v){
+    v = String(v||"").trim();
+    var m = /^([^\s@]+)@([^\s@]+)$/.exec(v);
+    if(!m) return false;
+    var local = m[1], domain = m[2].toLowerCase();
+    if(local.length > 64) return false;
+    if(/^\.|\.$|\.\./.test(local)) return false;            // no leading/trailing/double dot
+    if(domain.indexOf(".") === -1) return false;            // domain needs a dot
+    if(/^[.-]|[.-]$|\.\./.test(domain)) return false;
+    var labels = domain.split(".");
+    var tld = labels[labels.length-1];
+    if(!/^[a-z]{2,}$/.test(tld)) return false;              // real TLD: 2+ letters
+    for(var i=0;i<labels.length;i++){
+      if(!/^[a-z0-9-]+$/.test(labels[i])) return false;
+    }
+    var junk = ["example.com","example.net","example.org","test.com","test.test","asdf.com","aaa.com","abc.com","none.com","na.com","fake.com","noemail.com","no.com"];
+    if(junk.indexOf(domain) !== -1) return false;
+    if(/^(test|asdf|none|na|nn|xx|aa|qq)$/.test(local) && /^(test|asdf|aaa|abc|gmail)\./.test(domain)===false && local.length<=4 && domain.split(".")[0].length<=3) return false;
+    return true;
+  }
+  // Curated domain-typo map -> zero false positives (only genuine misspellings map)
+  var VS_DOMAIN_FIX = {
+    "gmial.com":"gmail.com","gmai.com":"gmail.com","gmal.com":"gmail.com","gmil.com":"gmail.com","gamil.com":"gmail.com",
+    "gnail.com":"gmail.com","gmaill.com":"gmail.com","gmailc.com":"gmail.com","gmaail.com":"gmail.com","gmail.co":"gmail.com","gmail.con":"gmail.com","gmail.cm":"gmail.com","gmail.om":"gmail.com","ymail.co":"ymail.com",
+    "yaho.com":"yahoo.com","yahooo.com":"yahoo.com","yhoo.com":"yahoo.com","yahho.com":"yahoo.com","yahoo.co":"yahoo.com","yahoo.con":"yahoo.com","yahoo.cm":"yahoo.com",
+    "hotmial.com":"hotmail.com","hotmai.com":"hotmail.com","hotmal.com":"hotmail.com","hotnail.com":"hotmail.com","homail.com":"hotmail.com","hotmail.co":"hotmail.com","hotmail.con":"hotmail.com","hotmail.cm":"hotmail.com",
+    "outlok.com":"outlook.com","outook.com":"outlook.com","outloo.com":"outlook.com","outlookk.com":"outlook.com","outlook.co":"outlook.com","outlook.con":"outlook.com","outlok.co":"outlook.com",
+    "iclod.com":"icloud.com","icoud.com":"icloud.com","iclould.com":"icloud.com","icloud.co":"icloud.com","icloud.con":"icloud.com",
+    "aol.con":"aol.com","aol.co":"aol.com","comcast.com":"comcast.net","live.con":"live.com","live.co":"live.com"
+  };
+  var VS_TLD_FIX = { "con":"com","cmo":"com","ocm":"com","vom":"com","xom":"com","comm":"com","coom":"com","cpm":"com","cin":"com","cokm":"com" };
+  function suggestEmail(v){
+    v = String(v||"").trim().toLowerCase();
+    var at = v.lastIndexOf("@"); if(at < 1) return null;
+    var local = v.slice(0,at), domain = v.slice(at+1);
+    if(!domain) return null;
+    if(VS_DOMAIN_FIX[domain]) return local + "@" + VS_DOMAIN_FIX[domain];
+    var parts = domain.split(".");
+    var tld = parts[parts.length-1];
+    if(VS_TLD_FIX[tld]){ parts[parts.length-1] = VS_TLD_FIX[tld]; return local + "@" + parts.join("."); }
+    return null;
+  }
+  // Central email-field check: sets inline message (typo suggestion or invalid), returns bool
+  function checkEmailField(inputId, fieldId){
+    var el = document.getElementById(inputId); if(!el) return false;
+    var v = el.value.trim();
+    var wrap = document.getElementById(fieldId);
+    var msg = wrap ? wrap.querySelector(".err-msg") : null;
+    if(!isValidEmail(v)){
+      if(msg) msg.textContent = "Please enter a valid email address.";
+      setErr(fieldId, true); return false;
+    }
+    var sug = suggestEmail(v);
+    if(sug){
+      if(msg) msg.textContent = "Did you mean " + sug + "? Please double-check your email.";
+      setErr(fieldId, true); return false;
+    }
+    setErr(fieldId, false); return true;
+  }
   function isValidZip(v){ return /^\d{5}$/.test(v.trim()); }
   function isValidDate(v){ return v && v.length === 10; }
 
@@ -1414,10 +1472,9 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
       if(ok){ indNav(3); }
     } else if(fromStep === 3){
       var phone = document.getElementById('ind-phone').value.trim();
-      var email = document.getElementById('ind-email').value.trim();
       setErr('f-ind-phone', !isValidPhone(phone));
-      setErr('f-ind-email', !isValidEmail(email));
-      if(!isValidPhone(phone) || !isValidEmail(email)) ok = false;
+      var emailOk = checkEmailField('ind-email','f-ind-email');
+      if(!isValidPhone(phone) || !emailOk) ok = false;
       if(ok){ indNav(4); }
     } else if(fromStep === 4){
       // situation optional but nudge if none
@@ -1433,12 +1490,10 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
       var fn = document.getElementById('biz-firstname').value.trim();
       var ln = document.getElementById('biz-lastname').value.trim();
       var ph = document.getElementById('biz-contact-phone').value.trim();
-      var em = document.getElementById('biz-email').value.trim();
-      var emOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
       setErr('f-biz-firstname', !fn);
       setErr('f-biz-lastname', !ln);
       setErr('f-biz-contact-phone', !isValidPhone(ph));
-      setErr('f-biz-email', !emOk);
+      var emOk = checkEmailField('biz-email','f-biz-email');
       if(!fn || !ln || !isValidPhone(ph) || !emOk) ok = false;
       if(ok){ bizNav(2); }
     } else if(fromStep === 2){
