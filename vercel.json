@@ -143,6 +143,11 @@
       "permanent": true
     },
     {
+      "source": "/small-business-health-insurance-calculator.html",
+      "destination": "/small-business-health-insurance-calculator",
+      "permanent": true
+    },
+    {
       "source": "/owner-operator-health-insurance",
       "destination": "/best-health-insurance-owner-operators",
       "permanent": true
