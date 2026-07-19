@@ -1366,7 +1366,19 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
   };
 
   // ---- VALIDATION ----
-  function isValidPhone(v){ return v.replace(/\D/g,'').length >= 10; }
+  function isValidPhone(v){
+    var d = String(v||"").replace(/\D/g,"");
+    if(d.length === 11 && d.charAt(0) === "1") d = d.slice(1);   // drop US country code
+    if(d.length !== 10) return false;
+    var area = d.slice(0,3), exch = d.slice(3,6);
+    if(area.charAt(0) === "0" || area.charAt(0) === "1") return false; // area code can't start 0/1
+    if(exch.charAt(0) === "0" || exch.charAt(0) === "1") return false; // prefix can't start 0/1
+    if(/^(\d)\1{9}$/.test(d)) return false;                          // all same digit (0000000000)
+    if(d === "1234567890" || d === "0123456789") return false;         // sequential
+    if(area === "555" || exch === "555") return false;                 // 555 test numbers
+    if(area.charAt(1) === "9" && area.charAt(2) === "9") return false; // reserved x99 area codes
+    return true;
+  }
   function isValidEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
   function isValidZip(v){ return /^\d{5}$/.test(v.trim()); }
   function isValidDate(v){ return v && v.length === 10; }
