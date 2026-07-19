@@ -1276,11 +1276,27 @@ $("rf-noappt").addEventListener("change",function(){
   $("wiz-appt-state").innerHTML=this.checked?"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/></svg> No appointment":"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='3' y='4' width='18' height='18' rx='2'/><path d='M16 2v4M8 2v4M3 10h18'/></svg> Appointment requested";
 });
 
+function ageFromDob(s){
+  s=String(s||"").trim(); if(!s) return null;
+  var d=null, m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if(m){ d=new Date(Number(m[3]), Number(m[1])-1, Number(m[2])); }
+  else { var iso=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/); if(iso){ d=new Date(Number(iso[1]), Number(iso[2])-1, Number(iso[3])); } else { var t=Date.parse(s); if(!isNaN(t)) d=new Date(t); } }
+  if(!d || isNaN(d.getTime())) return null;
+  var now=new Date(), age=now.getFullYear()-d.getFullYear(), mo=now.getMonth()-d.getMonth();
+  if(mo<0 || (mo===0 && now.getDate()<d.getDate())) age--;
+  return (age>=0 && age<130) ? age : null;
+}
 $("ref-form").addEventListener("submit",function(e){
   e.preventDefault();
   var acct=currentAccount();if(!acct)return;
   if(!wizValidate(1)){wizGo(1);return;}
   if(!$("rf-perm").checked)return showNotice("ref-msg","err","Please confirm you have permission to share their information.");
+  var __minorAge=ageFromDob($("rf-dob").value);
+  if(__minorAge!==null && __minorAge<18){
+    alert("They must be on a plan with someone 18 years or older. We are unable to accept minors on a plan by themselves unless they have a parent or guardian.");
+    showNotice("ref-msg","err","This person is under 18 and cannot be on a plan by themselves. They must be added with a parent or guardian who is 18 or older.");
+    return;
+  }
   var first=$("rf-first").value.trim(),last=$("rf-last").value.trim();
   var name=(first+" "+last).trim();
   var phone=$("rf-phone").value.trim(),email=$("rf-email").value.trim();
