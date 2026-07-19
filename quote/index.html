@@ -1722,6 +1722,26 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
     };
   }
 
+  // ---- LEAD CONVERSION TRACKING ----
+  // Google Ads conversion LABEL. Get it in Google Ads -> Goals -> Conversions ->
+  // (your "Quote Form Lead" action) -> Tag setup -> "Use Google tag". It looks
+  // like  AW-17950389267/AbC-D1efGhIjKl  -- paste ONLY the part after the slash:
+  var GADS_CONVERSION_LABEL = 'PASTE_LABEL_HERE';
+  var _leadFired = false;
+  function fireLeadConversion(data){
+    if(_leadFired) return; _leadFired = true;         // guard: fire once per submit
+    try{
+      if(typeof gtag !== 'function') return;
+      var leadType = (data && data.type) || 'individual';
+      // GA4 lead event (no label needed) -> shows up as a conversion in GA4
+      gtag('event','generate_lead',{ currency:'USD', value:0, lead_type:leadType });
+      // Google Ads conversion (needs the label above)
+      if(GADS_CONVERSION_LABEL && GADS_CONVERSION_LABEL.indexOf('PASTE_') === -1){
+        gtag('event','conversion',{ send_to:'AW-17950389267/'+GADS_CONVERSION_LABEL, value:0, currency:'USD' });
+      }
+    }catch(e){}
+  }
+
   // ---- SEND TO WEBHOOK ----
   function sendToWebhook(data, btnEl){
     // Turn button green + loading state
@@ -1753,6 +1773,7 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
 
     var webhookOk = WEBHOOK_URL && WEBHOOK_URL.indexOf('http') === 0 && WEBHOOK_URL.indexOf('YOUR_') === -1;
     var done = function(){
+      fireLeadConversion(data);
       setTimeout(function(){
         updateProgress(data.type === 'individual' ? IND_STEPS : BIZ_STEPS, data.type === 'individual' ? IND_STEPS : BIZ_STEPS);
         showPanel('panel-success');
