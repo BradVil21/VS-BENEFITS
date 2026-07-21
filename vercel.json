@@ -153,6 +153,11 @@
       "permanent": true
     },
     {
+      "source": "/blog/do-truck-drivers-get-health-insurance.html",
+      "destination": "/blog/do-truck-drivers-get-health-insurance",
+      "permanent": true
+    },
+    {
       "source": "/owner-operator-health-insurance",
       "destination": "/best-health-insurance-owner-operators",
       "permanent": true
