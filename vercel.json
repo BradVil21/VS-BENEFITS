@@ -148,6 +148,11 @@
       "permanent": true
     },
     {
+      "source": "/blog/how-to-offer-employees-health-insurance.html",
+      "destination": "/blog/how-to-offer-employees-health-insurance",
+      "permanent": true
+    },
+    {
       "source": "/owner-operator-health-insurance",
       "destination": "/best-health-insurance-owner-operators",
       "permanent": true
