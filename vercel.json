@@ -13,16 +13,6 @@
       "permanent": true
     },
     {
-      "source": "/blog/how-much-does-health-insurance-cost-2026",
-      "destination": "/how-much-does-health-insurance-cost",
-      "permanent": true
-    },
-    {
-      "source": "/blog/how-much-does-health-insurance-cost-2026.html",
-      "destination": "/how-much-does-health-insurance-cost",
-      "permanent": true
-    },
-    {
       "source": "/about.html",
       "destination": "/about",
       "permanent": true
@@ -339,6 +329,186 @@
     },
     {
       "source": "/blog/dental-vision-insurance-guide.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-alabama.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-arizona.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-arkansas.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-colorado.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-florida",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-florida.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-georgia",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-georgia.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-illinois.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-indiana.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-iowa.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-kansas.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-kentucky.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-louisiana.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-michigan.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-minnesota.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-mississippi.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-missouri.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-montana.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-nebraska.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-nevada.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-north-carolina",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-north-carolina.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-north-dakota.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-ohio.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-oklahoma.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-south-carolina.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-south-dakota.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-tennessee.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-texas",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-texas.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-utah.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-virginia.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-west-virginia.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-wisconsin.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/dental-vision-insurance-wyoming.html",
       "destination": "/dental-vision-insurance",
       "permanent": true
     }
