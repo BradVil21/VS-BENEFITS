@@ -1570,12 +1570,18 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
     };
   }
 
-  // ---- ZAPIER / MAKE WEBHOOK URL ----
-  // Every funnel completion is POSTed here AND added to the admin
-  // portal's Leads tab as a new lead. Replace with your own webhook
-  // URL (Zapier, Make.com, GoHighLevel/LeadConnector, etc.) to
-  // trigger your own workflow automation.
-  var WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/V5Px5jvE14SWLdNrFeGL/webhook-trigger/d9cf69ed-4e52-4c7d-bf11-580204f9cce7';
+  // ---- WEBHOOK URL ----
+  // GoHighLevel/LeadConnector webhook removed per setup — leads now flow to
+  // HubSpot (hidden form + serverless) and Firebase (admin portal). Leaving this
+  // blank keeps the external webhook off. To re-enable a Zapier/Make/GHL webhook
+  // later, paste its URL here.
+  var WEBHOOK_URL = '';
+
+  // ---- BUSINESS QUOTE ENDPOINT ----
+  // Serverless function that (1) creates/updates the HubSpot contact,
+  // (2) emails the lead a branded VS Health Benefits confirmation with a
+  // "Fill out census form" link, and (3) alerts Bradley. See api/business-quote.js.
+  var BUSINESS_QUOTE_API = '/api/business-quote';
 
   // ---- CONFETTI ----
   function launchConfetti(){
@@ -1768,6 +1774,19 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
           window.vsAdminWrite('leads', _lead);
           if (typeof window.hubspotSyncLead === 'function') window.hubspotSyncLead(_lead);
         }
+      }
+    } catch(e){ /* don't block the user */ }
+
+    // ---- BUSINESS: trigger the branded auto-email + census flow (serverless) ----
+    // Fire-and-forget: creates/updates the HubSpot contact, emails the lead a
+    // confirmation with the census link, and alerts Bradley. Never blocks the UI.
+    try {
+      if (data.type === 'business' && BUSINESS_QUOTE_API) {
+        fetch(BUSINESS_QUOTE_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        }).catch(function(){ /* non-blocking */ });
       }
     } catch(e){ /* don't block the user */ }
 

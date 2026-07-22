@@ -313,171 +313,6 @@
       "permanent": true
     },
     {
-      "source": "/health-insurance-nevada",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-wyoming",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-iowa",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-tennessee",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-arizona",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-illinois",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-minnesota",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-alabama",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-south-carolina",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-west-virginia",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-oklahoma",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-louisiana",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-indiana",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-virginia",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-montana",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-kansas",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-utah",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-michigan",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-wisconsin",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-kentucky",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-mississippi",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-nebraska",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-ohio",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-north-dakota",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-arkansas",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-missouri",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-south-dakota",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-colorado",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-for-auto-repair-shops",
-      "destination": "/small-business-health-insurance",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-for-cleaning-companies",
-      "destination": "/small-business-health-insurance",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-for-construction-companies",
-      "destination": "/small-business-health-insurance",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-for-real-estate-agents",
-      "destination": "/small-business-health-insurance",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-for-retail-businesses",
-      "destination": "/small-business-health-insurance",
-      "permanent": true
-    },
-    {
       "source": "/health-insurance-cost-faq",
       "destination": "/how-much-does-health-insurance-cost",
       "permanent": true
@@ -496,26 +331,6 @@
       "source": "/blog/dental-vision-insurance-guide.html",
       "destination": "/dental-vision-insurance",
       "permanent": true
-    },
-    {
-      "source": "/health-insurance-florida",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-texas",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-north-carolina",
-      "destination": "/",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-georgia",
-      "destination": "/",
-      "permanent": true
     }
   ],
   "rewrites": [
@@ -528,13 +343,19 @@
     {
       "source": "/admin",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
     },
     {
       "source": "/admin.html",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
       ]
     },
     {

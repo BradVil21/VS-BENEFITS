@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Employee Census — VS Health Benefits</title>
+<link rel="icon" href="/favicon.ico">
+<style>
+  :root{--navy:#16447f;--navy-d:#0f2f5c;--teal:#0db5a6;--ink:#16202e;--slate:#5a6b80;--line:#e2e8f1;--bg:#eef2f7;--green:#16a34a;--red:#e0483d}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+  .wrap{max-width:760px;margin:0 auto;padding:0 16px 60px}
+  header{background:linear-gradient(135deg,var(--navy),var(--navy-d));color:#fff;padding:26px 0 22px;margin-bottom:22px}
+  header .wrap{padding-bottom:0}
+  .brand{font-size:18px;font-weight:800}
+  .brand small{display:block;color:#9fc0ef;font-size:12px;font-weight:500;margin-top:2px}
+  h1{font-size:1.5rem;margin:14px 0 6px;font-weight:800;letter-spacing:-.01em}
+  header p{margin:0;color:#cfe0f6;font-size:.96rem;max-width:560px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 1px 3px rgba(16,32,60,.06),0 10px 30px rgba(16,32,60,.05);padding:22px;margin-bottom:18px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  label{display:block;font-size:.8rem;font-weight:700;color:var(--slate);margin:0 0 5px;text-transform:uppercase;letter-spacing:.04em}
+  input,select{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:9px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+  input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(22,68,127,.12)}
+  .field{margin-bottom:14px}
+  h2{font-size:1.05rem;margin:2px 0 4px;font-weight:750;color:var(--navy)}
+  .hint{font-size:.85rem;color:var(--slate);margin:0 0 14px}
+  table{width:100%;border-collapse:collapse;margin-top:6px}
+  thead th{font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--slate);text-align:left;padding:6px 8px;font-weight:750}
+  tbody td{padding:5px 6px;vertical-align:middle}
+  tbody td.num{width:78px}
+  tbody td.rel{width:130px}
+  tbody td.gen{width:120px}
+  tbody td.x{width:34px;text-align:center}
+  .rowline td{border-bottom:1px solid #f0f3f7}
+  .del{background:none;border:none;color:var(--red);font-size:20px;cursor:pointer;line-height:1;padding:4px 6px;border-radius:6px}
+  .del:hover{background:#fdecea}
+  .add{display:inline-flex;align-items:center;gap:7px;background:#eef3fa;color:var(--navy);border:1.5px dashed #b9cef0;border-radius:9px;padding:10px 16px;font-weight:700;font-size:14px;cursor:pointer;margin:12px 6px 0 0}
+  .add:hover{background:#e2ecfa}
+  .tally{display:flex;gap:18px;flex-wrap:wrap;background:#f0fbf9;border:1px solid #cdeee8;border-radius:10px;padding:12px 16px;margin-top:16px;font-size:.9rem}
+  .tally b{color:var(--navy)}
+  .submit{width:100%;padding:15px;background:linear-gradient(135deg,var(--navy),var(--navy-d));color:#fff;border:none;border-radius:11px;font-size:16px;font-weight:800;cursor:pointer;margin-top:8px;box-shadow:0 8px 22px rgba(22,68,127,.28)}
+  .submit:hover{filter:brightness(1.06)}
+  .submit:disabled{opacity:.7;cursor:default}
+  .foot{font-size:.8rem;color:var(--slate);text-align:center;margin-top:16px}
+  .ok{display:none;text-align:center;padding:26px 10px}
+  .ok .check{width:64px;height:64px;border-radius:50%;background:#e6f7ef;color:var(--green);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 14px}
+  .ok h2{font-size:1.4rem;color:var(--ink)}
+  @media(max-width:620px){.row{grid-template-columns:1fr}tbody td.rel,tbody td.gen{width:auto}table,thead,tbody,th,td,tr{display:block}thead{display:none}
+    .rowline{border:1px solid var(--line);border-radius:10px;padding:8px;margin-bottom:10px}
+    tbody td{padding:6px 2px}tbody td.x{text-align:right}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">VS Health Benefits<small>Health insurance, made simple</small></div>
+    <h1>Employee census</h1>
+    <p>Add each person you'd like covered — employees, plus any spouses and children. This is all I need to build your group quote. Takes about two minutes.</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <form id="censusForm">
+    <div class="card">
+      <h2>Business details</h2>
+      <div class="row">
+        <div class="field">
+          <label for="bizName">Business name</label>
+          <input type="text" id="bizName" placeholder="A&amp;A Sports Group" autocomplete="organization">
+        </div>
+        <div class="field">
+          <label for="bizZip">Business ZIP code</label>
+          <input type="text" id="bizZip" placeholder="33127" maxlength="5" inputmode="numeric" autocomplete="postal-code">
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label for="contactEmail">Your email</label>
+        <input type="email" id="contactEmail" placeholder="you@company.com" autocomplete="email" inputmode="email">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Who should be covered?</h2>
+      <p class="hint">List every person. For spouses/children, set the relationship and (optionally) note which employee they're linked to.</p>
+      <table id="peopleTable">
+        <thead>
+          <tr><th>Relationship</th><th>Name</th><th>Age</th><th>Gender</th><th></th></tr>
+        </thead>
+        <tbody id="peopleBody"></tbody>
+      </table>
+      <div>
+        <button type="button" class="add" data-rel="Employee">＋ Add employee</button>
+        <button type="button" class="add" data-rel="Spouse">＋ Add spouse</button>
+        <button type="button" class="add" data-rel="Child">＋ Add child</button>
+      </div>
+      <div class="tally" id="tally">
+        <span><b id="tEmp">0</b> employees</span>
+        <span><b id="tSp">0</b> spouses</span>
+        <span><b id="tCh">0</b> children</span>
+        <span><b id="tTot">0</b> total lives</span>
+      </div>
+    </div>
+
+    <button type="submit" class="submit" id="submitBtn">Submit census &amp; get my quote</button>
+    <p class="foot">🔒 Your information is used only to prepare your quote and is never sold. VS Health Benefits · vshealthbenefits.com</p>
+  </form>
+
+  <div class="ok card" id="okBox">
+    <div class="check">✓</div>
+    <h2>Census received!</h2>
+    <p class="hint" style="max-width:420px;margin:8px auto 0">Thanks — I've got everything I need. I'll review your group and reach out shortly with plans and pricing. A confirmation is on its way to your email.</p>
+    <p style="margin-top:18px;font-weight:700">— Bradley Vilsaint, VS Health Benefits</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var params = new URLSearchParams(location.search);
+  // Prefill from the quote email link
+  if(params.get('b')) document.getElementById('bizName').value = params.get('b');
+  if(params.get('z')) document.getElementById('bizZip').value = params.get('z');
+  if(params.get('e')) document.getElementById('contactEmail').value = params.get('e');
+  var contactId = params.get('c') || '';
+  var suggested = parseInt(params.get('n'),10);
+
+  var body = document.getElementById('peopleBody');
+
+  function genderSelect(){
+    return '<select class="p-gender"><option value="">—</option><option>Male</option><option>Female</option><option>Other</option></select>';
+  }
+  function relSelect(rel){
+    var opts = ['Employee','Spouse','Child'];
+    return '<select class="p-rel">' + opts.map(function(o){
+      return '<option'+(o===rel?' selected':'')+'>'+o+'</option>';
+    }).join('') + '</select>';
+  }
+  function addRow(rel){
+    var tr = document.createElement('tr');
+    tr.className = 'rowline';
+    tr.innerHTML =
+      '<td class="rel" data-label="Relationship">'+relSelect(rel||'Employee')+'</td>'+
+      '<td data-label="Name"><input class="p-name" type="text" placeholder="Full name" autocomplete="off"></td>'+
+      '<td class="num" data-label="Age"><input class="p-age" type="number" min="0" max="120" placeholder="Age" inputmode="numeric"></td>'+
+      '<td class="gen" data-label="Gender">'+genderSelect()+'</td>'+
+      '<td class="x"><button type="button" class="del" title="Remove">×</button></td>';
+    tr.querySelector('.del').addEventListener('click', function(){ tr.remove(); tally(); });
+    tr.querySelector('.p-rel').addEventListener('change', tally);
+    body.appendChild(tr);
+    tally();
+  }
+  function tally(){
+    var e=0,s=0,c=0;
+    body.querySelectorAll('tr').forEach(function(tr){
+      var r=(tr.querySelector('.p-rel').value||'').toLowerCase();
+      if(r.indexOf('spouse')>=0)s++; else if(r.indexOf('child')>=0)c++; else e++;
+    });
+    document.getElementById('tEmp').textContent=e;
+    document.getElementById('tSp').textContent=s;
+    document.getElementById('tCh').textContent=c;
+    document.getElementById('tTot').textContent=e+s+c;
+  }
+  document.querySelectorAll('.add').forEach(function(b){
+    b.addEventListener('click', function(){ addRow(b.getAttribute('data-rel')); });
+  });
+
+  // Seed employee rows (use the count from the quote if provided, else 1)
+  var seed = (suggested && suggested>0 && suggested<=50) ? suggested : 1;
+  for(var i=0;i<seed;i++) addRow('Employee');
+
+  document.getElementById('censusForm').addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var people=[];
+    body.querySelectorAll('tr').forEach(function(tr){
+      var name=tr.querySelector('.p-name').value.trim();
+      var age=tr.querySelector('.p-age').value.trim();
+      var gender=tr.querySelector('.p-gender').value;
+      var rel=tr.querySelector('.p-rel').value;
+      if(name||age||gender){ people.push({relationship:rel,linkedTo:'',name:name,age:age,gender:gender}); }
+    });
+    if(!people.length){ alert('Please add at least one person.'); return; }
+
+    var payload={
+      contactId: contactId,
+      email: document.getElementById('contactEmail').value.trim(),
+      businessName: document.getElementById('bizName').value.trim(),
+      businessZip: document.getElementById('bizZip').value.trim(),
+      employees: people
+    };
+
+    var btn=document.getElementById('submitBtn');
+    btn.disabled=true; btn.textContent='Submitting…';
+
+    fetch('/api/census',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      .catch(function(){})
+      .finally(function(){
+        document.getElementById('censusForm').style.display='none';
+        document.getElementById('okBox').style.display='block';
+        window.scrollTo({top:0,behavior:'smooth'});
+      });
+  });
+})();
+</script>
+</body>
+</html>
