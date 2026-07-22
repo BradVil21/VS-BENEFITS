@@ -12,9 +12,9 @@
 </script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ACA Subsidy Calculator 2025 | Estimate Your Health Insurance Cost | VS Health Benefits</title>
-<meta name="description" content="Free ACA subsidy calculator. Estimate your health insurance premium tax credit and your monthly cost in seconds, with Bronze, Silver, and Gold plan estimates. No email required. From VS Health Benefits, licensed in 40+ states." />
-<meta name="keywords" content="ACA subsidy calculator, health insurance subsidy calculator, premium tax credit calculator, obamacare subsidy calculator, health insurance cost estimator, marketplace subsidy calculator, how much is health insurance, aca calculator 2025, health insurance quote estimator" />
+<title>ACA Subsidy Calculator 2026-2027 | Estimate Your Health Insurance Cost | VS Health Benefits</title>
+<meta name="description" content="Free ACA subsidy calculator updated for 2026-2027 rules (after the enhanced credits expired). Estimate your premium tax credit and monthly cost in seconds, with Bronze, Silver, and Gold plan estimates. No email required. From VS Health Benefits, licensed in 40+ states." />
+<meta name="keywords" content="ACA subsidy calculator, health insurance subsidy calculator, premium tax credit calculator, obamacare subsidy calculator, health insurance cost estimator, marketplace subsidy calculator, how much is health insurance, aca calculator 2026, aca calculator 2027, subsidy cliff calculator, health insurance quote estimator" />
 <link rel="canonical" href="https://www.vshealthbenefits.com/aca-subsidy-calculator" />
 <meta name="robots" content="index,follow" />
 <meta name="geo.region" content="US-FL" />
@@ -199,7 +199,7 @@ footer a:hover{color:#fff}
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
 {"@type":"Question","name":"How does the ACA subsidy calculator work?","acceptedAnswer":{"@type":"Answer","text":"It estimates your premium tax credit by comparing your household income to the federal poverty level, then applying the ACA formula for how much you are expected to pay. Your subsidy is the difference between a benchmark plan's cost and your expected contribution."}},
 {"@type":"Question","name":"Is the subsidy estimate accurate?","acceptedAnswer":{"@type":"Answer","text":"It is a close estimate for planning. Your exact subsidy depends on your zip code and the specific plans available in your area. A licensed VS Health Benefits advisor can give you the precise number for free."}},
-{"@type":"Question","name":"Who qualifies for an ACA subsidy?","acceptedAnswer":{"@type":"Answer","text":"Most people who buy their own coverage and do not have affordable employer insurance qualify for some subsidy based on income. There is currently no hard income cap, so even higher earners may get help."}},
+{"@type":"Question","name":"Who qualifies for an ACA subsidy?","acceptedAnswer":{"@type":"Answer","text":"Most people who buy their own coverage and do not have affordable employer insurance qualify for a premium tax credit based on income. For 2026 and 2027, the enhanced subsidies have expired, so eligibility runs from 100% up to 400% of the federal poverty level, with a hard cutoff (the subsidy cliff) above 400%. Very low income households may qualify for Medicaid instead. A licensed broker can confirm your exact eligibility for free."}},
 {"@type":"Question","name":"How much can I save with a subsidy?","acceptedAnswer":{"@type":"Answer","text":"Savings vary by income, age, and household size. Many people pay far less than the sticker price, and some qualify for a very low or even zero dollar premium. Run the calculator to see your estimate."}}
 ]}
 </script>
@@ -325,7 +325,7 @@ footer a:hover{color:#fff}
     <h2>Frequently asked questions</h2>
     <div class="faq">
       <details><summary>How accurate is this ACA subsidy calculator?</summary><p>It gives a close estimate for planning using the ACA subsidy formula and household size. Your exact subsidy depends on your zip code and the specific plans sold in your area. For the precise number and real plan prices, a licensed advisor can check it for you at no cost.</p></details>
-      <details><summary>Who qualifies for a health insurance subsidy?</summary><p>Most people who buy their own coverage and do not have affordable insurance through an employer qualify for some subsidy based on income. There is currently no hard upper income cutoff, so even higher earners may receive help. Very low income households may qualify for Medicaid instead.</p></details>
+      <details><summary>Who qualifies for a health insurance subsidy?</summary><p>Most people who buy their own coverage and do not have affordable insurance through an employer qualify for a premium tax credit based on income. For 2026 and 2027, the enhanced pandemic-era subsidies have expired, so eligibility runs from 100% up to 400% of the federal poverty level — roughly $63,000 for a single person and $128,600 for a family of four — with a hard cutoff above 400% (the subsidy cliff). Very low income households may qualify for Medicaid instead. We check exactly what you qualify for at no cost.</p></details>
       <details><summary>Do I have to enter my email or phone to use this?</summary><p>No. The calculator gives you an instant estimate with no signup. If you want your exact quote and plan options, you can reach out to a VS Health Benefits advisor when you are ready.</p></details>
       <details><summary>What is a benchmark or Silver plan?</summary><p>Subsidies are calculated using the second-lowest-cost Silver plan in your area, called the benchmark. You can apply the same subsidy to a cheaper Bronze plan to lower your monthly cost, or a Gold plan for richer coverage.</p></details>
       <details><summary>Can a broker help me for free?</summary><p>Yes. VS Health Benefits is a licensed independent brokerage paid by the insurance carriers, not by you. Comparing plans and enrolling with an advisor costs the same as doing it yourself, so you get expert help at no extra charge.</p></details>
@@ -371,7 +371,7 @@ footer a:hover{color:#fff}
         </ul>
       </div>
     </div>
-    <div class="foot-disc">This calculator provides estimates for educational purposes only and is not an offer of insurance, a quote, or tax advice. Estimates are based on the federal poverty guidelines and the ACA premium tax credit formula and do not reflect the exact plans or prices in your area. Subsidy rules and enhanced credits are subject to change. VS Health Benefits only sends official enrollment materials after direct client confirmation. We do not mail unsolicited insurance packages.</div>
+    <div class="foot-disc">This calculator provides estimates for educational purposes only and is not an offer of insurance, a quote, or tax advice. Estimates use the 2025 federal poverty guidelines and the 2026 ACA premium tax credit formula (IRS Rev. Proc. 2025-25) that applies after the enhanced credits expired on December 31, 2025, and reflect a hard subsidy cliff above 400% of the federal poverty level. They do not reflect the exact plans or prices in your area. If Congress restores the enhanced credits, subsidy amounts could change — ask us for your exact figure. VS Health Benefits only sends official enrollment materials after direct client confirmation. We do not mail unsolicited insurance packages.</div>
     <div class="foot-bottom">
       <span>&copy; <span id="year">2026</span> VS Health Benefits. All rights reserved.</span>
       <span>vshealthbenefits.com | Licensed independent health insurance brokerage</span>
@@ -459,10 +459,12 @@ document.addEventListener("DOMContentLoaded",function(){
 (function(){
   "use strict";
   var lastEstimate={};
-  var FPL_BASE=15060,FPL_ADD=5380;
+  var FPL_BASE=15650,FPL_ADD=5500;
   function fpl(size){return FPL_BASE+(size-1)*FPL_ADD;}
   function lerp(x,x0,x1,y0,y1){return y0+(y1-y0)*(x-x0)/(x1-x0);}
-  function applicablePct(p){if(p<=150)return 0;if(p<=200)return lerp(p,150,200,0,2);if(p<=250)return lerp(p,200,250,2,4);if(p<=300)return lerp(p,250,300,4,6);if(p<=400)return lerp(p,300,400,6,8.5);return 8.5;}
+  // 2026/2027 required-contribution sliding scale (IRS Rev. Proc. 2025-25, original ACA rules after
+  // the enhanced credits expired 12/31/2025). Returns null above 400% FPL = subsidy cliff, no credit.
+  function applicablePct(p){if(p<133)return 2.10;if(p<150)return lerp(p,133,150,3.14,4.19);if(p<200)return lerp(p,150,200,4.19,6.60);if(p<250)return lerp(p,200,250,6.60,8.44);if(p<300)return lerp(p,250,300,8.44,9.96);if(p<=400)return 9.96;return null;}
   function ageFactor(a){if(a<21)return 0.765;if(a>=64)return 3.0;var pts=[[21,1.0],[25,1.004],[30,1.135],[35,1.222],[40,1.278],[45,1.444],[50,1.786],[55,2.230],[60,2.714],[64,3.0]];for(var i=0;i<pts.length-1;i++){if(a>=pts[i][0]&&a<pts[i+1][0])return lerp(a,pts[i][0],pts[i+1][0],pts[i][1],pts[i+1][1]);}return 1.0;}
   var BASE21=375;
   function prem(a){return BASE21*ageFactor(a);}
@@ -481,8 +483,9 @@ document.addEventListener("DOMContentLoaded",function(){
     var poverty=fpl(size),fplPct=income/poverty*100;
     var bench=prem(age1)+((age2&&age2>=18)?prem(Math.min(Math.max(age2,18),64)):0)+Math.min(kids,3)*(BASE21*0.765);
     var appl=applicablePct(fplPct);
-    var expectedMonthly=(income*(appl/100))/12;
-    var subsidy=Math.max(0,bench-expectedMonthly);
+    var overCliff=(appl===null); // above 400% FPL: no premium tax credit for 2026/2027
+    var expectedMonthly=overCliff?bench:(income*(appl/100))/12;
+    var subsidy=overCliff?0:Math.max(0,bench-expectedMonthly);
 
     // plan tier full-premium estimates relative to benchmark Silver
     var silverFull=bench, bronzeFull=bench*0.78, goldFull=bench*1.22;
@@ -494,6 +497,8 @@ document.addEventListener("DOMContentLoaded",function(){
     if(fplPct<100){
       note="<strong>Your income may qualify you for Medicaid</strong> at little or no cost, depending on your state. In states that did not expand Medicaid, you may fall into a coverage gap. An advisor can check your options for free.";
       subsidy=0;bronze=silver=gold=0;
+    } else if(overCliff){
+      note="<strong>Your income is above 400% of the federal poverty level.</strong> The enhanced ACA subsidies expired at the end of 2025, so for 2026 and 2027 there is a hard “subsidy cliff” at 400% FPL, and premium tax credits generally do not apply above it. You can still enroll at full price, and an advisor can often find lower-cost options (including off-marketplace plans) at no cost to you.";
     } else if(subsidy<=0){
       note="Based on this income a subsidy may not apply, but plan prices vary a lot by area and you may still find affordable coverage. An advisor can find your real options at no cost.";
     } else if(bronze<=1){

@@ -13,6 +13,16 @@
       "permanent": true
     },
     {
+      "source": "/blog/how-much-does-health-insurance-cost-2026",
+      "destination": "/how-much-does-health-insurance-cost",
+      "permanent": true
+    },
+    {
+      "source": "/blog/how-much-does-health-insurance-cost-2026.html",
+      "destination": "/how-much-does-health-insurance-cost",
+      "permanent": true
+    },
+    {
       "source": "/about.html",
       "destination": "/about",
       "permanent": true
