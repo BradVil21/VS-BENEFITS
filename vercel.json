@@ -333,6 +333,331 @@
       "permanent": true
     },
     {
+      "source": "/health-insurance-alabama",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-alabama.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-arizona",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-arizona.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-arkansas",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-arkansas.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-colorado",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-colorado.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-florida",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-florida.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-georgia",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-georgia.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-illinois",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-illinois.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-indiana",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-indiana.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-iowa",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-iowa.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-kansas",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-kansas.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-kentucky",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-kentucky.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-louisiana",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-louisiana.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-michigan",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-michigan.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-minnesota",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-minnesota.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-mississippi",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-mississippi.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-missouri",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-missouri.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-montana",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-montana.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-nebraska",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-nebraska.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-nevada",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-nevada.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-north-carolina",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-north-carolina.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-north-dakota",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-north-dakota.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-ohio",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-ohio.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-oklahoma",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-oklahoma.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-south-carolina",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-south-carolina.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-south-dakota",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-south-dakota.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-tennessee",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-tennessee.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-texas",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-texas.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-utah",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-utah.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-virginia",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-virginia.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-west-virginia",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-west-virginia.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-wisconsin",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-wisconsin.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-wyoming",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-wyoming.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/how-much-does-health-insurance-cost-2026.html",
+      "destination": "/how-much-does-health-insurance-cost",
+      "permanent": true
+    },
+    {
       "source": "/dental-vision-insurance-alabama.html",
       "destination": "/dental-vision-insurance",
       "permanent": true
