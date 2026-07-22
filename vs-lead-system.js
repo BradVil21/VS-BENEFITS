@@ -5,9 +5,9 @@
    Privacy-first design:
    - No analytics/marketing cookies load until the visitor consents
      (GDPR "prior consent" / CCPA-CPRA opt-out friendly).
-   - Form progress autosaves to THIS browser only (localStorage).
-   - Backend draft save happens ONLY if the visitor ticks the opt-in box,
-     and only posts to our own /api/lead-draft (server-side validated).
+   - Form progress autosaves to THIS browser (localStorage) for the resume banner.
+   - In-progress leads are auto-captured to our own /api/lead-draft (server-side
+     validated) once a valid email is present, even if the visitor never submits.
    - Clears the local draft the moment the form is successfully submitted.
 
    Safe by design: everything is wrapped in try/catch and degrades to a
@@ -48,7 +48,7 @@
    +".vs-rb-btn{border:0;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit;min-height:40px}"
    +".vs-rb-btn.go{background:#16447f;color:#fff}.vs-rb-btn.clear{background:#fff;border:1px solid #cbd5e1;color:#5a6b80}"
    +".vs-recover-row{display:flex;align-items:flex-start;gap:9px;margin:14px 0 2px;padding:11px 13px;background:#f7faff;border:1px solid #e4e9f2;border-radius:10px;font-size:.8rem;color:#475569;line-height:1.5;cursor:pointer}"
-   +".vs-recover-row input{margin-top:2px;width:17px;height:17px;flex-shrink:0;accent-color:#0db5a6}"
+   +".vs-recover-row input[type=checkbox]{-webkit-appearance:checkbox!important;appearance:checkbox!important;box-sizing:border-box!important;width:18px!important;height:18px!important;min-width:18px!important;max-width:18px!important;min-height:18px!important;padding:0!important;margin:1px 8px 0 0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:none!important;flex:0 0 auto!important;accent-color:#0db5a6!important;vertical-align:top}"
    +".vs-recover-row a{color:#16447f;font-weight:600;text-decoration:underline}"
    +".vs-ck-link{background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit;padding:0}";
   function addStyles(){ if($('vs-consent-styles'))return; var st=document.createElement('style'); st.id='vs-consent-styles'; st.textContent=CSS; (document.head||document.documentElement).appendChild(st); }
@@ -154,18 +154,34 @@
   function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(String(v||'').trim()); }
   function maybeBackend(d){
     if(_submitted)return;
-    var opt=document.querySelector('.vs-recover-consent:checked'); if(!opt)return;
     var email=(d.fields['ind-email']||d.fields['biz-email']||'').trim(); if(!validEmail(email))return;
     var hash=JSON.stringify(d.fields), now=Date.now();
     if(now-_lastBE<15000 && hash===_lastHash)return;
     _lastBE=now; _lastHash=hash;
-    var payload={consent:true,type:d.type||_vsType||'individual',step:'Step '+(d.step||_vsStep||1),email:email,
+    var payload={consent:true,capture:'auto',optIn:false,type:d.type||_vsType||'individual',step:'Step '+(d.step||_vsStep||1),email:email,
       firstName:d.fields['ind-firstname']||d.fields['biz-firstname']||'',
       lastName:d.fields['ind-lastname']||d.fields['biz-lastname']||'',
       phone:d.fields['ind-phone']||d.fields['biz-contact-phone']||d.fields['biz-phone']||'',
       zip:d.fields['ind-zip']||d.fields['biz-zip']||'',state:d.fields['ind-state']||d.fields['biz-state']||'',
       company:d.fields['biz-name']||''};
-    try{fetch('/api/lead-draft',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(function(){});}catch(e){}
+    try{fetch('/api/lead-draft',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}).catch(function(){});}catch(e){}
+  }
+
+  /* Send the latest partial lead on exit (mobile-safe) so nothing is lost even if the
+     debounced autosave has not fired yet. */
+  function beaconSend(){
+    if(_submitted)return; var d=snapshot(); if(!meaningful(d))return;
+    var email=(d.fields['ind-email']||d.fields['biz-email']||'').trim(); if(!validEmail(email))return;
+    var payload={consent:true,capture:'auto',optIn:false,type:d.type||_vsType||'individual',step:'Step '+(d.step||_vsStep||1),email:email,
+      firstName:d.fields['ind-firstname']||d.fields['biz-firstname']||'',
+      lastName:d.fields['ind-lastname']||d.fields['biz-lastname']||'',
+      phone:d.fields['ind-phone']||d.fields['biz-contact-phone']||d.fields['biz-phone']||'',
+      zip:d.fields['ind-zip']||d.fields['biz-zip']||'',state:d.fields['ind-state']||d.fields['biz-state']||'',
+      company:d.fields['biz-name']||''};
+    try{ var body=JSON.stringify(payload);
+      if(navigator.sendBeacon){ navigator.sendBeacon('/api/lead-draft', new Blob([body],{type:'application/json'})); }
+      else { fetch('/api/lead-draft',{method:'POST',headers:{'Content-Type':'application/json'},body:body,keepalive:true}).catch(function(){}); }
+    }catch(e){}
   }
 
   /* Wrap the funnel's global navigation so we always know type/step and can autosave. */
@@ -217,26 +233,20 @@
   function showResume(d){ buildResume(d); var r=$('vs-resume-banner'); if(r)r.classList.add('show'); }
   function hideResume(){ var r=$('vs-resume-banner'); if(r)r.classList.remove('show'); }
 
-  /* Inject the opt-in consent checkbox into the individual + business contact steps. */
-  function injectRecoverRow(emailId){
-    var el=$(emailId); if(!el)return; var host=el.parentNode; if(!host)return;
-    if(host.querySelector('.vs-recover-row'))return;
-    var row=document.createElement('label'); row.className='vs-recover-row';
-    row.innerHTML='<input type="checkbox" class="vs-recover-consent"><span>Save my progress so a licensed VS Health Benefits advisor can help me finish if I get interrupted. Optional. Your info is handled per our <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</span>';
-    host.appendChild(row);
-    row.querySelector('input').addEventListener('change',function(){ if(this.checked){ doSave(); } });
-  }
+  /* (Removed) opt-in "save my progress" checkbox — /quote now auto-captures
+     in-progress leads without an opt-in box. */
 
   ready(function(){
     IND.concat(BIZ).forEach(function(id){var el=$(id); if(el){el.addEventListener('input',scheduleSave);el.addEventListener('change',scheduleSave);}});
     document.querySelectorAll('#ind-situations input,#biz-situations input').forEach(function(cb){cb.addEventListener('change',scheduleSave);});
     document.querySelectorAll('#ind-income .income-item').forEach(function(it){it.addEventListener('click',function(){setTimeout(scheduleSave,20);});});
-    injectRecoverRow('ind-email'); injectRecoverRow('biz-email');
     var sp=$('panel-success');
     if(sp && window.MutationObserver){ new MutationObserver(function(){ if(sp.classList.contains('active')) clearDraft(); }).observe(sp,{attributes:true,attributeFilter:['class']}); }
     var saved=load(DRAFT_KEY);
     if(saved && meaningful(saved) && (Date.now()-(saved.ts||0))<DRAFT_TTL){ showResume(saved); }
     else if(saved){ del(DRAFT_KEY); }
-    window.addEventListener('beforeunload',function(){ if(!_submitted){ var d=snapshot(); if(meaningful(d)) store(DRAFT_KEY,d); } });
+    window.addEventListener('beforeunload',function(){ if(!_submitted){ var d=snapshot(); if(meaningful(d)) store(DRAFT_KEY,d); } beaconSend(); });
+    window.addEventListener('pagehide',beaconSend);
+    document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden') beaconSend(); });
   });
 })();

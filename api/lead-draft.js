@@ -1,14 +1,13 @@
 // Vercel serverless function: capture an ABANDONED / IN-PROGRESS quote "draft".
 //
-// Purpose: privacy-compliant abandoned-lead recovery. The website only calls this
-// AFTER the visitor explicitly opts in ("save my progress so an advisor can help
-// me finish"). It stores the partial info as a HubSpot contact tagged as a draft,
-// so Bradley can follow up. When the visitor later completes the full quote, the
-// same email upserts the SAME contact (no duplicate lead).
+// Purpose: first-party abandoned/in-progress lead capture. The website auto-calls
+// this from the /quote funnel as the visitor fills it in — even if they never press
+// submit. It stores the partial info as a HubSpot contact tagged as a draft so
+// Bradley can follow up. When the visitor later completes the full quote, the same
+// email upserts the SAME contact (no duplicate lead).
 //
 // Security / privacy by design:
 //   - POST only, JSON only, CORS locked to the site origin.
-//   - Requires an explicit consent flag from the client; refuses to store without it.
 //   - Server-side validation + sanitisation of every field (never trust the client).
 //   - Requires a valid email to write to the backend (dedup key). Phone-only drafts
 //     stay in the visitor's own browser and are never sent here.
@@ -70,11 +69,10 @@ module.exports = async (req, res) => {
   if (typeof d === "string") { try { d = JSON.parse(d); } catch (e) { d = {}; } }
   d = d || {};
 
-  // 1) Consent gate — no consent, no backend storage. (Local-only drafts never reach here.)
-  if (d.consent !== true && d.consent !== "true") {
-    res.status(200).json({ ok: false, skipped: "no_consent" });
-    return;
-  }
+  // 1) First-party auto-capture from our own /quote form: store partial (not-yet-
+  //    submitted) quotes so an advisor can follow up. There is no opt-in checkbox
+  //    anymore; a valid email (checked below) is the only hard requirement.
+  const optIn = d.optIn === true || d.optIn === "true";
 
   // 2) Validate the dedup key. Email is required to store server-side.
   const email = validEmail(d.email || d.contactEmail);
@@ -113,14 +111,14 @@ module.exports = async (req, res) => {
   try {
     if (contactId) {
       const note =
-        "<b>Abandoned quote draft (visitor opted in to recovery)</b><br>" +
+        "<b>In-progress quote — auto-captured (visitor did NOT press submit)</b><br>" +
         [
           "Funnel: " + type,
           step ? "Reached: " + L.esc(step) : "",
           firstName || lastName ? "Name: " + L.esc((firstName + " " + lastName).trim()) : "",
           phone ? "Phone: " + L.esc(phone) : "",
           company ? "Business: " + L.esc(company) : "",
-          "Consent: yes (draft recovery)",
+          "Opt-in checkbox: " + (optIn ? "yes" : "no (passive capture)"),
           "Source: /quote autosave",
         ].filter(Boolean).join("<br>");
       await L.addNoteToContact(contactId, note);
