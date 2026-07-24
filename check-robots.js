@@ -4,7 +4,10 @@ const fs = require('fs');
 const path = require('path');
 
 // Pages that should NOT be indexed
-const NOINDEX_PAGES = ['admin.html', 'client.html'];
+// NOTE: client.html (Member Portal) is intentionally left OUT of this list.
+// It is a public sign-in/sign-up page we want indexed (index,follow) so members
+// can find it via search. Only truly private pages (e.g. admin) belong here.
+const NOINDEX_PAGES = ['admin.html'];
 
 // Get all HTML files in current directory and subdirectories
 function getHtmlFiles(dir, fileList = []) {
