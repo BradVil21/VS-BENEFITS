@@ -5875,6 +5875,134 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
   }catch(err){ if(window.console)console.warn("mobile+ init failed",err); }
 })();
 
+
+/* ═══════════════ FIXES — viewall+burger+premium+calendly (added) ═══════════════ */
+(function(){
+ try{
+  var st=document.createElement("style"); st.setAttribute("data-fixes","1"); st.textContent="\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 FIXES \u2014 viewall + burger + premium + calendly \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\n\n/* \u2500\u2500 FIX 1: let the Follow-ups panel show when opened via \"View all\" \u2500\u2500 */\n#p-followups.active{display:block!important}\n#p-followups .vs-fu-back{display:inline-flex;align-items:center;gap:6px;margin-bottom:14px;background:#fff;border:1px solid #e4e9f2;border-radius:10px;padding:9px 15px;font-weight:800;color:#16447f;cursor:pointer;box-shadow:0 1px 3px rgba(13,27,42,.06)}\n#p-followups .vs-fu-back:hover{background:#f4f8fe;border-color:#c9d7ea}\n\n/* \u2500\u2500 FIX 3: prominent monthly premium on Active-Client cards \u2500\u2500 */\n#p-accounts .card-head-right .lead-value{\n  font-size:15px!important;font-weight:800!important;color:#0a8754!important;\n  background:#e9f9f3!important;border:1px solid #bfe9db!important;padding:5px 12px!important;border-radius:999px!important;\n  box-shadow:0 1px 3px rgba(10,135,84,.10)!important;\n}\n#p-accounts .vs-addprem{\n  font-size:12.5px!important;font-weight:800!important;color:#16447f!important;\n  background:#eef4fd!important;border:1px dashed #9fc0ec!important;padding:5px 12px!important;border-radius:999px!important;cursor:pointer;\n}\n#p-accounts .vs-addprem:hover{background:#e2edfc!important;border-color:#7aa8e6!important}\n\n/* \u2500\u2500 FIX 2: mobile hamburger + nav drawer \u2500\u2500 */\n.vs-burger{display:none;flex:0 0 auto;width:40px;height:40px;border-radius:10px;border:1px solid var(--w-line,#e4e9f2);background:#fff;color:#16447f;align-items:center;justify-content:center;cursor:pointer;margin-right:8px}\n.vs-burger svg{width:22px;height:22px}\n.vs-burger:hover{background:#f4f8fe}\n.vs-drawer-ov{position:fixed;left:0;right:0;bottom:0;top:54px;background:rgba(13,27,42,.30);opacity:0;pointer-events:none;transition:opacity .2s;z-index:390}\n.vs-drawer-ov.open{opacity:1;pointer-events:auto}\n.vs-drawer{position:fixed;top:54px;left:0;right:0;background:#fff;border-bottom:1px solid #e4e9f2;box-shadow:0 20px 44px rgba(13,27,42,.18);transform:translateY(-14px);opacity:0;pointer-events:none;transition:transform .22s ease,opacity .22s ease;z-index:400;max-height:calc(100vh - 54px);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px}\n.vs-drawer.open{transform:none;opacity:1;pointer-events:auto}\n.vs-drawer button{display:flex;width:100%;align-items:center;gap:10px;text-align:left;background:none;border:0;padding:15px 16px;border-radius:11px;font-weight:800;font-size:15.5px;color:#0d1b2a;cursor:pointer}\n.vs-drawer button:hover{background:#f4f8fe}\n.vs-drawer button.active{background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff}\n.vs-drawer .vs-drawer-badge{margin-left:auto;background:#e5484d;color:#fff;border-radius:999px;font-size:11px;padding:2px 9px;font-weight:800}\n.vs-drawer button.active .vs-drawer-badge{background:rgba(255,255,255,.25)}\n.vs-drawer .vs-drawer-div{height:1px;background:#e4e9f2;margin:6px 8px}\n@media(max-width:820px){\n  .vs-burger{display:inline-flex}\n  .sidebar-nav#sidebar-nav{display:none!important}\n}\n\n/* \u2500\u2500 FIX 4: Calendly booking modal (inline widget) \u2500\u2500 */\n.vs-cal-ov{position:fixed;inset:0;background:rgba(13,27,42,.55);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px}\n.vs-cal-box{position:relative;background:#fff;border-radius:16px;width:900px;max-width:100%;height:82vh;max-height:760px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4)}\n.vs-cal-x{position:absolute;top:10px;right:10px;z-index:3;width:38px;height:38px;border-radius:50%;border:1px solid #e4e9f2;background:#fff;cursor:pointer;font-size:15px;color:#0d1b2a;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(13,27,42,.12)}\n.vs-cal-x:hover{background:#f4f8fe}\n.vs-cal-mount{width:100%;height:100%;min-height:640px}\n@media(max-width:820px){.vs-cal-ov{padding:0}.vs-cal-box{width:100%;height:100%;max-height:none;border-radius:0}}\n"; document.head.appendChild(st);
+
+  /* ───────── FIX 1: "View all" opens the Follow-ups panel ───────── */
+  if(typeof ALL_TABS!=="undefined" && ALL_TABS.indexOf("followups")<0)ALL_TABS.push("followups");
+  function showFollowups(){
+    try{
+      Array.prototype.forEach.call(document.querySelectorAll(".panel"),function(p){p.classList.remove("active");});
+      var fp=document.getElementById("p-followups"); if(!fp)return;
+      fp.classList.add("active");
+      Array.prototype.forEach.call(document.querySelectorAll(".sidebar-nav-item"),function(b){b.classList.remove("active");});
+      if(typeof czFollowups==="function")czFollowups();
+      var host=document.getElementById("cz-followups");
+      if(host && !host.querySelector(".vs-fu-back")){
+        var back=document.createElement("button"); back.type="button"; back.className="vs-fu-back"; back.innerHTML="← Back to dashboard";
+        back.addEventListener("click",function(){ if(typeof switchTab==="function")switchTab("dashboard"); });
+        host.insertBefore(back,host.firstChild);
+      }
+      window.scrollTo(0,0);
+    }catch(e){ if(window.console)console.warn(e); }
+  }
+  window.vsShowFollowups=showFollowups;
+  document.addEventListener("click",function(e){
+    var t=e.target&&e.target.closest?e.target.closest('[data-cz-go="followups"]'):null;
+    if(t){ e.preventDefault(); e.stopPropagation(); showFollowups(); }
+  },true);
+
+  /* ───────── FIX 2: mobile hamburger drawer ───────── */
+  var burger=null, drawer=null, dov=null;
+  function currentActiveTab(){ var a=document.querySelector(".panel.active"); return a?a.id.replace(/^p-/,""):"dashboard"; }
+  function buildDrawer(){
+    if(drawer)return;
+    dov=document.createElement("div"); dov.className="vs-drawer-ov";
+    drawer=document.createElement("div"); drawer.className="vs-drawer";
+    document.body.appendChild(dov); document.body.appendChild(drawer);
+    dov.addEventListener("click",closeDrawer);
+  }
+  function fillDrawer(){
+    buildDrawer(); drawer.innerHTML="";
+    var cur=currentActiveTab(), seen={};
+    Array.prototype.forEach.call(document.querySelectorAll('.sidebar-nav-item[data-tab]'),function(it){
+      var tab=it.getAttribute("data-tab"); if(!tab||tab==="followups"||seen[tab])return; seen[tab]=1;
+      var lab=it.querySelector(".sni-label"); var label=(lab&&lab.textContent)||tab;
+      var b=document.createElement("button"); b.type="button"; if(tab===cur)b.className="active";
+      var sp=document.createElement("span"); sp.textContent=label; b.appendChild(sp);
+      var badge=it.querySelector(".sni-badge");
+      if(badge && badge.style.display!=="none" && (badge.textContent||"").trim()){
+        var bd=document.createElement("span"); bd.className="vs-drawer-badge"; bd.textContent=badge.textContent; b.appendChild(bd);
+      }
+      b.addEventListener("click",function(){ closeDrawer(); if(typeof switchTab==="function")switchTab(tab); });
+      drawer.appendChild(b);
+    });
+    var signout=document.getElementById("signout-btn");
+    if(signout){
+      var dv=document.createElement("div"); dv.className="vs-drawer-div"; drawer.appendChild(dv);
+      var so=document.createElement("button"); so.type="button";
+      var s2=document.createElement("span"); s2.textContent="Sign out"; so.appendChild(s2);
+      so.addEventListener("click",function(){ closeDrawer(); signout.click(); });
+      drawer.appendChild(so);
+    }
+  }
+  function openDrawer(){ fillDrawer(); dov.classList.add("open"); drawer.classList.add("open"); if(burger)burger.setAttribute("aria-expanded","true"); }
+  function closeDrawer(){ if(dov)dov.classList.remove("open"); if(drawer)drawer.classList.remove("open"); if(burger)burger.setAttribute("aria-expanded","false"); }
+  function addBurger(){
+    var sidebar=document.getElementById("sidebar"); if(!sidebar||document.querySelector(".vs-burger"))return;
+    burger=document.createElement("button"); burger.type="button"; burger.className="vs-burger"; burger.setAttribute("aria-label","Menu"); burger.setAttribute("aria-expanded","false");
+    burger.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+    burger.addEventListener("click",function(e){ e.stopPropagation(); (drawer&&drawer.classList.contains("open"))?closeDrawer():openDrawer(); });
+    var brand=sidebar.querySelector(".sidebar-brand");
+    if(brand&&brand.nextSibling)sidebar.insertBefore(burger,brand.nextSibling); else if(brand)sidebar.insertBefore(burger,sidebar.children[1]||null); else sidebar.appendChild(burger);
+  }
+  addBurger(); setTimeout(addBurger,700); setTimeout(addBurger,1700);
+  window.addEventListener("resize",function(){ if(window.innerWidth>820)closeDrawer(); });
+
+  /* ───────── FIX 3: prominent monthly premium on Active Clients ───────── */
+  function enhancePremium(){
+    var list=document.getElementById("accts-list"); if(!list)return;
+    var byId={}; (typeof getAccounts==="function"?getAccounts():[]).forEach(function(a){byId[a.id]=a;});
+    Array.prototype.forEach.call(list.querySelectorAll(".row[data-acct-id]"),function(row){
+      var a=byId[row.getAttribute("data-acct-id")]; if(!a)return;
+      var hr=row.querySelector(".card-head-right"); if(!hr)return;
+      var prem=(a.plan&&a.plan.monthlyPremium)?Number(a.plan.monthlyPremium):0;
+      if(prem>0)return; /* base shows a $X/mo pill, made prominent via CSS */
+      if(hr.querySelector(".vs-addprem"))return;
+      var b=document.createElement("button"); b.type="button"; b.className="vs-addprem"; b.textContent="＋ Add premium";
+      b.addEventListener("click",function(e){ e.preventDefault(); e.stopPropagation(); if(typeof openPlanForm==="function")openPlanForm(a); });
+      hr.appendChild(b);
+    });
+  }
+  if(typeof renderAccounts==="function"){ var _ra=renderAccounts; renderAccounts=function(){ var o=_ra.apply(this,arguments); try{enhancePremium();}catch(e){} return o; }; }
+  setTimeout(enhancePremium,600);
+
+  /* ───────── FIX 4: Calendly booking modal (inline widget, no popup blocker) ───────── */
+  var SLUG="bvilsaint-vshealthbenefits";
+  function ensureCalendly(cb){
+    if(window.Calendly&&window.Calendly.initInlineWidget){cb();return;}
+    if(!document.querySelector('link[data-calendly]')){var l=document.createElement("link");l.rel="stylesheet";l.href="https://assets.calendly.com/assets/external/widget.css";l.setAttribute("data-calendly","1");document.head.appendChild(l);}
+    if(!document.querySelector('script[data-calendly]')){var s=document.createElement("script");s.src="https://assets.calendly.com/assets/external/widget.js";s.async=true;s.setAttribute("data-calendly","1");document.head.appendChild(s);}
+    var n=0;(function poll(){ if(window.Calendly&&window.Calendly.initInlineWidget){cb();} else if(n++<80){setTimeout(poll,100);} else {cb(true);} })();
+  }
+  window.vsSchedule=function(name,email){
+    var url="https://calendly.com/"+SLUG+"?hide_gdpr_banner=1";
+    var ov=document.createElement("div"); ov.className="vs-cal-ov";
+    ov.innerHTML='<div class="vs-cal-box"><button class="vs-cal-x" aria-label="Close">✕</button><div class="vs-cal-mount"><div style="padding:48px;text-align:center;color:#5a6b80;font-weight:600">Loading scheduler…</div></div></div>';
+    document.body.appendChild(ov);
+    var prev=document.body.style.overflow; document.body.style.overflow="hidden";
+    function close(){ try{ov.remove();}catch(e){} document.body.style.overflow=prev; document.removeEventListener("keydown",onKey); }
+    function onKey(e){ if(e.key==="Escape")close(); }
+    ov.addEventListener("click",function(e){ if(e.target===ov)close(); });
+    ov.querySelector(".vs-cal-x").addEventListener("click",close);
+    document.addEventListener("keydown",onKey);
+    var mount=ov.querySelector(".vs-cal-mount");
+    ensureCalendly(function(failed){
+      if(failed||!(window.Calendly&&window.Calendly.initInlineWidget)){
+        mount.innerHTML='<div style="padding:44px 24px;text-align:center"><p style="color:#5a6b80;margin:0 0 16px;font-weight:600">Couldn\'t load the inline scheduler here.</p><a href="'+url+'" target="_blank" rel="noopener" class="btn btn-primary" style="display:inline-block;text-decoration:none">Open booking page ↗</a></div>';
+        return;
+      }
+      mount.innerHTML="";
+      window.Calendly.initInlineWidget({url:url,parentElement:mount,prefill:{name:name||"",email:email||""}});
+    });
+    return false;
+  };
+ }catch(err){ if(window.console)console.warn("fixes init failed",err); }
+})();
+
 })();
 </script>
 <script>
