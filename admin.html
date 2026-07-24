@@ -4265,7 +4265,7 @@ function czEnsure(){
     if((l.zipCode==null||l.zipCode==="")&&l.zipcode){l.zipCode=l.zipcode;}
     if(!l.lastContact){l.lastContact=l.updated?czYMD(new Date(l.updated)):(l.created?czYMD(new Date(l.created)):todayStr());changed=true;}
     if(!l.createdAt){l.createdAt=l.created?czYMD(new Date(l.created)):todayStr();}
-    if(!l.followUpDue&&czCLOSED.indexOf(l.stage)<0){l.followUpDue=czAddDays(l.lastContact||todayStr(),czFollowupDays);changed=true;}
+    if(!l.followUpDue&&!l.fuCleared&&czCLOSED.indexOf(l.stage)<0){l.followUpDue=czAddDays(l.lastContact||todayStr(),czFollowupDays);changed=true;}
   });
   if(changed)saveLeads(arr);
   return arr;
@@ -4304,7 +4304,7 @@ function czCurrentRender(){
 function czSetStage(id,stage){
   var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
   var prev=c.stage;c.stage=stage;c.status=czStageToStatus(stage);c.updated=Date.now();
-  if(czCLOSED.indexOf(stage)<0&&!c.followUpDue){c.followUpDue=czAddDays(c.lastContact||todayStr(),czFollowupDays);}
+  if(czCLOSED.indexOf(stage)<0&&!c.followUpDue){c.followUpDue=czAddDays(c.lastContact||todayStr(),czFollowupDays);c.fuCleared=false;}
   saveLeads(arr);
   if(stage==="sold"&&prev!=="sold"&&typeof convertLeadToClient==="function"){convertLeadToClient(id);}
   if(stage==="follow_up"&&prev!=="follow_up"&&typeof getLeadSeq==="function"&&!getLeadSeq(id)&&typeof initLeadSeq==="function"){initLeadSeq(id);}
@@ -4312,7 +4312,7 @@ function czSetStage(id,stage){
 }
 function czRestart(id){
   var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
-  var t=todayStr();c.lastContact=t;c.followUpDue=czAddDays(t,czFollowupDays);c.updated=Date.now();
+  var t=todayStr();c.lastContact=t;c.followUpDue=czAddDays(t,czFollowupDays);c.fuCleared=false;c.updated=Date.now();
   saveLeads(arr);
   if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","Logged contact · follow-up reset");
   czCurrentRender();
@@ -5812,6 +5812,55 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
     }
     build(); setTimeout(build,500); setTimeout(build,1600);
   }catch(err){ if(window.console)console.warn("topnav init failed",err); }
+})();
+
+
+/* ═══════════════ FU-DONE — mark follow-up complete (added) ═══════════════ */
+(function(){
+  try{
+    var st=document.createElement("style"); st.setAttribute("data-fudone","1"); st.textContent="\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 FU-DONE \u2014 mark follow-up complete \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\n#p-dashboard .d3-li{position:relative}\n.vs-fu-done{\n  flex:0 0 auto;margin-left:10px;width:30px;height:30px;border-radius:50%;\n  border:1px solid var(--w-line,#e4e9f2);background:#fff;color:#0a8754;cursor:pointer;\n  display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;line-height:1;\n  box-shadow:0 1px 3px rgba(13,27,42,.06);\n}\n.vs-fu-done:hover{background:#0db5a6;border-color:#0db5a6;color:#fff;transform:translateY(-1px);box-shadow:0 6px 16px rgba(13,181,166,.35)}\n.vs-fu-done:active{transform:translateY(0)}\n.d3-li.vs-fu-leaving{opacity:0!important;transform:translateX(14px)!important;transition:opacity .25s ease,transform .25s ease!important}\n@media(max-width:520px){.vs-fu-done{width:28px;height:28px;margin-left:6px}}\n"; document.head.appendChild(st);
+
+    // Mark a follow-up complete: clears it from the "Follow up now" list + stops the
+    // reminder, but keeps the lead in the pipeline (no delete, no reschedule).
+    window.vsFUComplete=function(id){
+      var arr=(typeof getLeads==="function"?getLeads():[]); var c=null;
+      for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ c=arr[i]; break; } }
+      if(!c)return;
+      c.followUpDue=""; c.fuCleared=true; c.updated=Date.now();
+      if(typeof saveLeads==="function")saveLeads(arr);
+      if(typeof addLeadActivity==="function"){ try{ addLeadActivity(id,"followup","Follow-up marked complete"); }catch(e){} }
+      try{ if(typeof window.renderDash3D==="function")window.renderDash3D(); }catch(e){}
+      try{ if(typeof czCurrentRender==="function")czCurrentRender(); }catch(e){}
+      try{ if(typeof renderTasks==="function")renderTasks(); }catch(e){}
+    };
+
+    // add a ✓ button to each follow-up row on the dashboard card
+    function injectFUDone(){
+      var items=document.querySelectorAll("#p-dashboard .d3-li[data-cz-open]");
+      Array.prototype.forEach.call(items,function(li){
+        if(li.querySelector("[data-fu-done]"))return;
+        var id=li.getAttribute("data-cz-open");
+        var b=document.createElement("button");
+        b.type="button"; b.className="vs-fu-done"; b.setAttribute("data-fu-done","1");
+        b.setAttribute("title","Mark completed"); b.setAttribute("aria-label","Mark follow-up completed");
+        b.innerHTML="✓";
+        b.addEventListener("click",function(e){
+          e.preventDefault(); e.stopPropagation();
+          li.classList.add("vs-fu-leaving");
+          setTimeout(function(){ try{ window.vsFUComplete(id); }catch(err){} },240);
+        });
+        li.appendChild(b);
+      });
+    }
+
+    // re-inject after every dashboard render (renderDash3D rebuilds the card)
+    if(typeof window.renderDash3D==="function"){
+      var _rd=window.renderDash3D;
+      window.renderDash3D=function(){ var o=_rd.apply(this,arguments); try{injectFUDone();}catch(e){} return o; };
+      try{ if(typeof czDashboard!=="undefined")czDashboard=window.renderDash3D; }catch(e){}
+    }
+    setTimeout(injectFUDone,300); setTimeout(injectFUDone,1200);
+  }catch(err){ if(window.console)console.warn("fu-done init failed",err); }
 })();
 
 })();
