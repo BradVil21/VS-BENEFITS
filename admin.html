@@ -5155,13 +5155,43 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
      "#p-assist .asst-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}"+
      "#p-assist .asst-stage{padding:8px 10px;border:1px solid var(--line);border-radius:9px;font-size:13px;font-weight:600;font-family:inherit;background:#fff}"+
      "html.dark #p-assist .asst-stage{background:#162030;border-color:#253a54;color:#d4e8ff}"+
-     "#p-assist .asst-note{width:100%;margin-top:10px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;font-size:13px;font-family:inherit;resize:vertical;min-height:38px}"+
+     "#p-assist .asst-note{width:100%;margin-top:11px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;font-size:13px;font-family:inherit;resize:vertical;min-height:40px;line-height:1.4;background:#fbfdff}"+
      "html.dark #p-assist .asst-note{background:#162030;border-color:#253a54;color:#d4e8ff}"+
      "#p-assist .asst-addbar{background:#fff;border:1px dashed var(--blue-600);border-radius:12px;padding:12px 14px;margin-bottom:16px}"+
      "html.dark #p-assist .asst-addbar{background:#162030;border-color:#3a6ea5}"+
      "#p-assist .asst-addbar .hd{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:8px}"+
      "#p-assist .asst-add-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:9px 2px;border-top:1px solid var(--line)}"+
      "#p-assist .asst-add-row .nm{flex:1;min-width:150px;font-size:14px;font-weight:600}"+
+     "#p-assist #asst-list{display:grid;grid-template-columns:1fr;gap:14px}"+
+     "@media(min-width:960px){#p-assist #asst-list{grid-template-columns:1fr 1fr}}"+
+     "#p-assist .asst-card{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 17px 13px 20px;box-shadow:0 1px 3px rgba(13,27,42,.05);transition:box-shadow .2s;overflow:hidden}"+
+     "html.dark #p-assist .asst-card{background:#1c2d42;border-color:#253a54}"+
+     "#p-assist .asst-card:hover{box-shadow:0 8px 24px rgba(13,27,42,.12)}"+
+     "#p-assist .asst-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px}"+
+     "#p-assist .asst-card.ac-funds::before{background:#dc2626}"+
+     "#p-assist .asst-card.ac-support::before{background:#d97706}"+
+     "#p-assist .asst-card.ac-resolved{opacity:.66}"+
+     "#p-assist .asst-card.ac-resolved::before{background:#94a3b8}"+
+     "#p-assist .asst-top{display:flex;align-items:flex-start;gap:12px}"+
+     "#p-assist .asst-av{width:44px;height:44px;flex:0 0 44px;border-radius:50%;background:linear-gradient(135deg,#dbeafe,#eff6ff);color:#1e40af;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}"+
+     "html.dark #p-assist .asst-av{background:#22364f;color:#93c5fd}"+
+     "#p-assist .asst-idcol{flex:1;min-width:0}"+
+     "#p-assist .asst-name{font-weight:700;font-size:15.5px;color:var(--blue-900);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}"+
+     "html.dark #p-assist .asst-name{color:#e2ecf9}"+
+     "#p-assist .asst-email{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}"+
+     "#p-assist .asst-right{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:5px}"+
+     "#p-assist .asst-prem{font-weight:800;font-size:13px;color:var(--blue-700)}"+
+     "#p-assist .asst-reasons{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:12px 0 10px}"+
+     "#p-assist .asst-meta{display:flex;flex-wrap:wrap;gap:5px 14px;font-size:12.5px;color:var(--muted);margin-bottom:12px}"+
+     "#p-assist .asst-meta .mi{display:inline-flex;align-items:center;gap:5px}"+
+     "#p-assist .asst-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:var(--blue-50);border-radius:10px;padding:9px 11px}"+
+     "html.dark #p-assist .asst-bar{background:#162334}"+
+     "#p-assist .asst-bar .lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}"+
+     "#p-assist .asst-foot{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}"+
+     "#p-assist .abtn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:12.5px;font-weight:600;color:var(--blue-700);cursor:pointer;text-decoration:none;line-height:1}"+
+     "#p-assist .abtn:hover{background:var(--blue-50);text-decoration:none}"+
+     "html.dark #p-assist .abtn{background:#22364f;border-color:#2f4763;color:#93c5fd}"+
+     "#p-assist .reason-tag{font-size:11px;padding:4px 10px}"+
      "#p-assist .row-resolved{opacity:.62}"+
      "#p-assist .tgl{cursor:pointer}"+
      "#p-assist .tgl.on-funds{background:#c0392b;color:#fff;border-color:#c0392b}"+
@@ -5250,73 +5280,69 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
 
     function card(a){
       var r=reasons(a), st=stageOf(a);
-      var row=el("div",{class:"row"+(isResolved(a)?" row-resolved":"")});
-      var body=el("div",{class:"card-body"});
-      /* header */
-      var hdr=el("div",{class:"card-header"});
-      var av=el("div",{class:"card-avatar"});
-      av.textContent=(typeof initials==="function")?initials(a):"?";
-      hdr.appendChild(av);
-      var tb=el("div",{class:"card-title-block"});
-      var nm=el("div",{class:"name",text:(typeof fullName==="function")?fullName(a):(a.firstName||a.email||"Client")});
-      tb.appendChild(nm);
-      if(a.email)tb.appendChild(el("div",{class:"sub",text:a.email}));
-      hdr.appendChild(tb);
-      var hr=el("div",{class:"card-head-right"});
-      hr.appendChild(el("span",{class:"stage-pill sp-"+st,text:st.replace(/-/g," ")}));
+      var accent=isResolved(a)?"ac-resolved":(r.funds?"ac-funds":"ac-support");
+      var card=el("div",{class:"asst-card "+accent});
+      /* top: avatar + name/email + stage/premium */
+      var top=el("div",{class:"asst-top"});
+      top.appendChild(el("div",{class:"asst-av",text:(typeof initials==="function")?initials(a):"?"}));
+      var idc=el("div",{class:"asst-idcol"});
+      idc.appendChild(el("div",{class:"asst-name",text:(typeof fullName==="function")?fullName(a):(a.firstName||a.email||"Client")}));
+      if(a.email)idc.appendChild(el("div",{class:"asst-email",text:a.email}));
+      top.appendChild(idc);
+      var right=el("div",{class:"asst-right"});
+      right.appendChild(el("span",{class:"stage-pill sp-"+st,text:st.replace(/-/g," ")}));
       var prem=(a.plan&&a.plan.monthlyPremium)?Number(a.plan.monthlyPremium):0;
-      if(prem>0)hr.appendChild(el("span",{class:"lead-value",text:"$"+(prem%1===0?prem:prem.toFixed(2))+"/mo"}));
-      hdr.appendChild(hr);
-      body.appendChild(hdr);
-      /* reason tags */
-      var tags=el("div",{style:"margin:10px 0 2px"});
-      if(r.funds)tags.appendChild(el("span",{class:"reason-tag rt-funds",text:"Insufficient Funds"}));
+      if(prem>0)right.appendChild(el("span",{class:"asst-prem",text:"$"+(prem%1===0?prem:prem.toFixed(2))+"/mo"}));
+      top.appendChild(right);
+      card.appendChild(top);
+      /* reason badges */
+      var tags=el("div",{class:"asst-reasons"});
+      if(r.funds)tags.appendChild(el("span",{class:"reason-tag rt-funds",text:"Insufficient funds"}));
       if(r.support){
-        var hint=r.supportAuto?(r.msgCount?(r.msgCount+" new message"+(r.msgCount>1?"s":"")):(r.tixCount+" open ticket"+(r.tixCount>1?"s":""))):"flagged";
-        tags.appendChild(el("span",{class:"reason-tag rt-support",text:"Needs Support"}));
+        tags.appendChild(el("span",{class:"reason-tag rt-support",text:"Needs support"}));
+        var hint=r.supportAuto?(r.msgCount?(r.msgCount+" new message"+(r.msgCount>1?"s":"")):(r.tixCount+" open ticket"+(r.tixCount>1?"s":""))):"manually flagged";
         tags.appendChild(el("span",{class:"sub",text:hint,style:"font-size:12px;color:var(--muted)"}));
       }
-      body.appendChild(tags);
-      /* info */
-      var info=el("div",{class:"card-info"});
-      function ci(txt){if(!txt)return;info.appendChild(el("div",{class:"ci"},[el("span",{class:"ci-val",text:txt})]));}
-      if(a.phone)ci("☎ "+a.phone);
+      card.appendChild(tags);
+      /* meta row */
+      var meta=el("div",{class:"asst-meta"});
+      function mi(txt){if(!txt)return;meta.appendChild(el("span",{class:"mi",text:txt}));}
+      if(a.phone)mi("☎ "+a.phone);
       var lastTs=(typeof presenceMap!=="undefined"&&presenceMap[a.id])||a.lastSignIn||0;
-      ci((typeof isOnline==="function"&&isOnline(a.id))?"Online now":(lastTs?("Last seen "+fmtDateTime(lastTs)):"Never signed in"));
-      if(a.plan&&(a.plan.carrier||a.plan.planName))ci([a.plan.carrier,a.plan.planName].filter(Boolean).join(" – "));
-      body.appendChild(info);
-      /* controls: stage + flags */
-      var ctr=el("div",{class:"asst-controls"});
+      mi((typeof isOnline==="function"&&isOnline(a.id))?"● Online now":(lastTs?("Last seen "+fmtDateTime(lastTs)):"Never signed in"));
+      if(a.plan&&(a.plan.carrier||a.plan.planName))mi([a.plan.carrier,a.plan.planName].filter(Boolean).join(" – "));
+      card.appendChild(meta);
+      /* control bar: stage + flag toggles */
+      var bar=el("div",{class:"asst-bar"});
+      bar.appendChild(el("span",{class:"lbl",text:"Stage"}));
       var sel=el("select",{class:"asst-stage"});
       [["open","Open"],["in-progress","In Progress"],["resolved","Resolved"]].forEach(function(o){
         var op=el("option",{value:o[0],text:o[1]}); if(o[0]===st)op.selected=true; sel.appendChild(op);
       });
       sel.addEventListener("change",function(){assistSet(a.id,{stage:sel.value});});
-      ctr.appendChild(el("span",{class:"sub",text:"Stage:",style:"font-size:12px;color:var(--muted)"}));
-      ctr.appendChild(sel);
-      var fb=el("button",{type:"button",class:"btn btn-ghost btn-sm tgl"+(r.funds?" on-funds":""),text:r.funds?"✓ Insufficient funds":"Flag funds"});
+      bar.appendChild(sel);
+      var fb=el("button",{type:"button",class:"abtn tgl"+(r.funds?" on-funds":""),text:r.funds?"✓ Funds":"+ Funds"});
       fb.addEventListener("click",function(){assistSet(a.id,{funds:!r.funds});});
-      ctr.appendChild(fb);
-      var sb=el("button",{type:"button",class:"btn btn-ghost btn-sm tgl"+(r.supportManual?" on-support":""),text:r.supportManual?"✓ Support flagged":"Flag support"});
+      bar.appendChild(fb);
+      var sb=el("button",{type:"button",class:"abtn tgl"+(r.supportManual?" on-support":""),text:r.supportManual?"✓ Support":"+ Support"});
       sb.addEventListener("click",function(){assistSet(a.id,{supportManual:!r.supportManual});});
-      ctr.appendChild(sb);
-      body.appendChild(ctr);
+      bar.appendChild(sb);
+      card.appendChild(bar);
       /* note */
-      var note=el("textarea",{class:"asst-note",placeholder:"Add a tracking note (what they need, next step, who to call)..."});
+      var note=el("textarea",{class:"asst-note",rows:"1",placeholder:"Add a note — what they need, next step, who to call..."});
       note.value=(a.assist&&a.assist.note)||"";
       note.addEventListener("blur",function(){var v=note.value.trim();var cur=(a.assist&&a.assist.note)||"";if(v!==cur)assistSet(a.id,{note:v});});
-      body.appendChild(note);
-      row.appendChild(body);
-      /* actions */
-      var acts=el("div",{class:"acts"});
-      if(a.email)acts.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:"mailto:"+a.email,text:"Email"}));
-      if(a.phone)acts.appendChild(el("a",{class:"btn btn-ghost btn-sm",href:"tel:"+String(a.phone).replace(/[^0-9+]/g,""),text:"Call"}));
+      card.appendChild(note);
+      /* footer actions */
+      var foot=el("div",{class:"asst-foot"});
+      if(a.email)foot.appendChild(el("a",{class:"abtn",href:"mailto:"+a.email,text:"✉ Email"}));
+      if(a.phone)foot.appendChild(el("a",{class:"abtn",href:"tel:"+String(a.phone).replace(/[^0-9+]/g,""),text:"☎ Call"}));
       if(r.supportAuto&&typeof selectThread==="function"){
-        acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Open chat",onclick:function(){switchTab("support");setTimeout(function(){try{selectThread(a.id);}catch(e){}},60);}}));
+        foot.appendChild(el("button",{class:"abtn",type:"button",text:"Open chat",onclick:function(){switchTab("support");setTimeout(function(){try{selectThread(a.id);}catch(e){}},60);}}));
       }
-      if(typeof openEditAcctForm==="function")acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Edit client",onclick:function(){openEditAcctForm(a);}}));
-      row.appendChild(acts);
-      return row;
+      if(typeof openEditAcctForm==="function")foot.appendChild(el("button",{class:"abtn",type:"button",text:"Edit client",onclick:function(){openEditAcctForm(a);}}));
+      card.appendChild(foot);
+      return card;
     }
 
     window.renderAssist=function(){
