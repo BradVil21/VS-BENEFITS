@@ -6071,6 +6071,61 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
  }catch(err){ if(window.console)console.warn("premfix init failed",err); }
 })();
 
+
+/* ═══════════════ BOOKFIX — always-available booking button (added) ═══════════════ */
+(function(){
+ try{
+  var st=document.createElement("style"); st.setAttribute("data-bookfix","1"); st.textContent="\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 BOOKFIX \u2014 always-available booking \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\n#p-dashboard .d3-cal-btn[data-vsbook]{\n  width:auto!important;padding:0 14px!important;margin-right:8px!important;\n  font-weight:800!important;font-size:13px!important;color:#16447f!important;\n  background:#f4f8fe!important;border-color:#c9d7ea!important;\n}\n#p-dashboard .d3-cal-btn[data-vsbook]:hover{background:#e2edfc!important;color:#0b2346!important}\n#p-dashboard .d3-mempty .vs-book-empty{\n  display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:11px 18px;border-radius:12px;\n  background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;font-weight:800;font-size:13.5px;border:0;cursor:pointer;\n  box-shadow:0 8px 20px -6px rgba(22,68,127,.5);\n}\n#p-dashboard .d3-mempty .vs-book-empty:hover{filter:brightness(1.05);transform:translateY(-1px)}\n"; document.head.appendChild(st);
+
+  function book(){ if(typeof window.vsSchedule==="function")window.vsSchedule("",""); }
+
+  // 1) "+ Book" button in the meetings card header — present on every render
+  function headerBtn(){
+    var heads=document.querySelectorAll("#p-dashboard .d3-mhead"), mhead=null;
+    Array.prototype.forEach.call(heads,function(h){ if(!mhead && h.querySelector(".d3-cal-btn"))mhead=h; });
+    if(!mhead)return;
+    if(mhead.querySelector("[data-vsbook]")||mhead.querySelector("[data-book-btn]"))return; // already has one
+    var b=document.createElement("button"); b.type="button"; b.className="d3-cal-btn"; b.setAttribute("data-vsbook","1");
+    b.textContent="+ Book"; b.title="Book a meeting";
+    b.addEventListener("click",function(e){ e.preventDefault(); book(); });
+    var ref=mhead.querySelector(".d3-cal-btn"); if(ref)mhead.insertBefore(b,ref); else mhead.appendChild(b);
+  }
+
+  // 2) A clear "Book a meeting" button inside the "no upcoming meetings" empty state
+  function emptyBtn(){
+    var list=document.getElementById("d3-meet-list"); if(!list)return;
+    var empty=list.querySelector(".d3-mempty"); if(!empty)return;
+    if(!/no upcoming meetings/i.test(empty.textContent||""))return; // skip loading/connect states
+    if(empty.querySelector(".vs-book-empty"))return;
+    var b=document.createElement("button"); b.type="button"; b.className="vs-book-empty";
+    b.innerHTML="📅 Book a meeting";
+    b.addEventListener("click",function(e){ e.preventDefault(); book(); });
+    empty.appendChild(document.createElement("br"));
+    empty.appendChild(b);
+  }
+
+  var observing=false, mo=null;
+  function inject(){ try{headerBtn();}catch(e){} try{emptyBtn();}catch(e){} }
+  function safeInject(){ if(mo)mo.disconnect(); inject(); if(mo&&observing)mo.observe(document.getElementById("p-dashboard"),{childList:true,subtree:true}); }
+
+  // re-inject after each dashboard render
+  if(typeof window.renderDash3D==="function"){
+    var _r=window.renderDash3D;
+    window.renderDash3D=function(){ var o=_r.apply(this,arguments); setTimeout(safeInject,40); return o; };
+    try{ if(typeof czDashboard!=="undefined")czDashboard=window.renderDash3D; }catch(e){}
+  }
+  // observe the dashboard so the async Calendly load (which repaints the list) keeps the buttons
+  function startObserve(){
+    var p=document.getElementById("p-dashboard"); if(!p||observing)return;
+    mo=new MutationObserver(function(){ if(mo)mo.disconnect(); inject(); if(observing)mo.observe(p,{childList:true,subtree:true}); });
+    mo.observe(p,{childList:true,subtree:true}); observing=true;
+  }
+  startObserve();
+  setTimeout(function(){ startObserve(); inject(); },400);
+  setTimeout(inject,1200); setTimeout(inject,2400);
+ }catch(err){ if(window.console)console.warn("bookfix init failed",err); }
+})();
+
 })();
 </script>
 <script>
