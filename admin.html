@@ -5452,7 +5452,12 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
       addIn.addEventListener("input",function(){
         var q=addIn.value.toLowerCase().trim(); addRes.innerHTML="";
         if(!q) return;
-        var matches=accts.filter(function(a){return !inPipeline(a) && [a.firstName,a.lastName,a.email,a.phone].join(" ").toLowerCase().indexOf(q)>=0;}).slice(0,6);
+        var toks=q.split(/\s+/).filter(Boolean);
+        var matches=accts.filter(function(a){
+          if(inPipeline(a))return false;
+          var hay=[a.firstName,a.lastName,a.name,((typeof fullName==="function")?fullName(a):""),a.email,a.phone,a.address,a.policyNumber].join(" ").toLowerCase();
+          return toks.every(function(t){return hay.indexOf(t)>=0;});
+        }).slice(0,25);
         if(!matches.length){addRes.appendChild(el("div",{class:"asst-add-row"},[el("span",{class:"sub",text:"No matches (they may already be in the list)."})]));return;}
         matches.forEach(function(a){
           var r=el("div",{class:"asst-add-row"});
