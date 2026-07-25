@@ -5454,14 +5454,14 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
         if(!q) return;
         var toks=q.split(/\s+/).filter(Boolean);
         var matches=accts.filter(function(a){
-          if(inPipeline(a))return false;
           var hay=[a.firstName,a.lastName,a.name,((typeof fullName==="function")?fullName(a):""),a.email,a.phone,a.address,a.policyNumber].join(" ").toLowerCase();
           return toks.every(function(t){return hay.indexOf(t)>=0;});
         }).slice(0,25);
-        if(!matches.length){addRes.appendChild(el("div",{class:"asst-add-row"},[el("span",{class:"sub",text:"No matches (they may already be in the list)."})]));return;}
+        if(!matches.length){addRes.appendChild(el("div",{class:"asst-add-row"},[el("span",{class:"sub",text:"No clients match your search."})]));return;}
         matches.forEach(function(a){
+          var already=inPipeline(a);
           var r=el("div",{class:"asst-add-row"});
-          r.appendChild(el("div",{class:"nm",text:((typeof fullName==="function")?fullName(a):(a.email||"Client"))+(a.email?(" · "+a.email):"")}));
+          r.appendChild(el("div",{class:"nm",text:((typeof fullName==="function")?fullName(a):(a.email||"Client"))+(a.email?(" · "+a.email):"")+(already?"  ✓ already in Needs Help":"")}));
           r.appendChild(el("button",{class:"btn btn-sm tgl",type:"button",text:"+ Insufficient funds",onclick:function(){assistSet(a.id,{funds:true});}}));
           r.appendChild(el("button",{class:"btn btn-sm tgl",type:"button",text:"+ Needs support",onclick:function(){assistSet(a.id,{supportManual:true});}}));
           addRes.appendChild(r);
@@ -6267,6 +6267,166 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
   }
   setTimeout(insertGraph,500); setTimeout(insertGraph,1500);
  }catch(err){ if(window.console)console.warn("premgraph init failed",err); }
+})();
+
+
+/* ═══════════════ HISTORY — audit log + needs-support button (added) ═══════════════ */
+(function(){
+ try{
+  var st=document.createElement("style"); st.setAttribute("data-history","1"); st.textContent="\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 HISTORY + NEEDS-SUPPORT \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\n#p-accounts .vs-needsupport{white-space:nowrap}\n#p-accounts .vs-needsupport.on{background:#eaf7f0!important;color:#0a7a4f!important;border:1px solid #b8e6cf!important}\n.vsh-card h4{display:flex;align-items:center;gap:6px}\n.vsh-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 12px;align-items:center}\n.vsh-toolbar .vsh-search{flex:1;min-width:160px}\n.vsh-toolbar select{max-width:180px}\n.vsh-list{display:flex;flex-direction:column;gap:8px;max-height:480px;overflow-y:auto;padding-right:4px}\n.vsh-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid var(--w-line,#e4e9f2);border-radius:12px;background:#fff}\n.vsh-row .vsh-main{flex:1;min-width:0}\n.vsh-sum{font-weight:700;color:#0d1b2a;font-size:13.5px;line-height:1.35}\n.vsh-ic{margin-right:5px}\n.vsh-meta{font-size:12px;color:#5a6b80;font-weight:600;margin-top:2px}\n.vsh-revert{flex:0 0 auto;background:#eef4fd!important;color:#16447f!important;border:1px solid #cfe0f7!important;font-weight:800!important;border-radius:9px!important}\n.vsh-revert:hover{background:#e0ebfb!important}\n.vsh-row.vsh-delete{border-left:3px solid #e5484d}\n.vsh-row.vsh-add{border-left:3px solid #0a8754}\n.vsh-row.vsh-update{border-left:3px solid #1e5ab0}\n.vsh-row.vsh-revert{border-left:3px solid #8a5cf6}\n.vsh-empty{padding:26px;text-align:center;color:#5a6b80;font-weight:600}\n@media(max-width:820px){ .vsh-row{flex-wrap:wrap} .vsh-revert{width:100%} }\n"; document.head.appendChild(st);
+
+  function esc(s){ return (typeof escapeHtml==="function")?escapeHtml(s):String(s==null?"":s); }
+  function nm(a){ return (typeof fullName==="function")?fullName(a):((a&&(a.name||a.email))||"client"); }
+  function toast(msg){
+    var t=document.getElementById("assist-toast");
+    if(!t){ t=document.createElement("div"); t.id="assist-toast"; t.className="assist-toast"; document.body.appendChild(t); }
+    t.textContent=msg; t.classList.add("show"); clearTimeout(t.__t); t.__t=setTimeout(function(){t.classList.remove("show");},2400);
+  }
+
+  /* ─────────── "Needs Customer Support" button on Active-Client cards ─────────── */
+  function injectSupportBtn(){
+    var list=document.getElementById("accts-list"); if(!list)return;
+    var byId={}; (typeof getAccounts==="function"?getAccounts():[]).forEach(function(a){byId[a.id]=a;});
+    Array.prototype.forEach.call(list.querySelectorAll(".row[data-acct-id]"),function(row){
+      var a=byId[row.getAttribute("data-acct-id")]; if(!a)return;
+      var acts=row.querySelector(".acts"); if(!acts)return;
+      var flagged=!!(a.assist&&a.assist.supportManual);
+      var b=acts.querySelector("[data-needsupport]");
+      if(!b){
+        b=document.createElement("button"); b.type="button"; b.setAttribute("data-needsupport","1"); b.className="btn btn-sm vs-needsupport";
+        b.addEventListener("click",function(e){
+          e.preventDefault(); e.stopPropagation();
+          var cur=(typeof getAccounts==="function"?getAccounts():[]).filter(function(x){return x.id===a.id;})[0];
+          var wasOn=!!(cur&&cur.assist&&cur.assist.supportManual);
+          if(typeof window.assistToggle==="function")window.assistToggle(a.id,"supportManual");
+          toast(wasOn?("Removed "+nm(a)+" from Needs Help"):(nm(a)+" sent to Needs Help — customer support"));
+        });
+        acts.appendChild(b);
+      }
+      b.innerHTML=flagged?"🎧 In Needs Help":"🎧 Needs Customer Support";
+      b.classList.toggle("on",flagged);
+    });
+  }
+  if(typeof renderAccounts==="function"){ var _ra=renderAccounts; renderAccounts=function(){ var o=_ra.apply(this,arguments); try{injectSupportBtn();}catch(e){} return o; }; }
+  setTimeout(injectSupportBtn,700);
+
+  /* ─────────── Activity history (audit log + revert) ─────────── */
+  var HKEY="vs_history_v1";
+  function hGet(){ try{ return JSON.parse(localStorage.getItem(HKEY)||"[]")||[]; }catch(e){ return []; } }
+  function hSet(arr){ try{ localStorage.setItem(HKEY,JSON.stringify(arr.slice(0,150))); }catch(e){ try{ localStorage.setItem(HKEY,JSON.stringify(arr.slice(0,50))); }catch(e2){} } }
+  function stripHeavy(o){ if(!o||typeof o!=="object")return o; var c=Object.assign({},o); delete c.photoDataUrl; delete c.documents; return c; }
+  function snapList(a){ try{ return JSON.parse(JSON.stringify(a||[])).map(stripHeavy); }catch(e){ return []; } }
+  function adminName(){ try{ var m=(typeof currentAdmin==="function"&&currentAdmin())||{}; return m.name||m.username||m.email||"You"; }catch(e){ return "You"; } }
+  function nameOf(coll,o){ if(coll==="clients")return nm(o); return o.name||(((o.firstName||"")+" "+(o.lastName||"")).trim())||o.email||"lead"; }
+  var VOL={updated:1,lastSignIn:1,_online:1,presence:1,onlineAt:1,syncedAt:1,_fu:1,followUpDue:1,lastContact:1,activity:1,fuCleared:1,createdAt:1};
+  function changedKeys(b,a){ var keys={}; if(b)for(var k in b)keys[k]=1; if(a)for(var k2 in a)keys[k2]=1; var out=[]; for(var kk in keys){ if(VOL[kk])continue; var bv,av; try{bv=JSON.stringify(b?b[kk]:undefined);}catch(e){bv="";} try{av=JSON.stringify(a?a[kk]:undefined);}catch(e){av="";} if(bv!==av)out.push(kk); } return out; }
+  function fieldWord(k){ var m={firstName:"first name",lastName:"last name",zipcode:"zip",pipelineStatus:"pipeline stage",policyNumber:"policy #",monthlyPremium:"premium",assist:"needs-help flags",plan:"plan / quote",status:"status",stage:"stage",notes:"notes",quoteValue:"quote value",value:"value"}; return m[k]||k; }
+  function lbl(coll,o){ return (coll==="clients"?"client ":"lead ")+nameOf(coll,o); }
+
+  var lastAcc=[], lastLd=[], READY=false;
+  function record(coll,before,after){
+    if(!READY)return;
+    before=before||[]; after=after||[];
+    var bById={},aById={}; before.forEach(function(x){bById[x.id]=x;}); after.forEach(function(x){aById[x.id]=x;});
+    var ent=[];
+    before.forEach(function(o){ if(!aById[o.id])ent.push({action:"delete",coll:coll,id:o.id,name:nameOf(coll,o),summary:"Deleted "+lbl(coll,o),snap:stripHeavy(o)}); });
+    after.forEach(function(o){ if(!bById[o.id])ent.push({action:"add",coll:coll,id:o.id,name:nameOf(coll,o),summary:"Added "+lbl(coll,o),snap:stripHeavy(o)}); });
+    after.forEach(function(o){ var b=bById[o.id]; if(b){ var ch=changedKeys(b,o); if(ch.length)ent.push({action:"update",coll:coll,id:o.id,name:nameOf(coll,o),summary:"Edited "+lbl(coll,o)+" · "+ch.map(fieldWord).slice(0,4).join(", "),fields:ch,snap:stripHeavy(b)}); } });
+    if(!ent.length)return;
+    var now=Date.now(), who=adminName();
+    ent.forEach(function(e,i){ e.ts=now; e.who=who; e.eid="h"+now+"_"+i+"_"+Math.floor(Math.random()*1e6); });
+    hSet(ent.concat(hGet()));
+    refreshHistoryUI();
+  }
+
+  var _saveAcc=(typeof saveAccounts==="function")?saveAccounts:null;
+  var _saveLd=(typeof saveLeads==="function")?saveLeads:null;
+  if(_saveAcc){ saveAccounts=function(v){ try{ record("clients",lastAcc,v||[]); }catch(e){} lastAcc=snapList(v||[]); return _saveAcc.apply(this,arguments); }; }
+  if(_saveLd){ saveLeads=function(v){ try{ record("leads",lastLd,v||[]); }catch(e){} lastLd=snapList(v||[]); return _saveLd.apply(this,arguments); }; }
+  // establish a clean baseline once data has hydrated, then start recording real changes
+  try{ lastAcc=snapList(typeof getAccounts==="function"?getAccounts():[]); lastLd=snapList(typeof getLeads==="function"?getLeads():[]); }catch(e){}
+  setTimeout(function(){ try{ lastAcc=snapList(getAccounts()); lastLd=snapList(getLeads()); }catch(e){} READY=true; },4000);
+
+  window.vsHistoryRevert=function(eid){
+    var hist=hGet(), e=null; for(var i=0;i<hist.length;i++){ if(hist[i].eid===eid){e=hist[i];break;} } if(!e)return;
+    var get=e.coll==="clients"?getAccounts:getLeads;
+    var save=e.coll==="clients"?_saveAcc:_saveLd; if(!save)return;
+    var arr=get(), msg="";
+    if(e.action==="delete"){
+      if(arr.some(function(x){return x.id===e.id;})){ toast(e.name+" already exists"); return; }
+      arr=arr.concat([e.snap]); msg="Restored "+e.name;
+    } else if(e.action==="add"){
+      arr=arr.filter(function(x){return x.id!==e.id;}); msg="Removed "+e.name+" (undid add)";
+    } else {
+      var found=false;
+      arr=arr.map(function(x){ if(x.id===e.id){ found=true; var m=Object.assign({},x,e.snap); if(x.photoDataUrl)m.photoDataUrl=x.photoDataUrl; if(x.documents)m.documents=x.documents; return m; } return x; });
+      if(!found)arr=arr.concat([e.snap]);
+      msg="Reverted "+e.name+" to earlier version";
+    }
+    lastAcc = e.coll==="clients"?snapList(arr):lastAcc;
+    lastLd  = e.coll==="leads"?snapList(arr):lastLd;
+    save(arr);
+    try{ if(e.coll==="clients"&&typeof renderAccounts==="function")renderAccounts(); }catch(_){}
+    try{ if(e.coll==="leads"){ if(typeof renderLeads==="function")renderLeads(); if(typeof czCurrentRender==="function")czCurrentRender(); } }catch(_){}
+    try{ if(typeof czDashboard==="function")czDashboard(); }catch(_){}
+    var mark={eid:"h"+Date.now()+"_r"+Math.floor(Math.random()*1e6),ts:Date.now(),who:adminName(),coll:e.coll,action:"revert",name:e.name,summary:"↩ "+msg,reverted:true};
+    hSet([mark].concat(hGet()));
+    toast(msg); refreshHistoryUI();
+  };
+
+  function fmtWhen(ts){ try{ return new Date(ts).toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}); }catch(e){ return ""; } }
+  function renderHistoryList(){
+    var box=document.getElementById("vsh-list"); if(!box)return;
+    var q=((document.getElementById("vsh-search")||{}).value||"").toLowerCase().trim();
+    var f=((document.getElementById("vsh-filter")||{}).value)||"all";
+    var rows=hGet().filter(function(e){
+      if(f==="clients"&&e.coll!=="clients")return false;
+      if(f==="leads"&&e.coll!=="leads")return false;
+      if(f==="delete"&&e.action!=="delete")return false;
+      if(f==="update"&&e.action!=="update")return false;
+      if(q && (e.summary||"").toLowerCase().indexOf(q)<0 && (e.name||"").toLowerCase().indexOf(q)<0)return false;
+      return true;
+    }).slice(0,250);
+    if(!rows.length){ box.innerHTML='<div class="vsh-empty">No activity yet. Changes you make to clients and leads will show up here.</div>'; return; }
+    box.innerHTML="";
+    rows.forEach(function(e){
+      var row=document.createElement("div"); row.className="vsh-row vsh-"+(e.action||"");
+      var ic=e.action==="delete"?"🗑":e.action==="add"?"➕":e.action==="revert"?"↩":"✏️";
+      var main=document.createElement("div"); main.className="vsh-main";
+      main.innerHTML='<div class="vsh-sum"><span class="vsh-ic">'+ic+'</span>'+esc(e.summary||"")+'</div><div class="vsh-meta">'+esc(fmtWhen(e.ts))+' · '+esc(e.who||"You")+'</div>';
+      row.appendChild(main);
+      if(e.snap && !e.reverted){
+        var btn=document.createElement("button"); btn.type="button"; btn.className="btn btn-sm vsh-revert";
+        btn.textContent=(e.action==="delete"?"Restore":e.action==="add"?"Undo add":"Revert");
+        btn.addEventListener("click",function(){ if(confirm((e.action==="delete"?"Restore ":e.action==="add"?"Undo adding ":"Revert ")+e.name+"?\n\nThis changes your data back.")) window.vsHistoryRevert(e.eid); });
+        row.appendChild(btn);
+      }
+      box.appendChild(row);
+    });
+  }
+  function refreshHistoryUI(){ try{ if(document.getElementById("vsh-list"))renderHistoryList(); }catch(e){} }
+
+  function mountHistory(){
+    var p=document.getElementById("p-settings"); if(!p)return;
+    if(!document.getElementById("vs-history-card")){
+      var card=document.createElement("div"); card.className="card vsh-card"; card.id="vs-history-card";
+      card.innerHTML='<h4 style="margin:0 0 6px;font-size:15px">🕒 Activity history</h4>'+
+        '<p class="lede">Everything you change on clients and leads is tracked here. If you make a mistake, hit <strong>Revert</strong> to change it back.</p>'+
+        '<div class="vsh-toolbar"><input id="vsh-search" class="search vsh-search" type="search" placeholder="Search history…"/>'+
+          '<select id="vsh-filter" class="sortsel"><option value="all">All activity</option><option value="clients">Clients only</option><option value="leads">Leads only</option><option value="update">Edits</option><option value="delete">Deletions</option></select>'+
+          '<button id="vsh-clear" class="btn btn-ghost btn-sm" type="button">Clear</button></div>'+
+        '<div id="vsh-list" class="vsh-list"></div>';
+      var h3=p.querySelector("h3");
+      if(h3&&h3.nextSibling)p.insertBefore(card,h3.nextSibling); else if(h3)p.appendChild(card); else p.insertBefore(card,p.firstChild);
+      var s=document.getElementById("vsh-search"); if(s)s.addEventListener("input",renderHistoryList);
+      var fl=document.getElementById("vsh-filter"); if(fl)fl.addEventListener("change",renderHistoryList);
+      var cl=document.getElementById("vsh-clear"); if(cl)cl.addEventListener("click",function(){ if(confirm("Clear all activity history? This cannot be undone.")){ hSet([]); renderHistoryList(); } });
+    }
+    renderHistoryList();
+  }
+  if(typeof renderSettings==="function"){ var _rs=renderSettings; renderSettings=function(){ var o=_rs.apply(this,arguments); try{mountHistory();}catch(e){} return o; }; }
+  setTimeout(function(){ var p=document.getElementById("p-settings"); if(p&&p.classList.contains("active"))mountHistory(); },700);
+ }catch(err){ if(window.console)console.warn("history init failed",err); }
 })();
 
 })();
