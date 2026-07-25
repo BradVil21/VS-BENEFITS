@@ -6072,57 +6072,52 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
 })();
 
 
-/* ═══════════════ BOOKFIX — always-available booking button (added) ═══════════════ */
+
+/* ═══════════════ BOOKFIX — single booking button (added) ═══════════════ */
 (function(){
  try{
-  var st=document.createElement("style"); st.setAttribute("data-bookfix","1"); st.textContent="\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 BOOKFIX \u2014 always-available booking \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\n#p-dashboard .d3-cal-btn[data-vsbook]{\n  width:auto!important;padding:0 14px!important;margin-right:8px!important;\n  font-weight:800!important;font-size:13px!important;color:#16447f!important;\n  background:#f4f8fe!important;border-color:#c9d7ea!important;\n}\n#p-dashboard .d3-cal-btn[data-vsbook]:hover{background:#e2edfc!important;color:#0b2346!important}\n#p-dashboard .d3-mempty .vs-book-empty{\n  display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:11px 18px;border-radius:12px;\n  background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;font-weight:800;font-size:13.5px;border:0;cursor:pointer;\n  box-shadow:0 8px 20px -6px rgba(22,68,127,.5);\n}\n#p-dashboard .d3-mempty .vs-book-empty:hover{filter:brightness(1.05);transform:translateY(-1px)}\n"; document.head.appendChild(st);
+  var st=document.createElement("style"); st.setAttribute("data-bookfix","1"); st.textContent="\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 BOOKFIX \u2014 single plain booking button \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\n#p-dashboard .d3-cal-btn[data-book-btn],#p-dashboard .d3-cal-btn[data-vsbook]{\n  width:auto!important;padding:0 14px!important;margin-right:8px!important;font-weight:700!important;font-size:13px!important;\n}\n"; document.head.appendChild(st);
 
   function book(){ if(typeof window.vsSchedule==="function")window.vsSchedule("",""); }
 
-  // 1) "+ Book" button in the meetings card header — present on every render
-  function headerBtn(){
+  // Ensure EXACTLY ONE plain "+ Book" button in the meetings-card header, always present.
+  function ensureOne(){
     var heads=document.querySelectorAll("#p-dashboard .d3-mhead"), mhead=null;
     Array.prototype.forEach.call(heads,function(h){ if(!mhead && h.querySelector(".d3-cal-btn"))mhead=h; });
     if(!mhead)return;
-    if(mhead.querySelector("[data-vsbook]")||mhead.querySelector("[data-book-btn]"))return; // already has one
-    var b=document.createElement("button"); b.type="button"; b.className="d3-cal-btn"; b.setAttribute("data-vsbook","1");
-    b.textContent="+ Book"; b.title="Book a meeting";
-    b.addEventListener("click",function(e){ e.preventDefault(); book(); });
-    var ref=mhead.querySelector(".d3-cal-btn"); if(ref)mhead.insertBefore(b,ref); else mhead.appendChild(b);
-  }
-
-  // 2) A clear "Book a meeting" button inside the "no upcoming meetings" empty state
-  function emptyBtn(){
-    var list=document.getElementById("d3-meet-list"); if(!list)return;
-    var empty=list.querySelector(".d3-mempty"); if(!empty)return;
-    if(!/no upcoming meetings/i.test(empty.textContent||""))return; // skip loading/connect states
-    if(empty.querySelector(".vs-book-empty"))return;
-    var b=document.createElement("button"); b.type="button"; b.className="vs-book-empty";
-    b.innerHTML="📅 Book a meeting";
-    b.addEventListener("click",function(e){ e.preventDefault(); book(); });
-    empty.appendChild(document.createElement("br"));
-    empty.appendChild(b);
+    var books=Array.prototype.slice.call(mhead.querySelectorAll("[data-book-btn],[data-vsbook]"));
+    if(books.length===0){
+      var b=document.createElement("button"); b.type="button"; b.className="d3-cal-btn";
+      b.setAttribute("data-book-btn","1"); b.setAttribute("data-vsbook","1"); // satisfies the old injector's guard too
+      b.textContent="+ Book"; b.title="Book a meeting";
+      b.addEventListener("click",function(e){ e.preventDefault(); book(); });
+      var ref=mhead.querySelector(".d3-cal-btn:not([data-book-btn]):not([data-vsbook])"); // the refresh icon
+      if(ref)mhead.insertBefore(b,ref); else mhead.appendChild(b);
+      return;
+    }
+    // keep one (prefer the original data-book-btn), remove any extras
+    var keep=null;
+    for(var i=0;i<books.length;i++){ if(books[i].hasAttribute("data-book-btn")){ keep=books[i]; break; } }
+    if(!keep)keep=books[0];
+    if(!keep.hasAttribute("data-book-btn"))keep.setAttribute("data-book-btn","1");
+    books.forEach(function(b){ if(b!==keep && b.parentNode)b.parentNode.removeChild(b); });
   }
 
   var observing=false, mo=null;
-  function inject(){ try{headerBtn();}catch(e){} try{emptyBtn();}catch(e){} }
-  function safeInject(){ if(mo)mo.disconnect(); inject(); if(mo&&observing)mo.observe(document.getElementById("p-dashboard"),{childList:true,subtree:true}); }
-
-  // re-inject after each dashboard render
+  function safe(){ if(mo)mo.disconnect(); try{ensureOne();}catch(e){} if(mo&&observing){var p=document.getElementById("p-dashboard"); if(p)mo.observe(p,{childList:true,subtree:true});} }
   if(typeof window.renderDash3D==="function"){
     var _r=window.renderDash3D;
-    window.renderDash3D=function(){ var o=_r.apply(this,arguments); setTimeout(safeInject,40); return o; };
+    window.renderDash3D=function(){ var o=_r.apply(this,arguments); setTimeout(safe,40); return o; };
     try{ if(typeof czDashboard!=="undefined")czDashboard=window.renderDash3D; }catch(e){}
   }
-  // observe the dashboard so the async Calendly load (which repaints the list) keeps the buttons
   function startObserve(){
     var p=document.getElementById("p-dashboard"); if(!p||observing)return;
-    mo=new MutationObserver(function(){ if(mo)mo.disconnect(); inject(); if(observing)mo.observe(p,{childList:true,subtree:true}); });
+    mo=new MutationObserver(function(){ if(mo)mo.disconnect(); try{ensureOne();}catch(e){} if(observing)mo.observe(p,{childList:true,subtree:true}); });
     mo.observe(p,{childList:true,subtree:true}); observing=true;
   }
   startObserve();
-  setTimeout(function(){ startObserve(); inject(); },400);
-  setTimeout(inject,1200); setTimeout(inject,2400);
+  setTimeout(function(){ startObserve(); ensureOne(); },400);
+  setTimeout(ensureOne,1200); setTimeout(ensureOne,2400);
  }catch(err){ if(window.console)console.warn("bookfix init failed",err); }
 })();
 
