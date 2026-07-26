@@ -5396,6 +5396,10 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
       var sb=el("button",{type:"button",class:"abtn tgl"+(r.supportManual?" on-support":""),text:r.supportManual?"✓ Support":"+ Support"});
       sb.addEventListener("click",function(){assistSet(a.id,{supportManual:!r.supportManual});});
       bar.appendChild(sb);
+      var _done=(st==="resolved");
+      var mc=el("button",{type:"button",class:"abtn asst-complete"+(_done?" is-done":""),text:_done?"↩ Reopen":"✓ Mark completed"});
+      mc.addEventListener("click",function(){assistSet(a.id,{stage:_done?"open":"resolved"});});
+      bar.appendChild(mc);
       card.appendChild(bar);
       /* note */
       var note=el("textarea",{class:"asst-note",rows:"1",placeholder:"Add a note — what they need, next step, who to call..."});
@@ -6127,148 +6131,6 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
 })();
 
 
-/* ═══════════════ PREMGRAPH — 3d premium trend (added) ═══════════════ */
-(function(){
- try{
-  var st=document.createElement("style"); st.setAttribute("data-premgraph","1"); st.textContent="\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 PREMGRAPH \u2014 3D premium trend \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\n#p-dashboard #pg-section{display:block}\n#p-dashboard .pg-card .g-inner{padding:22px}\n#p-dashboard .pg-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:6px}\n#p-dashboard .pg-k{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#1e5ab0}\n#p-dashboard .pg-h{font-family:'Poppins',sans-serif;font-size:20px;font-weight:800;color:#0d1b2a;margin:4px 0 6px}\n#p-dashboard .pg-total{font-family:'Poppins',sans-serif;font-weight:800;color:#0d1b2a;font-size:30px;line-height:1;font-variant-numeric:tabular-nums}\n#p-dashboard .pg-total .pg-cur{font-size:20px;vertical-align:8%;margin-right:1px}\n#p-dashboard .pg-total-sub{font-size:13px;font-weight:700;color:#5a6b80;margin-left:6px}\n#p-dashboard .pg-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}\n#p-dashboard .pg-seg{display:inline-flex;background:#eef2f8;border-radius:10px;padding:3px}\n#p-dashboard .pg-seg button{border:0;background:none;padding:7px 14px;border-radius:8px;font-weight:800;font-size:13px;color:#5a6b80;cursor:pointer}\n#p-dashboard .pg-seg button.on{background:#fff;color:#16447f;box-shadow:0 1px 3px rgba(13,27,42,.12)}\n#p-dashboard .pg-year{display:inline-flex;align-items:center;gap:2px;border:1px solid #e4e9f2;border-radius:10px;background:#fff;padding:2px}\n#p-dashboard .pg-year button{border:0;background:none;width:30px;height:32px;font-size:18px;color:#16447f;cursor:pointer;border-radius:8px;font-weight:800;line-height:1}\n#p-dashboard .pg-year button:hover{background:#f4f8fe}\n#p-dashboard .pg-year button:disabled{color:#c3ccd9;cursor:default;background:none}\n#p-dashboard .pg-year span{min-width:54px;text-align:center;font-weight:800;color:#0d1b2a;font-variant-numeric:tabular-nums}\n#p-dashboard .pg-play{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:9px 16px;font-weight:800;font-size:13px;color:#fff;cursor:pointer;background:linear-gradient(135deg,#16447f,#0db5a6);box-shadow:0 8px 18px -6px rgba(22,68,127,.5)}\n#p-dashboard .pg-play:hover{filter:brightness(1.06);transform:translateY(-1px)}\n#p-dashboard .pg-play .pg-play-ico{font-size:11px}\n#p-dashboard .pg-3d{margin-top:16px;perspective:1100px;overflow:hidden}\n#p-dashboard .pg-plane{transform:rotateX(16deg);transform-style:preserve-3d;transform-origin:center 72%;filter:drop-shadow(0 22px 22px rgba(13,27,42,.14))}\n#p-dashboard .pg-svg{width:100%;height:auto;display:block;overflow:visible}\n#p-dashboard .pg-grid{stroke:#e7edf5;stroke-width:1}\n#p-dashboard .pg-ylab{fill:#8a99ad;font-size:11px;font-weight:600;font-family:Inter,sans-serif}\n#p-dashboard .pg-xlab{fill:#8a99ad;font-size:11px;font-weight:700;font-family:Inter,sans-serif}\n#p-dashboard .pg-pt{fill:url(#pgDot);stroke:#fff;stroke-width:1.5;transform-box:fill-box;transform-origin:center;filter:drop-shadow(0 3px 3px rgba(13,80,127,.35));cursor:pointer}\n#p-dashboard .pg-empty{padding:48px 16px;text-align:center;color:#5a6b80;font-weight:600;font-size:14px}\n@media(max-width:820px){\n  #p-dashboard .pg-plane{transform:rotateX(10deg)}\n  #p-dashboard .pg-total{font-size:26px}\n  #p-dashboard .pg-controls{width:100%}\n}\n@media(prefers-reduced-motion:reduce){#p-dashboard .pg-plane{transform:none}}\n"; document.head.appendChild(st);
-
-  var state={ mode:"year", year:(new Date()).getFullYear() };
-
-  function accts(){ return (typeof getAccounts==="function"?getAccounts():[])||[]; }
-  function prem(a){ return (typeof window.vsGetPremium==="function")?window.vsGetPremium(a):((a.plan&&Number(a.plan.monthlyPremium))||0); }
-  function clientPts(){
-    return accts().filter(function(a){return (a.status||"active")!=="revoked";})
-      .map(function(a){ var t=a.created||(a.createdAt?Date.parse(a.createdAt):0)||0; return {t:t,p:prem(a)}; })
-      .filter(function(x){return x.p>0;});
-  }
-  function mrrAsOf(ts,arr){ var s=0; for(var i=0;i<arr.length;i++){ if(!arr[i].t||arr[i].t<=ts)s+=arr[i].p; } return s; }
-  function yearRange(){ var arr=clientPts(); var cy=(new Date()).getFullYear(); var min=cy; arr.forEach(function(x){ if(x.t){ var y=new Date(x.t).getFullYear(); if(y<min)min=y; } }); return {min:Math.min(min,cy-1),max:cy}; }
-
-  function series(mode,year){
-    var arr=clientPts(), pts=[];
-    if(mode==="year"){
-      var mn=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-      for(var m=0;m<12;m++){ var end=new Date(year,m+1,0,23,59,59).getTime(); pts.push({label:mn[m],value:mrrAsOf(end,arr)}); }
-    } else {
-      var now=new Date(); var ref=(year>=now.getFullYear())?now:new Date(year,11,31,23,59,59); var refMs=ref.getTime();
-      for(var i=11;i>=0;i--){ var d=new Date(refMs-i*7*86400000); pts.push({label:(d.getMonth()+1)+"/"+d.getDate(),value:mrrAsOf(d.getTime(),arr)}); }
-    }
-    return { points:pts, total:mrrAsOf((new Date()).getTime(),arr) };
-  }
-
-  function money0(n){ n=Math.round(Number(n)||0); return "$"+n.toLocaleString(); }
-
-  function buildSVG(points){
-    var W=760,H=300,pl=58,pr=22,pt=18,pb=36, plotW=W-pl-pr, plotH=H-pt-pb;
-    var vals=points.map(function(p){return p.value;});
-    var maxV=Math.max.apply(null,vals.concat([1]));
-    var yMax=maxV<=0?10:maxV*1.15, yMin=0, n=points.length;
-    function X(i){ return pl+(n<=1?plotW/2:(i/(n-1))*plotW); }
-    function Y(v){ return pt+(1-(v-yMin)/(yMax-yMin))*plotH; }
-    var line="";
-    points.forEach(function(p,i){ line+=(i?" L":"M")+X(i).toFixed(1)+" "+Y(p.value).toFixed(1); });
-    var area=line+" L"+X(n-1).toFixed(1)+" "+(pt+plotH)+" L"+X(0).toFixed(1)+" "+(pt+plotH)+" Z";
-    var grid="",ylab="";
-    for(var g=0;g<=4;g++){ var gv=yMin+(yMax-yMin)*g/4, gy=Y(gv);
-      grid+='<line class="pg-grid" x1="'+pl+'" y1="'+gy.toFixed(1)+'" x2="'+(W-pr)+'" y2="'+gy.toFixed(1)+'"/>';
-      ylab+='<text class="pg-ylab" x="'+(pl-8)+'" y="'+(gy+3).toFixed(1)+'" text-anchor="end">'+money0(gv)+'</text>';
-    }
-    var xlab="", step=n>8?Math.ceil(n/8):1;
-    points.forEach(function(p,i){ if(i%step===0||i===n-1){ xlab+='<text class="pg-xlab" x="'+X(i).toFixed(1)+'" y="'+(H-12)+'" text-anchor="middle">'+p.label+'</text>'; } });
-    var dots="";
-    points.forEach(function(p,i){ dots+='<circle class="pg-pt" cx="'+X(i).toFixed(1)+'" cy="'+Y(p.value).toFixed(1)+'" r="4.6"><title>'+p.label+': '+money0(p.value)+'</title></circle>'; });
-    return '<svg class="pg-svg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">'+
-      '<defs>'+
-        '<linearGradient id="pgLine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#16447f"/><stop offset="1" stop-color="#0db5a6"/></linearGradient>'+
-        '<linearGradient id="pgArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1e5ab0" stop-opacity=".38"/><stop offset="1" stop-color="#0db5a6" stop-opacity="0"/></linearGradient>'+
-        '<radialGradient id="pgDot" cx="35%" cy="30%" r="70%"><stop offset="0" stop-color="#ffffff"/><stop offset="35%" stop-color="#2fb6c9"/><stop offset="100%" stop-color="#0f7ea0"/></radialGradient>'+
-        '<filter id="pgGlow" x="-20%" y="-60%" width="140%" height="240%"><feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#12507f" flood-opacity="0.30"/></filter>'+
-      '</defs>'+
-      '<g class="pg-grids">'+grid+ylab+'</g>'+
-      '<path class="pg-area" d="'+area+'" fill="url(#pgArea)"/>'+
-      '<path class="pg-line" d="'+line+'" fill="none" stroke="url(#pgLine)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" filter="url(#pgGlow)"/>'+
-      '<g class="pg-dots">'+dots+'</g>'+
-      '<g class="pg-xlabs">'+xlab+'</g>'+
-    '</svg>';
-  }
-
-  function countUp(elm,to){
-    if(!elm)return; to=Math.round(to); var from=0,dur=900,start=null;
-    function s(ts){ if(start===null)start=ts; var k=Math.min(1,(ts-start)/dur); var e=1-Math.pow(1-k,3); elm.textContent=Math.round(from+(to-from)*e).toLocaleString(); if(k<1)requestAnimationFrame(s); }
-    requestAnimationFrame(s);
-  }
-
-  function animate(sec){
-    var svg=sec.querySelector(".pg-svg"); if(!svg)return;
-    var line=svg.querySelector(".pg-line"), area=svg.querySelector(".pg-area"), pts=svg.querySelectorAll(".pg-pt");
-    if(line){ var len=line.getTotalLength(); line.style.transition="none"; line.style.strokeDasharray=len; line.style.strokeDashoffset=len; }
-    if(area){ area.style.transition="none"; area.style.opacity="0"; }
-    Array.prototype.forEach.call(pts,function(p){ p.style.transition="none"; p.style.opacity="0"; p.style.transform="scale(0)"; });
-    void svg.getBoundingClientRect();
-    if(line){ line.style.transition="stroke-dashoffset 1.7s cubic-bezier(.4,.05,.2,1)"; line.style.strokeDashoffset="0"; }
-    if(area){ area.style.transition="opacity 1s ease .35s"; area.style.opacity="1"; }
-    var n=pts.length;
-    Array.prototype.forEach.call(pts,function(p,i){ var d=(0.25+i*(1.5/Math.max(1,n))); p.style.transition="opacity .35s ease "+d+"s, transform .45s cubic-bezier(.34,1.56,.64,1) "+d+"s"; p.style.opacity="1"; p.style.transform="scale(1)"; });
-  }
-
-  function updateYearBtns(sec){ var r=yearRange(), pv=sec.querySelector("#pg-prev"), nx=sec.querySelector("#pg-next"); if(pv)pv.disabled=state.year<=r.min; if(nx)nx.disabled=state.year>=r.max; }
-
-  function render(sec,noAnim){
-    var s=series(state.mode,state.year);
-    var plane=sec.querySelector("#pg-plane");
-    if(plane){
-      if(s.total<=0){ plane.innerHTML='<div class="pg-empty">No premium data yet — add monthly premiums to your active clients and your revenue trend will grow here.</div>'; }
-      else{ plane.innerHTML=buildSVG(s.points); }
-    }
-    var yl=sec.querySelector("#pg-year"); if(yl)yl.textContent=state.year;
-    countUp(sec.querySelector("#pg-total"), s.total);
-    Array.prototype.forEach.call(sec.querySelectorAll("#pg-seg button"),function(b){ b.classList.toggle("on",b.getAttribute("data-mode")===state.mode); });
-    updateYearBtns(sec);
-    if(!noAnim && s.total>0)requestAnimationFrame(function(){ animate(sec); });
-  }
-
-  var SECTION='<div class="d3-seclabel"><span class="n">02·5</span><span class="rule"></span><span class="l">Revenue · monthly premium trend</span></div>'+
-    '<div class="glass-3d pg-card"><div class="g-inner">'+
-      '<div class="pg-head">'+
-        '<div class="pg-titles"><div class="pg-k">Revenue</div><h3 class="pg-h">Total client premiums</h3>'+
-          '<div class="pg-total"><span class="pg-cur">$</span><span id="pg-total">0</span><span class="pg-total-sub">/mo total</span></div></div>'+
-        '<div class="pg-controls">'+
-          '<div class="pg-seg" id="pg-seg"><button type="button" data-mode="year" class="on">Year</button><button type="button" data-mode="week">Week</button></div>'+
-          '<div class="pg-year"><button type="button" id="pg-prev" aria-label="Previous year">&lsaquo;</button><span id="pg-year">—</span><button type="button" id="pg-next" aria-label="Next year">&rsaquo;</button></div>'+
-          '<button type="button" class="pg-play" id="pg-play"><span class="pg-play-ico">&#9654;</span> Play</button>'+
-        '</div>'+
-      '</div>'+
-      '<div class="pg-3d"><div class="pg-plane" id="pg-plane"></div></div>'+
-    '</div></div>';
-
-  function wire(sec){
-    render(sec);
-    var seg=sec.querySelector("#pg-seg");
-    if(seg)seg.addEventListener("click",function(e){ var b=e.target.closest("button[data-mode]"); if(!b)return; state.mode=b.getAttribute("data-mode"); render(sec); });
-    var pv=sec.querySelector("#pg-prev"); if(pv)pv.addEventListener("click",function(){ var r=yearRange(); if(state.year>r.min){ state.year--; render(sec); } });
-    var nx=sec.querySelector("#pg-next"); if(nx)nx.addEventListener("click",function(){ var r=yearRange(); if(state.year<r.max){ state.year++; render(sec); } });
-    var pl=sec.querySelector("#pg-play"); if(pl)pl.addEventListener("click",function(){ var s=series(state.mode,state.year); countUp(sec.querySelector("#pg-total"),s.total); animate(sec); });
-  }
-
-  function insertGraph(){
-    var w=document.getElementById("d3-wrap"); if(!w)return;
-    if(document.getElementById("pg-section"))return;
-    var sec=document.createElement("div"); sec.id="pg-section"; sec.innerHTML=SECTION;
-    var before=null;
-    Array.prototype.forEach.call(w.querySelectorAll(".d3-seclabel"),function(s){ var l=s.querySelector(".l"); if(!before&&l&&/pipeline/i.test(l.textContent||""))before=s; });
-    if(before)w.insertBefore(sec,before); else w.appendChild(sec);
-    wire(sec);
-  }
-
-  if(typeof window.renderDash3D==="function"){
-    var _r=window.renderDash3D;
-    window.renderDash3D=function(){ var o=_r.apply(this,arguments); setTimeout(insertGraph,30); return o; };
-    try{ if(typeof czDashboard!=="undefined")czDashboard=window.renderDash3D; }catch(e){}
-  }
-  setTimeout(insertGraph,500); setTimeout(insertGraph,1500);
- }catch(err){ if(window.console)console.warn("premgraph init failed",err); }
-})();
-
 
 /* ═══════════════ HISTORY — audit log + needs-support button (added) ═══════════════ */
 (function(){
@@ -6303,7 +6165,7 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
         });
         acts.appendChild(b);
       }
-      b.innerHTML=flagged?"🎧 In Needs Help":"🎧 Needs Customer Support";
+      b.innerHTML=flagged?"✓ In Needs Help":"⚑ Needs Help";
       b.classList.toggle("on",flagged);
     });
   }
@@ -6427,6 +6289,25 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
   if(typeof renderSettings==="function"){ var _rs=renderSettings; renderSettings=function(){ var o=_rs.apply(this,arguments); try{mountHistory();}catch(e){} return o; }; }
   setTimeout(function(){ var p=document.getElementById("p-settings"); if(p&&p.classList.contains("active"))mountHistory(); },700);
  }catch(err){ if(window.console)console.warn("history init failed",err); }
+})();
+
+
+/* ═══════════════ NAVFIX — single clean mobile menu (added) ═══════════════ */
+(function(){
+ try{
+  var st=document.createElement("style"); st.setAttribute("data-navfix","1"); st.textContent="\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 NAVFIX \u2014 clean nav + one Needs Help button \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\n/* kill every legacy toggle so only ONE menu control can ever show */\n#topbar,#sidebar-toggle,.topbar-toggle{display:none!important}\n\n/* Collapse the top nav to a single hamburger below 1080px (before it crowds) */\n@media(max-width:1080px){\n  .sidebar-nav#sidebar-nav{display:none!important}\n  .sidebar#sidebar .vs-burger{display:inline-flex!important}\n  .sidebar#sidebar .vs-acct{display:none!important}   /* fold account menu into the hamburger \u2192 one menu */\n}\n@media(min-width:1081px){\n  .sidebar#sidebar .vs-burger{display:none!important}\n  .sidebar-nav#sidebar-nav{display:flex!important}\n  .sidebar#sidebar .vs-acct{display:inline-flex!important}\n}\n\n/* nicer hamburger button */\n.sidebar#sidebar .vs-burger{\n  width:42px;height:42px;border-radius:12px;border:1px solid var(--w-line,#e4e9f2);background:#fff;color:#16447f;\n  align-items:center;justify-content:center;cursor:pointer;margin:0 0 0 2px;flex:0 0 auto;box-shadow:0 1px 3px rgba(13,27,42,.07);\n}\n.sidebar#sidebar .vs-burger svg{width:23px;height:23px}\n.sidebar#sidebar .vs-burger:hover,.sidebar#sidebar .vs-burger.on{background:#f4f8fe;border-color:#c9d7ea;color:#0b2346}\n/* let the brand + burger sit left, bell right */\n@media(max-width:1080px){\n  .sidebar#sidebar{justify-content:flex-start!important}\n  .sidebar#sidebar #bell-btn{margin-left:auto!important}\n}\n\n/* drawer polish */\n.vs-drawer{padding:10px 10px 16px!important;border-radius:0 0 18px 18px!important}\n.vs-drawer button{font-size:16px!important}\n\n/* \u2500\u2500 Needs Help: only ONE button on client cards \u2500\u2500 */\n#accts-list [data-assist-btn]{display:none!important}   /* hide the old popover button */\n\n/* \u2500\u2500 Mark-completed button on Needs Help cards \u2500\u2500 */\n.asst-bar .asst-complete{background:#0a8754!important;color:#fff!important;border:1px solid #0a8754!important;font-weight:800!important}\n.asst-bar .asst-complete:hover{background:#097a4c!important;border-color:#097a4c!important}\n.asst-bar .asst-complete.is-done{background:#eef2f8!important;color:#42566e!important;border-color:#dbe3ef!important}\n"; document.head.appendChild(st);
+  // guarantee exactly ONE hamburger (remove any duplicates that slipped in)
+  function dedupeBurger(){
+    var bs=document.querySelectorAll(".vs-burger");
+    for(var i=1;i<bs.length;i++){ if(bs[i].parentNode)bs[i].parentNode.removeChild(bs[i]); }
+    // also make sure the legacy toggle is gone from view
+    var t=document.getElementById("sidebar-toggle"); if(t)t.style.display="none";
+    var tb=document.getElementById("topbar"); if(tb)tb.style.display="none";
+  }
+  dedupeBurger();
+  setTimeout(dedupeBurger,300); setTimeout(dedupeBurger,900); setTimeout(dedupeBurger,2000);
+  window.addEventListener("resize",dedupeBurger);
+ }catch(err){ if(window.console)console.warn("navfix init failed",err); }
 })();
 
 })();
