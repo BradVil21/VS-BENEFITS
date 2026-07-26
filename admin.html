@@ -4292,6 +4292,8 @@ function czBind(root){
   root.querySelectorAll("[data-cz-add]").forEach(function(n){n.addEventListener("click",function(){czOpenModal(null);});});
   root.querySelectorAll("[data-cz-sample]").forEach(function(n){n.addEventListener("click",function(){czLoadSample();});});
   root.querySelectorAll("[data-cz-reset]").forEach(function(n){n.addEventListener("click",function(e){e.stopPropagation();czRestart(n.getAttribute("data-cz-reset"));});});
+  root.querySelectorAll("[data-cz-complete]").forEach(function(n){n.addEventListener("click",function(e){e.stopPropagation();czFuComplete(n.getAttribute("data-cz-complete"));});});
+  root.querySelectorAll("[data-cz-noanswer]").forEach(function(n){n.addEventListener("click",function(e){e.stopPropagation();czFuNoAnswer(n.getAttribute("data-cz-noanswer"));});});
   root.querySelectorAll("[data-cz-stage]").forEach(function(n){n.addEventListener("change",function(e){e.stopPropagation();czSetStage(n.getAttribute("data-cz-stage"),n.value);});});
 }
 function czCurrentRender(){
@@ -4316,6 +4318,22 @@ function czRestart(id){
   saveLeads(arr);
   if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","Logged contact · follow-up reset");
   czCurrentRender();
+}
+/* Follow-up handled — clears it from the list */
+function czFuComplete(id){
+  var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
+  var t=todayStr();c.lastContact=t;c.followUpDue="";c.fuCleared=true;c.updated=Date.now();
+  saveLeads(arr);
+  if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","Follow-up completed");
+  czCurrentRender();if(typeof renderTasks==="function")renderTasks();
+}
+/* No answer — recycle back into the list in a couple of days */
+function czFuNoAnswer(id){
+  var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
+  var t=todayStr();c.lastContact=t;c.followUpDue=czAddDays(t,2);c.fuCleared=false;c.updated=Date.now();
+  saveLeads(arr);
+  if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","No answer · recycled — follow up again in 2 days");
+  czCurrentRender();if(typeof renderTasks==="function")renderTasks();
 }
 function czUpsert(rec){
   var arr=getLeads();var i=arr.findIndex(function(x){return x.id===rec.id;});
@@ -4473,13 +4491,13 @@ function czFuResults(){
   g.overdue.sort(function(a,b){return b.fu.days-a.fu.days;});
   g.upcoming.sort(function(a,b){return a.fu.days-b.fu.days;});
   var total=g.overdue.length+g.today.length+g.upcoming.length;
-  var intro='<div class="cz-panel cz-fu-intro"><div class="cz-ico">↻</div><div class="cz-t"><b style="color:#334155">How the follow-up system works.</b> Every active lead is on a 14-day timer. When you call, text, or email someone, hit <b style="color:#0284c7">Reset ↻</b> to restart the clock. Anyone trying to ghost you keeps resurfacing in <b style="color:#f43f5e">Overdue</b> until they convert or you mark them out.</div></div>';
+  var intro='<div class="cz-panel cz-fu-intro"><div class="cz-ico">↻</div><div class="cz-t"><b style="color:#334155">How the follow-up system works.</b> After you follow up: hit <b style="color:#0a7a4f">✓ Completed</b> if you reached them (clears it), or <b style="color:#b45309">☎ No answer</b> to have them come back in 2 days. <b style="color:#0284c7">Reset ↻</b> restarts the full 14-day clock. Anyone trying to ghost you keeps resurfacing in <b style="color:#f43f5e">Overdue</b> until you close them out.</div></div>';
   if(total===0){box.innerHTML=intro+'<div class="cz-panel" style="padding:40px;text-align:center;color:#94a3b8;font-size:14px">No active follow-ups. Sold and "no longer interested" leads don\'t carry tasks.</div>';czBind(box);return;}
   var secs=[{key:"overdue",title:"Overdue",ico:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z'/><path d='M12 9v4M12 17h.01'/></svg>️",accent:"#e11d48"},{key:"today",title:"Due today",ico:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><circle cx='12' cy='13' r='8'/><path d='M12 9v4l2.5 1.5M5 3 2.5 5.5M19 3l2.5 2.5'/></svg>",accent:"#d97706"},{key:"upcoming",title:"Upcoming",ico:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='3' y='4' width='18' height='18' rx='2'/><path d='M16 2v4M8 2v4M3 10h18'/></svg>",accent:"#64748b"}];
   var blocks=secs.map(function(sec){
     var list=g[sec.key];if(!list.length)return"";
     var items=list.map(function(o){var c=o.c,fu=o.fu;
-      return '<div class="cz-listitem" style="cursor:default"><div style="min-width:0;flex:1;cursor:pointer" data-cz-open="'+c.id+'"><div class="cz-row" style="gap:8px"><span class="cz-nm">'+escapeHtml(czName(c))+'</span><span class="cz-chip" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></div><div class="cz-sub" style="margin-top:2px">'+escapeHtml(c.phone||c.email||"no contact info")+' · last contact '+(c.lastContact?czPretty(c.lastContact):"—")+'</div></div><span class="cz-pill cz-hide-md" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span><button class="cz-resetbtn" data-cz-reset="'+c.id+'">↻ Reset</button></div>';
+      return '<div class="cz-listitem" style="cursor:default"><div style="min-width:0;flex:1;cursor:pointer" data-cz-open="'+c.id+'"><div class="cz-row" style="gap:8px"><span class="cz-nm">'+escapeHtml(czName(c))+'</span><span class="cz-chip" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></div><div class="cz-sub" style="margin-top:2px">'+escapeHtml(c.phone||c.email||"no contact info")+' · last contact '+(c.lastContact?czPretty(c.lastContact):"—")+'</div></div><span class="cz-pill cz-hide-md" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span><div class="cz-fu-acts"><button class="cz-resetbtn vsfu-done" data-cz-complete="'+c.id+'" title="Reached them / handled — clears the follow-up">✓ Completed</button><button class="cz-resetbtn vsfu-no" data-cz-noanswer="'+c.id+'" title="No answer — comes back in 2 days">☎ No answer</button><button class="cz-resetbtn" data-cz-reset="'+c.id+'" title="Log contact — restart 14-day clock">↻ Reset</button></div></div>';
     }).join("");
     return '<div class="cz-panel" style="overflow:hidden;margin-bottom:20px"><div class="cz-sec-head"><h2><span style="color:'+sec.accent+'">'+sec.ico+'</span> '+sec.title+' <span class="cz-faint" style="font-size:12px;font-weight:400">'+list.length+'</span></h2></div>'+items+'</div>';
   }).join("");
@@ -5401,11 +5419,41 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
       mc.addEventListener("click",function(){assistSet(a.id,{stage:_done?"open":"resolved"});});
       bar.appendChild(mc);
       card.appendChild(bar);
-      /* note */
-      var note=el("textarea",{class:"asst-note",rows:"1",placeholder:"Add a note — what they need, next step, who to call..."});
-      note.value=(a.assist&&a.assist.note)||"";
-      note.addEventListener("blur",function(){var v=note.value.trim();var cur=(a.assist&&a.assist.note)||"";if(v!==cur)assistSet(a.id,{note:v});});
-      card.appendChild(note);
+      /* ── timestamped note log ── */
+      function _who(){ try{ var m=(typeof currentAdmin==="function"&&currentAdmin())||{}; return m.name||m.username||"You"; }catch(e){ return "You"; } }
+      function _when(ts){ try{ return new Date(ts).toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}); }catch(e){ return ""; } }
+      function _log(acct){
+        var lg=(acct.assist&&acct.assist.noteLog)?acct.assist.noteLog.slice():[];
+        if(!lg.length && acct.assist && acct.assist.note){ lg=[{ts:(acct.assist.updated||Date.now()),text:acct.assist.note,who:""}]; }
+        return lg;
+      }
+      var notesWrap=el("div",{class:"asst-notes"});
+      var lg=_log(a);
+      var listBox=el("div",{class:"asst-notelist"});
+      if(!lg.length){ listBox.appendChild(el("div",{class:"asst-note-empty",text:"No updates yet — add your first note below."})); }
+      else{
+        lg.slice().reverse().forEach(function(n){
+          var it=el("div",{class:"asst-noteitem"});
+          it.appendChild(el("div",{class:"asst-notetext",text:n.text}));
+          it.appendChild(el("div",{class:"asst-notemeta",text:_when(n.ts)+(n.who?(" · "+n.who):"")}));
+          listBox.appendChild(it);
+        });
+      }
+      notesWrap.appendChild(listBox);
+      var nrow=el("div",{class:"asst-noterow"});
+      var ninp=el("input",{class:"asst-noteinput",type:"text",placeholder:"Add an update…"});
+      var nadd=el("button",{type:"button",class:"abtn asst-noteadd",text:"+ Add note"});
+      function addNote(){
+        var v=ninp.value.trim(); if(!v)return;
+        var cur=_log(a); cur.push({ts:Date.now(),text:v,who:_who()});
+        ninp.value="";
+        assistSet(a.id,{noteLog:cur,note:""});
+      }
+      nadd.addEventListener("click",addNote);
+      ninp.addEventListener("keydown",function(e){ if(e.key==="Enter"){e.preventDefault();addNote();} });
+      nrow.appendChild(ninp); nrow.appendChild(nadd);
+      notesWrap.appendChild(nrow);
+      card.appendChild(notesWrap);
       /* footer actions */
       var foot=el("div",{class:"asst-foot"});
       if(a.email)foot.appendChild(el("a",{class:"abtn",href:"mailto:"+a.email,text:"✉ Email"}));
@@ -5489,7 +5537,7 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
       }
       function passesQuery(a){
         var q=fQuery.toLowerCase().trim(); if(!q)return true;
-        return [a.firstName,a.lastName,a.email,a.phone,(a.assist&&a.assist.note)].join(" ").toLowerCase().indexOf(q)>=0;
+        return [a.firstName,a.lastName,a.email,a.phone,(a.assist&&a.assist.note),(a.assist&&a.assist.noteLog?a.assist.noteLog.map(function(n){return n.text;}).join(" "):"")].join(" ").toLowerCase().indexOf(q)>=0;
       }
       function renderList(){
         var box=document.getElementById("asst-list"); if(!box)return;
@@ -6308,6 +6356,14 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
   setTimeout(dedupeBurger,300); setTimeout(dedupeBurger,900); setTimeout(dedupeBurger,2000);
   window.addEventListener("resize",dedupeBurger);
  }catch(err){ if(window.console)console.warn("navfix init failed",err); }
+})();
+
+
+/* ═══════════════ EXTRAS — followup actions + note log (added) ═══════════════ */
+(function(){
+ try{
+  var st=document.createElement("style"); st.setAttribute("data-extras","1"); st.textContent="\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 EXTRAS \u2014 follow-up actions + Needs Help note log \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\n/* follow-up row action buttons */\n.cz-fu-acts{display:inline-flex;gap:6px;flex-wrap:wrap;flex:0 0 auto;align-items:center}\n.cz-resetbtn.vsfu-done{color:#0a7a4f;border-color:#bfe6d3}\n.cz-resetbtn.vsfu-done:hover{background:#eaf7f0;border-color:#0a8754;color:#0a7a4f}\n.cz-resetbtn.vsfu-no{color:#b45309;border-color:#f0d9a8}\n.cz-resetbtn.vsfu-no:hover{background:#fff5e6;border-color:#e5972a;color:#b45309}\n@media(max-width:820px){\n  .cz-listitem{flex-wrap:wrap}\n  .cz-fu-acts{width:100%;margin-top:8px}\n  .cz-fu-acts .cz-resetbtn{flex:1 1 auto;justify-content:center}\n}\n\n/* Needs Help \u2014 timestamped note log */\n#p-assist .asst-notes{margin-top:12px}\n#p-assist .asst-notelist{display:flex;flex-direction:column;gap:7px;margin-bottom:9px;max-height:210px;overflow-y:auto;padding-right:2px}\n#p-assist .asst-noteitem{background:#f7faff;border:1px solid var(--w-line,#e4e9f2);border-left:3px solid #16447f;border-radius:9px;padding:8px 11px}\n#p-assist .asst-notetext{font-size:13.5px;color:#0d1b2a;font-weight:600;line-height:1.42;white-space:pre-wrap;word-break:break-word}\n#p-assist .asst-notemeta{font-size:11.5px;color:#5a6b80;font-weight:700;margin-top:3px}\n#p-assist .asst-note-empty{font-size:13px;color:#8595ab;font-style:italic;padding:4px 2px}\n#p-assist .asst-noterow{display:flex;gap:8px}\n#p-assist .asst-noteinput{flex:1;min-width:0;padding:10px 12px;border:1px solid var(--w-line,#e4e9f2);border-radius:10px;font-size:13.5px;font-family:inherit;background:#fff;color:#0d1b2a}\n#p-assist .asst-noteinput:focus{border-color:#1e5ab0;outline:0;box-shadow:0 0 0 3px rgba(30,90,176,.12)}\n#p-assist .asst-noteadd{flex:0 0 auto;background:#16447f!important;color:#fff!important;border:0!important;font-weight:800!important;white-space:nowrap;border-radius:10px!important}\n#p-assist .asst-noteadd:hover{background:#1e5ab0!important}\n"; document.head.appendChild(st);
+ }catch(err){ if(window.console)console.warn("extras init failed",err); }
 })();
 
 })();
