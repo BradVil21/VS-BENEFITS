@@ -1619,6 +1619,44 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
   // "Fill out census form" link, and (3) alerts Bradley. See api/business-quote.js.
   var BUSINESS_QUOTE_API = '/api/business-quote';
 
+  // ---- VISITOR META: capture IP + approx location + device for each lead ----
+  // Runs once on load so it's ready by the time they submit. Uses free, no-key
+  // HTTPS lookups with graceful fallbacks. Never blocks the form.
+  window.__vsMeta = { ip:'', city:'', region:'', country:'', org:'', ua:(navigator.userAgent||''), tz:'', ref:(document.referrer||'') };
+  try { window.__vsMeta.tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; } catch(e){}
+  (function captureMeta(){
+    function apply(m){
+      if(!m) return;
+      window.__vsMeta.ip      = m.ip || window.__vsMeta.ip || '';
+      window.__vsMeta.city    = m.city || '';
+      window.__vsMeta.region  = m.region || m.region_code || m.state || '';
+      window.__vsMeta.country = m.country || m.country_name || m.country_code || '';
+      window.__vsMeta.org     = (m.connection && (m.connection.isp || m.connection.org)) || m.org || m.isp || m.asn || '';
+    }
+    try {
+      fetch('https://ipwho.is/').then(function(r){return r.json();}).then(function(j){
+        if(j && j.success !== false){ apply(j); } else { throw 0; }
+      }).catch(function(){
+        fetch('https://ipapi.co/json/').then(function(r){return r.json();}).then(apply).catch(function(){
+          fetch('https://api.ipify.org?format=json').then(function(r){return r.json();}).then(function(j){ apply({ip:j.ip}); }).catch(function(){});
+        });
+      });
+    } catch(e){}
+  })();
+  function vsMetaFields(){
+    var m = window.__vsMeta || {};
+    return {
+      ip:        m.ip || '',
+      ipCity:    m.city || '',
+      ipRegion:  m.region || '',
+      ipCountry: m.country || '',
+      ipOrg:     m.org || '',
+      device:    m.ua || '',
+      tz:        m.tz || '',
+      referrer:  m.ref || ''
+    };
+  }
+
   // ---- CONFETTI ----
   function launchConfetti(){
     var colors = ['#16447f','#0db5a6','#2f7de0','#fbbf24','#f472b6','#34d399'];
@@ -1722,7 +1760,8 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
       source:    'index-funnel',
       type:      data.type,
       created:   Date.now(),
-      submitted_at: new Date().toISOString()
+      submitted_at: new Date().toISOString(),
+      meta:      vsMetaFields()
     };
   }
 
@@ -1760,7 +1799,8 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
       source:    'index-funnel-business',
       created:   Date.now(),
       updated:   Date.now(),
-      submitted_at: new Date().toISOString()
+      submitted_at: new Date().toISOString(),
+      meta:      vsMetaFields()
     };
   }
 

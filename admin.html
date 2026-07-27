@@ -4573,6 +4573,31 @@ function czAddrAutocomplete(opts){
   });
   inp.addEventListener("blur",function(){setTimeout(close,160);});
 }
+function czShortUA(ua){
+  ua=String(ua||""); if(!ua)return "";
+  var os=/(Windows|Mac OS X|iPhone|iPad|Android|Linux)/.exec(ua);
+  var br=/(Edg|OPR|Chrome|Firefox|Safari)/.exec(ua);
+  var out=[]; if(os)out.push(os[1].replace("Mac OS X","Mac")); if(br)out.push(br[1].replace("Edg","Edge").replace("OPR","Opera"));
+  return out.length?out.join(" · "):ua.slice(0,44);
+}
+function czIpBlock(c){
+  if(!c)return "";
+  var m=c.meta||{};
+  var ip=m.ip||c.ip||"";
+  if(!ip && !m.ipCity && !m.device)return "";
+  var loc=[m.ipCity,m.ipRegion,m.ipCountry].filter(Boolean).join(", ");
+  var same=0;
+  try{ getLeads().forEach(function(x){ var xm=(x&&x.meta)||{}; var xip=xm.ip||x.ip||""; if(ip && xip===ip && x.id!==c.id)same++; }); }catch(e){}
+  var dup=same>0?'<span class="cz-ipdup">⚠ '+same+' other lead'+(same>1?'s':'')+' from this IP</span>':'';
+  var dev=m.device?'<div class="cz-ipline"><b>Device:</b> '+escapeHtml(czShortUA(m.device))+'</div>':'';
+  var link=ip?' <a class="cz-iplink" href="https://ipinfo.io/'+encodeURIComponent(ip)+'" target="_blank" rel="noopener">look up ↗</a>':'';
+  return '<div class="cz-ipbox"><div class="cz-iphd"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Submission origin '+dup+'</div>'
+    +'<div class="cz-ipline"><b>IP:</b> '+escapeHtml(ip||"—")+link+'</div>'
+    +(loc?'<div class="cz-ipline"><b>Location:</b> '+escapeHtml(loc)+'</div>':'')
+    +(m.ipOrg?'<div class="cz-ipline"><b>Network:</b> '+escapeHtml(m.ipOrg)+'</div>':'')
+    +dev
+    +'</div>';
+}
 function czOpenModal(client){
   var isNew=!client;
   var c=client||{stage:"follow_up"};
@@ -4606,6 +4631,7 @@ function czOpenModal(client){
     +'<div class="cz-fld cz-full"><span>Call notes</span><div class="cz-quicknote"><input class="cz-inp" id="cz_quicknote" placeholder="Jot a note during the call, hit Add (timestamps it)"/><button type="button" class="cz-btn-go" id="cz-addnote">Add</button></div><textarea class="cz-inp" id="cz_notes" rows="5" placeholder="Conversation history, preferences, objections, best time to reach…">'+escapeHtml(c.notes||"")+'</textarea></div>'
     +'</div>'
     +'<div class="cz-err" id="cz-mErr" style="display:none">Add at least a first or last name so you can find this lead later.</div>'
+    +(typeof czIpBlock==="function"?czIpBlock(c):"")
     +metaBlock
     +'<div class="cz-mfoot">'+delBlock+'<button class="cz-btn-ghost" data-close>Cancel</button><button class="cz-btn-go" id="cz-mSave">✓ '+(isNew?"Add client":"Save changes")+'</button></div>';
   openModal(html);
@@ -6379,6 +6405,10 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
 
 /* ═══════════════ SNOOZE — followup snooze select (added) ═══════════════ */
 (function(){ try{ var st=document.createElement("style"); st.setAttribute("data-snooze","1"); st.textContent="\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 SNOOZE \u2014 follow-up disposition select \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\n.cz-fu-snooze{\n  -webkit-appearance:none;appearance:none;\n  padding:7px 26px 7px 11px!important;color:#16447f!important;font-weight:700!important;cursor:pointer;\n  background:#fff url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' fill='none' stroke='%2316447f' stroke-width='1.6' stroke-linecap='round'/></svg>\") no-repeat right 9px center!important;\n}\n.cz-fu-snooze:hover{background-color:#f4f8fe!important;border-color:#c9d7ea!important}\n.cz-fu-snooze:focus{outline:0;border-color:#1e5ab0!important;box-shadow:0 0 0 3px rgba(30,90,176,.12)!important}\n@media(max-width:820px){ .cz-fu-acts .cz-fu-snooze{flex:1 1 auto} }\n"; document.head.appendChild(st); }catch(e){} })();
+
+
+/* ═══════════════ IPMETA — submission origin (added) ═══════════════ */
+(function(){ try{ var st=document.createElement("style"); st.setAttribute("data-ipmeta","1"); st.textContent="\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 IPMETA \u2014 submission origin box \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\n.cz-ipbox{margin-top:14px;background:#f7faff;border:1px solid var(--w-line,#e4e9f2);border-radius:12px;padding:12px 14px}\n.cz-ipbox .cz-iphd{font-size:12px;font-weight:800;letter-spacing:.02em;color:#16447f;margin-bottom:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}\n.cz-ipbox .cz-ipline{font-size:13px;color:#334155;font-weight:600;margin-top:3px;word-break:break-word}\n.cz-ipbox .cz-ipline b{color:#0d1b2a;font-weight:800}\n.cz-ipbox .cz-iplink{color:#0db5a6;font-weight:800;text-decoration:none;font-size:12px;margin-left:4px}\n.cz-ipbox .cz-iplink:hover{text-decoration:underline}\n.cz-ipbox .cz-ipdup{background:#fdeaea;color:#c0392b;border:1px solid #f5c6cb;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:800;margin-left:auto}\n"; document.head.appendChild(st); }catch(e){} })();
 
 })();
 </script>
