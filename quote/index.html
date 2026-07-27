@@ -1441,6 +1441,48 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
   function isValidZip(v){ return /^\d{5}$/.test(v.trim()); }
   function isValidDate(v){ return v && v.length === 10; }
 
+  // ---- NAME validation: block placeholder / fake / keyboard-mash names ----
+  function vsNormName(s){ return String(s||"").trim().toLowerCase().replace(/[^a-z]/g,""); }
+  function vsJunkToken(t){
+    if(t.length < 2) return true;                          // single letter
+    if(/^(.)\1+$/.test(t)) return true;                    // aaaa, jjjj
+    if(t.length >= 4 && !/[aeiouy]/.test(t)) return true;  // no vowels -> keyboard mash (asdf, qwrt)
+    var rows = ["qwertyuiop","asdfghjkl","zxcvbnm"];
+    for(var i=0;i<rows.length;i++){ if(t.length >= 4 && rows[i].indexOf(t) !== -1) return true; }
+    var bad = ["test","testing","tester","asdf","asdfasdf","asdfg","qwerty","qwert","zxcv","abc","abcd","abcde",
+      "xyz","xxx","xxxx","none","noname","nomane","unknown","anon","anonymous","fake","dummy","sample","example",
+      "fname","lname","firstname","lastname","first","last","name","nada","null","nil","void","user","guest","doe","johndoe","janedoe"];
+    if(bad.indexOf(t) !== -1) return true;
+    if(t.length >= 5 && /doe$/.test(t) && /^(john|jon|jonathan|johnathan|jane)/.test(t)) return true; // johnathandoe
+    return false;
+  }
+  function isValidName(first, last){
+    var f = vsNormName(first), l = vsNormName(last);
+    if(f.length < 2 || l.length < 2) return false;
+    if(vsJunkToken(f) || vsJunkToken(l)) return false;
+    var joined = f + l;
+    var badFull = ["johndoe","janedoe","johnsmith","janesmith","testtest","firstlast","johnqpublic","janeqpublic",
+      "mickeymouse","donaldduck","jamesbond","joeblow","joeschmoe","noname","fakename","realname"];
+    if(badFull.indexOf(joined) !== -1) return false;
+    if(f === l && f.length <= 4) return false;              // "john john" / "aa aa"
+    return true;
+  }
+  function checkNameFields(firstId, firstFieldId, lastId, lastFieldId){
+    var fEl = document.getElementById(firstId), lEl = document.getElementById(lastId);
+    var fv = fEl ? fEl.value : "", lv = lEl ? lEl.value : "";
+    var fEmpty = !fv.trim(), lEmpty = !lv.trim();
+    if(fEmpty || lEmpty){ setErr(firstFieldId, fEmpty); setErr(lastFieldId, lEmpty); return false; }
+    if(!isValidName(fv, lv)){
+      setErr(firstFieldId, true); setErr(lastFieldId, true);
+      var wrap = document.getElementById(firstFieldId);
+      var msg = wrap ? wrap.querySelector(".err-msg") : null;
+      if(msg) msg.textContent = "Please enter your real first and last name.";
+      return false;
+    }
+    setErr(firstFieldId, false); setErr(lastFieldId, false);
+    return true;
+  }
+
   function setErr(fieldId, hasErr){
     var el = document.getElementById(fieldId);
     if(!el) return;
@@ -1453,13 +1495,10 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
   window.indNext = function(fromStep){
     var ok = true;
     if(fromStep === 1){
-      var fn = document.getElementById('ind-firstname').value.trim();
-      var ln = document.getElementById('ind-lastname').value.trim();
       var dob = document.getElementById('ind-dob').value;
-      setErr('f-ind-firstname', !fn);
-      setErr('f-ind-lastname', !ln);
+      var namesOk = checkNameFields('ind-firstname','f-ind-firstname','ind-lastname','f-ind-lastname');
       setErr('f-ind-dob', !isValidDate(dob));
-      if(!fn || !ln || !isValidDate(dob)) ok = false;
+      if(!namesOk || !isValidDate(dob)) ok = false;
       if(ok){ indNav(2); }
     } else if(fromStep === 2){
       var addr = document.getElementById('ind-address').value.trim();
@@ -1487,14 +1526,11 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
   window.bizNext = function(fromStep){
     var ok = true;
     if(fromStep === 1){
-      var fn = document.getElementById('biz-firstname').value.trim();
-      var ln = document.getElementById('biz-lastname').value.trim();
       var ph = document.getElementById('biz-contact-phone').value.trim();
-      setErr('f-biz-firstname', !fn);
-      setErr('f-biz-lastname', !ln);
+      var bizNamesOk = checkNameFields('biz-firstname','f-biz-firstname','biz-lastname','f-biz-lastname');
       setErr('f-biz-contact-phone', !isValidPhone(ph));
       var emOk = checkEmailField('biz-email','f-biz-email');
-      if(!fn || !ln || !isValidPhone(ph) || !emOk) ok = false;
+      if(!bizNamesOk || !isValidPhone(ph) || !emOk) ok = false;
       if(ok){ bizNav(2); }
     } else if(fromStep === 2){
       var bn = document.getElementById('biz-name').value.trim();
@@ -1812,12 +1848,28 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
 
   // ---- SUBMIT ----
   window.submitInd = function(){
+    // final anti-junk guard — never submit fake name / bad phone / bad email
+    if(!checkNameFields('ind-firstname','f-ind-firstname','ind-lastname','f-ind-lastname')){
+      indNav(1); updateProgress(1, IND_STEPS); return;
+    }
+    var phv = document.getElementById('ind-phone').value.trim();
+    var emOk = checkEmailField('ind-email','f-ind-email');
+    setErr('f-ind-phone', !isValidPhone(phv));
+    if(!isValidPhone(phv) || !emOk){ indNav(3); updateProgress(3, IND_STEPS); return; }
     var data = collectInd();
     var btn = document.querySelector('#panel-ind-5 .btn-submit');
     sendToWebhook(data, btn);
   };
 
   window.submitBiz = function(){
+    // final anti-junk guard — name + owner contact
+    if(!checkNameFields('biz-firstname','f-biz-firstname','biz-lastname','f-biz-lastname')){
+      bizNav(1); updateProgress(1, BIZ_STEPS); return;
+    }
+    var cphv = document.getElementById('biz-contact-phone').value.trim();
+    var bEmOk = checkEmailField('biz-email','f-biz-email');
+    setErr('f-biz-contact-phone', !isValidPhone(cphv));
+    if(!isValidPhone(cphv) || !bEmOk){ bizNav(1); updateProgress(1, BIZ_STEPS); return; }
     var addr = document.getElementById('biz-address').value.trim();
     var zip = document.getElementById('biz-zip').value.trim();
     var state = document.getElementById('biz-state').value;
