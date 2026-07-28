@@ -1,147 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Core Pages -->
-  <url><loc>https://www.vshealthbenefits.com/</loc><lastmod>2026-07-14</lastmod><priority>1.0</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/services</loc><lastmod>2026-05-11</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/quote</loc><lastmod>2026-06-17</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/about</loc><lastmod>2026-05-11</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/bradley-vilsaint</loc><lastmod>2026-06-30</lastmod><priority>0.7</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog</loc><lastmod>2026-07-12</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/contact</loc><lastmod>2026-05-11</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/careers</loc><lastmod>2026-06-30</lastmod><priority>0.6</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/client</loc><lastmod>2026-07-24</lastmod><priority>0.6</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/terms</loc><lastmod>2026-06-18</lastmod><priority>0.3</priority></url>
+  <!-- Core -->
+  <url><loc>https://www.vshealthbenefits.com/</loc><lastmod>2026-07-28</lastmod><priority>1.0</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/about</loc><lastmod>2026-07-28</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/bradley-vilsaint</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/contact</loc><lastmod>2026-07-28</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/privacy</loc><lastmod>2026-07-28</lastmod><priority>0.3</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/refer-and-earn</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/services</loc><lastmod>2026-07-28</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/terms</loc><lastmod>2026-07-28</lastmod><priority>0.3</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/what-is-vs-health-benefits</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
 
-  <!-- SEO Landing Pages -->
-  <url><loc>https://www.vshealthbenefits.com/truck-driver-health-insurance</loc><lastmod>2026-07-14</lastmod><priority>1.0</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/otr-truck-driver-health-insurance</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/lease-operator-health-insurance</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/truck-driver-family-health-insurance</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/best-health-insurance-owner-operators</loc><lastmod>2026-07-12</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/truck-driver-health-insurance-cost</loc><lastmod>2026-07-22</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/1099-truck-driver-health-insurance</loc><lastmod>2026-07-12</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/cdl-driver-health-insurance</loc><lastmod>2026-07-12</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/truck-driver-health-insurance-raleigh-nc</loc><lastmod>2026-07-12</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/truck-driver-health-insurance-florida</loc><lastmod>2026-07-19</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/1099-health-insurance</loc><lastmod>2026-06-03</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/family-health-insurance</loc><lastmod>2026-05-19</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/small-business-health-insurance</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-my-employees</loc><lastmod>2026-07-15</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/small-business-health-insurance-cost</loc><lastmod>2026-07-15</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/small-business-health-insurance-calculator</loc><lastmod>2026-07-19</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-contractors</loc><lastmod>2026-06-18</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-trucking-companies</loc><lastmod>2026-06-18</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-restaurants</loc><lastmod>2026-06-18</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-salons-and-spas</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-dental-offices</loc><lastmod>2026-06-18</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/ppo-health-insurance</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-uber-drivers</loc><lastmod>2026-06-01</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/seguro-de-salud-miami</loc><lastmod>2026-06-03</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/dental-vision-insurance</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/refer-and-earn</loc><lastmod>2026-06-30</lastmod><priority>0.9</priority></url>
+  <!-- Trucking & owner-operator -->
+  <url><loc>https://www.vshealthbenefits.com/1099-truck-driver-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/best-health-insurance-owner-operators</loc><lastmod>2026-07-28</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/1099-vs-w2-truck-driver-benefits</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/can-owner-operators-deduct-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/company-truck-driver-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/do-truck-drivers-get-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/cdl-driver-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/costo-seguro-medico-camioneros</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-trucking-companies</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/owner-operator-plan-finder</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/seguro-medico-camioneros</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/seguro-medico-camioneros-florida</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/seguro-medico-owner-operators</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/truck-driver-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>1.0</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/truck-driver-health-insurance-cost</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/truck-driver-health-insurance-florida</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/truck-driver-health-insurance-raleigh-nc</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
 
-  <!-- Dental and Vision State Pages -->
-  <url><loc>https://www.vshealthbenefits.com/dental-vision-insurance-florida</loc><lastmod>2026-07-12</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/dental-vision-insurance-georgia</loc><lastmod>2026-07-12</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/dental-vision-insurance-north-carolina</loc><lastmod>2026-07-12</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/dental-vision-insurance-texas</loc><lastmod>2026-07-12</lastmod><priority>0.8</priority></url>
+  <!-- Small business & industry -->
+  <url><loc>https://www.vshealthbenefits.com/blog/florida-small-business-health-care-tax-credit</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/florida-small-business-health-insurance-cost</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/health-insurance-for-real-estate-agents</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/how-to-offer-employees-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/miami-small-business-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/small-business-group-health-guide</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/florida-small-business-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-auto-repair-shops</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-cleaning-companies</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-construction-companies</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-contractors</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-dental-offices</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-real-estate-agents</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-restaurants</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-retail-businesses</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-salons-and-spas</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/small-business-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>1.0</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/small-business-health-insurance-calculator</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/small-business-health-insurance-cost</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
 
-  <url><loc>https://www.vshealthbenefits.com/individual-dental-vision-insurance</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/is-dental-and-vision-insurance-worth-it</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/qualifying-life-events-health-insurance</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/turning-26-health-insurance</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/what-income-counts-for-aca-subsidies</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/affordable-health-insurance</loc><lastmod>2026-07-14</lastmod><priority>1.0</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-near-me</loc><lastmod>2026-07-14</lastmod><priority>1.0</priority></url>
-  <!-- Blog Posts -->
-  <url><loc>https://www.vshealthbenefits.com/blog/company-truck-driver-health-insurance</loc><lastmod>2026-07-13</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/health-insurance-for-real-estate-agents</loc><lastmod>2026-06-30</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/employee-health-insurance-recruitment-retention</loc><lastmod>2026-06-30</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/earn-money-referring-health-insurance</loc><lastmod>2026-06-30</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/small-business-group-health-guide</loc><lastmod>2026-05-11</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/how-to-offer-employees-health-insurance</loc><lastmod>2026-07-19</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/do-truck-drivers-get-health-insurance</loc><lastmod>2026-07-19</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/aca-open-enrollment-2027-guide</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/miami-small-business-health-insurance</loc><lastmod>2026-05-11</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/aca-subsidy-calculator</loc><lastmod>2026-07-22</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/hmo-vs-ppo</loc><lastmod>2026-07-05</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-small-business-owners</loc><lastmod>2026-07-05</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/does-health-insurance-cover-dental-and-vision</loc><lastmod>2026-07-06</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/what-happens-if-you-miss-open-enrollment</loc><lastmod>2026-07-06</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-before-medicare</loc><lastmod>2026-07-06</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-between-jobs</loc><lastmod>2026-07-06</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/bronze-vs-silver-vs-gold-vs-platinum</loc><lastmod>2026-07-06</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/deductible-copay-out-of-pocket-explained</loc><lastmod>2026-07-06</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/how-much-does-health-insurance-cost</loc><lastmod>2026-07-22</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/what-is-vs-health-benefits</loc><lastmod>2026-07-06</lastmod><priority>0.7</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-brokerage-near-me</loc><lastmod>2026-07-06</lastmod><priority>0.8</priority></url>
+  <!-- Individual, family & ACA -->
+  <url><loc>https://www.vshealthbenefits.com/1099-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/aca-subsidy-calculator</loc><lastmod>2026-07-28</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/affordable-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/bronze-vs-silver-vs-gold-vs-platinum</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/business-open-enrollment-faq</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/deductible-copay-out-of-pocket-explained</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/dental-vision-insurance</loc><lastmod>2026-07-28</lastmod><priority>1.0</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/family-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance</loc><lastmod>2026-07-28</lastmod><priority>1.0</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-basics-faq</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-before-medicare</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-between-jobs</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-brokerage-near-me</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-near-me</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/health-insurance-uber-drivers</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/hmo-vs-ppo</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/how-much-does-health-insurance-cost</loc><lastmod>2026-07-28</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/ppo-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.9</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/qualifying-life-events-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/seguro-de-salud-miami</loc><lastmod>2026-07-28</lastmod><priority>0.7</priority></url>
 
-  <!-- New blog posts 2026-07-10 -->
-  <url><loc>https://www.vshealthbenefits.com/blog/aca-subsidies-ended-2026-what-to-do</loc><lastmod>2026-07-10</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/health-insurance-near-me-local-broker</loc><lastmod>2026-07-10</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/lost-health-insurance-job-loss-options</loc><lastmod>2026-07-10</lastmod><priority>0.8</priority></url>
+  <!-- Blog -->
+  <url><loc>https://www.vshealthbenefits.com/blog/aca-open-enrollment-2027-guide</loc><lastmod>2026-07-28</lastmod><priority>1.0</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/aca-subsidies-ended-2026-what-to-do</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/does-health-insurance-cover-dental-and-vision</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/earn-money-referring-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/employee-health-insurance-recruitment-retention</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/health-insurance-dot-physical</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/health-insurance-when-you-go-independent</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/health-insurance-while-living-on-the-road</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/how-to-shop-for-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/is-dental-and-vision-insurance-worth-it</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/lost-health-insurance-job-loss-options</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/turning-26-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/what-happens-if-you-miss-open-enrollment</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/what-income-counts-for-aca-subsidies</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
+  <url><loc>https://www.vshealthbenefits.com/blog/why-do-we-get-health-insurance</loc><lastmod>2026-07-28</lastmod><priority>0.6</priority></url>
 
-  <!-- Educational FAQ pages 2026-07-10 -->
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-open-enrollment-faq</loc><lastmod>2026-07-14</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/business-open-enrollment-faq</loc><lastmod>2026-07-22</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-basics-faq</loc><lastmod>2026-07-10</lastmod><priority>0.9</priority></url>
-
-
-  <!-- State health insurance pages (activated 2026-07-21) -->
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-alabama</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-arizona</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-arkansas</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-colorado</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-florida</loc><lastmod>2026-07-21</lastmod><priority>1.0</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-georgia</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-illinois</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-indiana</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-iowa</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-kansas</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-kentucky</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-louisiana</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-michigan</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-minnesota</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-mississippi</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-missouri</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-montana</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-nebraska</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-nevada</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-north-carolina</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-north-dakota</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-ohio</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-oklahoma</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-south-carolina</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-south-dakota</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-tennessee</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-texas</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-utah</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-virginia</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-west-virginia</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-wisconsin</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-wyoming</loc><lastmod>2026-07-21</lastmod><priority>0.9</priority></url>
-
-  <!-- Industry health insurance pages (activated 2026-07-21) -->
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-auto-repair-shops</loc><lastmod>2026-07-21</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-cleaning-companies</loc><lastmod>2026-07-21</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-construction-companies</loc><lastmod>2026-07-21</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-real-estate-agents</loc><lastmod>2026-07-21</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-for-retail-businesses</loc><lastmod>2026-07-21</lastmod><priority>0.8</priority></url>
-
-
-  <!-- Spanish truck-driver pages (activated 2026-07-22) -->
-  <url><loc>https://www.vshealthbenefits.com/seguro-medico-camioneros</loc><lastmod>2026-07-22</lastmod><priority>1.0</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/seguro-medico-camioneros-florida</loc><lastmod>2026-07-22</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/seguro-medico-owner-operators</loc><lastmod>2026-07-22</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/costo-seguro-medico-camioneros</loc><lastmod>2026-07-22</lastmod><priority>0.9</priority></url>
-
-  <url><loc>https://www.vshealthbenefits.com/health-insurance-cost-faq</loc><lastmod>2026-07-22</lastmod><priority>0.7</priority></url>
-
-  <!-- Florida small business cluster (added 2026-07-24) -->
-  <url><loc>https://www.vshealthbenefits.com/florida-small-business-health-insurance</loc><lastmod>2026-07-24</lastmod><priority>0.9</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/florida-small-business-health-insurance-cost</loc><lastmod>2026-07-24</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/how-to-set-up-small-business-health-insurance-florida</loc><lastmod>2026-07-24</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/blog/florida-small-business-health-care-tax-credit</loc><lastmod>2026-07-24</lastmod><priority>0.8</priority></url>
-  <url><loc>https://www.vshealthbenefits.com/book</loc><lastmod>2026-07-24</lastmod><priority>0.8</priority></url>
 </urlset>

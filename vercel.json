@@ -836,6 +836,106 @@
       "source": "/dental-vision-insurance-wyoming.html",
       "destination": "/dental-vision-insurance",
       "permanent": true
+    },
+    {
+      "source": "/health-insurance-open-enrollment-faq",
+      "destination": "/blog/aca-open-enrollment-2027-guide",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-open-enrollment-faq.html",
+      "destination": "/blog/aca-open-enrollment-2027-guide",
+      "permanent": true
+    },
+    {
+      "source": "/otr-truck-driver-health-insurance",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/otr-truck-driver-health-insurance.html",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-family-health-insurance",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-family-health-insurance.html",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-resources",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-resources.html",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/lease-operator-health-insurance",
+      "destination": "/best-health-insurance-owner-operators",
+      "permanent": true
+    },
+    {
+      "source": "/lease-operator-health-insurance.html",
+      "destination": "/best-health-insurance-owner-operators",
+      "permanent": true
+    },
+    {
+      "source": "/individual-dental-vision-insurance",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/individual-dental-vision-insurance.html",
+      "destination": "/dental-vision-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/health-insurance-near-me-local-broker",
+      "destination": "/health-insurance-brokerage-near-me",
+      "permanent": true
+    },
+    {
+      "source": "/blog/health-insurance-near-me-local-broker.html",
+      "destination": "/health-insurance-brokerage-near-me",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-small-business-owners",
+      "destination": "/small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-small-business-owners.html",
+      "destination": "/small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-my-employees",
+      "destination": "/blog/how-to-offer-employees-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-my-employees.html",
+      "destination": "/blog/how-to-offer-employees-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/how-to-set-up-small-business-health-insurance-florida",
+      "destination": "/florida-small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/how-to-set-up-small-business-health-insurance-florida.html",
+      "destination": "/florida-small-business-health-insurance",
+      "permanent": true
     }
   ],
   "rewrites": [
