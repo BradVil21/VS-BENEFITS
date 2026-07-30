@@ -4314,9 +4314,16 @@ function czSetStage(id,stage){
   if(stage==="follow_up"&&prev!=="follow_up"&&typeof getLeadSeq==="function"&&!getLeadSeq(id)&&typeof initLeadSeq==="function"){initLeadSeq(id);}
   czCurrentRender();if(typeof renderTasks==="function")renderTasks();
 }
+/* Prepend a timestamped line to a lead's Call notes (same format as the Add-note button) */
+function czStampNote(c,txt){
+  if(!c||!txt)return;
+  var stamp=new Date().toLocaleString(undefined,{month:"numeric",day:"numeric",hour:"numeric",minute:"2-digit"});
+  c.notes=("["+stamp+"] "+txt+"\n"+(c.notes||"")).replace(/\n+$/,"")+"\n";
+}
 function czRestart(id){
   var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
   var t=todayStr();c.lastContact=t;c.followUpDue=czAddDays(t,czFollowupDays);c.fuCleared=false;c.updated=Date.now();
+  czStampNote(c,"Logged contact — follow-up reset (14 days)");
   saveLeads(arr);
   if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","Logged contact · follow-up reset");
   czCurrentRender();
@@ -4325,6 +4332,7 @@ function czRestart(id){
 function czFuComplete(id){
   var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
   var t=todayStr();c.lastContact=t;c.followUpDue="";c.fuCleared=true;c.updated=Date.now();
+  czStampNote(c,"Follow-up completed");
   saveLeads(arr);
   if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","Follow-up completed");
   czCurrentRender();if(typeof renderTasks==="function")renderTasks();
@@ -4333,6 +4341,7 @@ function czFuComplete(id){
 function czFuNoAnswer(id){
   var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
   var t=todayStr();c.lastContact=t;c.followUpDue=czAddDays(t,2);c.fuCleared=false;c.updated=Date.now();
+  czStampNote(c,"No answer — recycled, retry in 2 days");
   saveLeads(arr);
   if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","No answer · recycled — follow up again in 2 days");
   czCurrentRender();if(typeof renderTasks==="function")renderTasks();
@@ -4342,6 +4351,7 @@ function czFuSnooze(id,days){
   days=parseInt(days,10)||0; if(days<=0)return;
   var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
   var t=todayStr();c.lastContact=t;c.followUpDue=czAddDays(t,days);c.fuCleared=false;c.updated=Date.now();
+  czStampNote(c,"Snoozed "+days+" days");
   saveLeads(arr);
   if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","Follow-up set out "+days+" days");
   czCurrentRender();if(typeof renderTasks==="function")renderTasks();
