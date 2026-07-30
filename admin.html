@@ -4314,11 +4314,11 @@ function czSetStage(id,stage){
   if(stage==="follow_up"&&prev!=="follow_up"&&typeof getLeadSeq==="function"&&!getLeadSeq(id)&&typeof initLeadSeq==="function"){initLeadSeq(id);}
   czCurrentRender();if(typeof renderTasks==="function")renderTasks();
 }
-/* Prepend a timestamped line to a lead's Call notes (same format as the Add-note button) */
+/* Prepend a timestamped, double-spaced line to a lead's Call notes (same format as the Add-note button) */
 function czStampNote(c,txt){
   if(!c||!txt)return;
   var stamp=new Date().toLocaleString(undefined,{month:"numeric",day:"numeric",hour:"numeric",minute:"2-digit"});
-  c.notes=("["+stamp+"] "+txt+"\n"+(c.notes||"")).replace(/\n+$/,"")+"\n";
+  c.notes=("["+stamp+"] "+txt+"\n\n"+(c.notes||"")).replace(/\n+$/,"")+"\n";
 }
 function czRestart(id){
   var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
@@ -4656,7 +4656,7 @@ function czOpenModal(client){
     function addNote(){
       var txt=qn.value.trim();if(!txt)return;
       var stamp=new Date().toLocaleString(undefined,{month:"numeric",day:"numeric",hour:"numeric",minute:"2-digit"});
-      ta.value=("["+stamp+"] "+txt+"\n"+(ta.value||"")).replace(/\n+$/,"")+"\n";
+      ta.value=("["+stamp+"] "+txt+"\n\n"+(ta.value||"")).replace(/\n+$/,"")+"\n";
       qn.value="";qn.focus();
       if(!isNew&&client&&client.id){
         var arr=getLeads();var i=arr.findIndex(function(x){return x.id===client.id;});
