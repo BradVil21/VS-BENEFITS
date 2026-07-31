@@ -629,6 +629,7 @@ footer a:hover{color:#fff}
 <!-- End of HubSpot Embed Code -->
 </head>
 <body>
+<div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><a href="/quote" style="color:#fff;text-decoration:none;display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span>Open Enrollment for 2027 coverage runs Nov 1 &ndash; Dec 15. Get ahead of the deadline.</span><span style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap">Get a Free Quote &rarr;</span></a></div>
 
 <header class="site-header">
   <div class="container nav-wrap">
@@ -853,7 +854,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* ---------- ACA Open Enrollment countdown ---------- */
   var START = new Date("2026-11-01T00:00:00-05:00").getTime();
-  var END   = new Date("2027-01-15T23:59:59-05:00").getTime();
+  var END   = new Date("2026-12-15T23:59:59-05:00").getTime();
   var elDays=document.getElementById("cd-days"),
       elHrs =document.getElementById("cd-hrs"),
       elMin =document.getElementById("cd-min"),
@@ -883,7 +884,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if(elWrap)elWrap.classList.remove("closed");
     } else if(now<=END){
       paint(END,"Time left to enroll in 2027 ACA coverage",
-            "Open Enrollment closes Jan 15, 2027. After that you will need a Special Enrollment event to switch plans.");
+            "Open Enrollment closes Dec 15, 2026. After that you will need a Special Enrollment event to switch plans.");
       if(elWrap)elWrap.classList.add("closed");
     } else {
       paint(Date.now(),"Open Enrollment is closed for 2027",
