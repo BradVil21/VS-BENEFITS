@@ -1343,6 +1343,14 @@ html,body{background:#f8fafc;font-size:14px}
 .cz-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:12px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
 .cz-card .cz-ctop{display:flex;justify-content:space-between;gap:8px;cursor:pointer}
 .cz-card .cz-cctl{display:flex;align-items:center;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid #f1f5f9}
+.cz-dates{display:flex;flex-direction:column;gap:5px;margin-top:9px}
+.cz-cdate{display:flex;align-items:center;gap:6px;font-weight:600;color:#64748b;cursor:default}
+.cz-cdate>span{flex:0 0 66px;font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.cz-cdate input{flex:1;min-width:0;border:1px solid #e2e8f0;border-radius:7px;padding:3px 6px;font-size:11.5px;color:#334155;background:#f8fafc;font-family:inherit}
+.cz-cdate input:focus{outline:none;border-color:#7cb1f0;background:#fff}
+.cz-cdate.cz-fu-overdue input{border-color:#fecdd3;background:#fff1f2;color:#be123c}
+.cz-cdate.cz-fu-today input{border-color:#fde68a;background:#fffbeb;color:#92400e}
+.cz-cdate.has-appt input{border-color:#a7f3d0;background:#ecfdf5;color:#047857}
 .cz-card select{font-size:11px;color:#64748b;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:5px 6px;flex:1;outline:none}
 .cz-iconbtn{background:transparent;border:none;color:#94a3b8;padding:6px;border-radius:6px;display:flex;cursor:pointer}
 .cz-iconbtn:hover{color:#0284c7;background:#f0f9ff}
@@ -4231,7 +4239,7 @@ function czSortOptions(sel){
 }
 function czExportLeadsCsv(){
   var cs=czFiltered().slice().sort(czSortCmp);
-  var header=["First Name","Last Name","Email","Phone","Date of Birth","Address","City","State","Zip","Stage","Status","Quote Value","Source","Notes","Created","Last Contact","Follow-up Due"];
+  var header=["First Name","Last Name","Email","Phone","Date of Birth","Address","City","State","Zip","Stage","Status","Quote Value","Source","Notes","Created","Last Contact","Follow-up Due","Appointment"];
   var rows=[header];
   cs.forEach(function(c){
     rows.push([
@@ -4240,7 +4248,7 @@ function czExportLeadsCsv(){
       (czMETA[c.stage]?czMETA[c.stage].label:(c.stage||"")), c.status||"",
       (czVal(c)||""), c.source||"", (c.notes||"").replace(/\r?\n/g," "),
       c.created?new Date(c.created).toISOString().slice(0,10):"",
-      c.lastContact||"", c.followUpDue||""
+      c.lastContact||"", c.followUpDue||"", c.apptDate||""
     ].map(csvEscape));
   });
   downloadFile("leads-"+new Date().toISOString().slice(0,10)+".csv", rows.map(function(r){return r.join(",");}).join("\n"), "text/csv");
@@ -4297,6 +4305,16 @@ function czBind(root){
   root.querySelectorAll("[data-cz-noanswer]").forEach(function(n){n.addEventListener("click",function(e){e.stopPropagation();czFuNoAnswer(n.getAttribute("data-cz-noanswer"));});});
   root.querySelectorAll("[data-cz-snooze]").forEach(function(n){n.addEventListener("change",function(e){e.stopPropagation();var d=parseInt(n.value,10);if(d>0)czFuSnooze(n.getAttribute("data-cz-snooze"),d);n.value="";});n.addEventListener("click",function(e){e.stopPropagation();});});
   root.querySelectorAll("[data-cz-stage]").forEach(function(n){n.addEventListener("change",function(e){e.stopPropagation();czSetStage(n.getAttribute("data-cz-stage"),n.value);});});
+  root.querySelectorAll("[data-cz-fudate]").forEach(function(n){
+    n.addEventListener("click",function(e){e.stopPropagation();});
+    n.addEventListener("mousedown",function(e){e.stopPropagation();});
+    n.addEventListener("change",function(e){e.stopPropagation();czSetFuDate(n.getAttribute("data-cz-fudate"),n.value);});
+  });
+  root.querySelectorAll("[data-cz-apptdate]").forEach(function(n){
+    n.addEventListener("click",function(e){e.stopPropagation();});
+    n.addEventListener("mousedown",function(e){e.stopPropagation();});
+    n.addEventListener("change",function(e){e.stopPropagation();czSetApptDate(n.getAttribute("data-cz-apptdate"),n.value);});
+  });
 }
 function czCurrentRender(){
   if($("p-dashboard")&&$("p-dashboard").classList.contains("active"))czDashboard();
@@ -4355,6 +4373,42 @@ function czFuSnooze(id,days){
   saveLeads(arr);
   if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","Follow-up set out "+days+" days");
   czCurrentRender();if(typeof renderTasks==="function")renderTasks();
+}
+/* Set the follow-up date directly (from the date field on a pipeline card or the lead editor) */
+function czSetFuDate(id,ymd){
+  var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
+  c.followUpDue=ymd||"";c.fuCleared=!ymd;c.updated=Date.now();
+  saveLeads(arr);
+  if(typeof addLeadActivity==="function")addLeadActivity(id,"followup",ymd?("Follow-up set for "+czPretty(ymd)):"Follow-up date cleared");
+  czCurrentRender();if(typeof renderTasks==="function")renderTasks();
+}
+/* Pretty-print a datetime-local value like "Aug 15, 10:00 AM" */
+function czPrettyDT(dt){
+  if(!dt)return"";
+  var d=new Date(dt);if(isNaN(d.getTime()))return dt;
+  return d.toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+}
+/* Set the appointment date/time on a lead and keep the Calendar tab in sync */
+function czSetApptDate(id,dt){
+  var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
+  c.apptDate=dt||"";c.updated=Date.now();
+  try{
+    var appts=getAppts();
+    if(dt){
+      var title="Appointment – "+czName(c);
+      var ex=c.apptId?appts.filter(function(a){return a.id===c.apptId;})[0]:null;
+      if(ex){ex.start=dt;ex.title=title;ex.with=czName(c);}
+      else{var na={id:uid(),title:title,with:czName(c),accountId:"",start:dt,end:"",location:"",notes:"Set from the Pipeline card",created:Date.now(),googleEventId:""};appts.push(na);c.apptId=na.id;}
+      saveAppts(appts);
+    }else if(c.apptId){
+      saveAppts(appts.filter(function(a){return a.id!==c.apptId;}));
+      c.apptId="";
+    }
+  }catch(e){}
+  saveLeads(arr);
+  if(typeof addLeadActivity==="function")addLeadActivity(id,"followup",dt?("Appointment set for "+czPrettyDT(dt)):"Appointment cleared");
+  czCurrentRender();
+  if(typeof renderCalendar==="function"){try{renderCalendar();}catch(e){}}
 }
 function czUpsert(rec){
   var arr=getLeads();var i=arr.findIndex(function(x){return x.id===rec.id;});
@@ -4423,7 +4477,12 @@ function czPipeResults(){
       var fup=fu.key!=="none"?'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+';margin-top:8px">'+fu.label+'</span>':'';
       var resetBtn=czCLOSED.indexOf(c.stage)<0?'<button class="cz-iconbtn" data-cz-reset="'+c.id+'" title="Reset 14-day follow-up">↻</button>':'';
       var opts=czSTAGES.map(function(st){return '<option value="'+st.id+'" '+(st.id===c.stage?"selected":"")+'>'+st.label+'</option>';}).join("");
-      return '<div class="cz-card" draggable="true" data-cz-card="'+c.id+'"><div class="cz-ctop"><div class="cz-nm">'+escapeHtml(czName(c))+'</div>'+val+'</div>'+contact+fup+'<div class="cz-cctl"><select data-cz-stage="'+c.id+'">'+opts+'</select>'+resetBtn+'</div></div>';
+      var fuCls=fu.key==="overdue"?" cz-fu-overdue":(fu.key==="today"?" cz-fu-today":"");
+      var dates='<div class="cz-dates">'
+        +'<label class="cz-cdate'+fuCls+'" title="When to follow up next"><span>Follow up</span><input type="date" data-cz-fudate="'+c.id+'" value="'+escapeHtml(c.followUpDue||"")+'"/></label>'
+        +'<label class="cz-cdate'+(c.apptDate?' has-appt':'')+'" title="Appointment date &amp; time (also shows on the Calendar tab)"><span>Appt</span><input type="datetime-local" data-cz-apptdate="'+c.id+'" value="'+escapeHtml(c.apptDate||"")+'"/></label>'
+        +'</div>';
+      return '<div class="cz-card" draggable="true" data-cz-card="'+c.id+'"><div class="cz-ctop"><div class="cz-nm">'+escapeHtml(czName(c))+'</div>'+val+'</div>'+contact+fup+dates+'<div class="cz-cctl"><select data-cz-stage="'+c.id+'">'+opts+'</select>'+resetBtn+'</div></div>';
     }).join("");
     return '<div class="cz-col" data-cz-drop="'+s.id+'" style="border-top-color:'+s.color+'"><div class="cz-col-head"><div class="cz-row" style="gap:8px"><span class="cz-dot" style="'+czDotStyle(s.id)+'"></span><span style="font-size:14px;font-weight:600">'+s.label+'</span><span class="cz-faint" style="font-size:12px">'+items.length+'</span></div><span class="cz-faint" style="font-size:11px">'+money(total)+'</span></div><div class="cz-col-body">'+body+'</div></div>';
   }).join("")+'</div>';
@@ -4484,7 +4543,8 @@ function czClientResults(){
   var cs=czFiltered().slice().sort(czSortCmp);
   var rows=cs.length===0?'<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:32px">No matches for your search.</td></tr>':cs.map(function(c){
     var fu=czFU(c);
-    var fup=fu.key==="none"?'<span class="cz-faint" style="font-size:12px">—</span>':'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span>';
+    var fup=fu.key==="none"?'<span class="cz-faint" style="font-size:12px">—</span>':'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span><div class="cz-sub" style="margin-top:2px">'+czPretty(c.followUpDue)+'</div>';
+    if(c.apptDate)fup+='<div class="cz-sub" style="margin-top:2px;color:#047857">Appt '+czPrettyDT(c.apptDate)+'</div>';
     return '<tr data-cz-open="'+c.id+'"><td><div class="cz-nm">'+escapeHtml(czName(c))+'</div><div class="cz-sub cz-only-mobile">'+escapeHtml(c.phone||c.email||"")+'</div></td>'
       +'<td><span class="cz-chip" style="'+czChipStyle(c.stage)+'"><span class="cz-dot" style="'+czDotStyle(c.stage)+'"></span>'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></td>'
       +'<td class="cz-hide-md cz-muted"><div>'+escapeHtml(c.phone||"")+'</div><div class="cz-sub">'+escapeHtml(c.email||"")+'</div></td>'
@@ -4614,6 +4674,7 @@ function czOpenModal(client){
   var c=client||{stage:"follow_up"};
   var fu=!isNew?czFU(c):null;
   var fuBadge=(!isNew&&fu.key!=="none")?'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+';margin-top:6px">Follow-up '+fu.label+' · due '+czPretty(c.followUpDue)+'</span>':'';
+  if(!isNew&&c.apptDate)fuBadge+=' <span class="cz-pill" style="background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;margin-top:6px">Appt '+czPrettyDT(c.apptDate)+'</span>';
   var stateOpts='<option value="">—</option>'+czUS.map(function(s){return '<option value="'+s+'">'+s+'</option>';}).join("");
   var stageOpts=czSTAGES.map(function(s){return '<option value="'+s.id+'">'+s.label+'</option>';}).join("");
   var zip=c.zipCode||c.zipcode||"";
@@ -4634,6 +4695,8 @@ function czOpenModal(client){
     +czF("Phone","cz_phone",c.phone,"(561) 555-0100")
     +'<label class="cz-fld"><span>Date of birth</span><input class="cz-inp" type="date" id="cz_dob" value="'+escapeHtml(c.dob||"")+'"/></label>'
     +'<label class="cz-fld"><span>Quote / value (USD)</span><div class="cz-moneywrap"><span class="cz-s">$</span><input class="cz-inp" type="number" min="0" id="cz_quoteValue" value="'+escapeHtml(qv)+'" placeholder="0"/></div></label>'
+    +'<label class="cz-fld"><span>Follow-up date</span><input class="cz-inp" type="date" id="cz_followUpDue" value="'+escapeHtml(c.followUpDue||"")+'"/></label>'
+    +'<label class="cz-fld"><span>Appointment (date &amp; time)</span><input class="cz-inp" type="datetime-local" id="cz_apptDate" value="'+escapeHtml(c.apptDate||"")+'"/></label>'
     +'<label class="cz-fld cz-full" style="position:relative"><span>Address <small style="color:#94a3b8;font-weight:400">(type to autofill city, state, zip)</small></span><input class="cz-inp" id="cz_address" value="'+escapeHtml(c.address||"")+'" placeholder="Start typing a street address" autocomplete="off"/></label>'
     +'<label class="cz-fld"><span>City</span><input class="cz-inp" id="cz_city" value="'+escapeHtml(c.city||"")+'" placeholder="Miami"/></label>'
     +'<label class="cz-fld"><span>State</span><select class="cz-inp" id="cz_state">'+stateOpts+'</select></label>'
@@ -4683,11 +4746,15 @@ function czOpenModal(client){
     rec.stage=stage;rec.status=czStageToStatus(stage);
     rec.createdAt=ex.createdAt||t;rec.created=ex.created||Date.now();
     rec.lastContact=ex.lastContact||t;
-    rec.followUpDue=ex.followUpDue||(czCLOSED.indexOf(stage)<0?czAddDays(t,czFollowupDays):"");
+    var fuIn=g("cz_followUpDue");
+    rec.followUpDue=fuIn||ex.followUpDue||(czCLOSED.indexOf(stage)<0?czAddDays(t,czFollowupDays):"");
+    if(fuIn)rec.fuCleared=false;
+    rec.apptDate=g("cz_apptDate")||"";
     if(!Array.isArray(rec.activity))rec.activity=ex.activity||[];
     rec.updated=Date.now();
     var wasSold=ex.stage==="sold";var wasFollow=ex.stage==="follow_up";
     czUpsert(rec);
+    if(rec.apptDate!==(ex.apptDate||""))czSetApptDate(rec.id,rec.apptDate);
     if(stage==="sold"&&!wasSold&&typeof convertLeadToClient==="function")convertLeadToClient(rec.id);
     if(stage==="follow_up"&&!wasFollow&&typeof getLeadSeq==="function"&&!getLeadSeq(rec.id)&&typeof initLeadSeq==="function")initLeadSeq(rec.id);
     closeModal();
