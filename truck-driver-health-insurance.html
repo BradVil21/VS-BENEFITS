@@ -1073,10 +1073,19 @@ async function qfFunnelRedirect() {
   if (phone || zip) {
     var lead = {
       id: 'id_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36),
-      firstName: '', lastName: '', phone: phone, zipcode: zip, state: '',
-      source: 'truck-driver-quickform', coverageType: 'truck-driver',
-      status: 'new', created: Date.now(),
-      notes: 'Quick quote form (ZIP + phone) on truck driver page'
+      firstName: '', lastName: '', email: '', phone: phone,
+      zipcode: zip, state: '', address: '', company: '',
+      coverage: 'Truck Driver / Owner-Operator',
+      household_size: '', effective_date: '', current_coverage: '',
+      monthlyPremium: null,
+      status: 'new',
+      source: 'truck-driver-quickform',
+      page: window.location.pathname,
+      referrer: document.referrer || '',
+      created: Date.now(),
+      updated: Date.now(),
+      submitted_at: new Date().toISOString(),
+      notes: 'Quick quote form (ZIP + phone) on the truck driver page. Partial lead — captured before the full quote funnel, so name and email may be missing. Call the number above.'
     };
     try { var ex = JSON.parse(localStorage.getItem('vs_leads') || '[]'); ex.unshift(lead); localStorage.setItem('vs_leads', JSON.stringify(ex)); } catch(e) {}
     // Fire into GoHighLevel pipeline (fire-and-forget)
@@ -1131,8 +1140,12 @@ function qfSubmit(pid, label) {
     id: 'id_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36),
     firstName: first, lastName: last, dob: dob, phone: phone,
     address: address, zipcode: zip, state: state, email: email,
-    source: pid + '-page', coverageType: qfType,
-    status: 'new', created: Date.now()
+    source: pid + '-page',
+    coverage: (qfType === 'business' ? 'Employer / Group' : 'Truck Driver / Owner-Operator'),
+    page: window.location.pathname,
+    referrer: document.referrer || '',
+    status: 'new', created: Date.now(), updated: Date.now(),
+    submitted_at: new Date().toISOString()
   };
   try {
     var ex = JSON.parse(localStorage.getItem('vs_leads') || '[]');
