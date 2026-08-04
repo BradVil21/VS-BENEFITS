@@ -886,6 +886,31 @@ footer a:hover{color:#fff}
         <span>Group health plans for companies with W-2 drivers.</span>
         <em>Read the guide &rarr;</em>
       </a>
+      <a class="hub-card" href="/otr-truck-driver-health-insurance">
+        <strong>OTR and Long-Haul Drivers</strong>
+        <span>National PPO coverage built for drivers who live on the road for weeks at a time.</span>
+        <em>Read the guide &rarr;</em>
+      </a>
+      <a class="hub-card" href="/lease-operator-health-insurance">
+        <strong>Lease Operators</strong>
+        <span>Coverage and ACA subsidies when you are leased onto a carrier but still self-employed.</span>
+        <em>Read the guide &rarr;</em>
+      </a>
+      <a class="hub-card" href="/truck-driver-family-health-insurance">
+        <strong>Coverage for Your Family</strong>
+        <span>Plans for your spouse and kids while you are out on the road.</span>
+        <em>Read the guide &rarr;</em>
+      </a>
+      <a class="hub-card" href="/owner-operator-plan-finder">
+        <strong>Owner-Operator Plan Finder</strong>
+        <span>Answer a few quick questions and see which plan type fits your operation.</span>
+        <em>Use the tool &rarr;</em>
+      </a>
+      <a class="hub-card" href="/truck-driver-health-insurance-resources">
+        <strong>All Guides and Tools</strong>
+        <span>Every trucker health insurance guide, calculator, and resource in one place.</span>
+        <em>Browse all &rarr;</em>
+      </a>
     </div>
   </div>
 </section>
@@ -1073,19 +1098,10 @@ async function qfFunnelRedirect() {
   if (phone || zip) {
     var lead = {
       id: 'id_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36),
-      firstName: '', lastName: '', email: '', phone: phone,
-      zipcode: zip, state: '', address: '', company: '',
-      coverage: 'Truck Driver / Owner-Operator',
-      household_size: '', effective_date: '', current_coverage: '',
-      monthlyPremium: null,
-      status: 'new',
-      source: 'truck-driver-quickform',
-      page: window.location.pathname,
-      referrer: document.referrer || '',
-      created: Date.now(),
-      updated: Date.now(),
-      submitted_at: new Date().toISOString(),
-      notes: 'Quick quote form (ZIP + phone) on the truck driver page. Partial lead — captured before the full quote funnel, so name and email may be missing. Call the number above.'
+      firstName: '', lastName: '', phone: phone, zipcode: zip, state: '',
+      source: 'truck-driver-quickform', coverageType: 'truck-driver',
+      status: 'new', created: Date.now(),
+      notes: 'Quick quote form (ZIP + phone) on truck driver page'
     };
     try { var ex = JSON.parse(localStorage.getItem('vs_leads') || '[]'); ex.unshift(lead); localStorage.setItem('vs_leads', JSON.stringify(ex)); } catch(e) {}
     // Fire into GoHighLevel pipeline (fire-and-forget)
@@ -1140,12 +1156,8 @@ function qfSubmit(pid, label) {
     id: 'id_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36),
     firstName: first, lastName: last, dob: dob, phone: phone,
     address: address, zipcode: zip, state: state, email: email,
-    source: pid + '-page',
-    coverage: (qfType === 'business' ? 'Employer / Group' : 'Truck Driver / Owner-Operator'),
-    page: window.location.pathname,
-    referrer: document.referrer || '',
-    status: 'new', created: Date.now(), updated: Date.now(),
-    submitted_at: new Date().toISOString()
+    source: pid + '-page', coverageType: qfType,
+    status: 'new', created: Date.now()
   };
   try {
     var ex = JSON.parse(localStorage.getItem('vs_leads') || '[]');
