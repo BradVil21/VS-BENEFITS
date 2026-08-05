@@ -801,7 +801,7 @@ p{color:var(--ink-2)}
         <p style="margin:0 0 6px;font-size:.9rem;color:#334155;font-style:italic">"Bradley is such a caring person. He didn't only help my mom find an amazing option, but then helped me find an option even though my schedule is crazy and I get home from work at 9:30pm every night."</p>
         <div style="font-size:.78rem;color:#5a6b80">Verified Google review</div>
       </div>
-      <p style="margin:14px 0 0;font-size:.88rem;color:#5a6b80;text-align:center;line-height:1.7">Rather talk to a person? Call or text <a href="tel:+19548251009" style="font-weight:700;color:#16447f;white-space:nowrap">(954) 825-1009</a><br/>Questions or support? Email <a href="mailto:info@vshealthbenefits.com" style="font-weight:700;color:#16447f">info@vshealthbenefits.com</a></p>
+      <p style="margin:14px 0 0;font-size:.88rem;color:#5a6b80;text-align:center">Rather talk to a person? Call or text <a href="tel:+19548251009" style="font-weight:700;color:#16447f">(954) 825-1009</a></p>
     </div>
   </div>
 
@@ -1310,23 +1310,7 @@ p{color:var(--ink-2)}
   .gen-steps li.done .gs-ico::after{content:"";width:6px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-2px}
   @keyframes genSpin{to{transform:rotate(360deg)}}
   @media (prefers-reduced-motion:reduce){.gen-steps li.active .gs-ico{animation:none}}
-  
-/* ===== A-RATED CARRIER STRIP ===== */
-.carriers{background:#fff;border-top:1px solid var(--line);padding:30px 0 34px;overflow:hidden}
-.carriers-inner{max-width:1080px;margin:0 auto;padding:0 20px}
-.carriers-title{text-align:center;font-family:'Poppins',sans-serif;font-size:1.02rem;font-weight:700;color:var(--ink);margin:0 0 20px;letter-spacing:.2px}
-.carriers-title span{color:var(--teal-dark)}
-.carriers-marquee{position:relative;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%);mask:linear-gradient(90deg,transparent 0,#000 7%,#000 93%,transparent 100%)}
-.carriers-track{display:flex;align-items:center;gap:16px;width:max-content;animation:carScroll 34s linear infinite}
-.carriers-marquee:hover .carriers-track{animation-play-state:paused}
-@keyframes carScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.carrier{flex:0 0 auto;display:flex;align-items:center;justify-content:center;min-width:168px;height:64px;padding:0 24px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-sm)}
-.carrier-wm{font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;color:var(--c,#16447f);white-space:nowrap;letter-spacing:.2px}
-.carrier img{max-height:40px;max-width:132px;width:auto;height:auto;object-fit:contain;display:block}
-.carriers-note{text-align:center;font-size:.72rem;color:var(--muted);opacity:.85;margin:18px auto 0;max-width:620px;line-height:1.5}
-@media (prefers-reduced-motion:reduce){.carriers-track{animation:none;flex-wrap:wrap;justify-content:center;width:auto}.carriers-marquee{-webkit-mask:none;mask:none}}
-
-</style>
+  </style>
   <div class="panel" id="panel-generating">
     <div class="gen-card">
       <div class="gen-ring">
@@ -1374,35 +1358,6 @@ p{color:var(--ink-2)}
   </div>
 
 </div><!-- /funnel-wrap -->
-
-<!-- FOOTER -->
-<!-- ===== A-RATED CARRIER STRIP (infinite loop) ===== -->
-<section class="carriers" aria-label="A-rated insurance carriers we compare">
-  <div class="carriers-inner">
-    <h3 class="carriers-title">Compare plans from top <span>A-rated carriers</span></h3>
-    <div class="carriers-marquee">
-      <div class="carriers-track">
-        <!-- copy 1 -->
-        <span class="carrier" data-logo="../images/carriers/unitedhealthcare.png"><span class="carrier-wm" style="--c:#002677">UnitedHealthcare</span></span>
-        <span class="carrier" data-logo="../images/carriers/aetna.png"><span class="carrier-wm" style="--c:#7d3f98">Aetna</span></span>
-        <span class="carrier" data-logo="../images/carriers/cigna.png"><span class="carrier-wm" style="--c:#0d7a6f">Cigna Healthcare</span></span>
-        <span class="carrier" data-logo="../images/carriers/humana.png"><span class="carrier-wm" style="--c:#4e9a2f">Humana</span></span>
-        <span class="carrier" data-logo="../images/carriers/bluecross.png"><span class="carrier-wm" style="--c:#0053a0">Blue Cross Blue Shield</span></span>
-        <span class="carrier" data-logo="../images/carriers/kaiser.png"><span class="carrier-wm" style="--c:#00629b">Kaiser Permanente</span></span>
-        <span class="carrier" data-logo="../images/carriers/anthem.png"><span class="carrier-wm" style="--c:#0079c1">Anthem</span></span>
-        <!-- copy 2 (seamless loop) -->
-        <span class="carrier" data-logo="../images/carriers/unitedhealthcare.png" aria-hidden="true"><span class="carrier-wm" style="--c:#002677">UnitedHealthcare</span></span>
-        <span class="carrier" data-logo="../images/carriers/aetna.png" aria-hidden="true"><span class="carrier-wm" style="--c:#7d3f98">Aetna</span></span>
-        <span class="carrier" data-logo="../images/carriers/cigna.png" aria-hidden="true"><span class="carrier-wm" style="--c:#0d7a6f">Cigna Healthcare</span></span>
-        <span class="carrier" data-logo="../images/carriers/humana.png" aria-hidden="true"><span class="carrier-wm" style="--c:#4e9a2f">Humana</span></span>
-        <span class="carrier" data-logo="../images/carriers/bluecross.png" aria-hidden="true"><span class="carrier-wm" style="--c:#0053a0">Blue Cross Blue Shield</span></span>
-        <span class="carrier" data-logo="../images/carriers/kaiser.png" aria-hidden="true"><span class="carrier-wm" style="--c:#00629b">Kaiser Permanente</span></span>
-        <span class="carrier" data-logo="../images/carriers/anthem.png" aria-hidden="true"><span class="carrier-wm" style="--c:#0079c1">Anthem</span></span>
-      </div>
-    </div>
-    <p class="carriers-note">Ratings reflect AM Best financial-strength ratings. VS Health Benefits is an independent broker and is not endorsed by any carrier.</p>
-  </div>
-</section>
 
 <!-- FOOTER -->
 <footer class="funnel-footer">
@@ -2188,19 +2143,5 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
 </script>
 
 <script src="/vs-lead-system.js" defer></script>
-<!-- ===== CARRIER LOGO SWAP (uses real image when data-logo is set) ===== -->
-<script>
-(function(){
-  document.querySelectorAll('.carrier[data-logo]').forEach(function(c){
-    var url = c.getAttribute('data-logo'); if(!url) return;
-    var name = (c.querySelector('.carrier-wm')||{}).textContent || 'carrier';
-    var img = new Image(); img.alt = name; img.decoding = 'async';
-    img.onload = function(){ c.innerHTML=''; c.appendChild(img); };
-    img.onerror = function(){};
-    img.src = url;
-  });
-})();
-</script>
-
 </body>
 </html>
