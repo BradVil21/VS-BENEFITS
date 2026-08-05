@@ -45,6 +45,7 @@ footer{background:var(--blue-900);color:#ffffff;padding:40px 0 20px}footer a{col
 <!-- Start of HubSpot Embed Code -->
 <script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246725050.js"></script>
 <!-- End of HubSpot Embed Code -->
+<style id="carrier-logo-css">.carriers .carrier img{max-height:32px;max-width:122px;width:auto;height:auto;object-fit:contain;display:block}.carriers .carrier:has(img){opacity:1}</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><a href="/quote" style="color:#fff;text-decoration:none;display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span>Open Enrollment for 2027 coverage runs Nov 1 &ndash; Dec 15. Get ahead of the deadline.</span><span style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap">Get a Free Quote &rarr;</span></a></div>
@@ -87,8 +88,8 @@ footer{background:var(--blue-900);color:#ffffff;padding:40px 0 20px}footer a{col
   <div class="container">
     <h2>We work with all major carriers in Wisconsin</h2>
     <div class="carrier-track-wrap"><div class="carrier-track">
-      <div class="carrier">Blue Cross Blue Shield</div><div class="carrier accent">UnitedHealthcare</div><div class="carrier">Aetna</div><div class="carrier accent">Cigna</div><div class="carrier">Humana</div><div class="carrier accent">Florida Blue</div><div class="carrier">Molina</div><div class="carrier accent">Oscar</div><div class="carrier">Ambetter</div><div class="carrier accent">Kaiser Permanente</div>
-      <div class="carrier">Blue Cross Blue Shield</div><div class="carrier accent">UnitedHealthcare</div><div class="carrier">Aetna</div><div class="carrier accent">Cigna</div><div class="carrier">Humana</div><div class="carrier accent">Florida Blue</div><div class="carrier">Molina</div><div class="carrier accent">Oscar</div><div class="carrier">Ambetter</div><div class="carrier accent">Kaiser Permanente</div>
+      <div class="carrier" data-logo="images/carriers/bluecross.png">Blue Cross Blue Shield</div><div class="carrier accent" data-logo="images/carriers/unitedhealthcare.png">UnitedHealthcare</div><div class="carrier" data-logo="images/carriers/aetna.png">Aetna</div><div class="carrier accent" data-logo="images/carriers/cigna.png">Cigna</div><div class="carrier" data-logo="images/carriers/humana.png">Humana</div><div class="carrier accent" data-logo="images/carriers/floridablue.png">Florida Blue</div><div class="carrier" data-logo="images/carriers/molina.png">Molina</div><div class="carrier accent" data-logo="images/carriers/oscar.png">Oscar</div><div class="carrier" data-logo="images/carriers/ambetter.png">Ambetter</div><div class="carrier accent" data-logo="images/carriers/kaiser.png">Kaiser Permanente</div>
+      <div class="carrier" data-logo="images/carriers/bluecross.png">Blue Cross Blue Shield</div><div class="carrier accent" data-logo="images/carriers/unitedhealthcare.png">UnitedHealthcare</div><div class="carrier" data-logo="images/carriers/aetna.png">Aetna</div><div class="carrier accent" data-logo="images/carriers/cigna.png">Cigna</div><div class="carrier" data-logo="images/carriers/humana.png">Humana</div><div class="carrier accent" data-logo="images/carriers/floridablue.png">Florida Blue</div><div class="carrier" data-logo="images/carriers/molina.png">Molina</div><div class="carrier accent" data-logo="images/carriers/oscar.png">Oscar</div><div class="carrier" data-logo="images/carriers/ambetter.png">Ambetter</div><div class="carrier accent" data-logo="images/carriers/kaiser.png">Kaiser Permanente</div>
     </div></div>
   </div>
 </div>
@@ -465,5 +466,6 @@ document.addEventListener("DOMContentLoaded", function () {
   btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});
 })();
 </script>
+<script>/*CARRIER LOGO SWAP*/(function(){document.querySelectorAll(".carriers .carrier[data-logo]").forEach(function(c){var u=c.getAttribute("data-logo");if(!u)return;var t=c.textContent;var i=new Image();i.alt=t;i.decoding="async";i.onload=function(){c.innerHTML="";c.appendChild(i);c.style.opacity="1"};i.onerror=function(){};i.src=u;});})();</script>
 </body>
 </html>
