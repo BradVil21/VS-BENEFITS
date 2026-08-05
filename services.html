@@ -627,6 +627,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function animateNumber(el){
+    if(/\d\s*[-–]\s*\d/.test(el.textContent) && !el.getAttribute("data-count")){ return; }
     var raw = el.getAttribute("data-count") || el.textContent.replace(/[^0-9.]/g,"");
     var suffix = el.textContent.replace(/[0-9.,]/g,"");
     var target = parseFloat(raw)||0;
