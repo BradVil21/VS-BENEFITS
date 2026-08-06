@@ -126,12 +126,15 @@ section{padding:44px 0}
 .nav-links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:0 12px 24px rgba(13,27,42,.08);padding:6px 0 12px;z-index:60}
 .nav-links.open{display:flex}
 .nav-links a{color:var(--ink);font-weight:600;font-size:1rem;padding:14px 20px;border-bottom:1px solid var(--line);min-height:var(--tap);display:flex;align-items:center}
+.nav-links button.nav-login{color:var(--ink);font-weight:600;font-size:1rem;padding:14px 20px;border:0;border-bottom:1px solid var(--line);min-height:var(--tap);display:flex;align-items:center;background:none;width:100%;text-align:left;cursor:pointer;font-family:inherit}
+.nav-links button.nav-login:hover{color:var(--blue-700)}
 .nav-links a.nav-cta{background:var(--blue-700);color:#fff;margin:10px 16px 6px;border-radius:10px;justify-content:center;border-bottom:0}
 .nav-links a.nav-cta:hover{background:var(--blue-600);color:#fff;text-decoration:none}
 @media(min-width:900px){
   .menu-toggle{display:none}
   .nav-links{display:flex;position:static;flex-direction:row;align-items:center;gap:6px;border:0;box-shadow:none;padding:0;background:transparent}
   .nav-links a{border:0;padding:8px 12px;min-height:auto}
+  .nav-links button.nav-login{border:0;padding:8px 12px;min-height:auto;width:auto}
   .nav-links a.nav-cta{margin:0 0 0 6px;padding:10px 18px}
 }
 
@@ -277,6 +280,16 @@ footer a:hover{color:#fff}
 .modal p{color:var(--ink-2);font-size:.96rem;margin-bottom:18px}
 .modal .modal-name{font-weight:700;color:var(--blue-700)}
 .modal-close{width:100%}
+/* login modal (matches other pages) */
+.modal-backdrop{position:fixed;inset:0;background:rgba(13,27,42,.55);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px;overflow-y:auto}
+.modal-backdrop.open{display:flex}
+.login-box{background:#fff;border-radius:16px;max-width:440px;width:100%;padding:28px 24px;box-shadow:var(--shadow-lg);position:relative;margin:auto;text-align:left}
+.login-box h2{margin-bottom:6px;font-size:1.4rem}
+.login-box .lede{color:var(--muted);margin-bottom:20px;font-size:.95rem}
+.login-box .close-x{position:absolute;top:10px;right:12px;background:transparent;border:0;width:36px;height:36px;font-size:1.6rem;color:var(--muted);cursor:pointer;line-height:1;border-radius:8px}
+.login-box .choice-row{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.login-box .choice-row .btn{width:100%}
+.login-box .small{font-size:.84rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -296,6 +309,8 @@ footer a:hover{color:#fff}
       <a href="/about">About</a>
       <a href="/blog">Blog</a>
       <a href="/contact">Contact</a>
+      <a href="/refer-and-earn">Refer &amp; Earn</a>
+      <button type="button" class="nav-login" data-open-login>Member Login</button>
       <a class="nav-cta" href="#support">Get Open Enrollment Help</a>
     </nav>
   </div>
@@ -638,6 +653,20 @@ footer a:hover{color:#fff}
   </div>
 </footer>
 
+<!-- LOGIN MODAL (matches other pages) -->
+<div class="modal-backdrop" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
+  <div class="login-box">
+    <button class="close-x" type="button" aria-label="Close" data-close-login>&times;</button>
+    <h2 id="login-modal-title">Sign in</h2>
+    <p class="lede">Choose where you'd like to go.</p>
+    <div class="choice-row">
+      <a class="btn btn-primary" href="/client">Client / Member Portal</a>
+      <a class="btn btn-ghost" href="/admin">Admin Portal</a>
+    </div>
+    <p class="small">Not a member yet? <a href="/client">Create a client account</a></p>
+  </div>
+</div>
+
 <!-- SUCCESS MODAL -->
 <div class="modal-overlay" id="oeModal" role="dialog" aria-modal="true" aria-labelledby="oeModalTitle">
   <div class="modal">
@@ -698,6 +727,15 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
   var mt=document.querySelector('.menu-toggle'), nl=document.getElementById('nav-links');
   if(mt&&nl){ mt.addEventListener('click',function(){ var o=nl.classList.toggle('open'); mt.setAttribute('aria-expanded',o?'true':'false'); }); }
   var y=document.getElementById('year'); if(y) y.textContent=new Date().getFullYear();
+
+  // ---- member login modal (matches other pages) ----
+  var loginModal=document.getElementById('login-modal');
+  function openLogin(){ if(loginModal){loginModal.classList.add('open');document.body.style.overflow='hidden';} if(nl)nl.classList.remove('open'); if(mt)mt.setAttribute('aria-expanded','false'); }
+  function closeLogin(){ if(loginModal){loginModal.classList.remove('open');document.body.style.overflow='';} }
+  document.querySelectorAll('[data-open-login]').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); openLogin(); }); });
+  document.querySelectorAll('[data-close-login]').forEach(function(b){ b.addEventListener('click',function(e){ e.preventDefault(); closeLogin(); }); });
+  if(loginModal) loginModal.addEventListener('click',function(e){ if(e.target===loginModal) closeLogin(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeLogin(); });
 
   // ---- countdown to Nov 1, 2026 (Open Enrollment opens) ----
   (function(){
