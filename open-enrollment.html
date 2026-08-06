@@ -146,7 +146,7 @@ section{padding:44px 0}
 @media(min-width:920px){.hero-grid{grid-template-columns:1.05fr .95fr;gap:40px}}
 
 /* form card */
-.form-card{background:#fff;border-radius:18px;padding:22px;box-shadow:var(--shadow-lg);border:1px solid var(--line)}
+.form-card{background:#fff;border-radius:18px;padding:22px;box-shadow:var(--shadow-lg);border:1px solid var(--line);scroll-margin-top:84px}
 .form-card .badge{display:inline-flex;align-items:center;gap:6px;font-size:.74rem;font-weight:700;color:var(--teal-dark);background:var(--teal-light,#e0f7f5);padding:5px 11px;border-radius:999px;letter-spacing:.04em}
 .form-card h2{font-size:1.3rem;margin:12px 0 4px}
 .form-card .sub{font-size:.9rem;color:var(--muted);margin-bottom:14px}
@@ -296,7 +296,7 @@ footer a:hover{color:#fff}
       <a href="/about">About</a>
       <a href="/blog">Blog</a>
       <a href="/contact">Contact</a>
-      <a class="nav-cta" href="#signup">Get Open Enrollment Help</a>
+      <a class="nav-cta" href="#oe-form">Get Open Enrollment Help</a>
     </nav>
   </div>
 </header>
@@ -319,7 +319,7 @@ footer a:hover{color:#fff}
     </div>
 
     <div>
-      <div class="form-card">
+      <div class="form-card" id="oe-form">
         <span class="badge">Free, no obligation</span>
         <h2 id="formTitle">Get Ready for Open Enrollment</h2>
         <p class="sub" id="formSub">Who are we preparing for? Pick one to start.</p>
