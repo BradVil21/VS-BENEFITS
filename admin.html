@@ -4703,7 +4703,7 @@ function czOpenModal(client){
     +'<label class="cz-fld"><span>State</span><select class="cz-inp" id="cz_state">'+stateOpts+'</select></label>'
     +'<label class="cz-fld"><span>Zip code</span><input class="cz-inp" id="cz_zipCode" value="'+escapeHtml(zip)+'" placeholder="33404"/></label>'
     +'<label class="cz-fld cz-full"><span>Pipeline stage</span><select class="cz-inp" id="cz_stage">'+stageOpts+'</select></label>'
-    +'<div class="cz-fld cz-full"><span>Call notes</span><div class="cz-quicknote"><input class="cz-inp" id="cz_quicknote" placeholder="Jot a note during the call, hit Add (timestamps it)"/><button type="button" class="cz-btn-go" id="cz-addnote">Add</button></div><textarea class="cz-inp" id="cz_notes" rows="5" placeholder="Conversation history, preferences, objections, best time to reach…">'+escapeHtml(c.notes||"")+'</textarea></div>'
+    +'<div class="cz-fld cz-full"><span>Call notes</span><div class="cz-quicknote"><input class="cz-inp" id="cz_quicknote" placeholder="Jot a note during the call, hit Add (timestamps it)"/><button type="button" class="cz-btn-go" id="cz-addnote">Add</button></div><textarea class="cz-inp" id="cz_notes" rows="5" placeholder="Conversation history, preferences, objections, best time to reach…">'+escapeHtml(c.notes||"")+'</textarea>'+(!isNew?'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center"><button type="button" class="cz-btn-go" id="cz-answered" style="background:#0a8754">☎ Answered · set callback from note</button><span style="font-size:11px;color:#94a3b8">e.g. write “call back in 3 hours” in the note</span></div>':'')+'</div>'
     +'</div>'
     +'<div class="cz-err" id="cz-mErr" style="display:none">Add at least a first or last name so you can find this lead later.</div>'
     +(typeof czIpBlock==="function"?czIpBlock(c):"")
@@ -4729,6 +4729,25 @@ function czOpenModal(client){
     }
     addBtn.addEventListener("click",addNote);
     qn.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();addNote();}});
+
+    var ansBtn=$("cz-answered");
+    if(ansBtn) ansBtn.addEventListener("click",function(){
+      if(isNew||!client||!client.id){ alert("Save this client first, then use Answered to set a callback."); return; }
+      if(qn.value.trim()) addNote();
+      var mins=(typeof czParseCallbackMins==="function")?czParseCallbackMins(ta.value):null;
+      if(mins==null){ var h=prompt("How many hours until the callback reminder?\n(Tip: write e.g. \"call back in 3 hours\" in the note and it reads it automatically.)","5"); if(h===null)return; mins=Math.round((parseFloat(h)||5)*60); }
+      if(!(mins>0))mins=300;
+      var when=Date.now()+mins*60000;
+      var lbl=(typeof czHumanDur==="function")?czHumanDur(mins):(Math.round(mins/60)+" hours");
+      var stamp=new Date().toLocaleString(undefined,{month:"numeric",day:"numeric",hour:"numeric",minute:"2-digit"});
+      ta.value=("["+stamp+"] ☎ Answered — call back in "+lbl+"\n\n"+(ta.value||"")).replace(/\n+$/,"")+"\n";
+      var d=new Date(when); var fu=d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);
+      var arr=getLeads();var i=arr.findIndex(function(x){return x.id===client.id;});
+      if(i>=0){ arr[i].notes=ta.value; arr[i].callbackAt=when; arr[i].callbackPending=true; arr[i].callbackReminded=false; arr[i].followUpDue=fu; arr[i].fuCleared=false; arr[i].lastContact=todayStr(); arr[i].updated=Date.now(); saveLeads(arr); }
+      client.notes=ta.value; client.callbackAt=when; client.callbackPending=true; client.callbackReminded=false; client.followUpDue=fu; client.lastContact=todayStr();
+      if(typeof czCurrentRender==="function")czCurrentRender();
+      alert("✓ Callback set for "+lbl+" from now (around "+new Date(when).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})+"). A reminder will pop up here when it's time.");
+    });
   })();
   var saveBtn=$("cz-mSave");
   if(saveBtn)saveBtn.addEventListener("click",function(){
@@ -6503,5 +6522,57 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
   var y=document.getElementById("sc-year");if(y)y.textContent=new Date().getFullYear();
 })();
 </script>
+
+<script>
+/* CALLBACKFIX — "Answered" callback reminders (added) */
+(function(){
+  window.czParseCallbackMins=function(t){
+    t=String(t||"").toLowerCase();
+    if(/\btomorrow\b/.test(t)) return 24*60;
+    var m=t.match(/(?:call\s*back|callback|\bcb\b|back|again|follow\s*up|reach\s*out)[^0-9]{0,18}(\d+(?:\.\d+)?)\s*(hours?|hrs?|hr|h|minutes?|mins?|min|days?|d)\b/);
+    if(!m) m=t.match(/\b(\d+(?:\.\d+)?)\s*(hours?|hrs?|hr|h|minutes?|mins?|min|days?|d)\b/);
+    if(!m) return null;
+    var n=parseFloat(m[1]), u=m[2];
+    if(u.charAt(0)==="h") return Math.round(n*60);
+    if(u.charAt(0)==="d") return Math.round(n*24*60);
+    return Math.round(n); // minutes
+  };
+  window.czHumanDur=function(mins){
+    if(mins>=1440){var d=Math.round(mins/144)/10; return d+(d===1?" day":" days");}
+    if(mins>=60){var h=Math.round(mins/6)/10; return h+(h===1?" hour":" hours");}
+    return Math.round(mins)+" min";
+  };
+  function setCB(id,pending,at,reminded){
+    try{var arr=getLeads();var i=arr.findIndex(function(x){return x.id===id;});
+      if(i>=0){arr[i].callbackPending=pending;if(at)arr[i].callbackAt=at;if(reminded!=null)arr[i].callbackReminded=reminded;saveLeads(arr);if(typeof czCurrentRender==="function")czCurrentRender();}}catch(e){}
+  }
+  function pop(l){
+    var name=l.name||((l.firstName||"")+" "+(l.lastName||"")).trim()||"Client";
+    var tel=l.phone?String(l.phone).replace(/[^0-9+]/g,""):"";
+    var ov=document.createElement("div");
+    ov.style.cssText="position:fixed;inset:0;background:rgba(13,27,42,.5);z-index:4000;display:flex;align-items:center;justify-content:center;padding:20px";
+    ov.innerHTML='<div style="background:#fff;border-radius:16px;max-width:390px;width:100%;padding:26px 22px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.32)"><div style="font-size:34px">⏰</div><h3 style="margin:8px 0 4px;font-size:19px;color:#0d1b2a;font-weight:700">Time to call back</h3><p style="margin:0 0 16px;color:#334155"><b>'+name+'</b>'+(l.phone?'<br>'+l.phone:'')+'</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'+(tel?'<a href="tel:'+tel+'" style="background:#0a8754;color:#fff;padding:11px 18px;border-radius:999px;font-weight:700;text-decoration:none">☎ Call now</a>':'')+'<button type="button" data-snooze style="background:#eef4fd;color:#16447f;border:0;padding:11px 16px;border-radius:999px;font-weight:700;cursor:pointer">Snooze 30 min</button><button type="button" data-done style="background:#f4f8fe;color:#0d1b2a;border:1px solid #e4e9f2;padding:11px 16px;border-radius:999px;font-weight:700;cursor:pointer">Done</button></div></div>';
+    document.body.appendChild(ov);
+    function close(){try{ov.remove();}catch(e){}}
+    ov.querySelector("[data-done]").onclick=function(){setCB(l.id,false,0,true);close();};
+    ov.querySelector("[data-snooze]").onclick=function(){setCB(l.id,true,Date.now()+30*60000,false);close();};
+    ov.addEventListener("click",function(e){if(e.target===ov)close();});
+  }
+  var shown={};
+  function check(){
+    if(typeof getLeads!=="function")return;
+    var now=Date.now(), arr=getLeads();
+    for(var i=0;i<arr.length;i++){var l=arr[i];
+      if(l.callbackPending && l.callbackAt && l.callbackAt<=now && !shown[l.id]){
+        shown[l.id]=true; pop(l);
+        (function(id){setTimeout(function(){delete shown[id];},120000);})(l.id);
+        break; // one at a time
+      }
+    }
+  }
+  setInterval(check,30000); setTimeout(check,2500);
+})();
+</script>
+
 </body>
 </html>
