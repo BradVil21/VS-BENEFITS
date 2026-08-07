@@ -2532,6 +2532,7 @@ async function convertLeadToClient(leadId){
   // Hash the temp password if we can, but NEVER let hashing block client creation
   var hash="";
   try{ if(window.crypto&&crypto.subtle){ hash=await sha256(tempPw); } }catch(e){ hash=""; }
+  var qv=(typeof czVal==="function")?czVal(lead):(Number(lead.quoteValue||lead.value)||0);
   var newClient={
     id:uid(),
     firstName:lead.firstName||"",lastName:lead.lastName||"",name:fullName(lead),
@@ -2539,7 +2540,7 @@ async function convertLeadToClient(leadId){
     address:lead.address||"",city:lead.city||"",state:lead.state||"",zipcode:lead.zipcode||lead.zipCode||"",
     passwordHash:hash,
     created:Date.now(),lastSignIn:0,status:"active",
-    plan:null,photoDataUrl:"",documents:[],
+    plan:(qv>0?{carrier:"",planName:"",effectiveDate:"",renewalDate:"",monthlyPremium:qv,notes:"Premium auto-set from quote value."}:null),quoteValue:qv,value:qv,photoDataUrl:"",documents:[],
     notes:lead.notes||"",pipelineStatus:"sold",
     _convertedFromLead:leadId
   };
@@ -5781,7 +5782,7 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
       var msgs=(typeof getMessages==="function")?getMessages():[];
       var now=Date.now(), wk=604800000;
       var activeClients=accounts.filter(function(a){return (a.status||"active")!=="revoked";});
-      var premiumSum=activeClients.reduce(function(s,a){return s+((a.plan&&Number(a.plan.monthlyPremium))||0);},0);
+      var premiumSum=activeClients.reduce(function(s,a){return s+(window.vsGetPremium?window.vsGetPremium(a):((a.plan&&Number(a.plan.monthlyPremium))||0));},0);
       var newClients7=accounts.filter(function(a){return a.created&&(now-a.created)<wk;}).length;
       var newLeads7=leads.filter(function(c){var t=leadTime(c);return t&&(now-t)<wk;}).length;
       var prevLeads7=leads.filter(function(c){var t=leadTime(c);return t&&(now-t)>=wk&&(now-t)<2*wk;}).length;
@@ -6201,8 +6202,10 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
     if(!a)return 0;
     var p=a.plan||{};
     var cands=[p.monthlyPremium,p.premium,p.monthly,p.monthlyCost,p.monthlyRate,p.monthly_premium,
-               a.monthlyPremium,a.premium,a.monthlyCost,a.monthly_premium];
+               a.monthlyPremium,a.premium,a.monthlyCost,a.monthly_premium,
+               a.quoteValue,a.value,p.value,p.quoteValue];
     for(var i=0;i<cands.length;i++){ var n=num(cands[i]); if(n>0)return n; }
+    try{ if(a._convertedFromLead&&typeof getLeads==="function"){ var _L=getLeads(); for(var j=0;j<_L.length;j++){ if(_L[j].id===a._convertedFromLead){ var _lv=num((_L[j].quoteValue!=null&&_L[j].quoteValue!=="")?_L[j].quoteValue:_L[j].value); if(_lv>0)return _lv; break; } } } }catch(e){}
     return 0;
   };
   function fmt(n){ return "$"+(n%1===0?n:n.toFixed(2))+"/mo"; }
