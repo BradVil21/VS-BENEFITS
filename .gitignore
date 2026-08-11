@@ -5,3 +5,4 @@ __deltest.tmp
 .DS_Store
 Thumbs.db
 node_modules/
+_to_delete/
