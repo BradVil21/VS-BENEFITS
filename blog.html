@@ -646,6 +646,16 @@ footer a:hover{color:#fff}
   <div class="container">
     <div class="post-grid">
       <!-- Newest posts -->
+      <a class="post-card" href="/blog/restaurant-employee-health-insurance-south-florida">
+        <div class="cover"><img src="/compressed/smal-business.jpg" alt="Health insurance for restaurant employees in Miami and Fort Lauderdale" loading="lazy" /></div>
+        <div class="body">
+          <div class="meta">Restaurants / South Florida | 8 min read</div>
+          <h3>Health insurance for restaurant employees in Miami &amp; Fort Lauderdale</h3>
+          <p>How South Florida restaurants cover hourly, tipped, and seasonal staff &mdash; what it costs per employee, who has to be eligible, and how to set it up without an HR department.</p>
+          <span class="read-more">Read article &rarr;</span>
+        </div>
+      </a>
+
       <a class="post-card" href="/blog/open-enrollment-2027-income-premium-increase">
         <div class="cover"><img src="/compressed/health-insurance-cost-2026-woman.jpg" alt="How an income change affects your 2027 health insurance premium during Open Enrollment" loading="lazy" /></div>
         <div class="body">
@@ -1508,6 +1518,6 @@ document.addEventListener("DOMContentLoaded", function () {
 })();
 </script>
 
-<script>/*CARRIER LOGO SWAP*/(function(){document.querySelectorAll(".carriers .carrier[data-logo]").forEach(function(c){var u=c.getAttribute("data-logo");if(!u)return;var t=c.textContent;var i=new Image();i.alt=t;i.decoding="async";i.onload=function(){c.innerHTML="";c.appendChild(i);c.style.opacity="1"};i.onerror=function(){};i.src=u;});})();</script>
+<script>/*CARRIER LOGO SWAP*/(function(){document.querySelectorAll(".carriers .carrier[data-logo], .carrier-item[data-logo]").forEach(function(c){var u=c.getAttribute("data-logo");if(!u)return;var t=c.textContent;var i=new Image();i.alt=t;i.decoding="async";i.onload=function(){c.innerHTML="";c.appendChild(i);c.style.opacity="1"};i.onerror=function(){};i.src=u;});})();</script>
 </body>
 </html>

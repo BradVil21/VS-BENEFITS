@@ -957,6 +957,6 @@ function qfSubmit(pid, label) {
 })();
 </script>
 
-<script>/*CARRIER LOGO SWAP*/(function(){document.querySelectorAll(".carriers .carrier[data-logo]").forEach(function(c){var u=c.getAttribute("data-logo");if(!u)return;var t=c.textContent;var i=new Image();i.alt=t;i.decoding="async";i.onload=function(){c.innerHTML="";c.appendChild(i);c.style.opacity="1"};i.onerror=function(){};i.src=u;});})();</script>
+<script>/*CARRIER LOGO SWAP*/(function(){document.querySelectorAll(".carriers .carrier[data-logo], .carrier-item[data-logo]").forEach(function(c){var u=c.getAttribute("data-logo");if(!u)return;var t=c.textContent;var i=new Image();i.alt=t;i.decoding="async";i.onload=function(){c.innerHTML="";c.appendChild(i);c.style.opacity="1"};i.onerror=function(){};i.src=u;});})();</script>
 </body>
 </html>

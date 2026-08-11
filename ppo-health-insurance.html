@@ -283,8 +283,8 @@ footer a:hover{color:#fff}
   <div class="container">
     <p class="carriers-label">We compare PPO plans across all major carriers</p>
     <div class="carrier-wrap"><div class="carrier-track">
-      <span class="carrier-item">Blue Cross Blue Shield</span><span class="carrier-item ac">UnitedHealthcare</span><span class="carrier-item">Aetna</span><span class="carrier-item ac">Cigna</span><span class="carrier-item">Humana</span><span class="carrier-item ac">Florida Blue</span><span class="carrier-item">Molina</span><span class="carrier-item ac">Oscar</span><span class="carrier-item">Ambetter</span><span class="carrier-item ac">Kaiser Permanente</span>
-      <span class="carrier-item">Blue Cross Blue Shield</span><span class="carrier-item ac">UnitedHealthcare</span><span class="carrier-item">Aetna</span><span class="carrier-item ac">Cigna</span><span class="carrier-item">Humana</span><span class="carrier-item ac">Florida Blue</span><span class="carrier-item">Molina</span><span class="carrier-item ac">Oscar</span><span class="carrier-item">Ambetter</span><span class="carrier-item ac">Kaiser Permanente</span>
+      <span class="carrier-item" data-logo="images/carriers/bluecross.png">Blue Cross Blue Shield</span><span class="carrier-item ac" data-logo="images/carriers/unitedhealthcare.png">UnitedHealthcare</span><span class="carrier-item" data-logo="images/carriers/aetna.png">Aetna</span><span class="carrier-item ac" data-logo="images/carriers/cigna.png">Cigna</span><span class="carrier-item" data-logo="images/carriers/humana.png">Humana</span><span class="carrier-item ac" data-logo="images/carriers/floridablue.png">Florida Blue</span><span class="carrier-item" data-logo="images/carriers/molina.png">Molina</span><span class="carrier-item ac" data-logo="images/carriers/oscar.png">Oscar</span><span class="carrier-item" data-logo="images/carriers/ambetter.png">Ambetter</span><span class="carrier-item ac" data-logo="images/carriers/kaiser.png">Kaiser Permanente</span>
+      <span class="carrier-item" data-logo="images/carriers/bluecross.png">Blue Cross Blue Shield</span><span class="carrier-item ac" data-logo="images/carriers/unitedhealthcare.png">UnitedHealthcare</span><span class="carrier-item" data-logo="images/carriers/aetna.png">Aetna</span><span class="carrier-item ac" data-logo="images/carriers/cigna.png">Cigna</span><span class="carrier-item" data-logo="images/carriers/humana.png">Humana</span><span class="carrier-item ac" data-logo="images/carriers/floridablue.png">Florida Blue</span><span class="carrier-item" data-logo="images/carriers/molina.png">Molina</span><span class="carrier-item ac" data-logo="images/carriers/oscar.png">Oscar</span><span class="carrier-item" data-logo="images/carriers/ambetter.png">Ambetter</span><span class="carrier-item ac" data-logo="images/carriers/kaiser.png">Kaiser Permanente</span>
     </div></div>
   </div>
 </div>
@@ -726,6 +726,6 @@ function qfSubmit(pid, label) {
 }
 </script>
 
-<script>/*CARRIER LOGO SWAP*/(function(){document.querySelectorAll(".carriers .carrier[data-logo]").forEach(function(c){var u=c.getAttribute("data-logo");if(!u)return;var t=c.textContent;var i=new Image();i.alt=t;i.decoding="async";i.onload=function(){c.innerHTML="";c.appendChild(i);c.style.opacity="1"};i.onerror=function(){};i.src=u;});})();</script>
+<script>/*CARRIER LOGO SWAP*/(function(){document.querySelectorAll(".carriers .carrier[data-logo], .carrier-item[data-logo]").forEach(function(c){var u=c.getAttribute("data-logo");if(!u)return;var t=c.textContent;var i=new Image();i.alt=t;i.decoding="async";i.onload=function(){c.innerHTML="";c.appendChild(i);c.style.opacity="1"};i.onerror=function(){};i.src=u;});})();</script>
 </body>
 </html>
