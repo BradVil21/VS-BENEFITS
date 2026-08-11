@@ -936,6 +936,356 @@
       "source": "/blog/how-to-set-up-small-business-health-insurance-florida.html",
       "destination": "/florida-small-business-health-insurance",
       "permanent": true
+    },
+    {
+      "source": "/aca-subsidy-calculator.html",
+      "destination": "/aca-subsidy-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/aca-vs-private-health-insurance-truck-drivers.html",
+      "destination": "/aca-vs-private-health-insurance-truck-drivers",
+      "permanent": true
+    },
+    {
+      "source": "/affordable-health-insurance.html",
+      "destination": "/affordable-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/book.html",
+      "destination": "/book",
+      "permanent": true
+    },
+    {
+      "source": "/bradley-vilsaint.html",
+      "destination": "/bradley-vilsaint",
+      "permanent": true
+    },
+    {
+      "source": "/bronze-vs-silver-vs-gold-vs-platinum.html",
+      "destination": "/bronze-vs-silver-vs-gold-vs-platinum",
+      "permanent": true
+    },
+    {
+      "source": "/business-open-enrollment-faq.html",
+      "destination": "/business-open-enrollment-faq",
+      "permanent": true
+    },
+    {
+      "source": "/can-truckers-deduct-health-insurance.html",
+      "destination": "/can-truckers-deduct-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/careers.html",
+      "destination": "/careers",
+      "permanent": true
+    },
+    {
+      "source": "/census.html",
+      "destination": "/census",
+      "permanent": true
+    },
+    {
+      "source": "/client.html",
+      "destination": "/client",
+      "permanent": true
+    },
+    {
+      "source": "/coral-springs-health-insurance.html",
+      "destination": "/coral-springs-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/costo-seguro-medico-camioneros.html",
+      "destination": "/costo-seguro-medico-camioneros",
+      "permanent": true
+    },
+    {
+      "source": "/deductible-copay-out-of-pocket-explained.html",
+      "destination": "/deductible-copay-out-of-pocket-explained",
+      "permanent": true
+    },
+    {
+      "source": "/florida-small-business-health-insurance.html",
+      "destination": "/florida-small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/fort-lauderdale-small-business-health-insurance.html",
+      "destination": "/fort-lauderdale-small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-basics-faq.html",
+      "destination": "/health-insurance-basics-faq",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-before-medicare.html",
+      "destination": "/health-insurance-before-medicare",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-between-jobs.html",
+      "destination": "/health-insurance-between-jobs",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-brokerage-near-me.html",
+      "destination": "/health-insurance-brokerage-near-me",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-cost-faq.html",
+      "destination": "/health-insurance-cost-faq",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-auto-repair-shops.html",
+      "destination": "/health-insurance-for-auto-repair-shops",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-cleaning-companies.html",
+      "destination": "/health-insurance-for-cleaning-companies",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-construction-companies.html",
+      "destination": "/health-insurance-for-construction-companies",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-contractors.html",
+      "destination": "/health-insurance-for-contractors",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-dental-offices.html",
+      "destination": "/health-insurance-for-dental-offices",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-real-estate-agents.html",
+      "destination": "/health-insurance-for-real-estate-agents",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-restaurants.html",
+      "destination": "/health-insurance-for-restaurants",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-retail-businesses.html",
+      "destination": "/health-insurance-for-retail-businesses",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-salons-and-spas.html",
+      "destination": "/health-insurance-for-salons-and-spas",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-self-employed-truck-drivers.html",
+      "destination": "/health-insurance-for-self-employed-truck-drivers",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-trucking-companies.html",
+      "destination": "/health-insurance-for-trucking-companies",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-near-me.html",
+      "destination": "/health-insurance-near-me",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance.html",
+      "destination": "/health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/hmo-vs-ppo.html",
+      "destination": "/hmo-vs-ppo",
+      "permanent": true
+    },
+    {
+      "source": "/how-much-does-health-insurance-cost.html",
+      "destination": "/how-much-does-health-insurance-cost",
+      "permanent": true
+    },
+    {
+      "source": "/miami-small-business-health-insurance.html",
+      "destination": "/miami-small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/open-enrollment.html",
+      "destination": "/open-enrollment",
+      "permanent": true
+    },
+    {
+      "source": "/owner-operator-plan-finder.html",
+      "destination": "/owner-operator-plan-finder",
+      "permanent": true
+    },
+    {
+      "source": "/qualifying-life-events-health-insurance.html",
+      "destination": "/qualifying-life-events-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/refer-and-earn.html",
+      "destination": "/refer-and-earn",
+      "permanent": true
+    },
+    {
+      "source": "/seguro-medico-camioneros-florida.html",
+      "destination": "/seguro-medico-camioneros-florida",
+      "permanent": true
+    },
+    {
+      "source": "/seguro-medico-camioneros.html",
+      "destination": "/seguro-medico-camioneros",
+      "permanent": true
+    },
+    {
+      "source": "/seguro-medico-owner-operators.html",
+      "destination": "/seguro-medico-owner-operators",
+      "permanent": true
+    },
+    {
+      "source": "/small-business-health-insurance-cost.html",
+      "destination": "/small-business-health-insurance-cost",
+      "permanent": true
+    },
+    {
+      "source": "/what-is-vs-health-benefits.html",
+      "destination": "/what-is-vs-health-benefits",
+      "permanent": true
+    },
+    {
+      "source": "/blog/1099-vs-w2-truck-driver-benefits.html",
+      "destination": "/blog/1099-vs-w2-truck-driver-benefits",
+      "permanent": true
+    },
+    {
+      "source": "/blog/aca-open-enrollment-2027-guide.html",
+      "destination": "/blog/aca-open-enrollment-2027-guide",
+      "permanent": true
+    },
+    {
+      "source": "/blog/aca-subsidies-ended-2026-what-to-do.html",
+      "destination": "/blog/aca-subsidies-ended-2026-what-to-do",
+      "permanent": true
+    },
+    {
+      "source": "/blog/can-owner-operators-deduct-health-insurance.html",
+      "destination": "/blog/can-owner-operators-deduct-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/company-truck-driver-health-insurance.html",
+      "destination": "/blog/company-truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/does-health-insurance-cover-dental-and-vision.html",
+      "destination": "/blog/does-health-insurance-cover-dental-and-vision",
+      "permanent": true
+    },
+    {
+      "source": "/blog/earn-money-referring-health-insurance.html",
+      "destination": "/blog/earn-money-referring-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/employee-health-insurance-recruitment-retention.html",
+      "destination": "/blog/employee-health-insurance-recruitment-retention",
+      "permanent": true
+    },
+    {
+      "source": "/blog/florida-small-business-health-care-tax-credit.html",
+      "destination": "/blog/florida-small-business-health-care-tax-credit",
+      "permanent": true
+    },
+    {
+      "source": "/blog/florida-small-business-health-insurance-cost.html",
+      "destination": "/blog/florida-small-business-health-insurance-cost",
+      "permanent": true
+    },
+    {
+      "source": "/blog/health-insurance-dot-physical.html",
+      "destination": "/blog/health-insurance-dot-physical",
+      "permanent": true
+    },
+    {
+      "source": "/blog/health-insurance-for-real-estate-agents.html",
+      "destination": "/blog/health-insurance-for-real-estate-agents",
+      "permanent": true
+    },
+    {
+      "source": "/blog/health-insurance-when-you-go-independent.html",
+      "destination": "/blog/health-insurance-when-you-go-independent",
+      "permanent": true
+    },
+    {
+      "source": "/blog/health-insurance-while-living-on-the-road.html",
+      "destination": "/blog/health-insurance-while-living-on-the-road",
+      "permanent": true
+    },
+    {
+      "source": "/blog/how-to-shop-for-health-insurance.html",
+      "destination": "/blog/how-to-shop-for-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/is-dental-and-vision-insurance-worth-it.html",
+      "destination": "/blog/is-dental-and-vision-insurance-worth-it",
+      "permanent": true
+    },
+    {
+      "source": "/blog/lost-health-insurance-job-loss-options.html",
+      "destination": "/blog/lost-health-insurance-job-loss-options",
+      "permanent": true
+    },
+    {
+      "source": "/blog/miami-small-business-health-insurance.html",
+      "destination": "/blog/miami-small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/open-enrollment-2027-income-premium-increase.html",
+      "destination": "/blog/open-enrollment-2027-income-premium-increase",
+      "permanent": true
+    },
+    {
+      "source": "/blog/small-business-group-health-guide.html",
+      "destination": "/blog/small-business-group-health-guide",
+      "permanent": true
+    },
+    {
+      "source": "/blog/turning-26-health-insurance.html",
+      "destination": "/blog/turning-26-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/what-happens-if-you-miss-open-enrollment.html",
+      "destination": "/blog/what-happens-if-you-miss-open-enrollment",
+      "permanent": true
+    },
+    {
+      "source": "/blog/what-income-counts-for-aca-subsidies.html",
+      "destination": "/blog/what-income-counts-for-aca-subsidies",
+      "permanent": true
+    },
+    {
+      "source": "/blog/why-do-we-get-health-insurance.html",
+      "destination": "/blog/why-do-we-get-health-insurance",
+      "permanent": true
     }
   ],
   "rewrites": [
