@@ -4605,7 +4605,7 @@ function czFuResults(){
   var blocks=secs.map(function(sec){
     var list=g[sec.key];if(!list.length)return"";
     var items=list.map(function(o){var c=o.c,fu=o.fu;
-      return '<div class="cz-listitem" style="cursor:default"><div style="min-width:0;flex:1;cursor:pointer" data-cz-open="'+c.id+'"><div class="cz-row" style="gap:8px"><span class="cz-nm">'+escapeHtml(czName(c))+'</span><span class="cz-chip" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></div><div class="cz-sub" style="margin-top:2px">'+escapeHtml(c.phone||c.email||"no contact info")+' · last contact '+(c.lastContact?czPretty(c.lastContact):"—")+'</div></div><span class="cz-pill cz-hide-md" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span><div class="cz-fu-acts"><button class="cz-resetbtn vsfu-done" data-cz-complete="'+c.id+'" title="Reached them / handled — clears the follow-up">✓ Completed</button><button class="cz-resetbtn vsfu-no" data-cz-noanswer="'+c.id+'" title="No answer — comes back in 2 days">☎ No answer</button><select class="cz-resetbtn cz-fu-snooze" data-cz-snooze="'+c.id+'" title="Follow up later — comes back when due"><option value="">⏱ Snooze</option><option value="30">30 days out</option><option value="60">60 days out</option><option value="90">90 days out</option></select><button class="cz-resetbtn" data-cz-reset="'+c.id+'" title="Log contact — restart 14-day clock">↻ Reset</button><button class="cz-resetbtn" data-cz-fu-remove="'+c.id+'" title="Take this person off the follow-up list" style="color:#be123c;border-color:#fecdd3">\u2715 Remove</button></div></div>';
+      return '<div class="cz-listitem" data-cz-open="'+c.id+'" style="cursor:pointer"><div style="min-width:0;flex:1"><div class="cz-row" style="gap:8px"><span class="cz-nm">'+escapeHtml(czName(c))+'</span><span class="cz-chip" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></div><div class="cz-sub" style="margin-top:2px">'+escapeHtml(c.phone||c.email||"no contact info")+' \u00b7 last contact '+(c.lastContact?czPretty(c.lastContact):"\u2014")+'</div></div><span class="cz-pill" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span><span style="font-size:12.5px;font-weight:800;color:#16447f;white-space:nowrap;background:#eef4fd;border:1px solid #c9dcf5;border-radius:999px;padding:6px 14px">Open \u2192</span></div>';
     }).join("");
     return '<div class="cz-panel" style="overflow:hidden;margin-bottom:20px"><div class="cz-sec-head"><h2><span style="color:'+sec.accent+'">'+sec.ico+'</span> '+sec.title+' <span class="cz-faint" style="font-size:12px;font-weight:400">'+list.length+'</span></h2><button class="cz-resetbtn vsfu-done" data-cz-clearall="'+sec.key+'" title="Mark every follow-up in this section as completed">\u2713 Clear all '+list.length+'</button></div>'+items+'</div>';
   }).join("");
@@ -6624,19 +6624,25 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
 </script>
 
 <style id="cz-compact-modal">
-/* Lead card: tighter so the whole thing fits without scrolling */
-#modal-box.modal{max-width:660px;padding:16px 18px;border:2px solid rgba(22,68,127,.18);box-shadow:0 24px 64px rgba(11,35,70,.35)}
-#modal-content h2{font-size:15px!important}
-#modal-content .cz-fgrid{gap:8px 10px;margin-top:10px!important}
-#modal-content .cz-inp{padding:6px 10px;font-size:13px;border-radius:8px;margin-top:2px}
-#modal-content .cz-fld>span{font-size:11.5px}
-#modal-content #cz_notes{min-height:64px}
-#modal-content .cz-callbar{margin:8px 0 0}
-#modal-content .cz-mfoot{margin-top:10px}
-#modal-content .cz-meta{margin-top:10px}
+/* Lead card: compact so the full card shows on open */
+#modal-box.modal{max-width:680px;padding:12px 16px;border:2px solid rgba(22,68,127,.18);box-shadow:0 24px 64px rgba(11,35,70,.35)}
+#modal-content h2{font-size:15px!important;margin-bottom:2px!important}
+#modal-content .cz-pill{margin-top:2px!important;font-size:11px}
+#modal-content .cz-fgrid{gap:6px 10px;margin-top:8px!important}
+#modal-content .cz-inp{padding:5px 9px;font-size:12.5px;border-radius:8px;margin-top:2px}
+#modal-content .cz-fld>span{font-size:11px}
+#modal-content .cz-moneywrap .cz-inp{padding-left:24px}
+#modal-content .cz-moneywrap .cz-s{left:10px;margin-top:1px;font-size:12.5px}
+#modal-content #cz_notes{min-height:48px}
+#modal-content .cz-callbar{margin:6px 0 0}
+#modal-content .cz-callbtn{padding:6px 12px;font-size:12.5px;border-radius:8px}
+#modal-content .cz-quicknote{gap:6px}
+#modal-content .cz-mfoot{margin-top:8px}
+#modal-content .cz-meta{margin-top:8px}
+#modal-content .cz-ipbox{margin-top:8px;padding:8px 10px;font-size:11.5px}
 /* Disposition panel on the card */
-#cz-dispwrap{margin:10px 0 0;padding:10px;border:2px solid #16447f;border-radius:12px;background:linear-gradient(135deg,#f4f8fe,#fff)}
-#cz-dispwrap #cz-dispbtn{width:100%;font-weight:800}
+#cz-dispwrap{margin:8px 0 0;padding:8px;border:2px solid #16447f;border-radius:12px;background:linear-gradient(135deg,#f4f8fe,#fff)}
+#cz-dispwrap #cz-dispbtn{width:100%;font-weight:800;padding:8px 12px}
 #cz-dispacts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 #cz-dispacts .cz-resetbtn{flex:1 1 auto;justify-content:center;text-align:center}
 </style>
