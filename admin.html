@@ -4715,7 +4715,16 @@ function czOpenModal(client){
     +(c.phone?'<a class="cz-callbtn cz-soft" href="sms:'+escapeHtml(telNum)+'"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.9-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 4 11.5a8.5 8.5 0 0 1 17 0z"/></svg> Text</a>':'')
     +(c.email?'<a class="cz-callbtn cz-soft" href="mailto:'+escapeHtml(c.email)+'"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg> Email</a>':'')
     +'</div>'):'';
-  var html='<h2 style="margin:0 0 4px;font-size:16px;font-weight:600;letter-spacing:-.01em">'+(isNew?"Add client":escapeHtml(czName(c)))+'</h2>'+fuBadge+callBar
+  var dispBlock=(!isNew&&fu&&fu.key!=="none")?('<div id="cz-dispwrap">'
+    +'<button type="button" class="cz-btn-go" id="cz-dispbtn">\u2691 Disposition this follow-up</button>'
+    +'<div id="cz-dispacts" style="display:none">'
+    +'<button type="button" class="cz-resetbtn vsfu-done" id="cz-disp-complete" title="Reached them / handled \u2014 clears the follow-up">\u2713 Completed</button>'
+    +'<button type="button" class="cz-resetbtn vsfu-no" id="cz-disp-noanswer" title="No answer \u2014 comes back in 2 days">\u260e No answer</button>'
+    +'<select class="cz-resetbtn" id="cz-disp-snooze" title="Push it out \u2014 comes back when due"><option value="">\u23f1 Snooze</option><option value="30">30 days out</option><option value="60">60 days out</option><option value="90">90 days out</option></select>'
+    +'<button type="button" class="cz-resetbtn" id="cz-disp-reset" title="Log contact \u2014 restart 14-day clock">\u21bb Reset</button>'
+    +'<button type="button" class="cz-resetbtn" id="cz-disp-remove" style="color:#be123c;border-color:#fecdd3" title="Take this person off the follow-up list">\u2715 Remove</button>'
+    +'</div></div>'):'';
+  var html='<h2 style="margin:0 0 4px;font-size:16px;font-weight:600;letter-spacing:-.01em">'+(isNew?"Add client":escapeHtml(czName(c)))+'</h2>'+fuBadge+callBar+dispBlock
     +'<div class="cz-fgrid" style="margin-top:16px">'
     +czF("First name","cz_firstName",c.firstName,"Jane")
     +czF("Last name","cz_lastName",c.lastName,"Doe")
@@ -4730,7 +4739,7 @@ function czOpenModal(client){
     +'<label class="cz-fld"><span>State</span><select class="cz-inp" id="cz_state">'+stateOpts+'</select></label>'
     +'<label class="cz-fld"><span>Zip code</span><input class="cz-inp" id="cz_zipCode" value="'+escapeHtml(zip)+'" placeholder="33404"/></label>'
     +'<label class="cz-fld cz-full"><span>Pipeline stage</span><select class="cz-inp" id="cz_stage">'+stageOpts+'</select></label>'
-    +'<div class="cz-fld cz-full"><span>Call notes</span><div class="cz-quicknote"><input class="cz-inp" id="cz_quicknote" placeholder="Jot a note during the call, hit Add (timestamps it)"/><button type="button" class="cz-btn-go" id="cz-addnote">Add</button></div><textarea class="cz-inp" id="cz_notes" rows="5" placeholder="Conversation history, preferences, objections, best time to reach…">'+escapeHtml(c.notes||"")+'</textarea>'+(!isNew?'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center"><button type="button" class="cz-btn-go" id="cz-answered" style="background:#0a8754">☎ Answered · set callback from note</button><span style="font-size:11px;color:#94a3b8">e.g. write “call back in 3 hours” in the note</span></div>':'')+'</div>'
+    +'<div class="cz-fld cz-full"><span>Call notes</span><div class="cz-quicknote"><input class="cz-inp" id="cz_quicknote" placeholder="Jot a note during the call, hit Add (timestamps it)"/><button type="button" class="cz-btn-go" id="cz-addnote">Add</button></div><textarea class="cz-inp" id="cz_notes" rows="3" placeholder="Conversation history, preferences, objections, best time to reach…">'+escapeHtml(c.notes||"")+'</textarea>'+(!isNew?'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center"><button type="button" class="cz-btn-go" id="cz-answered" style="background:#0a8754">☎ Answered · set callback from note</button><span style="font-size:11px;color:#94a3b8">e.g. write “call back in 3 hours” in the note</span></div>':'')+'</div>'
     +'</div>'
     +'<div class="cz-err" id="cz-mErr" style="display:none">Add at least a first or last name so you can find this lead later.</div>'
     +(typeof czIpBlock==="function"?czIpBlock(c):"")
@@ -4738,6 +4747,19 @@ function czOpenModal(client){
     +'<div class="cz-mfoot">'+delBlock+'<button class="cz-btn-ghost" data-close>Cancel</button><button class="cz-btn-go" id="cz-mSave">✓ '+(isNew?"Add client":"Save changes")+'</button></div>';
   openModal(html);
   czAddrAutocomplete();
+  (function(){
+    var db=$("cz-dispbtn"),da=$("cz-dispacts");
+    if(!db||!da||isNew||!client||!client.id)return;
+    var id=client.id;
+    db.addEventListener("click",function(){var open=da.style.display!=="none";da.style.display=open?"none":"flex";db.textContent=open?"\u2691 Disposition this follow-up":"Pick one \u2014 it saves and clears instantly:";});
+    function act(fn){return function(){closeModal();fn(id);};}
+    var b;
+    b=$("cz-disp-complete");if(b)b.addEventListener("click",act(czFuComplete));
+    b=$("cz-disp-noanswer");if(b)b.addEventListener("click",act(czFuNoAnswer));
+    b=$("cz-disp-reset");if(b)b.addEventListener("click",act(czRestart));
+    b=$("cz-disp-remove");if(b)b.addEventListener("click",function(){czFuRemove(id);var c2=getLeads().filter(function(x){return x.id===id;})[0];if(c2&&c2.fuCleared)closeModal();});
+    var sn=$("cz-disp-snooze");if(sn)sn.addEventListener("change",function(){var d=parseInt(sn.value,10);sn.value="";if(d>0){closeModal();czFuSnooze(id,d);}});
+  })();
   var stEl=$("cz_state");if(stEl)stEl.value=c.state||"";
   var sgEl=$("cz_stage");if(sgEl)sgEl.value=c.stage||"follow_up";
   // Live timestamped call notes: appends a stamped line and saves immediately for existing leads
@@ -6601,5 +6623,22 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
 })();
 </script>
 
+<style id="cz-compact-modal">
+/* Lead card: tighter so the whole thing fits without scrolling */
+#modal-box.modal{max-width:660px;padding:16px 18px;border:2px solid rgba(22,68,127,.18);box-shadow:0 24px 64px rgba(11,35,70,.35)}
+#modal-content h2{font-size:15px!important}
+#modal-content .cz-fgrid{gap:8px 10px;margin-top:10px!important}
+#modal-content .cz-inp{padding:6px 10px;font-size:13px;border-radius:8px;margin-top:2px}
+#modal-content .cz-fld>span{font-size:11.5px}
+#modal-content #cz_notes{min-height:64px}
+#modal-content .cz-callbar{margin:8px 0 0}
+#modal-content .cz-mfoot{margin-top:10px}
+#modal-content .cz-meta{margin-top:10px}
+/* Disposition panel on the card */
+#cz-dispwrap{margin:10px 0 0;padding:10px;border:2px solid #16447f;border-radius:12px;background:linear-gradient(135deg,#f4f8fe,#fff)}
+#cz-dispwrap #cz-dispbtn{width:100%;font-weight:800}
+#cz-dispacts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+#cz-dispacts .cz-resetbtn{flex:1 1 auto;justify-content:center;text-align:center}
+</style>
 </body>
 </html>
