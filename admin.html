@@ -4304,6 +4304,7 @@ function czBind(root){
   root.querySelectorAll("[data-cz-reset]").forEach(function(n){n.addEventListener("click",function(e){e.stopPropagation();czRestart(n.getAttribute("data-cz-reset"));});});
   root.querySelectorAll("[data-cz-complete]").forEach(function(n){n.addEventListener("click",function(e){e.stopPropagation();czFuComplete(n.getAttribute("data-cz-complete"));});});
   root.querySelectorAll("[data-cz-noanswer]").forEach(function(n){n.addEventListener("click",function(e){e.stopPropagation();czFuNoAnswer(n.getAttribute("data-cz-noanswer"));});});
+  root.querySelectorAll("[data-cz-fu-remove]").forEach(function(n){n.addEventListener("click",function(e){e.stopPropagation();czFuRemove(n.getAttribute("data-cz-fu-remove"));});});
   root.querySelectorAll("[data-cz-snooze]").forEach(function(n){n.addEventListener("change",function(e){e.stopPropagation();var d=parseInt(n.value,10);if(d>0)czFuSnooze(n.getAttribute("data-cz-snooze"),d);n.value="";});n.addEventListener("click",function(e){e.stopPropagation();});});
   root.querySelectorAll("[data-cz-stage]").forEach(function(n){n.addEventListener("change",function(e){e.stopPropagation();czSetStage(n.getAttribute("data-cz-stage"),n.value);});});
   root.querySelectorAll("[data-cz-fudate]").forEach(function(n){
@@ -4369,6 +4370,16 @@ function czFuClearAll(key){
   });
   saveLeads(arr);
   if(typeof addLeadActivity==="function")ids.forEach(function(id){addLeadActivity(id,"followup","Follow-up completed \u00b7 bulk clear");});
+  czCurrentRender();if(typeof renderTasks==="function")renderTasks();
+}
+/* Remove one person from the follow-up list entirely */
+function czFuRemove(id){
+  var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
+  if(!confirm("Remove "+(czName(c)||"this lead")+" from the follow-up list? They stay in your pipeline but will not come back up until you set a new follow-up date."))return;
+  c.followUpDue="";c.fuCleared=true;c.updated=Date.now();
+  czStampNote(c,"Removed from follow-up list");
+  saveLeads(arr);
+  if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","Removed from follow-up list");
   czCurrentRender();if(typeof renderTasks==="function")renderTasks();
 }
 /* No answer — recycle back into the list in a couple of days */
@@ -4594,7 +4605,7 @@ function czFuResults(){
   var blocks=secs.map(function(sec){
     var list=g[sec.key];if(!list.length)return"";
     var items=list.map(function(o){var c=o.c,fu=o.fu;
-      return '<div class="cz-listitem" style="cursor:default"><div style="min-width:0;flex:1;cursor:pointer" data-cz-open="'+c.id+'"><div class="cz-row" style="gap:8px"><span class="cz-nm">'+escapeHtml(czName(c))+'</span><span class="cz-chip" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></div><div class="cz-sub" style="margin-top:2px">'+escapeHtml(c.phone||c.email||"no contact info")+' · last contact '+(c.lastContact?czPretty(c.lastContact):"—")+'</div></div><span class="cz-pill cz-hide-md" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span><div class="cz-fu-acts"><button class="cz-resetbtn vsfu-done" data-cz-complete="'+c.id+'" title="Reached them / handled — clears the follow-up">✓ Completed</button><button class="cz-resetbtn vsfu-no" data-cz-noanswer="'+c.id+'" title="No answer — comes back in 2 days">☎ No answer</button><select class="cz-resetbtn cz-fu-snooze" data-cz-snooze="'+c.id+'" title="Follow up later — comes back when due"><option value="">⏱ Snooze</option><option value="30">30 days out</option><option value="60">60 days out</option><option value="90">90 days out</option></select><button class="cz-resetbtn" data-cz-reset="'+c.id+'" title="Log contact — restart 14-day clock">↻ Reset</button></div></div>';
+      return '<div class="cz-listitem" style="cursor:default"><div style="min-width:0;flex:1;cursor:pointer" data-cz-open="'+c.id+'"><div class="cz-row" style="gap:8px"><span class="cz-nm">'+escapeHtml(czName(c))+'</span><span class="cz-chip" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></div><div class="cz-sub" style="margin-top:2px">'+escapeHtml(c.phone||c.email||"no contact info")+' · last contact '+(c.lastContact?czPretty(c.lastContact):"—")+'</div></div><span class="cz-pill cz-hide-md" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span><div class="cz-fu-acts"><button class="cz-resetbtn vsfu-done" data-cz-complete="'+c.id+'" title="Reached them / handled — clears the follow-up">✓ Completed</button><button class="cz-resetbtn vsfu-no" data-cz-noanswer="'+c.id+'" title="No answer — comes back in 2 days">☎ No answer</button><select class="cz-resetbtn cz-fu-snooze" data-cz-snooze="'+c.id+'" title="Follow up later — comes back when due"><option value="">⏱ Snooze</option><option value="30">30 days out</option><option value="60">60 days out</option><option value="90">90 days out</option></select><button class="cz-resetbtn" data-cz-reset="'+c.id+'" title="Log contact — restart 14-day clock">↻ Reset</button><button class="cz-resetbtn" data-cz-fu-remove="'+c.id+'" title="Take this person off the follow-up list" style="color:#be123c;border-color:#fecdd3">\u2715 Remove</button></div></div>';
     }).join("");
     return '<div class="cz-panel" style="overflow:hidden;margin-bottom:20px"><div class="cz-sec-head"><h2><span style="color:'+sec.accent+'">'+sec.ico+'</span> '+sec.title+' <span class="cz-faint" style="font-size:12px;font-weight:400">'+list.length+'</span></h2><button class="cz-resetbtn vsfu-done" data-cz-clearall="'+sec.key+'" title="Mark every follow-up in this section as completed">\u2713 Clear all '+list.length+'</button></div>'+items+'</div>';
   }).join("");
