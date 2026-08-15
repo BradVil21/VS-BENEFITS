@@ -1312,15 +1312,6 @@
           "value": "noindex, nofollow"
         }
       ]
-    },
-    {
-      "source": "/privacy",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex"
-        }
-      ]
     }
   ]
 }
