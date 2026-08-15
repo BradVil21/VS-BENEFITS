@@ -737,7 +737,15 @@ footer a:hover{color:#fff}
             </div>
             <div class="field"><label for="q-notes">Anything else we should know?</label>
               <textarea id="q-notes" name="notes" placeholder="Example: need pediatric dental, prefer BCBS network, want to compare ICHRA."></textarea></div>
-            <button class="btn btn-primary" type="submit" style="width:100%">Send My Quote Request</button>
+            <div class="field" style="display:flex;gap:10px;align-items:flex-start;margin-bottom:14px">
+            <input id="q-sms-opt" name="sms_opt_in" type="checkbox"
+              style="width:18px;height:18px;margin-top:3px;flex-shrink:0;cursor:pointer" />
+            <label for="q-sms-opt" style="font-size:.8rem;line-height:1.5;cursor:pointer;font-weight:400">
+              I agree to receive SMS text messages and/or phone calls from VS Health Benefits at the number provided regarding my quote request. Message &amp; data rates may apply. Message frequency varies. Reply <strong>STOP</strong> to opt out at any time or <strong>HELP</strong> for help. Consent is not a condition of purchase.
+              <a href="/privacy#sms" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms#sms-terms" target="_blank" rel="noopener">Terms</a>.
+            </label>
+          </div>
+          <button class="btn btn-primary" type="submit" style="width:100%">Send My Quote Request</button>
             <p class="fine-print">By submitting, you consent to be contacted by VS Health Benefits. Your information is private and never shared or sold.</p>
           </div>
         </form>
@@ -1042,6 +1050,7 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
       var data={};
       new FormData(form).forEach(function(v,k){data[k]=v;});
+      data.sms_opt_in = data.sms_opt_in ? "yes" : "no";
       data._source="vshealthbenefits.com";
       data._page  =window.location.pathname;
       data._ts    =new Date().toISOString();
