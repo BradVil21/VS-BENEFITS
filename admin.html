@@ -1437,6 +1437,34 @@ html.dark .cz-ac-1{color:#e6eefb}
 </style>
 <style>
 /* ===== Cleaner Daily Sales Sequences cards (scoped override) ===== */
+/* ===== MY TASKS (personal to-do board) ===== */
+.mt-addbar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px}
+.mt-addbar input[type=text]{flex:1 1 280px;min-width:200px}
+.mt-addbar input,.mt-addbar select{padding:10px 12px;border:1px solid #d7e0ee;border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+html.dark .mt-addbar input,html.dark .mt-addbar select{background:#162030;border-color:#2c3d55;color:#e6eefb}
+.mt-filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.mt-chip{padding:6px 13px;border-radius:999px;border:1px solid #d7e0ee;background:#fff;color:#475569;font-size:12.5px;font-weight:600;cursor:pointer}
+.mt-chip.on{background:#16447f;border-color:#16447f;color:#fff}
+html.dark .mt-chip{background:#162030;border-color:#2c3d55;color:#9fb4cd}
+html.dark .mt-chip.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.mt-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #e3eaf4;border-left:4px solid #94a3b8;border-radius:12px;background:#fff;margin-bottom:9px}
+html.dark .mt-item{background:#141d2b;border-color:#26374e}
+.mt-item.s-new{border-left-color:#3b82f6}
+.mt-item.s-in-progress{border-left-color:#f59e0b}
+.mt-item.s-completed{border-left-color:#10b981}
+.mt-item.s-incomplete{border-left-color:#ef4444}
+.mt-item.s-completed .mt-title{text-decoration:line-through;opacity:.55}
+.mt-main{flex:1;min-width:0}
+.mt-title{font-weight:600;font-size:14px;color:#0e1726;word-break:break-word}
+html.dark .mt-title{color:#e6eefb}
+.mt-meta{font-size:11.5px;color:#64748b;margin-top:3px}
+.mt-meta .mt-over{color:#dc2626;font-weight:700}
+.mt-meta .mt-soon{color:#d97706;font-weight:700}
+.mt-item select{padding:6px 9px;border:1px solid #d7e0ee;border-radius:8px;font:inherit;font-size:12.5px;background:#fff;color:#0e1726}
+html.dark .mt-item select{background:#0f1826;border-color:#2c3d55;color:#e6eefb}
+.mt-del{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:18px;line-height:1;padding:4px 8px;border-radius:8px}
+.mt-del:hover{background:#fee2e2;color:#dc2626}
+@media(max-width:640px){.mt-item{flex-wrap:wrap}.mt-addbar input[type=text]{flex:1 1 100%}}
 #tasks-container .seq-card{border:2px solid #bcccea;border-radius:14px;box-shadow:0 3px 10px rgba(11,35,70,.09);margin-bottom:16px;overflow:hidden;transition:box-shadow .15s,transform .15s,border-color .15s}
 #tasks-container .seq-card:hover{border-color:#8fb0e6;box-shadow:0 10px 26px rgba(11,35,70,.14);transform:translateY(-1px)}
 html.dark #tasks-container .seq-card{border-color:#37527c}
@@ -1559,6 +1587,10 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.9-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 4 11.5a8.5 8.5 0 0 1 17 0z"/></svg></span><span class="sni-label">Support</span>
       <span class="sni-badge" id="b-sup" style="display:none">0</span>
     </button>
+    <button class="sidebar-nav-item" data-tab="mytasks" type="button">
+      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><span class="sni-label">My Tasks</span>
+      <span class="sni-badge" id="b-mytasks" style="display:none">0</span>
+    </button>
     <button class="sidebar-nav-item" data-tab="referrals" type="button">
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></span><span class="sni-label">Referrals</span>
       <span class="sni-badge" id="b-ref" style="display:none">0</span>
@@ -1673,6 +1705,25 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
     </div>
 
     <!-- FOLLOW-UPS (new CRM design) -->
+    <!-- MY TASKS -->
+    <div id="p-mytasks" class="panel">
+      <h3>My Tasks</h3>
+      <p class="lede">Your personal to-do board. Add what you're working on, set a deadline, and move it across the four states.</p>
+      <div class="mt-addbar">
+        <input id="mt-title" type="text" placeholder="What needs to get done?" />
+        <input id="mt-due" type="date" title="Deadline" />
+        <select id="mt-status">
+          <option value="new">New</option>
+          <option value="in-progress">In Progress</option>
+          <option value="completed">Completed</option>
+          <option value="incomplete">Incomplete</option>
+        </select>
+        <button id="mt-add" class="btn btn-primary" type="button">+ Add Task</button>
+      </div>
+      <div class="mt-filters" id="mt-filters"></div>
+      <div id="mytasks-container"></div>
+    </div>
+
     <div id="p-followups" class="panel">
       <div id="cz-followups"></div>
     </div>
@@ -2154,8 +2205,8 @@ function renderActivityHistory(container,l){
 }
 
 /* ── SIDEBAR NAVIGATION ── */
-var ALL_TABS=["dashboard","leads","tasks","pipeline","accounts","support","referrals","settings"];
-var TAB_TITLES={dashboard:"Command Center",leads:"Leads",tasks:"Daily Sales Sequences",pipeline:"Pipeline",accounts:"Active Clients",support:"Support Inbox",referrals:"Referrals",settings:"Settings"};
+var ALL_TABS=["dashboard","leads","tasks","mytasks","pipeline","accounts","support","referrals","settings"];
+var TAB_TITLES={dashboard:"Command Center",leads:"Leads",tasks:"Daily Sales Sequences",mytasks:"My Tasks",pipeline:"Pipeline",accounts:"Active Clients",support:"Support Inbox",referrals:"Referrals",settings:"Settings"};
 var isSidebarCollapsed=false;
 var isMobile=function(){return window.innerWidth<768;};
 
@@ -2221,6 +2272,7 @@ function switchTab(name){
   if(name==="settings"){renderSettings();initSoundSettings();}
   if(name==="pipeline")renderPipeline();
   if(name==="tasks")renderTasks();
+  if(name==="mytasks")renderMyTasks();
 }
 document.querySelectorAll("[data-tab]").forEach(function(b){b.addEventListener("click",function(){switchTab(b.getAttribute("data-tab"));});});
 
@@ -4044,6 +4096,163 @@ function renderDashboard(){
   });
 }
 
+/* ===================== MY TASKS — personal to-do board =====================
+   Simple, self-contained. Stored locally under vs_my_tasks.
+   Statuses: new | in-progress | completed | incomplete
+=========================================================================== */
+var MT_KEY="vs_my_tasks";
+var MT_SEEDED="vs_my_tasks_seeded";
+var MT_STATUSES=["new","in-progress","completed","incomplete"];
+var MT_LABEL={"new":"New","in-progress":"In Progress","completed":"Completed","incomplete":"Incomplete"};
+var mtFilter="all";
+
+function mtGet(){try{return JSON.parse(localStorage.getItem(MT_KEY)||"[]");}catch(e){return [];}}
+function mtSave(v){localStorage.setItem(MT_KEY,JSON.stringify(v||[]));}
+
+/* One-time seed: Bradley's automation checklist */
+function mtSeed(){
+  if(localStorage.getItem(MT_SEEDED))return;
+  var seed=[
+    ["Client Onboarding (Sold) Automation","completed"],
+    ["Customer Support Automation","new"],
+    ["Lead Generation Automation","in-progress"],
+    ["Member Account Creation Automation","new"],
+    ["Referral Automation","new"],
+    ["Marketing Automation","new"],
+    ["Launch Google Ads (Niched)","new"],
+    ["SMS A2P Approved","in-progress"],
+    ["Build More SEO Targeting (Niched)","new"],
+    ["Fix Google Search Console","new"],
+    ["Update Google Profile","new"]
+  ];
+  var now=Date.now(),arr=mtGet();
+  seed.forEach(function(t,i){
+    arr.push({id:uid(),title:t[0],status:t[1],due:"",created:now+i});
+  });
+  mtSave(arr);
+  localStorage.setItem(MT_SEEDED,"1");
+}
+
+function mtDueInfo(due){
+  if(!due)return {text:"No deadline",cls:""};
+  var d=new Date(due+"T23:59:59"), now=new Date();
+  var days=Math.ceil((d-now)/86400000);
+  var pretty=d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});
+  if(days<0)return {text:"Due "+pretty+" · "+Math.abs(days)+"d overdue",cls:"mt-over"};
+  if(days===0)return {text:"Due today ("+pretty+")",cls:"mt-soon"};
+  if(days<=3)return {text:"Due "+pretty+" · in "+days+"d",cls:"mt-soon"};
+  return {text:"Due "+pretty,cls:""};
+}
+
+function renderMyTasks(){
+  var box=$("mytasks-container"); if(!box)return;
+  mtSeed();
+  var all=mtGet();
+
+  /* filter chips */
+  var fbox=$("mt-filters");
+  if(fbox){
+    fbox.innerHTML="";
+    var counts={all:all.length};
+    MT_STATUSES.forEach(function(st){counts[st]=all.filter(function(t){return t.status===st;}).length;});
+    ["all"].concat(MT_STATUSES).forEach(function(k){
+      var chip=el("button",{class:"mt-chip"+(mtFilter===k?" on":""),type:"button",
+        text:(k==="all"?"All":MT_LABEL[k])+" ("+(counts[k]||0)+")",
+        onclick:function(){mtFilter=k;renderMyTasks();}});
+      fbox.appendChild(chip);
+    });
+  }
+
+  /* sort: unfinished first, then by deadline, then newest */
+  var rank={"new":0,"in-progress":1,"incomplete":2,"completed":3};
+  var list=all.slice().filter(function(t){return mtFilter==="all"||t.status===mtFilter;});
+  list.sort(function(a,b){
+    if(rank[a.status]!==rank[b.status])return rank[a.status]-rank[b.status];
+    if(a.due&&b.due&&a.due!==b.due)return a.due<b.due?-1:1;
+    if(a.due&&!b.due)return -1;
+    if(!a.due&&b.due)return 1;
+    return (b.created||0)-(a.created||0);
+  });
+
+  box.innerHTML="";
+  if(!list.length){
+    box.appendChild(el("div",{class:"empty",text:mtFilter==="all"?"No tasks yet — add your first one above.":"Nothing in \""+MT_LABEL[mtFilter]+"\"."}));
+    mtBadge();return;
+  }
+
+  list.forEach(function(t){
+    var row=el("div",{class:"mt-item s-"+t.status});
+    var main=el("div",{class:"mt-main"});
+    main.appendChild(el("div",{class:"mt-title",text:t.title}));
+    var di=mtDueInfo(t.due);
+    var meta=el("div",{class:"mt-meta"});
+    meta.appendChild(el("span",{class:di.cls,text:di.text}));
+    main.appendChild(meta);
+    row.appendChild(main);
+
+    /* deadline editor */
+    var dueIn=el("input",{type:"date",value:t.due||"",title:"Set deadline"});
+    dueIn.addEventListener("change",function(){
+      var arr=mtGet();var i=arr.findIndex(function(x){return x.id===t.id;});
+      if(i>=0){arr[i].due=dueIn.value;mtSave(arr);renderMyTasks();}
+    });
+    dueIn.style.cssText="padding:6px 9px;border:1px solid #d7e0ee;border-radius:8px;font:inherit;font-size:12.5px";
+    row.appendChild(dueIn);
+
+    /* status selector */
+    var sel=el("select",{title:"Status"});
+    MT_STATUSES.forEach(function(st){
+      var o=el("option",{value:st,text:MT_LABEL[st]});
+      if(st===t.status)o.selected=true;
+      sel.appendChild(o);
+    });
+    sel.addEventListener("change",function(){
+      var arr=mtGet();var i=arr.findIndex(function(x){return x.id===t.id;});
+      if(i>=0){arr[i].status=sel.value;mtSave(arr);
+        if(sel.value==="completed"&&typeof playTaskDoneSound==="function"){try{playTaskDoneSound();}catch(e){}}
+        renderMyTasks();}
+    });
+    row.appendChild(sel);
+
+    /* delete */
+    var del=el("button",{class:"mt-del",type:"button",title:"Delete task",html:"&times;",
+      onclick:function(){
+        if(!confirm('Delete "'+t.title+'"?'))return;
+        mtSave(mtGet().filter(function(x){return x.id!==t.id;}));
+        renderMyTasks();
+      }});
+    row.appendChild(del);
+    box.appendChild(row);
+  });
+  mtBadge();
+}
+
+/* sidebar badge = tasks not finished */
+function mtBadge(){
+  var b=$("b-mytasks"); if(!b)return;
+  var n=mtGet().filter(function(t){return t.status!=="completed";}).length;
+  b.textContent=n; b.style.display=n>0?"":"none";
+}
+
+function mtAdd(){
+  var ti=$("mt-title"), du=$("mt-due"), st=$("mt-status");
+  if(!ti)return;
+  var title=(ti.value||"").trim();
+  if(!title){ti.focus();return;}
+  var arr=mtGet();
+  arr.push({id:uid(),title:title,status:(st&&st.value)||"new",due:(du&&du.value)||"",created:Date.now()});
+  mtSave(arr);
+  ti.value="";if(du)du.value="";if(st)st.value="new";
+  renderMyTasks();ti.focus();
+}
+
+document.addEventListener("DOMContentLoaded",function(){
+  var addBtn=$("mt-add"); if(addBtn)addBtn.addEventListener("click",mtAdd);
+  var ti=$("mt-title");
+  if(ti)ti.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();mtAdd();}});
+  try{mtBadge();}catch(e){}
+});
+
 function renderTasks(){
   var box=$("tasks-container");if(!box)return;box.innerHTML="";
   var seqs=getSeqs();
@@ -5310,6 +5519,7 @@ function switchTab(name){
   else if(name==="accounts")renderAccounts();
   else if(name==="users")renderUsers();
   else if(name==="tasks")renderTasks();
+  else if(name==="mytasks")renderMyTasks();
   else if(name==="bizleads")renderBizLeads();
   else if(name==="notes")renderNotes();
   else if(name==="analytics")renderAnalytics();
