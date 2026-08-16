@@ -5134,8 +5134,8 @@ function czCelebrate(name,sub){
   var v=$("cz-celeb-view");if(v)v.addEventListener("click",function(){closeModal();switchTab("accounts");});
 }
 /* ---- route the existing CRM tabs through the new views ---- */
-ALL_TABS=["dashboard","pipeline","leads","followups","tasks","accounts","users","support","referrals","bizleads","notes","analytics","settings"];
-TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",accounts:"Active Clients",users:"Users",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",notes:"Notes",analytics:"Analytics",settings:"Settings"};
+ALL_TABS=["dashboard","pipeline","leads","followups","tasks","mytasks","accounts","users","support","referrals","bizleads","notes","analytics","settings"];
+TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",mytasks:"My Tasks",accounts:"Active Clients",users:"Users",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",notes:"Notes",analytics:"Analytics",settings:"Settings"};
 function renderDashboard(){czDashboard();}
 function renderLeads(){czClients();}
 function renderPipeline(){czPipeline();}
