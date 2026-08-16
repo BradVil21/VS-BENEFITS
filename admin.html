@@ -2525,7 +2525,7 @@ var dragId=null;var dragType=null;
    new-client onboarding workflow.
    Paste your GHL inbound webhook URL between the quotes below.
 ============================================================================== */
-var GHL_SOLD_WEBHOOK_URL = "";   // <-- PASTE ADMIN "SOLD" WEBHOOK URL HERE
+var GHL_SOLD_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/cNCy6JUURpb4eBDdb9bU/webhook-trigger/070ad0f8-0a1c-45d7-9098-7cdf2d8c3cfe";
 
 function ghlNotifySold(lead, client){
   try{
@@ -2534,23 +2534,41 @@ function ghlNotifySold(lead, client){
     if(localStorage.getItem(sentKey)) return;      // never double-fire
     var f=(lead&&lead.firstName)||(client&&client.firstName)||"";
     var l=(lead&&lead.lastName)||(client&&client.lastName)||"";
+    var pl = (client&&client.plan)||{};
+    var pick = function(a,b){ return (a!==undefined&&a!==null&&a!=="")?a:(b||""); };
     var payload={
       event:"lead_marked_sold",
       first_name:f, last_name:l, full_name:(f+" "+l).trim(),
-      email:(lead&&lead.email)||(client&&client.email)||"",
-      phone:(lead&&lead.phone)||(client&&client.phone)||"",
-      date_of_birth:(lead&&lead.dob)||(client&&client.dob)||"",
-      address1:(lead&&lead.address)||(client&&client.address)||"",
-      city:(lead&&lead.city)||(client&&client.city)||"",
-      state:(lead&&lead.state)||(client&&client.state)||"",
-      postal_code:(lead&&(lead.zipcode||lead.zipCode))||(client&&client.zipcode)||"",
-      company_name:(lead&&(lead.company||lead.businessName))||"",
-      lead_type:(lead&&lead.coverage)||"",
-      monthly_premium:(client&&client.quoteValue)||0,
+      email: pick(lead&&lead.email, client&&client.email),
+      phone: pick(lead&&lead.phone, client&&client.phone),
+      date_of_birth: pick(lead&&lead.dob, client&&client.dob),
+      address1: pick(lead&&lead.address, client&&client.address),
+      city:     pick(lead&&lead.city, client&&client.city),
+      state:    pick(lead&&lead.state, client&&client.state),
+      postal_code: pick(lead&&(lead.zipcode||lead.zipCode), client&&client.zipcode),
+      company_name: pick(lead&&(lead.company||lead.businessName), ""),
+      lead_type:      (lead&&lead.coverage)||"",
+      household_size: (lead&&lead.household_size)||"",
+      household_income:(lead&&lead.income)||"",
+      employee_count: (lead&&lead.employees)||"",
+      situation:      (lead&&lead.situation)||"",
+      carrier:         pl.carrier||"",
+      plan_name:       pl.planName||"",
+      effective_date:  pl.effectiveDate||"",
+      renewal_date:    pl.renewalDate||"",
+      monthly_premium: pick(pl.monthlyPremium, (client&&client.quoteValue)||0),
+      annual_premium:  Math.round((Number(pick(pl.monthlyPremium,(client&&client.quoteValue)||0))||0)*12),
+      quote_value:     (client&&client.quoteValue)||0,
       tag:"client",
+      tags:["client","sold"],
       pipeline_status:"sold",
+      client_status:(client&&client.status)||"active",
+      notes: pick(lead&&lead.notes, client&&client.notes),
       admin_lead_id:(lead&&lead.id)||"",
       client_id:(client&&client.id)||"",
+      original_lead_source:(lead&&lead.source)||"",
+      original_lead_page:(lead&&lead.page)||"",
+      lead_created_at: (lead&&lead.created)? new Date(lead.created).toISOString() : "",
       sold_at:new Date().toISOString(),
       lead_source:"vshealthbenefits.com admin portal"
     };
