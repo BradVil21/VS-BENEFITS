@@ -758,7 +758,7 @@ html.dark .bday-list-item .bli-name{color:#d4e8ff}
 /* ════════════════════════════════════════
    BACK TO TOP
 ════════════════════════════════════════ */
-#back-to-top{position:fixed;bottom:28px;right:22px;z-index:999;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue-700),var(--teal));color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(13,27,42,.22);opacity:0;transform:translateY(12px);transition:opacity .3s,transform .3s;pointer-events:none}
+#back-to-top{position:fixed;bottom:28px;left:22px;z-index:999;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue-700),var(--teal));color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(13,27,42,.22);opacity:0;transform:translateY(12px);transition:opacity .3s,transform .3s;pointer-events:none}
 #back-to-top.visible{opacity:1;transform:translateY(0);pointer-events:auto}
 
 @media(max-width:639px){
@@ -2518,6 +2518,51 @@ var STAGE_LABELS={"new":"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke
 var dragId=null;var dragType=null;
 
 /* Convert a lead to a client when dropped into "sold" */
+/* ===== GoHighLevel "SOLD → Client" webhook =====================================
+   Fires once whenever a lead is marked Sold in the admin portal (from any of the
+   4 paths: status dropdown, pipeline drag, pipeline card, referral mark-sold).
+   In GHL this webhook should: add the tag "client" (or "sold") and start the
+   new-client onboarding workflow.
+   Paste your GHL inbound webhook URL between the quotes below.
+============================================================================== */
+var GHL_SOLD_WEBHOOK_URL = "";   // <-- PASTE ADMIN "SOLD" WEBHOOK URL HERE
+
+function ghlNotifySold(lead, client){
+  try{
+    if(!GHL_SOLD_WEBHOOK_URL || GHL_SOLD_WEBHOOK_URL.indexOf("http")!==0) return;
+    var sentKey = "ghl_sold_sent_" + (lead && lead.id ? lead.id : "");
+    if(localStorage.getItem(sentKey)) return;      // never double-fire
+    var f=(lead&&lead.firstName)||(client&&client.firstName)||"";
+    var l=(lead&&lead.lastName)||(client&&client.lastName)||"";
+    var payload={
+      event:"lead_marked_sold",
+      first_name:f, last_name:l, full_name:(f+" "+l).trim(),
+      email:(lead&&lead.email)||(client&&client.email)||"",
+      phone:(lead&&lead.phone)||(client&&client.phone)||"",
+      date_of_birth:(lead&&lead.dob)||(client&&client.dob)||"",
+      address1:(lead&&lead.address)||(client&&client.address)||"",
+      city:(lead&&lead.city)||(client&&client.city)||"",
+      state:(lead&&lead.state)||(client&&client.state)||"",
+      postal_code:(lead&&(lead.zipcode||lead.zipCode))||(client&&client.zipcode)||"",
+      company_name:(lead&&(lead.company||lead.businessName))||"",
+      lead_type:(lead&&lead.coverage)||"",
+      monthly_premium:(client&&client.quoteValue)||0,
+      tag:"client",
+      pipeline_status:"sold",
+      admin_lead_id:(lead&&lead.id)||"",
+      client_id:(client&&client.id)||"",
+      sold_at:new Date().toISOString(),
+      lead_source:"vshealthbenefits.com admin portal"
+    };
+    fetch(GHL_SOLD_WEBHOOK_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    }).then(function(){ try{localStorage.setItem(sentKey,"1");}catch(e){} })
+      .catch(function(err){ console.warn("GHL sold webhook error:",err); });
+  }catch(e){ console.warn("GHL sold webhook skipped:",e); }
+}
+
 async function convertLeadToClient(leadId){
   var lead=getLeads().filter(function(l){return l.id===leadId;})[0];
   if(!lead)return;
@@ -2545,6 +2590,7 @@ async function convertLeadToClient(leadId){
     _convertedFromLead:leadId
   };
   accts.push(newClient);saveAccounts(accts);
+  ghlNotifySold(lead, newClient);   // -> GoHighLevel: tag + start client workflow
   addNotif("lead","<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M3 21l5-13 8 8-13 5z'/><path d='M14 6c1-1 3-1 4 0M16 3v3M20 8c1 0 2 1 2 2M13 11l6 6'/></svg> "+fullName(lead)+" is now a client!","Lead converted to client account. Temp password: "+tempPw,"accounts");
   if(typeof renderAccounts==="function"){try{renderAccounts();}catch(e){}}
   try{ czCelebrate(fullName(lead),"Now an active client · temp password "+tempPw+" — share it so they can log in."); }catch(e){}

@@ -1904,12 +1904,10 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
     };
   }
 
-  // ---- WEBHOOK URL ----
-  // GoHighLevel/LeadConnector webhook removed per setup — leads now flow to
-  // HubSpot (hidden form + serverless) and Firebase (admin portal). Leaving this
-  // blank keeps the external webhook off. To re-enable a Zapier/Make/GHL webhook
-  // later, paste its URL here.
-  var WEBHOOK_URL = '';
+  // ---- WEBHOOK URL (GoHighLevel inbound webhook trigger) ----
+  // Fires on every completed /quote submission (individual + business).
+  // Leads ALSO continue to flow to the admin portal + HubSpot independently.
+  var WEBHOOK_URL = 'https://services.leadconnectorhq.com/hooks/cNCy6JUURpb4eBDdb9bU/webhook-trigger/9737c37a-2a00-4fdc-ba1f-cf9d1c4230cf';
 
   // ---- BUSINESS QUOTE ENDPOINT ----
   // Serverless function that (1) creates/updates the HubSpot contact,
@@ -2132,7 +2130,31 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
       btnEl.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Sending...';
     }
 
-    var payload = Object.assign({}, data, { submitted_at: new Date().toISOString(), source: window.location.href });
+    // Flatten into GoHighLevel-friendly field names so GHL maps them to the
+    // standard contact fields automatically, while keeping every raw field too.
+    var isBiz = data.type === 'business';
+    var payload = Object.assign({}, data, {
+      first_name:   isBiz ? (data.ownerFirstName||'') : (data.firstName||''),
+      last_name:    isBiz ? (data.ownerLastName||'')  : (data.lastName||''),
+      full_name:   ((isBiz ? (data.ownerFirstName||'') : (data.firstName||'')) + ' ' +
+                    (isBiz ? (data.ownerLastName||'')  : (data.lastName||''))).trim(),
+      email:        isBiz ? (data.contactEmail||'')   : (data.email||''),
+      phone:        isBiz ? (data.contactPhone||'')   : (data.phone||''),
+      postal_code:  isBiz ? (data.businessZip||'')    : (data.zip||''),
+      state:        isBiz ? (data.businessState||'')  : (data.state||''),
+      address1:     isBiz ? (data.businessAddress||''): (data.address||''),
+      company_name: isBiz ? (data.businessName||'')   : '',
+      lead_type:    isBiz ? 'Business / Group' : 'Individual / Family',
+      date_of_birth: data.dob || '',
+      household_income: data.income || '',
+      employee_count:   data.employees || '',
+      coverage_start:   data.coverageStart || '',
+      situation:  Array.isArray(data.situations) ? data.situations.join(', ') : (data.situations||''),
+      sms_opt_in: data.sms_opt_in || 'no',
+      submitted_at: new Date().toISOString(),
+      source: window.location.href,
+      lead_source: 'vshealthbenefits.com /quote funnel'
+    });
 
     // Push into admin portal's Leads tab (independent of webhook)
     try {
@@ -2324,5 +2346,7 @@ window.hubspotSyncLead = window.hubspotSyncLead || function(l){
   start();
 })();
 </script>
+  <!-- GHL/LeadConnector chat widget (A2P SMS opt-in) -->
+  <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6a80d174421318e826ef36ae" data-source="WEB_USER"></script>
 </body>
 </html>
