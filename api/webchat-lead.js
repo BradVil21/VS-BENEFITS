@@ -1,28 +1,37 @@
 // Vercel serverless function: receive a WEBCHAT (GHL AI bot) lead.
 //
-// GoHighLevel's Conversation AI / Workflow posts here via an Outbound Webhook
-// once the bot has collected the visitor's details. This function:
-//   1. Validates + sanitises every field server-side (never trust the sender).
-//   2. Creates/updates the contact in HubSpot, tagged with the pain point.
-//   3. Adds a note with the full chat-captured detail.
-//   4. Emails Bradley an internal alert so nothing sits unseen.
+// Lead destinations (HubSpot has been removed):
+//   1. GHL  — already captures the lead natively via the Live Chat widget +
+//             Conversation AI. Nothing to do here; the contact exists in GHL
+//             before this webhook ever fires.
+//   2. VS admin portal — appended to the Firestore document `vs_state/leads`,
+//             which admin.html mirrors into localStorage via onSnapshot. The
+//             portal updates live, no refresh needed.
+//   3. Email — an internal alert so a lead never sits unseen.
 //
 // Auth: GHL must send a shared secret in the `x-vs-webhook-secret` header
 //       (or `?key=` query param) matching env var WEBCHAT_WEBHOOK_SECRET.
 //       If the env var is unset the check is skipped so you can test first.
 //
-// Safe by design: if HUBSPOT_PRIVATE_APP_TOKEN or RESEND_API_KEY are missing the
-// relevant step is skipped and the function still returns 200, so GHL never sees
-// a failed webhook and never retries in a loop.
+// Safe by design: every step is wrapped so a failure in one destination never
+// breaks the others, and the function always returns 200 so GHL never
+// retry-loops.
 //
 // ENV VARS (Vercel -> Project -> Settings -> Environment Variables):
-//   WEBCHAT_WEBHOOK_SECRET      shared secret GHL sends. Strongly recommended.
-//   HUBSPOT_PRIVATE_APP_TOKEN   already used by the other endpoints
+//   WEBCHAT_WEBHOOK_SECRET   shared secret GHL sends. Strongly recommended.
 //   RESEND_API_KEY / NOTIFY_EMAIL   see api/_lib.js
+//   FIREBASE_API_KEY         optional; defaults to the public web key below.
 //
-// See api/_lib.js for shared helpers.
+// Note: the Firebase web API key is public by design (it is already in
+// admin.html). Access is governed by Firestore security rules, not secrecy.
 
 const L = require("./_lib");
+
+const FB_API_KEY = process.env.FIREBASE_API_KEY || "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U";
+const FB_PROJECT = process.env.FIREBASE_PROJECT_ID || "vs-benefits-c1da9";
+const FS_DOC =
+  "https://firestore.googleapis.com/v1/projects/" + FB_PROJECT +
+  "/databases/(default)/documents/vs_state/leads";
 
 // ---------- sanitisers ----------
 function clean(v, max) {
@@ -48,7 +57,7 @@ function validPhone(v) {
 }
 
 // Accepts MM/DD/YYYY, M/D/YYYY, YYYY-MM-DD. Returns YYYY-MM-DD or "".
-// Rejects ages outside 14-100 so junk/typos never reach the CRM.
+// Rejects ages outside 14-100 so junk/typos never reach the portal.
 function validDob(v) {
   const s = clean(v, 20);
   if (!s) return "";
@@ -97,6 +106,98 @@ const PAIN_LABEL = {
   "Other": "Other / needs discovery",
 };
 
+// ---------- Firestore REST helpers ----------
+// Encode a plain JS value into Firestore's typed representation.
+function fsEncode(v) {
+  if (v === null || v === undefined) return { nullValue: null };
+  if (typeof v === "boolean") return { booleanValue: v };
+  if (typeof v === "number") {
+    return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
+  }
+  if (Array.isArray(v)) return { arrayValue: { values: v.map(fsEncode) } };
+  if (typeof v === "object") {
+    const fields = {};
+    Object.keys(v).forEach(function (k) { fields[k] = fsEncode(v[k]); });
+    return { mapValue: { fields: fields } };
+  }
+  return { stringValue: String(v) };
+}
+
+// Decode Firestore's typed representation back into plain JS.
+function fsDecode(v) {
+  if (!v || typeof v !== "object") return null;
+  if ("nullValue" in v) return null;
+  if ("booleanValue" in v) return v.booleanValue;
+  if ("integerValue" in v) return Number(v.integerValue);
+  if ("doubleValue" in v) return Number(v.doubleValue);
+  if ("stringValue" in v) return v.stringValue;
+  if ("timestampValue" in v) return v.timestampValue;
+  if ("arrayValue" in v) return (v.arrayValue.values || []).map(fsDecode);
+  if ("mapValue" in v) {
+    const out = {};
+    const f = v.mapValue.fields || {};
+    Object.keys(f).forEach(function (k) { out[k] = fsDecode(f[k]); });
+    return out;
+  }
+  return null;
+}
+
+// Sign in anonymously, exactly as admin.html does in the browser.
+async function fsToken() {
+  const r = await fetch(
+    "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + FB_API_KEY,
+    { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ returnSecureToken: true }) }
+  );
+  if (!r.ok) return null;
+  const j = await r.json();
+  return j.idToken || null;
+}
+
+// Append one lead to vs_state/leads, preserving everything already there.
+// Read-modify-write: fine at webchat volume, but two leads landing in the
+// same second could theoretically collide. Worth revisiting if volume grows.
+async function pushLeadToPortal(lead) {
+  const token = await fsToken();
+  if (!token) return { ok: false, reason: "auth_failed" };
+  const auth = { Authorization: "Bearer " + token };
+
+  let items = [];
+  const get = await fetch(FS_DOC, { headers: auth });
+  if (get.ok) {
+    const doc = await get.json();
+    const cur = doc && doc.fields && doc.fields.items;
+    if (cur) items = fsDecode(cur) || [];
+  } else if (get.status !== 404) {
+    return { ok: false, reason: "read_failed_" + get.status };
+  }
+
+  // Skip if this exact lead already landed (same phone or email today).
+  const dupe = items.some(function (it) {
+    if (!it) return false;
+    const samePhone = lead.phone && it.phone === lead.phone;
+    const sameEmail = lead.email && it.email === lead.email;
+    return (samePhone || sameEmail) && it.createdAt === lead.createdAt;
+  });
+  if (dupe) return { ok: true, skipped: "duplicate", total: items.length };
+
+  items.push(lead);
+
+  const body = {
+    fields: {
+      items: fsEncode(items),
+      ts: { integerValue: String(Date.now()) },
+    },
+  };
+  const put = await fetch(FS_DOC, {
+    method: "PATCH",
+    headers: Object.assign({ "Content-Type": "application/json" }, auth),
+    body: JSON.stringify(body),
+  });
+  if (!put.ok) return { ok: false, reason: "write_failed_" + put.status };
+  return { ok: true, total: items.length };
+}
+
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -129,7 +230,7 @@ module.exports = async (req, res) => {
   const pain      = normalizePain(painRaw);
   const state     = clean(d.state, 40);
   const zip       = clean(d.zip || d.postalCode, 12);
-  const notes     = clean(d.notes || d.transcript || d.summary, 4000);
+  const notesIn   = clean(d.notes || d.transcript || d.summary, 4000);
   const ghlId     = clean(d.contactId || d.ghl_contact_id, 60);
 
   // Need at least one durable identifier to be worth writing.
@@ -138,89 +239,52 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // ---- HubSpot ----
-  // Build the property set once; it is identical whether we key off email or phone.
-  const hsProps = {
-    firstname: firstName,
-    lastname: lastName,
-    phone: phone,
-    state: state,
-    zip: zip,
-    date_of_birth: dob,
-    annual_income: income,
-    website_lead_stage: pain ? "Webchat — " + pain : "Webchat lead",
-    hs_lead_status: "NEW",
-    lifecyclestage: "lead",
-  };
-  if (email) hsProps.email = email;
-
-  // Drop empty values so we never overwrite a good field with "".
-  function pruned(o) {
-    const out = {};
-    Object.keys(o).forEach(function (k) {
-      if (o[k] != null && String(o[k]).trim() !== "") out[k] = String(o[k]).trim();
-    });
-    return out;
-  }
-
-  // Find an existing contact by phone. HubSpot stores phone in several formats,
-  // so try the raw 10 digits and the common +1/E.164 form before giving up.
-  async function findByPhone(p) {
-    if (!p) return null;
-    const variants = [p, "+1" + p, "1" + p];
-    for (const v of variants) {
-      const r = await L.hs("/crm/v3/objects/contacts/search", "POST", {
-        filterGroups: [{ filters: [{ propertyName: "phone", operator: "EQ", value: v }] }],
-        properties: ["phone"],
-        limit: 1,
-      });
-      if (r.ok && r.json && r.json.results && r.json.results[0]) return r.json.results[0].id;
-    }
-    return null;
-  }
-
-  let contactId = null;
-  try {
-    if (email) {
-      // Email is the strongest dedupe key — use the shared helper.
-      contactId = await L.upsertContact(hsProps);
-    } else if (phone) {
-      // No email (the webchat flow does not ask for one). Key off phone instead so
-      // the lead still reaches the CRM rather than living only in an alert email.
-      const existing = await findByPhone(phone);
-      if (existing) {
-        await L.hs("/crm/v3/objects/contacts/" + existing, "PATCH", { properties: pruned(hsProps) });
-        contactId = existing;
-      } else {
-        const created = await L.hs("/crm/v3/objects/contacts", "POST", { properties: pruned(hsProps) });
-        contactId = created.ok && created.json ? created.json.id : null;
-      }
-    }
-  } catch (e) { /* non-fatal */ }
-
   const fullName = (firstName + " " + lastName).trim() || "Unknown";
+  const nowIso = new Date().toISOString();
+  const today = nowIso.slice(0, 10);
 
-  // ---- Note on the contact ----
-  try {
-    if (contactId) {
-      const rows = [
-        "Name: " + L.esc(fullName),
-        phone  ? "Phone: " + L.esc(phone) : "",
-        email  ? "Email: " + L.esc(email) : "",
-        dob    ? "DOB: " + L.esc(dob) : "",
-        income ? "Yearly income: $" + L.esc(Number(income).toLocaleString("en-US")) : "",
-        pain   ? "Pain point: " + L.esc(PAIN_LABEL[pain] || pain) : "",
-        painRaw && painRaw.toLowerCase() !== pain.toLowerCase()
-          ? "In their words: " + L.esc(painRaw) : "",
-        ghlId  ? "GHL contact: " + L.esc(ghlId) : "",
-      ].filter(Boolean);
-      let html = "<b>Website webchat lead</b><br>" + rows.join("<br>");
-      if (notes) html += "<br><br><b>Chat detail</b><br>" + L.esc(notes).replace(/\n/g, "<br>");
-      await L.addNoteToContact(contactId, html);
-    }
-  } catch (e) { /* non-fatal */ }
+  // Notes shown in the portal's lead detail.
+  const noteLines = [];
+  if (pain) noteLines.push("Pain point: " + (PAIN_LABEL[pain] || pain));
+  if (painRaw && painRaw.toLowerCase() !== pain.toLowerCase()) {
+    noteLines.push("In their words: " + painRaw);
+  }
+  if (income) noteLines.push("Yearly income: $" + Number(income).toLocaleString("en-US"));
+  if (ghlId) noteLines.push("GHL contact: " + ghlId);
+  if (notesIn) noteLines.push("Chat detail: " + notesIn);
+  noteLines.push("Source: Website live chat");
 
-  // ---- Internal alert email ----
+  // Shape matches the lead objects admin.html creates, so the portal
+  // renders it without any changes on the front end.
+  const lead = {
+    id: "wc_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    phone: phone,
+    dob: dob,
+    address: "",
+    state: state,
+    zipCode: zip,
+    notes: noteLines.join("\n"),
+    quoteValue: 0,
+    stage: "new",
+    followUpDue: today,
+    lastContact: today,
+    createdAt: today,
+    created: Date.now(),
+    source: "webchat",
+    painPoint: pain,
+    yearlyIncome: income,
+    activity: [{ ts: Date.now(), type: "created", text: "Captured from website live chat" }],
+  };
+
+  // ---- 1. VS admin portal (Firestore) ----
+  let portal = { ok: false, reason: "not_attempted" };
+  try { portal = await pushLeadToPortal(lead); }
+  catch (e) { portal = { ok: false, reason: "exception" }; }
+
+  // ---- 2. Internal alert email ----
   try {
     const rows = [
       ["Name", fullName],
@@ -230,6 +294,7 @@ module.exports = async (req, res) => {
       ["Yearly income", income ? "$" + Number(income).toLocaleString("en-US") : "—"],
       ["Pain point", PAIN_LABEL[pain] || pain || "—"],
       ["In their words", painRaw || "—"],
+      ["ZIP", zip || "—"],
     ];
     const table =
       '<table style="border-collapse:collapse;font:15px/1.5 system-ui,sans-serif">' +
@@ -244,15 +309,16 @@ module.exports = async (req, res) => {
       html: L.shell(
         "<h2 style=\"margin:0 0 12px;color:" + L.CFG.navy + "\">New webchat lead</h2>" +
         table +
-        (notes ? '<p style="margin-top:16px;color:#5a6b80">' + L.esc(notes).slice(0, 1200) + "</p>" : "") +
-        (contactId
-          ? L.btn("https://app.hubspot.com/contacts/_/contact/" + contactId, "Open in HubSpot")
-          : ""),
+        (notesIn ? '<p style="margin-top:16px;color:#5a6b80">' + L.esc(notesIn).slice(0, 1200) + "</p>" : "") +
+        '<p style="margin-top:16px;color:#5a6b80;font-size:13px">' +
+        (portal.ok ? "Added to your admin portal." : "Could not reach the admin portal — this email is the record.") +
+        "</p>" +
+        L.btn("https://www.vshealthbenefits.com/admin", "Open admin portal"),
         "New webchat lead from " + fullName
       ),
       replyTo: email || undefined,
     });
   } catch (e) { /* non-fatal */ }
 
-  res.status(200).json({ ok: true, contactId: contactId });
+  res.status(200).json({ ok: true, portal: portal, leadId: lead.id });
 };
