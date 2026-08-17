@@ -139,24 +139,64 @@ module.exports = async (req, res) => {
   }
 
   // ---- HubSpot ----
-  let contactId = null;
-  if (email) {
-    try {
-      contactId = await L.upsertContact({
-        email: email,
-        firstname: firstName,
-        lastname: lastName,
-        phone: phone,
-        state: state,
-        zip: zip,
-        date_of_birth: dob,
-        annual_income: income,
-        website_lead_stage: pain ? "Webchat — " + pain : "Webchat lead",
-        hs_lead_status: "NEW",
-        lifecyclestage: "lead",
-      });
-    } catch (e) { /* non-fatal */ }
+  // Build the property set once; it is identical whether we key off email or phone.
+  const hsProps = {
+    firstname: firstName,
+    lastname: lastName,
+    phone: phone,
+    state: state,
+    zip: zip,
+    date_of_birth: dob,
+    annual_income: income,
+    website_lead_stage: pain ? "Webchat — " + pain : "Webchat lead",
+    hs_lead_status: "NEW",
+    lifecyclestage: "lead",
+  };
+  if (email) hsProps.email = email;
+
+  // Drop empty values so we never overwrite a good field with "".
+  function pruned(o) {
+    const out = {};
+    Object.keys(o).forEach(function (k) {
+      if (o[k] != null && String(o[k]).trim() !== "") out[k] = String(o[k]).trim();
+    });
+    return out;
   }
+
+  // Find an existing contact by phone. HubSpot stores phone in several formats,
+  // so try the raw 10 digits and the common +1/E.164 form before giving up.
+  async function findByPhone(p) {
+    if (!p) return null;
+    const variants = [p, "+1" + p, "1" + p];
+    for (const v of variants) {
+      const r = await L.hs("/crm/v3/objects/contacts/search", "POST", {
+        filterGroups: [{ filters: [{ propertyName: "phone", operator: "EQ", value: v }] }],
+        properties: ["phone"],
+        limit: 1,
+      });
+      if (r.ok && r.json && r.json.results && r.json.results[0]) return r.json.results[0].id;
+    }
+    return null;
+  }
+
+  let contactId = null;
+  try {
+    if (email) {
+      // Email is the strongest dedupe key — use the shared helper.
+      contactId = await L.upsertContact(hsProps);
+    } else if (phone) {
+      // No email (the webchat flow does not ask for one). Key off phone instead so
+      // the lead still reaches the CRM rather than living only in an alert email.
+      const existing = await findByPhone(phone);
+      if (existing) {
+        await L.hs("/crm/v3/objects/contacts/" + existing, "PATCH", { properties: pruned(hsProps) });
+        contactId = existing;
+      } else {
+        const created = await L.hs("/crm/v3/objects/contacts", "POST", { properties: pruned(hsProps) });
+        contactId = created.ok && created.json ? created.json.id : null;
+      }
+    }
+  } catch (e) { /* non-fatal */ }
 
   const fullName = (firstName + " " + lastName).trim() || "Unknown";
 
