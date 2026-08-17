@@ -1286,6 +1286,11 @@
       "source": "/blog/why-do-we-get-health-insurance.html",
       "destination": "/blog/why-do-we-get-health-insurance",
       "permanent": true
+    },
+    {
+      "source": "/does-health-insurance-cover-dot-physical.html",
+      "destination": "/does-health-insurance-cover-dot-physical",
+      "permanent": true
     }
   ],
   "rewrites": [
