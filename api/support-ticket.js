@@ -32,12 +32,16 @@ const FS_DOC =
   "https://firestore.googleapis.com/v1/projects/" + FB_PROJECT +
   "/databases/(default)/documents/vs_state/contact_requests";
 
-// Custom field holding the ticket number on the contact record.
-// Create it in GHL as a Contact text field named exactly "Support Ticket Number"
-// (key: contact.support_ticket_number) and put its ID here. Reading the field
-// list at runtime needs the `locations.readonly` scope, which the current
-// private-integration token does not have - so this is set explicitly.
-const CF_TICKET_NUMBER = process.env.GHL_CF_TICKET_NUMBER || "";
+// Custom field holding the ticket number on the contact record:
+// "Support Ticket Number", key contact.support_ticket_number.
+//
+// Hardcoded rather than looked up, because reading /locations/{id}/customFields
+// needs the `locations.readonly` scope and this token only has contacts scopes.
+// GHL returns an empty list rather than an error in that case, which writes a
+// blank field and looks exactly like "the email just didn't work".
+// If you ever delete and recreate the field it gets a new ID - override with
+// the GHL_CF_TICKET_NUMBER env var, no deploy needed.
+const CF_TICKET_NUMBER = process.env.GHL_CF_TICKET_NUMBER || "5uaYmKQ3yLZH7mtV8d9n";
 
 // ---------- ticket numbers ----------
 // Crockford-style alphabet with the ambiguous characters removed. No 0/O, no
