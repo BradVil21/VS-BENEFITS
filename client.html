@@ -890,6 +890,31 @@ function loadEmailJS(){
     document.head.appendChild(s);
   });
 }
+/* ── GoHighLevel member-account sync ────────────────────────────────
+   Posts the new account to /api/portal-signup, which upserts the contact
+   in GHL and tags it `portal-account-created`. That tag is the trigger for
+   the "Member Account Creation" workflow, which sends the welcome email
+   and SMS. The GHL token lives only in that serverless function — never
+   here, because this file is public.
+   Password hashes are never sent. */
+window.ghlSyncAccount = function(a){
+  try{
+    if(!a || (!a.email && !a.phone)) return;
+    fetch("/api/portal-signup",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      keepalive:true,
+      body:JSON.stringify({
+        firstName:String(a.firstName||"").trim(),
+        lastName: String(a.lastName ||"").trim(),
+        email:    String(a.email    ||"").trim(),
+        phone:    String(a.phone    ||"").trim(),
+        accountId:String(a.id       ||"")
+      })
+    }).catch(function(){});
+  }catch(e){ /* never block signup on a CRM failure */ }
+};
+
 window.sendWelcomeEmail = async function(acct){
   try{
     if(!acct || !acct.email) return;
@@ -929,7 +954,12 @@ $("signup-form").addEventListener("submit",async function(e){
   accts.push(acct);
   saveAccounts(accts);
   window.hubspotSyncAccount(acct);
-  window.sendWelcomeEmail(acct);
+  window.ghlSyncAccount(acct);
+  /* Welcome email + SMS are now sent by the GHL "Member Account Creation"
+     workflow (triggered by the tag ghlSyncAccount adds). The EmailJS send
+     below is left in place but disabled so members don't get two welcomes.
+     Re-enable it only if you turn the GHL workflow off. */
+  // window.sendWelcomeEmail(acct);
   setSession({id:acct.id,email:acct.email,since:Date.now()});
 
   webhookFire({
@@ -945,9 +975,11 @@ $("signup-form").addEventListener("submit",async function(e){
     source:"vshealthbenefits.com",
     page:"/client.html",
     user_agent:navigator.userAgent,
-    // Account-created confirmation email to the new member
+    // Account-created confirmation email to the new member.
+    // send_email is false because GHL's "Member Account Creation" workflow now
+    // owns the welcome email + SMS. Flip back to true only if you turn it off.
     notify:"account_created",
-    send_email:true,
+    send_email:false,
     to_email:email,
     to_name:(first+" "+last).trim(),
     email_subject:"Welcome to VS Health Benefits — your account is ready",
