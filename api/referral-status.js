@@ -153,17 +153,42 @@ async function ghl(path, method, body) {
   }
 }
 
+// Known custom field IDs for this location, used when the lookup below can't run.
+//
+// Reading /locations/{id}/customFields requires the `locations.readonly` scope.
+// A private integration token created with only contacts scopes returns nothing
+// there - silently, as an empty list, not an error. That produced a working tag
+// with an EMPTY message field, which looks like "the SMS just didn't send".
+// So: try the lookup, and fall back to these if it comes back empty.
+//
+// If you recreate any of these fields in GHL they get new IDs. Either add
+// `locations.readonly` to the token so the lookup works, or update these.
+const FALLBACK_FIELD_IDS = {
+  referral_name: "yrFlqQhFeN8hJdaFBUtx",
+  referral_status: "kcRLrUfM7uuVDnUqbse6",
+  referral_status_message: "orTsedemCQasWAajYogD",
+  referral_payout: "5VDbFGM4YjsW7Tx2165k",
+};
+
 // Resolve custom field ids by fieldKey, cached for the life of the warm lambda.
 let FIELD_CACHE = null;
 async function fieldIds() {
   if (FIELD_CACHE) return FIELD_CACHE;
-  const r = await ghl("/locations/" + LOCATION_ID + "/customFields?model=contact", "GET");
-  const list = (r.json && r.json.customFields) || [];
-  const map = {};
-  list.forEach(function (f) {
-    if (f && f.fieldKey && f.id) map[String(f.fieldKey).replace(/^contact\./, "")] = f.id;
+  let map = {};
+  try {
+    const r = await ghl("/locations/" + LOCATION_ID + "/customFields?model=contact", "GET");
+    const list = (r.json && r.json.customFields) || [];
+    list.forEach(function (f) {
+      if (f && f.fieldKey && f.id) map[String(f.fieldKey).replace(/^contact\./, "")] = f.id;
+    });
+  } catch (e) { map = {}; }
+
+  // Fill any gap from the known-good IDs rather than writing a blank message.
+  Object.keys(FALLBACK_FIELD_IDS).forEach(function (k) {
+    if (!map[k]) map[k] = FALLBACK_FIELD_IDS[k];
   });
-  if (Object.keys(map).length) FIELD_CACHE = map;
+
+  FIELD_CACHE = map;
   return map;
 }
 
