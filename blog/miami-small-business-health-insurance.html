@@ -435,6 +435,24 @@ window.addEventListener("scroll",function(){btn.classList.toggle("visible",windo
 btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});
 </script>
   <!-- GHL/LeadConnector Live Chat widget (Conversation AI) -->
+  <!-- Fresh chat after an inactivity timeout.
+       The GHL widget keeps its conversation binding in localStorage under
+       <locationId>_<widgetId>_lead-connecter-live-widget-message-data and sets
+       chatEndedDueToInactivity:true when it times a chat out. Without this the
+       widget reopens showing the dead thread ("Your chat has ended") and the AI
+       greets the visitor as a returning contact.
+       Only ended chats are cleared - an active conversation is never touched.
+       Must run BEFORE the loader below, which reads the key on init. -->
+  <script>
+  (function(){try{
+    for(var i=localStorage.length-1;i>=0;i--){
+      var k=localStorage.key(i);
+      if(!k||k.indexOf("lead-connecter-live-widget-message-data")<0)continue;
+      var v=null;try{v=JSON.parse(localStorage.getItem(k));}catch(e){continue;}
+      if(v&&v.chatEndedDueToInactivity===true)localStorage.removeItem(k);
+    }
+  }catch(e){}})();
+  </script>
   <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6a8339a143b7e14560ca7528" data-source="WEB_USER"></script>
 </body>
 </html>
