@@ -7,7 +7,7 @@ three messages from GoHighLevel:
 |---|---|---|
 | 1 | Welcome **email** | immediately |
 | 2 | Welcome **SMS** | +5 minutes |
-| 3 | Website tour **email** | +1 day |
+| 3 | Portal tour **email** | +1 day |
 
 All three mention the referral payout. **GoHighLevel is the only destination.**
 HubSpot and EmailJS have been removed from the portal.
@@ -20,44 +20,32 @@ client.html signup form
        └─ POST /api/portal-signup            ← server-side, holds the GHL token
             ├─ 1. upsert contact in GHL      (by email/phone)
             ├─ 2. write custom field         Admin Client ID
-            ├─ 3. add tags                   portal-account-created, member-portal
-            └─ 4. POST to the Inbound Webhook URL   ◄── TRIGGER
+            └─ 3. add tag `portal-account-created`   ◄── TRIGGER
+                    (+ `member-portal` for segmentation)
                                                   │
 GHL workflow "Member Account Creation" ───────────┘
-  ├─ Create/Update Contact   (attaches the contact to the run)
   ├─ Send Email  — welcome
   ├─ Wait 5 minutes
   ├─ Send SMS    — welcome
   ├─ Wait 1 day
-  └─ Send Email  — website tour
+  └─ Send Email  — portal tour
 ```
 
-**Why the webhook fires last.** The contact is upserted *before* the webhook is
-called, so by the time the workflow starts, the record already exists with every
-field populated and carries a real `contact_id`. The first workflow action
-matches that contact instead of creating a duplicate, which is what makes
-`{{contact.first_name}}` resolve in the messages.
+**Why a tag and not an Inbound Webhook.** GHL bills the Inbound Webhook as a
+*premium trigger, charged per execution* — every signup would cost you. It also
+starts the workflow with no contact attached, so it needs an extra
+Create/Update Contact step before `{{contact.first_name}}` resolves. The tag is
+free, and because it is applied *after* the upsert it fires on a contact that
+already exists with every field populated. Fewer steps, nothing to map.
 
-**Trigger URL** (already hardcoded as the default in `api/portal-signup.js`):
+The webhook path is still in the code, switched off, so you can move back to it
+without a deploy — set `GHL_INBOUND_WEBHOOK_URL` to a workflow's URL.
 
-```
-https://services.leadconnectorhq.com/hooks/cNCy6JUURpb4eBDdb9bU/webhook-trigger/f3ed39bb-f80b-4b00-bde2-bf8d18749512
-```
-
-This URL is not a secret — it only accepts data, it never returns any. Override
-it with the `GHL_INBOUND_WEBHOOK_URL` env var if it ever gets regenerated.
-
-> ⚠️ **The URL is not final until you click "Save trigger."** GHL generates a
-> fresh URL each time you open an unsaved Inbound Webhook trigger, so the one
-> displayed in the panel changes on you until it's saved. Save the trigger
-> first, *then* copy the URL and compare it to the one above.
->
-> ⚠️ **A `200` response from this endpoint does not mean the URL is real.**
-> GHL returns `{"status":"Success: test request received"}` for *any* UUID in
-> that path, including one made up from scratch (verified). The only reliable
-> confirmation is the **Mapping Reference** dropdown inside the trigger showing
-> your payload after you click *Check for new requests*. Do not treat a 200 in
-> a curl or a Vercel log as proof the workflow was reached.
+> ⚠️ If you ever do wire a webhook: that endpoint answers
+> `200 {"status":"Success: test request received"}` for **any** URL of that
+> shape, including a UUID invented from scratch (verified). A 200 proves
+> nothing. The only real confirmation is your payload appearing under the
+> trigger's **Mapping Reference** in GHL.
 
 ## 1. Vercel environment variables
 
@@ -67,8 +55,8 @@ Project → Settings → Environment Variables:
 |---|---|---|
 | `GHL_PIT_TOKEN` | **yes** | your `pit-…` private integration token |
 | `GHL_LOCATION_ID` | no | defaults to `cNCy6JUURpb4eBDdb9bU` |
-| `GHL_SIGNUP_TAG` | no | defaults to `portal-account-created` |
-| `GHL_INBOUND_WEBHOOK_URL` | no | overrides the trigger URL above |
+| `GHL_SIGNUP_TAG` | no | defaults to `portal-account-created`. **Must match the tag the workflow triggers on.** |
+| `GHL_INBOUND_WEBHOOK_URL` | no | unset = no webhook call at all. Set to a URL to mirror the payload, or `off` to disable explicitly. |
 | `PORTAL_SIGNUP_SECRET` | no | shared secret; callers must send `x-vs-portal-secret` |
 
 > **Never** put the token in `client.html` or any committed file — this repo is
@@ -85,81 +73,33 @@ steps — so these have to be clicked. Open the existing draft named
 
 ### 2.1 Trigger
 
-1. **Add New Trigger** → **Inbound Webhook**
-2. Name: `Inbound Webhook`
-3. Click **Save trigger** now, before anything else. Until you do, the URL in
-   the panel is provisional and regenerates every time you reopen it.
-4. Reopen the trigger and copy the saved URL. If it differs from the trigger URL
-   above, set it as `GHL_INBOUND_WEBHOOK_URL` in Vercel — that's faster than a
-   code push and it's why the env var exists.
-5. Send a sample payload so the mapping reference has fields to offer, then
-   click **Check for new requests** in the Mapping Reference dropdown. If your
-   payload does not appear there, the URL is wrong — a `200` response does not
-   confirm anything (see the warning above).
+1. If an **Inbound webhook** trigger is already on the canvas, delete it — it
+   bills per execution and you no longer need it.
+2. **Add New Trigger** → **Contact Tag**
+3. Filter: `Tag` **is** `portal-account-created`
+4. **Save trigger.**
 
-   ```bash
-   curl -X POST "https://services.leadconnectorhq.com/hooks/cNCy6JUURpb4eBDdb9bU/webhook-trigger/f3ed39bb-f80b-4b00-bde2-bf8d18749512" \
-     -H "Content-Type: application/json" \
-     -d '{"event":"client_signup","contact_id":"SAMPLE_CONTACT_ID","first_name":"Sample","last_name":"Member","full_name":"Sample Member","email":"sample.member@example.com","phone":"+19548666872","account_id":"sample-account-id","sms_eligible":true,"source":"vshealthbenefits.com","page":"/client.html"}'
-   ```
+That is the whole trigger setup. No URL, no payload mapping, no sample request.
 
-6. **Save trigger** again if you changed anything.
+### 2.2 Actions, in order
 
-### 2.2 Payload fields available for mapping
+Every `{{contact.*}}` merge field resolves on its own, because the tag fires on
+a contact that is already complete.
 
-`api/portal-signup.js` deliberately sends each name in more than one shape,
-because different steps in the GHL builder default to different conventions.
-
-| Field | Example | Use for |
+| # | Action | Settings |
 |---|---|---|
-| `contact_id` / `contactId` | `abc123…` | matching the existing contact |
-| `first_name` / `firstName` | `Sample` | greeting |
-| `last_name` / `lastName` | `Member` | contact record |
-| `full_name` / `name` | `Sample Member` | contact record |
-| `email` | `sample.member@example.com` | email send |
-| `phone` | `+19548666872` | SMS send (already E.164) |
-| `account_id` / `accountId` | `sample-account-id` | portal cross-reference |
-| `sms_eligible` | `true` | optional if/else branch |
-| `event` | `client_signup` | sanity check |
+| 1 | **Send Email** | From name `VS Health Benefits`, from email `info@vshealthbenefits.com`, subject `Welcome to VS Health Benefits — your account is ready`, body = *Email 1* below |
+| 2 | **Wait** | `5 minutes` |
+| 3 | **Send SMS** | message = *SMS* below |
+| 4 | **Wait** | `1 day` |
+| 5 | **Send Email** | subject `Your VS Health Benefits portal — the quick map`, body = *Email 2* below |
 
-Merge-field syntax for webhook data is `{{inboundWebhookRequest.first_name}}`.
-
-### 2.3 Actions, in order
-
-**Action 1 — Create/Update Contact** (Contact category)
-
-Map these, then save. This is the step that attaches the contact to the run;
-without it `{{contact.*}}` merge fields stay blank.
-
-| Contact field | Value |
-|---|---|
-| Email | `{{inboundWebhookRequest.email}}` |
-| Phone | `{{inboundWebhookRequest.phone}}` |
-| First Name | `{{inboundWebhookRequest.first_name}}` |
-| Last Name | `{{inboundWebhookRequest.last_name}}` |
-
-**Action 2 — Send Email** (welcome, copy below)
-
-- From name: `VS Health Benefits`
-- From email: `info@vshealthbenefits.com`
-- Subject: `Welcome to VS Health Benefits — your account is ready`
-
-**Action 3 — Wait** → `5 minutes`
-
-**Action 4 — Send SMS** (copy below)
-
-**Action 5 — Wait** → `1 day`
-
-**Action 6 — Send Email** (website tour, copy below)
-
-- Subject: `A quick tour of your VS Health Benefits account`
-
-Then top right → toggle **Draft → Publish**.
+Then top right → toggle **Draft → Publish**. Nothing sends while it is a draft.
 
 ### Workflow settings (gear icon, top right)
 
-- **Allow Re-Entry**: **off** — one welcome per member, even if the webhook
-  fires twice.
+- **Allow Re-Entry**: **off** — one welcome per member, even if the tag is
+  re-applied later.
 - **Stop on Response**: off.
 
 ---
@@ -183,14 +123,13 @@ Every person you send our way who ends up enrolling earns you a payout —
 there's no cap, and it costs them nothing. Details and current rates are at
 https://www.vshealthbenefits.com/refer-and-earn
 
-Tomorrow I'll send you a short tour of the tools on the site so you know
-what's there before you need it.
+When you sign in the first time we'll walk you through the portal. Tomorrow
+we'll send that same map in writing so you have it later.
 
 If you didn't create this account, reply to this email or call (954) 866-6872
 and we'll take care of it.
 
 Thank you,
-Bradley Vilsaint
 VS Health Benefits
 (954) 866-6872
 ```
@@ -208,45 +147,74 @@ character over doubles your per-message cost.
 `Reply STOP to opt out` is not optional. It is required for A2P/TCPA compliance
 on an automated message.
 
-## Email 2 — Website tour (sends 1 day later)
+## Email 2 — Portal + site tour (sends 1 day later)
 
-Subject: `A quick tour of your VS Health Benefits account`
+Subject: `Your VS Health Benefits portal — the quick map`
+
+This mirrors the six-step in-portal tour (`CP_TOUR` in `client.html`) using the
+same section names, so the email and the portal call things the same thing. It
+then covers the site tools the in-portal tour does not touch.
+
+**Why it restates the tour instead of saying "go take the tour":** the tour only
+runs once, on first login, while `welcomePending` is true. Both *Take the quick
+tour* and *Skip tutorial* set that flag to false permanently — there is no way to
+replay it. Anyone who skipped would be sent to look for something that no longer
+appears. So this email *is* the second chance.
 
 ```
 Hi {{contact.first_name}},
 
-Now that you're set up, here's what's waiting for you on the site — most of
-it takes under two minutes to use.
+When you first signed in we walked you through your portal. Here's that
+same map in writing, in case you skipped it or want it handy later.
 
-1. Get a quote
-   Compare real plans side by side.
-   https://www.vshealthbenefits.com/get-a-quote
+INSIDE YOUR PORTAL
+https://www.vshealthbenefits.com/client
 
-2. See what a subsidy could save you
-   Most people qualify for more help than they expect.
-   https://www.vshealthbenefits.com/aca-subsidy-calculator
+  Your dashboard
+  Referrals sent, sold, and total earned at a glance.
 
-3. Plain-English guides
-   Deductibles, HMO vs PPO, what happens if you miss open enrollment.
-   https://www.vshealthbenefits.com/blog
+  Send a referral
+  Refer anyone who needs health insurance. Add their details and we take
+  care of the rest. You earn when they enroll.
 
-4. Book time with an advisor
-   A real conversation, no pressure, no cost.
-   https://www.vshealthbenefits.com/book
+  Track your referrals
+  Everyone you've sent, with live status, from In Progress to Paid.
 
-5. Refer and earn
-   This is the one people overlook. Refer someone who enrolls and you get
-   paid — friends, family, coworkers, your barber. There's no limit on how
-   many you can refer, and there's never a cost to the person you send.
-   You can submit a referral straight from your portal dashboard and watch
-   its status update as it moves along.
-   https://www.vshealthbenefits.com/refer-and-earn
+  Your plan
+  Your current coverage and plan details, kept up to date by your advisor.
 
-Your portal: https://www.vshealthbenefits.com/client
+  Message support
+  Reach your advisor directly with any question. We typically reply
+  within 24 hours.
 
-Reply to this email any time with a question — it comes straight to me.
+  Your settings
+  Update your profile, add a photo, and change your password any time.
 
-Bradley Vilsaint
+MORE ON THE REFERRAL SIDE
+
+That second one is the part people overlook. Refer someone who enrolls and
+you get paid — friends, family, coworkers, your barber. There's no limit on
+how many you can refer, and it never costs the person you send anything.
+Submit one straight from your dashboard and watch its status update as it
+moves along.
+https://www.vshealthbenefits.com/refer-and-earn
+
+ON THE SITE
+
+  Get a quote — compare real plans side by side
+  https://www.vshealthbenefits.com/get-a-quote
+
+  Subsidy calculator — most people qualify for more help than they expect
+  https://www.vshealthbenefits.com/aca-subsidy-calculator
+
+  Guides — deductibles, HMO vs PPO, what happens if you miss open enrollment
+  https://www.vshealthbenefits.com/blog
+
+  Book an advisor — a real conversation, no pressure, no cost
+  https://www.vshealthbenefits.com/book
+
+Reply to this email any time with a question — it comes straight to us.
+
 VS Health Benefits
 (954) 866-6872
 ```
@@ -265,25 +233,33 @@ The emails will work immediately. The SMS will silently fail without all three:
    number, so bad numbers never reach GHL.
 
 If a member signs up without a usable phone, the endpoint returns
-`smsEligible: false`, the payload carries `sms_eligible: false`, and only the
-emails go out. That's intended, not a bug. If you want the SMS step skipped
-cleanly rather than failing, add an **If/Else** before Action 4 on
-`{{inboundWebhookRequest.sms_eligible}}` is `true`.
+`smsEligible: false` and only the emails go out. That's intended, not a bug.
 
 ## 4. Test it
 
 1. Deploy, then create a test account at `/client.html` with a real email and
    your own mobile number.
-2. Check the Vercel function log for `/api/portal-signup` — you want
-   `{"ok":true,"smsEligible":true,"contactId":"…","tagged":true,"triggered":true}`.
-   Note that `triggered: true` only means GHL returned a 200 — that endpoint
-   returns 200 for any URL shape, so it is **not** proof the workflow was
-   reached. Confirm with step 4 below instead.
-3. In GHL, open the contact — it should carry the tags `portal-account-created`
-   and `member-portal`.
-4. Workflow → **Enrollment History** shows the contact entering and each action's
-   status. The tour email will sit as "waiting" for a day — that's correct.
+2. Check the Vercel function log for `/api/portal-signup`. You want:
+
+   ```json
+   {"ok":true,"smsEligible":true,"contactId":"…","tagged":true}
+   ```
+
+   **`tagged: true` is the one that matters.** It is the trigger. If it is
+   `false`, the workflow was never started and no amount of debugging inside
+   GHL will explain why — look at `tagError` instead.
+3. In GHL, open the contact — it should carry `portal-account-created` and
+   `member-portal`.
+4. Workflow → **Enrollment History** shows the contact entering and each
+   action's status. The tour email sits as "waiting" for a day — that's correct,
+   not a stall.
 5. Delete the test contact when you're done so it doesn't skew your counts.
+
+### If the email arrives but says "Hi ," with no name
+
+The contact reached GHL without a first name. Check the signup form actually
+sent one — `/api/portal-signup` trims and forwards whatever it receives, it
+does not invent a fallback.
 
 ## What was removed, and where it went
 
