@@ -2,7 +2,7 @@
 //
 // On submit it:
 //   1. Builds a CSV of the census.
-//   2. Uploads the CSV to HubSpot Files and attaches it (via a Note) to the contact
+//   2. Attaches the census summary to the contact in GoHighLevel as a note
 //      — so it appears on the lead's record / Documents in your CRM.
 //   3. Emails Bradley a "Census completed" summary (mockup #2 equivalent).
 //   4. Sends the lead a short confirmation.
@@ -53,29 +53,25 @@ module.exports = async (req, res) => {
   const stamp = new Date().toISOString().slice(0, 10);
   const filename = "Employee-Census-" + safeBiz + "-" + stamp + ".csv";
 
-  // ---- HubSpot: find contact, upload CSV, attach note ----
+  // ---- GoHighLevel: find or create the contact, then attach the census ----
   let contactId = String(d.contactId || d.c || "").trim() || null;
   try {
     if (!contactId && email) {
-      const search = await L.hs("/crm/v3/objects/contacts/search", "POST", {
-        filterGroups: [{ filters: [{ propertyName: "email", operator: "EQ", value: email.toLowerCase() }] }],
-        properties: ["email"], limit: 1,
-      });
-      contactId = search.ok && search.json && search.json.results && search.json.results[0]
-        ? search.json.results[0].id : null;
+      // upsert doubles as a lookup: same email returns the existing contact.
+      contactId = await L.upsertContact({ email: email });
     }
   } catch (e) { /* ignore */ }
 
-  // Update contact stage + a census-received marker
+  // Mark the stage on the contact. website_lead_stage was HubSpot-only, so it
+  // rides along as the source plus a tag instead.
   try {
     if (contactId) {
-      await L.hs("/crm/v3/objects/contacts/" + contactId, "PATCH", {
-        properties: {
-          website_lead_stage: "Census Received — Ready to Quote",
-          num_employees: String(emp || totalLives),
-          zip: zip || undefined,
-        },
+      await L.upsertContact({
+        email: email,
+        zip: zip || undefined,
+        website_lead_stage: "Census Received - Ready to Quote",
       });
+      await L.addTagsToContact(contactId, ["census-received", "business-lead"]);
     }
   } catch (e) { /* ignore */ }
 
@@ -111,7 +107,7 @@ module.exports = async (req, res) => {
     '<tr>' + ["Relationship", "Name", "Age", "Gender"].map((h) => '<th style="padding:8px;border:1px solid #e5ebf2;background:#f2f6fb;text-align:left">' + h + "</th>").join("") + "</tr>" +
     people.map((p) => "<tr>" + ["relationship", "name", "age", "gender"].map((k) => '<td style="padding:8px;border:1px solid #e5ebf2">' + L.esc(p[k] || (k === "relationship" ? "Employee" : "")) + "</td>").join("") + "</tr>").join("") +
     "</table>" +
-    '<p style="margin:16px 0 0;font-size:13px;color:#5a6b80">A CSV (' + L.esc(filename) + ") " + (fileId ? "has been saved to this contact's record in HubSpot." : "is attached below.") + "</p>";
+    '<p style="margin:16px 0 0;font-size:13px;color:#5a6b80">A CSV (' + L.esc(filename) + ") " + (fileId ? "has been saved to this contact's record." : "is attached below.") + "</p>";
 
   let alert = { skipped: "no_notify" };
   try {

@@ -205,9 +205,6 @@ footer a:hover{color:#fff}
   "openingHours": ["Mo-Fr 08:00-18:00","Sa-Su 08:00-13:00"]
 }
 </script>
-<!-- Start of HubSpot Embed Code -->
-<script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246725050.js"></script>
-<!-- End of HubSpot Embed Code -->
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><a href="/quote" style="color:#fff;text-decoration:none;display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span>Open Enrollment for 2027 coverage runs Nov 1 &ndash; Dec 15. Get ahead of the deadline.</span><span style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap">Get a Free Quote &rarr;</span></a></div>
@@ -413,29 +410,26 @@ window.vsAdminWrite = async function(key, item){
   try { await setDoc(ref, { items: items, ts: Date.now() }); } catch(e){}
 };
 
-/* Mirror each website submission into HubSpot (in addition to the admin portal).
-   Uses a hidden HubSpot form — no API key in the page. New contacts land as
-   "Lead"; pipeline status goes to "Website Lead Stage". */
-window.hubspotSyncLead = window.hubspotSyncLead || function(l){
+/* Mirror each website submission into GoHighLevel via /api/lead-sync.
+   This replaced a hidden HubSpot form whose portal ID and form GUID shipped to
+   the browser on every page load. The GHL token stays server-side. */
+window.hubspotSyncLead = window.ghlSyncLead = function(l){
   try{
     if(!l) return;
-    var email=(l.email||"").trim(); if(!email) return; // HubSpot requires an email
-    var first=(l.firstName||"").trim()||String(l.name||l.fullName||"").split(/\s+/)[0]||"";
-    var last =(l.lastName||"").trim()||String(l.name||l.fullName||"").split(/\s+/).slice(1).join(" ")||"";
-    var fields=[];
-    function add(n,v){ v=(v==null?"":String(v)).trim(); if(v) fields.push({name:n,value:v}); }
-    add("email",email); add("firstname",first); add("lastname",last);
-    add("phone",l.phone); add("address",l.address); add("state",l.state);
-    add("zip",l.zipcode||l.zip); add("date_of_birth",l.dob);
-    add("website_lead_stage",l.status||l.stage);
-    var n=String(l.notes||l.message||"").trim(); var extra=[];
-    if(l.coverage && n.indexOf(l.coverage)===-1) extra.push("Coverage: "+l.coverage);
-    if(l.estimate && n.indexOf(l.estimate)===-1) extra.push(String(l.estimate));
-    if(l.value||l.monthlyPremium) extra.push("Quoted: $"+(l.value||l.monthlyPremium));
-    var notes=[n, extra.join(" | ")].filter(Boolean).join(" | ");
-    add("notes",notes);
-    fetch("https://api-na2.hsforms.com/submissions/v3/integration/submit/246725050/ffec0159-e792-4827-854c-acab34314ddc",
-      {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fields:fields})}).catch(function(){});
+    var email=(l.email||"").trim(), phone=(l.phone||"").trim();
+    if(!email && !phone) return;
+    fetch("/api/lead-sync",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      keepalive:true,
+      body:JSON.stringify({
+        firstName:l.firstName||"", lastName:l.lastName||"",
+        email:email, phone:phone,
+        company:l.company||l.businessName||"",
+        state:l.state||"", zip:l.zip||l.zipCode||"",
+        source:l.source||"Website", notes:l.notes||""
+      })
+    }).catch(function(){});
   }catch(e){}
 };
 </script>
@@ -585,8 +579,11 @@ document.addEventListener("DOMContentLoaded", function () {
             created: Date.now(),
             submitted_at: new Date().toISOString()
           };
-          window.vsAdminWrite("contact_requests", _lead);
-          if (typeof window.hubspotSyncLead === "function") window.hubspotSyncLead(_lead);
+          /* The support ticket is written by /api/support-ticket below, which
+             also mints the ticket number and normalises the phone. This used to
+             ALSO call window.vsAdminWrite("contact_requests", _lead), which is
+             why every request produced two cards on the Support board - one with
+             a raw phone number and one in +1 format. Do not add it back. */
           // Open a support ticket. /api/support-ticket mints the ticket number,
           // pushes it to the admin Support board, and tags the contact in GHL,
           // which triggers the acknowledgement email to them and the copy to us.

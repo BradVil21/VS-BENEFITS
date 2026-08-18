@@ -554,10 +554,14 @@ footer a:hover{color:#fff}
   var GADS_CONVERSION_LABEL='PASTE_LABEL_HERE'; // same label as /quote
   var fired=false;
   function fireConv(){ if(fired) return; fired=true; try{ if(typeof gtag!=='function') return; gtag('event','generate_lead',{currency:'USD',value:0,lead_type:'business'}); if(GADS_CONVERSION_LABEL.indexOf('PASTE_')===-1) gtag('event','conversion',{send_to:'AW-17950389267/'+GADS_CONVERSION_LABEL,value:0,currency:'USD'}); }catch(e){} }
-  function hubspot(l){ try{ var f=[]; function a(n,v){v=(v==null?'':String(v)).trim(); if(v) f.push({name:n,value:v});}
-    var parts=String(l.name||'').split(/\s+/); a('email',l.email); a('firstname',parts[0]||''); a('lastname',parts.slice(1).join(' ')); a('phone',l.phone); a('company',l.company); a('numemployees',l.employees); a('num_employees',l.employees); a('website_lead_stage','Website Lead'); a('notes',l.notes);
-    fetch('https://api-na2.hsforms.com/submissions/v3/integration/submit/246725050/ffec0159-e792-4827-854c-acab34314ddc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fields:f})}).catch(function(){});
-  }catch(e){} }
+  function ghlLead(l){ try{
+    var email=(l.email||"").trim(), phone=(l.phone||"").trim();
+    if(!email && !phone) return;
+    fetch('/api/lead-sync',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
+      body:JSON.stringify({firstName:l.firstName||"",lastName:l.lastName||"",email:email,phone:phone,
+        company:l.company||"",zip:l.zip||"",source:'Small Business Calculator',tags:['sb-calculator']})}).catch(function(){});
+  }catch(e){}
+  }
 
   document.getElementById('l-submit').addEventListener('click', function(){
     var biz=document.getElementById('l-biz').value.trim();
@@ -577,7 +581,7 @@ footer a:hover{color:#fff}
     var lead={ type:'business', company:biz, name:name, email:email, phone:phone, employees:empv,
       status:'new', stage:'prospect', source:'group-cost-calculator',
       notes:'Group cost calculator lead. Employees: '+empv, created:Date.now(), submitted_at:new Date().toISOString() };
-    fireConv(); hubspot(lead);
+    fireConv(); ghlLead(lead);
     var payload=Object.assign({}, lead, {source:window.location.href});
     var done=function(){ document.getElementById('lead-form-wrap').style.display='none'; document.getElementById('lead-success').style.display='block'; document.getElementById('lead').scrollIntoView({behavior:'smooth',block:'center'}); };
     if(WEBHOOK_URL && WEBHOOK_URL.indexOf('http')===0){ fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(function(){}).finally(done); } else { done(); }
@@ -590,7 +594,6 @@ footer a:hover{color:#fff}
   if(sb) window.addEventListener('scroll', function(){ var h=document.documentElement; var p=h.scrollTop/(h.scrollHeight-h.clientHeight)*100; sb.style.width=p+'%'; });
 })();
 </script>
-<script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246725050.js"></script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"InsuranceAgency","@id":"https://vshealthbenefits.com/#org","name":"VS Health Benefits","url":"https://vshealthbenefits.com/","image":"https://vshealthbenefits.com/favicon.png","logo":{"@type":"ImageObject","url":"https://vshealthbenefits.com/favicon.png","width":512,"height":512},"telephone":"+1-954-866-6872","email":"info@vshealthbenefits.com","areaServed":[{"@type":"State","name":"Florida"},{"@type":"Country","name":"United States"}],"address":{"@type":"PostalAddress","addressLocality":"Miami","addressRegion":"FL","addressCountry":"US"},"sameAs":["https://www.linkedin.com/company/vsbenefits/","https://www.instagram.com/vshealthbenefits","https://www.facebook.com/profile.php?id=61588058885222","https://www.tiktok.com/@vshealthbenefits"],"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"08:00","closes":"18:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Saturday","Sunday"],"opens":"08:00","closes":"13:00"}]}
 </script>

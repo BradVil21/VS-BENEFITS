@@ -678,7 +678,7 @@ footer a:hover{color:#fff}
   </div>
 </div>
 
-<!-- ===== HubSpot + Admin portal integration (same as site funnel) ===== -->
+<!-- ===== GoHighLevel + Admin portal integration (same as site funnel) ===== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -703,21 +703,24 @@ window.vsAdminWrite = async function(key, item){
   items.unshift(item);
   try { await setDoc(ref, { items: items, ts: Date.now() }); } catch(e){}
 };
-/* Mirror each lead into HubSpot via the same hidden form endpoint the funnel uses. */
-window.hubspotSyncLead = window.hubspotSyncLead || function(l){
+/* Mirror each lead into GoHighLevel via /api/lead-sync (replaced a hidden
+   HubSpot form that shipped its portal ID and form GUID to the browser). */
+window.hubspotSyncLead = window.ghlSyncLead = function(l){
   try{
     if(!l) return;
-    var fields=[];
-    function add(n,v){ v=(v==null?"":String(v)).trim(); if(v) fields.push({name:n,value:v}); }
-    add("email",l.email); add("firstname",l.firstName); add("lastname",l.lastName);
-    add("phone",l.phone); add("company",l.company);
-    add("numemployees",l.employees); add("num_employees",l.employees);
-    add("website_lead_stage",l.status||l.stage);
-    add("notes",l.notes);
-    // HubSpot requires an email to create a contact; skip the HS call if none (admin portal still stores it).
-    if(!l.email) return;
-    fetch("https://api-na2.hsforms.com/submissions/v3/integration/submit/246725050/ffec0159-e792-4827-854c-acab34314ddc",
-      {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fields:fields})}).catch(function(){});
+    var email=(l.email||"").trim(), phone=(l.phone||"").trim();
+    if(!email && !phone) return;
+    fetch("/api/lead-sync",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      keepalive:true,
+      body:JSON.stringify({
+        firstName:l.firstName||"", lastName:l.lastName||"",
+        email:email, phone:phone,
+        company:l.company||"", state:l.state||"", zip:l.zip||l.zipCode||"",
+        source:l.status||l.stage||"Open Enrollment", notes:l.notes||""
+      })
+    }).catch(function(){});
   }catch(e){}
 };
 </script>

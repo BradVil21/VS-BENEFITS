@@ -1544,9 +1544,6 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
 .note-body{font-family:'Kalam','Comic Sans MS',cursive;font-size:16.5px;color:#2b2b2b;line-height:28px;white-space:pre-wrap;word-break:break-word}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
-<!-- Start of HubSpot Embed Code -->
-<script type="text/javascript" id="hs-script-loader" async defer src="//js-na2.hs-scripts.com/246725050.js"></script>
-<!-- End of HubSpot Embed Code -->
 </head>
 <body>
 
@@ -2023,46 +2020,32 @@ async function sha256(t){var b=await crypto.subtle.digest("SHA-256",new TextEnco
 function notice(elId,kind,text){var e=$(elId);if(!e)return;e.innerHTML="";if(!text)return;e.appendChild(el("div",{class:"notice notice-"+kind,text:text}));}
 function webhookFire(payload){var url=getWebhook();if(!url)return;try{fetch(url,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});}catch(e){}}
 
-/* ── HubSpot lead sync ──────────────────────────────────────────────
-   Pushes each lead saved in the admin portal to HubSpot via a hidden
-   HubSpot form (no API key needed). New contacts land as "Lead"; the
-   pipeline status is stored in the "Website Lead Stage" property and
-   coverage/quoted value are folded into the Notes property.
-   HubSpot form: portal 246725050, region na2.
-──────────────────────────────────────────────────────────────────── */
-window.HUBSPOT_PORTAL_ID = window.HUBSPOT_PORTAL_ID || "246725050";
-window.HUBSPOT_FORM_GUID  = window.HUBSPOT_FORM_GUID  || "ffec0159-e792-4827-854c-acab34314ddc";
-window.HUBSPOT_SUBMIT_URL = "https://api-na2.hsforms.com/submissions/v3/integration/submit/" + window.HUBSPOT_PORTAL_ID + "/" + window.HUBSPOT_FORM_GUID;
+/* ── Lead sync to GoHighLevel ───────────────────────────────────────
+   Every lead saved or imported in the admin portal is pushed to the CRM
+   through /api/lead-sync, which holds the token server-side.
+
+   This replaced a hidden HubSpot form that shipped the portal ID and form
+   GUID to the browser. Leads without an email used to be skipped entirely
+   because HubSpot required one - now a phone number is enough. */
 function hubspotSyncLead(l){
   try{
     if(!l) return;
-    var email = (l.email||"").trim();
-    if(!email) return; // HubSpot form requires an email; skip leads without one
-    var first = (l.firstName||"").trim() || String(l.name||"").split(/\s+/)[0] || "";
-    var last  = (l.lastName ||"").trim() || String(l.name||"").split(/\s+/).slice(1).join(" ") || "";
-    var fields = [];
-    function add(n,v){ v=(v==null?"":String(v)).trim(); if(v) fields.push({name:n,value:v}); }
-    add("email", email);
-    add("firstname", first);
-    add("lastname", last);
-    add("phone", l.phone);
-    add("address", l.address);
-    add("state", l.state);
-    add("zip", l.zipcode || l.zip);
-    add("date_of_birth", l.dob);
-    add("website_lead_stage", l.status || l.stage);
-    // Fold coverage interest + quoted amount into Notes so nothing is lost
-    var extra = [];
-    if(l.coverage) extra.push("Coverage: " + l.coverage);
-    if(l.value)    extra.push("Quoted: $" + l.value);
-    var notes = [String(l.notes||"").trim(), extra.join(" | ")].filter(Boolean).join(" | ");
-    add("notes", notes);
-    fetch(window.HUBSPOT_SUBMIT_URL, {
+    var email=String(l.email||"").trim(), phone=String(l.phone||"").trim();
+    if(!email && !phone) return;
+    fetch("/api/lead-sync",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ fields: fields })
+      keepalive:true,
+      body:JSON.stringify({
+        firstName:l.firstName||"", lastName:l.lastName||"",
+        email:email, phone:phone,
+        company:l.company||"", state:l.state||"", zip:l.zipCode||l.zip||"",
+        source:"Admin portal"+(l.stage?(" - "+l.stage):""),
+        notes:l.notes||"",
+        tags:["admin-lead"]
+      })
     }).catch(function(){});
-  }catch(e){ /* never block the admin UI on a sync failure */ }
+  }catch(e){ /* never block saving a lead on a CRM failure */ }
 }
 
 var cloud={ready:false,suspend:0};
@@ -3691,11 +3674,11 @@ $("import-file").addEventListener("change",function(e){
       if(b.leads)saveLeads(b.leads);if(b.accounts)saveAccounts(b.accounts);if(b.messages)saveMessages(b.messages);
       if(b.referrals)saveReferrals(b.referrals);if(b.appointments)saveAppts(b.appointments);
       if(b.admins)saveAdmins(b.admins);if(b.webhook)setWebhook(b.webhook);if(b.setupCode)localStorage.setItem(K.setupCode,b.setupCode);
-      /* Auto-sync newly imported leads to HubSpot (staggered to stay under rate limits) */
+      /* Auto-sync newly imported leads to GoHighLevel (staggered to stay under rate limits) */
       if(b.leads){
         var toSync=b.leads.filter(function(l){return l&&(l.email||"").trim()&&!prevIds[l.id];});
         toSync.forEach(function(l,i){setTimeout(function(){hubspotSyncLead(l);},i*250);});
-        if(toSync.length)addNotif("lead",toSync.length+" imported lead"+(toSync.length>1?"s":"")+" syncing to HubSpot","Contacts are being created in your CRM","leads");
+        if(toSync.length)addNotif("lead",toSync.length+" imported lead"+(toSync.length>1?"s":"")+" syncing to your CRM","Contacts are being created in GoHighLevel","leads");
       }
       alert("Import done.");renderAll();
     }catch(err){alert("Bad JSON file.");}

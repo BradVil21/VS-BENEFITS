@@ -1,12 +1,12 @@
 // Vercel serverless function: handle a BUSINESS (group) quote submission.
 //
 // On submit it:
-//   1. Creates/updates the contact in HubSpot (owner name, phone, company, employees, location).
+//   1. Creates/updates the contact in GoHighLevel (owner name, phone, company, employees, location).
 //   2. Sends the lead a branded VS Health Benefits confirmation email with a "Fill out census form" link.
 //   3. Emails Bradley an internal alert.
 //   4. Adds a note to the contact summarizing the request.
 //
-// Safe by design: if HUBSPOT_PRIVATE_APP_TOKEN or RESEND_API_KEY are missing, the
+// Safe by design: if GHL_PIT_TOKEN or RESEND_API_KEY are missing, the
 // relevant step is skipped and the function still returns 200 so the website never breaks.
 //
 // See api/_lib.js for env vars.

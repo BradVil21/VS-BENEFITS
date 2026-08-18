@@ -16,7 +16,7 @@
 (function(){
   "use strict";
   var CONSENT_KEY='vs_consent', DRAFT_KEY='vs_quote_draft', DRAFT_TTL=7*24*3600*1000;
-  var GA_ID='G-Z6EVXL76GG', ADS_ID='AW-17950389267', HS_ID='246725050';
+  var GA_ID='G-Z6EVXL76GG', ADS_ID='AW-17950389267';
 
   function $(id){return document.getElementById(id);}
   function store(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
@@ -66,7 +66,6 @@
   function loadMarketing(){ if(_mOn)return; _mOn=true;
     inject('https://www.googletagmanager.com/gtag/js?id='+ADS_ID);
     gtag('config',ADS_ID);
-    inject('https://js-na2.hs-scripts.com/'+HS_ID+'.js',{id:'hs-script-loader',defer:'defer'});
   }
   function killCookies(names){
     var domains=['','.'+location.hostname,location.hostname,'.vshealthbenefits.com'];
@@ -82,7 +81,7 @@
   function applyConsent(c){
     if(!c)return;
     if(c.analytics) loadAnalytics(); else killCookies(['_ga','_gid','_gat']);
-    if(c.marketing) loadMarketing(); else killCookies(['hubspotutk','__hstc','__hssrc','__hssc','_gcl_au']);
+    if(c.marketing) loadMarketing(); else killCookies(['_gcl_au']);
   }
   function saveConsent(a,m){
     consent={analytics:!!a,marketing:!!m,ts:Date.now(),v:1};
@@ -104,7 +103,7 @@
       +'  <div class="vs-cc-prefs" id="vs-cc-prefs">'
       +'    <label class="vs-cc-pref locked"><input type="checkbox" checked disabled><span><b>Essential</b>Required for the site and forms to work. Always on.</span></label>'
       +'    <label class="vs-cc-pref"><input type="checkbox" id="vs-cc-analytics"><span><b>Analytics</b>Helps us understand how visitors use the site (Google Analytics).</span></label>'
-      +'    <label class="vs-cc-pref"><input type="checkbox" id="vs-cc-marketing"><span><b>Marketing</b>Measures ad performance and enables follow-up (Google Ads, HubSpot).</span></label>'
+      +'    <label class="vs-cc-pref"><input type="checkbox" id="vs-cc-marketing"><span><b>Marketing</b>Measures ad performance and enables follow-up (Google Ads).</span></label>'
       +'    <button type="button" class="vs-cc-btn primary" id="vs-cc-save" style="align-self:center">Save my choices</button>'
       +'  </div>'
       +'</div>';

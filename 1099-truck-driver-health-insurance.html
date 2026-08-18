@@ -754,7 +754,7 @@ function qfFunnelRedirect_1099_truck_driver_health_insurance() {
 function ooGuideSubmit(f){
   var em=(f.email.value||'').trim();
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){f.email.focus();return false;}
-  try{fetch('https://api-na2.hsforms.com/submissions/v3/integration/submit/246725050/ffec0159-e792-4827-854c-acab34314ddc',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fields:[{name:'email',value:em},{name:'notes',value:'Downloaded Owner-Operator Health Insurance Guide'}]})}).catch(function(){});}catch(e){}
+  try{fetch('/api/lead-sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em,source:'Owner-Operator Guide',tags:['guide-download'],notes:'Downloaded Owner-Operator Health Insurance Guide'})}).catch(function(){});}catch(e){}
   var url='/guides/owner-operator-health-insurance-guide.pdf';
   f.parentNode.innerHTML='<div style="text-align:center;padding:8px 0"><div style="font-family:\'Poppins\',system-ui,sans-serif;font-size:1.25rem;font-weight:800;color:#fff;margin-bottom:8px">Your guide is ready &#10003;</div><p style="color:rgba(255,255,255,.9);margin:0 0 16px">Thanks! Your download should start automatically. If it does not, tap below.</p><a href="'+url+'" download style="display:inline-block;background:#fff;color:#16447f;font-weight:800;padding:13px 26px;border-radius:999px;text-decoration:none">Download the Guide (PDF)</a></div>';
   try{var a=document.createElement('a');a.href=url;a.setAttribute('download','');document.body.appendChild(a);a.click();document.body.removeChild(a);}catch(e){}

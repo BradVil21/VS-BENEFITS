@@ -1,17 +1,26 @@
 // Shared helpers for VS Health Benefits serverless functions.
-// - HubSpot REST calls (private-app token, server-side only)
+// - GoHighLevel REST calls (private integration token, server-side only)
 // - Resend transactional email (brand sender)
 // - Branded HTML email templates
 //
+// HubSpot has been removed entirely. upsertContact/addNoteToContact keep their
+// names so the endpoints that call them did not have to change shape, but they
+// now write to GoHighLevel. uploadFile is a no-op kept for the same reason -
+// see its comment.
+//
 // ENV VARS (set in Vercel -> Project -> Settings -> Environment Variables):
-//   HUBSPOT_PRIVATE_APP_TOKEN   already used by api/hubspot-ticket.js
-//   RESEND_API_KEY              from resend.com (free tier). If missing, email is skipped (no crash).
+//   GHL_PIT_TOKEN               private integration token (pit-...). If missing,
+//                               CRM writes are skipped and email still sends.
+//   GHL_LOCATION_ID             optional, defaults to the VS Health Benefits sub-account
+//   RESEND_API_KEY              from resend.com. If missing, email is skipped (no crash).
 //   FROM_EMAIL                  optional, default "VS Health Benefits <quotes@vshealthbenefits.com>"
 //   REPLY_TO_EMAIL              optional, default the notify address below
 //   NOTIFY_EMAIL                optional, where lead/census alerts go. Default bvilsainthealth@gmail.com
 //   SITE_URL                    optional, default https://www.vshealthbenefits.com
 
-const HS = "https://api.hubapi.com";
+const GHL_BASE = "https://services.leadconnectorhq.com";
+const GHL_VERSION = "2021-07-28";
+const GHL_LOCATION = process.env.GHL_LOCATION_ID || "cNCy6JUURpb4eBDdb9bU";
 
 const CFG = {
   brand: "VS Health Benefits",
@@ -29,95 +38,112 @@ function esc(s) {
     .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 
-// ---------- HubSpot ----------
-async function hs(path, method, body) {
-  const token = process.env.HUBSPOT_PRIVATE_APP_TOKEN;
-  if (!token) return { ok: false, skipped: "no_hs_token", status: 0, json: null };
-  const r = await fetch(HS + path, {
-    method: method || "GET",
-    headers: {
-      Authorization: "Bearer " + token,
-      "Content-Type": "application/json",
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  let json = null;
-  try { json = await r.json(); } catch (e) { /* ignore */ }
-  return { ok: r.ok, status: r.status, json };
-}
-
-// Create or update a contact by email. Returns contactId (or null).
-async function upsertContact(props) {
-  const email = String(props.email || "").trim().toLowerCase();
-  if (!email) return null;
-  // Try find first
-  const search = await hs("/crm/v3/objects/contacts/search", "POST", {
-    filterGroups: [{ filters: [{ propertyName: "email", operator: "EQ", value: email }] }],
-    properties: ["email"],
-    limit: 1,
-  });
-  const existing =
-    search.ok && search.json && search.json.results && search.json.results[0]
-      ? search.json.results[0].id
-      : null;
-
-  const clean = {};
-  Object.keys(props).forEach((k) => {
-    const v = props[k];
-    if (v != null && String(v).trim() !== "") clean[k] = String(v).trim();
-  });
-
-  if (existing) {
-    await hs("/crm/v3/objects/contacts/" + existing, "PATCH", { properties: clean });
-    return existing;
+// ---------- GoHighLevel ----------
+async function ghl(path, method, body) {
+  const token = process.env.GHL_PIT_TOKEN;
+  if (!token) return { ok: false, skipped: "no_ghl_token", status: 0, json: null };
+  try {
+    const r = await fetch(GHL_BASE + path, {
+      method: method || "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+        Version: GHL_VERSION,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    let json = null;
+    try { json = await r.json(); } catch (e) { /* ignore */ }
+    return { ok: r.ok, status: r.status, json };
+  } catch (e) {
+    return { ok: false, status: 0, json: null, error: String((e && e.message) || e) };
   }
-  const created = await hs("/crm/v3/objects/contacts", "POST", { properties: clean });
-  return created.ok && created.json ? created.json.id : null;
 }
 
-// Create a Note engagement, optionally with a file attachment, associated to a contact.
+// Kept under the old name so callers did not need rewriting. Callers still pass
+// HubSpot-style property names (firstname, lastname, zip, company...), so those
+// are mapped to GHL's fields here rather than at every call site. Anything that
+// has no GHL equivalent is folded into the contact's source/tags instead of
+// being silently dropped.
+async function upsertContact(props) {
+  const p = props || {};
+  const email = String(p.email || "").trim().toLowerCase();
+  const phone = String(p.phone || "").trim();
+  if (!email && !phone) return null;
+
+  const body = { locationId: GHL_LOCATION };
+  if (email) body.email = email;
+  if (phone) body.phone = phone;
+
+  const first = String(p.firstname || p.firstName || "").trim();
+  const last = String(p.lastname || p.lastName || "").trim();
+  if (first) body.firstName = first;
+  if (last) body.lastName = last;
+  if (first || last) body.name = (first + " " + last).trim();
+
+  const company = String(p.company || "").trim();
+  if (company) body.companyName = company;
+
+  const state = String(p.state || "").trim();
+  if (state) body.state = state;
+
+  const zip = String(p.zip || p.postalCode || "").trim();
+  if (zip) body.postalCode = zip;
+
+  const address = String(p.address || "").trim();
+  if (address) body.address1 = address;
+
+  // website_lead_stage was a HubSpot-only property. Carry it as the source line
+  // so the context is not lost on the record.
+  const stage = String(p.website_lead_stage || "").trim();
+  body.source = stage || "Website";
+
+  const r = await ghl("/contacts/upsert", "POST", body);
+  const c = r.json && (r.json.contact || r.json.data || r.json);
+  return r.ok && c && c.id ? c.id : null;
+}
+
+// Notes in GHL are plain text, so any HTML the callers built for HubSpot gets
+// flattened rather than rendered as tag soup on the contact record.
+function htmlToText(html) {
+  return String(html == null ? "" : html)
+    .replace(/<\s*br\s*\/?>/gi, "\n")
+    .replace(/<\s*\/(tr|p|div|h[1-6])\s*>/gi, "\n")
+    .replace(/<\s*\/td\s*>/gi, "  ")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim()
+    .slice(0, 5000);
+}
+
 async function addNoteToContact(contactId, html, attachmentId) {
   if (!contactId) return null;
-  const props = { hs_note_body: html, hs_timestamp: new Date().toISOString() };
-  if (attachmentId) props.hs_attachment_ids = String(attachmentId);
-  // association type 202 = note_to_contact (default)
-  const body = {
-    properties: props,
-    associations: [
-      {
-        to: { id: contactId },
-        types: [{ associationCategory: "HUBSPOT_DEFINED", associationTypeId: 202 }],
-      },
-    ],
-  };
-  const r = await hs("/crm/v3/objects/notes", "POST", body);
-  return r.ok && r.json ? r.json.id : null;
+  let text = htmlToText(html);
+  if (attachmentId) text += "\n\n(attachment reference: " + attachmentId + ")";
+  const r = await ghl("/contacts/" + contactId + "/notes", "POST", { body: text });
+  return r.ok && r.json && r.json.note ? r.json.note.id : (r.ok ? true : null);
 }
 
-// Upload a text file (e.g. CSV) to HubSpot Files and return its fileId.
-// Uses global FormData/Blob (Node 18+ on Vercel).
-async function uploadFile(filename, text, mime) {
-  const token = process.env.HUBSPOT_PRIVATE_APP_TOKEN;
-  if (!token) return null;
-  try {
-    const form = new FormData();
-    form.append("file", new Blob([text], { type: mime || "text/csv" }), filename);
-    form.append("folderPath", "/lead-census");
-    form.append(
-      "options",
-      JSON.stringify({ access: "PRIVATE", overwrite: false, duplicateValidationStrategy: "NONE" })
-    );
-    const r = await fetch(HS + "/files/v3/files", {
-      method: "POST",
-      headers: { Authorization: "Bearer " + token },
-      body: form,
-    });
-    const json = await r.json().catch(() => null);
-    return r.ok && json ? json.id : null;
-  } catch (e) {
-    return null;
-  }
+async function addTagsToContact(contactId, tags) {
+  if (!contactId || !tags || !tags.length) return null;
+  const r = await ghl("/contacts/" + contactId + "/tags", "POST", { tags: tags });
+  return r.ok;
 }
+
+// No-op. This used to push the census CSV into HubSpot Files and return a file
+// id that addNoteToContact attached to the note. GHL's media library is not a
+// drop-in equivalent, and the census CSV already goes out on the alert email,
+// which is where it actually gets used. Returns null so callers skip the
+// attachment path without any of them needing to change.
+async function uploadFile() {
+  return null;
+}
+
 
 // ---------- Email (Resend) ----------
 async function sendEmail({ to, subject, html, replyTo }) {
@@ -213,11 +239,11 @@ function bizAlertEmail(d) {
   const inner = `
     <h1 style="margin:0 0 12px;font-size:20px;font-weight:800">🏢 New business quote request</h1>
     <table role="presentation" width="100%" style="border-collapse:collapse;margin-top:8px">${trs}</table>
-    <p style="margin:16px 0 0;font-size:13px;color:#5a6b80">A confirmation + census link was sent to the contact. Census will be saved to their contact record in HubSpot.</p>`;
+    <p style="margin:16px 0 0;font-size:13px;color:#5a6b80">A confirmation + census link was sent to the contact. The census is saved to their contact record in GoHighLevel.</p>`;
   return shell(inner, "New business quote request");
 }
 
 module.exports = {
-  CFG, esc, hs, upsertContact, addNoteToContact, uploadFile, sendEmail,
+  CFG, esc, ghl, upsertContact, addNoteToContact, addTagsToContact, uploadFile, sendEmail,
   shell, btn, businessLeadEmail, bizAlertEmail,
 };

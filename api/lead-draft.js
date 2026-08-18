@@ -2,7 +2,7 @@
 //
 // Purpose: first-party abandoned/in-progress lead capture. The website auto-calls
 // this from the /quote funnel as the visitor fills it in — even if they never press
-// submit. It stores the partial info as a HubSpot contact tagged as a draft so
+// submit. It stores the partial info as a GoHighLevel contact tagged as a draft so
 // Bradley can follow up. When the visitor later completes the full quote, the same
 // email upserts the SAME contact (no duplicate lead).
 //
@@ -13,7 +13,7 @@
 //     stay in the visitor's own browser and are never sent here.
 //   - Length caps to stop oversized/abusive payloads.
 //   - Encrypted in transit (Vercel serves this over HTTPS/TLS only).
-//   - Safe by design: if HUBSPOT_PRIVATE_APP_TOKEN is missing, the write is skipped
+//   - Safe by design: if GHL_PIT_TOKEN is missing, the write is skipped
 //     and the function still returns 200 so the site never breaks.
 //
 // See api/_lib.js for shared helpers and env vars.
