@@ -852,6 +852,8 @@ window.ghlSyncReferral = function(r, fromAcct){
         preferredContact: r.preferredContact || "",
         referredByName:  referredBy,
         referredByEmail: (fromAcct && fromAcct.email) || "",
+        referredByPhone: (fromAcct && fromAcct.phone) || "",
+        referredByFirst: (fromAcct && fromAcct.firstName) || "",
         referralId: r.id || ""
       })
     }).catch(function(){});

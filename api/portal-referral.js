@@ -103,6 +103,8 @@ module.exports = async (req, res) => {
     preferredContact: clean(d.preferredContact || d.preferred_contact, 40),
     referredByName:  clean(d.referredByName  || d.referred_by_name, 120),
     referredByEmail: validEmail(d.referredByEmail || d.referred_by_email),
+    referredByPhone: validPhone(d.referredByPhone || d.referred_by_phone),
+    referredByFirst: clean(d.referredByFirst || d.referred_by_first, 60),
     referralId: clean(d.referralId || d.referral_id, 60),
   };
 
@@ -168,6 +170,36 @@ module.exports = async (req, res) => {
       });
       out.noted = Boolean(n.ok);
     } catch (e) { out.noted = false; }
+  }
+
+  // ---- 4. tag the REFERRING MEMBER -> triggers the thank-you workflow ----
+  // This is a different person from the contact above. The referred person gets
+  // added to the CRM; the member who sent them gets the thank-you email + SMS,
+  // and Bradley gets the internal alert (that lives in the workflow, not here).
+  if (r.referredByEmail || r.referredByPhone) {
+    try {
+      const rb = { locationId: LOCATION_ID, source: "Client portal referral" };
+      if (r.referredByEmail) rb.email = r.referredByEmail;
+      if (r.referredByPhone) rb.phone = r.referredByPhone;
+      if (r.referredByFirst) rb.firstName = r.referredByFirst;
+
+      const up2 = await ghl("/contacts/upsert", "POST", rb);
+      const c2 = up2.json && (up2.json.contact || up2.json.data || up2.json);
+      const referrerId = up2.ok && c2 && c2.id ? c2.id : null;
+      out.referrerId = referrerId;
+
+      if (referrerId) {
+        const t2 = await ghl("/contacts/" + referrerId + "/tags", "POST", {
+          tags: ["referral-submitted", "member-portal"],
+        });
+        out.referrerTagged = Boolean(t2.ok);
+        if (!t2.ok) out.referrerTagError = t2.status || t2.skipped;
+      } else {
+        out.referrerError = up2.status || up2.skipped;
+      }
+    } catch (e) { out.referrerTagged = false; out.referrerError = "exception"; }
+  } else {
+    out.referrerSkipped = "no_referrer_contact";
   }
 
   res.status(200).json(out);

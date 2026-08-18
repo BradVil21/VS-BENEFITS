@@ -3485,22 +3485,17 @@ function openRefPayoutModal(r){
   openModal(html);
   $("rp-form").addEventListener("submit",function(e){e.preventDefault();updateRef(r.id,{status:"paid",paidAt:Date.now(),payout:Number($("rp-amt").value)||0,notes:$("rp-notes").value.trim(),read:true});closeModal();});
 }
-/* ── Referral status emails via EmailJS (reuses the same account as the client portal) ──
-   Service + public key are shared with client.html. Create ONE new EmailJS template
-   for referral status updates and paste its ID below (see setup notes from Claude). */
-window.EMAILJS_SERVICE_ID = window.EMAILJS_SERVICE_ID || "service_jd32jh7";
-window.EMAILJS_PUBLIC_KEY = window.EMAILJS_PUBLIC_KEY || "_5ahTbYlf4F7vsV-2";
-window.EMAILJS_REF_STATUS_TEMPLATE_ID = window.EMAILJS_REF_STATUS_TEMPLATE_ID || "REPLACE_WITH_REFERRAL_STATUS_TEMPLATE_ID";
-function loadEmailJS(){
-  return new Promise(function(resolve,reject){
-    if(window.emailjs) return resolve(window.emailjs);
-    var s=document.createElement("script");
-    s.src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
-    s.onload=function(){ resolve(window.emailjs); };
-    s.onerror=reject;
-    document.head.appendChild(s);
-  });
-}
+/* ── Referral status notifications via GoHighLevel ──────────────────
+   Every status change you make here texts the MEMBER WHO SENT the referral.
+   Posts to /api/referral-status, which upserts their GHL contact, writes the
+   message into a custom field, and tags them `referral-status-updated` - the
+   trigger for the "Referral Status Update" workflow.
+
+   The SMS copy itself lives server-side in api/referral-status.js so there is
+   one source of truth and the 160-character limit is enforced in code.
+
+   This replaced an EmailJS sender that was never finished (its template ID was
+   still REPLACE_..., so it silently no-opped on every status change). */
 function ageFromDob(s){
   s=String(s||"").trim(); if(!s) return null;
   var d=null, m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
@@ -3515,35 +3510,23 @@ async function sendReferralStatusEmail(ref, newStatus){
   try{
     if(!ref) return;
     var acct=getAccounts().filter(function(a){return a.id===ref.fromAccountId;})[0];
-    var toEmail = acct && acct.email ? acct.email : "";
-    if(!toEmail) return; // no referrer email on file
-    if(String(window.EMAILJS_SERVICE_ID||"").indexOf("REPLACE_")===0) return;
-    if(String(window.EMAILJS_REF_STATUS_TEMPLATE_ID||"").indexOf("REPLACE_")===0) return; // template not set up yet
-    var labels={"in-progress":"In Progress","being-reviewed":"Being Reviewed","sold":"Approved","declined":"Declined","paid":"Reward Paid"};
-    var msgs={
-      "in-progress":"is now in progress. Our team has started working on it.",
-      "being-reviewed":"is currently being reviewed by our team.",
-      "sold":"has been approved and enrolled. Thank you for the referral!",
-      "declined":"could not be accepted at this time.",
-      "paid":"reward has been paid out. Thank you for referring them!"
-    };
-    var label=labels[newStatus]||newStatus;
-    var refName=ref.referralName||"your referral";
-    var statusMessage="Your referral for "+refName+" "+(msgs[newStatus]||("was updated to "+label+"."));
-    var notes=String(ref.notes||"").trim();
-    var ejs=await loadEmailJS();
-    await ejs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_REF_STATUS_TEMPLATE_ID, {
-      to_email:       toEmail,
-      to_name:        (acct.firstName||"there"),
-      referral_name:  refName,
-      new_status:     label,
-      status_message: statusMessage,
-      notes:          notes,
-      show_notes:     (newStatus==="declined" && notes) ? "yes" : "",
-      from_name:      "VS Health Benefits",
-      reply_to:       "info@vshealthbenefits.com"
-    }, { publicKey: window.EMAILJS_PUBLIC_KEY });
-  }catch(e){ console.warn("referral status email failed", e); }
+    if(!acct) return;                       // referral with no member attached
+    if(!acct.email && !acct.phone) return;  // nothing to reach them on
+    await fetch("/api/referral-status",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      keepalive:true,
+      body:JSON.stringify({
+        referrerFirstName: acct.firstName||"",
+        referrerLastName:  acct.lastName||"",
+        referrerEmail:     acct.email||"",
+        referrerPhone:     acct.phone||"",
+        referralName:      ref.referralName||"",
+        status:            newStatus||"",
+        payout:            ref.payout!=null?String(ref.payout):""
+      })
+    });
+  }catch(e){ console.warn("referral status notify failed", e); }
 }
 function updateRef(id,patch){
   var changed=null, prevStatus=null;
