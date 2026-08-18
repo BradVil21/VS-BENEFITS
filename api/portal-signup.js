@@ -5,30 +5,32 @@
 //     -> POST /api/portal-signup   (this file)
 //        1. Upsert the contact in GoHighLevel (creates or updates by email/phone)
 //        2. Write portal custom fields (Admin Client ID)
-//        3. Add the tag `portal-account-created`
-//           -> this tag is what TRIGGERS the "Member Account Creation" workflow
-//              in GHL, which sends the welcome EMAIL + SMS.
-//        4. Optionally mirror the raw payload to a GHL Inbound Webhook URL
+//        3. Add the tags `portal-account-created` + `member-portal` (segmentation)
+//        4. POST the payload to the GHL Inbound Webhook  <-- THIS IS THE TRIGGER
+//           -> starts the "Member Account Creation" workflow, which sends:
+//                - welcome email        (immediately)
+//                - welcome SMS          (+5 min)
+//                - website tour email   (+1 day, includes the referral payout)
 //
-// Why the tag and not a raw inbound webhook as the trigger:
-//   A tag fires on a contact that already exists with every field populated, so
-//   the workflow's email/SMS merge fields ({{contact.first_name}} etc.) resolve.
-//   An inbound-webhook trigger would have to re-map every field by hand and
-//   can fire before the contact record is complete.
+// Why the webhook fires LAST:
+//   The contact is upserted first, so by the time the workflow starts the record
+//   already exists with every field populated. The payload carries `contact_id`,
+//   so the workflow's first action can match the existing contact rather than
+//   creating a duplicate - and {{contact.first_name}} resolves in the messages.
 //
 // Why this is server-side and not in client.html:
 //   The GHL private integration token must never ship to the browser. client.html
 //   is public. Only this function ever sees the token.
 //
-// Safe by design: every step is wrapped, one failure never blocks the others, and
-// the function always returns 200 so a portal signup is never blocked by CRM lag.
+// HubSpot and EmailJS have been removed from this flow. GoHighLevel is the only
+// destination - there is no second system to keep in sync and no duplicate email.
 //
 // ENV VARS (Vercel -> Project -> Settings -> Environment Variables):
-//   GHL_PIT_TOKEN              REQUIRED. Private integration token (pit-...).
-//                              No fallback on purpose — never hardcode it here.
+//   GHL_PIT_TOKEN              REQUIRED for the contact upsert/tagging.
+//                              No fallback on purpose - never hardcode it here.
 //   GHL_LOCATION_ID            optional, defaults to the VS Health Benefits sub-account
 //   GHL_SIGNUP_TAG             optional, defaults to "portal-account-created"
-//   GHL_INBOUND_WEBHOOK_URL    optional. If set, the raw payload is also POSTed here.
+//   GHL_INBOUND_WEBHOOK_URL    optional override for the trigger URL below
 //   PORTAL_SIGNUP_SECRET       optional shared secret; if set, callers must send it
 //                              in the `x-vs-portal-secret` header.
 
@@ -37,6 +39,12 @@ const GHL_VERSION = "2021-07-28";
 
 const LOCATION_ID = process.env.GHL_LOCATION_ID || "cNCy6JUURpb4eBDdb9bU";
 const SIGNUP_TAG = process.env.GHL_SIGNUP_TAG || "portal-account-created";
+
+// Inbound Webhook trigger for the "Member Account Creation" workflow.
+// This URL is not a secret - it only accepts data, it never returns any.
+const WEBHOOK_URL =
+  process.env.GHL_INBOUND_WEBHOOK_URL ||
+  "https://services.leadconnectorhq.com/hooks/cNCy6JUURpb4eBDdb9bU/webhook-trigger/4a141b0c-a3d6-4b64-ad46-587f4821b1ca";
 
 // Custom field IDs for this location (locations_get-custom-fields).
 const CF = {
@@ -113,26 +121,34 @@ async function upsertContact(d) {
   return { id: c.id, isNew: r.json.new === true, status: r.status };
 }
 
-// Add the trigger tag as a discrete event, after the contact is fully populated.
+// Add the segmentation tags as a discrete event, after the contact is populated.
 async function addTags(contactId, tags) {
   if (!contactId) return { ok: false, skipped: "no_contact" };
   return ghl("/contacts/" + contactId + "/tags", "POST", { tags: tags });
 }
 
-// Optional mirror to a GHL Inbound Webhook (or any other listener).
-async function mirrorToWebhook(payload) {
-  const url = process.env.GHL_INBOUND_WEBHOOK_URL;
-  if (!url) return { ok: false, skipped: "no_webhook_url" };
-  try {
-    const r = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    return { ok: r.ok, status: r.status };
-  } catch (e) {
-    return { ok: false, error: String((e && e.message) || e) };
+// Fire the Inbound Webhook that starts the workflow.
+// This is the trigger, so it gets one retry - a dropped call means the member
+// never receives their welcome email or SMS.
+async function fireTrigger(payload) {
+  if (!WEBHOOK_URL) return { ok: false, skipped: "no_webhook_url" };
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const r = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (r.ok) return { ok: true, status: r.status, attempts: attempt };
+      if (attempt === 2) return { ok: false, status: r.status, attempts: attempt };
+    } catch (e) {
+      if (attempt === 2) {
+        return { ok: false, error: String((e && e.message) || e), attempts: attempt };
+      }
+    }
+    await new Promise(function (res) { setTimeout(res, 400); });
   }
+  return { ok: false };
 }
 
 module.exports = async (req, res) => {
@@ -178,7 +194,7 @@ module.exports = async (req, res) => {
   result.contactId = contact.id;
   if (!contact.id) result.contactError = contact.error || contact.status;
 
-  // ---- 3. tag -> fires the "Member Account Creation" workflow ----
+  // ---- 3. tags (segmentation only - the webhook below is the trigger) ----
   if (contact.id) {
     try {
       const tagged = await addTags(contact.id, [SIGNUP_TAG, "member-portal"]);
@@ -187,18 +203,46 @@ module.exports = async (req, res) => {
     } catch (e) { result.tagged = false; result.tagError = "exception"; }
   }
 
-  // ---- 4. optional raw mirror ----
+  // ---- 4. fire the Inbound Webhook -> starts "Member Account Creation" ----
+  // Keys are sent in several shapes on purpose. GHL's inbound-webhook mapper
+  // reads whatever key you point it at, and different actions in the builder
+  // default to different conventions, so first_name / firstName / full_name are
+  // all present. Do not remove one without checking the workflow mapping first.
+  const first = payload.firstName;
+  const fullName = (payload.firstName + " " + payload.lastName).trim();
+  const trigger = {
+    event: "client_signup",
+
+    // contact identity - map these in the workflow's Create/Update Contact step
+    contact_id: contact.id || "",
+    contactId: contact.id || "",
+    first_name: first,
+    firstName: first,
+    last_name: payload.lastName,
+    lastName: payload.lastName,
+    full_name: fullName,
+    name: fullName,
+    email: payload.email,
+    phone: payload.phone,
+
+    // portal metadata
+    account_id: payload.accountId,
+    accountId: payload.accountId,
+    sms_eligible: Boolean(payload.phone),
+    is_new_contact: Boolean(contact.isNew),
+
+    // provenance
+    created_iso: new Date().toISOString(),
+    source: "vshealthbenefits.com",
+    page: "/client.html",
+    location_id: LOCATION_ID,
+  };
+
   try {
-    const m = await mirrorToWebhook({
-      event: "client_signup",
-      ...payload,
-      contactId: contact.id,
-      created_iso: new Date().toISOString(),
-      source: "vshealthbenefits.com",
-      page: "/client.html",
-    });
-    if (!m.skipped) result.mirrored = Boolean(m.ok);
-  } catch (e) { /* non-fatal */ }
+    const t = await fireTrigger(trigger);
+    result.triggered = Boolean(t.ok);
+    if (!t.ok) result.triggerError = t.status || t.error || t.skipped;
+  } catch (e) { result.triggered = false; result.triggerError = "exception"; }
 
   res.status(200).json(result);
 };

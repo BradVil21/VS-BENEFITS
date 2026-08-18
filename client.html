@@ -817,85 +817,54 @@ $("tab-signup").addEventListener("click",function(){
   showNotice("login-msg","",""); showNotice("signup-msg","","");
 });
 
-/* Push each new client-portal account into HubSpot via a dedicated hidden
-   HubSpot signup form (no API key in the page). That form also triggers the
-   account welcome email. Password hashes are never sent. */
-window.hubspotSyncAccount = function(a){
-  try{
-    if(!a || !a.email) return;
-    var fields=[
-      {name:"email",     value:String(a.email||"").trim()},
-      {name:"firstname", value:String(a.firstName||"").trim()},
-      {name:"lastname",  value:String(a.lastName||"").trim()},
-      {name:"phone",     value:String(a.phone||"").trim()}
-    ].filter(function(f){return f.value;});
-    fetch("https://api-na2.hsforms.com/submissions/v3/integration/submit/246725050/44178a65-c328-4ee4-aea2-61ceb6c10d23",
-      {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fields:fields})}).catch(function(){});
-  }catch(e){}
-};
+/* ── GoHighLevel referral sync ──────────────────────────────────────
+   Every referral submitted in the portal is posted to /api/portal-referral,
+   which upserts the referred person as a GHL contact, tags them
+   `portal-referral` and attaches a note with the full detail plus who
+   referred them. The GHL token lives only in that serverless function —
+   never here, because this file is public.
 
-/* ── HubSpot referral sync ──────────────────────────────────────────
-   Every referral submitted in the portal is pushed to HubSpot via a
-   dedicated hidden "Client Referral" form (no API key in the page).
-   The form lives in HubSpot (Marketing → Forms → "Client Referral")
-   with fields: email, firstname, lastname, phone, zip, state, notes.
-   Submission notifications email bvilsaint@vshealthbenefits.com
-   (configured in the form's Submission settings).
-   Portal 246725050, region na2. */
-window.HUBSPOT_PORTAL_ID        = "246725050";
-window.HUBSPOT_LEAD_FORM_GUID   = "ffec0159-e792-4827-854c-acab34314ddc";
-window.HUBSPOT_REFERRAL_FORM_GUID = "b659a509-cfad-4294-9caa-04a7bfb93cec";
-window.hubspotSyncReferral = function(r, fromAcct){
+   This replaced the old HubSpot "Client Referral" hidden form. GoHighLevel
+   is now the only CRM the portal writes to. */
+window.ghlSyncReferral = function(r, fromAcct){
   try{
     if(!r) return;
-    var guid = String(window.HUBSPOT_REFERRAL_FORM_GUID||"");
-    if(guid.indexOf("REPLACE_")===0) guid = window.HUBSPOT_LEAD_FORM_GUID;
-    var fields=[];
-    function add(n,v){ v=(v==null?"":String(v)).trim(); if(v) fields.push({name:n,value:v}); }
-    add("email",     r.referralEmail);
-    add("firstname", r.firstName || String(r.referralName||"").split(/\s+/)[0]);
-    add("lastname",  r.lastName  || String(r.referralName||"").split(/\s+/).slice(1).join(" "));
-    add("phone",     r.referralPhone);
-    add("zip",       r.zip);
-    add("state",     r.state);
-    var extra=["Client referral — referred by "+((fromAcct&&((fromAcct.firstName||"")+" "+(fromAcct.lastName||"")).trim())||"client")+(fromAcct&&fromAcct.email?" ("+fromAcct.email+")":"")];
-    if(r.leadType)  extra.push("Lead type: "+r.leadType);
-    if(r.dob)       extra.push("DOB: "+r.dob);
-    if(r.income)    extra.push("Income: $"+r.income);
-    extra.push(r.appointment?("Appointment: "+r.appointment):"No appointment needed");
-    if(r.preferredContact) extra.push("Preferred contact: "+r.preferredContact);
-    if(r.notes)     extra.push("Notes: "+r.notes);
-    add("notes", extra.join(" | "));
-    if(!fields.length) return;
-    fetch("https://api-na2.hsforms.com/submissions/v3/integration/submit/"+window.HUBSPOT_PORTAL_ID+"/"+guid,
-      {method:"POST",headers:{"Content-Type":"application/json"},
-       body:JSON.stringify({fields:fields,context:{pageUri:location.href,pageName:"Client Portal — Referral"}})}).catch(function(){});
+    var email=String(r.referralEmail||"").trim();
+    var phone=String(r.referralPhone||"").trim();
+    if(!email && !phone) return;
+    var referredBy=((fromAcct&&((fromAcct.firstName||"")+" "+(fromAcct.lastName||"")).trim())||"");
+    fetch("/api/portal-referral",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      keepalive:true,
+      body:JSON.stringify({
+        firstName: r.firstName || String(r.referralName||"").split(/\s+/)[0] || "",
+        lastName:  r.lastName  || String(r.referralName||"").split(/\s+/).slice(1).join(" ") || "",
+        email:     email,
+        phone:     phone,
+        leadType:  r.leadType || "",
+        zip:       r.zip || "",
+        state:     r.state || "",
+        dob:       r.dob || "",
+        income:    r.income || "",
+        notes:     r.notes || "",
+        appointment: r.appointment || "",
+        preferredContact: r.preferredContact || "",
+        referredByName:  referredBy,
+        referredByEmail: (fromAcct && fromAcct.email) || "",
+        referralId: r.id || ""
+      })
+    }).catch(function(){});
   }catch(e){ /* never block the referral flow on a sync failure */ }
 };
 
-/* ── Account welcome email via EmailJS (transactional, from info@vshealthbenefits.com) ──
-   Paste the three IDs from your EmailJS dashboard below. Until they are filled
-   in, this quietly no-ops so signups still work. All three IDs are safe to
-   expose in client-side code (that's how EmailJS is designed). */
-window.EMAILJS_SERVICE_ID  = "service_jd32jh7";
-window.EMAILJS_TEMPLATE_ID = "template_8t0tz9c";
-window.EMAILJS_PUBLIC_KEY  = "_5ahTbYlf4F7vsV-2";
-function loadEmailJS(){
-  return new Promise(function(resolve,reject){
-    if(window.emailjs) return resolve(window.emailjs);
-    var s=document.createElement("script");
-    s.src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
-    s.onload=function(){ resolve(window.emailjs); };
-    s.onerror=reject;
-    document.head.appendChild(s);
-  });
-}
 /* ── GoHighLevel member-account sync ────────────────────────────────
    Posts the new account to /api/portal-signup, which upserts the contact
-   in GHL and tags it `portal-account-created`. That tag is the trigger for
-   the "Member Account Creation" workflow, which sends the welcome email
-   and SMS. The GHL token lives only in that serverless function — never
-   here, because this file is public.
+   in GHL, tags it, then fires the GHL Inbound Webhook that TRIGGERS the
+   "Member Account Creation" workflow. That workflow sends the welcome
+   email, the welcome SMS, and the website tour email a day later.
+   The GHL token lives only in that serverless function — never here,
+   because this file is public.
    Password hashes are never sent. */
 window.ghlSyncAccount = function(a){
   try{
@@ -915,19 +884,10 @@ window.ghlSyncAccount = function(a){
   }catch(e){ /* never block signup on a CRM failure */ }
 };
 
-window.sendWelcomeEmail = async function(acct){
-  try{
-    if(!acct || !acct.email) return;
-    if(String(window.EMAILJS_SERVICE_ID).indexOf("REPLACE_")===0) return; // not configured yet
-    var ejs = await loadEmailJS();
-    await ejs.send(window.EMAILJS_SERVICE_ID, window.EMAILJS_TEMPLATE_ID, {
-      to_email:  acct.email,
-      to_name:   acct.firstName || "there",
-      from_name: "VS Health Benefits",
-      reply_to:  "info@vshealthbenefits.com"
-    }, { publicKey: window.EMAILJS_PUBLIC_KEY });
-  }catch(e){ /* never block signup if the email fails */ }
-};
+/* EmailJS has been removed. The welcome email, welcome SMS and website tour
+   email are all sent by the GHL "Member Account Creation" workflow, which is
+   triggered by the Inbound Webhook that /api/portal-signup fires. Nothing in
+   this page sends mail any more. */
 
 $("signup-form").addEventListener("submit",async function(e){
   e.preventDefault();
@@ -953,13 +913,11 @@ $("signup-form").addEventListener("submit",async function(e){
   var acct={id:uid(),firstName:first,lastName:last,email:email,phone:phone,passwordHash:hash,created:Date.now(),lastSignIn:Date.now(),status:"active",plan:null,photoDataUrl:"",welcomePending:true,selfSignup:true};
   accts.push(acct);
   saveAccounts(accts);
-  window.hubspotSyncAccount(acct);
+  /* GoHighLevel is the only destination. ghlSyncAccount posts to
+     /api/portal-signup, which upserts the contact and then fires the Inbound
+     Webhook that starts the "Member Account Creation" workflow — welcome
+     email now, welcome SMS +5 min, website tour email +1 day. */
   window.ghlSyncAccount(acct);
-  /* Welcome email + SMS are now sent by the GHL "Member Account Creation"
-     workflow (triggered by the tag ghlSyncAccount adds). The EmailJS send
-     below is left in place but disabled so members don't get two welcomes.
-     Re-enable it only if you turn the GHL workflow off. */
-  // window.sendWelcomeEmail(acct);
   setSession({id:acct.id,email:acct.email,since:Date.now()});
 
   webhookFire({
@@ -975,15 +933,11 @@ $("signup-form").addEventListener("submit",async function(e){
     source:"vshealthbenefits.com",
     page:"/client.html",
     user_agent:navigator.userAgent,
-    // Account-created confirmation email to the new member.
-    // send_email is false because GHL's "Member Account Creation" workflow now
-    // owns the welcome email + SMS. Flip back to true only if you turn it off.
+    // Notification only. GHL's "Member Account Creation" workflow owns every
+    // message sent to the member, so no email copy is passed here and
+    // send_email stays false — that is what stops a duplicate welcome.
     notify:"account_created",
-    send_email:false,
-    to_email:email,
-    to_name:(first+" "+last).trim(),
-    email_subject:"Welcome to VS Health Benefits — your account is ready",
-    email_body:"Hi "+first+",\n\nYour VS Health Benefits member account was created successfully. You can sign in any time at https://www.vshealthbenefits.com/client to view your plan, send referrals, and message your advisor.\n\nIf you did not create this account, please reply to this email or call (954) 866-6872.\n\nThank you,\nVS Health Benefits"
+    send_email:false
   });
 
   showDashboard();
@@ -1340,7 +1294,7 @@ $("ref-form").addEventListener("submit",function(e){
     appointment:appt,noAppt:noAppt,permission:true,preferredContact:$("rf-contact").value,relationship:"",
     status:"in-progress",ts:Date.now(),read:false,payout:0,paid:false};
   var arr=getReferrals();arr.unshift(r);saveReferrals(arr);
-  window.hubspotSyncReferral(r,acct);
+  window.ghlSyncReferral(r,acct);
   webhookFire({event:"client_referral",from_account_id:acct.id,from_email:acct.email,referral_name:name,referral_phone:phone,referral_email:email,lead_type:r.leadType,zip:r.zip,state:r.state,dob:r.dob,income:r.income,appointment:appt,preferred_contact:r.preferredContact,notes:r.notes,ts:Date.now()});
   $("ref-form").reset();$("rf-appt-fields").hidden=true;$("wiz-appt-state").innerHTML="<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/></svg> No appointment";
   wizGo(1);
