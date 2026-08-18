@@ -1580,7 +1580,7 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
       <span class="sni-badge" id="b-acct" style="display:none">0</span>
     </button>
     <button class="sidebar-nav-item" data-tab="users" type="button">
-      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="sni-label">Users</span>
+      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="sni-label">Members</span>
       <span class="sni-badge" id="b-users" style="display:none">0</span>
     </button>
     <button class="sidebar-nav-item" data-tab="support" type="button">
@@ -1750,7 +1750,7 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
 
     <!-- USERS -->
     <div id="p-users" class="panel">
-      <h3>Users</h3>
+      <h3>Members</h3>
       <p class="lede">Everyone who created an account. Green dot = online now.</p>
       <div class="users-stats" id="users-stats"></div>
       <div class="toolbar">
@@ -2120,11 +2120,7 @@ async function initCloud(){
           });
         }
         if(rk==="accounts"&&$("shell")&&!$("shell").hidden){
-          var prevAcctIds={};prevItems.forEach(function(a){if(a&&a.id)prevAcctIds[a.id]=true;});
-          items.filter(function(a){return a&&a.id&&!prevAcctIds[a.id]&&a.selfSignup&&(Date.now()-(a.created||0))<15*60*1000;}).forEach(function(a){
-            var nm=((a.firstName||"")+" "+(a.lastName||"")).trim()||a.email||"New user";
-            addNotif("lead","New account created: "+nm,(a.email||"")+(a.phone?(" · "+a.phone):"")+" signed up for the client portal","users");
-          });
+          notifyNewMembers(items);
         }
         if(!$("shell").hidden){
           if(rk==="leads"){renderLeads();renderPipeline();renderTasks();if(typeof checkTaskNotifications==="function")setTimeout(checkTaskNotifications,300);}
@@ -2285,6 +2281,8 @@ async function route(){
   if(!admins.length){$("signup-view").hidden=false;return;}
   if(!currentAdmin()){$("login-view").hidden=false;return;}
   $("shell").hidden=false;$("signout-btn").hidden=false;$("bell-btn").hidden=false;
+  /* Catch up on anyone who signed up while the portal was closed. */
+  try{setTimeout(function(){notifyNewMembers();},1200);}catch(e){}
   // Update admin avatar in sidebar
   var me=currentAdmin();
   if(me){
@@ -2990,13 +2988,19 @@ var _gcd=$("gcal-disconnect");if(_gcd)_gcd.addEventListener("click",function(){c
    CLIENT ACCOUNTS
 ════════════════════════════════════════ */
 var CLIENT_STATUSES=["active","revoked"];
+/* A "member" is someone who created their own account from the client portal
+   (client.html sets selfSignup:true). They are NOT a client until you convert
+   them, so they stay out of the Clients list and live in the Members tab.
+   Accounts you create yourself in admin have no selfSignup flag, so they are
+   clients from the moment they exist. */
+function isMember(a){return !!(a&&a.selfSignup===true&&a.convertedToClient!==true);}
 var ACCT_PIPE_STATUSES=PIPE_STAGES;
 var activeAcctFilter="all";
 
 function renderAccounts(){
   buildFilterChips("acct-filter-row",["all"].concat(CLIENT_STATUSES),function(){return activeAcctFilter;},function(v){activeAcctFilter=v;},renderAccounts);
   var q=($("acct-search").value||"").toLowerCase().trim();
-  var accts=getAccounts();
+  var accts=getAccounts().filter(function(a){return !isMember(a);});
   var total=accts.length;
   var bdg=$("b-acct");if(bdg){bdg.textContent=total;bdg.style.display=total>0?"":"none";}
   var rows=accts.filter(function(a){
@@ -3771,6 +3775,30 @@ function addNotif(type,title,sub,tab){
   var ctx=_getCtx();if(ctx&&ctx.state==="suspended")ctx.resume().then(playNotifSound);else playNotifSound();
   updateBellBadge();
   var btn=$("bell-btn");if(btn){btn.classList.remove("bell-shake");void btn.offsetWidth;btn.classList.add("bell-shake");}
+}
+/* New-member alerts that survive the portal being closed.
+   The old version only fired if a signup landed while this page was open AND
+   within 15 minutes, so anything that happened overnight was never surfaced.
+   This tracks the newest signup already announced, so opening the portal
+   catches up on everything missed since. */
+function getLastMemberSeen(){try{return Number(localStorage.getItem("vs_last_member_seen")||0)||0;}catch(e){return 0;}}
+function setLastMemberSeen(ts){try{localStorage.setItem("vs_last_member_seen",String(ts||0));}catch(e){}}
+function notifyNewMembers(accts){
+  var list=(accts||getAccounts()).filter(function(a){return a&&a.id&&a.selfSignup===true&&(a.created||0)>0;});
+  if(!list.length)return;
+  var last=getLastMemberSeen();
+  var fresh=list.filter(function(a){return (a.created||0)>last;})
+                .sort(function(a,b){return (a.created||0)-(b.created||0);});
+  if(!fresh.length)return;
+  var newest=fresh[fresh.length-1].created||Date.now();
+  /* First run on a browser: set the baseline quietly instead of firing a
+     notification for every member who already existed. */
+  if(!last){setLastMemberSeen(newest);return;}
+  fresh.slice(-10).forEach(function(a){
+    var nm=((a.firstName||"")+" "+(a.lastName||"")).trim()||a.email||"New member";
+    addNotif("lead","New member signed up: "+nm,(a.email||"")+(a.phone?(" \u00b7 "+a.phone):"")+" created a portal account","users");
+  });
+  setLastMemberSeen(newest);
 }
 function updateBellBadge(){
   var notifs=getNotifs();var unread=notifs.filter(function(n){return!n.read;}).length;
@@ -5318,12 +5346,12 @@ function userLastTs(a){return presenceMap[a.id]||a.lastActive||a.lastSignIn||0;}
 function renderUsers(){
   if(!$("users-list"))return;
   var q=($("users-search")&&$("users-search").value||"").toLowerCase().trim();
-  var accts=getAccounts();
+  var accts=getAccounts().filter(isMember);
   var bdg=$("b-users");if(bdg){bdg.textContent=accts.length;bdg.style.display=accts.length>0?"":"none";}
   var onlineN=accts.filter(function(a){return isOnline(a.id);}).length;
   var newN=accts.filter(function(a){return (a.created||0)>=Date.now()-7*864e5;}).length;
   var stats=$("users-stats");
-  if(stats)stats.innerHTML='<div class="ustat"><div class="un">'+accts.length+'</div><div class="ul">Total users</div></div>'+
+  if(stats)stats.innerHTML='<div class="ustat"><div class="un">'+accts.length+'</div><div class="ul">Total members</div></div>'+
     '<div class="ustat ustat-live"><div class="un" style="color:#0a8754"><span class="live-dot"></span>'+onlineN+'</div><div class="ul">Online now</div></div>'+
     '<div class="ustat"><div class="un">'+newN+'</div><div class="ul">New this week</div></div>';
   var rows=accts.filter(function(a){return !q||[a.firstName,a.lastName,a.email,a.phone].join(" ").toLowerCase().indexOf(q)>=0;});
@@ -5335,7 +5363,7 @@ function renderUsers(){
     return userLastTs(b)-userLastTs(a);
   });
   var box=$("users-list");box.innerHTML="";
-  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No users yet. Accounts created from the client portal show up here."}));return;}
+  if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No members yet. Anyone who signs up at vshealthbenefits.com/client lands here."}));return;}
   rows.forEach(function(a){
     var on=isOnline(a.id);var lt=userLastTs(a);
     var row=el("div",{class:"row"});
@@ -5365,7 +5393,12 @@ function renderUsers(){
     body.appendChild(info);
     row.appendChild(body);
     var acts=el("div",{class:"acts"});
-    acts.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"View in Clients",onclick:function(){switchTab("accounts");var s=$("acct-search");if(s){s.value=a.email||fullName(a);}renderAccounts();}}));
+    acts.appendChild(el("button",{class:"btn btn-sm",type:"button",text:"Convert to client",onclick:function(){
+      if(!confirm("Move "+fullName(a)+" into Clients?\n\nThey keep their login and referral history \u2014 this only changes which list they appear in."))return;
+      updateAcct(a.id,{convertedToClient:true,updated:Date.now()});
+      if(typeof renderUsers==="function")renderUsers();
+      switchTab("accounts");var sB=$("acct-search");if(sB){sB.value=a.email||fullName(a);}renderAccounts();
+    }}));
     row.appendChild(acts);
     box.appendChild(row);
   });
@@ -5375,8 +5408,8 @@ function renderUsers(){
   var so=$("users-sort");if(so)so.addEventListener("change",renderUsers);
   var ex=$("export-users-btn");if(ex)ex.addEventListener("click",function(){
     var rows=[["name","email","phone","status","joined","last_active"]];
-    getAccounts().forEach(function(a){var lt=userLastTs(a);rows.push([fullName(a),a.email||"",a.phone||"",a.status||"active",a.created?new Date(a.created).toISOString():"",lt?new Date(lt).toISOString():""].map(csvEscape));});
-    downloadFile("users-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
+    getAccounts().filter(isMember).forEach(function(a){var lt=userLastTs(a);rows.push([fullName(a),a.email||"",a.phone||"",a.status||"active",a.created?new Date(a.created).toISOString():"",lt?new Date(lt).toISOString():""].map(csvEscape));});
+    downloadFile("members-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
   });
   // Keep the online-now count live while viewing the Users tab
   setInterval(function(){
