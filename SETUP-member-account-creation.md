@@ -41,11 +41,23 @@ matches that contact instead of creating a duplicate, which is what makes
 **Trigger URL** (already hardcoded as the default in `api/portal-signup.js`):
 
 ```
-https://services.leadconnectorhq.com/hooks/cNCy6JUURpb4eBDdb9bU/webhook-trigger/4a141b0c-a3d6-4b64-ad46-587f4821b1ca
+https://services.leadconnectorhq.com/hooks/cNCy6JUURpb4eBDdb9bU/webhook-trigger/f3ed39bb-f80b-4b00-bde2-bf8d18749512
 ```
 
 This URL is not a secret — it only accepts data, it never returns any. Override
 it with the `GHL_INBOUND_WEBHOOK_URL` env var if it ever gets regenerated.
+
+> ⚠️ **The URL is not final until you click "Save trigger."** GHL generates a
+> fresh URL each time you open an unsaved Inbound Webhook trigger, so the one
+> displayed in the panel changes on you until it's saved. Save the trigger
+> first, *then* copy the URL and compare it to the one above.
+>
+> ⚠️ **A `200` response from this endpoint does not mean the URL is real.**
+> GHL returns `{"status":"Success: test request received"}` for *any* UUID in
+> that path, including one made up from scratch (verified). The only reliable
+> confirmation is the **Mapping Reference** dropdown inside the trigger showing
+> your payload after you click *Check for new requests*. Do not treat a 200 in
+> a curl or a Vercel log as proof the workflow was reached.
 
 ## 1. Vercel environment variables
 
@@ -75,19 +87,23 @@ steps — so these have to be clicked. Open the existing draft named
 
 1. **Add New Trigger** → **Inbound Webhook**
 2. Name: `Inbound Webhook`
-3. The URL shown must match the trigger URL above. If GHL generated a *different*
-   URL, copy it and set it as `GHL_INBOUND_WEBHOOK_URL` in Vercel — do not edit
-   the code.
-4. Click **Fetch sample requests**. A sample payload has already been sent, so
-   the field list below should appear. If it is empty, re-send one:
+3. Click **Save trigger** now, before anything else. Until you do, the URL in
+   the panel is provisional and regenerates every time you reopen it.
+4. Reopen the trigger and copy the saved URL. If it differs from the trigger URL
+   above, set it as `GHL_INBOUND_WEBHOOK_URL` in Vercel — that's faster than a
+   code push and it's why the env var exists.
+5. Send a sample payload so the mapping reference has fields to offer, then
+   click **Check for new requests** in the Mapping Reference dropdown. If your
+   payload does not appear there, the URL is wrong — a `200` response does not
+   confirm anything (see the warning above).
 
    ```bash
-   curl -X POST "https://services.leadconnectorhq.com/hooks/cNCy6JUURpb4eBDdb9bU/webhook-trigger/4a141b0c-a3d6-4b64-ad46-587f4821b1ca" \
+   curl -X POST "https://services.leadconnectorhq.com/hooks/cNCy6JUURpb4eBDdb9bU/webhook-trigger/f3ed39bb-f80b-4b00-bde2-bf8d18749512" \
      -H "Content-Type: application/json" \
      -d '{"event":"client_signup","contact_id":"SAMPLE_CONTACT_ID","first_name":"Sample","last_name":"Member","full_name":"Sample Member","email":"sample.member@example.com","phone":"+19548666872","account_id":"sample-account-id","sms_eligible":true,"source":"vshealthbenefits.com","page":"/client.html"}'
    ```
 
-5. **Save trigger.**
+6. **Save trigger** again if you changed anything.
 
 ### 2.2 Payload fields available for mapping
 
@@ -260,8 +276,9 @@ cleanly rather than failing, add an **If/Else** before Action 4 on
    your own mobile number.
 2. Check the Vercel function log for `/api/portal-signup` — you want
    `{"ok":true,"smsEligible":true,"contactId":"…","tagged":true,"triggered":true}`.
-   **`triggered: true` is the important one** — it means the workflow was
-   started. It retries once before giving up.
+   Note that `triggered: true` only means GHL returned a 200 — that endpoint
+   returns 200 for any URL shape, so it is **not** proof the workflow was
+   reached. Confirm with step 4 below instead.
 3. In GHL, open the contact — it should carry the tags `portal-account-created`
    and `member-portal`.
 4. Workflow → **Enrollment History** shows the contact entering and each action's

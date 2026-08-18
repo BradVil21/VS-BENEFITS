@@ -44,7 +44,7 @@ const SIGNUP_TAG = process.env.GHL_SIGNUP_TAG || "portal-account-created";
 // This URL is not a secret - it only accepts data, it never returns any.
 const WEBHOOK_URL =
   process.env.GHL_INBOUND_WEBHOOK_URL ||
-  "https://services.leadconnectorhq.com/hooks/cNCy6JUURpb4eBDdb9bU/webhook-trigger/4a141b0c-a3d6-4b64-ad46-587f4821b1ca";
+  "https://services.leadconnectorhq.com/hooks/cNCy6JUURpb4eBDdb9bU/webhook-trigger/f3ed39bb-f80b-4b00-bde2-bf8d18749512";
 
 // Custom field IDs for this location (locations_get-custom-fields).
 const CF = {
