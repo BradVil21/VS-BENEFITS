@@ -2116,7 +2116,7 @@ async function initCloud(){
           var prevTicketIds={};prevItems.forEach(function(t){if(t&&t.id)prevTicketIds[t.id]=true;});
           items.filter(function(t){return t&&t.id&&!prevTicketIds[t.id];}).forEach(function(t){
             var who=t.fullName||((t.firstName||"")+" "+(t.lastName||"")).trim()||t.email||"Someone";
-            addNotif("support","Support request from "+who,(t.message?String(t.message).slice(0,80):"Submitted via the contact form"),"support");
+            addNotif("support","Support request from "+who,(t.ticketNo?(t.ticketNo+" \u00b7 "):"")+(t.message?String(t.message).slice(0,70):"Submitted via the contact form"),"support");
           });
         }
         if(rk==="accounts"&&$("shell")&&!$("shell").hidden){
@@ -3293,6 +3293,7 @@ function renderTicketBoard(){
       nm.appendChild(el("span",{class:"pl-name-lbl",text:"Ticket: "}));
       nm.appendChild(el("strong",{text:ticketName(t)}));
       top.appendChild(nm);card.appendChild(top);
+      if(t.ticketNo){card.appendChild(el("div",{class:"pl-note",style:"font-weight:700;letter-spacing:.02em",text:t.ticketNo}));}
       if(t.message){var mt=String(t.message);card.appendChild(el("div",{class:"pl-note",text:mt.slice(0,90)+(mt.length>90?"…":"")}));}
       var contact=t.phone?("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z'/></svg> "+escapeHtml(t.phone)):(t.email?("<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='2' y='4' width='20' height='16' rx='2'/><path d='m22 7-10 6L2 7'/></svg>️ "+escapeHtml(t.email)):"");
       if(contact)card.appendChild(el("div",{class:"pl-meta",html:contact}));
@@ -3313,7 +3314,8 @@ function openTicketDetail(id){
   var name=ticketName(t);
   function row(lbl,val){return val?('<div class="tk-drow"><span class="tk-dl">'+lbl+'</span><span class="tk-dv">'+escapeHtml(val)+'</span></div>'):"";}
   var rows=row("Name",name)+row("Email",t.email)+row("Phone",t.phone)+row("ZIP",t.zip||t.postal_code)+row("Submitted",fmtDateTime(t.created))+row("Source",t.source||"contact-form")+row("Page",t.page);
-  var msg=t.message?('<div class="tk-msg"><div class="tk-dl">Message</div><div class="tk-msgbody">'+escapeHtml(t.message)+'</div></div>'):"";
+  var tno=t.ticketNo?('<div class="tk-msg"><div class="tk-dl">Ticket number</div><div class="tk-msgbody" style="font-weight:700;letter-spacing:.02em">'+escapeHtml(t.ticketNo)+'</div></div>'):"";
+  var msg=tno+(t.message?('<div class="tk-msg"><div class="tk-dl">Message</div><div class="tk-msgbody">'+escapeHtml(t.message)+'</div></div>'):"");
   var opts=TICKET_STAGES.map(function(s){return '<option value="'+s+'"'+(ticketStageOf(t)===s?" selected":"")+'>'+escapeHtml(stripIco(TICKET_LABELS[s]).trim())+'</option>';}).join("");
   var emailBtn=t.email?'<a class="btn btn-primary btn-sm" href="mailto:'+escapeHtml(t.email)+'"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg> Email</a>':"";
   var callBtn=t.phone?'<a class="btn btn-ghost btn-sm" href="tel:'+String(t.phone).replace(/[^0-9+]/g,"")+'"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Call</a>':"";
