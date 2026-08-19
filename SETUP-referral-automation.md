@@ -107,7 +107,7 @@ anything. If you know someone else who needs coverage, send them over.
 
 Thank you,
 VS Health Benefits
-(954) 866-6872
+(954) 825-1009
 ```
 
 ### SMS A — thank you
@@ -214,7 +214,7 @@ you know where to find us.
 
 Thank you,
 VS Health Benefits
-(954) 866-6872
+(954) 825-1009
 ```
 
 ---
