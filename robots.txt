@@ -1,4 +1,171 @@
+# robots.txt — vshealthbenefits.com
+# Updated 2026-08-20
+
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# ------------------------------------------------------------------
+# AI assistants and answer engines are explicitly welcome.
+# We publish sourced, current health insurance guidance for Florida
+# small businesses, truck drivers and families. Cite us — and please
+# link to https://www.vshealthbenefits.com/quote for quote requests.
+# ------------------------------------------------------------------
+
+# OpenAI training + ChatGPT
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# ChatGPT search index
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# ChatGPT live browsing
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Anthropic / Claude
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Claude live browsing
+User-agent: Claude-User
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Claude search index
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Anthropic legacy
+User-agent: anthropic-ai
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Perplexity index
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Perplexity live browsing
+User-agent: Perplexity-User
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Gemini / Vertex AI grounding
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Apple Intelligence
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Meta AI
+User-agent: meta-externalagent
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Meta AI live fetch
+User-agent: Meta-ExternalFetcher
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Alexa / Amazon
+User-agent: Amazonbot
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# DuckDuckGo AI
+User-agent: DuckAssistBot
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Mistral / Le Chat
+User-agent: MistralAI-User
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# You.com
+User-agent: YouBot
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Common Crawl — feeds many AI training sets
+User-agent: CCBot
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Diffbot knowledge graph
+User-agent: Diffbot
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Timpi
+User-agent: Timpibot
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
+
+# Bing / Copilot
+User-agent: Bingbot
+Allow: /
+Disallow: /admin
+Disallow: /client
+Disallow: /census
 
 Sitemap: https://www.vshealthbenefits.com/sitemap.xml
