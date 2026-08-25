@@ -151,3 +151,36 @@ fields get filled in and a dated line is added to its notes.
 The exception is a card in a closed stage (Sold, Lost, Disqualified, Ghosted, or
 Won/Lost on the business board). That means the old card is finished business,
 so a genuinely new enquiry from the same person gets a fresh card.
+
+---
+
+## 6. The sweep (backstop)
+
+The workflow is the fast path — a lead is on the board a second after GHL
+creates it. The sweep is the safety net for when the fast path doesn't run: a
+workflow left in Draft, a webhook step that errored, a lead source nobody wired
+up yet.
+
+```
+POST https://www.vshealthbenefits.com/api/lead-sync?to=portal&sweep=1
+x-vs-webhook-secret: your secret
+```
+
+It walks the most recently added GHL contacts newest-first and puts any that are
+missing onto the right board. Optional body fields:
+
+| Field | Default | Max | What it does |
+|---|---|---|---|
+| `hours` | 24 | 168 | How far back to look |
+| `limit` | 25 | 100 | Most contacts touched in one run |
+
+Running it repeatedly is harmless — a contact already on a board is matched on
+contact id, email or phone and merged, never duplicated. The window stays short
+on purpose so this never turns into a bulk import of your whole CRM history.
+
+It sends no per-lead emails; a sweep that finds ten leads shouldn't send ten
+alerts. New cards still raise the portal's own in-app notification.
+
+**If you want the sweep to run on a schedule**, it just needs something to POST
+to it hourly — a scheduled Claude task, a cron service, or a GHL workflow on a
+recurring trigger all work.

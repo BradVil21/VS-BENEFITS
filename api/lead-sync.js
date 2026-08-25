@@ -3,6 +3,7 @@
 //
 //   to-crm     (default)  portal / website form  ->  GoHighLevel contact
 //   to-portal            GoHighLevel workflow    ->  admin portal pipeline
+//   to-portal + sweep    poll GHL for anything the webhook missed
 //
 // Both live in one file because Vercel's Hobby plan allows 12 serverless
 // functions per deployment and api/ is at the cap. They are otherwise
@@ -55,6 +56,14 @@
 // is - blank fields get filled in and a dated line is added to its notes. The
 // exception is a card in a closed stage (sold, lost, disqualified, ghosted),
 // which means the old card is finished business and this is a new enquiry.
+//
+// ── sweep ──────────────────────────────────────────────────────────────────
+//   POST /api/lead-sync?to=portal&sweep=1
+//
+// The backstop. Walks the most recently added GHL contacts and puts any that
+// are missing onto the right board, so a paused workflow or an unwired lead
+// source cannot silently swallow leads. Same dedupe rules, so running it often
+// is harmless. See sweepPortal() for the window and limit.
 //
 // Safe by design: always returns 200 so a form never breaks and GHL never
 // retry-loops, and skips quietly when there is nothing usable to write.
@@ -194,26 +203,16 @@ async function ghlGetContact(contactId) {
   }
 }
 
-async function toPortal(d, req, res) {
-  // ---- shared secret ----
-  const expected = process.env.GHL_INBOUND_SECRET || process.env.WEBCHAT_WEBHOOK_SECRET;
-  if (expected) {
-    const got = String(
-      (req.headers && req.headers["x-vs-webhook-secret"]) ||
-      (req.query && req.query.key) || ""
-    );
-    if (got !== expected) { res.status(401).json({ error: "Unauthorized" }); return; }
-  }
+// Normalise a contact into the shape the boards are built from. It arrives
+// three ways - a webhook payload, an API read of that contact, or a row from
+// the sweep's contact list - and they disagree about field names, so this is
+// the one place that reconciles them. The API record wins wherever both have a
+// value, because a webhook payload can be a snapshot from before the
+// workflow's earlier steps ran.
+function normalize(c, d) {
+  c = c || {}; d = d || {};
 
-  // GHL's field names depend on how the workflow was mapped, and the
-  // custom-values style ({{contact.first_name}}) differs again from the native
-  // webhook shape, so every common alias is accepted.
-  const contactId = clean(d.contactId || d.contact_id || d.id || d.ghl_contact_id, 60);
-
-  // The contact record from GHL wins wherever both have a value, because the
-  // payload can be a snapshot from before the workflow's earlier steps ran.
-  const c = (await ghlGetContact(contactId)) || {};
-
+  const contactId = clean(c.id || d.contactId || d.contact_id || d.id || d.ghl_contact_id, 60);
   const tags = L.normTags(
     (c.tags && c.tags.length ? c.tags : null) || d.tags || d.tag || d.contact_tags
   );
@@ -232,106 +231,104 @@ async function toPortal(d, req, res) {
   const email = validEmail(c.email || d.email || d.contactEmail);
   const phone = tenDigits(c.phone || d.phone || d.phoneNumber || d.contactPhone);
   const company = clean(c.companyName || d.company || d.businessName || d.company_name, 120);
-  const state = clean(c.state || d.state, 40);
-  const zip = clean(c.postalCode || d.zip || d.postalCode || d.zipCode, 12);
-  const employees = clean(d.employees || d.employeeCount || d.numEmployees || d.num_employees, 20);
-  const source = clean(c.source || d.source || d.leadSource, 80) || "GoHighLevel";
-  const notesIn = clean(d.notes || d.message || d.summary || d.transcript, 3000);
 
-  if (!email && !phone) {
-    res.status(200).json({ ok: true, skipped: "no_email_or_phone" });
-    return;
-  }
+  return {
+    contactId: contactId,
+    tags: tags,
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    phone: phone,
+    company: company,
+    state: clean(c.state || d.state, 40),
+    zip: clean(c.postalCode || d.zip || d.postalCode || d.zipCode, 12),
+    employees: clean(d.employees || d.employeeCount || d.numEmployees || d.num_employees, 20),
+    source: clean(c.source || d.source || d.leadSource, 80) || "GoHighLevel",
+    notesIn: clean(d.notes || d.message || d.summary || d.transcript, 3000),
+    dob: clean(d.dob || d.dateOfBirth, 20),
+    niche: clean(d.niche || d.industry, 60),
+    requestedCoverage: clean(d.requestedCoverage || d.coverage, 80),
+    currentlyInsured: clean(d.currentlyInsured, 40),
+    coverageStart: clean(d.coverageStart, 40),
+    business: L.isBusinessLead(d.pipeline || d.leadType || d.coverageType || d.type, tags),
+    fullName: (firstName + " " + lastName).trim() || company || email || phone,
+  };
+}
 
-  const business = L.isBusinessLead(d.pipeline || d.leadType || d.coverageType || d.type, tags);
+// Put one normalised contact on the right board. Returns the appendRecord
+// result: { ok, action: "created"|"merged"|"unchanged", total, id }.
+async function syncToBoards(n) {
   const now = Date.now();
   const today = todayStr();
-  const fullName = (firstName + " " + lastName).trim() || company || email || phone;
-
-  // A dry run classifies and reports back without writing anything - it is how
-  // the routing gets verified against a real payload without littering the
-  // boards with test cards.
-  const dryRun = String((req.query && req.query.dryRun) || d.dryRun || "") === "1" ||
-                 (req.query && req.query.dryRun) === "true" || d.dryRun === true;
-  if (dryRun) {
-    res.status(200).json({
-      ok: true, dryRun: true, direction: "to-portal",
-      pipeline: business ? "business" : "individual",
-      tags: tags, contactId: contactId || null,
-      parsed: { firstName, lastName, email, phone, company, state, zip, employees, source },
-    });
-    return;
-  }
 
   const noteLines = [];
-  if (source) noteLines.push("Source: " + source);
-  if (tags.length) noteLines.push("GHL tags: " + tags.join(", "));
-  if (contactId) noteLines.push("GHL contact: " + contactId);
-  if (notesIn) noteLines.push(notesIn);
+  if (n.source) noteLines.push("Source: " + n.source);
+  if (n.tags.length) noteLines.push("GHL tags: " + n.tags.join(", "));
+  if (n.contactId) noteLines.push("GHL contact: " + n.contactId);
+  if (n.notesIn) noteLines.push(n.notesIn);
   const notes = noteLines.join("\n");
 
   function sameContact(x) {
-    if (contactId && x.ghlContactId && x.ghlContactId === contactId) return true;
-    if (email && String(x.email || "").toLowerCase() === email) return true;
-    if (phone && lastTen(x.phone) && lastTen(x.phone) === phone) return true;
+    if (n.contactId && x.ghlContactId && x.ghlContactId === n.contactId) return true;
+    if (n.email && String(x.email || "").toLowerCase() === n.email) return true;
+    if (n.phone && lastTen(x.phone) && lastTen(x.phone) === n.phone) return true;
     return false;
   }
 
-  let result;
-
-  if (business) {
+  if (n.business) {
     // ---- Business Leads board, Prospect column ----
-    const rec = {
-      id: "ghl_" + now.toString(36) + Math.random().toString(36).slice(2, 8),
-      company: company || fullName,
-      contact: (firstName + " " + lastName).trim(),
-      niche: clean(d.niche || d.industry, 60),
-      employees: employees,
-      requestedCoverage: clean(d.requestedCoverage || d.coverage, 80),
-      currentlyInsured: clean(d.currentlyInsured, 40),
-      coverageStart: clean(d.coverageStart, 40),
-      stage: "prospect",
-      email: email,
-      phone: phone,
-      source: source,
-      nextFollowUp: today,
-      notes: notes,
-      ghlContactId: contactId,
-      created: now,
-      updated: now,
-    };
-
-    result = await FS.appendRecord(
+    return FS.appendRecord(
       "biz_leads",
-      rec,
+      {
+        id: "ghl_" + now.toString(36) + Math.random().toString(36).slice(2, 8),
+        company: n.company || n.fullName,
+        contact: (n.firstName + " " + n.lastName).trim(),
+        niche: n.niche,
+        employees: n.employees,
+        requestedCoverage: n.requestedCoverage,
+        currentlyInsured: n.currentlyInsured,
+        coverageStart: n.coverageStart,
+        stage: "prospect",
+        email: n.email,
+        phone: n.phone,
+        source: n.source,
+        nextFollowUp: today,
+        notes: notes,
+        ghlContactId: n.contactId,
+        created: now,
+        updated: now,
+      },
       function (x) {
         if (CLOSED_BUSINESS.indexOf(x.stage) >= 0) return false;
         return sameContact(x);
       },
       function (existing) {
-        if (!existing.ghlContactId && contactId) existing.ghlContactId = contactId;
-        if (!existing.email && email) existing.email = email;
-        if (!existing.phone && phone) existing.phone = phone;
-        if (!existing.employees && employees) existing.employees = employees;
+        if (!existing.ghlContactId && n.contactId) existing.ghlContactId = n.contactId;
+        if (!existing.email && n.email) existing.email = n.email;
+        if (!existing.phone && n.phone) existing.phone = n.phone;
+        if (!existing.employees && n.employees) existing.employees = n.employees;
         existing.notes = (existing.notes ? existing.notes + "\n" : "") +
-          "[" + today + "] New inbound from GoHighLevel (" + source + ")";
+          "[" + today + "] New inbound from GoHighLevel (" + n.source + ")";
         existing.updated = now;
         return true;
       }
     );
-  } else {
-    // ---- Individual / family pipeline, New Lead column ----
-    const rec = {
+  }
+
+  // ---- Individual / family pipeline, New Lead column ----
+  return FS.appendRecord(
+    "leads",
+    {
       id: "ghl_" + now.toString(36) + Math.random().toString(36).slice(2, 8),
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      phone: phone,
-      dob: clean(d.dob || d.dateOfBirth, 20),
+      firstName: n.firstName,
+      lastName: n.lastName,
+      email: n.email,
+      phone: n.phone,
+      dob: n.dob,
       address: "",
-      state: state,
-      zipCode: zip,
-      company: company,
+      state: n.state,
+      zipCode: n.zip,
+      company: n.company,
       notes: notes,
       quoteValue: 0,
       status: "new",
@@ -341,76 +338,196 @@ async function toPortal(d, req, res) {
       createdAt: today,
       created: now,
       updated: now,
-      source: source,
-      ghlContactId: contactId,
-      activity: [{ ts: now, type: "created", text: "Arrived from GoHighLevel (" + source + ")" }],
-    };
+      source: n.source,
+      ghlContactId: n.contactId,
+      activity: [{ ts: now, type: "created", text: "Arrived from GoHighLevel (" + n.source + ")" }],
+    },
+    function (x) {
+      if (CLOSED_INDIVIDUAL.indexOf(x.stage) >= 0) return false;
+      return sameContact(x);
+    },
+    function (existing) {
+      if (!existing.ghlContactId && n.contactId) existing.ghlContactId = n.contactId;
+      if (!existing.email && n.email) existing.email = n.email;
+      if (!existing.phone && n.phone) existing.phone = n.phone;
+      if (!existing.zipCode && n.zip) existing.zipCode = n.zip;
+      if (!existing.state && n.state) existing.state = n.state;
+      existing.lastContact = today;
+      existing.updated = now;
+      existing.activity = (existing.activity || []).concat([
+        { ts: now, type: "note", text: "New inbound from GoHighLevel (" + n.source + ")" },
+      ]);
+      return true;
+    }
+  );
+}
 
-    result = await FS.appendRecord(
-      "leads",
-      rec,
-      function (x) {
-        if (CLOSED_INDIVIDUAL.indexOf(x.stage) >= 0) return false;
-        return sameContact(x);
-      },
-      function (existing) {
-        if (!existing.ghlContactId && contactId) existing.ghlContactId = contactId;
-        if (!existing.email && email) existing.email = email;
-        if (!existing.phone && phone) existing.phone = phone;
-        if (!existing.zipCode && zip) existing.zipCode = zip;
-        if (!existing.state && state) existing.state = state;
-        existing.lastContact = today;
-        existing.updated = now;
-        existing.activity = (existing.activity || []).concat([
-          { ts: now, type: "note", text: "New inbound from GoHighLevel (" + source + ")" },
-        ]);
-        return true;
-      }
-    );
+function secretOk(req) {
+  const expected = process.env.GHL_INBOUND_SECRET || process.env.WEBCHAT_WEBHOOK_SECRET;
+  if (!expected) return true; // not configured yet - allow, so you can test first
+  const got = String(
+    (req.headers && req.headers["x-vs-webhook-secret"]) ||
+    (req.query && req.query.key) || ""
+  );
+  return got === expected;
+}
+
+async function toPortal(d, req, res) {
+  if (!secretOk(req)) { res.status(401).json({ error: "Unauthorized" }); return; }
+
+  const contactId = clean(d.contactId || d.contact_id || d.id || d.ghl_contact_id, 60);
+  const n = normalize(await ghlGetContact(contactId), d);
+
+  if (!n.email && !n.phone) {
+    res.status(200).json({ ok: true, skipped: "no_email_or_phone" });
+    return;
   }
 
-  // ---- alert email, best effort ----
-  try {
-    if (result && result.ok && result.action === "created") {
-      const rows = [
-        ["Name", fullName],
-        ["Phone", phone || "—"],
-        ["Email", email || "—"],
-        ["Company", company || "—"],
-        ["Employees", employees || "—"],
-        ["Tags", tags.join(", ") || "—"],
-        ["Source", source],
-      ];
-      const table =
-        '<table style="border-collapse:collapse;font:15px/1.5 system-ui,sans-serif">' +
-        rows.map(function (r) {
-          return '<tr><td style="padding:4px 14px 4px 0;color:#5a6b80">' + L.esc(r[0]) +
-                 '</td><td style="padding:4px 0"><b>' + L.esc(r[1]) + "</b></td></tr>";
-        }).join("") + "</table>";
-      await L.sendEmail({
-        to: L.CFG.notify,
-        subject: (business ? "🏢 New business lead: " : "New lead: ") + fullName,
-        html: L.shell(
-          '<h2 style="margin:0 0 12px;color:' + L.CFG.navy + '">' +
-          (business ? "New business lead" : "New lead") + " from GoHighLevel</h2>" + table +
-          '<p style="margin-top:16px;color:#5a6b80;font-size:13px">Added to your ' +
-          (business ? "Business Leads board (Prospect)" : "Pipeline (New Lead)") + ".</p>" +
-          L.btn("https://www.vshealthbenefits.com/admin", "Open admin portal"),
-          (business ? "New business lead" : "New lead") + ": " + fullName
-        ),
-        replyTo: email || undefined,
-      });
-    }
-  } catch (e) { /* non-fatal */ }
+  // A dry run classifies and reports back without writing anything - it is how
+  // the routing gets verified against a real payload without littering the
+  // boards with test cards.
+  const dryRun = String((req.query && req.query.dryRun) || d.dryRun || "") === "1" ||
+                 (req.query && req.query.dryRun) === "true" || d.dryRun === true;
+  if (dryRun) {
+    res.status(200).json({
+      ok: true, dryRun: true, direction: "to-portal",
+      pipeline: n.business ? "business" : "individual",
+      tags: n.tags, contactId: n.contactId || null,
+      parsed: {
+        firstName: n.firstName, lastName: n.lastName, email: n.email, phone: n.phone,
+        company: n.company, state: n.state, zip: n.zip, employees: n.employees, source: n.source,
+      },
+    });
+    return;
+  }
+
+  const result = await syncToBoards(n);
+
+  if (result && result.ok && result.action === "created") {
+    try { await alertNewLead(n); } catch (e) { /* non-fatal */ }
+  }
 
   res.status(200).json({
     ok: true,
     direction: "to-portal",
-    pipeline: business ? "business" : "individual",
+    pipeline: n.business ? "business" : "individual",
     action: (result && result.action) || "failed",
     portal: result || null,
-    tags: tags,
-    contactId: contactId || null,
+    tags: n.tags,
+    contactId: n.contactId || null,
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════════════
+// sweep : catch anything the webhook missed
+// ══════════════════════════════════════════════════════════════════════════
+// POST /api/lead-sync?to=portal&sweep=1
+//
+// Walks the most recently added GoHighLevel contacts newest-first and puts any
+// that are missing onto the right board. It is the backstop for the webhook:
+// if a workflow is paused, a webhook step errors, or a lead is created by a
+// route nobody wired up, the sweep still finds it.
+//
+// Safe to run as often as you like - syncToBoards matches on contact id, email
+// and phone, so a contact already on a board is merged, never duplicated. The
+// window is deliberately short (24h by default) so it never turns into a bulk
+// import of the whole CRM history.
+//
+//   hours   how far back to look. Default 24, max 168 (a week).
+//   limit   most contacts to touch in one run. Default 25, max 100.
+//
+// No per-lead alert emails here - a sweep that finds ten leads should not send
+// ten emails. The portal raises its own in-app notification for each new card.
+async function sweepPortal(d, req, res) {
+  if (!secretOk(req)) { res.status(401).json({ error: "Unauthorized" }); return; }
+
+  const hours = Math.min(Math.max(parseInt(d.hours || (req.query && req.query.hours) || 24, 10) || 24, 1), 168);
+  const limit = Math.min(Math.max(parseInt(d.limit || (req.query && req.query.limit) || 25, 10) || 25, 1), 100);
+  const cutoff = Date.now() - hours * 3600 * 1000;
+
+  const out = {
+    ok: true, direction: "to-portal", mode: "sweep",
+    hours: hours, limit: limit,
+    scanned: 0, created: 0, merged: 0, skipped: 0, failed: 0,
+    createdLeads: [],
+  };
+
+  // The contacts list comes back newest-first, so we can stop at the first one
+  // older than the window instead of paging through the whole CRM.
+  let path = "/contacts/?locationId=" + encodeURIComponent(LOCATION_ID) + "&limit=" + Math.min(limit, 100);
+  let guard = 0;
+
+  while (path && guard < 5 && out.scanned < limit) {
+    guard++;
+    const r = await L.ghl(path, "GET");
+    if (!r.ok) { out.ok = false; out.error = "ghl_" + (r.status || r.skipped); break; }
+    const contacts = (r.json && r.json.contacts) || [];
+    if (!contacts.length) break;
+
+    let hitCutoff = false;
+    for (const c of contacts) {
+      if (out.scanned >= limit) break;
+      const added = Date.parse(c.dateAdded || "") || 0;
+      if (added && added < cutoff) { hitCutoff = true; break; }
+      out.scanned++;
+
+      const n = normalize(c, {});
+      if (!n.email && !n.phone) { out.skipped++; continue; }
+
+      try {
+        const result = await syncToBoards(n);
+        if (!result || !result.ok) { out.failed++; continue; }
+        if (result.action === "created") {
+          out.created++;
+          out.createdLeads.push({
+            name: n.fullName,
+            pipeline: n.business ? "business" : "individual",
+            contactId: n.contactId,
+          });
+        } else { out.merged++; }
+      } catch (e) { out.failed++; }
+    }
+
+    if (hitCutoff) break;
+    const meta = (r.json && r.json.meta) || {};
+    path = meta.startAfter && meta.startAfterId
+      ? "/contacts/?locationId=" + encodeURIComponent(LOCATION_ID) + "&limit=" + Math.min(limit, 100) +
+        "&startAfter=" + meta.startAfter + "&startAfterId=" + encodeURIComponent(meta.startAfterId)
+      : null;
+  }
+
+  res.status(200).json(out);
+}
+
+// Internal alert for a single new lead.
+async function alertNewLead(n) {
+  const rows = [
+    ["Name", n.fullName],
+    ["Phone", n.phone || "—"],
+    ["Email", n.email || "—"],
+    ["Company", n.company || "—"],
+    ["Employees", n.employees || "—"],
+    ["Tags", n.tags.join(", ") || "—"],
+    ["Source", n.source],
+  ];
+  const table =
+    '<table style="border-collapse:collapse;font:15px/1.5 system-ui,sans-serif">' +
+    rows.map(function (r) {
+      return '<tr><td style="padding:4px 14px 4px 0;color:#5a6b80">' + L.esc(r[0]) +
+             '</td><td style="padding:4px 0"><b>' + L.esc(r[1]) + "</b></td></tr>";
+    }).join("") + "</table>";
+  return L.sendEmail({
+    to: L.CFG.notify,
+    subject: (n.business ? "🏢 New business lead: " : "New lead: ") + n.fullName,
+    html: L.shell(
+      '<h2 style="margin:0 0 12px;color:' + L.CFG.navy + '">' +
+      (n.business ? "New business lead" : "New lead") + " from GoHighLevel</h2>" + table +
+      '<p style="margin-top:16px;color:#5a6b80;font-size:13px">Added to your ' +
+      (n.business ? "Business Leads board (Prospect)" : "Pipeline (New Lead)") + ".</p>" +
+      L.btn("https://www.vshealthbenefits.com/admin", "Open admin portal"),
+      (n.business ? "New business lead" : "New lead") + ": " + n.fullName
+    ),
+    replyTo: n.email || undefined,
   });
 }
 
@@ -430,8 +547,12 @@ module.exports = async (req, res) => {
   const to = String((req.query && req.query.to) || d.to || d.direction || "").toLowerCase();
   const inbound = to === "portal" || to === "to-portal" || to === "pipeline";
 
+  const isSweep = String((req.query && req.query.sweep) || d.sweep || "") === "1" ||
+                  (req.query && req.query.sweep) === "true" || d.sweep === true;
+
   try {
-    if (inbound) await toPortal(d, req, res);
+    if (inbound && isSweep) await sweepPortal(d, req, res);
+    else if (inbound) await toPortal(d, req, res);
     else await toCrm(d, res);
   } catch (e) {
     // Never let a lead form see a 500.
