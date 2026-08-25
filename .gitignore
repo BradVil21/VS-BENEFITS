@@ -6,3 +6,8 @@ __deltest.tmp
 Thumbs.db
 node_modules/
 _to_delete/
+
+# SEO work scripts cache
+.seo-work/__pycache__/
+_to_delete/
+VS-Health-Benefits-Search-Performance-Aug-2026.pdf

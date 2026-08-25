@@ -314,12 +314,7 @@
     },
     {
       "source": "/health-insurance-cost-faq",
-      "destination": "/how-much-does-health-insurance-cost",
-      "permanent": true
-    },
-    {
-      "source": "/blog/how-much-does-health-insurance-cost-2026",
-      "destination": "/how-much-does-health-insurance-cost",
+      "destination": "/blog/how-much-does-health-insurance-cost-2026",
       "permanent": true
     },
     {
@@ -654,7 +649,7 @@
     },
     {
       "source": "/blog/how-much-does-health-insurance-cost-2026.html",
-      "destination": "/how-much-does-health-insurance-cost",
+      "destination": "/blog/how-much-does-health-insurance-cost-2026",
       "permanent": true
     },
     {
@@ -1039,7 +1034,7 @@
     },
     {
       "source": "/health-insurance-cost-faq.html",
-      "destination": "/how-much-does-health-insurance-cost",
+      "destination": "/blog/how-much-does-health-insurance-cost-2026",
       "permanent": true
     },
     {
@@ -1114,7 +1109,7 @@
     },
     {
       "source": "/how-much-does-health-insurance-cost.html",
-      "destination": "/how-much-does-health-insurance-cost",
+      "destination": "/blog/how-much-does-health-insurance-cost-2026",
       "permanent": true
     },
     {
@@ -1290,6 +1285,11 @@
     {
       "source": "/does-health-insurance-cover-dot-physical.html",
       "destination": "/does-health-insurance-cover-dot-physical",
+      "permanent": true
+    },
+    {
+      "source": "/how-much-does-health-insurance-cost",
+      "destination": "/blog/how-much-does-health-insurance-cost-2026",
       "permanent": true
     }
   ],
