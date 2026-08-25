@@ -2360,5 +2360,32 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   }catch(e){}})();
   </script>
   <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6a8339a143b7e14560ca7528" data-source="WEB_USER"></script>
+
+  <script id="vs-quote-deeplink">
+  /* Deep-link support: /quote?type=business (aliases: group, employer, smallbusiness)
+     lands the visitor directly on the group form. Falls back silently. */
+  (function(){
+    function go(){
+      try{
+        var p = new URLSearchParams(window.location.search);
+        var t = (p.get('type') || p.get('for') || '').toLowerCase().replace(/[^a-z]/g,'');
+        if(!t) return;
+        var biz = ['business','group','employer','smallbusiness','company'];
+        var ind = ['individual','family','personal','self'];
+        var pick = biz.indexOf(t) > -1 ? 'business' : (ind.indexOf(t) > -1 ? 'individual' : null);
+        if(!pick || typeof window.selectType !== 'function') return;
+        window.selectType(pick);
+        var el = document.getElementById('progressWrap') ||
+                 document.getElementById(pick === 'business' ? 'typeBusiness' : 'typeIndividual');
+        if(el && el.scrollIntoView) setTimeout(function(){
+          el.scrollIntoView({behavior:'smooth', block:'start'});
+        }, 420);
+      }catch(e){}
+    }
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', go);
+    } else { go(); }
+  })();
+  </script>
 </body>
 </html>

@@ -15,6 +15,8 @@ PRIO = {
  '/open-enrollment': '0.9', '/truck-driver-health-insurance': '0.9',
  '/best-health-insurance-owner-operators': '0.9', '/aca-subsidy-calculator': '0.9',
  '/small-business-health-insurance': '0.9', '/quote': '0.9',
+ '/group-health-insurance-by-industry': '0.9', '/florida-small-business-health-insurance': '0.9',
+ '/small-business-health-insurance-calculator': '0.9',
 }
 
 rows = []

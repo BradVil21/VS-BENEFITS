@@ -245,6 +245,116 @@ table.vs-table caption{caption-side:bottom;font-size:.78rem;color:var(--muted);p
 .vs-rg-card em{display:inline-block;margin-top:9px;color:#16447f;font-weight:700;font-size:.85rem;font-style:normal}
 @media(min-width:760px){.vs-rg-grid{grid-template-columns:1fr 1fr}}
 </style>
+<script type="application/ld+json" id="vs-service-schema">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Level-funded health plan setup for Florida employers",
+  "name": "Level-funded health plan setup for Florida employers",
+  "url": "https://www.vshealthbenefits.com/level-funded-health-insurance-florida",
+  "provider": {
+    "@type": "InsuranceAgency",
+    "name": "VS Health Benefits",
+    "url": "https://www.vshealthbenefits.com/",
+    "telephone": "+1-954-825-1009",
+    "email": "info@vshealthbenefits.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Miami",
+      "addressRegion": "FL",
+      "addressCountry": "US"
+    }
+  },
+  "areaServed": [
+    {
+      "@type": "City",
+      "name": "Miami",
+      "addressRegion": "FL"
+    },
+    {
+      "@type": "City",
+      "name": "Fort Lauderdale",
+      "addressRegion": "FL"
+    },
+    {
+      "@type": "City",
+      "name": "Coral Gables",
+      "addressRegion": "FL"
+    },
+    {
+      "@type": "City",
+      "name": "Doral",
+      "addressRegion": "FL"
+    },
+    {
+      "@type": "City",
+      "name": "Hialeah",
+      "addressRegion": "FL"
+    },
+    {
+      "@type": "City",
+      "name": "Hollywood",
+      "addressRegion": "FL"
+    },
+    {
+      "@type": "City",
+      "name": "Miramar",
+      "addressRegion": "FL"
+    },
+    {
+      "@type": "City",
+      "name": "Pembroke Pines",
+      "addressRegion": "FL"
+    },
+    {
+      "@type": "City",
+      "name": "Plantation",
+      "addressRegion": "FL"
+    },
+    {
+      "@type": "City",
+      "name": "Sunrise",
+      "addressRegion": "FL"
+    },
+    {
+      "@type": "City",
+      "name": "Coral Springs",
+      "addressRegion": "FL"
+    },
+    {
+      "@type": "State",
+      "name": "Florida"
+    },
+    {
+      "@type": "Country",
+      "name": "United States"
+    }
+  ],
+  "audience": {
+    "@type": "BusinessAudience",
+    "name": "Small businesses with 1-50 employees",
+    "numberOfEmployees": {
+      "@type": "QuantitativeValue",
+      "minValue": 1,
+      "maxValue": 50
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "description": "Free comparison and setup of group health coverage; carriers pay the broker commission."
+  },
+  "availableChannel": {
+    "@type": "ServiceChannel",
+    "serviceUrl": "https://www.vshealthbenefits.com/quote?type=business",
+    "servicePhone": {
+      "@type": "ContactPoint",
+      "telephone": "+1-954-825-1009"
+    }
+  }
+}
+</script>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><a href="/quote" style="color:#fff;text-decoration:none;display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span>Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Get ahead of the deadline.</span><span style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap">Get a Free Quote &rarr;</span></a></div>
@@ -432,7 +542,7 @@ table.vs-table caption{caption-side:bottom;font-size:.78rem;color:var(--muted);p
 <div class="cta-block">
         <h3>Find Out If Your Group Underwrites Well</h3>
         <p>Level-funded pricing depends entirely on your specific census and claims history. We shop it across multiple carriers alongside your fully insured options — at no cost to you.</p>
-        <a class="btn btn-teal" href="/quote">Get a Free Quote →</a>
+        <a class="btn btn-teal" href="/quote?type=business">Get a Free Quote →</a>
       </div>
 
       <div class="sources">
@@ -490,7 +600,7 @@ table.vs-table caption{caption-side:bottom;font-size:.78rem;color:var(--muted);p
       <div class="sidebar-card" style="background:linear-gradient(135deg,var(--blue-700),var(--teal));border:none">
         <h4 style="color:#fff">Get Level-Funded Quotes</h4>
         <p style="color:rgba(255,255,255,.9);font-size:.88rem;margin-bottom:14px">We shop level-funded and fully insured side by side so you can see the real spread.</p>
-        <a class="btn btn-teal" href="/quote" style="background:#fff;color:var(--blue-700);width:100%;justify-content:center">Get a Free Quote →</a>
+        <a class="btn btn-teal" href="/quote?type=business" style="background:#fff;color:var(--blue-700);width:100%;justify-content:center">Get a Free Quote →</a>
       </div>
 
       <div class="sidebar-card">
@@ -506,7 +616,7 @@ table.vs-table caption{caption-side:bottom;font-size:.78rem;color:var(--muted);p
 <section class="vs-related-guides" data-block="tools">
   <div class="vs-rg-inner">
     <h2>Run your own numbers</h2>
-    <p class="vs-rg-sub">Every tool here is free, instant, and does not ask for your email. Ready for numbers instead? <a href="/quote" style="color:#16447f;font-weight:700">Get a free quote &rarr;</a></p>
+    <p class="vs-rg-sub">Every tool here is free, instant, and does not ask for your email. Ready for numbers instead? <a href="/quote?type=business" style="color:#16447f;font-weight:700">Get a free quote &rarr;</a></p>
     <div class="vs-rg-grid">
         <a class="vs-rg-card" href="/small-business-health-insurance-calculator">
           <strong>Group Health Cost Calculator</strong>
@@ -518,9 +628,38 @@ table.vs-table caption{caption-side:bottom;font-size:.78rem;color:var(--muted);p
           <span>Group, level-funded and ICHRA compared for a 2 to 100 employee business, with real per-employee ranges.</span>
           <em>Read the guide &rarr;</em>
         </a>
-        <a class="vs-rg-card" href="/quote">
+        <a class="vs-rg-card" href="/quote?type=business">
           <strong>Get a Real Quote</strong>
           <span>A licensed advisor prices your actual options against your doctors and your budget. Carriers pay our commission, not you.</span>
+          <em>Read the guide &rarr;</em>
+        </a>
+    </div>
+  </div>
+</section>
+
+<section class="vs-related-guides" data-block="sb-cluster">
+  <div class="vs-rg-inner">
+    <h2>More on group coverage for small business</h2>
+    <p class="vs-rg-sub">Group plans for 1 to 50 employees, priced by a licensed independent broker. Carriers pay our commission, so comparing costs you nothing. Ready for numbers instead? <a href="/quote?type=business" style="color:#16447f;font-weight:700">Get group quotes &rarr;</a></p>
+    <div class="vs-rg-grid">
+        <a class="vs-rg-card" href="/ichra-florida-small-business">
+          <strong>ICHRA for Florida Small Business</strong>
+          <span>Reimburse individual premiums tax-free instead of running a group plan. Reaches 1099 people a group plan cannot.</span>
+          <em>Read the guide &rarr;</em>
+        </a>
+        <a class="vs-rg-card" href="/small-business-health-insurance">
+          <strong>Small Business Group Health 2027</strong>
+          <span>Group, level-funded and ICHRA compared for a team of 2 to 50, with real per-employee ranges.</span>
+          <em>Read the guide &rarr;</em>
+        </a>
+        <a class="vs-rg-card" href="/group-health-insurance-by-industry">
+          <strong>Group Health Insurance by Industry</strong>
+          <span>Contractors, janitorial, fleets, retail, restaurants and clinics. What changes by trade, and the rating rule most owners get wrong.</span>
+          <em>Read the guide &rarr;</em>
+        </a>
+        <a class="vs-rg-card" href="/small-business-health-insurance-calculator">
+          <strong>Group Health Cost Calculator</strong>
+          <span>Estimate your monthly cost by employee count, ages and contribution level. Instant, no email required.</span>
           <em>Read the guide &rarr;</em>
         </a>
     </div>
