@@ -245,6 +245,25 @@ async function ghlGetContact(contactId) {
 // the one place that reconciles them. The API record wins wherever both have a
 // value, because a webhook payload can be a snapshot from before the
 // workflow's earlier steps ran.
+// A contact the live chat widget created carries these markers. GHL does not
+// put anything in `source`, so without this a chat lead lands on the board
+// looking like it came from nowhere.
+function isWebchatContact(c) {
+  if (!c) return false;
+  const by = c.createdBy || {};
+  if (String(by.sourceId || "").indexOf("live-chat") >= 0) return true;
+  if (String(by.source || "").toUpperCase() === "CONVERSATIONS") return true;
+  return Boolean(c.visitorId);
+}
+
+// The widget names a contact "Guest Visitor a1b2c" until the visitor says who
+// they are. That is a placeholder, not a name, and it should not become the
+// title of a card on the board.
+function isGuestPlaceholder(first, last) {
+  return /^guest$/i.test(String(first || "").trim()) &&
+         /^visitor\b/i.test(String(last || "").trim());
+}
+
 function normalize(c, d) {
   c = c || {}; d = d || {};
 
@@ -264,11 +283,22 @@ function normalize(c, d) {
     }
   }
 
+  if (isGuestPlaceholder(firstName, lastName)) { firstName = ""; lastName = ""; }
+
   const email = validEmail(c.email || d.email || d.contactEmail);
   const phone = tenDigits(c.phone || d.phone || d.phoneNumber || d.contactPhone);
   const company = clean(c.companyName || d.company || d.businessName || d.company_name, 120);
 
+  // Webchat wins over whatever `source` says, so the board shows where the lead
+  // actually came from rather than a blank or a stale funnel name.
+  const webchat = isWebchatContact(c) ||
+    /webchat|live[- ]?chat/i.test(String(d.source || d.leadSource || ""));
+  const source = webchat
+    ? "Website live chat"
+    : (clean(c.source || d.source || d.leadSource, 80) || "GoHighLevel");
+
   return {
+    webchat: webchat,
     contactId: contactId,
     tags: tags,
     firstName: firstName,
@@ -279,7 +309,7 @@ function normalize(c, d) {
     state: clean(c.state || d.state, 40),
     zip: clean(c.postalCode || d.zip || d.postalCode || d.zipCode, 12),
     employees: clean(d.employees || d.employeeCount || d.numEmployees || d.num_employees, 20),
-    source: clean(c.source || d.source || d.leadSource, 80) || "GoHighLevel",
+    source: source,
     notesIn: clean(d.notes || d.message || d.summary || d.transcript, 3000),
     dob: clean(d.dob || d.dateOfBirth, 20),
     niche: clean(d.niche || d.industry, 60),
@@ -475,56 +505,87 @@ async function toPortal(d, req, res) {
 // ══════════════════════════════════════════════════════════════════════════
 // POST /api/lead-sync?to=portal&sweep=1
 //
-// Walks the most recently added GoHighLevel contacts newest-first and puts any
-// that are missing onto the right board. It is the backstop for the webhook:
-// if a workflow is paused, a webhook step errors, or a lead is created by a
-// route nobody wired up, the sweep still finds it.
+// Walks recent GoHighLevel contacts and puts any that are missing onto the
+// right board. It is the backstop for the webhook: if a workflow is paused, a
+// webhook step errors, or a lead is created by a route nobody wired up, the
+// sweep still finds it.
+//
+// It matches on when a contact was last TOUCHED, not just when it was created,
+// because the live chat widget creates a nameless "Guest Visitor" the moment
+// someone opens the chat and only fills in a phone or email later. Those
+// contacts keep their original dateAdded, so a created-only sweep would walk
+// straight past every webchat lead.
 //
 // Safe to run as often as you like - syncToBoards matches on contact id, email
 // and phone, so a contact already on a board is merged, never duplicated. The
 // window is deliberately short (24h by default) so it never turns into a bulk
 // import of the whole CRM history.
 //
-//   hours   how far back to look. Default 24, max 168 (a week).
-//   limit   most contacts to touch in one run. Default 25, max 100.
+//   hours   how far back a contact must have been created OR updated to count.
+//           Default 24, max 168 (a week).
+//   limit   most cards to create or merge in one run. Default 25, max 100.
+//
+// Walking is bounded separately: at most 300 contacts, 5 pages, and never
+// further back than 30 days of dateAdded, whatever `hours` says.
 //
 // No per-lead alert emails here - a sweep that finds ten leads should not send
 // ten emails. The portal raises its own in-app notification for each new card.
 async function sweepPortal(d, req, res) {
   if (!secretOk(req)) { res.status(401).json({ error: "Unauthorized" }); return; }
 
-  const hours = Math.min(Math.max(parseInt(d.hours || (req.query && req.query.hours) || 24, 10) || 24, 1), 168);
-  const limit = Math.min(Math.max(parseInt(d.limit || (req.query && req.query.limit) || 25, 10) || 25, 1), 100);
+  const q = (req.query || {});
+  const hours = Math.min(Math.max(parseInt(d.hours || q.hours || 24, 10) || 24, 1), 168);
+  const limit = Math.min(Math.max(parseInt(d.limit || q.limit || 25, 10) || 25, 1), 100);
   const cutoff = Date.now() - hours * 3600 * 1000;
+
+  // How far back we are willing to WALK, which is not the same as how far back
+  // we are willing to SYNC. A live-chat visitor is created as a nameless guest
+  // the moment they open the widget and only becomes a real lead later, when
+  // they type a phone number - at which point the contact is updated but its
+  // dateAdded still points at whenever the chat window was opened. Walking only
+  // by dateAdded would miss exactly those, which are the webchat leads.
+  const WALK_BACK_MS = 30 * 24 * 3600 * 1000;
+  const MAX_SCAN = 300;
 
   const out = {
     ok: true, direction: "to-portal", mode: "sweep",
     hours: hours, limit: limit,
-    scanned: 0, created: 0, merged: 0, skipped: 0, failed: 0,
+    scanned: 0, considered: 0, created: 0, merged: 0, skipped: 0, failed: 0, webchat: 0,
     createdLeads: [],
   };
 
-  // The contacts list comes back newest-first, so we can stop at the first one
-  // older than the window instead of paging through the whole CRM.
-  let path = "/contacts/?locationId=" + encodeURIComponent(LOCATION_ID) + "&limit=" + Math.min(limit, 100);
-  let guard = 0;
+  const pageSize = 100;
+  let path = "/contacts/?locationId=" + encodeURIComponent(LOCATION_ID) + "&limit=" + pageSize;
+  let pages = 0;
 
-  while (path && guard < 5 && out.scanned < limit) {
-    guard++;
+  while (path && pages < 5 && out.scanned < MAX_SCAN && out.created + out.merged < limit) {
+    pages++;
     const r = await L.ghl(path, "GET");
     if (!r.ok) { out.ok = false; out.error = "ghl_" + (r.status || r.skipped); break; }
     const contacts = (r.json && r.json.contacts) || [];
     if (!contacts.length) break;
 
-    let hitCutoff = false;
+    let walkedPastWindow = false;
     for (const c of contacts) {
-      if (out.scanned >= limit) break;
-      const added = Date.parse(c.dateAdded || "") || 0;
-      if (added && added < cutoff) { hitCutoff = true; break; }
+      if (out.created + out.merged >= limit) break;
       out.scanned++;
+
+      const added = Date.parse(c.dateAdded || "") || 0;
+      const updated = Date.parse(c.dateUpdated || "") || 0;
+
+      // The list is newest-first by dateAdded, so once we are past the walk-back
+      // horizon there is nothing left worth checking.
+      if (added && added < Date.now() - WALK_BACK_MS) { walkedPastWindow = true; break; }
+
+      // Touched inside the window either way round: created recently, or created
+      // a while ago and updated recently.
+      const touched = Math.max(added, updated);
+      if (touched < cutoff) continue;
+      out.considered++;
 
       const n = normalize(c, {});
       if (!n.email && !n.phone) { out.skipped++; continue; }
+      if (n.webchat) out.webchat++;
 
       try {
         const result = await syncToBoards(n, { reopenClosed: false });
@@ -534,16 +595,17 @@ async function sweepPortal(d, req, res) {
           out.createdLeads.push({
             name: n.fullName,
             pipeline: n.business ? "business" : "individual",
+            source: n.source,
             contactId: n.contactId,
           });
         } else { out.merged++; }
       } catch (e) { out.failed++; }
     }
 
-    if (hitCutoff) break;
+    if (walkedPastWindow) break;
     const meta = (r.json && r.json.meta) || {};
     path = meta.startAfter && meta.startAfterId
-      ? "/contacts/?locationId=" + encodeURIComponent(LOCATION_ID) + "&limit=" + Math.min(limit, 100) +
+      ? "/contacts/?locationId=" + encodeURIComponent(LOCATION_ID) + "&limit=" + pageSize +
         "&startAfter=" + meta.startAfter + "&startAfterId=" + encodeURIComponent(meta.startAfterId)
       : null;
   }
