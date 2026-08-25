@@ -1825,6 +1825,7 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
         <input id="biz-search" class="search" type="search" placeholder="Search company, contact, phone..." />
         <button id="biz-add" class="btn btn-primary btn-sm" type="button">+ Add business lead</button>
         <button id="biz-export" class="btn btn-ghost btn-sm" type="button">&#11015; CSV</button>
+        <button id="biz-import" class="btn btn-ghost btn-sm" type="button">&#11014; Import CSV</button>
       </div>
       <div id="biz-list"></div>
     </div>
@@ -4579,6 +4580,7 @@ function czImportLeadsCsv(){
 }
 
 function czImportPreview(rows,filename){
+  czEnsureSourceList();
   if(rows.length<2){alert("That CSV has no data rows.");return;}
   var head=rows[0].map(czCsvField);
   if(head.indexOf("email")<0&&head.indexOf("phone")<0){
@@ -4936,7 +4938,7 @@ function czPipeResults(){
       var fu=czFU(c);
       var val=czVal(c)>0?'<span style="font-size:12px;font-weight:600;color:#047857;white-space:nowrap">'+money(czVal(c))+'</span>':'';
       var contact=(c.phone||c.email)?'<div class="cz-sub" style="margin-top:4px">'+escapeHtml(c.phone||c.email)+'</div>':'';
-      var src=c.source?'<div class="cz-sub" style="margin-top:3px;font-size:11px;color:#94a3b8">'+escapeHtml(c.source)+'</div>':'<div class="cz-sub" style="margin-top:3px;font-size:11px;color:#cbd5e1">no source</div>';
+      var src='<div class="cz-sub" style="margin-top:3px;font-size:11px;color:'+(c.source?'#94a3b8':'#cbd5e1')+'">'+(c.source?escapeHtml(czSourceLabel(c.source)):'no source')+'</div>';
       var fup=fu.key!=="none"?'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+';margin-top:8px">'+fu.label+'</span>':'';
       var resetBtn=czCLOSED.indexOf(c.stage)<0?'<button class="cz-iconbtn" data-cz-reset="'+c.id+'" title="Reset 14-day follow-up">↻</button>':'';
       var opts=czSTAGES.map(function(st){return '<option value="'+st.id+'" '+(st.id===c.stage?"selected":"")+'>'+st.label+'</option>';}).join("");
@@ -5013,7 +5015,7 @@ function czClientResults(){
       +'<td><span class="cz-chip" style="'+czChipStyle(c.stage)+'"><span class="cz-dot" style="'+czDotStyle(c.stage)+'"></span>'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></td>'
       +'<td class="cz-hide-md cz-muted"><div>'+escapeHtml(c.phone||"")+'</div><div class="cz-sub">'+escapeHtml(c.email||"")+'</div></td>'
       +'<td class="cz-hide-lg cz-muted">'+escapeHtml([c.state,c.zipCode||c.zipcode].filter(Boolean).join(" ")||"—")+'</td>'
-      +'<td class="cz-hide-lg cz-muted">'+(c.source?escapeHtml(c.source)+(c.sourceDetail?'<div class="cz-sub">'+escapeHtml(c.sourceDetail)+'</div>':''):'<span style="color:#cbd5e1">no source</span>')+'</td>'
+      +'<td class="cz-hide-lg cz-muted">'+czSourceCell(c.source,c.sourceDetail)+'</td>'
       +'<td class="cz-tright" style="font-weight:500;color:#334155">'+(czVal(c)>0?money(czVal(c)):"—")+'</td>'
       +'<td>'+fup+'</td></tr>';
   }).join("");
@@ -5136,6 +5138,7 @@ function czIpBlock(c){
     +'</div>';
 }
 function czOpenModal(client){
+  czEnsureSourceList();
   var isNew=!client;
   var c=client||{stage:"follow_up"};
   var fu=!isNew?czFU(c):null;
@@ -5177,7 +5180,7 @@ function czOpenModal(client){
     +'<label class="cz-fld"><span>State</span><select class="cz-inp" id="cz_state">'+stateOpts+'</select></label>'
     +'<label class="cz-fld"><span>Zip code</span><input class="cz-inp" id="cz_zipCode" value="'+escapeHtml(zip)+'" placeholder="33404"/></label>'
     +'<label class="cz-fld"><span>Pipeline stage</span><select class="cz-inp" id="cz_stage">'+stageOpts+'</select></label>'
-    +'<label class="cz-fld"><span>Lead source <small style="color:#94a3b8;font-weight:400">(where did they come from?)</small></span><input class="cz-inp" id="cz_source" list="cz-sources" value="'+escapeHtml(c.source||"")+'" placeholder="Referral, Facebook, walk-in…"/><datalist id="cz-sources">'+CZ_SOURCES.map(function(x){return '<option value="'+escapeHtml(x)+'"></option>';}).join('')+'</datalist></label>'
+    +'<label class="cz-fld"><span>Lead source <small style="color:#94a3b8;font-weight:400">(where did they come from?)</small></span><input class="cz-inp" id="cz_source" list="cz-sources" value="'+escapeHtml(c.source||"")+'" placeholder="Referral, Facebook, walk-in…"/></label>'
     +'<div class="cz-fld cz-full"><span>Call notes</span><div class="cz-quicknote"><input class="cz-inp" id="cz_quicknote" placeholder="Jot a note during the call, hit Add (timestamps it)"/><button type="button" class="cz-btn-go" id="cz-addnote">Add</button></div><textarea class="cz-inp" id="cz_notes" rows="3" placeholder="Conversation history, preferences, objections, best time to reach…">'+escapeHtml(c.notes||"")+'</textarea>'+(!isNew?'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center"><button type="button" class="cz-btn-go" id="cz-answered" style="background:#0a8754">☎ Answered · set callback from note</button><span style="font-size:11px;color:#94a3b8">e.g. write “call back in 3 hours” in the note</span></div>':'')+'</div>'
     +'</div>'
     +'<div class="cz-err" id="cz-mErr" style="display:none">Add at least a first or last name so you can find this lead later.</div>'
@@ -5373,6 +5376,38 @@ var BIZ_STAGES=[
    - a locked list would just push him back to leaving it blank, which is how
    249 of the first 260 leads ended up unattributed. Website leads fill this in
    by themselves from /vs-attribution.js. */
+/* The site writes machine keys like "index-funnel-business" into source.
+   They are accurate and unreadable, so the boards show a plain-English
+   version while the stored value stays exactly as written - reports and
+   CSV exports keep the key, the card shows the phrase. */
+var CZ_SRC_LABELS={
+  "index-funnel":"Website quote form",
+  "index-funnel-business":"Website business form",
+  "webchat":"Website live chat",
+  "phone-ai":"Phone AI agent",
+  "Website live chat":"Website live chat"
+};
+/* One shared <datalist> for every source field on the page. It used to be
+   built inside the leads modal, which meant the business form and both CSV
+   importers pointed at a list that was not in the DOM unless that one modal
+   happened to be open. */
+function czEnsureSourceList(){
+  if(document.getElementById("cz-sources"))return;
+  var dl=document.createElement("datalist");
+  dl.id="cz-sources";
+  dl.innerHTML=CZ_SOURCES.map(function(x){return '<option value="'+escapeHtml(x)+'"></option>';}).join("");
+  document.body.appendChild(dl);
+}
+function czSourceLabel(s){
+  s=String(s==null?"":s).trim();
+  if(!s)return "";
+  return CZ_SRC_LABELS[s]||s;
+}
+function czSourceCell(s,detail,style){
+  var lab=czSourceLabel(s);
+  if(!lab)return '<span style="color:#cbd5e1">no source</span>';
+  return escapeHtml(lab)+(detail?'<div class="cz-sub">'+escapeHtml(czSourceLabel(detail))+'</div>':'');
+}
 var CZ_SOURCES=["Referral — client","Referral — partner","Phone call","Walk-in","Facebook","Instagram","Google Ads","Organic search","Networking event","Trucking company","Bought lead","Repeat client","Other"];
 var BIZ_NICHES=["Small business","Solopreneur / Freelancer","Independent contractor","Trades / Construction","Real estate","Professional services","Retail / Restaurant","Health / Wellness","Transportation / Trucking","Agency / Creative","Other"];
 function bizStageMeta(id){return BIZ_STAGES.filter(function(s){return s.id===id;})[0]||BIZ_STAGES[0];}
@@ -5395,7 +5430,8 @@ function renderBizLeads(){
       var contact=(b.phone||b.email)?'<div class="cz-sub" style="margin-top:4px">'+escapeHtml(b.phone||b.email)+'</div>':'';
       var fu=b.nextFollowUp?'<span class="cz-pill" style="background:#fff7ed;color:#b45309;border:1px solid #fed7aa;margin-top:8px"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 1.5M5 3 2.5 5.5M19 3l2.5 2.5"/></svg> '+escapeHtml(b.nextFollowUp)+'</span>':'';
       var opts=BIZ_STAGES.map(function(st){return '<option value="'+st.id+'"'+((b.stage||"prospect")===st.id?" selected":"")+'>'+st.label+'</option>';}).join("");
-      return '<div class="cz-card" draggable="true" data-bizcard="'+b.id+'"><div class="cz-ctop"><div class="cz-nm">'+escapeHtml(b.company||"(no company)")+'</div>'+emp+'</div>'+(sub?'<div class="cz-sub">'+escapeHtml(sub)+'</div>':'')+contact+fu+'<div class="cz-cctl"><select data-bizstage="'+b.id+'">'+opts+'</select></div></div>';
+      var bsrc='<div class="cz-sub" style="margin-top:3px;font-size:11px;color:'+(b.source?'#94a3b8':'#cbd5e1')+'">'+(b.source?escapeHtml(czSourceLabel(b.source)):'no source')+'</div>';
+      return '<div class="cz-card" draggable="true" data-bizcard="'+b.id+'"><div class="cz-ctop"><div class="cz-nm">'+escapeHtml(b.company||"(no company)")+'</div>'+emp+'</div>'+(sub?'<div class="cz-sub">'+escapeHtml(sub)+'</div>':'')+contact+bsrc+fu+'<div class="cz-cctl"><select data-bizstage="'+b.id+'">'+opts+'</select></div></div>';
     }).join("");
     return '<div class="cz-col" data-bizdrop="'+s.id+'" style="border-top-color:'+s.color+'"><div class="cz-col-head"><div class="cz-row" style="gap:8px"><span class="cz-dot" style="background:'+s.color+'"></span><span style="font-size:14px;font-weight:600">'+s.label+'</span><span class="cz-faint" style="font-size:12px">'+items.length+'</span></div></div><div class="cz-col-body">'+body+'</div></div>';
   }).join("")+'</div>';
@@ -5426,6 +5462,7 @@ function renderBizLeads(){
   }
 }
 function openBizLeadForm(b){
+  czEnsureSourceList();
   var isNew=!b;b=b||{stage:"prospect"};
   var stageOpts=BIZ_STAGES.map(function(s){return '<option value="'+s.id+'"'+((b.stage||"prospect")===s.id?" selected":"")+'>'+s.label+'</option>';}).join("");
   var nicheDatalist=BIZ_NICHES.map(function(n){return '<option value="'+escapeHtml(n)+'"></option>';}).join("");
@@ -5443,7 +5480,7 @@ function openBizLeadForm(b){
    +'<label class="cz-fld"><span>Stage</span><select class="cz-inp" id="bz_stage">'+stageOpts+'</select></label>'
    +'<label class="cz-fld"><span>Email</span><input class="cz-inp" id="bz_email" value="'+escapeHtml(b.email||"")+'" placeholder="jane@acme.com"/></label>'
    +'<label class="cz-fld"><span>Phone</span><input class="cz-inp" id="bz_phone" value="'+escapeHtml(b.phone||"")+'" placeholder="(561) 555-0100"/></label>'
-   +'<label class="cz-fld"><span>Source</span><input class="cz-inp" id="bz_source" value="'+escapeHtml(b.source||"")+'" placeholder="LinkedIn, referral, chamber..."/></label>'
+   +'<label class="cz-fld"><span>Source</span><input class="cz-inp" id="bz_source" list="cz-sources" value="'+escapeHtml(b.source||"")+'" placeholder="LinkedIn, referral, chamber..."/></label>'
    +'<label class="cz-fld"><span>Next follow-up</span><input class="cz-inp" id="bz_followup" type="date" value="'+escapeHtml(b.nextFollowUp||"")+'"/></label>'
    +'<div class="cz-fld cz-full"><span>Notes</span><div class="cz-quicknote"><input class="cz-inp" id="bz_quicknote" placeholder="Quick note during a call, hit Add (timestamps it)"/><button type="button" class="cz-btn-go" id="bz-addnote">Add</button></div><textarea class="cz-inp" id="bz_notes" rows="4" placeholder="Meeting notes, objections, decision makers, plan interest...">'+escapeHtml(b.notes||"")+'</textarea></div>'
    +'</div>'
@@ -5472,10 +5509,140 @@ function bizExportCsv(){
   all.forEach(function(b){rows.push([b.company||"",b.contact||"",b.niche||"",b.employees||"",b.requestedCoverage||"",b.currentlyInsured||"",b.coverageStart||"",bizStageMeta(b.stage||"prospect").label,b.email||"",b.phone||"",b.source||"",b.nextFollowUp||"",(b.notes||"").replace(/\r?\n/g," "),b.created?new Date(b.created).toISOString().slice(0,10):""].map(csvEscape));});
   downloadFile("business-leads-"+new Date().toISOString().slice(0,10)+".csv",rows.map(function(r){return r.join(",");}).join("\n"),"text/csv");
 }
+
+/* ── Business CSV import ─────────────────────────────────────────────────
+   Same rule as the leads import: a batch cannot arrive unattributed. The
+   Import button stays disabled until the source is filled in, and a row
+   carrying its own Source column keeps it. Duplicates are matched on
+   email, phone, then company name, since a company list often has one
+   switchboard number across several records. */
+function bizImportCsv(){
+  var inp=document.createElement("input");
+  inp.type="file";inp.accept=".csv,text/csv";inp.style.display="none";
+  document.body.appendChild(inp);
+  inp.addEventListener("change",function(){
+    var f=inp.files&&inp.files[0];
+    if(!f){inp.remove();return;}
+    var fr=new FileReader();
+    fr.onload=function(){
+      try{ bizImportPreview(czCsvParse(String(fr.result||"")), f.name); }
+      catch(e){ alert("Could not read that CSV."); }
+      inp.remove();
+    };
+    fr.onerror=function(){alert("Could not read that file.");inp.remove();};
+    fr.readAsText(f);
+  });
+  inp.click();
+}
+
+function bizCsvField(h){
+  h=String(h||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+  if(/^(company|companyname|business|businessname|organisation|organization|account)$/.test(h))return "company";
+  if(/^(contact|contactname|owner|ownername|name|decisionmaker)$/.test(h))return "contact";
+  if(/^(email|emailaddress|mail)$/.test(h))return "email";
+  if(/^(phone|phonenumber|mobile|cell|tel|telephone)$/.test(h))return "phone";
+  if(/^(employees|employeecount|numemployees|headcount|staff|ees|size)$/.test(h))return "employees";
+  if(/^(niche|industry|vertical|sector|trade)$/.test(h))return "niche";
+  if(/^(notes|note|comments|comment)$/.test(h))return "notes";
+  if(/^(source|leadsource)$/.test(h))return "source";
+  if(/^(coverage|requestedcoverage|plantype)$/.test(h))return "requestedCoverage";
+  if(/^(insured|currentlyinsured|hascoverage)$/.test(h))return "currentlyInsured";
+  if(/^(start|coveragestart|effectivedate)$/.test(h))return "coverageStart";
+  return "";
+}
+
+function bizImportPreview(rows,filename){
+  czEnsureSourceList();
+  if(rows.length<2){alert("That CSV has no data rows.");return;}
+  var head=rows[0].map(bizCsvField);
+  if(head.indexOf("company")<0&&head.indexOf("contact")<0){
+    alert("That CSV needs a company or contact column.\n\nColumns found: "+rows[0].join(", "));
+    return;
+  }
+  var body=rows.slice(1);
+
+  var ov=document.createElement("div");
+  ov.setAttribute("style","position:fixed;inset:0;z-index:99999;background:rgba(13,27,42,.5);display:flex;align-items:center;justify-content:center;padding:16px");
+  var card=document.createElement("div");
+  card.setAttribute("style","background:#fff;border-radius:16px;max-width:520px;width:100%;padding:22px;box-shadow:0 20px 60px rgba(13,27,42,.3);font-family:inherit");
+  card.innerHTML='<h3 style="margin:0 0 6px;font-size:19px;font-weight:800;color:#0b2346">Import '+body.length+' business lead'+(body.length===1?'':'s')+'</h3>'
+   +'<p style="margin:0 0 16px;font-size:13.5px;color:#5a6b80;line-height:1.5">From <strong>'+escapeHtml(filename)+'</strong>. They land in <strong>Prospect</strong>. Companies already on the board are skipped, matched on email, phone, then name.</p>'
+   +'<label style="display:block;font-size:13px;font-weight:600;color:#0b2346;margin-bottom:6px">Where did these come from? <span style="color:#dc2626">*</span></label>'
+   +'<input id="bz-imp-src" list="cz-sources" placeholder="e.g. Chamber of commerce list, LinkedIn export" style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:9px;font-size:14px;font-family:inherit;outline:none"/>'
+   +'<p style="margin:8px 0 18px;font-size:12px;color:#5a6b80;line-height:1.5">Required. Every company in this file is tagged with it, so you can tell later which list was worth working.</p>'
+   +'<div style="display:flex;gap:8px;justify-content:flex-end"><button id="bz-imp-cancel" style="padding:10px 18px;border-radius:9px;border:1.5px solid #cbd5e1;background:#fff;font-weight:600;cursor:pointer;font-family:inherit">Cancel</button>'
+   +'<button id="bz-imp-go" disabled style="padding:10px 18px;border-radius:9px;border:0;background:#94a3b8;color:#fff;font-weight:700;cursor:not-allowed;font-family:inherit">Import</button></div>';
+  ov.appendChild(card);document.body.appendChild(ov);
+
+  var srcEl=card.querySelector("#bz-imp-src"),goEl=card.querySelector("#bz-imp-go");
+  function sync(){
+    var ok=srcEl.value.trim().length>1;
+    goEl.disabled=!ok;
+    goEl.style.background=ok?"#16447f":"#94a3b8";
+    goEl.style.cursor=ok?"pointer":"not-allowed";
+  }
+  srcEl.addEventListener("input",sync);
+  setTimeout(function(){srcEl.focus();},50);
+  card.querySelector("#bz-imp-cancel").addEventListener("click",function(){ov.remove();});
+  ov.addEventListener("click",function(e){if(e.target===ov)ov.remove();});
+  goEl.addEventListener("click",function(){
+    var res=bizImportRows(head,body,srcEl.value.trim());
+    ov.remove();
+    alert("Imported "+res.added+" compan"+(res.added===1?"y":"ies")+
+          (res.skipped?"\nSkipped "+res.skipped+" already on the board":"")+
+          (res.bad?"\nIgnored "+res.bad+" row"+(res.bad===1?"":"s")+" with no company or contact":""));
+    renderBizLeads();
+  });
+}
+
+function bizImportRows(head,body,source){
+  var existing=getBizLeads();
+  function digits(v){return String(v||"").replace(/\D/g,"").slice(-10);}
+  function norm(v){return String(v||"").trim().toLowerCase();}
+  var seenEmail={},seenPhone={},seenCo={};
+  existing.forEach(function(b){
+    if(b.email)seenEmail[norm(b.email)]=1;
+    if(digits(b.phone))seenPhone[digits(b.phone)]=1;
+    if(b.company)seenCo[norm(b.company)]=1;
+  });
+
+  var t=todayStr(),added=0,skipped=0,bad=0,out=existing.slice();
+  body.forEach(function(r){
+    var rec={};
+    head.forEach(function(field,i){ if(field)rec[field]=String(r[i]==null?"":r[i]).trim(); });
+    if(!rec.company&&!rec.contact){bad++;return;}
+    var em=norm(rec.email),ph=digits(rec.phone),co=norm(rec.company);
+    if((em&&seenEmail[em])||(ph&&seenPhone[ph])||(co&&seenCo[co])){skipped++;return;}
+    if(em)seenEmail[em]=1; if(ph)seenPhone[ph]=1; if(co)seenCo[co]=1;
+
+    out.unshift({
+      id:uid(),
+      company:rec.company||rec.contact,
+      contact:rec.contact||"",
+      niche:rec.niche||"",
+      employees:rec.employees||"",
+      requestedCoverage:rec.requestedCoverage||"",
+      currentlyInsured:rec.currentlyInsured||"",
+      coverageStart:rec.coverageStart||"",
+      stage:"prospect",
+      email:rec.email||"",phone:rec.phone||"",
+      source:rec.source||source,
+      sourceDetail:"CSV import",
+      nextFollowUp:t,
+      notes:rec.notes||"",
+      created:Date.now(),updated:Date.now()
+    });
+    added++;
+  });
+  saveBizLeads(out);
+  return {added:added,skipped:skipped,bad:bad};
+}
+
 (function wireBiz(){
   var s=$("biz-search");if(s)s.addEventListener("input",renderBizLeads);
   var a=$("biz-add");if(a)a.addEventListener("click",function(){openBizLeadForm(null);});
   var x=$("biz-export");if(x)x.addEventListener("click",bizExportCsv);
+  var im=$("biz-import");if(im)im.addEventListener("click",bizImportCsv);
 })();
 function renderAll(){czBadges();czDashboard();czClients();czPipeline();czFollowups();renderAccounts();renderSupport();renderReferrals();renderSettings();renderTasks();renderNotes();renderBizLeads();}
 function fmtAgo(ts){
