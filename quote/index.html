@@ -1618,6 +1618,9 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   // ---- TYPE SELECT ----
   window.selectType = function(type){
     currentType = type;
+    // The funnel's first real commitment. Without this you can only see who
+    // finished, never how many started and where the rest went.
+    try{ if(window.vsTrack) window.vsTrack('quote_start',{ lead_type:type }); }catch(e){}
     document.querySelectorAll('.type-card').forEach(function(c){ c.classList.remove('selected'); });
     document.getElementById(type === 'individual' ? 'typeIndividual' : 'typeBusiness').classList.add('selected');
     setTimeout(function(){
@@ -1645,6 +1648,9 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
 
   // ---- INDIVIDUAL NAVIGATION ----
   window.indNav = function(toStep){
+    // Reported as the step just COMPLETED, so a drop-off between step 3 and 4
+    // reads as "they finished 3 and never finished 4".
+    try{ if(window.vsTrack && toStep>indStep) window.vsTrack('quote_step',{ lead_type:'individual', step:indStep, of:IND_STEPS }); }catch(e){}
     indStep = toStep;
     updateProgress(toStep, IND_STEPS);
     showPanel('panel-ind-' + toStep);
@@ -1652,6 +1658,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
 
   // ---- BUSINESS NAVIGATION ----
   window.bizNav = function(toStep){
+    try{ if(window.vsTrack && toStep>bizStep) window.vsTrack('quote_step',{ lead_type:'business', step:bizStep, of:BIZ_STEPS }); }catch(e){}
     bizStep = toStep;
     updateProgress(toStep, BIZ_STEPS);
     showPanel('panel-biz-' + toStep);
@@ -2112,14 +2119,20 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   // Google Ads conversion LABEL. Get it in Google Ads -> Goals -> Conversions ->
   // (your "Quote Form Lead" action) -> Tag setup -> "Use Google tag". It looks
   // like  AW-17950389267/AbC-D1efGhIjKl  -- paste ONLY the part after the slash:
-  var GADS_CONVERSION_LABEL = 'PASTE_LABEL_HERE';
+  // Read from vs-conversions.js so there is a single place to paste labels.
+  // The old inline PASTE_LABEL_HERE was a second copy that would silently
+  // drift out of step with the sitewide one.
+  var GADS_CONVERSION_LABEL = (window.VS_ADS && window.VS_ADS.labels && window.VS_ADS.labels.lead) || '';
   var _leadFired = false;
   function fireLeadConversion(data){
     if(_leadFired) return; _leadFired = true;         // guard: fire once per submit
     try{
       if(typeof gtag !== 'function') return;
       var leadType = (data && data.type) || 'individual';
-      // GA4 lead event (no label needed) -> shows up as a conversion in GA4
+      // GA4 lead event (no label needed) -> shows up as a conversion in GA4.
+      // Routed through vsTrack so it carries the attribution channel and so
+      // the Ads conversion fires from the same place as phone clicks.
+      if(typeof window.vsTrack==='function'){ window.vsTrack('generate_lead',{ currency:'USD', value:0, lead_type:leadType }); return; }
       gtag('event','generate_lead',{ currency:'USD', value:0, lead_type:leadType });
       // Google Ads conversion (needs the label above)
       if(GADS_CONVERSION_LABEL && GADS_CONVERSION_LABEL.indexOf('PASTE_') === -1){
@@ -2402,5 +2415,6 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   })();
   </script>
   <script src="/vs-attribution.js" defer></script>
+  <script src="/vs-conversions.js" defer></script>
 </body>
 </html>
