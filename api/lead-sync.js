@@ -151,7 +151,9 @@ async function toCrm(d, res) {
     company:   clean(d.company || d.businessName, 120),
     state:     clean(d.state, 4).toUpperCase(),
     zip:       clean(d.zip || d.zipCode, 12),
-    source:    clean(d.source || d.leadSource, 80) || "Website",
+    // GHL's source field gets the channel too, so the CRM and the board agree.
+    source:    clean(d.attribution && d.attribution.source, 80) ||
+               clean(d.source || d.leadSource, 80) || "Website",
     notes:     clean(d.notes, 1500),
   };
 
@@ -293,12 +295,26 @@ function normalize(c, d) {
   // actually came from rather than a blank or a stale funnel name.
   const webchat = isWebchatContact(c) ||
     /webchat|live[- ]?chat/i.test(String(d.source || d.leadSource || ""));
+
+  // Attribution, when the browser sent it, is the better answer to "where did
+  // this lead come from" than the name of the form they happened to fill in.
+  // "index-funnel" says which page; "Google Ads" says which channel, and the
+  // channel is what you decide a budget on. Both are kept - the form name
+  // moves to sourceDetail rather than being thrown away.
+  const formSource = clean(c.source || d.source || d.leadSource, 80);
+  // A lead Bradley types into the portal himself is not a website visit, and
+  // the browser attribution attached to that page would label it "Direct" and
+  // bury the real answer. His own entry wins.
+  const attr = (d.attribution && typeof d.attribution === "object" &&
+                !/^admin portal/i.test(formSource)) ? d.attribution : null;
   const source = webchat
     ? "Website live chat"
-    : (clean(c.source || d.source || d.leadSource, 80) || "GoHighLevel");
+    : (clean(attr && attr.source, 80) || formSource || "GoHighLevel");
 
   return {
     webchat: webchat,
+    attribution: attr,
+    sourceDetail: (attr && formSource) ? formSource : "",
     contactId: contactId,
     tags: tags,
     firstName: firstName,
@@ -341,7 +357,15 @@ async function syncToBoards(n, opts) {
   const today = todayStr();
 
   const noteLines = [];
-  if (n.source) noteLines.push("Source: " + n.source);
+  if (n.source) noteLines.push("Source: " + n.source + (n.sourceDetail ? " (" + n.sourceDetail + ")" : ""));
+  if (n.attribution) {
+    const a = n.attribution;
+    if (a.landing) noteLines.push("Landed on: " + a.landing);
+    if (a.referrer) noteLines.push("Referrer: " + a.referrer);
+    if (a.utm_campaign) noteLines.push("Campaign: " + a.utm_campaign);
+    if (a.lastSource && a.lastSource !== a.source) noteLines.push("Last touch: " + a.lastSource);
+    if (a.visits > 1) noteLines.push("Visits before enquiring: " + a.visits);
+  }
   if (n.tags.length) noteLines.push("GHL tags: " + n.tags.join(", "));
   if (n.contactId) noteLines.push("GHL contact: " + n.contactId);
   if (n.notesIn) noteLines.push(n.notesIn);
@@ -377,6 +401,8 @@ async function syncToBoards(n, opts) {
         email: n.email,
         phone: n.phone,
         source: n.source,
+        sourceDetail: n.sourceDetail,
+        attribution: n.attribution || null,
         nextFollowUp: today,
         notes: notes,
         ghlContactId: n.contactId,
@@ -392,6 +418,7 @@ async function syncToBoards(n, opts) {
         if (!existing.email && n.email) existing.email = n.email;
         if (!existing.phone && n.phone) existing.phone = n.phone;
         if (!existing.employees && n.employees) existing.employees = n.employees;
+        if (!existing.attribution && n.attribution) existing.attribution = n.attribution;
         if (!existing.stage || VALID_BIZ_STAGES.indexOf(existing.stage) < 0) existing.stage = "prospect";
         existing.notes = (existing.notes ? existing.notes + "\n" : "") +
           "[" + today + "] New inbound from GoHighLevel (" + n.source + ")";
@@ -431,8 +458,10 @@ async function syncToBoards(n, opts) {
       created: now,
       updated: now,
       source: n.source,
+      sourceDetail: n.sourceDetail,
+      attribution: n.attribution || null,
       ghlContactId: n.contactId,
-      activity: [{ ts: now, type: "created", text: "Arrived from GoHighLevel (" + n.source + ")" }],
+      activity: [{ ts: now, type: "created", text: "Arrived from " + n.source }],
     },
     function (x) {
       if (reopenClosed && CLOSED_INDIVIDUAL.indexOf(x.stage) >= 0) return false;
@@ -444,6 +473,7 @@ async function syncToBoards(n, opts) {
       if (!existing.phone && n.phone) existing.phone = n.phone;
       if (!existing.zipCode && n.zip) existing.zipCode = n.zip;
       if (!existing.state && n.state) existing.state = n.state;
+      if (!existing.attribution && n.attribution) existing.attribution = n.attribution;
       // The quote funnel writes its own card straight to Firestore without a
       // stage, so a card we merge into can be one the board cannot place - it
       // renders in no column at all. admin.html repairs that on load, but only

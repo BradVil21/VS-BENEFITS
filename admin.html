@@ -2040,7 +2040,11 @@ function hubspotSyncLead(l){
         firstName:l.firstName||"", lastName:l.lastName||"",
         email:email, phone:phone,
         company:l.company||"", state:l.state||"", zip:l.zipCode||l.zip||"",
-        source:"Admin portal"+(l.stage?(" - "+l.stage):""),
+        // Send the real source when there is one, so the CRM and the board
+        // agree on where a lead came from. "Admin portal" alone told us only
+        // which screen it was typed into, which is not an answer to that.
+        source:(l.source||"").trim()||("Admin portal"+(l.stage?(" - "+l.stage):"")),
+        sourceDetail:"Admin portal",
         notes:l.notes||"",
         tags:["admin-lead"]
       })
@@ -4776,6 +4780,7 @@ function czPipeResults(){
       var fu=czFU(c);
       var val=czVal(c)>0?'<span style="font-size:12px;font-weight:600;color:#047857;white-space:nowrap">'+money(czVal(c))+'</span>':'';
       var contact=(c.phone||c.email)?'<div class="cz-sub" style="margin-top:4px">'+escapeHtml(c.phone||c.email)+'</div>':'';
+      var src=c.source?'<div class="cz-sub" style="margin-top:3px;font-size:11px;color:#94a3b8">'+escapeHtml(c.source)+'</div>':'<div class="cz-sub" style="margin-top:3px;font-size:11px;color:#cbd5e1">no source</div>';
       var fup=fu.key!=="none"?'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+';margin-top:8px">'+fu.label+'</span>':'';
       var resetBtn=czCLOSED.indexOf(c.stage)<0?'<button class="cz-iconbtn" data-cz-reset="'+c.id+'" title="Reset 14-day follow-up">↻</button>':'';
       var opts=czSTAGES.map(function(st){return '<option value="'+st.id+'" '+(st.id===c.stage?"selected":"")+'>'+st.label+'</option>';}).join("");
@@ -4784,7 +4789,7 @@ function czPipeResults(){
         +'<label class="cz-cdate'+fuCls+'" title="When to follow up next"><span>Follow up</span><input type="date" data-cz-fudate="'+c.id+'" value="'+escapeHtml(c.followUpDue||"")+'"/></label>'
         +'<label class="cz-cdate'+(c.apptDate?' has-appt':'')+'" title="Appointment date &amp; time (also shows on the Calendar tab)"><span>Appt</span><input type="datetime-local" data-cz-apptdate="'+c.id+'" value="'+escapeHtml(c.apptDate||"")+'"/></label>'
         +'</div>';
-      return '<div class="cz-card" draggable="true" data-cz-card="'+c.id+'"><div class="cz-ctop"><div class="cz-nm">'+escapeHtml(czName(c))+'</div>'+val+'</div>'+contact+fup+dates+'<div class="cz-cctl"><select data-cz-stage="'+c.id+'">'+opts+'</select>'+resetBtn+'</div></div>';
+      return '<div class="cz-card" draggable="true" data-cz-card="'+c.id+'"><div class="cz-ctop"><div class="cz-nm">'+escapeHtml(czName(c))+'</div>'+val+'</div>'+contact+src+fup+dates+'<div class="cz-cctl"><select data-cz-stage="'+c.id+'">'+opts+'</select>'+resetBtn+'</div></div>';
     }).join("");
     return '<div class="cz-col" data-cz-drop="'+s.id+'" style="border-top-color:'+s.color+'"><div class="cz-col-head"><div class="cz-row" style="gap:8px"><span class="cz-dot" style="'+czDotStyle(s.id)+'"></span><span style="font-size:14px;font-weight:600">'+s.label+'</span><span class="cz-faint" style="font-size:12px">'+items.length+'</span></div><span class="cz-faint" style="font-size:11px">'+money(total)+'</span></div><div class="cz-col-body">'+body+'</div></div>';
   }).join("")+'</div>';
@@ -5013,7 +5018,8 @@ function czOpenModal(client){
     +'<label class="cz-fld"><span>City</span><input class="cz-inp" id="cz_city" value="'+escapeHtml(c.city||"")+'" placeholder="Miami"/></label>'
     +'<label class="cz-fld"><span>State</span><select class="cz-inp" id="cz_state">'+stateOpts+'</select></label>'
     +'<label class="cz-fld"><span>Zip code</span><input class="cz-inp" id="cz_zipCode" value="'+escapeHtml(zip)+'" placeholder="33404"/></label>'
-    +'<label class="cz-fld cz-full"><span>Pipeline stage</span><select class="cz-inp" id="cz_stage">'+stageOpts+'</select></label>'
+    +'<label class="cz-fld"><span>Pipeline stage</span><select class="cz-inp" id="cz_stage">'+stageOpts+'</select></label>'
+    +'<label class="cz-fld"><span>Lead source <small style="color:#94a3b8;font-weight:400">(where did they come from?)</small></span><input class="cz-inp" id="cz_source" list="cz-sources" value="'+escapeHtml(c.source||"")+'" placeholder="Referral, Facebook, walk-in…"/><datalist id="cz-sources">'+CZ_SOURCES.map(function(x){return '<option value="'+escapeHtml(x)+'"></option>';}).join('')+'</datalist></label>'
     +'<div class="cz-fld cz-full"><span>Call notes</span><div class="cz-quicknote"><input class="cz-inp" id="cz_quicknote" placeholder="Jot a note during the call, hit Add (timestamps it)"/><button type="button" class="cz-btn-go" id="cz-addnote">Add</button></div><textarea class="cz-inp" id="cz_notes" rows="3" placeholder="Conversation history, preferences, objections, best time to reach…">'+escapeHtml(c.notes||"")+'</textarea>'+(!isNew?'<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center"><button type="button" class="cz-btn-go" id="cz-answered" style="background:#0a8754">☎ Answered · set callback from note</button><span style="font-size:11px;color:#94a3b8">e.g. write “call back in 3 hours” in the note</span></div>':'')+'</div>'
     +'</div>'
     +'<div class="cz-err" id="cz-mErr" style="display:none">Add at least a first or last name so you can find this lead later.</div>'
@@ -5086,6 +5092,7 @@ function czOpenModal(client){
     rec.address=g("cz_address");rec.city=g("cz_city");rec.state=g("cz_state");
     rec.zipCode=g("cz_zipCode");rec.zipcode=g("cz_zipCode");
     rec.notes=g("cz_notes");
+    var srcIn=g("cz_source");if(srcIn||!rec.source)rec.source=srcIn;
     rec.quoteValue=Number(g("cz_quoteValue"))||0;rec.value=rec.quoteValue;
     rec.stage=stage;rec.status=czStageToStatus(stage);
     rec.createdAt=ex.createdAt||t;rec.created=ex.created||Date.now();
@@ -5203,6 +5210,12 @@ var BIZ_STAGES=[
  {id:"won",label:"Won",color:"#10b981"},
  {id:"lost",label:"Lost",color:"#ef4444"}
 ];
+/* Where a lead came from. Free text with suggestions rather than a fixed
+   dropdown, because the real answer is whatever Bradley actually says out loud
+   - a locked list would just push him back to leaving it blank, which is how
+   249 of the first 260 leads ended up unattributed. Website leads fill this in
+   by themselves from /vs-attribution.js. */
+var CZ_SOURCES=["Referral — client","Referral — partner","Phone call","Walk-in","Facebook","Instagram","Google Ads","Organic search","Networking event","Trucking company","Bought lead","Repeat client","Other"];
 var BIZ_NICHES=["Small business","Solopreneur / Freelancer","Independent contractor","Trades / Construction","Real estate","Professional services","Retail / Restaurant","Health / Wellness","Transportation / Trucking","Agency / Creative","Other"];
 function bizStageMeta(id){return BIZ_STAGES.filter(function(s){return s.id===id;})[0]||BIZ_STAGES[0];}
 var bizDragId=null,bizDragging=false,bizPan={down:false,sx:0,sl:0,board:null},bizPanWired=false;

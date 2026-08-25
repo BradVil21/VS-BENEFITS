@@ -2046,14 +2046,26 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       coverage:  coverage,
       monthlyPremium: null,
       status:    'new',
+      // Must be one of the pipeline column ids in admin.html. Without it the
+      // card is written to the portal and rendered in no column at all.
+      stage:     'new_lead',
       notes:     extras.join('\n'),
-      source:    'index-funnel',
+      source:    vsChannel('index-funnel'),
+      sourceDetail: 'index-funnel',
+      attribution: vsAttr(),
       type:      data.type,
       created:   Date.now(),
       submitted_at: new Date().toISOString(),
       meta:      vsMetaFields()
     };
   }
+
+  // Attribution captured by /vs-attribution.js on the visitor's first landing.
+  // These two records are written straight to Firestore rather than through
+  // /api/, so the fetch hook that attributes every other form cannot see them -
+  // they have to ask for it explicitly.
+  function vsAttr(){ try { return (window.vsAttribution && window.vsAttribution()) || null; } catch(e){ return null; } }
+  function vsChannel(fallback){ var a = vsAttr(); return (a && a.source) || fallback; }
 
   // Build a Business Lead record for the admin portal's Business Leads tab
   function toBizLead(data){
@@ -2086,7 +2098,9 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       zipcode:   data.businessZip || '',
       address:   data.businessAddress || '',
       notes:     extras.join('\n'),
-      source:    'index-funnel-business',
+      source:    vsChannel('index-funnel-business'),
+      sourceDetail: 'index-funnel-business',
+      attribution: vsAttr(),
       created:   Date.now(),
       updated:   Date.now(),
       submitted_at: new Date().toISOString(),
@@ -2387,5 +2401,6 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     } else { go(); }
   })();
   </script>
+  <script src="/vs-attribution.js" defer></script>
 </body>
 </html>
