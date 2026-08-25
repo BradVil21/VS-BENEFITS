@@ -114,3 +114,55 @@ One repair worth noting: an offset bug in an inline edit split a `</li>` tag on
 - **Tampa, Orlando, Jacksonville.** `business health insurance tampa` is at position 36.8 with
   no page. Out of scope for South Florida first — worth revisiting once the local pages move.
 - **Real carrier and pricing data per city.** Still broker work; I will not invent premiums.
+
+---
+
+# Addendum — Tampa page + monthly check-in
+
+## Tampa
+
+`business health insurance tampa` was sitting at position 36.8 with no Tampa page at all.
+Total Tampa Bay demand in the export: 4 queries, 83 impressions, zero clicks
+(`business health insurance tampa` 36.8, `small business health insurance tampa` 52.5,
+`small business benefits planning in tampa fl` 25.7, `st petersburg small business health
+insurance` 70.5).
+
+**`/tampa-small-business-health-insurance`** — written fresh, not find/replaced off the Miami
+page. A templated sibling is exactly what got the dental-vision cluster 301'd.
+
+The angle is a verified one that no competitor page leads with: **Tampa employers pay less
+than Miami employers for the same plan.** Premiums are set by geographic rating area,
+Florida's are county-based, and the spread from cheapest to most expensive county runs
+roughly 40–60% for comparable coverage. Miami-Dade sits at the high end; Hillsborough is
+mid-range. That is directly useful to anyone who has been quoted off South Florida numbers
+or moved a team up from Miami.
+
+Also covered: the bay-split problem (Hillsborough and Pinellas rate separately, so one
+company with two offices is not one price), six Tampa Bay industry cases, the four decisions
+in the order they actually come up, and 7 FAQs written against the live queries.
+Service schema with `areaServed` across Hillsborough, Pinellas, Pasco and Hernando plus
+8 named cities. 1,486 words. Cross-linked from the Florida hub, the industry hub and the
+Miami page; added to the sitemap (now 121 URLs).
+
+## Monthly check-in
+
+Scheduled task created: **1st of each month, 13:00 UTC** (9am ET while daylight time is in
+effect, 8am after November 1). First run 1 September 2026.
+
+Each run verifies the deploy is live and still correct — specifically that the 2027 guide
+still says **January 15, 2027** and has not regressed to December 15 — checks the industry
+hub, Tampa page and `/quote?type=business` resolve, reports anything committed but unpushed,
+and asks for a fresh Search Console export to compare against these baselines:
+
+| Metric | Baseline (24 May – 23 Aug 2026) | Target |
+|---|---|---|
+| Queries in top 10 | 71 | 120+ |
+| Non-branded clicks / quarter | ~16 | 75+ |
+| CTR at positions 4–20 | 0.39% | 2%+ |
+| Pages earning ≥1 click | 46 of 154 | 75 |
+
+The task is instructed to say so explicitly if total impressions is the only thing that
+improved, since that number rises on its own while none of the above move.
+
+**Note:** the task registered cloud-only. Approve device binding when prompted if you want it
+to check the local repo for unpushed commits; without that it can still do every live-site check.
