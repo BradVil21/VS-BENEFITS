@@ -283,7 +283,15 @@ function normalize(c, d) {
 
 // Put one normalised contact on the right board. Returns the appendRecord
 // result: { ok, action: "created"|"merged"|"unchanged", total, id }.
-async function syncToBoards(n) {
+//
+// opts.reopenClosed decides what a match in a closed stage means. For a webhook
+// or a form submission it is true: the person just raised their hand again, so
+// an old Sold or Lost card is finished business and this deserves a fresh one.
+// For the sweep it is false - the sweep is backfill, walking contacts that may
+// be months old, and treating a closed card as "no match" there would resurrect
+// settled clients into New Lead every time it ran.
+async function syncToBoards(n, opts) {
+  const reopenClosed = !opts || opts.reopenClosed !== false;
   const now = Date.now();
   const today = todayStr();
 
@@ -325,7 +333,7 @@ async function syncToBoards(n) {
         updated: now,
       },
       function (x) {
-        if (CLOSED_BUSINESS.indexOf(x.stage) >= 0) return false;
+        if (reopenClosed && CLOSED_BUSINESS.indexOf(x.stage) >= 0) return false;
         return sameContact(x);
       },
       function (existing) {
@@ -369,7 +377,7 @@ async function syncToBoards(n) {
       activity: [{ ts: now, type: "created", text: "Arrived from GoHighLevel (" + n.source + ")" }],
     },
     function (x) {
-      if (CLOSED_INDIVIDUAL.indexOf(x.stage) >= 0) return false;
+      if (reopenClosed && CLOSED_INDIVIDUAL.indexOf(x.stage) >= 0) return false;
       return sameContact(x);
     },
     function (existing) {
@@ -501,7 +509,7 @@ async function sweepPortal(d, req, res) {
       if (!n.email && !n.phone) { out.skipped++; continue; }
 
       try {
-        const result = await syncToBoards(n);
+        const result = await syncToBoards(n, { reopenClosed: false });
         if (!result || !result.ok) { out.failed++; continue; }
         if (result.action === "created") {
           out.created++;
