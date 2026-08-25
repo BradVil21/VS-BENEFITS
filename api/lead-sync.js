@@ -2,6 +2,7 @@
 // portal and GoHighLevel. It runs in two directions.
 //
 //   to-crm     (default)  portal / website form  ->  GoHighLevel contact
+//                                                 AND the portal board
 //   to-portal            GoHighLevel workflow    ->  admin portal pipeline
 //   to-portal + sweep    poll GHL for anything the webhook missed
 //
@@ -184,6 +185,31 @@ async function toCrm(d, res) {
       try { await L.ghl("/contacts/" + contactId + "/notes", "POST", { body: p.notes }); out.noted = true; }
       catch (e) { out.noted = false; }
     }
+  }
+
+  // ---- and straight onto the portal board ----
+  // A website form used to create the GHL contact and stop there, leaving the
+  // portal to find out later through the webhook or the sweep. That made the
+  // pipeline depend on a GHL workflow existing and staying published, for a
+  // lead this function is already holding in its hand. So write both.
+  //
+  // Skipped when the admin portal is the caller, because that lead is already
+  // on the board - it is what triggered this call. Without the guard, saving a
+  // lead in the portal would bounce straight back into it.
+  const fromAdmin = /^admin portal/i.test(p.source);
+  if (!fromAdmin) {
+    try {
+      const n = normalize(
+        { id: contactId, email: p.email, phone: p.phone, companyName: p.company,
+          firstName: p.firstName, lastName: p.lastName, state: p.state, postalCode: p.zip },
+        Object.assign({}, d, { source: p.source, notes: p.notes })
+      );
+      const board = await syncToBoards(n);
+      out.board = board && board.ok ? (board.action || "ok") : ((board && board.reason) || "error");
+      out.pipeline = n.business ? "business" : "individual";
+    } catch (e) { out.board = "exception"; }
+  } else {
+    out.board = "skipped_admin_origin";
   }
 
   res.status(200).json(out);
