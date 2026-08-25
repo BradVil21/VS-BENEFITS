@@ -324,6 +324,10 @@ function normalize(c, d) {
 // Put one normalised contact on the right board. Returns the appendRecord
 // result: { ok, action: "created"|"merged"|"unchanged", total, id }.
 //
+// opts.createIfMissing false means "update a card if one exists, but do not
+// open a new one". The sweep uses it for contacts that were merely edited, so
+// editing an old contact in GHL cannot resurrect it into New Lead.
+//
 // opts.reopenClosed decides what a match in a closed stage means. For a webhook
 // or a form submission it is true: the person just raised their hand again, so
 // an old Sold or Lost card is finished business and this deserves a fresh one.
@@ -332,6 +336,7 @@ function normalize(c, d) {
 // settled clients into New Lead every time it ran.
 async function syncToBoards(n, opts) {
   const reopenClosed = !opts || opts.reopenClosed !== false;
+  const createIfMissing = !opts || opts.createIfMissing !== false;
   const now = Date.now();
   const today = todayStr();
 
@@ -351,6 +356,12 @@ async function syncToBoards(n, opts) {
 
   if (n.business) {
     // ---- Business Leads board, Prospect column ----
+    if (!createIfMissing) {
+      const seen = await FS.readStore("biz_leads");
+      if (seen.ok && !seen.items.some(sameContact)) {
+        return { ok: true, action: "unchanged", skipped: "not_on_board" };
+      }
+    }
     return FS.appendRecord(
       "biz_leads",
       {
@@ -391,6 +402,12 @@ async function syncToBoards(n, opts) {
   }
 
   // ---- Individual / family pipeline, New Lead column ----
+  if (!createIfMissing) {
+    const seen = await FS.readStore("leads");
+    if (seen.ok && !seen.items.some(sameContact)) {
+      return { ok: true, action: "unchanged", skipped: "not_on_board" };
+    }
+  }
   return FS.appendRecord(
     "leads",
     {
@@ -587,8 +604,20 @@ async function sweepPortal(d, req, res) {
       if (!n.email && !n.phone) { out.skipped++; continue; }
       if (n.webchat) out.webchat++;
 
+      // A brand new contact is a lead and earns a card. So does a webchat
+      // contact that was updated, because that IS the webchat pattern - the
+      // guest was created empty when the widget opened and has only now handed
+      // over a number. Any other contact that was merely edited gets its card
+      // updated if it has one, but never a new one: editing an old client in
+      // GHL should not drop them back into New Lead.
+      const isNew = added >= cutoff;
+      const lateWebchat = n.webchat && updated >= cutoff;
+
       try {
-        const result = await syncToBoards(n, { reopenClosed: false });
+        const result = await syncToBoards(n, {
+          reopenClosed: false,
+          createIfMissing: isNew || lateWebchat,
+        });
         if (!result || !result.ok) { out.failed++; continue; }
         if (result.action === "created") {
           out.created++;
