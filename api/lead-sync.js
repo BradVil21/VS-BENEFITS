@@ -91,6 +91,16 @@ const LOCATION_ID = process.env.GHL_LOCATION_ID || "cNCy6JUURpb4eBDdb9bU";
 const CLOSED_INDIVIDUAL = ["sold", "no_longer_interested", "disqualified", "ghosted"];
 const CLOSED_BUSINESS = ["won", "lost"];
 
+// The board renders a card by exact stage match, so a stage outside these lists
+// means the card is in the data and in no column - invisible. Keep in step with
+// czSTAGES and BIZ_STAGES in admin.html.
+const VALID_STAGES = [
+  "new_lead", "follow_up", "appointment_scheduled", "quoted", "sixty_plus",
+  "open_enrollment", "affordable_care_act", "ghosted", "no_longer_interested",
+  "disqualified", "sold",
+];
+const VALID_BIZ_STAGES = ["prospect", "contacted", "meeting", "proposal", "won", "lost"];
+
 // ---------- sanitisers ----------
 function clean(v, max) {
   return String(v == null ? "" : v).trim().slice(0, max || 120);
@@ -341,6 +351,7 @@ async function syncToBoards(n, opts) {
         if (!existing.email && n.email) existing.email = n.email;
         if (!existing.phone && n.phone) existing.phone = n.phone;
         if (!existing.employees && n.employees) existing.employees = n.employees;
+        if (!existing.stage || VALID_BIZ_STAGES.indexOf(existing.stage) < 0) existing.stage = "prospect";
         existing.notes = (existing.notes ? existing.notes + "\n" : "") +
           "[" + today + "] New inbound from GoHighLevel (" + n.source + ")";
         existing.updated = now;
@@ -386,6 +397,13 @@ async function syncToBoards(n, opts) {
       if (!existing.phone && n.phone) existing.phone = n.phone;
       if (!existing.zipCode && n.zip) existing.zipCode = n.zip;
       if (!existing.state && n.state) existing.state = n.state;
+      // The quote funnel writes its own card straight to Firestore without a
+      // stage, so a card we merge into can be one the board cannot place - it
+      // renders in no column at all. admin.html repairs that on load, but only
+      // once somebody opens the portal. Repair it here too, so a lead is on the
+      // board from the moment it lands rather than from the next time it is
+      // looked at.
+      if (!existing.stage || VALID_STAGES.indexOf(existing.stage) < 0) existing.stage = "new_lead";
       existing.lastContact = today;
       existing.updated = now;
       existing.activity = (existing.activity || []).concat([
