@@ -4511,6 +4511,162 @@ function czSortOptions(sel){
   return [["az","Name A to Z"],["za","Name Z to A"],["new","Newest first"],["old","Oldest first"],["value","Highest value"]]
     .map(function(o){return '<option value="'+o[0]+'"'+(o[0]===sel?" selected":"")+'>'+o[1]+'</option>';}).join("");
 }
+/* ── CSV import ──────────────────────────────────────────────────────────
+   Bulk-adding leads was the one path that could still put an untracked
+   lead on the board, which is how most of the first 260 arrived with no
+   source. So the source field here is required: the import button does
+   not enable until it is filled in, and every row from the file gets it.
+
+   Rows already in the pipeline (matched on email or phone) are skipped
+   rather than duplicated, so re-importing a file you have already loaded
+   is safe. */
+function czCsvParse(text){
+  var rows=[],row=[],cur="",q=false,i=0;
+  text=String(text||"").replace(/^﻿/,"");
+  for(;i<text.length;i++){
+    var ch=text[i];
+    if(q){
+      if(ch==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else q=false; }
+      else cur+=ch;
+    }else{
+      if(ch==='"')q=true;
+      else if(ch===','){row.push(cur);cur="";}
+      else if(ch==='\n'){row.push(cur);cur="";rows.push(row);row=[];}
+      else if(ch!=='\r')cur+=ch;
+    }
+  }
+  if(cur.length||row.length){row.push(cur);rows.push(row);}
+  return rows.filter(function(r){return r.some(function(c){return String(c).trim()!=="";});});
+}
+
+/* Accepts the column names people actually use, including the ones our own
+   export produces, so a file exported from here can be re-imported. */
+function czCsvField(h){
+  h=String(h||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+  if(/^(firstname|first|fname|givenname)$/.test(h))return "firstName";
+  if(/^(lastname|last|lname|surname|familyname)$/.test(h))return "lastName";
+  if(/^(name|fullname|contactname|client)$/.test(h))return "name";
+  if(/^(email|emailaddress|mail)$/.test(h))return "email";
+  if(/^(phone|phonenumber|mobile|cell|tel|telephone)$/.test(h))return "phone";
+  if(/^(state|st)$/.test(h))return "state";
+  if(/^(zip|zipcode|postal|postalcode)$/.test(h))return "zipCode";
+  if(/^(dob|dateofbirth|birthdate|birthday)$/.test(h))return "dob";
+  if(/^(notes|note|comments|comment)$/.test(h))return "notes";
+  if(/^(value|quotevalue|premium|monthlypremium)$/.test(h))return "quoteValue";
+  if(/^(source|leadsource)$/.test(h))return "source";
+  if(/^(city|town)$/.test(h))return "city";
+  if(/^(address|street|address1)$/.test(h))return "address";
+  return "";
+}
+
+function czImportLeadsCsv(){
+  var inp=document.createElement("input");
+  inp.type="file";inp.accept=".csv,text/csv";inp.style.display="none";
+  document.body.appendChild(inp);
+  inp.addEventListener("change",function(){
+    var f=inp.files&&inp.files[0];
+    if(!f){inp.remove();return;}
+    var fr=new FileReader();
+    fr.onload=function(){
+      try{ czImportPreview(czCsvParse(String(fr.result||"")), f.name); }
+      catch(e){ alert("Could not read that CSV."); }
+      inp.remove();
+    };
+    fr.onerror=function(){alert("Could not read that file.");inp.remove();};
+    fr.readAsText(f);
+  });
+  inp.click();
+}
+
+function czImportPreview(rows,filename){
+  if(rows.length<2){alert("That CSV has no data rows.");return;}
+  var head=rows[0].map(czCsvField);
+  if(head.indexOf("email")<0&&head.indexOf("phone")<0){
+    alert("That CSV needs an email or phone column so leads can be matched and contacted.\n\nColumns found: "+rows[0].join(", "));
+    return;
+  }
+  var body=rows.slice(1);
+
+  var ov=document.createElement("div");
+  ov.setAttribute("style","position:fixed;inset:0;z-index:99999;background:rgba(13,27,42,.5);display:flex;align-items:center;justify-content:center;padding:16px");
+  var card=document.createElement("div");
+  card.setAttribute("style","background:#fff;border-radius:16px;max-width:520px;width:100%;padding:22px;box-shadow:0 20px 60px rgba(13,27,42,.3);font-family:inherit");
+  card.innerHTML='<h3 style="margin:0 0 6px;font-size:19px;font-weight:800;color:#0b2346">Import '+body.length+' lead'+(body.length===1?'':'s')+'</h3>'
+   +'<p style="margin:0 0 16px;font-size:13.5px;color:#5a6b80;line-height:1.5">From <strong>'+escapeHtml(filename)+'</strong>. Leads already in your pipeline are skipped, matched on email or phone.</p>'
+   +'<label style="display:block;font-size:13px;font-weight:600;color:#0b2346;margin-bottom:6px">Where did these come from? <span style="color:#dc2626">*</span></label>'
+   +'<input id="cz-imp-src" list="cz-sources" placeholder="e.g. Bought list — Aug 2026, or Networking event" style="width:100%;padding:10px 12px;border:1.5px solid #cbd5e1;border-radius:9px;font-size:14px;font-family:inherit;outline:none"/>'
+   +'<p style="margin:8px 0 18px;font-size:12px;color:#5a6b80;line-height:1.5">Required. Every lead in this file is tagged with it, so in a month you can tell what this batch was actually worth.</p>'
+   +'<div style="display:flex;gap:8px;justify-content:flex-end"><button id="cz-imp-cancel" style="padding:10px 18px;border-radius:9px;border:1.5px solid #cbd5e1;background:#fff;font-weight:600;cursor:pointer;font-family:inherit">Cancel</button>'
+   +'<button id="cz-imp-go" disabled style="padding:10px 18px;border-radius:9px;border:0;background:#94a3b8;color:#fff;font-weight:700;cursor:not-allowed;font-family:inherit">Import</button></div>';
+  ov.appendChild(card);document.body.appendChild(ov);
+
+  var srcEl=card.querySelector("#cz-imp-src"),goEl=card.querySelector("#cz-imp-go");
+  function sync(){
+    var ok=srcEl.value.trim().length>1;
+    goEl.disabled=!ok;
+    goEl.style.background=ok?"#16447f":"#94a3b8";
+    goEl.style.cursor=ok?"pointer":"not-allowed";
+  }
+  srcEl.addEventListener("input",sync);
+  setTimeout(function(){srcEl.focus();},50);
+  card.querySelector("#cz-imp-cancel").addEventListener("click",function(){ov.remove();});
+  ov.addEventListener("click",function(e){if(e.target===ov)ov.remove();});
+  goEl.addEventListener("click",function(){
+    var res=czImportRows(head,body,srcEl.value.trim());
+    ov.remove();
+    alert("Imported "+res.added+" lead"+(res.added===1?"":"s")+
+          (res.skipped?"\nSkipped "+res.skipped+" already in your pipeline":"")+
+          (res.bad?"\nIgnored "+res.bad+" row"+(res.bad===1?"":"s")+" with no email or phone":""));
+    renderLeads();renderPipeline();
+  });
+}
+
+function czImportRows(head,body,source){
+  var existing=getLeads();
+  function digits(v){return String(v||"").replace(/\D/g,"").slice(-10);}
+  var seenEmail={},seenPhone={};
+  existing.forEach(function(l){
+    if(l.email)seenEmail[String(l.email).toLowerCase()]=1;
+    if(digits(l.phone))seenPhone[digits(l.phone)]=1;
+  });
+
+  var t=todayStr(),added=0,skipped=0,bad=0,out=existing.slice();
+  body.forEach(function(r){
+    var rec={};
+    head.forEach(function(field,i){ if(field)rec[field]=String(r[i]==null?"":r[i]).trim(); });
+    if(rec.name&&!rec.firstName&&!rec.lastName){
+      var parts=rec.name.split(/\s+/);rec.firstName=parts[0]||"";rec.lastName=parts.slice(1).join(" ");
+    }
+    var em=(rec.email||"").toLowerCase(),ph=digits(rec.phone);
+    if(!em&&!ph){bad++;return;}
+    if((em&&seenEmail[em])||(ph&&seenPhone[ph])){skipped++;return;}
+    if(em)seenEmail[em]=1; if(ph)seenPhone[ph]=1;
+
+    out.unshift({
+      id:uid(),
+      firstName:rec.firstName||"",lastName:rec.lastName||"",
+      name:((rec.firstName||"")+" "+(rec.lastName||"")).trim(),
+      email:rec.email||"",phone:rec.phone||"",dob:rec.dob||"",
+      address:rec.address||"",city:rec.city||"",
+      state:(rec.state||"").toUpperCase().slice(0,2),
+      zipCode:rec.zipCode||"",zipcode:rec.zipCode||"",
+      notes:rec.notes||"",
+      quoteValue:Number(rec.quoteValue)||0,
+      status:"new",stage:"new_lead",
+      /* The row's own source column wins if it had one - a file exported
+         from here keeps what it already knew - otherwise the batch label. */
+      source:rec.source||source,
+      sourceDetail:"CSV import",
+      followUpDue:czAddDays(t,czFollowupDays),
+      lastContact:t,createdAt:t,created:Date.now(),updated:Date.now(),
+      activity:[{ts:Date.now(),type:"created",text:"Imported from CSV — "+source}]
+    });
+    added++;
+  });
+  saveLeads(out);
+  return {added:added,skipped:skipped,bad:bad};
+}
+
 function czExportLeadsCsv(){
   var cs=czFiltered().slice().sort(czSortCmp);
   var header=["First Name","Last Name","Email","Phone","Date of Birth","Address","City","State","Zip","Stage","Status","Quote Value","Source","Notes","Created","Last Contact","Follow-up Due","Appointment"];
@@ -4837,18 +4993,19 @@ function czClients(){
     czBind(mount);return;
   }
   mount.innerHTML='<h3 class="cz-h">Leads</h3><p class="cz-lede">Your leads and clients.</p>'
-    +'<div class="cz-toolbar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search name, email, phone, zip…" value="'+escapeHtml(czQuery)+'"/></div><select data-cz-sort class="sortsel" aria-label="Sort leads">'+czSortOptions(czSort)+'</select><button class="cz-btn-soft" data-cz-export="1" title="Download these leads as a CSV">&#11015; Download CSV</button><button class="cz-btn-go" data-cz-add="1">+ Add client</button></div>'
+    +'<div class="cz-toolbar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search name, email, phone, zip…" value="'+escapeHtml(czQuery)+'"/></div><select data-cz-sort class="sortsel" aria-label="Sort leads">'+czSortOptions(czSort)+'</select><button class="cz-btn-soft" data-cz-export="1" title="Download these leads as a CSV">&#11015; Download CSV</button><button class="cz-btn-soft" data-cz-import="1" title="Import leads from a CSV file">&#11014; Import CSV</button><button class="cz-btn-go" data-cz-add="1">+ Add client</button></div>'
     +'<div id="cz-clients-results"></div>';
   var sb=mount.querySelector("[data-cz-search]");if(sb)sb.addEventListener("input",function(){czQuery=sb.value;czClientResults();});
   var so=mount.querySelector("[data-cz-sort]");if(so)so.addEventListener("change",function(){czSort=so.value;czClientResults();});
   mount.querySelectorAll("[data-cz-export]").forEach(function(n){n.addEventListener("click",czExportLeadsCsv);});
+  mount.querySelectorAll("[data-cz-import]").forEach(function(n){n.addEventListener("click",czImportLeadsCsv);});
   mount.querySelectorAll("[data-cz-add]").forEach(function(n){n.addEventListener("click",function(){czOpenModal(null);});});
   czClientResults();
 }
 function czClientResults(){
   var box=$("cz-clients-results");if(!box)return;
   var cs=czFiltered().slice().sort(czSortCmp);
-  var rows=cs.length===0?'<tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:32px">No matches for your search.</td></tr>':cs.map(function(c){
+  var rows=cs.length===0?'<tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:32px">No matches for your search.</td></tr>':cs.map(function(c){
     var fu=czFU(c);
     var fup=fu.key==="none"?'<span class="cz-faint" style="font-size:12px">—</span>':'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span><div class="cz-sub" style="margin-top:2px">'+czPretty(c.followUpDue)+'</div>';
     if(c.apptDate)fup+='<div class="cz-sub" style="margin-top:2px;color:#047857">Appt '+czPrettyDT(c.apptDate)+'</div>';
@@ -4856,10 +5013,11 @@ function czClientResults(){
       +'<td><span class="cz-chip" style="'+czChipStyle(c.stage)+'"><span class="cz-dot" style="'+czDotStyle(c.stage)+'"></span>'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></td>'
       +'<td class="cz-hide-md cz-muted"><div>'+escapeHtml(c.phone||"")+'</div><div class="cz-sub">'+escapeHtml(c.email||"")+'</div></td>'
       +'<td class="cz-hide-lg cz-muted">'+escapeHtml([c.state,c.zipCode||c.zipcode].filter(Boolean).join(" ")||"—")+'</td>'
+      +'<td class="cz-hide-lg cz-muted">'+(c.source?escapeHtml(c.source)+(c.sourceDetail?'<div class="cz-sub">'+escapeHtml(c.sourceDetail)+'</div>':''):'<span style="color:#cbd5e1">no source</span>')+'</td>'
       +'<td class="cz-tright" style="font-weight:500;color:#334155">'+(czVal(c)>0?money(czVal(c)):"—")+'</td>'
       +'<td>'+fup+'</td></tr>';
   }).join("");
-  box.innerHTML='<div class="cz-panel" style="overflow:hidden"><div style="overflow-x:auto"><table class="cz-table"><thead><tr><th>Name</th><th>Stage</th><th class="cz-hide-md">Contact</th><th class="cz-hide-lg">Location</th><th class="cz-tright">Value</th><th>Follow-up</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+  box.innerHTML='<div class="cz-panel" style="overflow:hidden"><div style="overflow-x:auto"><table class="cz-table"><thead><tr><th>Name</th><th>Stage</th><th class="cz-hide-md">Contact</th><th class="cz-hide-lg">Location</th><th class="cz-hide-lg">Source</th><th class="cz-tright">Value</th><th>Follow-up</th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
   czBind(box);
 }
 function czFollowups(){
