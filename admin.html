@@ -4540,6 +4540,12 @@ function czEnsure(){
     if(!l.firstName&&!l.lastName&&l.name){var p=String(l.name).split(/\s+/);l.firstName=p[0]||"";l.lastName=p.slice(1).join(" ");changed=true;}
     if(!l.stage){l.stage=czStatusToStage(l.status);changed=true;}
     else if(l.status==="new"&&l.stage==="follow_up"){l.stage="new_lead";changed=true;}
+    /* A stage that is not one of the board's column ids matches no column, so
+       the card silently renders nowhere. Leads written by the webchat, phone
+       and webhook endpoints carried stage:"new" for a while and were invisible
+       on the board because of exactly this. Map anything unrecognised back
+       onto a real column instead of dropping it. */
+    if(l.stage&&!czMETA[l.stage]){l.stage=czStatusToStage(l.stage);changed=true;}
     if(l.quoteValue==null||l.quoteValue===""){l.quoteValue=leadValue(l);changed=true;}
     if((l.zipCode==null||l.zipCode==="")&&l.zipcode){l.zipCode=l.zipcode;}
     if(!l.lastContact){l.lastContact=l.updated?czYMD(new Date(l.updated)):(l.created?czYMD(new Date(l.created)):todayStr());changed=true;}

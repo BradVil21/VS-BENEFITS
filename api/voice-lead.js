@@ -2,8 +2,11 @@
 //
 // Called by the GHL Voice AI agent ("Amanda") at the end of a call with someone
 // who is NOT already a member. Writes the lead into:
-//   1. Firestore vs_state/leads  -> shows up in the admin portal Pipeline at "New"
-//   2. GoHighLevel               -> contact + tag `phone-lead`, so it lives in the CRM
+//   1. The admin portal (Firestore) -> vs_state/leads for an individual or
+//      family caller, landing in the Pipeline's "New Lead" column, or
+//      vs_state/biz_leads for an employer caller, landing on the Business Leads
+//      board in "Prospect".
+//   2. GoHighLevel                  -> contact + tag `phone-lead`, so it lives in the CRM
 //
 // Family members and business census rows arrive as arrays and get folded into
 // the lead's notes, because the admin pipeline stores one row per lead.
@@ -23,11 +26,7 @@ const GHL_BASE = "https://services.leadconnectorhq.com";
 const GHL_VERSION = "2021-07-28";
 const LOCATION_ID = process.env.GHL_LOCATION_ID || "cNCy6JUURpb4eBDdb9bU";
 
-const FB_API_KEY = process.env.FIREBASE_API_KEY || "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U";
-const FB_PROJECT = process.env.FIREBASE_PROJECT_ID || "vs-benefits-c1da9";
-const FS_LEADS =
-  "https://firestore.googleapis.com/v1/projects/" + FB_PROJECT +
-  "/databases/(default)/documents/vs_state/leads";
+const FS = require("./_fs");
 
 // ---------- sanitisers ----------
 function clean(v, max) {
@@ -122,89 +121,6 @@ async function ghl(path, method, body) {
   }
 }
 
-// ---------- Firestore ----------
-function fsEncode(v) {
-  if (v === null || v === undefined) return { nullValue: null };
-  if (typeof v === "boolean") return { booleanValue: v };
-  if (typeof v === "number") {
-    return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
-  }
-  if (Array.isArray(v)) return { arrayValue: { values: v.map(fsEncode) } };
-  if (typeof v === "object") {
-    const fields = {};
-    Object.keys(v).forEach(function (k) { fields[k] = fsEncode(v[k]); });
-    return { mapValue: { fields: fields } };
-  }
-  return { stringValue: String(v) };
-}
-
-function fsDecode(v) {
-  if (!v || typeof v !== "object") return null;
-  if ("nullValue" in v) return null;
-  if ("booleanValue" in v) return v.booleanValue;
-  if ("integerValue" in v) return Number(v.integerValue);
-  if ("doubleValue" in v) return Number(v.doubleValue);
-  if ("stringValue" in v) return v.stringValue;
-  if ("timestampValue" in v) return v.timestampValue;
-  if ("arrayValue" in v) return (v.arrayValue.values || []).map(fsDecode);
-  if ("mapValue" in v) {
-    const out = {};
-    const f = v.mapValue.fields || {};
-    Object.keys(f).forEach(function (k) { out[k] = fsDecode(f[k]); });
-    return out;
-  }
-  return null;
-}
-
-async function fsToken() {
-  try {
-    const r = await fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + FB_API_KEY,
-      { method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ returnSecureToken: true }) }
-    );
-    if (!r.ok) return null;
-    const j = await r.json();
-    return j.idToken || null;
-  } catch (e) { return null; }
-}
-
-async function pushLead(lead) {
-  const token = await fsToken();
-  if (!token) return { ok: false, reason: "auth_failed" };
-  const auth = { Authorization: "Bearer " + token };
-
-  let items = [];
-  const get = await fetch(FS_LEADS, { headers: auth });
-  if (get.ok) {
-    const doc = await get.json();
-    const cur = doc && doc.fields && doc.fields.items;
-    if (cur) items = fsDecode(cur) || [];
-  } else if (get.status !== 404) {
-    return { ok: false, reason: "read_failed_" + get.status };
-  }
-
-  // Same caller ringing twice in a minute shouldn't create two pipeline cards.
-  const dupe = items.some(function (it) {
-    if (!it || it.source !== "phone-ai") return false;
-    const samePhone = lead.phone && it.phone === lead.phone;
-    const sameEmail = lead.email && it.email === lead.email;
-    return (samePhone || sameEmail) && Math.abs((it.created || 0) - lead.created) < 120000;
-  });
-  if (dupe) return { ok: true, skipped: "duplicate", total: items.length };
-
-  items.unshift(lead);
-  if (items.length > 2000) items = items.slice(0, 2000);
-
-  const put = await fetch(FS_LEADS, {
-    method: "PATCH",
-    headers: Object.assign({ "Content-Type": "application/json" }, auth),
-    body: JSON.stringify({ fields: { items: fsEncode(items), ts: fsEncode(Date.now()) } }),
-  });
-  if (!put.ok) return { ok: false, reason: "write_failed_" + put.status };
-  return { ok: true, total: items.length };
-}
-
 module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
   if (req.method === "OPTIONS") { res.status(204).end(); return; }
@@ -230,6 +146,7 @@ module.exports = async (req, res) => {
     income:    normIncome(d.income || d.yearlyIncome),
     pain:      normPain(d.painPoint || d.pain_point || d.reason),
     coverageType: clean(d.coverageType || d.coverage_type, 30).toLowerCase(), // individual | family | business
+    company:   clean(d.company || d.businessName || d.business_name, 120),
     employeeCount: clean(d.employeeCount || d.employee_count, 8),
     familyCount:   clean(d.familyCount || d.family_count, 8),
     bestContact:   clean(d.bestContact || d.best_contact, 120),
@@ -246,6 +163,7 @@ module.exports = async (req, res) => {
   const lines = [];
   if (p.pain) lines.push("Reason for looking: " + p.pain);
   if (p.coverageType) lines.push("Coverage type: " + p.coverageType);
+  if (p.company) lines.push("Business: " + p.company);
   if (p.income) lines.push("Household income: $" + p.income);
   if (p.bestContact) lines.push("Best way to reach: " + p.bestContact);
 
@@ -300,7 +218,11 @@ module.exports = async (req, res) => {
     zipCode: p.zip,
     notes: lines.join("\n"),
     quoteValue: 0,
-    stage: "new",
+    status: "new",
+    // Must match a column id in admin.html's czSTAGES. It used to be "new",
+    // which matches no column, so phone leads landed in the portal's data but
+    // never appeared on the pipeline board.
+    stage: "new_lead",
     followUpDue: today,
     lastContact: today,
     createdAt: today,
@@ -314,13 +236,58 @@ module.exports = async (req, res) => {
     activity: [{ ts: now, type: "created", text: "Captured by the phone AI agent" }],
   };
 
-  const out = { ok: true, leadId: lead.id };
+  // An employer calling about covering their staff belongs on the Business
+  // Leads board, not in the individual pipeline - the caller already told the
+  // agent which one they are, so no guessing is needed here.
+  const business = p.coverageType === "business";
+
+  const bizLead = {
+    id: "ph_" + now.toString(36) + Math.random().toString(36).slice(2, 8),
+    company: p.company || ((p.firstName + " " + p.lastName).trim() || p.phone),
+    contact: (p.firstName + " " + p.lastName).trim(),
+    niche: "",
+    employees: p.employeeCount || "",
+    requestedCoverage: "",
+    currentlyInsured: "",
+    coverageStart: "",
+    stage: "prospect",
+    email: p.email,
+    phone: p.phone,
+    source: "Phone AI agent",
+    nextFollowUp: today,
+    notes: lines.join("\n"),
+    created: now,
+    updated: now,
+  };
+
+  const out = { ok: true, leadId: business ? bizLead.id : lead.id };
+  out.pipelineName = business ? "business" : "individual";
+
+  // A caller who rings twice in a row should not become two cards, and one who
+  // is already being worked should update in place rather than jump the board.
+  function sameCaller(x) {
+    if (p.email && String(x.email || "").toLowerCase() === p.email) return true;
+    if (p.phone && String(x.phone || "").replace(/\D/g, "").slice(-10) === String(p.phone).replace(/\D/g, "").slice(-10)) return true;
+    return false;
+  }
+  function touch(existing) {
+    existing.notes = (existing.notes ? existing.notes + "\n" : "") +
+      "[" + today + "] Called again - handled by the phone AI agent";
+    existing.updated = now;
+    return true;
+  }
 
   // ---- 1. admin pipeline ----
   try {
-    const push = await pushLead(lead);
+    const push = business
+      ? await FS.appendRecord("biz_leads", bizLead, function (x) {
+          return x.stage !== "won" && x.stage !== "lost" && sameCaller(x);
+        }, touch)
+      : await FS.appendRecord("leads", lead, function (x) {
+          return ["sold", "no_longer_interested", "disqualified", "ghosted"].indexOf(x.stage) < 0 && sameCaller(x);
+        }, touch);
     out.pipeline = Boolean(push.ok);
-    if (push.skipped) out.pipelineSkipped = push.skipped;
+    if (push.action) out.pipelineAction = push.action;
     if (!push.ok) out.pipelineError = push.reason;
   } catch (e) { out.pipeline = false; out.pipelineError = "exception"; }
 

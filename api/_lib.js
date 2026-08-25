@@ -243,7 +243,49 @@ function bizAlertEmail(d) {
   return shell(inner, "New business quote request");
 }
 
+
+// ---------- Lead routing (individual/family vs business) ----------
+// One place decides which portal pipeline a lead belongs in, so the webchat,
+// the phone agent and the generic GHL webhook can never disagree about it.
+//
+// The decision is tag-driven: a contact carrying any of these tags in GHL is an
+// employer/group lead and belongs on the Business Leads board. Extend the list
+// without a deploy through the GHL_BUSINESS_TAGS env var (comma separated).
+const BUSINESS_TAGS = [
+  "business-lead", "business", "biz-lead", "group-quote", "group-health",
+  "group-lead", "employer", "employer-lead", "small-business", "company",
+];
+
+// Tags reach us as an array, a comma string, or occasionally a JSON string.
+function normTags(v) {
+  let raw = v;
+  if (typeof raw === "string") {
+    const t = raw.trim();
+    if (t.charAt(0) === "[") { try { raw = JSON.parse(t); } catch (e) { raw = t.split(","); } }
+    else raw = t.split(",");
+  }
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map(function (t) { return String(t == null ? "" : t).trim().toLowerCase().replace(/\s+/g, "-").slice(0, 60); })
+    .filter(Boolean);
+}
+
+// `explicit` is an override a caller already knows ("business", "individual",
+// "family", "group"...). It always beats the tags.
+function isBusinessLead(explicit, tags) {
+  const e = String(explicit == null ? "" : explicit).trim().toLowerCase();
+  if (e === "business" || e === "group" || e === "employer" || e === "biz") return true;
+  if (e === "individual" || e === "family" || e === "personal") return false;
+  const extra = String(process.env.GHL_BUSINESS_TAGS || "")
+    .split(",").map(function (t) { return t.trim().toLowerCase().replace(/\s+/g, "-"); })
+    .filter(Boolean);
+  const set = {};
+  BUSINESS_TAGS.concat(extra).forEach(function (t) { set[t] = true; });
+  return (tags || []).some(function (t) { return set[t] === true; });
+}
+
 module.exports = {
   CFG, esc, ghl, upsertContact, addNoteToContact, addTagsToContact, uploadFile, sendEmail,
   shell, btn, businessLeadEmail, bizAlertEmail,
+  BUSINESS_TAGS, normTags, isBusinessLead,
 };

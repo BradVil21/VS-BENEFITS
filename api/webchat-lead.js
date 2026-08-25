@@ -27,11 +27,7 @@
 
 const L = require("./_lib");
 
-const FB_API_KEY = process.env.FIREBASE_API_KEY || "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U";
-const FB_PROJECT = process.env.FIREBASE_PROJECT_ID || "vs-benefits-c1da9";
-const FS_DOC =
-  "https://firestore.googleapis.com/v1/projects/" + FB_PROJECT +
-  "/databases/(default)/documents/vs_state/leads";
+const FS = require("./_fs");
 
 // ---------- sanitisers ----------
 function clean(v, max) {
@@ -106,98 +102,6 @@ const PAIN_LABEL = {
   "Other": "Other / needs discovery",
 };
 
-// ---------- Firestore REST helpers ----------
-// Encode a plain JS value into Firestore's typed representation.
-function fsEncode(v) {
-  if (v === null || v === undefined) return { nullValue: null };
-  if (typeof v === "boolean") return { booleanValue: v };
-  if (typeof v === "number") {
-    return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
-  }
-  if (Array.isArray(v)) return { arrayValue: { values: v.map(fsEncode) } };
-  if (typeof v === "object") {
-    const fields = {};
-    Object.keys(v).forEach(function (k) { fields[k] = fsEncode(v[k]); });
-    return { mapValue: { fields: fields } };
-  }
-  return { stringValue: String(v) };
-}
-
-// Decode Firestore's typed representation back into plain JS.
-function fsDecode(v) {
-  if (!v || typeof v !== "object") return null;
-  if ("nullValue" in v) return null;
-  if ("booleanValue" in v) return v.booleanValue;
-  if ("integerValue" in v) return Number(v.integerValue);
-  if ("doubleValue" in v) return Number(v.doubleValue);
-  if ("stringValue" in v) return v.stringValue;
-  if ("timestampValue" in v) return v.timestampValue;
-  if ("arrayValue" in v) return (v.arrayValue.values || []).map(fsDecode);
-  if ("mapValue" in v) {
-    const out = {};
-    const f = v.mapValue.fields || {};
-    Object.keys(f).forEach(function (k) { out[k] = fsDecode(f[k]); });
-    return out;
-  }
-  return null;
-}
-
-// Sign in anonymously, exactly as admin.html does in the browser.
-async function fsToken() {
-  const r = await fetch(
-    "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + FB_API_KEY,
-    { method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ returnSecureToken: true }) }
-  );
-  if (!r.ok) return null;
-  const j = await r.json();
-  return j.idToken || null;
-}
-
-// Append one lead to vs_state/leads, preserving everything already there.
-// Read-modify-write: fine at webchat volume, but two leads landing in the
-// same second could theoretically collide. Worth revisiting if volume grows.
-async function pushLeadToPortal(lead) {
-  const token = await fsToken();
-  if (!token) return { ok: false, reason: "auth_failed" };
-  const auth = { Authorization: "Bearer " + token };
-
-  let items = [];
-  const get = await fetch(FS_DOC, { headers: auth });
-  if (get.ok) {
-    const doc = await get.json();
-    const cur = doc && doc.fields && doc.fields.items;
-    if (cur) items = fsDecode(cur) || [];
-  } else if (get.status !== 404) {
-    return { ok: false, reason: "read_failed_" + get.status };
-  }
-
-  // Skip if this exact lead already landed (same phone or email today).
-  const dupe = items.some(function (it) {
-    if (!it) return false;
-    const samePhone = lead.phone && it.phone === lead.phone;
-    const sameEmail = lead.email && it.email === lead.email;
-    return (samePhone || sameEmail) && it.createdAt === lead.createdAt;
-  });
-  if (dupe) return { ok: true, skipped: "duplicate", total: items.length };
-
-  items.push(lead);
-
-  const body = {
-    fields: {
-      items: fsEncode(items),
-      ts: { integerValue: String(Date.now()) },
-    },
-  };
-  const put = await fetch(FS_DOC, {
-    method: "PATCH",
-    headers: Object.assign({ "Content-Type": "application/json" }, auth),
-    body: JSON.stringify(body),
-  });
-  if (!put.ok) return { ok: false, reason: "write_failed_" + put.status };
-  return { ok: true, total: items.length };
-}
-
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -232,6 +136,13 @@ module.exports = async (req, res) => {
   const zip       = clean(d.zip || d.postalCode, 12);
   const notesIn   = clean(d.notes || d.transcript || d.summary, 4000);
   const ghlId     = clean(d.contactId || d.ghl_contact_id, 60);
+  const company   = clean(d.company || d.businessName || d.company_name, 120);
+  const employees = clean(d.employees || d.employeeCount || d.num_employees, 20);
+  // A visitor who tells the chat bot they are covering employees belongs on the
+  // Business Leads board, not in the individual pipeline. The bot flags that
+  // either by tagging the contact or by sending an explicit `pipeline` field.
+  const tags      = L.normTags(d.tags || d.tag || d.contact_tags);
+  const business  = L.isBusinessLead(d.pipeline || d.leadType || d.coverageType || d.type, tags);
 
   // Need at least one durable identifier to be worth writing.
   if (!email && !phone) {
@@ -266,23 +177,78 @@ module.exports = async (req, res) => {
     address: "",
     state: state,
     zipCode: zip,
+    company: company,
     notes: noteLines.join("\n"),
     quoteValue: 0,
-    stage: "new",
+    status: "new",
+    // Must be one of the column ids in admin.html's czSTAGES. It used to be
+    // "new" here, which matches no column, so chat leads were written to the
+    // portal and then rendered nowhere on the board.
+    stage: "new_lead",
     followUpDue: today,
     lastContact: today,
     createdAt: today,
     created: Date.now(),
+    updated: Date.now(),
     source: "webchat",
     painPoint: pain,
     yearlyIncome: income,
+    ghlContactId: ghlId,
     activity: [{ ts: Date.now(), type: "created", text: "Captured from website live chat" }],
   };
 
+  // The Business Leads board stores a different record shape than the
+  // individual pipeline, so a business chat lead is rebuilt rather than
+  // squeezed into a lead card.
+  const bizLead = {
+    id: "wc_" + Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+    company: company || fullName,
+    contact: (firstName + " " + lastName).trim(),
+    niche: clean(d.niche || d.industry, 60),
+    employees: employees,
+    requestedCoverage: clean(d.requestedCoverage || d.coverage, 80),
+    currentlyInsured: clean(d.currentlyInsured, 40),
+    coverageStart: clean(d.coverageStart, 40),
+    stage: "prospect",
+    email: email,
+    phone: phone,
+    source: "Website live chat",
+    nextFollowUp: today,
+    notes: noteLines.join("\n"),
+    ghlContactId: ghlId,
+    created: Date.now(),
+    updated: Date.now(),
+  };
+
+  function sameLead(x) {
+    if (ghlId && x.ghlContactId && x.ghlContactId === ghlId) return true;
+    if (email && String(x.email || "").toLowerCase() === email) return true;
+    if (phone && String(x.phone || "").replace(/\D/g, "").slice(-10) === phone) return true;
+    return false;
+  }
+
+  function touch(existing) {
+    existing.notes = (existing.notes ? existing.notes + "\n" : "") +
+      "[" + today + "] Came back through the website live chat";
+    if (!existing.ghlContactId && ghlId) existing.ghlContactId = ghlId;
+    existing.updated = Date.now();
+    return true;
+  }
+
   // ---- 1. VS admin portal (Firestore) ----
+  // Appending through the shared helper means a chat lead that is already on
+  // the board (they came back, or the GHL webhook beat us to it) updates the
+  // existing card instead of creating a second one.
   let portal = { ok: false, reason: "not_attempted" };
-  try { portal = await pushLeadToPortal(lead); }
-  catch (e) { portal = { ok: false, reason: "exception" }; }
+  try {
+    portal = business
+      ? await FS.appendRecord("biz_leads", bizLead, function (x) {
+          return x.stage !== "won" && x.stage !== "lost" && sameLead(x);
+        }, touch)
+      : await FS.appendRecord("leads", lead, function (x) {
+          return ["sold", "no_longer_interested", "disqualified", "ghosted"].indexOf(x.stage) < 0 && sameLead(x);
+        }, touch);
+  } catch (e) { portal = { ok: false, reason: "exception" }; }
 
   // ---- 2. Internal alert email ----
   try {
@@ -320,5 +286,10 @@ module.exports = async (req, res) => {
     });
   } catch (e) { /* non-fatal */ }
 
-  res.status(200).json({ ok: true, portal: portal, leadId: lead.id });
+  res.status(200).json({
+    ok: true,
+    pipeline: business ? "business" : "individual",
+    portal: portal,
+    leadId: business ? bizLead.id : lead.id,
+  });
 };
