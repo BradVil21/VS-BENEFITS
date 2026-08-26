@@ -452,13 +452,14 @@ footer a:hover{color:#fff}
         <p class="sub">A licensed VS Health Benefits advisor will send real plan options and pricing for your business. Free, no obligation, and we handle all the paperwork.</p>
         <div class="lead-row two">
           <div class="lead-field" id="lf-biz"><label>Business name</label><input type="text" id="l-biz" placeholder="Acme LLC" autocomplete="organization" /><div class="msg">Please enter your business name.</div></div>
-          <div class="lead-field" id="lf-name"><label>Your name</label><input type="text" id="l-name" placeholder="Jane Owner" autocomplete="name" /><div class="msg">Please enter your name.</div></div>
+          <div class="lead-field" id="lf-name"><label>Your first name</label><input type="text" id="l-first" placeholder="Jane" autocomplete="given-name" /><div class="msg">Please enter your first name.</div></div>
         </div>
         <div class="lead-row two" style="margin-top:14px">
+          <div class="lead-field" id="lf-last"><label>Your last name</label><input type="text" id="l-last" placeholder="Owner" autocomplete="family-name" /><div class="msg">Please enter your last name.</div></div>
           <div class="lead-field" id="lf-email"><label>Work email</label><input type="email" id="l-email" placeholder="jane@company.com" autocomplete="email" /><div class="msg">Please enter a valid email address.</div></div>
-          <div class="lead-field" id="lf-phone"><label>Phone</label><input type="tel" id="l-phone" placeholder="(305) 555-0100" autocomplete="tel" /><div class="msg">Please enter a valid phone number.</div></div>
         </div>
-        <div class="lead-row" style="margin-top:14px">
+        <div class="lead-row two" style="margin-top:14px">
+          <div class="lead-field" id="lf-phone"><label>Phone</label><input type="tel" id="l-phone" placeholder="(305) 555-0100" autocomplete="tel" /><div class="msg">Please enter a valid phone number.</div></div>
           <div class="lead-field" id="lf-emp2"><label>Number of employees</label><input type="number" id="l-emp" min="1" max="200" placeholder="5" inputmode="numeric" /></div>
         </div>
         <button class="lead-submit" id="l-submit" type="button">Send Me My Group Quote &rarr;</button>
@@ -639,42 +640,64 @@ footer a:hover{color:#fff}
   function setErr(id,on,msg){ var el=document.getElementById(id); if(!el) return; el.classList[on?'add':'remove']('err'); if(msg){ var m=el.querySelector('.msg'); if(m) m.textContent=msg; } }
 
   // ---- LEAD PIPELINE ----
-  var WEBHOOK_URL='https://services.leadconnectorhq.com/hooks/V5Px5jvE14SWLdNrFeGL/webhook-trigger/d9cf69ed-4e52-4c7d-bf11-580204f9cce7';
+  // The WEBHOOK_URL that used to live here posted to GHL location
+  // V5Px5jvE14SWLdNrFeGL, which is not this business's location
+  // (cNCy6JUURpb4eBDdb9bU). Every group quote request this page collected went
+  // to somebody else's GoHighLevel. Removed - /api/lead-sync does the CRM write
+  // server-side with the right token.
   var GADS_CONVERSION_LABEL='PASTE_LABEL_HERE'; // same label as /quote
   var fired=false;
   function fireConv(){ if(fired) return; fired=true; try{ if(typeof gtag!=='function') return; gtag('event','generate_lead',{currency:'USD',value:0,lead_type:'business'}); if(GADS_CONVERSION_LABEL.indexOf('PASTE_')===-1) gtag('event','conversion',{send_to:'AW-17950389267/'+GADS_CONVERSION_LABEL,value:0,currency:'USD'}); }catch(e){} }
+  // `type:'business'` and the business-lead tag are what route this to the
+  // Business Leads pipeline. Without them isBusinessLead() falls through and
+  // every group quote lands in Individuals & Families. The name has to arrive
+  // pre-split, because the API reads firstName/lastName and nothing else.
   function ghlLead(l){ try{
     var email=(l.email||"").trim(), phone=(l.phone||"").trim();
     if(!email && !phone) return;
     fetch('/api/lead-sync',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
-      body:JSON.stringify({firstName:l.firstName||"",lastName:l.lastName||"",email:email,phone:phone,
-        company:l.company||"",zip:l.zip||"",source:'Small Business Calculator',tags:['sb-calculator']})}).catch(function(){});
+      body:JSON.stringify({
+        firstName:l.firstName||"", lastName:l.lastName||"", email:email, phone:phone,
+        company:l.company||"", zip:l.zip||"",
+        type:'business',
+        employees:l.employees||"",
+        source:'small-business-calculator',
+        tags:['business-lead','sb-calculator','website-lead'],
+        notes:l.notes||""
+      })}).catch(function(){});
   }catch(e){}
   }
 
   document.getElementById('l-submit').addEventListener('click', function(){
     var biz=document.getElementById('l-biz').value.trim();
-    var name=document.getElementById('l-name').value.trim();
+    var first=document.getElementById('l-first').value.trim();
+    var last=document.getElementById('l-last').value.trim();
     var email=document.getElementById('l-email').value.trim();
     var phone=document.getElementById('l-phone').value.trim();
     var empv=document.getElementById('l-emp').value.trim()||document.getElementById('emp').value.trim();
     var ok=true;
     setErr('lf-biz', !biz, 'Please enter your business name.'); if(!biz) ok=false;
-    setErr('lf-name', !name, 'Please enter your name.'); if(!name) ok=false;
+    setErr('lf-name', !first, 'Please enter your first name.'); if(!first) ok=false;
+    setErr('lf-last', !last, 'Please enter your last name.'); if(!last) ok=false;
     if(!isValidEmail(email)){ setErr('lf-email',true,'Please enter a valid email address.'); ok=false; }
     else { var s=suggestEmail(email); if(s){ setErr('lf-email',true,'Did you mean '+s+'? Please double-check your email.'); ok=false; } else setErr('lf-email',false); }
     setErr('lf-phone', !isValidPhone(phone), 'Please enter a valid phone number.'); if(!isValidPhone(phone)) ok=false;
     if(!ok) return;
 
     var btn=this; btn.disabled=true; btn.textContent='Sending...';
-    var lead={ type:'business', company:biz, name:name, email:email, phone:phone, employees:empv,
-      status:'new', stage:'prospect', source:'group-cost-calculator',
-      notes:'Group cost calculator lead. Employees: '+empv, created:Date.now(), submitted_at:new Date().toISOString() };
-    fireConv(); ghlLead(lead);
-    var payload=Object.assign({}, lead, {source:window.location.href});
-    var done=function(){ document.getElementById('lead-form-wrap').style.display='none'; document.getElementById('lead-success').style.display='block'; document.getElementById('lead').scrollIntoView({behavior:'smooth',block:'center'}); };
-    if(WEBHOOK_URL && WEBHOOK_URL.indexOf('http')===0){ fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(function(){}).finally(done); } else { done(); }
+    // The current on-screen estimate travels with the lead, so the advisor
+    // opens the card already knowing what this owner was quoted.
+    var estNote='Group cost calculator. '+empv+' employees. On-screen estimate: employer '+
+      txt('rc-employer')+', total premium '+txt('rc-total')+', annual employer cost '+txt('rc-annual')+'.';
+    ghlLead({ firstName:first, lastName:last, company:biz, email:email, phone:phone,
+              employees:empv, notes:estNote });
+    fireConv();
+    document.getElementById('lead-form-wrap').style.display='none';
+    document.getElementById('lead-success').style.display='block';
+    document.getElementById('lead').scrollIntoView({behavior:'smooth',block:'center'});
   });
+
+  function txt(id){ var e=document.getElementById(id); return e?e.textContent.replace(/\s+/g,' ').trim():''; }
 
   // ---- NAV + SCROLL ----
   var mt=document.querySelector('.menu-toggle');
