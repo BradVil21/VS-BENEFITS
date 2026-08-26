@@ -205,7 +205,7 @@ footer a:hover{color:#fff}
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
 {"@type":"Question","name":"Can I get health insurance outside of open enrollment?","acceptedAnswer":{"@type":"Answer","text":"Yes, if you have had a qualifying life event. Losing job-based coverage, getting married, having a baby, moving to a new county or state, losing Medicaid, or aging off a parent's plan at 26 all open a special enrollment period. In most cases you have 60 days from the date of the event to pick a plan."}},
 {"@type":"Question","name":"How long is a special enrollment period?","acceptedAnswer":{"@type":"Answer","text":"Sixty days from the date of the qualifying life event. If you are losing coverage rather than gaining a household member, the window usually also opens 60 days before the loss, so you can enroll early and avoid a gap."}},
-{"@type":"Question","name":"What happens if I miss the 60-day window?","acceptedAnswer":{"@type":"Answer","text":"You generally have to wait for open enrollment, which runs November 1 through December 15 for coverage starting January 1. Medicaid and CHIP have no enrollment window and accept applications year round, so it is worth checking whether you qualify."}},
+{"@type":"Question","name":"What happens if I miss the 60-day window?","acceptedAnswer":{"@type":"Answer","text":"You generally have to wait for open enrollment, which runs November 1 through January 15, with December 15 the cutoff for coverage starting January 1. Medicaid and CHIP have no enrollment window and accept applications year round, so it is worth checking whether you qualify."}},
 {"@type":"Question","name":"What proof do I need for a special enrollment period?","acceptedAnswer":{"@type":"Answer","text":"It depends on the event. A loss of coverage usually needs a letter from the employer or insurer showing the last day of coverage. A marriage needs the certificate, a birth needs the birth certificate or hospital record, and a move needs proof of the old and new addresses. Documents are typically due within 30 days of picking a plan."}},
 {"@type":"Question","name":"When does coverage start after a special enrollment period?","acceptedAnswer":{"@type":"Answer","text":"For most events, coverage starts the first day of the month after you select a plan. For a birth, adoption, or foster placement, coverage can be backdated to the date of the event. If you enroll before a known loss of coverage, coverage can start the day the old plan ends, with no gap."}}
 ]}
@@ -228,7 +228,7 @@ footer a:hover{color:#fff}
 </style>
 </head>
 <body>
-<div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><a href="/quote" style="color:#fff;text-decoration:none;display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span>Open Enrollment for 2027 coverage runs Nov 1 &ndash; Dec 15. Get ahead of the deadline.</span><span style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap">Get a Free Quote &rarr;</span></a></div>
+<div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><a href="/quote" style="color:#fff;text-decoration:none;display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span>Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Enroll by Dec 15 for a January 1 start.</span><span style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap">Get a Free Quote &rarr;</span></a></div>
 
 <header class="site-header">
   <div class="container nav-wrap">
@@ -329,7 +329,7 @@ footer a:hover{color:#fff}
     <div class="faq">
       <details><summary>Can I get health insurance outside of open enrollment?</summary><p>Yes, if you have had a qualifying life event. Losing job-based coverage, getting married, having a baby, moving to a new county or state, losing Medicaid, or aging off a parent&rsquo;s plan at 26 all open a special enrollment period. In most cases you have 60 days from the date of the event to pick a plan.</p></details>
       <details><summary>How long is a special enrollment period?</summary><p>Sixty days from the date of the qualifying life event. If you are losing coverage rather than gaining a household member, the window usually also opens 60 days before the loss, so you can enroll early and avoid a gap in coverage.</p></details>
-      <details><summary>What happens if I miss the 60-day window?</summary><p>You generally wait for open enrollment, which runs November 1 through December 15 for coverage starting January 1. Medicaid and CHIP have no enrollment window and accept applications year round, so it is always worth checking whether you qualify. An advisor can also tell you whether something you did not think of counts as an event.</p></details>
+      <details><summary>What happens if I miss the 60-day window?</summary><p>You generally wait for open enrollment, which runs November 1 through January 15, with December 15 the cutoff for coverage starting January 1. Medicaid and CHIP have no enrollment window and accept applications year round, so it is always worth checking whether you qualify. An advisor can also tell you whether something you did not think of counts as an event.</p></details>
       <details><summary>What proof will I need?</summary><p>It depends on the event. A loss of coverage usually needs a letter from the employer or insurer showing the last day of coverage. A marriage needs the certificate, a birth needs the birth certificate or hospital record, and a move needs proof of both the old and new address. Documents are typically due within 30 days of picking a plan, and coverage can be held up until they are in.</p></details>
       <details><summary>Does quitting my job count, or only being laid off?</summary><p>Both. What matters is that you lost the coverage, not why. Voluntarily leaving a job, being laid off, being fired, or having your hours cut below the eligibility threshold all open the window. Choosing to drop your employer plan while still employed generally does not.</p></details>
       <details><summary>Why do you ask for my name and phone number?</summary><p>Because a 60-day window is short and the answer usually needs a follow-up: which plans are actually sold in your ZIP, what document the marketplace will want, and whether your coverage can start without a gap. Your email is optional. There is no cost and no obligation.</p></details>
@@ -544,17 +544,25 @@ document.addEventListener("DOMContentLoaded",function(){
     return d;
   }
   function daysBetween(a,b){ return Math.round((b-a)/DAY); }
+  function days(n){ return n+(n===1?" day":" days"); }
   function fmt(d){ return d.toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}); }
   function addDays(d,n){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()+n); }
 
   // Open enrollment for the next plan year: Nov 1 through Dec 15. If we are
   // already past Nov 1 this year, the relevant Nov 1 is this year's.
+  // Verified 2026-08-26: open enrollment runs Nov 1 through Jan 15 of the
+  // FOLLOWING year, not Dec 15. The HHS rule that would have shortened it was
+  // vacated in June 2026. Dec 15 is only the cutoff for a January 1 start, and
+  // conflating the two tells somebody enrollment closed a month before it did.
   function nextOpenEnrollment(){
     var t=todayLocal(), y=t.getFullYear();
-    var nov=new Date(y,10,1), dec=new Date(y,11,15);
-    if(t>dec) return { start:new Date(y+1,10,1), end:new Date(y+1,11,15), open:false };
-    if(t>=nov) return { start:nov, end:dec, open:true };
-    return { start:nov, end:dec, open:false };
+    // The window that is running or next: it starts Nov 1 of some year and
+    // ends Jan 15 of the year after.
+    var startY = (t < new Date(y,0,16)) ? y-1 : y;   // still inside last Nov's window
+    var start=new Date(startY,10,1), end=new Date(startY+1,0,15);
+    if(t>end){ start=new Date(startY+1,10,1); end=new Date(startY+2,0,15); }
+    return { start:start, end:end, open:(t>=start && t<=end),
+             jan1cut:new Date(start.getFullYear(),11,15) };
   }
 
   function show(id,on){var el=document.getElementById(id); if(el){el.hidden=!on;}}
@@ -611,7 +619,7 @@ document.addEventListener("DOMContentLoaded",function(){
         row("Your situation","No qualifying life event")+
         row("Open enrollment", fmt(oe.start)+" to "+fmt(oe.end))+
         total(oe.open?"Days left to enroll":"Days until open enrollment",
-              String(Math.max(0, daysBetween(t, oe.open?oe.end:oe.start)))+" days",
+              days(Math.max(0, daysBetween(t, oe.open?oe.end:oe.start))),
               oe.open?"var(--ok)":"");
       note = oe.open
         ? "<strong>Open enrollment is running right now.</strong> Anyone can enroll, no life event needed. Coverage starts January 1 if you pick a plan by "+fmt(oe.end)+"."
@@ -635,7 +643,7 @@ document.addEventListener("DOMContentLoaded",function(){
             row("Date", fmt(evDate))+
             row("Window", "60 days before and 60 days after")+
             row("Last day to enroll", fmt(deadline))+
-            total("Days you have", untilDeadline+" days", "var(--ok)");
+            total("Days you have", days(untilDeadline), "var(--ok)");
           note="<strong>Enroll before "+fmt(evDate)+" and you never go uncovered.</strong> Because this is a loss of coverage you can see coming, the marketplace lets you pick a plan in advance and start it the day the old one ends. Waiting until after the loss usually means a gap of at least a few weeks.";
         } else {
           status="too-early";
@@ -677,7 +685,7 @@ document.addEventListener("DOMContentLoaded",function(){
           row("Your 60 days ended", fmt(deadline))+
           row("Open enrollment", fmt(oe.start)+" to "+fmt(oe.end))+
           total(oe.open?"Days left to enroll":"Days until open enrollment",
-                String(Math.max(0, daysBetween(t, oe.open?oe.end:oe.start)))+" days",
+                days(Math.max(0, daysBetween(t, oe.open?oe.end:oe.start))),
                 oe.open?"var(--ok)":"");
         note = oe.open
           ? "<strong>Good timing anyway.</strong> Open enrollment is running now, so you can enroll without needing an event at all. Coverage starts January 1."
