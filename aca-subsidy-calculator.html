@@ -13,7 +13,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ACA Subsidy Calculator 2027: Estimate Your Price</title>
-<meta name="description" content="Estimate your 2027 ACA subsidy and real monthly premium by income and household size. Free, no email required, results in seconds." />
+<meta name="description" content="Estimate your 2027 ACA subsidy by income and household size. Free, no email required, results in seconds." />
 <meta name="keywords" content="ACA subsidy calculator, health insurance subsidy calculator, premium tax credit calculator, obamacare subsidy calculator, health insurance cost estimator, marketplace subsidy calculator, how much is health insurance, aca calculator 2026, aca calculator 2027, subsidy cliff calculator, health insurance quote estimator" />
 <link rel="canonical" href="https://www.vshealthbenefits.com/aca-subsidy-calculator" />
 <meta name="robots" content="index,follow" />
@@ -21,13 +21,13 @@
 <meta name="geo.placename" content="Miami" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="ACA Subsidy Calculator 2027: Estimate Your Price" />
-<meta property="og:description" content="Estimate your 2027 ACA subsidy and real monthly premium by income and household size. Free, no email required, results in seconds." />
+<meta property="og:description" content="Estimate your 2027 ACA subsidy by income and household size. Free, no email required, results in seconds." />
 <meta property="og:url" content="https://www.vshealthbenefits.com/aca-subsidy-calculator" />
 <meta property="og:site_name" content="VS Health Benefits" />
 <meta property="og:image" content="https://www.vshealthbenefits.com/compressed/familyhappy.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="ACA Subsidy Calculator 2027: Estimate Your Price" />
-<meta name="twitter:description" content="Estimate your 2027 ACA subsidy and real monthly premium by income and household size. Free, no email required, results in seconds." />
+<meta name="twitter:description" content="Estimate your 2027 ACA subsidy by income and household size. Free, no email required, results in seconds." />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -97,6 +97,13 @@ p{margin:0 0 1em;color:var(--ink-2)}
 .calc-btn{margin-top:14px;width:100%;min-height:54px;font-size:1.06rem;background:linear-gradient(120deg,var(--blue-700),var(--teal));color:#fff;border:0;border-radius:12px;font-weight:700;cursor:pointer;font-family:inherit}
 .calc-btn:hover{filter:brightness(1.05)}
 .results{display:none;margin-top:24px;border-top:1px solid var(--line);padding-top:22px}
+/* Tier prices stay blurred until the visitor identifies themselves. The
+   subsidy number above is always free - that is the hook, and gating it
+   would break the promise the page makes in search results. */
+.tiers.locked .amt{filter:blur(9px);user-select:none;pointer-events:none}
+.tiers.locked .tier-grid{position:relative}
+.gate-err{color:#b91c1c;font-size:.9rem;font-weight:600;margin:10px 0 0}
+.gate-fine{font-size:.76rem;color:#64748b;line-height:1.5;margin:10px 0 0}
 .results.show{display:block;animation:fade .3s}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .res-hl{background:linear-gradient(135deg,#e9f9f4,#f4f8fe);border:1px solid #bfe8dd;border-radius:16px;padding:20px;text-align:center;margin-bottom:16px}
@@ -262,16 +269,16 @@ footer a:hover{color:#fff}
           <div class="field"><label>Your age</label><input id="age1" type="number" min="18" max="64" inputmode="numeric" placeholder="40" /></div>
           <div class="field"><label>Spouse age <span class="hint">(if applying together)</span></label><input id="age2" type="number" min="18" max="64" inputmode="numeric" placeholder="Optional" /></div>
           <div class="field"><label>Children under 21 <span class="hint">(on the plan)</span></label><input id="kids" type="number" min="0" max="8" inputmode="numeric" placeholder="0" /></div>
-          <div class="field"><label>ZIP code <span class="hint">(optional)</span></label><input id="zip" type="text" inputmode="numeric" maxlength="5" placeholder="33101" /></div>
+          <div class="field"><label>ZIP code</label><input id="zip" type="text" inputmode="numeric" maxlength="5" placeholder="33101" required /></div>
         </div>
         <button class="calc-btn" id="calc-btn" type="button">Calculate My Estimate</button>
 
         <div class="results" id="results">
           <div class="res-hl"><div class="big" id="r-subsidy">$0/mo</div><div class="lbl">Estimated monthly subsidy</div></div>
           <div class="breakdown" id="r-breakdown"></div>
-          <div class="tiers">
+          <div class="tiers" id="tier-wrap">
             <h4>Estimated monthly cost by plan type, after your subsidy</h4>
-            <div class="tier-grid">
+            <div class="tier-grid" id="tier-grid">
               <div class="tier"><div class="name">Bronze</div><div class="amt" id="r-bronze">$0</div><div class="per">per month</div></div>
               <div class="tier mid"><div class="name">Silver</div><div class="amt" id="r-silver">$0</div><div class="per">per month</div></div>
               <div class="tier"><div class="name">Gold</div><div class="amt" id="r-gold">$0</div><div class="per">per month</div></div>
@@ -279,33 +286,23 @@ footer a:hover{color:#fff}
           </div>
           <div class="res-note" id="r-note"></div>
 
-          <div class="advisor" id="advisor-prompt">
-            <h3>Want help setting up the right plan?</h3>
-            <p>This is an estimate. A licensed VS Health Benefits advisor can review your real options and set you up with the plan that best fits your needs, at no cost to you.</p>
-            <p class="ask">Would you like an advisor to reach out and assist you?</p>
-            <div class="advisor-btns">
-              <button type="button" class="btn-yes" id="advisor-yes">Yes, have an advisor contact me</button>
-              <button type="button" class="btn-no" id="advisor-no-btn">No thanks</button>
-            </div>
-          </div>
-
-          <div class="advisor-form" id="advisor-form" hidden>
-            <h3>Great, where can your advisor reach you?</h3>
-            <p>Enter your details and a licensed advisor will contact you shortly. Your estimate is sent along so they can jump right in.</p>
+          <div class="advisor" id="lead-gate">
+            <h3>See your plan prices</h3>
+            <p>Your subsidy estimate is above. Enter your details to unlock your estimated Bronze, Silver and Gold monthly costs — and a licensed VS Health Benefits advisor will follow up with the real plans available in your ZIP, at no cost to you.</p>
             <div class="grid">
-              <div class="field"><label>Full name</label><input id="ad-name" type="text" placeholder="Your name" /></div>
-              <div class="field"><label>Phone</label><input id="ad-phone" type="tel" inputmode="tel" placeholder="(555) 555-5555" /></div>
-              <div class="field"><label>Email</label><input id="ad-email" type="email" placeholder="you@email.com" /></div>
+              <div class="field"><label>First name</label><input id="ad-first" type="text" autocomplete="given-name" placeholder="First name" /></div>
+              <div class="field"><label>Last name</label><input id="ad-last" type="text" autocomplete="family-name" placeholder="Last name" /></div>
+              <div class="field"><label>Phone</label><input id="ad-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-5555" /></div>
+              <div class="field"><label>Email <span class="hint">(optional)</span></label><input id="ad-email" type="email" autocomplete="email" placeholder="you@email.com" /></div>
               <div class="field"><label>Best time to reach you</label>
                 <select id="ad-time"><option>Anytime</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select></div>
             </div>
-            <button class="calc-btn" id="advisor-submit" type="button">Request My Callback</button>
-            <div class="advisor-success" id="advisor-success" hidden></div>
+            <div class="gate-err" id="gate-err" hidden></div>
+            <button class="calc-btn" id="advisor-submit" type="button">Show My Plan Prices</button>
+            <p class="gate-fine">We never sell your information. By submitting you agree a licensed advisor may contact you about coverage.</p>
           </div>
 
-          <div class="advisor-declined" id="advisor-declined" hidden>
-            <p><strong>No problem at all.</strong> Your estimate is saved above whenever you are ready. If you change your mind, you can <a href="/quote">get a full quote</a> or call us at <a href="tel:+19548251009">(954) 825-1009</a> anytime.</p>
-          </div>
+          <div class="advisor-success" id="advisor-success" hidden></div>
 
           <p class="disc-mini" id="r-disclaimer"></p>
         </div>
@@ -512,7 +509,11 @@ document.addEventListener("DOMContentLoaded",function(){
     var age1=parseInt(document.getElementById("age1").value,10);
     var age2=parseInt(document.getElementById("age2").value,10);
     var kids=parseInt(document.getElementById("kids").value,10)||0;
+    var zipVal=(document.getElementById("zip").value||"").trim();
     if(!income||!age1){alert("Please enter your household income and your age.");return;}
+    // ZIP drives which plans and prices actually apply, so it is required
+    // rather than decorative - and it makes the resulting lead workable.
+    if(!/^\d{5}$/.test(zipVal)){alert("Please enter your 5-digit ZIP code so we can estimate plans for your area.");document.getElementById("zip").focus();return;}
     if(age1<18)age1=18;if(age1>64)age1=64;
 
     var poverty=fpl(size),fplPct=income/poverty*100;
@@ -555,56 +556,103 @@ document.addEventListener("DOMContentLoaded",function(){
     document.getElementById("r-disclaimer").textContent=
       "Estimate only. Based on the ACA premium tax credit formula and an estimated benchmark Silver premium of "+money(bench)+"/mo for your household. Tier costs are approximate. Actual subsidies and plan prices depend on your zip code and the plans available. This is not a quote or tax advice.";
     lastEstimate={income:income,size:size,age1:age1,age2:(age2&&age2>=18)?age2:"",kids:kids,zip:(document.getElementById("zip").value||""),fplPct:fplPct,bench:bench,subsidy:subsidy,bronze:bronze,silver:silver,gold:gold};
-    resetAdvisor();
+    lockTiers();
 
     var r=document.getElementById("results");r.classList.add("show");
     r.scrollIntoView({behavior:"smooth",block:"nearest"});
   }
 
-  function resetAdvisor(){
-    show("advisor-prompt",true); show("advisor-form",false); show("advisor-declined",false); show("advisor-success",false);
-    var b=document.getElementById("advisor-submit"); if(b){b.disabled=false;b.textContent="Request My Callback";}
+  // Once someone has given their details we do not ask again - re-running the
+  // calculator with different numbers should not re-gate a person who already
+  // converted. That would read as a bug to them, and it produces duplicates.
+  var gateUnlocked=false;
+  function lockTiers(){
+    var w=document.getElementById("tier-wrap");
+    if(w) w.classList.toggle("locked",!gateUnlocked);
+    show("lead-gate",!gateUnlocked);
+    show("advisor-success",gateUnlocked);
+    var b=document.getElementById("advisor-submit");
+    if(b){b.disabled=false;b.textContent="Show My Plan Prices";}
+  }
+  function unlockTiers(){
+    gateUnlocked=true;
+    var w=document.getElementById("tier-wrap"); if(w) w.classList.remove("locked");
+    show("lead-gate",false);
   }
   function show(id,on){var el=document.getElementById(id); if(el){el.hidden=!on;}}
   function val(id){var el=document.getElementById(id); return el?el.value.trim():"";}
 
-  var LEAD_WEBHOOK_URL="https://services.leadconnectorhq.com/hooks/V5Px5jvE14SWLdNrFeGL/webhook-trigger/d9cf69ed-4e52-4c7d-bf11-580204f9cce7";
-  function sendWebhook(url,payload){
-    if(!url||url.indexOf("http")!==0) return false;
-    var json; try{json=JSON.stringify(payload);}catch(e){return false;}
-    try{ if(navigator&&typeof navigator.sendBeacon==="function"){ if(navigator.sendBeacon(url,new Blob([json],{type:"application/json"}))) return true; } }catch(e){}
-    try{ fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:json,keepalive:true,mode:"no-cors"}).catch(function(){}); return true; }catch(e2){return false;}
-  }
+  // The old LEAD_WEBHOOK_URL here pointed at GHL location V5Px5jvE14SWLdNrFeGL,
+  // which is not this business's location (cNCy6JUURpb4eBDdb9bU). Every lead
+  // this calculator captured was being posted to a different GoHighLevel
+  // account. Removed - /api/lead-sync now handles the CRM write server-side,
+  // with the token where it belongs.
   function fireConfetti(){
     if(typeof confetti!=="function") return;
     var colors=["#1e5ab0","#0db5a6","#16a34a","#2f7de0","#ffc857"];
     try{confetti({particleCount:90,spread:70,origin:{y:.6},colors:colors});}catch(e){}
   }
 
+  function gateError(msg){
+    var e=document.getElementById("gate-err");
+    if(e){ e.textContent=msg; e.hidden=false; }
+  }
+
   function submitAdvisor(){
-    var name=val("ad-name"),phone=val("ad-phone"),email=val("ad-email"),time=val("ad-time");
-    if(!name||(!phone&&!email)){ alert("Please enter your name and a phone or email so an advisor can reach you."); return; }
-    var e=lastEstimate;
-    var summary="Est. subsidy "+money(e.subsidy||0)+"/mo (Bronze "+money(e.bronze||0)+", Silver "+money(e.silver||0)+", Gold "+money(e.gold||0)+"/mo). Income $"+(e.income||0).toLocaleString()+", household "+(e.size||"")+", age "+(e.age1||"")+(e.age2?"/"+e.age2:"")+", "+(e.kids||0)+" kids, "+Math.round(e.fplPct||0)+"% FPL.";
-    var parts=name.split(/\s+/), first=parts.shift()||"", last=parts.join(" ");
-    var ticketMsg="[Advisor callback request from the ACA Subsidy Calculator] Best time to reach: "+time+". "+summary;
-    var payload={ full_name:name, name:name, first_name:first, last_name:last, phone:phone, email:email, zip:e.zip||"", postal_code:e.zip||"", best_time:time, lead_type:"advisor_callback", message:ticketMsg, notes:summary, source:"vshealthbenefits.com", page:location.pathname, submitted_at:new Date().toISOString(), user_agent:navigator.userAgent, referrer:document.referrer||"" };
-    sendWebhook(LEAD_WEBHOOK_URL,payload);
-    try{
-      if(typeof window.vsAdminWrite==="function"){
-        var _lead={ id:"id_"+Math.random().toString(36).slice(2,10)+Date.now().toString(36), firstName:first, lastName:last, fullName:name, email:email, phone:phone, zip:e.zip||"", bestTime:time, message:payload.message, estimate:summary, status:"new", source:"subsidy-calculator", page:location.pathname, user_agent:navigator.userAgent, referrer:document.referrer||"", created:Date.now(), submitted_at:new Date().toISOString() };
-        window.vsAdminWrite("contact_requests",_lead);
-        if(typeof window.hubspotSyncLead==="function") window.hubspotSyncLead(_lead);
-      }
-    }catch(_){}
-    var b=document.getElementById("advisor-submit"); if(b){b.disabled=true;b.textContent="✓ Request Sent";}
-    var s=document.getElementById("advisor-success"); if(s){s.hidden=false;s.textContent="Thank you"+(first?", "+first:"")+"! A licensed advisor will reach out shortly to help set up the plan that best fits your needs.";}
+    var first=val("ad-first"), last=val("ad-last"), phone=val("ad-phone"),
+        email=val("ad-email"), time=val("ad-time");
+    var digits=phone.replace(/\D/g,"");
+    if(digits.length===11&&digits.charAt(0)==="1") digits=digits.slice(1);
+
+    if(!first){ gateError("Please enter your first name."); document.getElementById("ad-first").focus(); return; }
+    if(!last){ gateError("Please enter your last name."); document.getElementById("ad-last").focus(); return; }
+    if(digits.length!==10){ gateError("Please enter a 10-digit phone number so an advisor can reach you."); document.getElementById("ad-phone").focus(); return; }
+    var e=document.getElementById("gate-err"); if(e) e.hidden=true;
+
+    var est=lastEstimate;
+    var summary="Est. subsidy "+money(est.subsidy||0)+"/mo (Bronze "+money(est.bronze||0)+
+      ", Silver "+money(est.silver||0)+", Gold "+money(est.gold||0)+"/mo). Income $"+
+      (est.income||0).toLocaleString()+", household "+(est.size||"")+", age "+(est.age1||"")+
+      (est.age2?"/"+est.age2:"")+", "+(est.kids||0)+" kids, "+Math.round(est.fplPct||0)+"% FPL."+
+      " Best time to reach: "+time+".";
+
+    var b=document.getElementById("advisor-submit");
+    if(b){ b.disabled=true; b.textContent="Sending…"; }
+
+    // Straight to /api/lead-sync, which creates the GoHighLevel contact AND
+    // the pipeline card in one call. The previous version posted to a webhook
+    // on a different GHL location entirely and wrote the person into
+    // contact_requests - the Support tickets board - so calculator leads never
+    // reached the pipeline at all. vs-attribution.js folds the channel in.
+    fetch("/api/lead-sync",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      keepalive:true,
+      body:JSON.stringify({
+        firstName:first, lastName:last, phone:phone, email:email,
+        zip:est.zip||"", state:"",
+        source:"subsidy-calculator",
+        tags:["subsidy-calculator","website-lead"],
+        notes:summary
+      })
+    }).catch(function(){});
+
+    try{ if(window.vsTrack) window.vsTrack("generate_lead",{currency:"USD",value:0,lead_type:"subsidy_calculator"}); }catch(_){ }
+
+    unlockTiers();
+    var sEl=document.getElementById("advisor-success");
+    if(sEl){
+      sEl.hidden=false;
+      sEl.textContent="Thanks "+first+" — your plan prices are unlocked above. A licensed advisor will reach out "+
+        (time&&time!=="Anytime"?("in the "+time.toLowerCase()):"shortly")+
+        " with the actual plans available in "+(est.zip||"your area")+".";
+    }
+    var wrap=document.getElementById("tier-wrap");
+    if(wrap) wrap.scrollIntoView({behavior:"smooth",block:"nearest"});
     fireConfetti();
   }
 
-  var yBtn=document.getElementById("advisor-yes"), nBtn=document.getElementById("advisor-no-btn"), sBtn=document.getElementById("advisor-submit");
-  if(yBtn) yBtn.addEventListener("click",function(){ show("advisor-prompt",false); show("advisor-declined",false); show("advisor-form",true); var el=document.getElementById("advisor-form"); if(el)el.scrollIntoView({behavior:"smooth",block:"nearest"}); });
-  if(nBtn) nBtn.addEventListener("click",function(){ show("advisor-prompt",false); show("advisor-form",false); show("advisor-declined",true); });
+  var sBtn=document.getElementById("advisor-submit");
   if(sBtn) sBtn.addEventListener("click",submitAdvisor);
 
   document.getElementById("calc-btn").addEventListener("click",calc);
