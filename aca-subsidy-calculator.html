@@ -13,7 +13,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ACA Subsidy Calculator 2027: Estimate Your Price</title>
-<meta name="description" content="Estimate your 2027 ACA subsidy by income and household size. Free, no email required, results in seconds." />
+<meta name="description" content="Estimate your 2027 ACA subsidy by income and household size. Free, no obligation, and your results in under a minute." />
 <meta name="keywords" content="ACA subsidy calculator, health insurance subsidy calculator, premium tax credit calculator, obamacare subsidy calculator, health insurance cost estimator, marketplace subsidy calculator, how much is health insurance, aca calculator 2026, aca calculator 2027, subsidy cliff calculator, health insurance quote estimator" />
 <link rel="canonical" href="https://www.vshealthbenefits.com/aca-subsidy-calculator" />
 <meta name="robots" content="index,follow" />
@@ -21,13 +21,13 @@
 <meta name="geo.placename" content="Miami" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="ACA Subsidy Calculator 2027: Estimate Your Price" />
-<meta property="og:description" content="Estimate your 2027 ACA subsidy by income and household size. Free, no email required, results in seconds." />
+<meta property="og:description" content="Estimate your 2027 ACA subsidy by income and household size. Free, no obligation, and your results in under a minute." />
 <meta property="og:url" content="https://www.vshealthbenefits.com/aca-subsidy-calculator" />
 <meta property="og:site_name" content="VS Health Benefits" />
 <meta property="og:image" content="https://www.vshealthbenefits.com/compressed/familyhappy.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="ACA Subsidy Calculator 2027: Estimate Your Price" />
-<meta name="twitter:description" content="Estimate your 2027 ACA subsidy by income and household size. Free, no email required, results in seconds." />
+<meta name="twitter:description" content="Estimate your 2027 ACA subsidy by income and household size. Free, no obligation, and your results in under a minute." />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -100,8 +100,6 @@ p{margin:0 0 1em;color:var(--ink-2)}
 /* Tier prices stay blurred until the visitor identifies themselves. The
    subsidy number above is always free - that is the hook, and gating it
    would break the promise the page makes in search results. */
-.tiers.locked .amt{filter:blur(9px);user-select:none;pointer-events:none}
-.tiers.locked .tier-grid{position:relative}
 .gate-err{color:#b91c1c;font-size:.9rem;font-weight:600;margin:10px 0 0}
 .gate-fine{font-size:.76rem;color:#64748b;line-height:1.5;margin:10px 0 0}
 .results.show{display:block;animation:fade .3s}
@@ -251,7 +249,7 @@ footer a:hover{color:#fff}
   <div class="container hero-inner">
     <span class="eyebrow">Free Estimator Tool</span>
     <h1>ACA Subsidy &amp; Health Insurance Cost Calculator</h1><p class="freshness-stamp" style="font-size:.8rem;color:#5a6b80;font-weight:600;margin:6px 0 14px;display:inline-flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:#0db5a6;display:inline-block"></span>Updated July 22, 2026 &middot; current for the 2026-2027 plan year</p>
-    <p class="sub">See how much you could save on health insurance. Estimate your subsidy and your monthly cost in under a minute, with Bronze, Silver, and Gold plan estimates. No email required.</p>
+    <p class="sub">See how much you could save on health insurance. Estimate your subsidy and your monthly cost in under a minute, with Bronze, Silver, and Gold plan estimates. Free, and no obligation.</p>
 
     <div class="calc">
       <div class="calc-bar">
@@ -259,10 +257,14 @@ footer a:hover{color:#fff}
           <div class="ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M8 14h5"/></svg></div>
           <div><h2>Instant Subsidy Estimate</h2><div class="sub">Powered by the ACA premium tax credit formula</div></div>
         </div>
-        <span class="calc-chip"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> No email required</span>
+        <span class="calc-chip"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Free &amp; no obligation</span>
       </div>
       <div class="calc-body">
         <div class="grid">
+          <div class="field"><label>First name</label><input id="ad-first" type="text" autocomplete="given-name" placeholder="First name" required /></div>
+          <div class="field"><label>Last name</label><input id="ad-last" type="text" autocomplete="family-name" placeholder="Last name" required /></div>
+          <div class="field"><label>Phone</label><input id="ad-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-5555" required /></div>
+          <div class="field"><label>Email <span class="hint">(optional)</span></label><input id="ad-email" type="email" autocomplete="email" placeholder="you@email.com" /></div>
           <div class="field"><label>Household income <span class="hint">(yearly, pre-tax)</span></label><div class="inp-money"><span>$</span><input id="income" type="text" inputmode="numeric" placeholder="55,000" /></div></div>
           <div class="field"><label>Household size <span class="hint">(on your taxes)</span></label>
             <select id="household"><option value="1">1 person</option><option value="2" selected>2 people</option><option value="3">3 people</option><option value="4">4 people</option><option value="5">5 people</option><option value="6">6 people</option><option value="7">7 people</option><option value="8">8 people</option></select></div>
@@ -271,7 +273,9 @@ footer a:hover{color:#fff}
           <div class="field"><label>Children under 21 <span class="hint">(on the plan)</span></label><input id="kids" type="number" min="0" max="8" inputmode="numeric" placeholder="0" /></div>
           <div class="field"><label>ZIP code</label><input id="zip" type="text" inputmode="numeric" maxlength="5" placeholder="33101" required /></div>
         </div>
+        <div class="gate-err" id="gate-err" hidden></div>
         <button class="calc-btn" id="calc-btn" type="button">Calculate My Estimate</button>
+        <p class="gate-fine">We never sell your information. By submitting you agree a licensed VS Health Benefits advisor may contact you about coverage.</p>
 
         <div class="results" id="results">
           <div class="res-hl"><div class="big" id="r-subsidy">$0/mo</div><div class="lbl">Estimated monthly subsidy</div></div>
@@ -285,22 +289,6 @@ footer a:hover{color:#fff}
             </div>
           </div>
           <div class="res-note" id="r-note"></div>
-
-          <div class="advisor" id="lead-gate">
-            <h3>See your plan prices</h3>
-            <p>Your subsidy estimate is above. Enter your details to unlock your estimated Bronze, Silver and Gold monthly costs — and a licensed VS Health Benefits advisor will follow up with the real plans available in your ZIP, at no cost to you.</p>
-            <div class="grid">
-              <div class="field"><label>First name</label><input id="ad-first" type="text" autocomplete="given-name" placeholder="First name" /></div>
-              <div class="field"><label>Last name</label><input id="ad-last" type="text" autocomplete="family-name" placeholder="Last name" /></div>
-              <div class="field"><label>Phone</label><input id="ad-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-5555" /></div>
-              <div class="field"><label>Email <span class="hint">(optional)</span></label><input id="ad-email" type="email" autocomplete="email" placeholder="you@email.com" /></div>
-              <div class="field"><label>Best time to reach you</label>
-                <select id="ad-time"><option>Anytime</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select></div>
-            </div>
-            <div class="gate-err" id="gate-err" hidden></div>
-            <button class="calc-btn" id="advisor-submit" type="button">Show My Plan Prices</button>
-            <p class="gate-fine">We never sell your information. By submitting you agree a licensed advisor may contact you about coverage.</p>
-          </div>
 
           <div class="advisor-success" id="advisor-success" hidden></div>
 
@@ -510,10 +498,23 @@ document.addEventListener("DOMContentLoaded",function(){
     var age2=parseInt(document.getElementById("age2").value,10);
     var kids=parseInt(document.getElementById("kids").value,10)||0;
     var zipVal=(document.getElementById("zip").value||"").trim();
-    if(!income||!age1){alert("Please enter your household income and your age.");return;}
+
+    // Name, phone and ZIP are required to run the estimate. The estimate is
+    // the thing of value, so it is what asks for the contact details - there
+    // is no second gate after the results.
+    var first=val("ad-first"), last=val("ad-last"), phone=val("ad-phone"), email=val("ad-email");
+    var digits=phone.replace(/\D/g,"");
+    if(digits.length===11&&digits.charAt(0)==="1") digits=digits.slice(1);
+    if(!first){ gateError("Please enter your first name."); focusOn("ad-first"); return; }
+    if(!last){ gateError("Please enter your last name."); focusOn("ad-last"); return; }
+    if(digits.length!==10){ gateError("Please enter a 10-digit phone number so an advisor can reach you."); focusOn("ad-phone"); return; }
+    if(email&&!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)){ gateError("That email does not look right. Leave it blank if you would rather not share it."); focusOn("ad-email"); return; }
+    if(!income){ gateError("Please enter your household income."); focusOn("income"); return; }
+    if(!age1){ gateError("Please enter your age."); focusOn("age1"); return; }
     // ZIP drives which plans and prices actually apply, so it is required
     // rather than decorative - and it makes the resulting lead workable.
-    if(!/^\d{5}$/.test(zipVal)){alert("Please enter your 5-digit ZIP code so we can estimate plans for your area.");document.getElementById("zip").focus();return;}
+    if(!/^\d{5}$/.test(zipVal)){ gateError("Please enter your 5-digit ZIP code so we can estimate plans for your area."); focusOn("zip"); return; }
+    gateError("");
     if(age1<18)age1=18;if(age1>64)age1=64;
 
     var poverty=fpl(size),fplPct=income/poverty*100;
@@ -556,31 +557,20 @@ document.addEventListener("DOMContentLoaded",function(){
     document.getElementById("r-disclaimer").textContent=
       "Estimate only. Based on the ACA premium tax credit formula and an estimated benchmark Silver premium of "+money(bench)+"/mo for your household. Tier costs are approximate. Actual subsidies and plan prices depend on your zip code and the plans available. This is not a quote or tax advice.";
     lastEstimate={income:income,size:size,age1:age1,age2:(age2&&age2>=18)?age2:"",kids:kids,zip:(document.getElementById("zip").value||""),fplPct:fplPct,bench:bench,subsidy:subsidy,bronze:bronze,silver:silver,gold:gold};
-    lockTiers();
 
     var r=document.getElementById("results");r.classList.add("show");
     r.scrollIntoView({behavior:"smooth",block:"nearest"});
+    sendLead(first,last,phone,digits,email);
   }
 
-  // Once someone has given their details we do not ask again - re-running the
-  // calculator with different numbers should not re-gate a person who already
-  // converted. That would read as a bug to them, and it produces duplicates.
-  var gateUnlocked=false;
-  function lockTiers(){
-    var w=document.getElementById("tier-wrap");
-    if(w) w.classList.toggle("locked",!gateUnlocked);
-    show("lead-gate",!gateUnlocked);
-    show("advisor-success",gateUnlocked);
-    var b=document.getElementById("advisor-submit");
-    if(b){b.disabled=false;b.textContent="Show My Plan Prices";}
-  }
-  function unlockTiers(){
-    gateUnlocked=true;
-    var w=document.getElementById("tier-wrap"); if(w) w.classList.remove("locked");
-    show("lead-gate",false);
-  }
   function show(id,on){var el=document.getElementById(id); if(el){el.hidden=!on;}}
   function val(id){var el=document.getElementById(id); return el?el.value.trim():"";}
+  function focusOn(id){var el=document.getElementById(id); if(el) el.focus();}
+  function gateError(msg){
+    var e=document.getElementById("gate-err");
+    if(!e) return;
+    if(msg){ e.textContent=msg; e.hidden=false; } else { e.textContent=""; e.hidden=true; }
+  }
 
   // The old LEAD_WEBHOOK_URL here pointed at GHL location V5Px5jvE14SWLdNrFeGL,
   // which is not this business's location (cNCy6JUURpb4eBDdb9bU). Every lead
@@ -593,31 +583,25 @@ document.addEventListener("DOMContentLoaded",function(){
     try{confetti({particleCount:90,spread:70,origin:{y:.6},colors:colors});}catch(e){}
   }
 
-  function gateError(msg){
-    var e=document.getElementById("gate-err");
-    if(e){ e.textContent=msg; e.hidden=false; }
-  }
-
-  function submitAdvisor(){
-    var first=val("ad-first"), last=val("ad-last"), phone=val("ad-phone"),
-        email=val("ad-email"), time=val("ad-time");
-    var digits=phone.replace(/\D/g,"");
-    if(digits.length===11&&digits.charAt(0)==="1") digits=digits.slice(1);
-
-    if(!first){ gateError("Please enter your first name."); document.getElementById("ad-first").focus(); return; }
-    if(!last){ gateError("Please enter your last name."); document.getElementById("ad-last").focus(); return; }
-    if(digits.length!==10){ gateError("Please enter a 10-digit phone number so an advisor can reach you."); document.getElementById("ad-phone").focus(); return; }
-    var e=document.getElementById("gate-err"); if(e) e.hidden=true;
-
-    var est=lastEstimate;
+  // One lead per person, not one per click. Recalculating with different
+  // numbers is normal behaviour and must not create duplicate pipeline cards;
+  // a genuinely different phone number does count as a new person.
+  var sentPhones={};
+  function sendLead(first,last,phone,digits,email){
+    var est=lastEstimate||{};
     var summary="Est. subsidy "+money(est.subsidy||0)+"/mo (Bronze "+money(est.bronze||0)+
       ", Silver "+money(est.silver||0)+", Gold "+money(est.gold||0)+"/mo). Income $"+
       (est.income||0).toLocaleString()+", household "+(est.size||"")+", age "+(est.age1||"")+
-      (est.age2?"/"+est.age2:"")+", "+(est.kids||0)+" kids, "+Math.round(est.fplPct||0)+"% FPL."+
-      " Best time to reach: "+time+".";
+      (est.age2?"/"+est.age2:"")+", "+(est.kids||0)+" kids, "+Math.round(est.fplPct||0)+"% FPL.";
 
-    var b=document.getElementById("advisor-submit");
-    if(b){ b.disabled=true; b.textContent="Sending…"; }
+    var sEl=document.getElementById("advisor-success");
+    if(sEl){
+      sEl.hidden=false;
+      sEl.textContent="Thanks "+first+" — a licensed VS Health Benefits advisor will reach out shortly with the actual plans available in "+(est.zip||"your area")+", at no cost to you.";
+    }
+
+    if(sentPhones[digits]) return;   // already in the pipeline, do not duplicate
+    sentPhones[digits]=true;
 
     // Straight to /api/lead-sync, which creates the GoHighLevel contact AND
     // the pipeline card in one call. The previous version posted to a webhook
@@ -638,22 +622,8 @@ document.addEventListener("DOMContentLoaded",function(){
     }).catch(function(){});
 
     try{ if(window.vsTrack) window.vsTrack("generate_lead",{currency:"USD",value:0,lead_type:"subsidy_calculator"}); }catch(_){ }
-
-    unlockTiers();
-    var sEl=document.getElementById("advisor-success");
-    if(sEl){
-      sEl.hidden=false;
-      sEl.textContent="Thanks "+first+" — your plan prices are unlocked above. A licensed advisor will reach out "+
-        (time&&time!=="Anytime"?("in the "+time.toLowerCase()):"shortly")+
-        " with the actual plans available in "+(est.zip||"your area")+".";
-    }
-    var wrap=document.getElementById("tier-wrap");
-    if(wrap) wrap.scrollIntoView({behavior:"smooth",block:"nearest"});
     fireConfetti();
   }
-
-  var sBtn=document.getElementById("advisor-submit");
-  if(sBtn) sBtn.addEventListener("click",submitAdvisor);
 
   document.getElementById("calc-btn").addEventListener("click",calc);
   var inc=document.getElementById("income");
