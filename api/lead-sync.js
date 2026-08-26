@@ -211,10 +211,15 @@ async function toCrm(d, res) {
   const fromAdmin = /^admin portal/i.test(p.source);
   if (!fromAdmin) {
     try {
+      // Pass the caller's ORIGINAL source through, not p.source. p.source has
+      // already had the attribution channel folded into it for GHL's benefit,
+      // so handing it back to normalize made sourceDetail read "Google Ads"
+      // instead of the form that produced the lead - losing the one field that
+      // says WHICH form it was.
       const n = normalize(
         { id: contactId, email: p.email, phone: p.phone, companyName: p.company,
           firstName: p.firstName, lastName: p.lastName, state: p.state, postalCode: p.zip },
-        Object.assign({}, d, { source: p.source, notes: p.notes })
+        Object.assign({}, d, { notes: p.notes })
       );
       const board = await syncToBoards(n);
       out.board = board && board.ok ? (board.action || "ok") : ((board && board.reason) || "error");
