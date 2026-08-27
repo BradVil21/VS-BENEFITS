@@ -9,7 +9,11 @@ NEW = ['texas-small-business-health-insurance.html',
        'blog/group-health-insurance-minimum-participation.html',
        'blog/small-business-health-care-tax-credit-2026.html',
        'blog/small-business-health-insurance-cost-2027.html',
-       'blog/ichra-vs-group-health-subsidy-cliff.html']
+       'blog/ichra-vs-group-health-subsidy-cliff.html',
+       'cobra-alternatives.html',
+       'blog/why-is-cobra-so-expensive.html',
+       'blog/cobra-60-day-loophole.html',
+       'blog/can-i-drop-cobra-for-marketplace.html']
 
 changed = subprocess.run(['git','status','--porcelain'],capture_output=True,text=True).stdout.split('\n')
 changed = [l[3:].strip() for l in changed if l.strip().endswith('.html')]

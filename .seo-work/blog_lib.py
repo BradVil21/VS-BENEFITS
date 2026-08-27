@@ -11,7 +11,7 @@ SRC = 'blog/how-to-set-up-small-business-health-insurance-florida.html'
 
 
 def build(slug, title, h1, desc, lede, published, read_min, eyebrow,
-          img, alt, toc, body, faq, cta_head, cta_copy):
+          img, alt, toc, body, faq, cta_head, cta_copy, cta_href='/quote?type=business'):
     url = BASE + '/blog/' + slug
     s = open(SRC, encoding='utf-8').read()
     head_end = s.index('</head>')
@@ -113,7 +113,7 @@ def build(slug, title, h1, desc, lede, published, read_min, eyebrow,
     out = re.sub(r'(<p style="color:rgba\(255,255,255,\.9\);font-size:\.88rem;margin-bottom:14px">)(.*?)(</p>)',
                  lambda m: m.group(1) + cta_copy + m.group(3), out, count=1, flags=re.S)
     out = out.replace('href="/quote" style="background:#fff;color:var(--blue-700);width:100%',
-                      'href="/quote?type=business" style="background:#fff;color:var(--blue-700);width:100%')
+                      'href="%s" style="background:#fff;color:var(--blue-700);width:100%%' % cta_href)
 
     path = 'blog/' + slug + '.html'
     open(path, 'w', encoding='utf-8').write(out)

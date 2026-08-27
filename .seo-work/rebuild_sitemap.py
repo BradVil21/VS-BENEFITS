@@ -20,6 +20,7 @@ PRIO = {
  '/texas-small-business-health-insurance': '0.9',
  '/maryland-small-business-health-insurance': '0.9',
  '/kentucky-small-business-health-insurance': '0.9',
+ '/cobra-alternatives': '0.9', '/cobra-vs-marketplace-calculator': '0.9',
 }
 
 rows = []

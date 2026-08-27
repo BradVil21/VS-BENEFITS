@@ -61,7 +61,8 @@ STYLE='''<style id="vs-tpa-style">
 .vs-ih h3.sub{font-family:'Poppins','Inter',sans-serif;color:#0b2346;font-size:1.08rem;margin:26px 0 8px}
 .vs-ih p.lede{color:#3d4c5f;font-size:1.02rem;line-height:1.7;max-width:800px;margin:0 0 22px}
 .vs-ih-key{background:#f2f7fd;border:1px solid #d6e6f7;border-left:4px solid #16447f;border-radius:12px;padding:20px 22px;margin:0 0 28px;max-width:880px}
-.vs-ih-key strong{display:block;color:#0b2346;font-size:1.04rem;margin-bottom:6px}
+.vs-ih-key>strong{display:block;color:#0b2346;font-size:1.04rem;margin-bottom:6px}
+.vs-ih-key p strong,.vs-ih-key li strong{display:inline;color:#0b2346;font-weight:700;font-size:inherit;margin:0}
 .vs-ih-key p{margin:0;color:#3d4c5f;font-size:.97rem;line-height:1.68}
 .vs-ih-grid{display:grid;grid-template-columns:1fr;gap:14px}
 .vs-ih-card{display:block;background:#fff;border:1px solid #e4e9f2;border-radius:14px;padding:19px 21px;text-decoration:none}
