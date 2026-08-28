@@ -45,9 +45,11 @@ for f in sorted(changed):
     for m in re.finditer(r'<script type="application/ld\+json"[^>]*>(.*?)</script>', s, re.S):
         try: json.loads(m.group(1))
         except Exception as e: msgs.append('bad JSON-LD: %s' % str(e)[:50])
-    for tag, pat in [('title', r'<title>.*?</title>'),
-                     ('canonical', r'rel="canonical" href="'),
-                     ('h1', r'<h1[\s>]')]:
+    noindex = bool(re.search(r'<meta name="robots"[^>]*noindex', s))
+    checks = [('title', r'<title>.*?</title>'), ('h1', r'<h1[\s>]')]
+    if not noindex:
+        checks.append(('canonical', r'rel="canonical" href="'))
+    for tag, pat in checks:
         c = len(re.findall(pat, s, re.S))
         if c != 1: msgs.append('%s x%d' % (tag, c))
     if msgs:
