@@ -7,7 +7,9 @@
      (GDPR "prior consent" / CCPA-CPRA opt-out friendly).
    - Form progress autosaves to THIS browser (localStorage) for the resume banner.
    - In-progress leads are auto-captured to our own /api/lead-draft (server-side
-     validated) once a valid email is present, even if the visitor never submits.
+     validated) once a valid PHONE or email is present, even if the visitor never
+     submits. The /quote funnel asks for ZIP and phone before name and email, so an
+     abandoned quote still lands in the CRM with a number to call and an area to quote.
    - Clears the local draft the moment the form is successfully submitted.
 
    Safe by design: everything is wrapped in try/catch and degrades to a
@@ -144,39 +146,72 @@
     if(!d.income){var s=document.querySelector('#ind-income .income-item.selected'); if(s)d.income=s.textContent.trim();}
     return d;
   }
-  function meaningful(d){ if(!d)return false; var f=d.fields||{}; return !!(f['ind-firstname']||f['ind-email']||f['ind-phone']||f['biz-email']||f['biz-name']||f['biz-firstname']); }
+  function meaningful(d){ if(!d)return false; var f=d.fields||{}; return !!(f['ind-phone']||f['ind-zip']||f['ind-firstname']||f['ind-email']||f['biz-contact-phone']||f['biz-email']||f['biz-name']||f['biz-firstname']); }
   function scheduleSave(){ if(_submitted)return; clearTimeout(_t); _t=setTimeout(doSave,800); }
   function doSave(){ var d=snapshot(); if(meaningful(d)){ store(DRAFT_KEY,d); maybeBackend(d); } }
 
-  /* Backend draft save — ONLY when the visitor opted in AND we have a valid email. */
+  /* Backend draft save — fires as soon as we have a reachable contact point.
+     A valid phone is enough: the funnel collects ZIP + phone before name + email,
+     so this is what turns an abandoned quote into a followable lead. The server
+     dedupes on phone (then email), so the completed submission later updates the
+     SAME contact instead of creating a second one. */
   var _lastBE=0,_lastHash='';
   function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(String(v||'').trim()); }
+  function validPhone(v){
+    var d=String(v||'').replace(/\D/g,'');
+    if(d.length===11&&d.charAt(0)==='1')d=d.slice(1);
+    if(d.length!==10)return false;
+    if(/^(\d)\1{9}$/.test(d))return false;
+    if(d.slice(0,3)==='555'||d.slice(3,6)==='555')return false;
+    return true;
+  }
+  function draftPayload(d){
+    var f=d.fields||{};
+    return {consent:true,capture:'auto',optIn:false,type:d.type||_vsType||'individual',step:'Step '+(d.step||_vsStep||1),
+      email:cleanEmail(f['ind-email']||f['biz-email']||''),
+      phone:(f['ind-phone']||f['biz-contact-phone']||f['biz-phone']||'').trim(),
+      firstName:f['ind-firstname']||f['biz-firstname']||'',
+      lastName:f['ind-lastname']||f['biz-lastname']||'',
+      address:f['ind-address']||f['biz-address']||'',
+      zip:f['ind-zip']||f['biz-zip']||'',state:f['ind-state']||f['biz-state']||'',
+      company:f['biz-name']||''};
+  }
+  /* Only pass an email the funnel itself is happy with: a half-typed or mistyped
+     address (jane@gmial.com) would otherwise land on the CRM record. */
+  function cleanEmail(v){
+    v=String(v||'').trim(); if(!validEmail(v))return '';
+    try{ if(window.vsSuggestEmail && window.vsSuggestEmail(v)) return ''; }catch(e){}
+    return v;
+  }
+  function reachable(p){ return validEmail(p.email)||validPhone(p.phone); }
+
   function maybeBackend(d){
     if(_submitted)return;
-    var email=(d.fields['ind-email']||d.fields['biz-email']||'').trim(); if(!validEmail(email))return;
+    var payload=draftPayload(d); if(!reachable(payload))return;
     var hash=JSON.stringify(d.fields), now=Date.now();
     if(now-_lastBE<15000 && hash===_lastHash)return;
     _lastBE=now; _lastHash=hash;
-    var payload={consent:true,capture:'auto',optIn:false,type:d.type||_vsType||'individual',step:'Step '+(d.step||_vsStep||1),email:email,
-      firstName:d.fields['ind-firstname']||d.fields['biz-firstname']||'',
-      lastName:d.fields['ind-lastname']||d.fields['biz-lastname']||'',
-      phone:d.fields['ind-phone']||d.fields['biz-contact-phone']||d.fields['biz-phone']||'',
-      zip:d.fields['ind-zip']||d.fields['biz-zip']||'',state:d.fields['ind-state']||d.fields['biz-state']||'',
-      company:d.fields['biz-name']||''};
     try{fetch('/api/lead-draft',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}).catch(function(){});}catch(e){}
   }
+
+  /* Called by the funnel the moment a step with a phone number is cleared, so the
+     lead is captured on the spot rather than on the next debounce tick. */
+  window.vsCaptureDraft=function(type,step){
+    if(_submitted)return;
+    if(type)_vsType=type; if(step)_vsStep=step;
+    var d=snapshot(); store(DRAFT_KEY,d);
+    var payload=draftPayload(d); if(!reachable(payload))return;
+    var hash=JSON.stringify(d.fields), now=Date.now();
+    if(now-_lastBE<15000 && hash===_lastHash)return;   // the debounced save just sent this
+    _lastBE=now; _lastHash=hash;
+    try{fetch('/api/lead-draft',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}).catch(function(){});}catch(e){}
+  };
 
   /* Send the latest partial lead on exit (mobile-safe) so nothing is lost even if the
      debounced autosave has not fired yet. */
   function beaconSend(){
     if(_submitted)return; var d=snapshot(); if(!meaningful(d))return;
-    var email=(d.fields['ind-email']||d.fields['biz-email']||'').trim(); if(!validEmail(email))return;
-    var payload={consent:true,capture:'auto',optIn:false,type:d.type||_vsType||'individual',step:'Step '+(d.step||_vsStep||1),email:email,
-      firstName:d.fields['ind-firstname']||d.fields['biz-firstname']||'',
-      lastName:d.fields['ind-lastname']||d.fields['biz-lastname']||'',
-      phone:d.fields['ind-phone']||d.fields['biz-contact-phone']||d.fields['biz-phone']||'',
-      zip:d.fields['ind-zip']||d.fields['biz-zip']||'',state:d.fields['ind-state']||d.fields['biz-state']||'',
-      company:d.fields['biz-name']||''};
+    var payload=draftPayload(d); if(!reachable(payload))return;
     try{ var body=JSON.stringify(payload);
       if(navigator.sendBeacon){ navigator.sendBeacon('/api/lead-draft', new Blob([body],{type:'application/json'})); }
       else { fetch('/api/lead-draft',{method:'POST',headers:{'Content-Type':'application/json'},body:body,keepalive:true}).catch(function(){}); }
@@ -205,7 +240,7 @@
       var step=d.step||1;
       setTimeout(function(){
         if(type==='individual'&&window.indNav){window.indNav(Math.min(step||1,5));}
-        else if(type==='business'&&window.bizNav){window.bizNav(Math.min(step||1,4));}
+        else if(type==='business'&&window.bizNav){window.bizNav(Math.min(step||1,5));}
       },260);
     },320);
     hideResume();

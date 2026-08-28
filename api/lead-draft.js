@@ -9,8 +9,11 @@
 // Security / privacy by design:
 //   - POST only, JSON only, CORS locked to the site origin.
 //   - Server-side validation + sanitisation of every field (never trust the client).
-//   - Requires a valid email to write to the backend (dedup key). Phone-only drafts
-//     stay in the visitor's own browser and are never sent here.
+//   - Requires a valid phone OR email to write to the backend. Phone is the
+//     primary dedup key because the /quote funnel now asks for ZIP + phone before
+//     name and email, so an abandoned quote still arrives with a number to call.
+//     GoHighLevel's upsert matches on phone (then email), so when the visitor
+//     later finishes the quote it fills in the SAME contact, not a second one.
 //   - Length caps to stop oversized/abusive payloads.
 //   - Encrypted in transit (Vercel serves this over HTTPS/TLS only).
 //   - Safe by design: if GHL_PIT_TOKEN is missing, the write is skipped
@@ -74,18 +77,19 @@ module.exports = async (req, res) => {
   //    anymore; a valid email (checked below) is the only hard requirement.
   const optIn = d.optIn === true || d.optIn === "true";
 
-  // 2) Validate the dedup key. Email is required to store server-side.
+  // 2) Validate the dedup key. Either a real phone or a real email will do.
   const email = validEmail(d.email || d.contactEmail);
-  if (!email) {
-    res.status(200).json({ ok: false, skipped: "no_valid_email" });
+  const phone = validPhone(d.phone || d.contactPhone || d.businessPhone);
+  if (!email && !phone) {
+    res.status(200).json({ ok: false, skipped: "no_valid_contact" });
     return;
   }
 
   // 3) Sanitise the rest.
-  const phone = validPhone(d.phone || d.contactPhone || d.businessPhone);
   const firstName = clean(d.firstName || d.ownerFirstName, 60);
   const lastName = clean(d.lastName || d.ownerLastName, 60);
   const zip = clean(d.zip || d.businessZip, 10).replace(/\D/g, "").slice(0, 5);
+  const address = clean(d.address || d.businessAddress, 160);
   const state = clean(d.state || d.businessState, 30);
   const company = clean(d.company || d.businessName, 120);
   const type = d.type === "business" ? "business" : "individual";
@@ -95,12 +99,13 @@ module.exports = async (req, res) => {
   let contactId = null;
   try {
     contactId = await L.upsertContact({
-      email: email,
+      email: email,                                  // may be "" on an early draft
       firstname: firstName,
       lastname: lastName,
-      phone: phone,
-      company: company,
-      state: state,
+      phone: phone ? "+1" + phone : "",              // E.164, so the completed
+      company: company,                              // submission matches this
+      state: state,                                  // same contact later
+      address: address,
       zip: zip,
       website_lead_stage: "Abandoned Draft — Recover",
       lifecyclestage: "lead",
@@ -117,6 +122,8 @@ module.exports = async (req, res) => {
           step ? "Reached: " + L.esc(step) : "",
           firstName || lastName ? "Name: " + L.esc((firstName + " " + lastName).trim()) : "",
           phone ? "Phone: " + L.esc(phone) : "",
+          email ? "Email: " + L.esc(email) : "(no email yet — did not reach the last step)",
+          zip ? "ZIP: " + L.esc(zip) + (state ? " (" + L.esc(state) + ")" : "") : "",
           company ? "Business: " + L.esc(company) : "",
           "Opt-in checkbox: " + (optIn ? "yes" : "no (passive capture)"),
           "Source: /quote autosave",

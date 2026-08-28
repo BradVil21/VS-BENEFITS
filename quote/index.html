@@ -845,56 +845,15 @@ p{color:var(--ink-2)}
 
   <!-- ======================== INDIVIDUAL PANELS ======================== -->
 
-  <!-- INDIVIDUAL: Step 1 - Name + DOB -->
+  <!-- INDIVIDUAL: Step 1 - Location + DOB -->
   <div class="panel" id="panel-ind-1">
-    <div class="step-dots" id="dots-ind"></div>
-    <div class="step-card">
-      <div class="step-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        About You
-      </div>
-      <h2>Let's start with the basics</h2>
-      <p class="step-sub">We'll use this to personalize your quote options.</p>
-      <div class="field-row">
-        <div class="field" id="f-ind-firstname">
-          <label>First Name<span class="req">*</span></label>
-          <input type="text" id="ind-firstname" placeholder="Jane" autocomplete="given-name" />
-          <div class="err-msg">Please enter your first name.</div>
-        </div>
-        <div class="field" id="f-ind-lastname">
-          <label>Last Name<span class="req">*</span></label>
-          <input type="text" id="ind-lastname" placeholder="Smith" autocomplete="family-name" />
-          <div class="err-msg">Please enter your last name.</div>
-        </div>
-      </div>
-      <div class="field" id="f-ind-dob">
-        <label>Date of Birth<span class="req">*</span></label>
-        <input type="date" id="ind-dob" autocomplete="bday" />
-        <div class="err-msg">Please enter a valid date of birth.</div>
-      </div>
-    </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="backTo(0)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-      <button class="btn-next" onclick="indNext(1)">
-        Continue
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- INDIVIDUAL: Step 2 - Address -->
-  <div class="panel" id="panel-ind-2">
-    <div class="step-dots" id="dots-ind-2"></div>
     <div class="step-card">
       <div class="step-eyebrow">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
         Location
       </div>
-      <h2>What is your home address?</h2>
-      <p class="step-sub">Your location helps us find plans available in your area.</p>
+      <h2>Let's start with where you live</h2>
+      <p class="step-sub">Your ZIP code tells us which plans and carriers are available in your area.</p>
       <div class="field" id="f-ind-address">
         <label>Street Address<span class="req">*</span></label>
         <input type="text" id="ind-address" placeholder="123 Main Street" autocomplete="street-address" />
@@ -924,6 +883,42 @@ p{color:var(--ink-2)}
           <div class="err-msg">Please select your state.</div>
         </div>
       </div>
+      <div class="field" id="f-ind-dob">
+        <label>Date of Birth<span class="req">*</span></label>
+        <input type="date" id="ind-dob" autocomplete="bday" />
+        <div class="err-msg">Please enter a valid date of birth.</div>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="backTo(0)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn-next" onclick="indNext(1)">
+        Continue
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- INDIVIDUAL: Step 2 - Phone -->
+  <div class="panel" id="panel-ind-2">
+    <div class="step-card">
+      <div class="step-eyebrow">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        Contact Info
+      </div>
+      <h2>What is the best number to reach you?</h2>
+      <p class="step-sub">Your advisor will call or text you to go over your quote options. We never share your information.</p>
+      <div class="field" id="f-ind-phone">
+        <label>Phone Number<span class="req">*</span></label>
+        <input type="tel" id="ind-phone" placeholder="(305) 555-0100" autocomplete="tel" inputmode="tel" />
+        <div class="err-msg">Please enter a valid phone number.</div>
+      </div>
+      <div class="field-hint">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Your information is 100% secure and never sold.
+      </div>
     </div>
     <div class="nav-btns">
       <button class="btn-back" onclick="indNav(1)">
@@ -937,44 +932,8 @@ p{color:var(--ink-2)}
     </div>
   </div>
 
-  <!-- INDIVIDUAL: Step 3 - Contact -->
+  <!-- INDIVIDUAL: Step 3 - Situation -->
   <div class="panel" id="panel-ind-3">
-    <div class="step-card">
-      <div class="step-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-        Contact Info
-      </div>
-      <h2>How can we reach you?</h2>
-      <p class="step-sub">Your advisor will use this to share your personalized quote options. We never share your information.</p>
-      <div class="field" id="f-ind-phone">
-        <label>Phone Number<span class="req">*</span></label>
-        <input type="tel" id="ind-phone" placeholder="(305) 555-0100" autocomplete="tel" inputmode="tel" />
-        <div class="err-msg">Please enter a valid phone number.</div>
-      </div>
-      <div class="field" id="f-ind-email">
-        <label>Email Address<span class="req">*</span></label>
-        <input type="email" id="ind-email" placeholder="jane@email.com" autocomplete="email" />
-        <div class="err-msg">Please enter a valid email address.</div>
-      </div>
-      <div class="field-hint">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Your information is 100% secure and never sold.
-      </div>
-    </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="indNav(2)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-      <button class="btn-next" onclick="indNext(3)">
-        Continue
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- INDIVIDUAL: Step 4 - Situation -->
-  <div class="panel" id="panel-ind-4">
     <div class="step-card">
       <div class="step-eyebrow">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
@@ -1046,19 +1005,19 @@ p{color:var(--ink-2)}
       </div>
     </div>
     <div class="nav-btns">
-      <button class="btn-back" onclick="indNav(3)">
+      <button class="btn-back" onclick="indNav(2)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
         Back
       </button>
-      <button class="btn-next" onclick="indNext(4)">
+      <button class="btn-next" onclick="indNext(3)">
         Continue
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </button>
     </div>
   </div>
 
-  <!-- INDIVIDUAL: Step 5 - Income -->
-  <div class="panel" id="panel-ind-5">
+  <!-- INDIVIDUAL: Step 4 - Income -->
+  <div class="panel" id="panel-ind-4">
     <div class="step-card">
       <div class="step-eyebrow">
         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
@@ -1081,6 +1040,49 @@ p{color:var(--ink-2)}
         Many people qualify for $0/month plans. Your income helps us find every discount available to you.
       </div>
     </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="indNav(3)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn-next" onclick="indNext(4)">
+        Continue
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- INDIVIDUAL: Step 5 - Name + Email -->
+  <div class="panel" id="panel-ind-5">
+    <div class="step-card">
+      <div class="step-eyebrow">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Almost Done
+      </div>
+      <h2>Where should we send your quote?</h2>
+      <p class="step-sub">Last step. Your advisor will send your personalized plan options here.</p>
+      <div class="field-row">
+        <div class="field" id="f-ind-firstname">
+          <label>First Name<span class="req">*</span></label>
+          <input type="text" id="ind-firstname" placeholder="Jane" autocomplete="given-name" />
+          <div class="err-msg">Please enter your first name.</div>
+        </div>
+        <div class="field" id="f-ind-lastname">
+          <label>Last Name<span class="req">*</span></label>
+          <input type="text" id="ind-lastname" placeholder="Smith" autocomplete="family-name" />
+          <div class="err-msg">Please enter your last name.</div>
+        </div>
+      </div>
+      <div class="field" id="f-ind-email">
+        <label>Email Address<span class="req">*</span></label>
+        <input type="email" id="ind-email" placeholder="jane@email.com" autocomplete="email" />
+        <div class="err-msg">Please enter a valid email address.</div>
+      </div>
+      <div class="field-hint">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Your information is 100% secure and never sold.
+      </div>
+    </div>
     <div class="field" style="display:flex;gap:10px;align-items:flex-start;margin-top:14px">
       <input id="ind-sms-opt" type="checkbox" style="width:18px;height:18px;margin-top:3px;flex-shrink:0;cursor:pointer" />
       <label for="ind-sms-opt" style="font-size:.78rem;line-height:1.5;cursor:pointer;font-weight:400">
@@ -1101,36 +1103,23 @@ p{color:var(--ink-2)}
 
   <!-- ======================== BUSINESS PANELS ======================== -->
 
-  <!-- BUSINESS: Step 1 - Owner Info -->
+  <!-- BUSINESS: Step 1 - Contact Phone -->
   <div class="panel" id="panel-biz-1">
     <div class="step-card">
       <div class="step-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
         Business Owner
       </div>
-      <h2>Tell us about yourself</h2>
+      <h2>How can we reach you?</h2>
       <p class="step-sub">We'll assign a dedicated business insurance advisor to your account.</p>
-      <div class="field-row">
-        <div class="field" id="f-biz-firstname">
-          <label>Owner First Name<span class="req">*</span></label>
-          <input type="text" id="biz-firstname" placeholder="John" autocomplete="given-name" />
-          <div class="err-msg">Please enter the owner's first name.</div>
-        </div>
-        <div class="field" id="f-biz-lastname">
-          <label>Owner Last Name<span class="req">*</span></label>
-          <input type="text" id="biz-lastname" placeholder="Doe" autocomplete="family-name" />
-          <div class="err-msg">Please enter the owner's last name.</div>
-        </div>
-      </div>
       <div class="field" id="f-biz-contact-phone">
         <label>Best Contact Phone Number<span class="req">*</span></label>
         <input type="tel" id="biz-contact-phone" placeholder="(305) 555-0200" autocomplete="tel" inputmode="tel" />
         <div class="err-msg">Please enter a valid phone number.</div>
       </div>
-      <div class="field" id="f-biz-email">
-        <label>Business Email<span class="req">*</span></label>
-        <input type="email" id="biz-email" placeholder="owner@company.com" autocomplete="email" inputmode="email" />
-        <div class="err-msg">Please enter a valid business email.</div>
+      <div class="field-hint">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Your information is 100% secure and never sold.
       </div>
     </div>
     <div class="nav-btns">
@@ -1322,6 +1311,49 @@ p{color:var(--ink-2)}
         <div class="err-msg">Please enter a valid business phone number.</div>
       </div>
     </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="bizNav(3)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+      <button class="btn-next" onclick="bizNext(4)">
+        Continue
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- BUSINESS: Step 5 - Owner Name + Email -->
+  <div class="panel" id="panel-biz-5">
+    <div class="step-card">
+      <div class="step-eyebrow">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Almost Done
+      </div>
+      <h2>Where should we send your group quote?</h2>
+      <p class="step-sub">Last step. Your advisor will send your personalized group plan options here.</p>
+      <div class="field-row">
+        <div class="field" id="f-biz-firstname">
+          <label>Owner First Name<span class="req">*</span></label>
+          <input type="text" id="biz-firstname" placeholder="John" autocomplete="given-name" />
+          <div class="err-msg">Please enter the owner's first name.</div>
+        </div>
+        <div class="field" id="f-biz-lastname">
+          <label>Owner Last Name<span class="req">*</span></label>
+          <input type="text" id="biz-lastname" placeholder="Doe" autocomplete="family-name" />
+          <div class="err-msg">Please enter the owner's last name.</div>
+        </div>
+      </div>
+      <div class="field" id="f-biz-email">
+        <label>Business Email<span class="req">*</span></label>
+        <input type="email" id="biz-email" placeholder="owner@company.com" autocomplete="email" inputmode="email" />
+        <div class="err-msg">Please enter a valid business email.</div>
+      </div>
+      <div class="field-hint">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Your information is 100% secure and never sold.
+      </div>
+    </div>
     <div class="field" style="display:flex;gap:10px;align-items:flex-start;margin-top:14px">
       <input id="biz-sms-opt" type="checkbox" style="width:18px;height:18px;margin-top:3px;flex-shrink:0;cursor:pointer" />
       <label for="biz-sms-opt" style="font-size:.78rem;line-height:1.5;cursor:pointer;font-weight:400">
@@ -1329,7 +1361,7 @@ p{color:var(--ink-2)}
       </label>
     </div>
     <div class="nav-btns">
-      <button class="btn-back" onclick="bizNav(3)">
+      <button class="btn-back" onclick="bizNav(4)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
         Back
       </button>
@@ -1339,6 +1371,7 @@ p{color:var(--ink-2)}
       </button>
     </div>
   </div>
+
 
   <!-- SUCCESS SCREEN -->
   <!-- ===== QUOTE-GENERATING LOADER (after submit, before success) ===== -->
@@ -1548,12 +1581,12 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   // ---- STATE ----
   var currentType = null;     // 'individual' | 'business'
   var indStep = 0;            // 1-5
-  var bizStep = 0;            // 1-4
+  var bizStep = 0;            // 1-5
   var selectedIncome = null;
 
-  // IND: 5 steps total, BIZ: 4 steps total
+  // IND: 5 steps total, BIZ: 5 steps total
   var IND_STEPS = 5;
-  var BIZ_STEPS = 4;
+  var BIZ_STEPS = 5;
 
   // ---- PROGRESS ----
   function updateProgress(step, total){
@@ -1720,6 +1753,10 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     if(VS_TLD_FIX[tld]){ parts[parts.length-1] = VS_TLD_FIX[tld]; return local + "@" + parts.join("."); }
     return null;
   }
+  // Exposed so the draft-capture layer can refuse to send a mistyped address to
+  // the CRM while the visitor is still typing it.
+  window.vsSuggestEmail = suggestEmail;
+
   // Central email-field check: sets inline message (typo suggestion or invalid), returns bool
   function checkEmailField(inputId, fieldId){
     var el = document.getElementById(inputId); if(!el) return false;
@@ -1794,29 +1831,27 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   window.indNext = function(fromStep){
     var ok = true;
     if(fromStep === 1){
-      var dob = document.getElementById('ind-dob').value;
-      var namesOk = checkNameFields('ind-firstname','f-ind-firstname','ind-lastname','f-ind-lastname');
-      setErr('f-ind-dob', !isValidDate(dob));
-      if(!namesOk || !isValidDate(dob)) ok = false;
-      if(ok){ indNav(2); }
-    } else if(fromStep === 2){
       var addr = document.getElementById('ind-address').value.trim();
       var zip = document.getElementById('ind-zip').value.trim();
       var state = document.getElementById('ind-state').value;
+      var dob = document.getElementById('ind-dob').value;
       setErr('f-ind-address', !addr);
       setErr('f-ind-zip', !isValidZip(zip));
       setErr('f-ind-state', !state);
-      if(!addr || !isValidZip(zip) || !state) ok = false;
-      if(ok){ indNav(3); }
-    } else if(fromStep === 3){
+      setErr('f-ind-dob', !isValidDate(dob));
+      if(!addr || !isValidZip(zip) || !state || !isValidDate(dob)) ok = false;
+      if(ok){ indNav(2); }
+    } else if(fromStep === 2){
       var phone = document.getElementById('ind-phone').value.trim();
       setErr('f-ind-phone', !isValidPhone(phone));
-      var emailOk = checkEmailField('ind-email','f-ind-email');
-      if(!isValidPhone(phone) || !emailOk) ok = false;
-      if(ok){ indNav(4); }
+      if(!isValidPhone(phone)) ok = false;
+      // ZIP and phone are both in hand here, and name/email are still two steps
+      // away. Push the partial lead now so an abandoned quote is still a lead.
+      if(ok){ try{ if(window.vsCaptureDraft) window.vsCaptureDraft('individual', 2); }catch(e){} indNav(3); }
+    } else if(fromStep === 3){
+      indNav(4);            // situation is optional
     } else if(fromStep === 4){
-      // situation optional but nudge if none
-      indNav(5);
+      indNav(5);            // income is optional
     }
     if(ok){ updateProgress(fromStep + 1, IND_STEPS); }
   };
@@ -1826,11 +1861,9 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     var ok = true;
     if(fromStep === 1){
       var ph = document.getElementById('biz-contact-phone').value.trim();
-      var bizNamesOk = checkNameFields('biz-firstname','f-biz-firstname','biz-lastname','f-biz-lastname');
       setErr('f-biz-contact-phone', !isValidPhone(ph));
-      var emOk = checkEmailField('biz-email','f-biz-email');
-      if(!bizNamesOk || !isValidPhone(ph) || !emOk) ok = false;
-      if(ok){ bizNav(2); }
+      if(!isValidPhone(ph)) ok = false;
+      if(ok){ try{ if(window.vsCaptureDraft) window.vsCaptureDraft('business', 1); }catch(e){} bizNav(2); }
     } else if(fromStep === 2){
       var bn = document.getElementById('biz-name').value.trim();
       var emp = document.getElementById('biz-employees').value;
@@ -1843,7 +1876,20 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       if(!bn || !emp || !cov || !ins) ok = false;
       if(ok){ bizNav(3); }
     } else if(fromStep === 3){
-      bizNav(4);
+      bizNav(4);            // situation is optional
+    } else if(fromStep === 4){
+      var addr = document.getElementById('biz-address').value.trim();
+      var zip = document.getElementById('biz-zip').value.trim();
+      var state = document.getElementById('biz-state').value;
+      var bph = document.getElementById('biz-phone').value.trim();
+      setErr('f-biz-address', !addr);
+      setErr('f-biz-zip', !isValidZip(zip));
+      setErr('f-biz-state', !state);
+      setErr('f-biz-phone', !isValidPhone(bph));
+      if(!addr || !isValidZip(zip) || !state || !isValidPhone(bph)) ok = false;
+      // Business ZIP is only known now, so refresh the partial lead before the
+      // owner name + email step.
+      if(ok){ try{ if(window.vsCaptureDraft) window.vsCaptureDraft('business', 4); }catch(e){} bizNav(5); }
     }
     if(ok){ updateProgress(fromStep + 1, BIZ_STEPS); }
   };
@@ -2231,14 +2277,15 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
 
   // ---- SUBMIT ----
   window.submitInd = function(){
-    // final anti-junk guard — never submit fake name / bad phone / bad email
-    if(!checkNameFields('ind-firstname','f-ind-firstname','ind-lastname','f-ind-lastname')){
-      indNav(1); updateProgress(1, IND_STEPS); return;
-    }
-    var phv = document.getElementById('ind-phone').value.trim();
+    // Name + email live on this last step now, so they are validated here.
+    var namesOk = checkNameFields('ind-firstname','f-ind-firstname','ind-lastname','f-ind-lastname');
     var emOk = checkEmailField('ind-email','f-ind-email');
-    setErr('f-ind-phone', !isValidPhone(phv));
-    if(!isValidPhone(phv) || !emOk){ indNav(3); updateProgress(3, IND_STEPS); return; }
+    if(!namesOk || !emOk) return;
+    // Earlier steps can still be bad if someone jumped back and cleared them.
+    var zipv = document.getElementById('ind-zip').value.trim();
+    if(!isValidZip(zipv)){ setErr('f-ind-zip', true); indNav(1); updateProgress(1, IND_STEPS); return; }
+    var phv = document.getElementById('ind-phone').value.trim();
+    if(!isValidPhone(phv)){ setErr('f-ind-phone', true); indNav(2); updateProgress(2, IND_STEPS); return; }
     var data = collectInd();
     data.sms_opt_in = document.getElementById('ind-sms-opt') && document.getElementById('ind-sms-opt').checked ? 'yes' : 'no';
     var btn = document.querySelector('#panel-ind-5 .btn-submit');
@@ -2246,26 +2293,26 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   };
 
   window.submitBiz = function(){
-    // final anti-junk guard — name + owner contact
-    if(!checkNameFields('biz-firstname','f-biz-firstname','biz-lastname','f-biz-lastname')){
-      bizNav(1); updateProgress(1, BIZ_STEPS); return;
-    }
-    var cphv = document.getElementById('biz-contact-phone').value.trim();
+    // Owner name + business email live on this last step now.
+    var namesOk = checkNameFields('biz-firstname','f-biz-firstname','biz-lastname','f-biz-lastname');
     var bEmOk = checkEmailField('biz-email','f-biz-email');
-    setErr('f-biz-contact-phone', !isValidPhone(cphv));
-    if(!isValidPhone(cphv) || !bEmOk){ bizNav(1); updateProgress(1, BIZ_STEPS); return; }
+    if(!namesOk || !bEmOk) return;
+    var cphv = document.getElementById('biz-contact-phone').value.trim();
+    if(!isValidPhone(cphv)){ setErr('f-biz-contact-phone', true); bizNav(1); updateProgress(1, BIZ_STEPS); return; }
     var addr = document.getElementById('biz-address').value.trim();
     var zip = document.getElementById('biz-zip').value.trim();
     var state = document.getElementById('biz-state').value;
     var ph = document.getElementById('biz-phone').value.trim();
-    setErr('f-biz-address', !addr);
-    setErr('f-biz-zip', !isValidZip(zip));
-    setErr('f-biz-state', !state);
-    setErr('f-biz-phone', !isValidPhone(ph));
-    if(!addr || !isValidZip(zip) || !state || !isValidPhone(ph)) return;
+    if(!addr || !isValidZip(zip) || !state || !isValidPhone(ph)){
+      setErr('f-biz-address', !addr);
+      setErr('f-biz-zip', !isValidZip(zip));
+      setErr('f-biz-state', !state);
+      setErr('f-biz-phone', !isValidPhone(ph));
+      bizNav(4); updateProgress(4, BIZ_STEPS); return;
+    }
     var data = collectBiz();
     data.sms_opt_in = document.getElementById('biz-sms-opt') && document.getElementById('biz-sms-opt').checked ? 'yes' : 'no';
-    var btn = document.querySelector('#panel-biz-4 .btn-submit');
+    var btn = document.querySelector('#panel-biz-5 .btn-submit');
     sendToWebhook(data, btn);
   };
 
