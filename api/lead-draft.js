@@ -99,6 +99,9 @@ module.exports = async (req, res) => {
   const company = clean(d.company || d.businessName, 120);
   const type = d.type === "business" ? "business" : "individual";
   const step = clean(d.step, 20);
+  // Whatever the funnel knows that is not a plain contact field - situation,
+  // income band, employee count. It is what makes the card worth calling.
+  const extras = clean(d.notes, 600);
 
   // 4) Upsert the contact (dedup by email) and tag it as a recoverable draft.
   let contactId = null;
@@ -130,6 +133,7 @@ module.exports = async (req, res) => {
           email ? "Email: " + L.esc(email) : "(no email yet — did not reach the last step)",
           zip ? "ZIP: " + L.esc(zip) + (state ? " (" + L.esc(state) + ")" : "") : "",
           company ? "Business: " + L.esc(company) : "",
+          extras ? L.esc(extras) : "",
           "Opt-in checkbox: " + (optIn ? "yes" : "no (passive capture)"),
           "Source: /quote autosave",
         ].filter(Boolean).join("<br>");
@@ -156,7 +160,8 @@ module.exports = async (req, res) => {
         : "Quote funnel (in progress)"),
       attribution: (d.attribution && typeof d.attribution === "object") ? d.attribution : null,
       notes: "Auto-captured before submit" + (step ? " (" + step + ")" : "") +
-             (firstName || lastName ? "" : " — no name given yet") + ".",
+             (firstName || lastName ? "" : " — no name given yet") + "." +
+             (extras ? " " + extras : ""),
     });
     board = r && r.ok ? (r.action || "ok") : ((r && r.reason) || "error");
   } catch (e) { board = "exception"; }

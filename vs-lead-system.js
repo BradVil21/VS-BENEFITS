@@ -5,7 +5,9 @@
    Privacy-first design:
    - No analytics/marketing cookies load until the visitor consents
      (GDPR "prior consent" / CCPA-CPRA opt-out friendly).
-   - Form progress autosaves to THIS browser (localStorage) for the resume banner.
+   - Form progress is NOT kept in this browser. There is no "resume / start over"
+     banner: a returning visitor gets a clean form, and the recovery happens on
+     Bradley's side from the captured lead, not on the visitor's screen.
    - In-progress leads are auto-captured to our own /api/lead-draft (server-side
      validated) once a valid PHONE or email is present, even if the visitor never
      submits. The /quote funnel asks for ZIP and phone before name and email, so an
@@ -17,7 +19,7 @@
    ===================================================================== */
 (function(){
   "use strict";
-  var CONSENT_KEY='vs_consent', DRAFT_KEY='vs_quote_draft', DRAFT_TTL=7*24*3600*1000;
+  var CONSENT_KEY='vs_consent';
   var GA_ID='G-Z6EVXL76GG', ADS_ID='AW-17950389267';
 
   function $(id){return document.getElementById(id);}
@@ -42,13 +44,7 @@
    +".vs-cc-pref{display:flex;align-items:flex-start;gap:9px;font-size:.82rem;color:#334155;max-width:320px}"
    +".vs-cc-pref input{margin-top:3px;width:17px;height:17px;accent-color:#0db5a6}"
    +".vs-cc-pref b{color:#0b2346;display:block;font-size:.85rem}.vs-cc-pref.locked{opacity:.7}"
-   +"#vs-resume-banner{display:none;max-width:680px;margin:0 auto 18px;background:linear-gradient(135deg,#f4f8fe,#eef5ff);border:1px solid #cfe0f7;border-left:4px solid #0db5a6;border-radius:12px;padding:15px 18px}"
-   +"#vs-resume-banner.show{display:block}"
-   +".vs-rb-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between}"
-   +".vs-rb-txt{font-size:.9rem;color:#0b2346;font-weight:600}.vs-rb-txt span{display:block;font-weight:400;color:#5a6b80;font-size:.8rem;margin-top:2px}"
-   +".vs-rb-btns{display:flex;gap:8px}"
-   +".vs-rb-btn{border:0;border-radius:999px;padding:9px 16px;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit;min-height:40px}"
-   +".vs-rb-btn.go{background:#16447f;color:#fff}.vs-rb-btn.clear{background:#fff;border:1px solid #cbd5e1;color:#5a6b80}"
+   +""
    +".vs-recover-row{display:flex;align-items:flex-start;gap:9px;margin:14px 0 2px;padding:11px 13px;background:#f7faff;border:1px solid #e4e9f2;border-radius:10px;font-size:.8rem;color:#475569;line-height:1.5;cursor:pointer}"
    +".vs-recover-row input[type=checkbox]{-webkit-appearance:checkbox!important;appearance:checkbox!important;box-sizing:border-box!important;width:18px!important;height:18px!important;min-width:18px!important;max-width:18px!important;min-height:18px!important;padding:0!important;margin:1px 8px 0 0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:none!important;flex:0 0 auto!important;accent-color:#0db5a6!important;vertical-align:top}"
    +".vs-recover-row a{color:#16447f;font-weight:600;text-decoration:underline}"
@@ -148,7 +144,7 @@
   }
   function meaningful(d){ if(!d)return false; var f=d.fields||{}; return !!(f['ind-phone']||f['ind-zip']||f['ind-firstname']||f['ind-email']||f['biz-contact-phone']||f['biz-email']||f['biz-name']||f['biz-firstname']); }
   function scheduleSave(){ if(_submitted)return; clearTimeout(_t); _t=setTimeout(doSave,800); }
-  function doSave(){ var d=snapshot(); if(meaningful(d)){ store(DRAFT_KEY,d); maybeBackend(d); } }
+  function doSave(){ var d=snapshot(); if(meaningful(d)) maybeBackend(d); }
 
   /* Backend draft save — fires as soon as we have a reachable contact point.
      A valid phone is enough: the funnel collects ZIP + phone before name + email,
@@ -167,6 +163,16 @@
   }
   function draftPayload(d){
     var f=d.fields||{};
+    // Situation and income are not <input> values, so they never reach the card
+    // through `fields`. Fold them into the note instead - a lead that says "lost
+    // job coverage, $35-50k" is worth more on the phone than a bare number.
+    var extras=[];
+    var sits=((d.sits&&d.sits.ind)||[]).concat((d.sits&&d.sits.biz)||[]);
+    if(sits.length) extras.push('Situation: '+sits.join(', '));
+    if(d.income) extras.push('Household income: '+d.income);
+    if(f['ind-dob']) extras.push('DOB: '+f['ind-dob']);
+    if(f['biz-employees']) extras.push('Employees: '+f['biz-employees']);
+    if(f['biz-coverage']) extras.push('Requested coverage: '+f['biz-coverage']);
     return {consent:true,capture:'auto',optIn:false,type:d.type||_vsType||'individual',step:'Step '+(d.step||_vsStep||1),
       email:cleanEmail(f['ind-email']||f['biz-email']||''),
       phone:(f['ind-phone']||f['biz-contact-phone']||f['biz-phone']||'').trim(),
@@ -174,7 +180,8 @@
       lastName:f['ind-lastname']||f['biz-lastname']||'',
       address:f['ind-address']||f['biz-address']||'',
       zip:f['ind-zip']||f['biz-zip']||'',state:f['ind-state']||f['biz-state']||'',
-      company:f['biz-name']||''};
+      company:f['biz-name']||'',
+      notes:extras.join('; ')};
   }
   /* Only pass an email the funnel itself is happy with: a half-typed or mistyped
      address (jane@gmial.com) would otherwise land on the CRM record. */
@@ -184,13 +191,21 @@
     return v;
   }
   function reachable(p){ return validEmail(p.email)||validPhone(p.phone); }
+  /* Dedupe key: everything the card would show, minus the step label. Moving
+     from step 3 to step 4 without answering anything is not worth a write. */
+  function payloadKey(p){ var c={}; Object.keys(p).forEach(function(k){ if(k!=='step') c[k]=p[k]; }); return JSON.stringify(c); }
 
+  /* Typing is noisy: every 800ms pause would otherwise be a CRM write and a
+     board read-modify-write. Rate-limited to one post per 8s while typing; the
+     step advance below and the exit beacon are not rate-limited, so the last
+     state a visitor typed always gets out. */
   function maybeBackend(d){
     if(_submitted)return;
     var payload=draftPayload(d); if(!reachable(payload))return;
-    var hash=JSON.stringify(d.fields), now=Date.now();
-    if(now-_lastBE<15000 && hash===_lastHash)return;
-    _lastBE=now; _lastHash=hash;
+    var key=payloadKey(payload), now=Date.now();
+    if(key===_lastHash) return;
+    if(now-_lastBE<8000) return;
+    _lastBE=now; _lastHash=key;
     try{fetch('/api/lead-draft',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}).catch(function(){});}catch(e){}
   }
 
@@ -199,11 +214,11 @@
   window.vsCaptureDraft=function(type,step){
     if(_submitted)return;
     if(type)_vsType=type; if(step)_vsStep=step;
-    var d=snapshot(); store(DRAFT_KEY,d);
+    var d=snapshot();
     var payload=draftPayload(d); if(!reachable(payload))return;
-    var hash=JSON.stringify(d.fields), now=Date.now();
-    if(now-_lastBE<15000 && hash===_lastHash)return;   // the debounced save just sent this
-    _lastBE=now; _lastHash=hash;
+    var key=payloadKey(payload);
+    if(key===_lastHash) return;                        // nothing new since the last post
+    _lastBE=Date.now(); _lastHash=key;
     try{fetch('/api/lead-draft',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),keepalive:true}).catch(function(){});}catch(e){}
   };
 
@@ -212,7 +227,9 @@
   function beaconSend(){
     if(_submitted)return; var d=snapshot(); if(!meaningful(d))return;
     var payload=draftPayload(d); if(!reachable(payload))return;
-    try{ var body=JSON.stringify(payload);
+    try{ var body=JSON.stringify(payload), key=payloadKey(payload);
+      if(key===_lastHash) return;                      // already sent this exact state
+      _lastBE=Date.now(); _lastHash=key;
       if(navigator.sendBeacon){ navigator.sendBeacon('/api/lead-draft', new Blob([body],{type:'application/json'})); }
       else { fetch('/api/lead-draft',{method:'POST',headers:{'Content-Type':'application/json'},body:body,keepalive:true}).catch(function(){}); }
     }catch(e){}
@@ -221,65 +238,47 @@
   /* Wrap the funnel's global navigation so we always know type/step and can autosave. */
   function wrap(name,before){ var orig=window[name]; if(typeof orig!=='function')return; window[name]=function(){ try{before.apply(null,arguments);}catch(e){} return orig.apply(this,arguments); }; }
   wrap('selectType',function(t){_vsType=t;_vsStep=1;});
-  wrap('indNav',function(s){_vsType='individual';_vsStep=s;scheduleSave();});
-  wrap('bizNav',function(s){_vsType='business';_vsStep=s;scheduleSave();});
+  wrap('indNav',function(s){
+    var fwd = s > _vsStep; _vsType='individual'; _vsStep=s;
+    if(fwd && window.vsCaptureDraft) window.vsCaptureDraft('individual', s); else scheduleSave();
+  });
+  wrap('bizNav',function(s){
+    var fwd = s > _vsStep; _vsType='business'; _vsStep=s;
+    if(fwd && window.vsCaptureDraft) window.vsCaptureDraft('business', s); else scheduleSave();
+  });
   wrap('selectIncome',function(el,val){_vsIncome=val;scheduleSave();});
   wrap('backTo',function(s){if(s===0){_vsStep=0;}});
 
-  function clearDraft(){ _submitted=true; del(DRAFT_KEY); hideResume(); }
+  function clearDraft(){ _submitted=true; }
 
-  /* Restore a saved draft into the funnel. */
-  function restore(d){
-    var type=d.type||((d.fields['biz-email']||d.fields['biz-name']||d.fields['biz-firstname'])?'business':'individual');
-    if(window.selectType) window.selectType(type);
-    setTimeout(function(){
-      Object.keys(d.fields||{}).forEach(function(id){var el=$(id);if(el){el.value=d.fields[id];}});
-      restoreSits('#ind-situations',(d.sits&&d.sits.ind)||[]);
-      restoreSits('#biz-situations',(d.sits&&d.sits.biz)||[]);
-      if(d.income){document.querySelectorAll('#ind-income .income-item').forEach(function(it){ if(it.textContent.trim()===d.income && window.selectIncome){window.selectIncome(it,d.income);} });}
-      var step=d.step||1;
-      setTimeout(function(){
-        if(type==='individual'&&window.indNav){window.indNav(Math.min(step||1,5));}
-        else if(type==='business'&&window.bizNav){window.bizNav(Math.min(step||1,5));}
-      },260);
-    },320);
-    hideResume();
-  }
-  function restoreSits(sel,vals){
-    document.querySelectorAll(sel+' input[type=checkbox]').forEach(function(cb){
-      if(vals.indexOf(cb.value)!==-1){ cb.checked=true; var lb=cb.closest('label'); if(lb)lb.classList.add('checked'); }
-    });
-  }
-
-  /* Resume banner */
-  function buildResume(d){
-    if($('vs-resume-banner'))return;
-    var panel0=$('panel-0'); if(!panel0)return;
-    var host=panel0.parentNode; if(!host)return;
-    var r=document.createElement('div'); r.id='vs-resume-banner';
-    var when=''; try{ var mins=Math.round((Date.now()-(d.ts||Date.now()))/60000); when=mins<60?(Math.max(mins,1)+' min ago'):(Math.round(mins/60)+' hr ago'); }catch(e){}
-    r.innerHTML='<div class="vs-rb-row"><div class="vs-rb-txt">Welcome back &mdash; want to pick up where you left off?<span>We saved your progress on this device'+(when?(' ('+when+')'):'')+'. Nothing was submitted.</span></div>'
-      +'<div class="vs-rb-btns"><button type="button" class="vs-rb-btn go" id="vs-rb-go">Resume</button><button type="button" class="vs-rb-btn clear" id="vs-rb-clear">Start over</button></div></div>';
-    host.insertBefore(r,panel0);
-    $('vs-rb-go').onclick=function(){ restore(d); };
-    $('vs-rb-clear').onclick=function(){ del(DRAFT_KEY); hideResume(); };
-  }
-  function showResume(d){ buildResume(d); var r=$('vs-resume-banner'); if(r)r.classList.add('show'); }
-  function hideResume(){ var r=$('vs-resume-banner'); if(r)r.classList.remove('show'); }
+  /* (Removed) resume banner + local draft restore. A half-finished quote is
+     recovered by calling the person, not by offering them their old answers
+     back on the next visit - the banner told a visitor we had been keeping
+     their data and handed them a "Start over" button that threw the lead away.
+     The capture below is what makes that unnecessary. */
 
   /* (Removed) opt-in "save my progress" checkbox — /quote now auto-captures
      in-progress leads without an opt-in box. */
 
   ready(function(){
-    IND.concat(BIZ).forEach(function(id){var el=$(id); if(el){el.addEventListener('input',scheduleSave);el.addEventListener('change',scheduleSave);}});
+    // Typing is rate-limited; leaving a field is not. Blur is the moment a
+    // value is actually finished, and on the last step - name and email - it is
+    // the only chance to capture them before the visitor goes.
+    function saveNow(){ try{ if(window.vsCaptureDraft) window.vsCaptureDraft(_vsType,_vsStep); }catch(e){} }
+    var IDENTITY=['ind-firstname','ind-lastname','ind-email','ind-phone',
+                  'biz-firstname','biz-lastname','biz-email','biz-contact-phone'];
+    IND.concat(BIZ).forEach(function(id){
+      var el=$(id); if(!el) return;
+      el.addEventListener('input',scheduleSave);
+      if(IDENTITY.indexOf(id)>=0){ el.addEventListener('change',saveNow); el.addEventListener('blur',saveNow); }
+      else { el.addEventListener('change',scheduleSave); }
+    });
     document.querySelectorAll('#ind-situations input,#biz-situations input').forEach(function(cb){cb.addEventListener('change',scheduleSave);});
     document.querySelectorAll('#ind-income .income-item').forEach(function(it){it.addEventListener('click',function(){setTimeout(scheduleSave,20);});});
     var sp=$('panel-success');
     if(sp && window.MutationObserver){ new MutationObserver(function(){ if(sp.classList.contains('active')) clearDraft(); }).observe(sp,{attributes:true,attributeFilter:['class']}); }
-    var saved=load(DRAFT_KEY);
-    if(saved && meaningful(saved) && (Date.now()-(saved.ts||0))<DRAFT_TTL){ showResume(saved); }
-    else if(saved){ del(DRAFT_KEY); }
-    window.addEventListener('beforeunload',function(){ if(!_submitted){ var d=snapshot(); if(meaningful(d)) store(DRAFT_KEY,d); } beaconSend(); });
+    try{ del('vs_quote_draft'); }catch(e){}   // clear drafts left by the old banner
+    window.addEventListener('beforeunload',beaconSend);
     window.addEventListener('pagehide',beaconSend);
     document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='hidden') beaconSend(); });
   });

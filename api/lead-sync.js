@@ -101,6 +101,10 @@ const VALID_STAGES = [
 ];
 const VALID_BIZ_STAGES = ["prospect", "contacted", "meeting", "proposal", "won", "lost"];
 
+// A note line written by a pre-submit capture (api/lead-draft). Recognisable so
+// the merge can replace the previous one instead of appending another.
+const AUTO_NOTE = /^Auto-captured before submit/;
+
 // ---------- sanitisers ----------
 function clean(v, max) {
   return String(v == null ? "" : v).trim().slice(0, max || 120);
@@ -440,8 +444,14 @@ async function syncToBoards(n, opts) {
           if (n.sourceDetail) existing.sourceDetail = n.sourceDetail;
         }
         if (!existing.stage || VALID_BIZ_STAGES.indexOf(existing.stage) < 0) existing.stage = "prospect";
-        existing.notes = (existing.notes ? existing.notes + "\n" : "") +
-          "[" + today + "] New inbound from GoHighLevel (" + n.source + ")";
+        const bizLine = "[" + today + "] New inbound from GoHighLevel (" + n.source + ")";
+        let bizPrev = String(existing.notes || "");
+        if (AUTO_NOTE.test(String(n.notesIn || ""))) {
+          bizPrev = bizPrev.split("\n").filter(function (l) { return !AUTO_NOTE.test(l.trim()); }).join("\n");
+          if (n.notesIn) bizPrev = (bizPrev ? bizPrev + "\n" : "") + n.notesIn;
+        }
+        if (bizPrev.indexOf(bizLine) < 0) bizPrev = (bizPrev ? bizPrev + "\n" : "") + bizLine;
+        existing.notes = bizPrev;
         existing.updated = now;
         return true;
       }
@@ -505,7 +515,14 @@ async function syncToBoards(n, opts) {
       if (fullName && !String(existing.name || "").trim()) existing.name = fullName;
       if (!existing.dob && n.dob) existing.dob = n.dob;
       if (n.notesIn && String(existing.notes || "").indexOf(n.notesIn) < 0) {
-        existing.notes = (existing.notes ? existing.notes + "\n" : "") + n.notesIn;
+        // A pre-submit capture posts again at every step, each time knowing a
+        // little more. Keep the latest of those lines rather than stacking six
+        // near-identical ones on the card.
+        let prev = String(existing.notes || "");
+        if (AUTO_NOTE.test(n.notesIn)) {
+          prev = prev.split("\n").filter(function (l) { return !AUTO_NOTE.test(l.trim()); }).join("\n");
+        }
+        existing.notes = (prev ? prev + "\n" : "") + n.notesIn;
       }
       if (!existing.attribution && n.attribution) existing.attribution = n.attribution;
       // The quote funnel writes its own card straight to Firestore without a
