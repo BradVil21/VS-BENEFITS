@@ -192,6 +192,33 @@ footer a:hover{color:#fff}
   .nav-links a.nav-cta{margin:0;padding:10px 18px;border-radius:999px}
   .menu-toggle{display:none}
 }
+
+/* ===== STEPPED CALCULATOR =====
+   One question at a time, ZIP and phone first, name and email last. The
+   estimate is the reward at the end, so the fields that make a lead workable
+   are asked for while the visitor still wants something. */
+.cs-progress{margin:0 0 20px}
+.cs-bar{height:7px;background:var(--blue-100);border-radius:99px;overflow:hidden}
+.cs-bar span{display:block;height:100%;width:20%;border-radius:99px;background:linear-gradient(90deg,var(--blue-700),var(--teal));transition:width .35s ease}
+.cs-meta{display:flex;justify-content:space-between;font-size:.78rem;font-weight:700;color:var(--muted);margin-top:7px}
+.cs-meta .pct{color:var(--blue-600)}
+.cs-panel{display:none}
+.cs-panel.active{display:block;animation:fade .3s}
+.cs-eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--blue-50);color:var(--blue-700);border:1px solid var(--blue-100);border-radius:99px;padding:4px 11px;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.cs-h{font-size:1.22rem;margin:0 0 5px}
+.cs-sub{color:var(--muted);font-size:.9rem;margin:0 0 16px;line-height:1.5}
+.cs-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(102px,1fr));gap:9px}
+.cs-tiles.wide{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.cs-tile{border:1.5px solid var(--line);border-radius:11px;padding:12px 10px;text-align:center;font-weight:600;font-size:.9rem;cursor:pointer;background:#fff;min-height:var(--tap);display:flex;align-items:center;justify-content:center;transition:border-color .15s,background .15s,color .15s}
+.cs-tile:hover{border-color:var(--blue-500)}
+.cs-tile.sel{border-color:var(--blue-600);background:var(--blue-50);color:var(--blue-700);box-shadow:0 0 0 3px rgba(30,90,176,.12)}
+.cs-or{font-size:.82rem;color:var(--muted);margin:15px 0 7px;font-weight:600}
+.cs-nav{display:flex;gap:10px;align-items:center;margin-top:18px}
+.cs-nav .calc-btn{margin-top:0}
+.cs-back{flex:0 0 auto;min-height:54px;padding:0 22px;border:1.5px solid var(--line);background:#fff;color:var(--muted);border-radius:12px;font-weight:700;font-family:inherit;font-size:.95rem;cursor:pointer}
+.cs-back:hover{border-color:var(--blue-500);color:var(--blue-700)}
+.cs-secure{display:flex;gap:8px;align-items:flex-start;background:var(--bg-soft);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:.8rem;color:var(--muted);margin-top:14px;line-height:1.45}
+.cs-secure .chk{color:var(--teal-dark);font-weight:800}
 @media(max-width:560px){.grid{grid-template-columns:1fr}.tier-grid{grid-template-columns:1fr}}
 </style>
 <script type="application/ld+json">
@@ -260,21 +287,89 @@ footer a:hover{color:#fff}
         <span class="calc-chip"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Free &amp; no obligation</span>
       </div>
       <div class="calc-body">
-        <div class="grid">
-          <div class="field"><label>First name</label><input id="ad-first" type="text" autocomplete="given-name" placeholder="First name" required /></div>
-          <div class="field"><label>Last name</label><input id="ad-last" type="text" autocomplete="family-name" placeholder="Last name" required /></div>
-          <div class="field"><label>Phone</label><input id="ad-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-5555" required /></div>
-          <div class="field"><label>Email <span class="hint">(optional)</span></label><input id="ad-email" type="email" autocomplete="email" placeholder="you@email.com" /></div>
-          <div class="field"><label>Household income <span class="hint">(yearly, pre-tax)</span></label><div class="inp-money"><span>$</span><input id="income" type="text" inputmode="numeric" placeholder="55,000" /></div></div>
-          <div class="field"><label>Household size <span class="hint">(on your taxes)</span></label>
-            <select id="household"><option value="1">1 person</option><option value="2" selected>2 people</option><option value="3">3 people</option><option value="4">4 people</option><option value="5">5 people</option><option value="6">6 people</option><option value="7">7 people</option><option value="8">8 people</option></select></div>
-          <div class="field"><label>Your age</label><input id="age1" type="number" min="18" max="64" inputmode="numeric" placeholder="40" /></div>
-          <div class="field"><label>Spouse age <span class="hint">(if applying together)</span></label><input id="age2" type="number" min="18" max="64" inputmode="numeric" placeholder="Optional" /></div>
-          <div class="field"><label>Children under 21 <span class="hint">(on the plan)</span></label><input id="kids" type="number" min="0" max="8" inputmode="numeric" placeholder="0" /></div>
-          <div class="field"><label>ZIP code</label><input id="zip" type="text" inputmode="numeric" maxlength="5" placeholder="33101" required /></div>
+        <div class="cs-progress" id="cs-progress">
+          <div class="cs-bar"><span id="cs-fill"></span></div>
+          <div class="cs-meta"><span id="cs-step">Step 1 of 5</span><span class="pct" id="cs-pct">20%</span></div>
         </div>
+
+        <!-- STEP 1 - ZIP -->
+        <div class="cs-panel active" id="cs-p1">
+          <div class="cs-eyebrow">Location</div>
+          <h3 class="cs-h">What is your ZIP code?</h3>
+          <p class="cs-sub">Subsidies and plan prices are set locally, so this is what makes the estimate yours rather than an average.</p>
+          <div class="field"><label>ZIP Code</label><input id="zip" type="text" inputmode="numeric" maxlength="5" placeholder="33101" autocomplete="postal-code" /></div>
+        </div>
+
+        <!-- STEP 2 - PHONE -->
+        <div class="cs-panel" id="cs-p2">
+          <div class="cs-eyebrow">Contact</div>
+          <h3 class="cs-h">Where should your advisor reach you?</h3>
+          <p class="cs-sub">Your estimate appears on this page either way. The number is so a licensed advisor can confirm the exact plans and prices available to you, at no cost.</p>
+          <div class="field"><label>Phone Number</label><input id="ad-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-5555" /></div>
+        <div class="cs-secure"><span class="chk">&#10003;</span><span>Your information is 100% secure and never sold. A licensed advisor uses it to send you the real plans in your area.</span></div>
+        </div>
+
+        <!-- STEP 3 - HOUSEHOLD -->
+        <div class="cs-panel" id="cs-p3">
+          <div class="cs-eyebrow">Household</div>
+          <h3 class="cs-h">Who is on the plan?</h3>
+          <p class="cs-sub">Household size is everyone on your tax return. Age matters because ACA premiums are age-rated.</p>
+          <label style="display:block;font-size:.85rem;font-weight:700;color:var(--ink);margin-bottom:8px">Household size <span style="font-weight:400;color:var(--muted);font-size:.78rem">(on your taxes)</span></label>
+          <div class="cs-tiles" id="cs-household" data-target="household">
+            <div class="cs-tile" data-val="1">1 person</div>
+            <div class="cs-tile sel" data-val="2">2 people</div>
+            <div class="cs-tile" data-val="3">3 people</div>
+            <div class="cs-tile" data-val="4">4 people</div>
+            <div class="cs-tile" data-val="5">5 people</div>
+            <div class="cs-tile" data-val="6">6 people</div>
+            <div class="cs-tile" data-val="7">7 people</div>
+            <div class="cs-tile" data-val="8">8 people</div>
+          </div>
+          <input type="hidden" id="household" value="2" />
+          <div class="grid" style="margin-top:18px">
+            <div class="field"><label>Your age</label><input id="age1" type="number" min="18" max="64" inputmode="numeric" placeholder="40" /></div>
+            <div class="field"><label>Spouse age <span class="hint">(if applying together)</span></label><input id="age2" type="number" min="18" max="64" inputmode="numeric" placeholder="Optional" /></div>
+            <div class="field"><label>Children under 21 <span class="hint">(on the plan)</span></label><input id="kids" type="number" min="0" max="8" inputmode="numeric" placeholder="0" /></div>
+          </div>
+        </div>
+
+        <!-- STEP 4 - INCOME -->
+        <div class="cs-panel" id="cs-p4">
+          <div class="cs-eyebrow">Income</div>
+          <h3 class="cs-h">What is your household income?</h3>
+          <p class="cs-sub">Yearly, before tax, for everyone on the return. This is the number the subsidy formula runs on &mdash; nothing else moves the estimate as much.</p>
+          <div class="cs-tiles wide" id="cs-income">
+            <div class="cs-tile" data-val="15000">Under $20,000</div>
+            <div class="cs-tile" data-val="27500">$20,000 &ndash; $35,000</div>
+            <div class="cs-tile" data-val="42500">$35,000 &ndash; $50,000</div>
+            <div class="cs-tile" data-val="62500">$50,000 &ndash; $75,000</div>
+            <div class="cs-tile" data-val="87500">$75,000 &ndash; $100,000</div>
+            <div class="cs-tile" data-val="125000">$100,000 &ndash; $150,000</div>
+            <div class="cs-tile" data-val="175000">$150,000+</div>
+          </div>
+          <p class="cs-or">Pick a range and we use the middle of it. For a sharper estimate, enter the exact figure:</p>
+          <div class="field"><div class="inp-money"><span>$</span><input id="income" type="text" inputmode="numeric" placeholder="55,000" /></div></div>
+        </div>
+
+        <!-- STEP 5 - NAME + EMAIL -->
+        <div class="cs-panel" id="cs-p5">
+          <div class="cs-eyebrow">Almost Done</div>
+          <h3 class="cs-h">Who is this estimate for?</h3>
+          <p class="cs-sub">Last step &mdash; then your numbers appear right below.</p>
+          <div class="grid">
+            <div class="field"><label>First name</label><input id="ad-first" type="text" autocomplete="given-name" placeholder="First name" /></div>
+            <div class="field"><label>Last name</label><input id="ad-last" type="text" autocomplete="family-name" placeholder="Last name" /></div>
+          </div>
+          <div class="field" style="margin-top:16px"><label>Email <span class="hint">(optional)</span></label><input id="ad-email" type="email" autocomplete="email" placeholder="you@email.com" /></div>
+        <div class="cs-secure"><span class="chk">&#10003;</span><span>Your information is 100% secure and never sold. A licensed advisor uses it to send you the real plans in your area.</span></div>
+        </div>
+
         <div class="gate-err" id="gate-err" hidden></div>
-        <button class="calc-btn" id="calc-btn" type="button">Calculate My Estimate</button>
+        <div class="cs-nav">
+          <button class="cs-back" id="cs-back" type="button" hidden>&larr; Back</button>
+          <button class="calc-btn" id="cs-next" type="button">Continue &rarr;</button>
+          <button class="calc-btn" id="calc-btn" type="button" hidden>Calculate My Estimate</button>
+        </div>
         <p class="gate-fine">We never sell your information. By submitting you agree a licensed VS Health Benefits advisor may contact you about coverage.</p>
 
         <div class="results" id="results">
@@ -515,15 +610,15 @@ document.addEventListener("DOMContentLoaded",function(){
     var first=val("ad-first"), last=val("ad-last"), phone=val("ad-phone"), email=val("ad-email");
     var digits=phone.replace(/\D/g,"");
     if(digits.length===11&&digits.charAt(0)==="1") digits=digits.slice(1);
-    if(!first){ gateError("Please enter your first name."); focusOn("ad-first"); return; }
-    if(!last){ gateError("Please enter your last name."); focusOn("ad-last"); return; }
-    if(digits.length!==10){ gateError("Please enter a 10-digit phone number so an advisor can reach you."); focusOn("ad-phone"); return; }
-    if(email&&!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)){ gateError("That email does not look right. Leave it blank if you would rather not share it."); focusOn("ad-email"); return; }
-    if(!income){ gateError("Please enter your household income."); focusOn("income"); return; }
-    if(!age1){ gateError("Please enter your age."); focusOn("age1"); return; }
-    // ZIP drives which plans and prices actually apply, so it is required
-    // rather than decorative - and it makes the resulting lead workable.
-    if(!/^\d{5}$/.test(zipVal)){ gateError("Please enter your 5-digit ZIP code so we can estimate plans for your area."); focusOn("zip"); return; }
+    // Each check sends the visitor back to the step that owns the field, so a
+    // blank on step 1 does not fail silently five steps later.
+    if(!/^\d{5}$/.test(zipVal)){ csGo(1); gateError("Please enter your 5-digit ZIP code so we can estimate plans for your area."); focusOn("zip"); return; }
+    if(digits.length!==10){ csGo(2); gateError("Please enter a 10-digit phone number so an advisor can reach you."); focusOn("ad-phone"); return; }
+    if(!age1){ csGo(3); gateError("Please enter your age."); focusOn("age1"); return; }
+    if(!income){ csGo(4); gateError("Please pick an income range or enter your household income."); focusOn("income"); return; }
+    if(!first){ csGo(5); gateError("Please enter your first name."); focusOn("ad-first"); return; }
+    if(!last){ csGo(5); gateError("Please enter your last name."); focusOn("ad-last"); return; }
+    if(email&&!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)){ csGo(5); gateError("That email does not look right. Leave it blank if you would rather not share it."); focusOn("ad-email"); return; }
     gateError("");
     if(age1<18)age1=18;if(age1>64)age1=64;
 
@@ -610,6 +705,7 @@ document.addEventListener("DOMContentLoaded",function(){
       sEl.textContent="Thanks "+first+" — a licensed VS Health Benefits advisor will reach out shortly with the actual plans available in "+(est.zip||"your area")+", at no cost to you.";
     }
 
+    window.__csSubmitted = true;     // stop the pre-submit draft capture
     if(sentPhones[digits]) return;   // already in the pipeline, do not duplicate
     sentPhones[digits]=true;
 
@@ -635,9 +731,137 @@ document.addEventListener("DOMContentLoaded",function(){
     fireConfetti();
   }
 
+  /* ===================== STEPPED FLOW =====================
+     Five panels in one card. ZIP and phone come first because they are what
+     make a lead workable; the name is asked for last, right before the button
+     that pays it off. */
+  var CS_TOTAL=5, csStep=1;
+
+  function csGo(step){
+    csStep=Math.min(Math.max(step,1),CS_TOTAL);
+    for(var i=1;i<=CS_TOTAL;i++){
+      var p=document.getElementById("cs-p"+i);
+      if(p) p.classList.toggle("active", i===csStep);
+    }
+    var pct=Math.round(csStep/CS_TOTAL*100);
+    document.getElementById("cs-fill").style.width=pct+"%";
+    document.getElementById("cs-pct").textContent=pct+"%";
+    document.getElementById("cs-step").textContent="Step "+csStep+" of "+CS_TOTAL;
+    show("cs-back", csStep>1);
+    show("cs-next", csStep<CS_TOTAL);
+    show("calc-btn", csStep===CS_TOTAL);
+    gateError("");
+    var card=document.getElementById("cs-progress");
+    if(card && csStep>1) card.scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
+
+  function phoneDigits(){
+    var d=val("ad-phone").replace(/\D/g,"");
+    if(d.length===11&&d.charAt(0)==="1") d=d.slice(1);
+    return d;
+  }
+
+  // Advance only when the step's own answer is usable. Anything optional
+  // (spouse age, kids, email) is never a blocker.
+  function csNext(){
+    if(csStep===1){
+      if(!/^\d{5}$/.test(val("zip"))){ gateError("Please enter your 5-digit ZIP code."); focusOn("zip"); return; }
+    } else if(csStep===2){
+      if(phoneDigits().length!==10){ gateError("Please enter a 10-digit phone number so an advisor can reach you."); focusOn("ad-phone"); return; }
+      // ZIP and phone are both in hand and the name is still three steps away.
+      // Capture the lead now, so somebody who never presses Calculate is still
+      // a lead you can call rather than a bounce.
+      csCaptureDraft("Step 2 - phone");
+    } else if(csStep===3){
+      var a=parseInt(val("age1"),10);
+      if(!a){ gateError("Please enter your age."); focusOn("age1"); return; }
+      if(a<18||a>64){ gateError("Enter an age between 18 and 64. Under 18 is usually covered as a child, and 65+ is Medicare - an advisor can help with either."); focusOn("age1"); return; }
+    } else if(csStep===4){
+      if(!parseFloat(val("income").replace(/[^0-9.]/g,""))){ gateError("Pick an income range or enter the exact figure."); focusOn("income"); return; }
+      csCaptureDraft("Step 4 - income");
+    }
+    csGo(csStep+1);
+  }
+
+  /* Pre-submit capture. Posts to /api/lead-draft, which upserts the GoHighLevel
+     contact AND opens the card on the admin portal board, deduped on phone. So
+     when they do press Calculate, sendLead() below merges into that same card
+     and fills the name in rather than creating a second one. */
+  var _csLast="", _csLastAt=0;
+  function csDraftPayload(step){
+    var digits=phoneDigits();
+    if(digits.length!==10) return null;
+    var email=val("ad-email");
+    if(email&&!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)) email="";
+    return {
+      capture:"auto", type:"individual", step:step||("Step "+csStep),
+      source:"Subsidy calculator (in progress)",
+      firstName:val("ad-first"), lastName:val("ad-last"),
+      phone:val("ad-phone"), email:email, zip:val("zip"),
+      notes:"Started the subsidy calculator and has not pressed Calculate My Estimate yet.",
+      attribution:(function(){try{return (window.vsAttribution&&window.vsAttribution())||null;}catch(e){return null;}})()
+    };
+  }
+  function csCaptureDraft(step){
+    if(window.__csSubmitted) return;
+    var payload=csDraftPayload(step); if(!payload) return;
+    var hash=JSON.stringify(payload), now=Date.now();
+    if(hash===_csLast && now-_csLastAt<15000) return;
+    _csLast=hash; _csLastAt=now;
+    try{ fetch("/api/lead-draft",{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,body:hash}).catch(function(){}); }catch(e){}
+  }
+  // Leaving the page counts too - a phone number typed and abandoned is still a
+  // lead, and on mobile this is the only event that reliably fires.
+  function csBeacon(){
+    if(window.__csSubmitted) return;
+    var payload=csDraftPayload("Left the page on step "+csStep); if(!payload) return;
+    var body=JSON.stringify(payload);
+    if(body===_csLast && Date.now()-_csLastAt<15000) return;
+    _csLast=body; _csLastAt=Date.now();
+    try{
+      if(navigator.sendBeacon){ navigator.sendBeacon("/api/lead-draft", new Blob([body],{type:"application/json"})); }
+      else { fetch("/api/lead-draft",{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,body:body}).catch(function(){}); }
+    }catch(e){}
+  }
+  window.addEventListener("pagehide",csBeacon);
+  document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="hidden") csBeacon(); });
+
+  // Tiles: household size writes to the hidden #household, income writes the
+  // midpoint of the range into #income, which stays editable.
+  function wireTiles(wrapId, onPick){
+    var wrap=document.getElementById(wrapId); if(!wrap) return;
+    wrap.addEventListener("click",function(e){
+      var t=e.target.closest(".cs-tile"); if(!t||!wrap.contains(t)) return;
+      var all=wrap.querySelectorAll(".cs-tile");
+      for(var i=0;i<all.length;i++) all[i].classList.remove("sel");
+      t.classList.add("sel");
+      gateError("");
+      onPick(t.getAttribute("data-val"));
+    });
+  }
+  wireTiles("cs-household",function(v){ document.getElementById("household").value=v; });
+  wireTiles("cs-income",function(v){
+    var el=document.getElementById("income");
+    el.value=parseInt(v,10).toLocaleString();
+  });
+
+  document.getElementById("cs-next").addEventListener("click",csNext);
+  document.getElementById("cs-back").addEventListener("click",function(){ csGo(csStep-1); });
   document.getElementById("calc-btn").addEventListener("click",calc);
   var inc=document.getElementById("income");
-  inc.addEventListener("input",function(){var v=this.value.replace(/[^0-9]/g,"");this.value=v?parseInt(v,10).toLocaleString():"";});
+  inc.addEventListener("input",function(){
+    var v=this.value.replace(/[^0-9]/g,"");
+    this.value=v?parseInt(v,10).toLocaleString():"";
+    // Typing an exact figure overrides whichever range was tapped.
+    var tiles=document.querySelectorAll("#cs-income .cs-tile");
+    for(var i=0;i<tiles.length;i++) tiles[i].classList.remove("sel");
+  });
+  document.getElementById("zip").addEventListener("input",function(){ this.value=this.value.replace(/\D/g,"").slice(0,5); });
+  ["zip","ad-phone","age1"].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el) el.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); csNext(); } });
+  });
+  csGo(1);
 })();
 </script>
   <!-- GHL/LeadConnector Live Chat widget (Conversation AI) -->

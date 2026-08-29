@@ -422,8 +422,23 @@ async function syncToBoards(n, opts) {
         if (!existing.ghlContactId && n.contactId) existing.ghlContactId = n.contactId;
         if (!existing.email && n.email) existing.email = n.email;
         if (!existing.phone && n.phone) existing.phone = n.phone;
+        // A card opened by a partial capture has no name on it yet - the funnel
+        // asks for the name last. Filling these is the whole point of the merge.
+        if (!existing.firstName && n.firstName) existing.firstName = n.firstName;
+        if (!existing.lastName && n.lastName) existing.lastName = n.lastName;
+        const bizContact = (n.firstName + " " + n.lastName).trim();
+        if (bizContact && !String(existing.contact || "").trim()) existing.contact = bizContact;
+        if (n.company && !String(existing.company || "").trim()) existing.company = n.company;
+        if (!existing.state && n.state) existing.state = n.state;
         if (!existing.employees && n.employees) existing.employees = n.employees;
         if (!existing.attribution && n.attribution) existing.attribution = n.attribution;
+        // The card was opened by a pre-submit capture, whose source says
+        // "(in progress)". They are not in progress any more.
+        if (n.source && /\(in progress\)/i.test(String(existing.source || "")) &&
+            !/\(in progress\)/i.test(n.source)) {
+          existing.source = n.source;
+          if (n.sourceDetail) existing.sourceDetail = n.sourceDetail;
+        }
         if (!existing.stage || VALID_BIZ_STAGES.indexOf(existing.stage) < 0) existing.stage = "prospect";
         existing.notes = (existing.notes ? existing.notes + "\n" : "") +
           "[" + today + "] New inbound from GoHighLevel (" + n.source + ")";
@@ -477,7 +492,21 @@ async function syncToBoards(n, opts) {
       if (!existing.email && n.email) existing.email = n.email;
       if (!existing.phone && n.phone) existing.phone = n.phone;
       if (!existing.zipCode && n.zip) existing.zipCode = n.zip;
+      // The browser-written cards spell it zipcode; keep both in step so the
+      // board shows the ZIP whichever field it reads.
+      if (!existing.zipcode && n.zip) existing.zipcode = n.zip;
       if (!existing.state && n.state) existing.state = n.state;
+      // A partial card has no name on it - the funnel and the calculator both
+      // ask for the name last, so this is what turns "(no name yet)" into a
+      // person once they finish.
+      if (!existing.firstName && n.firstName) existing.firstName = n.firstName;
+      if (!existing.lastName && n.lastName) existing.lastName = n.lastName;
+      const fullName = (n.firstName + " " + n.lastName).trim();
+      if (fullName && !String(existing.name || "").trim()) existing.name = fullName;
+      if (!existing.dob && n.dob) existing.dob = n.dob;
+      if (n.notesIn && String(existing.notes || "").indexOf(n.notesIn) < 0) {
+        existing.notes = (existing.notes ? existing.notes + "\n" : "") + n.notesIn;
+      }
       if (!existing.attribution && n.attribution) existing.attribution = n.attribution;
       // The quote funnel writes its own card straight to Firestore without a
       // stage, so a card we merge into can be one the board cannot place - it
@@ -485,6 +514,13 @@ async function syncToBoards(n, opts) {
       // once somebody opens the portal. Repair it here too, so a lead is on the
       // board from the moment it lands rather than from the next time it is
       // looked at.
+      // The card was opened by a pre-submit capture, whose source says
+      // "(in progress)". They are not in progress any more.
+      if (n.source && /\(in progress\)/i.test(String(existing.source || "")) &&
+          !/\(in progress\)/i.test(n.source)) {
+        existing.source = n.source;
+        if (n.sourceDetail) existing.sourceDetail = n.sourceDetail;
+      }
       if (!existing.stage || VALID_STAGES.indexOf(existing.stage) < 0) existing.stage = "new_lead";
       existing.lastContact = today;
       existing.updated = now;
@@ -710,6 +746,29 @@ async function alertNewLead(n) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════
+// Shared with api/lead-draft.js, which captures a quote or calculator that was
+// never submitted. Those partials belong on the same board as finished leads —
+// a name is the one thing they are missing, and a phone number and a ZIP are
+// enough to work. syncToBoards dedupes on contact id, then email, then phone,
+// so when the visitor comes back and finishes, the completed lead merges into
+// the card the partial opened instead of adding a second one.
+//
+// Not a serverless function of its own: this is a require() from lead-draft, so
+// the api/ directory stays inside the 12-function limit.
+async function pushLeadToBoards(d) {
+  const contact = {
+    id: d.contactId || "",
+    email: d.email || "",
+    phone: d.phone || "",
+    firstName: d.firstName || "",
+    lastName: d.lastName || "",
+    state: d.state || "",
+    postalCode: d.zip || "",
+    companyName: d.company || "",
+  };
+  return syncToBoards(normalize(contact, d));
+}
+
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -737,3 +796,5 @@ module.exports = async (req, res) => {
     if (!res.headersSent) res.status(200).json({ ok: true, error: "exception" });
   }
 };
+
+module.exports.pushLeadToBoards = pushLeadToBoards;

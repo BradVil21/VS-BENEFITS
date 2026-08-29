@@ -9,6 +9,10 @@
 // Security / privacy by design:
 //   - POST only, JSON only, CORS locked to the site origin.
 //   - Server-side validation + sanitisation of every field (never trust the client).
+//   - Writes the partial to BOTH GoHighLevel and the admin portal board, so a
+//     visitor who never pressed submit still shows up as a New Lead with a
+//     number to call. The board write dedupes on phone/email, so finishing the
+//     quote later updates that same card rather than opening a second one.
 //   - Requires a valid phone OR email to write to the backend. Phone is the
 //     primary dedup key because the /quote funnel now asks for ZIP + phone before
 //     name and email, so an abandoned quote still arrives with a number to call.
@@ -22,6 +26,7 @@
 // See api/_lib.js for shared helpers and env vars.
 
 const L = require("./_lib");
+const LEADSYNC = require("./lead-sync");
 
 // Only accept requests from our own site (defence-in-depth; the data is first-party).
 const ALLOWED_ORIGINS = [
@@ -132,5 +137,29 @@ module.exports = async (req, res) => {
     }
   } catch (e) { /* non-fatal */ }
 
-  res.status(200).json({ ok: true, contactId: contactId || null, stored: !!contactId });
+  // 6) And onto the admin portal board, so the partial is a lead you can see
+  //    and work, not just a contact record sitting in GoHighLevel.
+  let board = "skipped";
+  try {
+    const r = await LEADSYNC.pushLeadToBoards({
+      contactId: contactId || "",
+      email: email,
+      phone: phone,
+      firstName: firstName,
+      lastName: lastName,
+      company: company,
+      state: state,
+      zip: zip,
+      type: type,
+      source: clean(d.source, 80) || (type === "business"
+        ? "Quote funnel — business (in progress)"
+        : "Quote funnel (in progress)"),
+      attribution: (d.attribution && typeof d.attribution === "object") ? d.attribution : null,
+      notes: "Auto-captured before submit" + (step ? " (" + step + ")" : "") +
+             (firstName || lastName ? "" : " — no name given yet") + ".",
+    });
+    board = r && r.ok ? (r.action || "ok") : ((r && r.reason) || "error");
+  } catch (e) { board = "exception"; }
+
+  res.status(200).json({ ok: true, contactId: contactId || null, stored: !!contactId, board: board });
 };

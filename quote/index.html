@@ -1540,6 +1540,34 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 let _authReady = signInAnonymously(auth).catch(function(){});
+/* One person, one card. The funnel captures a partial lead as soon as it has a
+   phone number (see /api/lead-draft), which opens the card before the visitor
+   has given a name. Without a match check here, finishing the quote a minute
+   later would unshift a second card for the same person and the board would
+   show the same lead twice - once nameless. Matched on phone last-10 or email,
+   the same keys the server uses, and blanks on the existing card are filled in
+   rather than overwritten. A card in a closed stage is finished business, so
+   that person enquiring again does deserve a new card. */
+const VS_CLOSED = ["sold","no_longer_interested","disqualified","ghosted","won","lost"];
+function vsLast10(v){ return String(v == null ? "" : v).replace(/\D/g,"").slice(-10); }
+function vsSamePerson(a, b){
+  var ae = String(a.email||"").trim().toLowerCase(), be = String(b.email||"").trim().toLowerCase();
+  if (ae && be && ae === be) return true;
+  var ap = vsLast10(a.phone), bp = vsLast10(b.phone);
+  return Boolean(ap && ap.length === 10 && ap === bp);
+}
+function vsMergeInto(existing, item){
+  Object.keys(item).forEach(function(k){
+    if (k === "id" || k === "created" || k === "stage" || k === "status") return;
+    var cur = existing[k], next = item[k];
+    if (next === null || next === undefined || next === "") return;
+    if (cur === null || cur === undefined || cur === "") { existing[k] = next; return; }
+    if (k === "notes" && String(cur) !== String(next)) existing[k] = cur + "\n" + next;
+  });
+  existing.updated = Date.now();
+  return existing;
+}
+
 window.vsAdminWrite = async function(key, item){
   try { await _authReady; } catch(e){}
   var ref = doc(db, "vs_state", key);
@@ -1548,7 +1576,12 @@ window.vsAdminWrite = async function(key, item){
     var snap = await getDoc(ref);
     if (snap.exists() && Array.isArray(snap.data().items)) items = snap.data().items;
   } catch(e){}
-  items.unshift(item);
+  var hit = -1;
+  for (var i = 0; i < items.length; i++){
+    if (items[i] && VS_CLOSED.indexOf(items[i].stage) < 0 && vsSamePerson(items[i], item)) { hit = i; break; }
+  }
+  if (hit >= 0) items[hit] = vsMergeInto(items[hit], item);
+  else items.unshift(item);
   try { await setDoc(ref, { items: items, ts: Date.now() }); } catch(e){}
 };
 
@@ -2095,6 +2128,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       address:   address,
       state:     state,
       zipcode:   zip,
+      zipCode:   zip,          // the server-written cards use this spelling
       company:   data.businessName || '',
       coverage:  coverage,
       monthlyPremium: null,
