@@ -6,6 +6,10 @@ from linkblock import inject
 red={r['source'] for r in json.load(open('vercel.json'))['redirects']}
 
 C={
+ 'elig':  ('/group-health-eligibility-checker','Do You Have Enough Employees?',
+           'Free 60-second check: whether you can get a group plan, your real participation number, and the Nov 15-Dec 15 window that waives it.'),
+ 'ecalc': ('/employer-health-insurance-cost-calculator','What Will It Cost Me Per Employee?',
+           'Your monthly cost, what comes out of employee paychecks, and the Section 125 payroll tax you get back.'),
  'hub':   ('/group-health-insurance-by-industry','Group Health Insurance by Industry',
            'Contractors, janitorial, fleets, retail, restaurants and clinics. What changes by trade, and the rating rule most owners get wrong.'),
  'pillar':('/small-business-health-insurance','Small Business Group Health 2027',
@@ -29,19 +33,19 @@ C={
 }
 
 # default set, overridden per page below
-DEFAULT=['hub','calc','pillar','req']
+DEFAULT=['elig','ecalc','hub','pillar']
 SPECIAL={
- 'group-health-insurance-by-industry.html': ['pillar','calc','fl','ichra'],
- 'small-business-health-insurance.html':    ['hub','calc','cost','req'],
- 'small-business-health-insurance-cost.html':['calc','hub','pillar','lf'],
- 'small-business-health-insurance-calculator.html':['pillar','hub','cost','fl'],
+ 'group-health-insurance-by-industry.html': ['elig','ecalc','pillar','ichra'],
+ 'small-business-health-insurance.html':    ['elig','ecalc','hub','cost'],
+ 'small-business-health-insurance-cost.html':['ecalc','elig','hub','lf'],
+ 'small-business-health-insurance-calculator.html':['ecalc','elig','pillar','cost'],
  'florida-small-business-health-insurance.html':['hub','miami','req','calc'],
- 'florida-small-business-health-insurance-requirements.html':['pillar','hub','calc','ichra'],
+ 'florida-small-business-health-insurance-requirements.html':['elig','ecalc','pillar','hub'],
  'ichra-florida-small-business.html':       ['lf','pillar','hub','calc'],
  'level-funded-health-insurance-florida.html':['ichra','pillar','hub','calc'],
- 'business-open-enrollment-faq.html':       ['pillar','hub','calc','req'],
+ 'business-open-enrollment-faq.html':       ['elig','ecalc','pillar','req'],
 }
-CITY=['hub','fl','calc','req']
+CITY=['elig','ecalc','fl','hub']
 
 SB=[f for f in sorted(glob.glob('*.html')) if re.search(
     r'small-business|business-open-enrollment|group-health-insurance-by-industry|restaurant-health|'

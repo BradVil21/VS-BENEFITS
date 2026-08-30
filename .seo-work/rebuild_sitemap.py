@@ -17,6 +17,8 @@ PRIO = {
  '/small-business-health-insurance': '0.9', '/quote': '0.9',
  '/group-health-insurance-by-industry': '0.9', '/florida-small-business-health-insurance': '0.9',
  '/small-business-health-insurance-calculator': '0.9',
+ '/group-health-eligibility-checker': '0.9',
+ '/employer-health-insurance-cost-calculator': '0.9',
  '/texas-small-business-health-insurance': '0.9',
  '/maryland-small-business-health-insurance': '0.9',
  '/kentucky-small-business-health-insurance': '0.9',
