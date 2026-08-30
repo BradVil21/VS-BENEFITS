@@ -668,8 +668,8 @@ COST_STEPS = STEP1 % dict(
     cta="Start my estimate",
 ) + """
       <div class="wstep" id="s2">
-        <h2>What kind of plan and what kind of team?</h2>
-        <p class="wsub">Premiums move with the average age of your group and the plan tier you pick. These two inputs do most of the work.</p>
+        <h2>Tell us about your team</h2>
+        <p class="wsub">Premiums move with the average age of your group and how many people add dependents. These two inputs do most of the work.</p>
         <div class="wf">
           <label>Average age of your team</label>
           <div class="wseg" id="age-seg">
@@ -678,15 +678,6 @@ COST_STEPS = STEP1 % dict(
             <button type="button" data-age="1.28">40&ndash;49</button>
             <button type="button" data-age="1.65">50+</button>
           </div>
-        </div>
-        <div class="wf">
-          <label>Plan level</label>
-          <div class="wseg" id="tier-seg">
-            <button type="button" data-base="470">Bronze</button>
-            <button type="button" data-base="605" class="on">Silver</button>
-            <button type="button" data-base="730">Gold</button>
-          </div>
-          <div class="hint">Bronze has the lowest premium and the highest deductible. Silver is where most small groups land.</div>
         </div>
         <div class="wf" id="f-fam">
           <label for="cnt-family">How many would add a spouse or children?</label>
@@ -746,7 +737,7 @@ COST_STEPS = STEP1 % dict(
           <button class="wback" type="button" onclick="wBack(3)">&larr; Back</button>
           <button class="wnext" type="button" onclick="wShow(5)">Email me these numbers &rarr;</button>
         </div>
-        <p class="wfine">Estimate only, based on 2026&ndash;2027 small group rates for Florida and nearby states. Real premiums depend on your ZIP code, exact employee ages, carrier and plan design. VS Health Benefits quotes and sets up group coverage at no cost to the employer.</p>
+        <p class="wfine">Estimate only, based on a mid-range plan at 2026&ndash;2027 small group rates for Florida and nearby states. Bronze runs lower and Gold higher; your advisor will price all three. Real premiums depend on your ZIP code, exact employee ages, carrier and plan design. VS Health Benefits quotes and sets up group coverage at no cost to the employer.</p>
       </div>
 """ + FINAL_STEP % dict(
     n=5, back=4,
@@ -757,7 +748,8 @@ COST_STEPS = STEP1 % dict(
 )
 
 COST_LOGIC = r"""
-  var AGE=1.00, BASE=605, CEE=0.50, CDEP=0;
+  var AGE=1.00, CEE=0.50, CDEP=0;
+  var BASE=605;   /* mid-range (Silver-level) small group rate */
   var FAMFACTOR=2.7, FICA=0.0765;
 
   function seg(id, cb){
@@ -769,7 +761,6 @@ COST_LOGIC = r"""
     });
   }
   seg('age-seg',     function(b){ AGE=parseFloat(b.getAttribute('data-age')); });
-  seg('tier-seg',    function(b){ BASE=parseFloat(b.getAttribute('data-base')); });
   seg('contrib-seg', function(b){ CEE=parseFloat(b.getAttribute('data-c')); });
   seg('dep-seg',     function(b){ CDEP=parseFloat(b.getAttribute('data-d')); });
 
@@ -800,7 +791,7 @@ COST_LOGIC = r"""
   var famEl=document.getElementById('cnt-family'); if(famEl) famEl.addEventListener('input', calc);
   var empEl=document.getElementById('biz-employees'); if(empEl) empEl.addEventListener('input', calc);
 
-  window.wStep2=function(){ calc(); captureDraft(2, 'Plan interest: base '+BASE+', age factor '+AGE+'.'); show(3); };
+  window.wStep2=function(){ calc(); captureDraft(2, 'Age factor '+AGE+', '+num('cnt-family')+' taking family coverage.'); show(3); };
   window.wStep3=function(){
     calc();
     captureDraft(3, 'Estimate: employer '+money(LAST.employer)+'/mo, total premium '+money(LAST.total)+'/mo, annual employer cost '+money(LAST.employer*12)+'.');
