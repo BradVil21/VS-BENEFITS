@@ -348,6 +348,16 @@ p{color:var(--ink-2)}
   appearance:none;
   -webkit-appearance:none;
 }
+
+/* --- FIX: consent/SMS checkboxes must not inherit text-input styling --- */
+.field input[type="checkbox"],.field input[type="radio"]{
+  width:18px;height:18px;min-width:18px;min-height:18px;
+  padding:0;border:0;border-radius:0;background:none;
+  appearance:auto;-webkit-appearance:checkbox;
+  accent-color:var(--blue-600);
+  flex:0 0 auto;cursor:pointer;
+}
+.field input[type="radio"]{-webkit-appearance:radio}
 .field input:focus,.field select:focus{
   outline:none;
   border-color:var(--blue-600);
