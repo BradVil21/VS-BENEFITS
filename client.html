@@ -329,6 +329,10 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .cp-navitem.tour-hi{outline:2px solid #34d399;outline-offset:-2px;background:rgba(52,211,153,.18)!important;border-radius:10px}
 @media(max-width:860px){.cp-tour-card{bottom:14px}}
 
+/* soft photo backdrop behind the sign-in view */
+body{background-color:var(--bg);background-image:linear-gradient(180deg,rgba(246,249,252,.50) 0%,rgba(246,249,252,.66) 46%,rgba(246,249,252,.93) 100%),url('/compressed/portal-bg-soft.jpg');background-size:cover;background-position:center top;background-repeat:no-repeat;min-height:100vh}
+@media(max-width:900px){body{background-image:linear-gradient(180deg,rgba(246,249,252,.58) 0%,rgba(246,249,252,.74) 42%,rgba(246,249,252,.95) 100%),url('/compressed/portal-bg-soft.jpg')}}
+
 /* ── Member portal hero (auth view) ── */
 .portal-hero{position:relative;overflow:hidden;border-radius:24px;margin:10px 0 0;background:linear-gradient(135deg,#0b2346 0%,#16447f 58%,#0b6f79 100%);box-shadow:0 24px 60px rgba(11,35,70,.22)}
 .portal-hero::before{content:"";position:absolute;inset:0;background-image:url('/compressed/member-portal-happy-client.jpg');background-size:cover;background-position:72% 30%;opacity:.46}
