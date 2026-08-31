@@ -329,6 +329,24 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .cp-navitem.tour-hi{outline:2px solid #34d399;outline-offset:-2px;background:rgba(52,211,153,.18)!important;border-radius:10px}
 @media(max-width:860px){.cp-tour-card{bottom:14px}}
 
+/* ── Mobile hamburger for the public nav ── */
+.nav-burger{display:none;background:none;border:0;width:42px;height:42px;padding:9px 8px;cursor:pointer;border-radius:10px;flex:none}
+.nav-burger:hover{background:rgba(14,42,61,.07)}
+.nav-burger span{display:block;height:2.5px;border-radius:2px;background:#0e2a3d;margin:4px 0;transition:transform .25s ease,opacity .2s ease}
+.nav-burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.nav-burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.nav-burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+@media(max-width:700px){
+  .nav-burger{display:block}
+  .site-nav{padding:0 14px}
+  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#fff;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;box-shadow:0 16px 30px rgba(13,27,42,.13);padding:6px 16px 16px;z-index:60}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:14px 2px;font-size:15.5px;font-weight:600;color:#1f2937;border-bottom:1px solid #f1f5f9}
+  .nav-links a:last-child{border-bottom:0}
+  .nav-links .nav-cta{text-align:center;margin-top:12px;padding:13px 20px;color:#fff !important;border-bottom:0}
+}
+@media(max-width:560px){#sync-label{display:none}.sync-pill{padding:5px 6px}}
+
 /* soft photo backdrop behind the sign-in view */
 body{background-color:var(--bg);background-image:linear-gradient(180deg,rgba(246,249,252,.50) 0%,rgba(246,249,252,.66) 46%,rgba(246,249,252,.93) 100%),url('/compressed/portal-bg-soft.jpg');background-size:cover;background-position:center top;background-repeat:no-repeat;min-height:100vh}
 @media(max-width:900px){body{background-image:linear-gradient(180deg,rgba(246,249,252,.58) 0%,rgba(246,249,252,.74) 42%,rgba(246,249,252,.95) 100%),url('/compressed/portal-bg-soft.jpg')}}
@@ -351,10 +369,16 @@ body{background-color:var(--bg);background-image:linear-gradient(180deg,rgba(246
 .portal-note{color:rgba(255,255,255,.72);font-size:.8rem;margin:18px 0 0;display:flex;align-items:center;gap:7px}
 .portal-note svg{flex:none;width:15px;height:15px;color:#8ff0e4}
 @media(max-width:900px){
-  .portal-hero{border-radius:18px}
-  .portal-hero-inner{grid-template-columns:1fr;gap:26px;padding:32px 22px}
+  /* below 900px the dark panel and the sign-in card become two separate cards */
+  .portal-hero{background:none;box-shadow:none;border-radius:0;overflow:visible;margin-top:4px}
+  .portal-hero::before,.portal-hero::after{display:none}
+  .portal-hero-inner{grid-template-columns:1fr;gap:18px;padding:0}
+  .portal-copy{position:relative;overflow:hidden;border-radius:20px;padding:30px 22px 26px;background:linear-gradient(135deg,#0b2346 0%,#16447f 58%,#0b6f79 100%);box-shadow:0 16px 40px rgba(11,35,70,.22)}
+  .portal-copy::before{content:"";position:absolute;inset:0;background-image:url('/compressed/member-portal-happy-client.jpg');background-size:cover;background-position:70% 28%;opacity:.42}
+  .portal-copy::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,35,70,.93) 0%,rgba(11,35,70,.87) 55%,rgba(11,35,70,.74) 100%)}
+  .portal-copy>*{position:relative;z-index:2}
   .portal-type{min-height:4.4em}
-  .portal-hero::after{background:linear-gradient(180deg,rgba(11,35,70,.93) 0%,rgba(11,35,70,.87) 52%,rgba(11,35,70,.7) 100%)}
+  .portal-formcol .card{border:1px solid var(--line);box-shadow:0 12px 32px rgba(11,35,70,.13)}
 }
 @media(prefers-reduced-motion:reduce){.cp-caret::after{animation:none}}
 </style>
@@ -367,7 +391,7 @@ body{background-color:var(--bg);background-image:linear-gradient(180deg,rgba(246
     <span class="b">VS</span>
     <span>VS Health Benefits</span>
   </a>
-  <div class="nav-links">
+  <div class="nav-links" id="nav-links">
     <a href="https://vshealthbenefits.com">Home</a>
     <a href="https://vshealthbenefits.com/services">Services</a>
     <a href="https://vshealthbenefits.com/about">About</a>
@@ -379,6 +403,9 @@ body{background-color:var(--bg);background-image:linear-gradient(180deg,rgba(246
   <div class="nav-right">
     <span id="sync-pill" class="sync-pill"><span class="dot"></span><span id="sync-label">Connecting</span></span>
     <button id="signout-btn" class="signout" hidden>Sign out</button>
+    <button class="nav-burger" id="nav-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
@@ -1598,6 +1625,35 @@ if(getSession())showDashboard();
   }, {passive:true});
   btn.addEventListener("click", function(){
     window.scrollTo({top:0, behavior:"smooth"});
+  });
+})();
+</script>
+<script>
+/* Public nav: mobile hamburger */
+(function(){
+  var burger = document.getElementById('nav-burger');
+  var links  = document.getElementById('nav-links');
+  if(!burger || !links) return;
+  function setOpen(on){
+    links.classList.toggle('open', on);
+    burger.setAttribute('aria-expanded', on ? 'true' : 'false');
+    burger.setAttribute('aria-label', on ? 'Close menu' : 'Open menu');
+  }
+  burger.addEventListener('click', function(e){
+    e.stopPropagation();
+    setOpen(!links.classList.contains('open'));
+  });
+  links.addEventListener('click', function(e){
+    if(e.target.tagName === 'A') setOpen(false);
+  });
+  document.addEventListener('click', function(e){
+    if(links.classList.contains('open') && !links.contains(e.target) && e.target !== burger) setOpen(false);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && links.classList.contains('open')){ setOpen(false); burger.focus(); }
+  });
+  window.addEventListener('resize', function(){
+    if(window.innerWidth > 700 && links.classList.contains('open')) setOpen(false);
   });
 })();
 </script>
