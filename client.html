@@ -64,7 +64,7 @@ input,select,textarea{font-family:inherit;font-size:16px}
 @media(max-width:700px){.nav-links{display:none}.site-nav{padding:0 16px}}
 
 /* Wrap */
-.wrap{max-width:760px;margin:0 auto;padding:18px 16px 80px}
+.wrap{max-width:1160px;margin:0 auto;padding:18px 16px 80px}
 
 /* Card */
 .card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:20px;margin-bottom:18px}
@@ -328,6 +328,31 @@ input,select,textarea{font-family:inherit;font-size:16px}
 .cp-tbtn.primary{background:linear-gradient(120deg,#16447f,#0db5a6);color:#fff}
 .cp-navitem.tour-hi{outline:2px solid #34d399;outline-offset:-2px;background:rgba(52,211,153,.18)!important;border-radius:10px}
 @media(max-width:860px){.cp-tour-card{bottom:14px}}
+
+/* ── Member portal hero (auth view) ── */
+.portal-hero{position:relative;overflow:hidden;border-radius:24px;margin:10px 0 0;background:linear-gradient(135deg,#0b2346 0%,#16447f 58%,#0b6f79 100%);box-shadow:0 24px 60px rgba(11,35,70,.22)}
+.portal-hero::before{content:"";position:absolute;inset:0;background-image:url('/compressed/member-portal-happy-client.jpg');background-size:cover;background-position:72% 30%;opacity:.46}
+.portal-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(104deg,rgba(11,35,70,.95) 0%,rgba(11,35,70,.9) 34%,rgba(11,35,70,.55) 72%,rgba(9,58,78,.34) 100%)}
+.portal-hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1.02fr .98fr;gap:38px;align-items:center;padding:46px 42px}
+.portal-copy{color:#fff;min-width:0}
+.portal-eyebrow{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8ff0e4;background:rgba(13,181,166,.18);border:1px solid rgba(13,181,166,.42);padding:6px 13px;border-radius:999px;margin-bottom:16px}
+.portal-title{color:#fff;font-size:clamp(1.75rem,3.4vw,2.6rem);line-height:1.16;font-weight:800;margin:0 0 14px;letter-spacing:-.5px}
+.portal-title .hl{background:linear-gradient(90deg,#5ee7d5,#8ff0e4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.portal-type{color:rgba(255,255,255,.94);font-size:clamp(1rem,1.5vw,1.14rem);font-weight:500;margin:0 0 24px;min-height:3.1em;line-height:1.55}
+.portal-perks{list-style:none;padding:0;margin:0 0 4px;display:grid;gap:11px}
+.portal-perks li{display:flex;align-items:flex-start;gap:10px;color:rgba(255,255,255,.93);font-size:.95rem;line-height:1.45}
+.portal-perks svg{flex:none;width:19px;height:19px;margin-top:1px;color:#5ee7d5}
+.portal-formcol{min-width:0}
+.portal-formcol .card{margin-bottom:0;padding:26px 24px;border:0;border-radius:18px;box-shadow:0 18px 44px rgba(11,35,70,.28)}
+.portal-note{color:rgba(255,255,255,.72);font-size:.8rem;margin:18px 0 0;display:flex;align-items:center;gap:7px}
+.portal-note svg{flex:none;width:15px;height:15px;color:#8ff0e4}
+@media(max-width:900px){
+  .portal-hero{border-radius:18px}
+  .portal-hero-inner{grid-template-columns:1fr;gap:26px;padding:32px 22px}
+  .portal-type{min-height:4.4em}
+  .portal-hero::after{background:linear-gradient(180deg,rgba(11,35,70,.93) 0%,rgba(11,35,70,.87) 52%,rgba(11,35,70,.7) 100%)}
+}
+@media(prefers-reduced-motion:reduce){.cp-caret::after{animation:none}}
 </style>
 </head>
 <body>
@@ -357,6 +382,21 @@ input,select,textarea{font-family:inherit;font-size:16px}
 
   <!-- ====================== AUTH VIEW ====================== -->
   <section id="auth-view">
+    <div class="portal-hero">
+      <div class="portal-hero-inner">
+        <div class="portal-copy">
+          <span class="portal-eyebrow">VS Health Benefits Member Portal</span>
+          <h1 class="portal-title">Your coverage, <span class="hl">always within reach.</span></h1>
+          <p class="portal-type" id="portal-type" aria-live="polite"></p>
+          <ul class="portal-perks">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Your plan details and documents in one place, any time.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Message your licensed advisor directly &mdash; no phone tag.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Send referrals and track your rewards.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Renewal and open enrollment reminders before deadlines hit.</span></li>
+          </ul>
+          <p class="portal-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Private and secure. Your information is never sold or shared.</p>
+        </div>
+        <div class="portal-formcol">
     <div class="card">
       <h2>Member portal</h2>
       <p class="lede">Sign in to view your plan, message your advisor, and refer friends for a chance to win a gift.</p>
@@ -413,6 +453,9 @@ input,select,textarea{font-family:inherit;font-size:16px}
         </div>
         <button class="btn btn-primary" type="submit">Create account</button>
       </form>
+    </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1552,6 +1595,35 @@ if(getSession())showDashboard();
   btn.addEventListener("click", function(){
     window.scrollTo({top:0, behavior:"smooth"});
   });
+})();
+</script>
+<script>
+/* Member-portal hero: looping typewriter for the benefit lines */
+(function(){
+  var el = document.getElementById('portal-type');
+  if(!el) return;
+  var lines = [
+    'See your plan, carrier and coverage details the moment you sign in.',
+    'Message your licensed advisor directly, and get a real answer back.',
+    'Send a referral and watch your rewards add up.',
+    'Get renewal and open enrollment reminders before the deadline.',
+    'One secure login for your whole household.'
+  ];
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ el.textContent = lines[0]; return; }
+  var li = 0, ci = 0, deleting = false;
+  el.classList.add('cp-caret');
+  (function tick(){
+    var t = lines[li];
+    if(!deleting){
+      ci++; el.textContent = t.slice(0, ci);
+      if(ci >= t.length){ deleting = true; return setTimeout(tick, 2100); }
+      return setTimeout(tick, 34);
+    }
+    ci--; el.textContent = t.slice(0, ci);
+    if(ci <= 0){ deleting = false; li = (li + 1) % lines.length; return setTimeout(tick, 340); }
+    return setTimeout(tick, 16);
+  })();
 })();
 </script>
 </body>
