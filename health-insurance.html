@@ -6,11 +6,11 @@
 gtag('config', 'AW-17950389267');</script>
 <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>2027 Health Insurance Plans &amp; Open Enrollment</title>
-<meta name="description" content="Compare 2027 individual and family health plans with a licensed independent advisor. Open Enrollment runs Nov 1 to Dec 15 - see your after-subsidy price." />
+<meta name="description" content="Compare 2027 individual and family health plans with a licensed independent advisor. Open Enrollment runs Nov 1 to Jan 15 - see your after-subsidy price." />
 <link rel="canonical" href="https://www.vshealthbenefits.com/health-insurance" /><meta name="robots" content="index,follow,max-image-preview:large" /><meta name="geo.region" content="US" />
 <link rel="icon" type="image/png" href="/favicon.png" /><link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" /><link rel="icon" type="image/png" sizes="192x192" href="/favicon.png" /><link rel="apple-touch-icon" href="/favicon.png" />
-<meta property="og:type" content="website" /><meta property="og:title" content="Individual and Family Health Insurance Plans 2027" /><meta property="og:description" content="Compare 2027 individual and family health plans with a licensed independent advisor. Open Enrollment runs Nov 1 to Dec 15 - see your after-subsidy price." /><meta property="og:url" content="https://www.vshealthbenefits.com/health-insurance" /><meta property="og:site_name" content="VS Health Benefits" /><meta property="og:image" content="https://www.vshealthbenefits.com/images/og-default.jpg" />
-<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="Individual and Family Health Insurance Plans 2027" /><meta name="twitter:description" content="Compare 2027 individual and family health plans with a licensed independent advisor. Open Enrollment runs Nov 1 to Dec 15 - see your after-subsidy price." />
+<meta property="og:type" content="website" /><meta property="og:title" content="Individual and Family Health Insurance Plans 2027" /><meta property="og:description" content="Compare 2027 individual and family health plans with a licensed independent advisor. Open Enrollment runs Nov 1 to Jan 15 - see your after-subsidy price." /><meta property="og:url" content="https://www.vshealthbenefits.com/health-insurance" /><meta property="og:site_name" content="VS Health Benefits" /><meta property="og:image" content="https://www.vshealthbenefits.com/images/og-default.jpg" />
+<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="Individual and Family Health Insurance Plans 2027" /><meta name="twitter:description" content="Compare 2027 individual and family health plans with a licensed independent advisor. Open Enrollment runs Nov 1 to Jan 15 - see your after-subsidy price." />
 <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
 <style>
@@ -88,7 +88,7 @@ footer{background:var(--blue-900);color:#ffffff;padding:40px 0 20px}footer a{col
 
 <div class="vs-answer">
   <h2>How do I choose an individual or family health plan?</h2>
-  <p>Start with your total yearly exposure, not the monthly premium. Add the premium you would pay for twelve months to the plan&#x27;s deductible, then check the out-of-pocket maximum, which is the worst case in a bad year. A cheap premium with a high deductible often costs more than a mid-tier plan if anyone in the household actually uses care. Then confirm your doctors and prescriptions are in network before you enrol, because that is the change that is hardest to undo.</p>
+  <p>Start with your total yearly exposure, not the monthly premium. Add the premium you would pay for twelve months to the plan&#x27;s deductible, then check the out-of-pocket maximum, which is the worst case in a bad year. A cheap premium with a high deductible often costs more than a mid-tier plan if anyone in the household actually uses care. Then confirm your doctors and prescriptions are in network before you enroll, because that is the change that is hardest to undo.</p>
 </div>
 <div class="carriers">
  <div class="container">
@@ -427,11 +427,11 @@ document.addEventListener("DOMContentLoaded", function () {
  if(modal){modal.addEventListener("click",function(e){if(e.target===modal)closeModal();});}
  document.addEventListener("keydown",function(e){if(e.key==="Escape")closeModal();});
  var y=document.getElementById("year");if(y)y.textContent=new Date().getFullYear();
- var START=new Date("2026-11-01T00:00:00-05:00").getTime(),END=new Date("2026-12-15T23:59:59-05:00").getTime();
+ var START=new Date("2026-11-01T00:00:00-05:00").getTime(),DEC15=new Date("2026-12-15T23:59:59-05:00").getTime(),END=new Date("2027-01-15T23:59:59-05:00").getTime();
  var elDays=document.getElementById("cd-days"),elHrs=document.getElementById("cd-hrs"),elMin=document.getElementById("cd-min"),elSec=document.getElementById("cd-sec"),elTitle=document.getElementById("cd-title"),elSub=document.getElementById("cd-sub"),elWrap=document.getElementById("cd-wrap");
  function pad(n){return String(Math.max(0,n)).padStart(2,"0");}
  function paint(target,t,sv){var delta=Math.max(0,target-Date.now());var d=Math.floor(delta/86400000),h=Math.floor((delta%86400000)/3600000),m=Math.floor((delta%3600000)/60000),sec=Math.floor((delta%60000)/1000);if(elDays)elDays.textContent=pad(d);if(elHrs)elHrs.textContent=pad(h);if(elMin)elMin.textContent=pad(m);if(elSec)elSec.textContent=pad(sec);if(elTitle&&t)elTitle.textContent=t;if(elSub&&sv)elSub.textContent=sv;}
- function tick(){var now=Date.now();if(now<START){paint(START,"Open Enrollment 2027 starts in","Nov 1, 2026 is your next chance to lock in individual or family ACA coverage. Get your documents ready.");if(elWrap)elWrap.classList.remove("closed");}else if(now<=END){paint(END,"Time left to enroll in 2027 ACA coverage","Open Enrollment closes Dec 15, 2026. After that you will need a Special Enrollment event to switch plans.");if(elWrap)elWrap.classList.remove("closed");}else{paint(Date.now(),"Open Enrollment is closed for 2027","Special Enrollment may be available if you have had a qualifying life event. Reach out to check.");if(elWrap)elWrap.classList.add("closed");}}
+ function tick(){var now=Date.now();if(now<START){paint(START,"Open Enrollment 2027 starts in","Nov 1, 2026 is your next chance to lock in individual or family ACA coverage. Get your documents ready.");if(elWrap)elWrap.classList.remove("closed");}else if(now<=DEC15){paint(DEC15,"Time left to enroll in 2027 ACA coverage","Enroll by Dec 15, 2026 for coverage that starts Jan 1, 2027. Open Enrollment then runs through Jan 15.");if(elWrap)elWrap.classList.remove("closed");}else if(now<=END){paint(END,"Last chance to enroll for 2027 coverage","Open Enrollment closes Jan 15, 2027. A plan bought now starts Feb 1. After Jan 15 you need a qualifying life event.");if(elWrap)elWrap.classList.remove("closed");}else{paint(Date.now(),"Open Enrollment is closed for 2027","Special Enrollment may be available if you have had a qualifying life event. Reach out to check.");if(elWrap)elWrap.classList.add("closed");}}
  tick();setInterval(tick,1000);
 });
 </script>

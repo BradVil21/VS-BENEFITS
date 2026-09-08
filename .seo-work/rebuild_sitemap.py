@@ -23,6 +23,11 @@ PRIO = {
  '/maryland-small-business-health-insurance': '0.9',
  '/kentucky-small-business-health-insurance': '0.9',
  '/cobra-alternatives': '0.9', '/cobra-vs-marketplace-calculator': '0.9',
+ '/truck-driver-health-insurance-cost-calculator': '0.9',
+ '/truck-driver-open-enrollment-2027': '0.9',
+ '/ooida-health-insurance-vs-aca': '0.8',
+ '/blue-cross-blue-shield-truck-drivers': '0.8',
+ '/best-trucking-company-health-benefits': '0.8',
 }
 
 rows = []

@@ -318,7 +318,7 @@ footer a:hover{color:#fff}
     {"@type":"Question","name":"Do I pay you anything for your help?","acceptedAnswer":{"@type":"Answer","text":"No. As an independent advisor, I am compensated by the carriers when you enroll. My consultation, plan comparisons, paperwork, and ongoing support are free to you."}},
     {"@type":"Question","name":"How is this different from going direct to the carrier?","acceptedAnswer":{"@type":"Answer","text":"Going direct only shows you that one carrier's plans. I show you the full market across major carriers and pick what actually fits your family or business, not what one company has to sell."}},
     {"@type":"Question","name":"What states do you serve?","acceptedAnswer":{"@type":"Answer","text":"We are licensed in 40+ states. We're based in Miami, FL but work with clients nationwide."}},
-    {"@type":"Question","name":"When can I enroll?","acceptedAnswer":{"@type":"Answer","text":"Open Enrollment runs Nov 1 - Dec 15 each year. Outside that window you typically need a Special Enrollment qualifying event. Group plans for businesses can be set up year-round."}},
+    {"@type":"Question","name":"When can I enroll?","acceptedAnswer":{"@type":"Answer","text":"Open Enrollment runs Nov 1 through Jan 15. Enroll by Dec 15 for coverage starting Jan 1. Outside that window you typically need a Special Enrollment qualifying event. Group plans for businesses can be set up year-round."}},
     {"@type":"Question","name":"What if I already have coverage?","acceptedAnswer":{"@type":"Answer","text":"We will review what you have at no cost and only recommend a change if it would actually improve your coverage or cost."}}
   ]
 }
@@ -963,7 +963,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /* ---------- Open Enrollment countdown ---------- */
   var START = new Date("2026-11-01T00:00:00-05:00").getTime();
-  var END   = new Date("2026-12-15T23:59:59-05:00").getTime();
+  var DEC15   = new Date("2026-12-15T23:59:59-05:00").getTime();var END   = new Date("2027-01-15T23:59:59-05:00").getTime();
   var elDays=document.getElementById("cd-days"),
       elHrs =document.getElementById("cd-hrs"),
       elMin =document.getElementById("cd-min"),
@@ -991,11 +991,7 @@ document.addEventListener("DOMContentLoaded", function () {
       paint(START,"Open Enrollment 2027 starts in",
             "Nov 1, 2026 is your next chance to lock in individual or family ACA coverage. Get your documents ready.");
       if(elWrap)elWrap.classList.remove("closed");
-    } else if(now<=END){
-      paint(END,"Time left to enroll in 2027 ACA coverage",
-            "Open Enrollment closes Dec 15, 2026. After that you will need a Special Enrollment event to switch plans.");
-      if(elWrap)elWrap.classList.remove("closed");
-    } else {
+    } else if(now<=DEC15){paint(DEC15,"Time left to enroll in 2027 ACA coverage","Enroll by Dec 15, 2026 for coverage that starts Jan 1, 2027. Open Enrollment then runs through Jan 15.");if(elWrap)elWrap.classList.remove("closed");}else if(now<=END){paint(END,"Last chance to enroll for 2027 coverage","Open Enrollment closes Jan 15, 2027. A plan bought now starts Feb 1. After Jan 15 you need a qualifying life event.");if(elWrap)elWrap.classList.remove("closed");} else {
       paint(Date.now(),"Open Enrollment is closed for 2027",
             "Special Enrollment may be available if you've had a qualifying life event. Reach out to check.");
       if(elWrap)elWrap.classList.add("closed");

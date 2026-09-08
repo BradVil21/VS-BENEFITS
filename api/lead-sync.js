@@ -146,7 +146,7 @@ function todayStr() { return new Date().toISOString().slice(0, 10); }
 // ══════════════════════════════════════════════════════════════════════════
 // to-crm : website / portal  ->  GoHighLevel
 // ══════════════════════════════════════════════════════════════════════════
-async function toCrm(d, res) {
+async function toCrm(d, req, res) {
   const p = {
     firstName: clean(d.firstName || d.first_name || d.firstname, 60),
     lastName:  clean(d.lastName  || d.last_name  || d.lastname,  60),
@@ -341,6 +341,7 @@ function normalize(c, d) {
     requestedCoverage: clean(d.requestedCoverage || d.coverage, 80),
     currentlyInsured: clean(d.currentlyInsured, 40),
     coverageStart: clean(d.coverageStart, 40),
+    meta: (d.meta && typeof d.meta === "object") ? d.meta : null,
     business: L.isBusinessLead(d.pipeline || d.leadType || d.coverageType || d.type, tags),
     fullName: (firstName + " " + lastName).trim() || company || email || phone,
   };
@@ -412,6 +413,7 @@ async function syncToBoards(n, opts) {
         source: n.source,
         sourceDetail: n.sourceDetail,
         attribution: n.attribution || null,
+        meta: n.meta || null,
         nextFollowUp: today,
         notes: notes,
         ghlContactId: n.contactId,
@@ -435,6 +437,7 @@ async function syncToBoards(n, opts) {
         if (n.company && !String(existing.company || "").trim()) existing.company = n.company;
         if (!existing.state && n.state) existing.state = n.state;
         if (!existing.employees && n.employees) existing.employees = n.employees;
+        if (n.meta && n.meta.ip && !(existing.meta && existing.meta.ip)) existing.meta = n.meta;
         if (!existing.attribution && n.attribution) existing.attribution = n.attribution;
         // The card was opened by a pre-submit capture, whose source says
         // "(in progress)". They are not in progress any more.
@@ -490,6 +493,7 @@ async function syncToBoards(n, opts) {
       source: n.source,
       sourceDetail: n.sourceDetail,
       attribution: n.attribution || null,
+      meta: n.meta || null,
       ghlContactId: n.contactId,
       activity: [{ ts: now, type: "created", text: "Arrived from " + n.source }],
     },
@@ -524,6 +528,7 @@ async function syncToBoards(n, opts) {
         }
         existing.notes = (prev ? prev + "\n" : "") + n.notesIn;
       }
+      if (n.meta && n.meta.ip && !(existing.meta && existing.meta.ip)) existing.meta = n.meta;
       if (!existing.attribution && n.attribution) existing.attribution = n.attribution;
       // The quote funnel writes its own card straight to Firestore without a
       // stage, so a card we merge into can be one the board cannot place - it
@@ -804,10 +809,33 @@ module.exports = async (req, res) => {
   const isSweep = String((req.query && req.query.sweep) || d.sweep || "") === "1" ||
                   (req.query && req.query.sweep) === "true" || d.sweep === true;
 
+  // Visitor origin (IP, city, ISP, device) for the "Submission origin" panel on
+  // the lead card, and the value the Block button bans.
+  //
+  // Only on the to-crm direction, which is a browser posting a form. On
+  // to-portal the caller is GoHighLevel's server, so x-forwarded-for would be
+  // GHL's data centre - stamping that on a lead would be worse than useless,
+  // because banning it would ban every CRM-sourced lead at once. Whatever meta
+  // that payload carries is left exactly as it arrived.
+  //
+  // Nor when the admin portal is the caller. Bradley saving a lead he typed in
+  // himself is HIS browser posting, so the headers describe him, not the lead.
+  // Stamping that on the card would put his own IP under "Submission origin" -
+  // one Block click away from banning himself from his own website.
+  const fromPortal =
+    /^admin portal/i.test(String(d.sourceDetail || "")) ||
+    /^admin portal/i.test(String(d.source || d.leadSource || "")) ||
+    (Array.isArray(d.tags) && d.tags.indexOf("admin-lead") >= 0);
+
+  if (!inbound && !fromPortal) {
+    const m = L.visitorMeta(req, d);
+    if (m) d.meta = m;
+  }
+
   try {
     if (inbound && isSweep) await sweepPortal(d, req, res);
     else if (inbound) await toPortal(d, req, res);
-    else await toCrm(d, res);
+    else await toCrm(d, req, res);
   } catch (e) {
     // Never let a lead form see a 500.
     if (!res.headersSent) res.status(200).json({ ok: true, error: "exception" });

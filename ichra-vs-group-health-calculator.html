@@ -682,7 +682,7 @@ document.addEventListener("DOMContentLoaded",function(){
       R.tier+" plan at "+Math.round((R.contrib||0)*100)+"% employer share. "+
       "Group employer cost "+money(R.groupEmployer||0)+"/mo vs ICHRA allowance "+money(R.allowance||0)+
       "/employee ("+money(R.ichraEmployer||0)+"/mo). Verdict: "+(R.verdict||"")+
-      ((R.diffYr||0)>0?" in favour of ICHRA.":" against ICHRA.")+" ZIP "+(zip||"n/a")+".";
+      ((R.diffYr||0)>0?" in favor of ICHRA.":" against ICHRA.")+" ZIP "+(zip||"n/a")+".";
 
     fetch("/api/lead-sync",{
       method:"POST",

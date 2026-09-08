@@ -693,6 +693,53 @@ document.addEventListener("DOMContentLoaded",function(){
   // this calculator captured was being posted to a different GoHighLevel
   // account. Removed - /api/lead-sync now handles the CRM write server-side,
   // with the token where it belongs.
+  /* ── VISITOR ORIGIN: IP + approximate location + device ────────────────
+     Same capture the /quote funnel runs, so a calculator lead and a quote
+     lead carry an identical "Submission origin" panel on the card.
+
+     The IP the server records comes from the request headers, not from this -
+     an ad blocker eats these lookups often enough that a browser-only IP would
+     be missing on a good share of leads, and a forged one would let anybody
+     dodge a ban by editing a fetch. What this DOES add is the two things the
+     headers cannot carry: the ISP name ("Charter Communications") and the
+     browser's own idea of its timezone. api/_lib.js merges the two, server
+     first. Runs once on load, never blocks the form, fails silently. */
+  window.__vsMeta = { ip:"", city:"", region:"", country:"", org:"",
+                      ua:(navigator.userAgent||""), tz:"", ref:(document.referrer||"") };
+  try { window.__vsMeta.tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch(e){}
+  (function captureMeta(){
+    function apply(m){
+      if(!m) return;
+      window.__vsMeta.ip      = m.ip || window.__vsMeta.ip || "";
+      window.__vsMeta.city    = m.city || "";
+      window.__vsMeta.region  = m.region || m.region_code || m.state || "";
+      window.__vsMeta.country = m.country || m.country_name || m.country_code || "";
+      window.__vsMeta.org     = (m.connection && (m.connection.isp || m.connection.org)) || m.org || m.isp || m.asn || "";
+    }
+    try {
+      fetch("https://ipwho.is/").then(function(r){return r.json();}).then(function(j){
+        if(j && j.success !== false){ apply(j); } else { throw 0; }
+      }).catch(function(){
+        fetch("https://ipapi.co/json/").then(function(r){return r.json();}).then(apply).catch(function(){
+          fetch("https://api.ipify.org?format=json").then(function(r){return r.json();}).then(function(j){ apply({ip:j.ip}); }).catch(function(){});
+        });
+      });
+    } catch(e){}
+  })();
+  function vsMetaFields(){
+    var m = window.__vsMeta || {};
+    return {
+      ip:        m.ip || "",
+      ipCity:    m.city || "",
+      ipRegion:  m.region || "",
+      ipCountry: m.country || "",
+      ipOrg:     m.org || "",
+      device:    m.ua || "",
+      tz:        m.tz || "",
+      referrer:  m.ref || ""
+    };
+  }
+
   function fireConfetti(){
     if(typeof confetti!=="function") return;
     var colors=["#1e5ab0","#0db5a6","#16a34a","#2f7de0","#ffc857"];
@@ -700,7 +747,7 @@ document.addEventListener("DOMContentLoaded",function(){
   }
 
   // One lead per person, not one per click. Recalculating with different
-  // numbers is normal behaviour and must not create duplicate pipeline cards;
+  // numbers is normal behavior and must not create duplicate pipeline cards;
   // a genuinely different phone number does count as a new person.
   var sentPhones={};
   function sendLead(first,last,phone,digits,email){
@@ -734,6 +781,7 @@ document.addEventListener("DOMContentLoaded",function(){
         zip:est.zip||"", state:"",
         source:"subsidy-calculator",
         tags:["subsidy-calculator","website-lead"],
+        meta:vsMetaFields(),
         notes:summary
       })
     }).catch(function(){});
@@ -810,6 +858,7 @@ document.addEventListener("DOMContentLoaded",function(){
       firstName:val("ad-first"), lastName:val("ad-last"),
       phone:val("ad-phone"), email:email, zip:val("zip"),
       notes:"Started the subsidy calculator and has not pressed Calculate My Estimate yet.",
+      meta:vsMetaFields(),
       attribution:(function(){try{return (window.vsAttribution&&window.vsAttribution())||null;}catch(e){return null;}})()
     };
   }

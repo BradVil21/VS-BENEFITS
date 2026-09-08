@@ -1600,6 +1600,10 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><span class="sni-label">Business Leads</span>
       <span class="sni-badge" id="b-biz" style="display:none">0</span>
     </button>
+    <button class="sidebar-nav-item" data-tab="blocked" type="button">
+      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg></span><span class="sni-label">Blocked IPs</span>
+      <span class="sni-badge" id="b-blocked" style="display:none">0</span>
+    </button>
     <div class="sidebar-divider"></div>
     <button class="sidebar-nav-item" data-tab="settings" type="button">
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>️</span><span class="sni-label">Settings</span>
@@ -1834,6 +1838,32 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
       <div id="biz-list"></div>
     </div>
 
+    <!-- BLOCKED IPs -->
+    <div id="p-blocked" class="panel">
+      <h3>Blocked IPs</h3>
+      <p class="lede">Anyone on this list gets a 404 &ldquo;you have been blocked&rdquo; page instead of the website. This portal and the client area are never blocked, so you cannot lock yourself out of the screen you would need to undo it.</p>
+
+      <div class="card">
+        <h4 style="margin:0 0 6px;font-size:15px">Block an address</h4>
+        <p class="lede">Paste an IP, or use the <strong>Block</strong> button on a lead card &mdash; that one fills the address in for you.</p>
+        <div class="toolbar" style="margin:0">
+          <input id="blk-ip" class="search" type="text" placeholder="73.12.4.9  or  2603:9001:8400:2851:cc8c:e95a:293c:83df" autocomplete="off" spellcheck="false" />
+          <input id="blk-note" class="search" type="text" placeholder="Reason (optional) — spam, abusive, competitor…" autocomplete="off" />
+          <button id="blk-add" class="btn btn-primary btn-sm" type="button">&#128683; Block address</button>
+        </div>
+        <div id="blk-msg" style="margin-top:8px"></div>
+      </div>
+
+      <div class="card">
+        <h4 style="margin:0 0 10px;font-size:15px">Currently blocked <span id="blk-count" style="font-weight:500;color:var(--muted)"></span></h4>
+        <div id="blocked-mount"></div>
+      </div>
+
+      <p class="lede" style="margin-top:14px;font-size:12.5px">
+        <strong>On IPv6.</strong> A home IPv6 address rotates its second half every few hours, so an exact match would stop working almost immediately. IPv6 entries are therefore stored and matched as the <code>/64</code> prefix &mdash; the stable half the internet provider assigns to the household. IPv4 addresses are matched exactly.<br>
+        <strong>How fast.</strong> A block takes effect within about a minute; unblocking is the same.
+      </p>
+    </div>
 
     <!-- SETTINGS -->
     <div id="p-settings" class="panel">
@@ -1971,6 +2001,7 @@ var K={
   webhook:"vs_webhook_url",
   gcalCid:"vs_gcal_client_id",gcalTok:"vs_gcal_token",gcalEmail:"vs_gcal_email",
   sequences:"vs_seq_state",notifications:"vs_notifications",
+  blockedIps:"vs_blocked_ips",
   soundOn:"vs_sound_on",soundVol:"vs_sound_vol"
 };
 
@@ -2025,6 +2056,7 @@ LOCAL_TO_REMOTE[K.tickets]="contact_requests";
 LOCAL_TO_REMOTE[K.quickNotes]="quick_notes";
 LOCAL_TO_REMOTE[K.bizLeads]="biz_leads";
 LOCAL_TO_REMOTE[K.referrals]="referrals";LOCAL_TO_REMOTE[K.appointments]="appointments";LOCAL_TO_REMOTE[K.adminAccts]="admin_accounts";
+LOCAL_TO_REMOTE[K.blockedIps]="blocked_ips";
 
 function setArr(k,v){setArrLocal(k,v);var r=LOCAL_TO_REMOTE[k];if(r)cloudPush(r,v);}
 function getLeads(){return asArr(K.leads);}function saveLeads(v){setArr(K.leads,v);}
@@ -2036,6 +2068,7 @@ function getBizLeads(){return asArr(K.bizLeads);}function saveBizLeads(v){setArr
 function getReferrals(){return asArr(K.referrals);}function saveReferrals(v){setArr(K.referrals,v);}
 function getAppts(){return asArr(K.appointments);}function saveAppts(v){setArr(K.appointments,v);}
 function getAdmins(){return asArr(K.adminAccts);}function saveAdmins(v){setArr(K.adminAccts,v);}
+function getBlockedIps(){return asArr(K.blockedIps);}function saveBlockedIps(v){setArr(K.blockedIps,v);}
 function getWebhook(){return localStorage.getItem(K.webhook)||"";}
 function setWebhook(v){localStorage.setItem(K.webhook,v||"");}
 
@@ -2077,8 +2110,8 @@ function hubspotSyncLead(l){
 
 var cloud={ready:false,suspend:0};
 var presenceMap={};
-var REMOTE_KEYS=["leads","accounts","messages","contact_requests","quick_notes","biz_leads","referrals","appointments","admin_accounts"];
-var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,contact_requests:K.tickets,quick_notes:K.quickNotes,biz_leads:K.bizLeads,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts};
+var REMOTE_KEYS=["leads","accounts","messages","contact_requests","quick_notes","biz_leads","referrals","appointments","admin_accounts","blocked_ips"];
+var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,contact_requests:K.tickets,quick_notes:K.quickNotes,biz_leads:K.bizLeads,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts,blocked_ips:K.blockedIps};
 
 function setSyncPill(state){
   var p=$("sync-pill");if(!p)return;
@@ -5141,6 +5174,88 @@ function czShortUA(ua){
   var out=[]; if(os)out.push(os[1].replace("Mac OS X","Mac")); if(br)out.push(br[1].replace("Edg","Edge").replace("OPR","Opera"));
   return out.length?out.join(" · "):ua.slice(0,44);
 }
+/* ═══════════════ IP BLOCK LIST ═══════════════
+   The ban list the website enforces. It lives in Firestore under
+   vs_state/blocked_ips, in the same { items, ts } shape as every other store
+   here, and middleware.js at the repository root reads it on the edge in front
+   of every page. Nothing else writes it.
+
+   ipKey() below is a byte-for-byte copy of the one in middleware.js. If you
+   change one, change the other, or the portal will show an address as blocked
+   that the edge lets straight through. */
+
+/* Normalise an address into the key the list is stored and matched under.
+   IPv4 matches exactly. IPv6 matches on the /64 prefix, because the second
+   half of a home IPv6 address rotates every few hours (RFC 4941 privacy
+   extensions) - banning the exact address a lead submitted from would stop
+   working before the end of the day. */
+function ipKey(raw){
+  var ip=String(raw==null?"":raw).trim().toLowerCase();
+  if(!ip)return "";
+  if(ip.charAt(0)==="["){var close=ip.indexOf("]");ip=close>0?ip.slice(1,close):ip.slice(1);}
+  var zone=ip.indexOf("%");if(zone>0)ip=ip.slice(0,zone);
+  var v4=/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::\d+)?$/.exec(ip);
+  if(v4)return v4[1];
+  var mapped=/^::ffff:(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/.exec(ip);
+  if(mapped)return mapped[1];
+  if(ip.indexOf(":")<0)return "";
+  var parts;
+  if(ip.indexOf("::")>=0){
+    var halves=ip.split("::");
+    var head=halves[0]?halves[0].split(":"):[];
+    var tail=halves[1]?halves[1].split(":"):[];
+    var fill=Math.max(0,8-head.length-tail.length);
+    parts=head.concat(new Array(fill).fill("0"),tail);
+  } else parts=ip.split(":");
+  parts=parts.slice(0,4).map(function(h){return (h||"0").replace(/^0+(?=.)/,"");});
+  while(parts.length<4)parts.push("0");
+  if(!/^[0-9a-f]{1,4}$/.test(parts[0]))return "";
+  return parts.join(":")+"::/64";
+}
+
+/* Is this address currently banned? Takes a raw address, not a key. */
+function ipIsBlocked(raw){
+  var k=ipKey(raw);
+  if(!k)return false;
+  return getBlockedIps().some(function(b){return b&&b.ip===k;});
+}
+
+/* Ban an address. `ctx` is optional and only decorates the entry so the list
+   reads as something you can audit later rather than a column of numbers.
+   Returns the entry, or null when the address is unusable / already banned. */
+function ipBlockAdd(raw,note,ctx){
+  var k=ipKey(raw);
+  if(!k)return null;
+  var list=getBlockedIps();
+  if(list.some(function(b){return b&&b.ip===k;}))return null;
+  var c=ctx||{};
+  var entry={
+    id:"blk_"+Date.now().toString(36)+Math.random().toString(36).slice(2,7),
+    ip:k,                                   /* what the edge matches on */
+    label:String(raw||"").trim(),           /* what they actually came in on */
+    note:String(note||"").trim().slice(0,200),
+    leadId:c.leadId||"",
+    leadName:c.leadName||"",
+    city:c.city||"", org:c.org||"",
+    by:(function(){try{return (currentAdmin()||{}).email||"";}catch(e){return "";}})(),
+    created:Date.now()
+  };
+  list.unshift(entry);
+  saveBlockedIps(list);
+  return entry;
+}
+
+/* Lift a ban. Matches on the normalised key, so it works whether you pass the
+   stored key or the original address off a lead card. */
+function ipBlockRemove(raw){
+  var k=ipKey(raw)||String(raw||"").trim().toLowerCase();
+  var list=getBlockedIps();
+  var next=list.filter(function(b){return !(b&&(b.ip===k||b.id===raw));});
+  if(next.length===list.length)return false;
+  saveBlockedIps(next);
+  return true;
+}
+
 function czIpBlock(c){
   if(!c)return "";
   var m=c.meta||{};
@@ -5152,11 +5267,29 @@ function czIpBlock(c){
   var dup=same>0?'<span class="cz-ipdup">⚠ '+same+' other lead'+(same>1?'s':'')+' from this IP</span>':'';
   var dev=m.device?'<div class="cz-ipline"><b>Device:</b> '+escapeHtml(czShortUA(m.device))+'</div>':'';
   var link=ip?' <a class="cz-iplink" href="https://ipinfo.io/'+encodeURIComponent(ip)+'" target="_blank" rel="noopener">look up ↗</a>':'';
+  /* Ban / unban, right where you are looking at the address. The button only
+     appears when there is an address to act on - there is nothing to ban on a
+     lead that arrived by phone. */
+  var banned=ip?ipIsBlocked(ip):false;
+  var key=ip?ipKey(ip):"";
+  var banRow="";
+  if(ip&&key){
+    banRow=banned
+      ? '<div class="cz-ipban-row cz-ipban-on">'
+          +'<span class="cz-ipban-flag">&#128683; Blocked from the website</span>'
+          +'<button type="button" class="cz-ipban-btn cz-ipban-undo" data-ipunban="'+escapeHtml(key)+'">Unblock</button>'
+        +'</div>'
+      : '<div class="cz-ipban-row">'
+          +'<button type="button" class="cz-ipban-btn" data-ipban="'+escapeHtml(ip)+'">&#128683; Block this visitor</button>'
+          +'<span class="cz-ipban-hint">'+(key.indexOf("::/64")>0?'Blocks '+escapeHtml(key)+' — their whole home connection':'They will see a 404 blocked page')+'</span>'
+        +'</div>';
+  }
   return '<div class="cz-ipbox"><div class="cz-iphd"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Submission origin '+dup+'</div>'
     +'<div class="cz-ipline"><b>IP:</b> '+escapeHtml(ip||"—")+link+'</div>'
     +(loc?'<div class="cz-ipline"><b>Location:</b> '+escapeHtml(loc)+'</div>':'')
     +(m.ipOrg?'<div class="cz-ipline"><b>Network:</b> '+escapeHtml(m.ipOrg)+'</div>':'')
     +dev
+    +banRow
     +'</div>';
 }
 function czOpenModal(client){
@@ -5210,6 +5343,31 @@ function czOpenModal(client){
     +metaBlock
     +'<div class="cz-mfoot">'+delBlock+'<button class="cz-btn-ghost" data-close>Cancel</button><button class="cz-btn-go" id="cz-mSave">✓ '+(isNew?"Add client":"Save changes")+'</button></div>';
   openModal(html);
+  /* Ban / unban from the Submission origin panel. Re-opens the card afterwards
+     so the panel repaints into its other state. */
+  (function(){
+    var box=$("modal-content");if(!box)return;
+    var ban=box.querySelector("[data-ipban]"),un=box.querySelector("[data-ipunban]");
+    if(ban)ban.addEventListener("click",function(){
+      var raw=ban.getAttribute("data-ipban");
+      var k=ipKey(raw);
+      var who=czName(c)||"this visitor";
+      if(!confirm("Block "+k+"?\n\n"+who+" will get a 404 \u201cyou have been blocked\u201d page on every page of the website. Your admin portal and the client area stay reachable.\n\nYou can undo this any time from Blocked IPs."))return;
+      var mm=(c&&c.meta)||{};
+      ipBlockAdd(raw,"Blocked from lead card",{
+        leadId:c.id||"",leadName:who,
+        city:[mm.ipCity,mm.ipRegion,mm.ipCountry].filter(Boolean).join(", "),
+        org:mm.ipOrg||""
+      });
+      if(typeof renderBlocked==="function")renderBlocked();
+      closeModal();czOpenModal(c);
+    });
+    if(un)un.addEventListener("click",function(){
+      ipBlockRemove(un.getAttribute("data-ipunban"));
+      if(typeof renderBlocked==="function")renderBlocked();
+      closeModal();czOpenModal(c);
+    });
+  })();
   czAddrAutocomplete();
   (function(){
     var db=$("cz-dispbtn"),da=$("cz-dispacts");
@@ -5326,8 +5484,8 @@ function czCelebrate(name,sub){
   var v=$("cz-celeb-view");if(v)v.addEventListener("click",function(){closeModal();switchTab("accounts");});
 }
 /* ---- route the existing CRM tabs through the new views ---- */
-ALL_TABS=["dashboard","pipeline","leads","followups","tasks","mytasks","accounts","users","support","referrals","bizleads","notes","analytics","settings"];
-TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",mytasks:"My Tasks",accounts:"Active Clients",users:"Users",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",notes:"Notes",analytics:"Analytics",settings:"Settings"};
+ALL_TABS=["dashboard","pipeline","leads","followups","tasks","mytasks","accounts","users","support","referrals","bizleads","notes","analytics","blocked","settings"];
+TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",mytasks:"My Tasks",accounts:"Active Clients",users:"Users",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",notes:"Notes",analytics:"Analytics",blocked:"Blocked IPs",settings:"Settings"};
 function renderDashboard(){czDashboard();}
 function renderLeads(){czClients();}
 function renderPipeline(){czPipeline();}
@@ -5559,7 +5717,7 @@ function bizImportCsv(){
 
 function bizCsvField(h){
   h=String(h||"").toLowerCase().replace(/[^a-z0-9]/g,"");
-  if(/^(company|companyname|business|businessname|organisation|organization|account)$/.test(h))return "company";
+  if(/^(company|companyname|business|businessname|organization|organization|account)$/.test(h))return "company";
   if(/^(contact|contactname|owner|ownername|name|decisionmaker)$/.test(h))return "contact";
   if(/^(email|emailaddress|mail)$/.test(h))return "email";
   if(/^(phone|phonenumber|mobile|cell|tel|telephone)$/.test(h))return "phone";
@@ -5872,6 +6030,110 @@ function renderAnalytics(){
   mount.appendChild(el("div",{class:"an-note",html:"Tip: this shows leads and inquiries captured in your portal. For raw pageviews and total visitor clicks across the whole site, check your Google Analytics dashboard, which tracks every visit even when someone does not fill out a form."}));
 }
 
+/* ═══════════════ BLOCKED IPs TAB ═══════════════
+   Read and write the same vs_state/blocked_ips document the edge middleware
+   reads. Everything here goes through ipBlockAdd / ipBlockRemove so the portal
+   and the edge can never end up with different ideas of what is banned. */
+function blkMsg(kind,text){
+  var e=$("blk-msg");if(!e)return;
+  e.innerHTML="";
+  if(!text)return;
+  e.appendChild(el("div",{class:"notice notice-"+kind,text:text}));
+}
+
+function renderBlocked(){
+  var mount=$("blocked-mount");if(!mount)return;
+  var list=getBlockedIps().slice().sort(function(a,b){return (b.created||0)-(a.created||0);});
+
+  var bdg=$("b-blocked");
+  if(bdg){bdg.textContent=list.length;bdg.style.display=list.length?"":"none";}
+  var cnt=$("blk-count");
+  if(cnt)cnt.textContent=list.length?("· "+list.length+" address"+(list.length>1?"es":"")):"";
+
+  if(!list.length){
+    mount.innerHTML='<p class="lede" style="margin:0">Nobody is blocked. Open a lead, look at <strong>Submission origin</strong>, and use <strong>Block this visitor</strong> — or paste an address above.</p>';
+  } else {
+    /* Which leads did this address ever submit from? It is the difference
+       between "some numbers" and "the four junk leads from Tuesday". */
+    var leads=getLeads();
+    mount.innerHTML='<div class="blk-list">'+list.map(function(b){
+      var hits=leads.filter(function(l){
+        var m=(l&&l.meta)||{};
+        return ipKey(m.ip||l.ip||"")===b.ip;
+      });
+      var names=hits.slice(0,4).map(function(l){return czName(l)||"(no name)";});
+      var extra=hits.length>4?(" +"+(hits.length-4)+" more"):"";
+      var meta=[b.city,b.org].filter(Boolean).join(" · ");
+      return '<div class="blk-row">'
+        +'<div class="blk-main">'
+          +'<div class="blk-ip">'+escapeHtml(b.ip)+(b.ip.indexOf("::/64")>0?'<span class="blk-tag">IPv6 range</span>':'')+'</div>'
+          +(b.label&&b.label.toLowerCase()!==b.ip?'<div class="blk-sub">Submitted from '+escapeHtml(b.label)+'</div>':'')
+          +(meta?'<div class="blk-sub">'+escapeHtml(meta)+'</div>':'')
+          +(b.note?'<div class="blk-sub"><b>Reason:</b> '+escapeHtml(b.note)+'</div>':'')
+          +(names.length?'<div class="blk-sub"><b>Leads from this address:</b> '+escapeHtml(names.join(", ")+extra)+'</div>':'')
+          +'<div class="blk-sub blk-when">Blocked '+fmtDateTime(b.created)+(b.by?(" by "+escapeHtml(b.by)):"")+'</div>'
+        +'</div>'
+        +'<button type="button" class="btn btn-ghost btn-sm blk-un" data-unblock="'+escapeHtml(b.id)+'">Unblock</button>'
+      +'</div>';
+    }).join("")+'</div>';
+
+    mount.querySelectorAll("[data-unblock]").forEach(function(btn){
+      btn.addEventListener("click",function(){
+        var id=btn.getAttribute("data-unblock");
+        var row=getBlockedIps().filter(function(x){return x.id===id;})[0];
+        if(!row)return;
+        if(!confirm("Unblock "+row.ip+"?\n\nThey will be able to reach the website again within about a minute."))return;
+        saveBlockedIps(getBlockedIps().filter(function(x){return x.id!==id;}));
+        blkMsg("ok","Unblocked "+row.ip+". The website will let them through again within about a minute.");
+        renderBlocked();
+      });
+    });
+  }
+}
+
+/* Manual entry. Paste anything the "Submission origin" panel or a server log
+   shows and it is normalised the same way the edge will normalise the visitor
+   it is compared against. */
+(function wireBlockedForm(){
+  function boot(){
+    var addBtn=$("blk-add"),ipIn=$("blk-ip"),noteIn=$("blk-note");
+    if(!addBtn||!ipIn)return;
+    function submit(){
+      var raw=ipIn.value.trim();
+      if(!raw){blkMsg("err","Enter an IP address first.");ipIn.focus();return;}
+      var k=ipKey(raw);
+      if(!k){blkMsg("err",'"'+raw+'" is not an IP address. It should look like 73.12.4.9 or 2603:9001:8400:2851:cc8c:e95a:293c:83df.');ipIn.focus();return;}
+      /* Refuse to ban the machine you are sitting at. The portal is exempt from
+         the block, so this would not actually lock you out, but it would take
+         the public site away from you with no obvious cause. */
+      if(window.__vsMyIp&&ipKey(window.__vsMyIp)===k){
+        blkMsg("err","That is this computer's own address ("+k+"). Blocking it would take the public website away from you. Left unchanged.");
+        return;
+      }
+      if(ipIsBlocked(raw)){blkMsg("err",k+" is already blocked.");return;}
+      var entry=ipBlockAdd(raw,noteIn?noteIn.value:"" ,{});
+      if(!entry){blkMsg("err","Could not block that address.");return;}
+      ipIn.value="";if(noteIn)noteIn.value="";
+      blkMsg("ok","Blocked "+entry.ip+". The website starts turning them away within about a minute.");
+      renderBlocked();
+    }
+    addBtn.addEventListener("click",submit);
+    ipIn.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();submit();}});
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);
+  else boot();
+})();
+
+/* Whose computer is this? Only used to stop you banning yourself by hand.
+   Never stored, never sent anywhere. */
+(function(){
+  try{
+    fetch("https://ipwho.is/").then(function(r){return r.json();}).then(function(j){
+      if(j&&j.ip)window.__vsMyIp=j.ip;
+    }).catch(function(){});
+  }catch(e){}
+})();
+
 function switchTab(name){
   ALL_TABS.forEach(function(n){var pn=$("p-"+n);if(pn)pn.classList.toggle("active",n===name);});
   document.querySelectorAll(".sidebar-nav-item[data-tab]").forEach(function(b){b.classList.toggle("active",b.getAttribute("data-tab")===name);});
@@ -5890,6 +6152,7 @@ function switchTab(name){
   else if(name==="bizleads")renderBizLeads();
   else if(name==="notes")renderNotes();
   else if(name==="analytics")renderAnalytics();
+  else if(name==="blocked")renderBlocked();
   else if(name==="settings"){renderSettings();if(typeof initSoundSettings==="function")initSoundSettings();}
 }
 /* BOOT */
@@ -7286,6 +7549,29 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
 #cz-dispwrap #cz-dispbtn{width:100%;font-weight:800;padding:8px 12px}
 #cz-dispacts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 #cz-dispacts .cz-resetbtn{flex:1 1 auto;justify-content:center;text-align:center}
+
+/* ═══════════ Blocked IPs ═══════════ */
+.cz-ipban-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed #dbe3ef}
+.cz-ipban-btn{background:#fff;border:1px solid #f0b4b4;color:#b91c1c;font-weight:700;font-size:11.5px;
+  padding:5px 10px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.cz-ipban-btn:hover{background:#fef2f2;border-color:#e08585}
+.cz-ipban-hint{font-size:10.5px;color:#94a3b8;line-height:1.35}
+.cz-ipban-on{border-top-color:#f0b4b4}
+.cz-ipban-flag{font-size:11.5px;font-weight:800;color:#b91c1c}
+.cz-ipban-undo{border-color:#cbd5e1;color:#41536b}
+.cz-ipban-undo:hover{background:#f4f8fe;border-color:#94a3b8}
+.blk-list{display:flex;flex-direction:column;gap:10px}
+.blk-row{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border:1px solid #e4e9f2;
+  border-left:3px solid #dc2626;border-radius:12px;background:#fff}
+.blk-main{flex:1 1 auto;min-width:0}
+.blk-ip{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;font-weight:700;
+  color:#0d1b2a;word-break:break-all;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.blk-tag{font-family:inherit;font-size:10px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;
+  background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;border-radius:999px;padding:2px 7px}
+.blk-sub{font-size:12px;color:#5a6b80;margin-top:3px;word-break:break-word}
+.blk-when{color:#94a3b8;font-size:11px}
+.blk-un{flex:0 0 auto}
+@media(max-width:640px){.blk-row{flex-direction:column}.blk-un{width:100%}}
 </style>
 </body>
 </html>

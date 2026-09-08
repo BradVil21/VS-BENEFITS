@@ -284,8 +284,64 @@ function isBusinessLead(explicit, tags) {
   return (tags || []).some(function (t) { return set[t] === true; });
 }
 
+// ---------- Visitor origin (IP + geo + device) ----------
+// Every lead that reaches the portal carries a `meta` block, which is what the
+// "Submission origin" panel on a lead card renders and what the Block button
+// bans. It is assembled here rather than in each endpoint so the quote funnel,
+// the subsidy calculator, the contact form and the phone agent can never
+// disagree about what an IP is.
+//
+// The IP is taken from the request headers, NOT from whatever the browser
+// posted. A browser-supplied IP comes from a third-party lookup that an ad
+// blocker, a privacy extension or a corporate proxy will happily eat, and it is
+// trivially forgeable by anyone who wants to dodge a ban. Vercel's edge sets
+// x-forwarded-for with the real client on the left, so that is the truth.
+//
+// The browser's own lookup is still useful for the two things the headers do not
+// carry - the ISP/organisation name ("Charter Communications") and the user
+// agent - so those are taken from the payload when present.
+
+function clientIp(req) {
+  const h = (req && req.headers) || {};
+  const xff = String(h["x-forwarded-for"] || h["X-Forwarded-For"] || "");
+  const first = xff.split(",")[0].trim();
+  return (first || String(h["x-real-ip"] || h["x-vercel-forwarded-for"] || "").trim()).slice(0, 60);
+}
+
+// Vercel geo headers are percent-encoded (a city can contain a space).
+function geoHeader(req, name) {
+  const h = (req && req.headers) || {};
+  const v = String(h[name] || "");
+  if (!v) return "";
+  try { return decodeURIComponent(v).slice(0, 80); } catch (e) { return v.slice(0, 80); }
+}
+
+// Merge what the server knows with what the browser sent. Server wins on the IP
+// and on geo it actually has; the browser fills the gaps.
+function visitorMeta(req, d) {
+  const sent = (d && typeof d.meta === "object" && d.meta) || {};
+  const s = function (v, max) { return String(v == null ? "" : v).trim().slice(0, max || 80); };
+
+  const ip = clientIp(req) || s(sent.ip, 60);
+  const meta = {
+    ip: ip,
+    ipCity: geoHeader(req, "x-vercel-ip-city") || s(sent.ipCity),
+    ipRegion: geoHeader(req, "x-vercel-ip-country-region") || s(sent.ipRegion),
+    ipCountry: geoHeader(req, "x-vercel-ip-country") || s(sent.ipCountry),
+    // Only the browser lookup knows the ISP.
+    ipOrg: s(sent.ipOrg, 120),
+    device: s(sent.device || (req && req.headers && req.headers["user-agent"]), 300),
+    tz: s(sent.tz, 60),
+    referrer: s(sent.referrer, 300),
+    at: Date.now(),
+  };
+  // Do not store an all-empty block - an empty panel on a card is worse than no
+  // panel, because it looks like the capture is broken rather than absent.
+  return meta.ip || meta.ipCity || meta.device ? meta : null;
+}
+
 module.exports = {
-  CFG, esc, ghl, upsertContact, addNoteToContact, addTagsToContact, uploadFile, sendEmail,
+  CFG, esc, ghl, clientIp, geoHeader, visitorMeta, upsertContact, addNoteToContact, addTagsToContact, uploadFile, sendEmail,
   shell, btn, businessLeadEmail, bizAlertEmail,
   BUSINESS_TAGS, normTags, isBusinessLead,
 };

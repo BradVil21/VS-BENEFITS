@@ -337,6 +337,16 @@ footer a:hover{color:#fff}
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.vshealthbenefits.com/"},{"@type":"ListItem","position":2,"name":"Truck Driver Health Insurance","item":"https://www.vshealthbenefits.com/truck-driver-health-insurance"},{"@type":"ListItem","position":3,"name":"Atlanta, GA","item":"https://www.vshealthbenefits.com/truck-driver-health-insurance-atlanta-ga"}]}
 </script>
+<style id="vs-sticky-call">
+#vs-callbar{position:fixed;left:0;right:0;bottom:0;z-index:120;display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);backdrop-filter:saturate(160%) blur(8px);border-top:1px solid var(--line);box-shadow:0 -6px 18px rgba(13,27,42,.10)}
+#vs-callbar a{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;min-height:48px;border-radius:999px;font-weight:700;font-size:.95rem;text-decoration:none;line-height:1.1}
+#vs-callbar .vs-call{background:var(--teal-dark);color:#fff}
+#vs-callbar .vs-quote{background:var(--blue-700);color:#fff}
+#vs-callbar a:hover{text-decoration:none;color:#fff}
+body{padding-bottom:0}
+@media(max-width:759px){body{padding-bottom:76px}#back-to-top{bottom:88px}}
+@media(min-width:760px){#vs-callbar{display:none}}
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -446,6 +456,46 @@ footer a:hover{color:#fff}
         <a class="vs-rg-card" href="/group-health-insurance-for-dump-truck-fleets">
           <strong>Dump Truck Fleet Coverage</strong>
           <span>A small W-2 core inside a fleet of leased owner-operators, and why home-daily changes the plan.</span>
+          <em>Read the guide &rarr;</em>
+        </a>
+    </div>
+  </div>
+</section>
+
+
+<section class="vs-related-guides" data-block="vs-trucking-tools">
+  <div class="vs-rg-inner">
+    <h2>Driver tools and coverage guides</h2>
+    <p class="vs-rg-sub">Work out the number first, then choose where to buy. Ready to talk to somebody? <a href="/quote?type=trucker" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
+    <div class="vs-rg-grid">
+        <a class="vs-rg-card" href="/truck-driver-health-insurance-cost-calculator">
+          <strong>Cost Calculator for Drivers</strong>
+          <span>Your 2027 premium after credits in about a minute, plus what your Schedule C deductions are actually worth.</span>
+          <em>Run the numbers &rarr;</em>
+        </a>
+        <a class="vs-rg-card" href="/truck-driver-open-enrollment-2027">
+          <strong>Open Enrollment 2027 for Drivers</strong>
+          <span>Nov 1 to Jan 15. The three dates that matter, what changed with the subsidy cliff, and how to enroll from the road.</span>
+          <em>See the dates &rarr;</em>
+        </a>
+        <a class="vs-rg-card" href="/ooida-health-insurance-vs-aca">
+          <strong>OOIDA vs the Marketplace</strong>
+          <span>What an association benefits package actually covers, and where a subsidized Marketplace plan wins.</span>
+          <em>Compare them &rarr;</em>
+        </a>
+        <a class="vs-rg-card" href="/blue-cross-blue-shield-truck-drivers">
+          <strong>Blue Cross Blue Shield for Drivers</strong>
+          <span>Which Blue plans travel and which do not. The two questions to ask before you enroll.</span>
+          <em>Read the guide &rarr;</em>
+        </a>
+        <a class="vs-rg-card" href="/best-trucking-company-health-benefits">
+          <strong>Judging a Fleet's Benefits</strong>
+          <span>The five things that decide whether a company plan is good, and the questions to take to orientation.</span>
+          <em>Read the guide &rarr;</em>
+        </a>
+        <a class="vs-rg-card" href="/dot-physical-requirements">
+          <strong>DOT Physical Requirements</strong>
+          <span>Blood pressure thresholds, sleep apnea and CPAP, diabetes, vision - and what decides your card length.</span>
           <em>Read the guide &rarr;</em>
         </a>
     </div>
@@ -919,5 +969,10 @@ function qfSubmit(pid, label) {
   <script src="/vs-conversions.js" defer></script>
 <!-- GoHighLevel external tracking -->
 <script src="https://link.msgsndr.com/js/external-tracking.js" data-tracking-id="tk_e89392b2cfc34b548ae43b1ea975ae50"></script>
+<div id="vs-callbar" role="region" aria-label="Contact a licensed advisor">
+  <a class="vs-call" href="tel:+19548251009" data-vs-cta="sticky-call"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg>Call an advisor</a>
+  <a class="vs-quote" href="/quote" data-vs-cta="sticky-quote">Get my quote</a>
+</div>
+<script>(function(){var b=document.getElementById("vs-callbar");if(!b)return;b.addEventListener("click",function(e){var a=e.target.closest("a[data-vs-cta]");if(!a)return;try{if(window.vsTrack)window.vsTrack(a.getAttribute("data-vs-cta")==="sticky-call"?"contact_call":"quote_start",{lead_type:"sticky_bar"});}catch(_){}});})();</script>
 </body>
 </html>

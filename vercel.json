@@ -1291,6 +1291,81 @@
       "source": "/how-much-does-health-insurance-cost",
       "destination": "/blog/how-much-does-health-insurance-cost-2026",
       "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-cost-calculator.html",
+      "destination": "/truck-driver-health-insurance-cost-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-open-enrollment-2027.html",
+      "destination": "/truck-driver-open-enrollment-2027",
+      "permanent": true
+    },
+    {
+      "source": "/ooida-health-insurance-vs-aca.html",
+      "destination": "/ooida-health-insurance-vs-aca",
+      "permanent": true
+    },
+    {
+      "source": "/blue-cross-blue-shield-truck-drivers.html",
+      "destination": "/blue-cross-blue-shield-truck-drivers",
+      "permanent": true
+    },
+    {
+      "source": "/best-trucking-company-health-benefits.html",
+      "destination": "/best-trucking-company-health-benefits",
+      "permanent": true
+    },
+    {
+      "source": "/owner-operator-health-insurance-cost",
+      "destination": "/truck-driver-health-insurance-cost-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/owner-operator-health-insurance-cost.html",
+      "destination": "/truck-driver-health-insurance-cost-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-calculator",
+      "destination": "/truck-driver-health-insurance-cost-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-calculator.html",
+      "destination": "/truck-driver-health-insurance-cost-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/ooida-health-insurance",
+      "destination": "/ooida-health-insurance-vs-aca",
+      "permanent": true
+    },
+    {
+      "source": "/ooida-health-insurance.html",
+      "destination": "/ooida-health-insurance-vs-aca",
+      "permanent": true
+    },
+    {
+      "source": "/blue-cross-blue-shield-for-truck-drivers",
+      "destination": "/blue-cross-blue-shield-truck-drivers",
+      "permanent": true
+    },
+    {
+      "source": "/blue-cross-blue-shield-for-truck-drivers.html",
+      "destination": "/blue-cross-blue-shield-truck-drivers",
+      "permanent": true
+    },
+    {
+      "source": "/best-trucking-companies-health-benefits",
+      "destination": "/best-trucking-company-health-benefits",
+      "permanent": true
+    },
+    {
+      "source": "/best-trucking-companies-health-benefits.html",
+      "destination": "/best-trucking-company-health-benefits",
+      "permanent": true
     }
   ],
   "rewrites": [

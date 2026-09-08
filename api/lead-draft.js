@@ -159,6 +159,11 @@ module.exports = async (req, res) => {
         ? "Quote funnel — business (in progress)"
         : "Quote funnel (in progress)"),
       attribution: (d.attribution && typeof d.attribution === "object") ? d.attribution : null,
+      // Visitor origin, read from the request headers rather than from anything
+      // the browser posted. This is what fills the "Submission origin" panel on
+      // the card and what the portal's Block button bans, and a half-finished
+      // funnel is exactly the kind of lead worth checking the origin of.
+      meta: L.visitorMeta(req, d),
       notes: "Auto-captured before submit" + (step ? " (" + step + ")" : "") +
              (firstName || lastName ? "" : " — no name given yet") + "." +
              (extras ? " " + extras : ""),
