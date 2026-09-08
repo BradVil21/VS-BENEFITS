@@ -1366,6 +1366,26 @@
       "source": "/best-trucking-companies-health-benefits.html",
       "destination": "/best-trucking-company-health-benefits",
       "permanent": true
+    },
+    {
+      "source": "/blog/truck-driver-prescriptions-on-the-road.html",
+      "destination": "/blog/truck-driver-prescriptions-on-the-road",
+      "permanent": true
+    },
+    {
+      "source": "/blog/using-health-insurance-out-of-state-truck-drivers.html",
+      "destination": "/blog/using-health-insurance-out-of-state-truck-drivers",
+      "permanent": true
+    },
+    {
+      "source": "/blog/what-state-do-truck-drivers-buy-health-insurance.html",
+      "destination": "/blog/what-state-do-truck-drivers-buy-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/nationwide-ppo-health-insurance-truck-drivers.html",
+      "destination": "/nationwide-ppo-health-insurance-truck-drivers",
+      "permanent": true
     }
   ],
   "rewrites": [
