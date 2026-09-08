@@ -15,7 +15,7 @@
 //   RESEND_API_KEY              from resend.com. If missing, email is skipped (no crash).
 //   FROM_EMAIL                  optional, default "VS Health Benefits <quotes@vshealthbenefits.com>"
 //   REPLY_TO_EMAIL              optional, default the notify address below
-//   NOTIFY_EMAIL                optional, where lead/census alerts go. Default bvilsainthealth@gmail.com
+//   NOTIFY_EMAIL                optional, where lead/census alerts go. Default info@vshealthbenefits.com
 //   SITE_URL                    optional, default https://www.vshealthbenefits.com
 
 const GHL_BASE = "https://services.leadconnectorhq.com";
@@ -26,8 +26,8 @@ const CFG = {
   brand: "VS Health Benefits",
   site: process.env.SITE_URL || "https://www.vshealthbenefits.com",
   from: process.env.FROM_EMAIL || "VS Health Benefits <quotes@vshealthbenefits.com>",
-  replyTo: process.env.REPLY_TO_EMAIL || process.env.NOTIFY_EMAIL || "bvilsainthealth@gmail.com",
-  notify: process.env.NOTIFY_EMAIL || "bvilsainthealth@gmail.com",
+  replyTo: process.env.REPLY_TO_EMAIL || process.env.NOTIFY_EMAIL || "info@vshealthbenefits.com",
+  notify: process.env.NOTIFY_EMAIL || "info@vshealthbenefits.com",
   navy: "#16447f",
   teal: "#0db5a6",
 };

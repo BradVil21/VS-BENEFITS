@@ -21,13 +21,18 @@
 // is what gets matched. IPv4 is matched exactly. `ipKey()` does the conversion
 // and admin.html carries a byte-identical copy, so both ends always agree.
 //
-// ── Never take the site down ───────────────────────────────────────────────
-// Three rules, in order of importance:
+// ── Never take the site down, and never trap anyone ────────────────────────
+// Four rules, in order of importance:
 //   1. Firestore unreachable, slow, or malformed  ->  fail OPEN. A ban is worth
 //      less than the site being up.
-//   2. /admin and /client are never blocked, so a mistyped ban can't lock
+//   2. A ban is only ever enforced from a RECENTLY CONFIRMED list. If the last
+//      successful read is older than MAX_STALE_MS the list is dropped and
+//      everyone is let through, because a stale list is how an unblocked
+//      visitor stays locked out forever. Enforcement resumes the moment a fresh
+//      read succeeds.
+//   3. /admin and /client are never blocked, so a mistyped ban can't lock
 //      Bradley out of the portal he'd need to undo it with.
-//   3. IP_BLOCK_DISABLED=1 in the Vercel env turns the whole thing off without
+//   4. IP_BLOCK_DISABLED=1 in the Vercel env turns the whole thing off without
 //      a deploy.
 //
 // ── Latency ────────────────────────────────────────────────────────────────
@@ -36,6 +41,12 @@
 // cold isolate races the fetch against a 1.2s timeout and lets the request
 // through if the fetch loses. The matcher below keeps static assets out of here
 // entirely - this runs about once per pageview, not once per file.
+//
+// ── Checking your work ─────────────────────────────────────────────────────
+// GET /__blockcheck returns JSON: the address the edge sees you as, the key it
+// matches on, whether you are currently blocked, and how old its copy of the
+// list is. Never blocked, never cached. Use it to confirm an unblock landed
+// instead of guessing from a page that might be sitting in a browser cache.
 
 const FB_API_KEY = process.env.FIREBASE_API_KEY || "AIzaSyCbZ7Otrz6yPlxJuLlDPEoMzssgsWkjo5U";
 const FB_PROJECT = process.env.FIREBASE_PROJECT_ID || "vs-benefits-c1da9";
@@ -46,8 +57,13 @@ const AUTH_URL =
   "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + FB_API_KEY;
 
 const FRESH_MS = 60 * 1000;        // serve from cache without revalidating
+const MAX_STALE_MS = 5 * 60 * 1000; // hard limit on how old an enforced list may be
+const RETRY_MS = 5 * 1000;         // after a failed read, wait this long before retrying
 const COLD_TIMEOUT_MS = 1200;      // longest a cold isolate will wait on Firestore
-const TOKEN_MS = 45 * 60 * 1000;   // anonymous id tokens are good for an hour
+const TOKEN_MS = 40 * 60 * 1000;   // anonymous id tokens are good for an hour
+
+// The block-status probe. Exempt from blocking and from caching.
+const CHECK_PATH = /^\/__blockcheck\/?$/i;
 
 // Paths that are never blocked. The portal has to stay reachable to undo a ban,
 // and a paying client should not lose their account page over a bad entry.
@@ -58,7 +74,11 @@ const EXEMPT = /^\/(admin|client)(\.html)?(\/|$)/i;
 const STATIC = /\.(?:png|jpe?g|gif|svg|webp|avif|ico|css|js|mjs|map|woff2?|ttf|otf|eot|txt|xml|json|webmanifest|pdf|mp4|webm)$/i;
 
 // ── isolate-scoped caches ──────────────────────────────────────────────────
-let cache = { keys: null, at: 0, loading: null };
+// `at`   - when the list was last read SUCCESSFULLY. Never moved by a failure,
+//          because that is what makes rule 2 above work.
+// `tried`- when a read was last attempted, successfully or not. Only used to
+//          keep a broken Firestore from being hammered once per request.
+let cache = { keys: null, at: 0, tried: 0, loading: null };
 let token = { value: "", exp: 0 };
 
 // ── IP normalisation ───────────────────────────────────────────────────────
@@ -121,9 +141,9 @@ async function anonToken() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ returnSecureToken: true }),
   });
-  if (!r.ok) return "";
+  if (!r.ok) { token = { value: "", exp: 0 }; return ""; }
   const j = await r.json();
-  if (!j || !j.idToken) return "";
+  if (!j || !j.idToken) { token = { value: "", exp: 0 }; return ""; }
   token = { value: j.idToken, exp: Date.now() + TOKEN_MS };
   return token.value;
 }
@@ -131,9 +151,18 @@ async function anonToken() {
 // Reads the document and returns a Set of match keys. A missing document means
 // nothing is banned, which is a perfectly good answer and gets cached.
 async function loadKeys() {
-  const t = await anonToken();
+  let t = await anonToken();
   if (!t) throw new Error("auth");
-  const r = await fetch(DOC_URL, { headers: { Authorization: "Bearer " + t } });
+  let r = await fetch(DOC_URL, { headers: { Authorization: "Bearer " + t } });
+  // A cached token that Firebase has since rejected looks exactly like a
+  // permanent outage from here, and a permanent outage is what used to freeze
+  // the list. Throw the token away and try once more with a fresh one.
+  if (r.status === 401 || r.status === 403) {
+    token = { value: "", exp: 0 };
+    t = await anonToken();
+    if (!t) throw new Error("auth");
+    r = await fetch(DOC_URL, { headers: { Authorization: "Bearer " + t } });
+  }
   if (r.status === 404) return new Set();
   if (!r.ok) throw new Error("read_" + r.status);
   const doc = await r.json();
@@ -158,45 +187,78 @@ async function loadKeys() {
 
 function refresh() {
   if (cache.loading) return cache.loading;
+  cache.tried = Date.now();
   cache.loading = loadKeys()
     .then(function (keys) {
-      cache = { keys: keys, at: Date.now(), loading: null };
+      // A good read is the only thing that moves `at`.
+      cache = { keys: keys, at: Date.now(), tried: Date.now(), loading: null };
       return keys;
     })
     .catch(function () {
-      // Keep whatever we had rather than dropping every ban on one bad read,
-      // but move `at` forward so we do not hammer Firestore on every request.
-      cache = { keys: cache.keys, at: Date.now(), loading: null };
-      return cache.keys;
+      // Keep whatever we had so one bad read does not drop every ban, but leave
+      // `at` where it was: the list now has an expiry, and letting a failure
+      // renew it is exactly the bug that kept unblocked visitors on the 404.
+      cache = { keys: cache.keys, at: cache.at, tried: Date.now(), loading: null };
+      return null;
     });
   return cache.loading;
 }
 
-// Returns the current key set, or null when we have nothing and could not get
-// anything in time. null means "let them through".
+// Start a refresh unless one is already running or one just failed. Returns a
+// promise (possibly already settled) suitable for event.waitUntil.
+function maybeRefresh() {
+  if (cache.loading) return cache.loading;
+  if (cache.tried && Date.now() - cache.tried < RETRY_MS && !cache.at) {
+    return Promise.resolve(null);
+  }
+  return refresh();
+}
+
+// Returns the current key set, or null when we have nothing recent enough to
+// act on. null means "let them through".
 async function blockedKeys(event) {
   const age = Date.now() - cache.at;
 
+  // Fresh: answer straight from memory.
   if (cache.keys && age < FRESH_MS) return cache.keys;
 
-  if (cache.keys) {
-    // Stale but usable: answer now, refresh behind the response.
-    const p = refresh();
+  // Usable but stale: answer now, refresh behind the response. Past
+  // MAX_STALE_MS it stops being usable at all - see rule 2 at the top.
+  if (cache.keys && age < MAX_STALE_MS) {
+    const p = maybeRefresh();
     if (event && typeof event.waitUntil === "function") event.waitUntil(p);
     return cache.keys;
   }
 
-  // Cold isolate. Wait, but not for long.
+  // Nothing we are willing to enforce. Try to get a real answer, briefly, and
+  // let the visitor through if it does not arrive.
   let timer;
   const timeout = new Promise(function (resolve) {
     timer = setTimeout(function () { resolve(null); }, COLD_TIMEOUT_MS);
   });
   try {
-    return await Promise.race([refresh(), timeout]);
+    const keys = await Promise.race([maybeRefresh(), timeout]);
+    if (keys) return keys;
+    // The race may have been lost by a refresh that has since landed.
+    return (cache.keys && Date.now() - cache.at < MAX_STALE_MS) ? cache.keys : null;
+  } catch (e) {
+    return null;
   } finally {
     clearTimeout(timer);
   }
 }
+
+// Headers that stop the 404 being remembered by anything between us and the
+// visitor. Without these an unblock can look like it did not work simply
+// because a browser or an edge cache is still handing out yesterday's answer.
+const NO_STORE = {
+  "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+  "CDN-Cache-Control": "no-store",
+  "Vercel-CDN-Cache-Control": "no-store",
+  Pragma: "no-cache",
+  Expires: "0",
+  Vary: "*",
+};
 
 // ── the page a blocked visitor sees ────────────────────────────────────────
 function blockedPage(ip) {
@@ -231,7 +293,7 @@ function blockedPage(ip) {
     <p><strong>Your access to this website has been blocked.</strong> Your network address
        was placed on our block list, so pages on vshealthbenefits.com will not load for you.</p>
     <p>If you believe this is a mistake, email
-       <a href="mailto:bvilsainthealth@gmail.com" style="color:#16447f">bvilsainthealth@gmail.com</a>
+       <a href="mailto:info@vshealthbenefits.com" style="color:#16447f">info@vshealthbenefits.com</a>
        and include the reference below.</p>
     <div class="meta">Reference: <code>${ip.replace(/[<>&"]/g, "")}</code></div>
   </div>
@@ -241,11 +303,36 @@ function blockedPage(ip) {
 
 // ── entry point ────────────────────────────────────────────────────────────
 export default async function middleware(request, event) {
-  if (process.env.IP_BLOCK_DISABLED === "1") return;
+  const disabled = process.env.IP_BLOCK_DISABLED === "1";
 
   let path = "/";
   try { path = new URL(request.url).pathname; } catch (e) { return; }
 
+  // The probe answers before anything else, so it works even while blocked.
+  if (CHECK_PATH.test(path)) {
+    const raw = clientIp(request);
+    const key = ipKey(raw);
+    let keys = null;
+    if (!disabled && key) { try { keys = await blockedKeys(event); } catch (e) { keys = null; } }
+    const age = cache.at ? Date.now() - cache.at : null;
+    const body = {
+      ip: raw,
+      key: key,
+      blocked: !!(keys && key && keys.has(key)),
+      enforcing: !disabled && !!keys,
+      listSize: keys ? keys.size : null,
+      listAgeSeconds: age === null ? null : Math.round(age / 1000),
+      disabled: disabled,
+      checkedAt: new Date().toISOString(),
+    };
+    return new Response(JSON.stringify(body, null, 2), {
+      status: 200,
+      headers: Object.assign({ "Content-Type": "application/json; charset=utf-8",
+                               "X-Robots-Tag": "noindex, nofollow" }, NO_STORE),
+    });
+  }
+
+  if (disabled) return;
   if (EXEMPT.test(path) || STATIC.test(path)) return;
 
   const raw = clientIp(request);
@@ -258,11 +345,8 @@ export default async function middleware(request, event) {
 
   return new Response(blockedPage(raw), {
     status: 404,
-    headers: {
-      "Content-Type": "text/html; charset=utf-8",
-      "Cache-Control": "no-store, no-cache, must-revalidate",
-      "X-Robots-Tag": "noindex, nofollow",
-    },
+    headers: Object.assign({ "Content-Type": "text/html; charset=utf-8",
+                             "X-Robots-Tag": "noindex, nofollow" }, NO_STORE),
   });
 }
 

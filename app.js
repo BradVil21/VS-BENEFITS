@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", function () {
       data._ts     = new Date().toISOString();
 
       var webhook = form.getAttribute("data-webhook") || window.MAKE_WEBHOOK_URL;
-      var mailto  = form.getAttribute("data-mailto")  || "bvilsainthealth@gmail.com";
+      var mailto  = form.getAttribute("data-mailto")  || "info@vshealthbenefits.com";
       var submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
       var originalLabel = submitBtn ? submitBtn.textContent : "";
       if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Sending..."; }

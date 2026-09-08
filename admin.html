@@ -1861,7 +1861,8 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
 
       <p class="lede" style="margin-top:14px;font-size:12.5px">
         <strong>On IPv6.</strong> A home IPv6 address rotates its second half every few hours, so an exact match would stop working almost immediately. IPv6 entries are therefore stored and matched as the <code>/64</code> prefix &mdash; the stable half the internet provider assigns to the household. IPv4 addresses are matched exactly.<br>
-        <strong>How fast.</strong> A block takes effect within about a minute; unblocking is the same.
+        <strong>How fast.</strong> A block takes effect within about a minute; unblocking is the same.<br>
+        <strong>Checking it worked.</strong> Have the person open <code>vshealthbenefits.com/__blockcheck</code>. It reports the address the website sees them as and whether it is currently blocking them &mdash; a plain answer that no browser cache can fake. If it says <code>blocked: false</code> but they still see the 404 page, it is their own browser cache: a hard refresh clears it.
       </p>
     </div>
 
@@ -2058,7 +2059,11 @@ LOCAL_TO_REMOTE[K.bizLeads]="biz_leads";
 LOCAL_TO_REMOTE[K.referrals]="referrals";LOCAL_TO_REMOTE[K.appointments]="appointments";LOCAL_TO_REMOTE[K.adminAccts]="admin_accounts";
 LOCAL_TO_REMOTE[K.blockedIps]="blocked_ips";
 
-function setArr(k,v){setArrLocal(k,v);var r=LOCAL_TO_REMOTE[k];if(r)cloudPush(r,v);}
+/* `force` marks a write the person just made by hand. Those must never be
+   dropped by the echo-suppression below - a swallowed write is how an unblocked
+   visitor stayed on the 404 page. Returns a promise for whether the cloud copy
+   was actually updated, so callers can say so out loud. */
+function setArr(k,v,force){setArrLocal(k,v);var r=LOCAL_TO_REMOTE[k];return r?cloudPush(r,v,force):Promise.resolve(true);}
 function getLeads(){return asArr(K.leads);}function saveLeads(v){setArr(K.leads,v);}
 function getAccounts(){return asArr(K.accounts);}function saveAccounts(v){setArr(K.accounts,v);}
 function getMessages(){return asArr(K.messages);}function saveMessages(v){setArr(K.messages,v);}
@@ -2068,7 +2073,7 @@ function getBizLeads(){return asArr(K.bizLeads);}function saveBizLeads(v){setArr
 function getReferrals(){return asArr(K.referrals);}function saveReferrals(v){setArr(K.referrals,v);}
 function getAppts(){return asArr(K.appointments);}function saveAppts(v){setArr(K.appointments,v);}
 function getAdmins(){return asArr(K.adminAccts);}function saveAdmins(v){setArr(K.adminAccts,v);}
-function getBlockedIps(){return asArr(K.blockedIps);}function saveBlockedIps(v){setArr(K.blockedIps,v);}
+function getBlockedIps(){return asArr(K.blockedIps);}function saveBlockedIps(v){return setArr(K.blockedIps,v,true);}
 function getWebhook(){return localStorage.getItem(K.webhook)||"";}
 function setWebhook(v){localStorage.setItem(K.webhook,v||"");}
 
@@ -2119,10 +2124,14 @@ function setSyncPill(state){
   else{p.classList.add("off");$("sync-lbl").textContent="Offline";}
 }
 
-async function cloudPush(key,items){
-  if(!cloud.ready||cloud.suspend>0)return;
-  try{await setDoc(doc(db,"vs_state",key),{items:items,ts:Date.now()});}
-  catch(e){console.warn("cloud push",key,e);}
+async function cloudPush(key,items,force){
+  /* `suspend` exists to stop a snapshot echoing straight back out again. A
+     deliberate edit is not an echo, so `force` ignores it - otherwise a click
+     that lands within 80ms of any incoming snapshot is silently thrown away. */
+  if(!cloud.ready)return false;
+  if(cloud.suspend>0&&!force)return false;
+  try{await setDoc(doc(db,"vs_state",key),{items:items,ts:Date.now()});return true;}
+  catch(e){console.warn("cloud push",key,e);return false;}
 }
 
 async function initCloud(){
@@ -5241,7 +5250,7 @@ function ipBlockAdd(raw,note,ctx){
     created:Date.now()
   };
   list.unshift(entry);
-  saveBlockedIps(list);
+  entry.__sync=saveBlockedIps(list);   /* resolves false if the cloud copy did not take */
   return entry;
 }
 
@@ -5252,8 +5261,7 @@ function ipBlockRemove(raw){
   var list=getBlockedIps();
   var next=list.filter(function(b){return !(b&&(b.ip===k||b.id===raw));});
   if(next.length===list.length)return false;
-  saveBlockedIps(next);
-  return true;
+  return saveBlockedIps(next);   /* promise<boolean> - truthy either way, but awaitable */
 }
 
 function czIpBlock(c){
@@ -5363,9 +5371,15 @@ function czOpenModal(client){
       closeModal();czOpenModal(c);
     });
     if(un)un.addEventListener("click",function(){
-      ipBlockRemove(un.getAttribute("data-ipunban"));
+      var p=ipBlockRemove(un.getAttribute("data-ipunban"));
       if(typeof renderBlocked==="function")renderBlocked();
       closeModal();czOpenModal(c);
+      /* Local removal is instant; the website only stops turning them away once
+         the cloud copy is updated. Say so rather than letting a failed write
+         look like a successful unblock. */
+      Promise.resolve(p).then(function(ok){
+        if(ok===false)alert("Removed from this browser, but the change did not reach the website (you appear to be offline). Reload the portal while online and unblock again, or the block will come back.");
+      });
     });
   })();
   czAddrAutocomplete();
@@ -6083,8 +6097,12 @@ function renderBlocked(){
         var row=getBlockedIps().filter(function(x){return x.id===id;})[0];
         if(!row)return;
         if(!confirm("Unblock "+row.ip+"?\n\nThey will be able to reach the website again within about a minute."))return;
-        saveBlockedIps(getBlockedIps().filter(function(x){return x.id!==id;}));
-        blkMsg("ok","Unblocked "+row.ip+". The website will let them through again within about a minute.");
+        blkMsg("ok","Unblocking "+row.ip+"\u2026");
+        saveBlockedIps(getBlockedIps().filter(function(x){return x.id!==id;})).then(function(ok){
+          if(ok)blkMsg("ok","Unblocked "+row.ip+". The website lets them through again within about a minute. To confirm, have them open vshealthbenefits.com/__blockcheck \u2014 it should say blocked: false.");
+          else blkMsg("err","Removed from this browser, but the change did not reach the website \u2014 the sync connection is offline. Reload this portal while online and unblock again, otherwise the block stays live.");
+          renderBlocked();
+        });
         renderBlocked();
       });
     });
@@ -6115,6 +6133,9 @@ function renderBlocked(){
       if(!entry){blkMsg("err","Could not block that address.");return;}
       ipIn.value="";if(noteIn)noteIn.value="";
       blkMsg("ok","Blocked "+entry.ip+". The website starts turning them away within about a minute.");
+      Promise.resolve(entry.__sync).then(function(ok){
+        if(ok===false)blkMsg("err","Saved in this browser only \u2014 the change did not reach the website (sync is offline). The address is not actually blocked yet.");
+      });
       renderBlocked();
     }
     addBtn.addEventListener("click",submit);
