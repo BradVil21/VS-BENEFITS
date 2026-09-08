@@ -21,7 +21,7 @@ def section(inner, soft=False, width="820px"):
             % (" bg-soft" if soft else "", width, inner))
 
 def hero(eyebrow, h1_plain, h1_span, sub, ctas=True):
-    c = ('<div class="hero-ctas"><a class="btn btn-primary" href="/quote?type=trucker">Get my quote</a>'
+    c = ('<div class="hero-ctas"><a class="btn btn-primary" href="/quote?type=individual">Get my quote</a>'
          '<a class="btn btn-secondary" href="/truck-driver-health-insurance-cost-calculator">Estimate my cost</a></div>'
          if ctas else "")
     return """
@@ -41,7 +41,7 @@ def hero(eyebrow, h1_plain, h1_span, sub, ctas=True):
   </div>
 </section>""" % (eyebrow, h1_plain, h1_span, sub, c)
 
-def cta(h, p, label="Get my quote", href="/quote?type=trucker"):
+def cta(h, p, label="Get my quote", href="/quote?type=individual"):
     return ('<div class="cta-strip"><h2>%s</h2><p>%s</p>'
             '<a class="btn" href="%s" style="background:#fff;color:var(--blue-700)">%s</a></div>' % (h, p, href, label))
 

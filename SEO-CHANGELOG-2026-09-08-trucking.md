@@ -200,3 +200,79 @@ Whether the trucking head terms ("health insurance for truck drivers", 1,139
 impressions at pos 53) move once the new internal links are crawled. If they do
 not by mid-October, the constraint is off-site authority rather than structure,
 and no further on-page work will fix it.
+
+---
+
+# Addendum — /open-enrollment rebuild
+
+## The nav
+
+The desktop nav was wrapping to three lines. Two causes, both fixed:
+
+- **This page's nav CSS was missing `white-space:nowrap` and `font-size:.94rem`**,
+  which every other page's chrome carries. Its links were rendering at 1rem and
+  allowed to break mid-label, so "Refer & Earn" and "Member Login" each took two
+  lines.
+- **The CTA read "Get Open Enrollment Help"** — roughly twice the width of the
+  site-standard "Get a Quote" — and pointed at `#support` rather than `/quote`.
+
+Also raised the nav breakpoint from **900px to 960px** to match the rest of the
+site. At 900px the horizontal nav engaged before it fit and pushed the body wider
+than the viewport. Verified at 11 widths from 390 to 1440: one line at every
+desktop width, mobile menu below 960, no horizontal overflow anywhere.
+
+## Everything routes to /quote
+
+The page was running its own **duplicate lead funnel** — two inline forms
+(individual and business) posting to `/api/lead-sync` plus direct Firebase,
+HubSpot and GoHighLevel writes from the page itself. That is now gone and the
+page routes into `/quote`, which is the funnel the rest of the site uses.
+
+| Element | Was | Now |
+|---|---|---|
+| Nav CTA | `#support` | `/quote` |
+| "Individual / Family" card | inline form | `/quote?type=individual` |
+| "Business / Group" card | inline form | `/quote?type=business` |
+| Countdown | no CTA | `/quote` |
+| Support section | phone + email only | phone, email + `/quote` |
+
+`/quote` already supported `?type=` deep links, so the individual/business
+segmentation is preserved — visitors land on the correct form rather than the
+chooser. The phone number was kept in all three places; a call is still a
+conversion.
+
+**Removed with the forms:** both `<form>` blocks, the success modal, the confetti
+routine, ~5.7KB of handler JS, and the whole Firebase module — **three fewer
+third-party imports on page load**. Page is 11.5KB smaller.
+
+## Two defects caught in verification
+
+1. **Cutting the dead form JS also removed the closing `})();` of the enclosing
+   IIFE**, leaving the whole script unparseable — which would have killed the nav
+   toggle, the login modal, the countdown and the testimonial slideshow on that
+   page. `node --check` caught it; the wrapper was restored and all four inline
+   scripts now parse.
+2. **53 links across 49 pages pointed at `/quote?type=trucker`** — my own from
+   earlier today. `/quote` accepts `business|group|employer|smallbusiness|company`
+   and `individual|family|personal|self`; anything else falls through silently to
+   the chooser. Every trucking CTA was landing drivers one extra click from the
+   form. Rewritten to `?type=individual`, and the builders corrected at source.
+
+## Countdown
+
+It counted down to 1 November and then stopped, zeroed out. Now runs four phases
+on the same model as the sitewide widget: opens 1 Nov → 1 January coverage
+deadline 15 Dec → close of enrollment 15 Jan → closed.
+
+## Verification
+
+Full site pass: **no problems found** across 253 files. The page specifically:
+0 forms, 1 h1, 0 JS errors at any of 11 viewport widths, 0 Firebase imports,
+all inline scripts parse, JSON-LD valid.
+
+## Worth watching
+
+The inline form was four fields; `/quote` is a longer multi-step flow. Consolidating
+to one funnel is right for maintenance and attribution, but if open-enrollment
+conversion drops in November, the shorter form is the likely reason — and the fix
+would be shortening `/quote`, not restoring the duplicate.
