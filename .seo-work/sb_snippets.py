@@ -84,8 +84,8 @@ PAGES = {
    "Group Health Insurance Sunrise, FL | Small Business",
    "Group health for Sunrise, FL businesses with 2 to 50 employees. Every major Broward carrier compared free by a licensed, bilingual local broker."),
  'coral-springs-health-insurance.html': (
-   "Group Health Insurance Coral Springs, FL | Employers",
-   "Group and individual health insurance for Coral Springs, FL. Every major Broward County carrier compared by a licensed local broker, at no cost to you."),
+   "Health Insurance Coral Springs, FL | Family & Business",
+   "Individual, family, small group, dental and vision plans for Coral Springs and Broward County. A licensed local broker compares major carriers at no cost."),
  'restaurant-health-insurance-miami-fort-lauderdale.html': (
    "Restaurant Group Health Insurance Miami & Fort Lauderdale",
    "Group health for South Florida restaurants: tipped wages, part-time rules and the ACA lookback, plus what it really costs per employee in 2027."),

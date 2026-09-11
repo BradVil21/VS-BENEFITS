@@ -6,8 +6,8 @@ import re, sys
 
 PAGES = {
  'blog/aca-open-enrollment-2027-guide.html': (
-   "Open Enrollment 2027: Nov 1 – Jan 15 (Dates by State)",
-   "Open enrollment for 2027 coverage runs Nov 1, 2026 to Jan 15, 2027 on HealthCare.gov. Enroll by Dec 15 for a January 1 start. Every state's deadline."),
+   "When Is Open Enrollment 2027? Dates, Deadlines and Mistakes",
+   "Runs Nov 1, 2026 to Jan 15, 2027, but enroll after Dec 15 and coverage waits until Feb 1. Your state's deadline, the subsidy cliff, and 5 costly mistakes."),
  'health-insurance-open-enrollment-faq.html': (
    "Open Enrollment 2027 FAQ: Dates, Deadlines, Subsidies",
    "2027 open enrollment runs Nov 1, 2026 to Jan 15, 2027. Enroll by Dec 15 for January 1 coverage. Answers on deadlines, special enrollment and subsidies."),
@@ -16,19 +16,19 @@ PAGES = {
    "2027 open enrollment runs Nov 1, 2026 through Jan 15, 2027. Enroll by Dec 15 for coverage starting January 1. A licensed advisor compares plans free."),
  'blog/what-income-counts-for-aca-subsidies.html': (
    "What Income Counts for ACA Subsidies? MAGI in 2027",
-   "ACA subsidies use MAGI: adjusted gross income plus tax-exempt interest and untaxed Social Security. What counts, what doesn't, and how 1099 earners estimate it."),
+   "Wages, net 1099 profit, IRA withdrawals: what counts toward ACA subsidies, what doesn't, and why a wrong estimate can mean repaying credits at tax time."),
  'blog/how-much-does-health-insurance-cost-2026.html': (
    "How Much Does Health Insurance Cost in 2026? Real Prices",
    "The benchmark silver plan averages about $625 a month before subsidies in 2026, and roughly $752 at age 40. What drives your price and how to pay less."),
  'blog/health-insurance-dot-physical.html': (
    "Do You Need Health Insurance to Pass a DOT Physical?",
-   "No. You don't need insurance to pass a DOT physical and it won't pay for the exam. But coverage is what keeps your medical card renewing year after year."),
+   "Insurance won't pay for the exam, but it's what keeps your medical card renewing. The conditions that most often shorten a card, and how drivers stay certified."),
  'does-health-insurance-cover-dot-physical.html': (
-   "Does Health Insurance Cover DOT Physicals? (2026 Answer)",
-   "Almost never - standard health plans exclude DOT physicals as employment exams. What the exam really costs in 2026, and the HSA and deduction moves drivers miss."),
+   "Does Insurance Cover a DOT Physical? BCBS, Aetna & More",
+   "Blue Cross, Aetna, Cigna, UnitedHealthcare and Marketplace plans all treat it the same. What the exam costs ($50-$150) and how to pay with pre-tax HSA dollars."),
  'services.html': (
-   "Health Insurance We Broker: ACA, Group, Dental, Vision",
-   "ACA marketplace, private PPO, small group, family, dental and vision - compared by a licensed broker at no cost to you. Carriers pay our commission, not you."),
+   "Health Insurance Broker Services: Group, ACA, Family, Dental",
+   "Small group (2-25 employees), ACA marketplace, family, dental and vision plans compared by a licensed Miami broker. Carriers pay us, so our help is free."),
  'health-insurance-for-hvac-companies.html': (
    "Health Insurance for HVAC Companies: 2027 Costs & Plans",
    "Group health for HVAC companies runs about $350 to $650 per employee per month. Which structures fit a 2-100 person shop, and free setup from a licensed broker."),
