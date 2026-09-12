@@ -1386,6 +1386,31 @@
       "source": "/nationwide-ppo-health-insurance-truck-drivers.html",
       "destination": "/nationwide-ppo-health-insurance-truck-drivers",
       "permanent": true
+    },
+    {
+      "source": "/private-health-insurance.html",
+      "destination": "/private-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/private-market-health-insurance",
+      "destination": "/private-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/non-marketplace-health-insurance",
+      "destination": "/private-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/private-ppo-health-insurance",
+      "destination": "/private-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/private-health-insurance-plans",
+      "destination": "/private-health-insurance",
+      "permanent": true
     }
   ],
   "rewrites": [
