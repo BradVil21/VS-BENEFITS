@@ -64,7 +64,8 @@ def build(slug, title, h1, desc, lede, published, read_min, eyebrow,
     schema_html = ''.join('<script type="application/ld+json">\n%s\n</script>\n'
                           % json.dumps(x, indent=2) for x in schema)
 
-    TBL = ("<style id=\"vs-post-tbl\">.article-body .vs-tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:22px 0}"
+    TBL = ("<style id=\"vs-post-tbl\">.article-body{min-width:0;max-width:100%}"
+           ".article-body .vs-tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:22px 0;max-width:100%}"
            ".article-body table.vs-t{width:100%;border-collapse:collapse;font-size:.93rem;min-width:520px}"
            ".article-body table.vs-t th{text-align:left;background:var(--blue-50);color:var(--blue-700);font-weight:700;"
            "padding:11px 13px;border-bottom:2px solid var(--blue-100);font-size:.86rem}"

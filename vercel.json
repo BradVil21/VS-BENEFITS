@@ -1411,6 +1411,21 @@
       "source": "/private-health-insurance-plans",
       "destination": "/private-health-insurance",
       "permanent": true
+    },
+    {
+      "source": "/blog/truck-driver-family-health-insurance-guide.html",
+      "destination": "/blog/truck-driver-family-health-insurance-guide",
+      "permanent": true
+    },
+    {
+      "source": "/blog/affordable-health-insurance-truck-drivers.html",
+      "destination": "/blog/affordable-health-insurance-truck-drivers",
+      "permanent": true
+    },
+    {
+      "source": "/blog/company-driver-to-owner-operator-health-insurance.html",
+      "destination": "/blog/company-driver-to-owner-operator-health-insurance",
+      "permanent": true
     }
   ],
   "rewrites": [
