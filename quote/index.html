@@ -2365,6 +2365,80 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     sendToWebhook(data, btn);
   };
 
+  /* ---- IN-PROGRESS / ABANDONED QUOTE CAPTURE ----
+     Posts to /api/lead-draft once the visitor has given a phone or an email, on
+     each step forward and again if they leave the page. The server reads the IP
+     from the request headers (never from anything posted here), so a half-finished
+     business quote still lands on the board with an origin you can see and block.
+     Nothing is sent once the real submission succeeds, and the same payload is
+     never sent twice. */
+  var DRAFT_API = '/api/lead-draft';
+  var draftSig = '';
+  var draftDone = false;
+
+  function draftPayload(){
+    if(draftDone || !currentType) return null;
+    var isBiz = currentType === 'business';
+    var d;
+    try { d = isBiz ? collectBiz() : collectInd(); } catch(e){ return null; }
+    var email = isBiz ? d.contactEmail : d.email;
+    var phone = isBiz ? (d.contactPhone || d.businessPhone) : d.phone;
+    if(!email && !phone) return null;              // nothing to follow up on yet
+    return {
+      type:      isBiz ? 'business' : 'individual',
+      step:      isBiz ? ('business step ' + bizStep + ' of ' + BIZ_STEPS)
+                       : ('step ' + indStep + ' of ' + IND_STEPS),
+      firstName: isBiz ? d.ownerFirstName : d.firstName,
+      lastName:  isBiz ? d.ownerLastName  : d.lastName,
+      email:     email,
+      phone:     phone,
+      zip:       isBiz ? d.businessZip   : d.zip,
+      state:     isBiz ? d.businessState : d.state,
+      company:   isBiz ? d.businessName  : '',
+      source:    isBiz ? 'Quote funnel — business (in progress)'
+                       : 'Quote funnel (in progress)',
+      attribution: (typeof vsAttr === 'function' ? vsAttr() : null)
+    };
+  }
+
+  function draftSend(leaving){
+    var p = draftPayload(); if(!p) return;
+    var sig = [p.type,p.email,p.phone,p.firstName,p.lastName,p.company,p.zip].join('|');
+    if(sig === draftSig) return;                   // nothing new since the last send
+    draftSig = sig;
+    var body = JSON.stringify(p);
+    if(leaving){
+      // The tab is closing: a beacon survives the unload where fetch may not.
+      try { if(navigator.sendBeacon && navigator.sendBeacon(DRAFT_API, new Blob([body], {type:'application/json'}))) return; } catch(e){}
+    }
+    try {
+      fetch(DRAFT_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:body, keepalive:true })
+        .catch(function(){ /* never block the funnel */ });
+    } catch(e){}
+  }
+
+  /* Step forward = one more thing worth saving. */
+  (function(){
+    var _ind = window.indNav, _biz = window.bizNav;
+    window.indNav = function(to){ var prev = indStep; _ind.apply(this, arguments); if(to > prev) draftSend(false); };
+    window.bizNav = function(to){ var prev = bizStep; _biz.apply(this, arguments); if(to > prev) draftSend(false); };
+  })();
+
+  /* Once the real submission lands, the draft path goes quiet so a finished lead
+     never also arrives as an abandoned one. */
+  (function(){
+    var _showPanel = showPanel;
+    showPanel = function(id){
+      if(id === 'panel-generating' || id === 'panel-success') draftDone = true;
+      return _showPanel.apply(this, arguments);
+    };
+  })();
+
+  window.addEventListener('pagehide', function(){ draftSend(true); });
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState === 'hidden') draftSend(true);
+  });
+
   // ---- PHONE FORMATTING ----
   function formatPhone(inp){
     inp.addEventListener('input', function(){

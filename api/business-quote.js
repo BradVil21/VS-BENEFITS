@@ -86,6 +86,10 @@ module.exports = async (req, res) => {
           "Census link sent; awaiting census.",
         ].filter(Boolean).join("\n"),
         ghlContactId: contactId || "",
+        // Visitor origin, read from the request headers rather than from anything the
+        // browser posted. Fills the "Submission origin" panel on the card and is what
+        // the portal's Block button bans.
+        meta: L.visitorMeta(req, d),
         created: now,
         updated: now,
       },
@@ -101,6 +105,11 @@ module.exports = async (req, res) => {
         if (!existing.email && email) existing.email = email;
         if (!existing.phone && phone) existing.phone = phone;
         if (!existing.employees && d.employees) existing.employees = String(d.employees);
+        // A repeat submission from a different network is worth seeing, so the newest
+        // origin wins; a submission with no readable IP never erases the one on file.
+        var m = L.visitorMeta(req, d);
+        if (m && m.ip) existing.meta = m;
+        else if (m && !existing.meta) existing.meta = m;
         existing.notes = (existing.notes ? existing.notes + "\n" : "") +
           "[" + today + "] Submitted the business quote form again.";
         existing.updated = now;
