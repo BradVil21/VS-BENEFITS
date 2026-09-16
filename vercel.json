@@ -1426,6 +1426,36 @@
       "source": "/blog/company-driver-to-owner-operator-health-insurance.html",
       "destination": "/blog/company-driver-to-owner-operator-health-insurance",
       "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-roofing-companies.html",
+      "destination": "/health-insurance-for-roofing-companies",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-daycare-centers.html",
+      "destination": "/health-insurance-for-daycare-centers",
+      "permanent": true
+    },
+    {
+      "source": "/blog/skilled-trades-health-insurance.html",
+      "destination": "/blog/skilled-trades-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/workers-comp-vs-health-insurance.html",
+      "destination": "/blog/workers-comp-vs-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/1099-crew-vs-w2-health-insurance.html",
+      "destination": "/blog/1099-crew-vs-w2-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/seasonal-part-time-crew-health-insurance.html",
+      "destination": "/blog/seasonal-part-time-crew-health-insurance",
+      "permanent": true
     }
   ],
   "rewrites": [
