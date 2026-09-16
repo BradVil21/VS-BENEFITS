@@ -1917,11 +1917,17 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       var emp = document.getElementById('biz-employees').value;
       var cov = document.getElementById('biz-coverage').value;
       var ins = document.getElementById('biz-insured').value;
-      setErr('f-biz-name', !bn);
+      var bnOk = (typeof window.vsIsTextName === 'function') ? window.vsIsTextName(bn) : !!bn;
+      setErr('f-biz-name', !bnOk);
       setErr('f-biz-employees', !emp);
       setErr('f-biz-coverage', !cov);
       setErr('f-biz-insured', !ins);
-      if(!bn || !emp || !cov || !ins) ok = false;
+      if(!bnOk){
+        var bnWrap = document.getElementById('f-biz-name');
+        var bnMsg = bnWrap ? bnWrap.querySelector('.err-msg') : null;
+        if(bnMsg) bnMsg.textContent = 'Please enter the business name in letters.';
+      }
+      if(!bnOk || !emp || !cov || !ins) ok = false;
       if(ok){ bizNav(3); }
     } else if(fromStep === 3){
       bizNav(4);            // situation is optional
@@ -2346,6 +2352,16 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     var namesOk = checkNameFields('biz-firstname','f-biz-firstname','biz-lastname','f-biz-lastname');
     var bEmOk = checkEmailField('biz-email','f-biz-email');
     if(!namesOk || !bEmOk) return;
+    // Company and headcount live two steps back, so someone who jumped around
+    // could reach this button without them. Nothing submits without both.
+    var bnv = document.getElementById('biz-name').value.trim();
+    var empv = document.getElementById('biz-employees').value;
+    var bnvOk = (typeof window.vsIsTextName === 'function') ? window.vsIsTextName(bnv) : !!bnv;
+    if(!bnvOk || !empv){
+      setErr('f-biz-name', !bnvOk);
+      setErr('f-biz-employees', !empv);
+      bizNav(2); updateProgress(2, BIZ_STEPS); return;
+    }
     var cphv = document.getElementById('biz-contact-phone').value.trim();
     if(!isValidPhone(cphv)){ setErr('f-biz-contact-phone', true); bizNav(1); updateProgress(1, BIZ_STEPS); return; }
     var addr = document.getElementById('biz-address').value.trim();
@@ -2365,80 +2381,6 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     sendToWebhook(data, btn);
   };
 
-  /* ---- IN-PROGRESS / ABANDONED QUOTE CAPTURE ----
-     Posts to /api/lead-draft once the visitor has given a phone or an email, on
-     each step forward and again if they leave the page. The server reads the IP
-     from the request headers (never from anything posted here), so a half-finished
-     business quote still lands on the board with an origin you can see and block.
-     Nothing is sent once the real submission succeeds, and the same payload is
-     never sent twice. */
-  var DRAFT_API = '/api/lead-draft';
-  var draftSig = '';
-  var draftDone = false;
-
-  function draftPayload(){
-    if(draftDone || !currentType) return null;
-    var isBiz = currentType === 'business';
-    var d;
-    try { d = isBiz ? collectBiz() : collectInd(); } catch(e){ return null; }
-    var email = isBiz ? d.contactEmail : d.email;
-    var phone = isBiz ? (d.contactPhone || d.businessPhone) : d.phone;
-    if(!email && !phone) return null;              // nothing to follow up on yet
-    return {
-      type:      isBiz ? 'business' : 'individual',
-      step:      isBiz ? ('business step ' + bizStep + ' of ' + BIZ_STEPS)
-                       : ('step ' + indStep + ' of ' + IND_STEPS),
-      firstName: isBiz ? d.ownerFirstName : d.firstName,
-      lastName:  isBiz ? d.ownerLastName  : d.lastName,
-      email:     email,
-      phone:     phone,
-      zip:       isBiz ? d.businessZip   : d.zip,
-      state:     isBiz ? d.businessState : d.state,
-      company:   isBiz ? d.businessName  : '',
-      source:    isBiz ? 'Quote funnel — business (in progress)'
-                       : 'Quote funnel (in progress)',
-      attribution: (typeof vsAttr === 'function' ? vsAttr() : null)
-    };
-  }
-
-  function draftSend(leaving){
-    var p = draftPayload(); if(!p) return;
-    var sig = [p.type,p.email,p.phone,p.firstName,p.lastName,p.company,p.zip].join('|');
-    if(sig === draftSig) return;                   // nothing new since the last send
-    draftSig = sig;
-    var body = JSON.stringify(p);
-    if(leaving){
-      // The tab is closing: a beacon survives the unload where fetch may not.
-      try { if(navigator.sendBeacon && navigator.sendBeacon(DRAFT_API, new Blob([body], {type:'application/json'}))) return; } catch(e){}
-    }
-    try {
-      fetch(DRAFT_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:body, keepalive:true })
-        .catch(function(){ /* never block the funnel */ });
-    } catch(e){}
-  }
-
-  /* Step forward = one more thing worth saving. */
-  (function(){
-    var _ind = window.indNav, _biz = window.bizNav;
-    window.indNav = function(to){ var prev = indStep; _ind.apply(this, arguments); if(to > prev) draftSend(false); };
-    window.bizNav = function(to){ var prev = bizStep; _biz.apply(this, arguments); if(to > prev) draftSend(false); };
-  })();
-
-  /* Once the real submission lands, the draft path goes quiet so a finished lead
-     never also arrives as an abandoned one. */
-  (function(){
-    var _showPanel = showPanel;
-    showPanel = function(id){
-      if(id === 'panel-generating' || id === 'panel-success') draftDone = true;
-      return _showPanel.apply(this, arguments);
-    };
-  })();
-
-  window.addEventListener('pagehide', function(){ draftSend(true); });
-  document.addEventListener('visibilitychange', function(){
-    if(document.visibilityState === 'hidden') draftSend(true);
-  });
-
   // ---- PHONE FORMATTING ----
   function formatPhone(inp){
     inp.addEventListener('input', function(){
@@ -2452,6 +2394,36 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     var el = document.getElementById(id);
     if(el) formatPhone(el);
   });
+
+  // ---- TEXT-ONLY FIELDS ----
+  // A company or a person's name never contains digits. Stripping them as they
+  // are typed stops the junk that was reaching the board: phone numbers typed
+  // into the company field, "12345" as a last name.
+  ['biz-name','biz-firstname','biz-lastname','ind-firstname','ind-lastname'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    el.addEventListener('input', function(){
+      var cleaned = this.value.replace(/[0-9]/g,'');
+      if(cleaned !== this.value){
+        var pos = this.selectionStart;
+        this.value = cleaned;
+        try{ this.setSelectionRange(pos-1, pos-1); }catch(e){}
+      }
+    });
+    el.addEventListener('paste', function(){
+      var self = this;
+      setTimeout(function(){ self.value = self.value.replace(/[0-9]/g,''); }, 0);
+    });
+  });
+
+  // A real business name has at least two letters and no digits.
+  function isTextName(v){
+    var t = String(v||'').trim();
+    if(t.length < 2) return false;
+    if(/[0-9]/.test(t)) return false;
+    return (t.match(/[A-Za-z]/g)||[]).length >= 2;
+  }
+  window.vsIsTextName = isTextName;
 
   // ---- ZIP NUMERIC ONLY ----
   ['ind-zip','biz-zip'].forEach(function(id){

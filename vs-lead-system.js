@@ -159,6 +159,13 @@
     if(d.length!==10)return false;
     if(/^(\d)\1{9}$/.test(d))return false;
     if(d.slice(0,3)==='555'||d.slice(3,6)==='555')return false;
+    /* Same North American numbering rules the funnel enforces. A number that
+       cannot exist is not a lead, and drafting it only created junk cards. */
+    var area=d.slice(0,3), exch=d.slice(3,6);
+    if(area.charAt(0)==='0'||area.charAt(0)==='1')return false;
+    if(exch.charAt(0)==='0'||exch.charAt(0)==='1')return false;
+    if(area.charAt(1)==='9'&&area.charAt(2)==='9')return false;
+    if(d==='1234567890'||d==='0123456789')return false;
     return true;
   }
   function draftPayload(d){

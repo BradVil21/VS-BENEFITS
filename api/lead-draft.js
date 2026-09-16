@@ -61,7 +61,25 @@ function validPhone(v) {
   if (d.length !== 10) return "";
   if (/^(\d)\1{9}$/.test(d)) return "";               // all same digit
   if (d.slice(0, 3) === "555" || d.slice(3, 6) === "555") return "";
+  // North American numbering rules. Without these, junk like 1423307434 or
+  // 0123456789 opened a lead card and a CRM contact with nothing to call.
+  const area = d.slice(0, 3), exch = d.slice(3, 6);
+  if (area.charAt(0) === "0" || area.charAt(0) === "1") return "";
+  if (exch.charAt(0) === "0" || exch.charAt(0) === "1") return "";
+  if (area.charAt(1) === "9" && area.charAt(2) === "9") return "";   // reserved
+  if (d === "1234567890" || d === "0123456789") return "";
   return d;
+}
+
+// A company name has to read like a name. Digits-only values were arriving as
+// company names because the funnel falls back to the phone when the field is
+// blank, which put a phone number on the board as the company.
+function validCompany(v) {
+  const c = clean(v, 120);
+  if (!c) return "";
+  if (!/[A-Za-z]{2}/.test(c)) return "";               // needs real letters
+  if (/^\d[\d\s().+-]*$/.test(c)) return "";          // digits / phone shaped
+  return c;
 }
 
 module.exports = async (req, res) => {
@@ -96,7 +114,7 @@ module.exports = async (req, res) => {
   const zip = clean(d.zip || d.businessZip, 10).replace(/\D/g, "").slice(0, 5);
   const address = clean(d.address || d.businessAddress, 160);
   const state = clean(d.state || d.businessState, 30);
-  const company = clean(d.company || d.businessName, 120);
+  const company = validCompany(d.company);
   const type = d.type === "business" ? "business" : "individual";
   const step = clean(d.step, 20);
   // Whatever the funnel knows that is not a plain contact field - situation,
