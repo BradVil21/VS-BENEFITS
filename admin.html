@@ -1469,6 +1469,53 @@ html.dark .mt-item select{background:#0f1826;border-color:#2c3d55;color:#e6eefb}
 .mt-del{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:18px;line-height:1;padding:4px 8px;border-radius:8px}
 .mt-del:hover{background:#fee2e2;color:#dc2626}
 @media(max-width:640px){.mt-item{flex-wrap:wrap}.mt-addbar input[type=text]{flex:1 1 100%}}
+/* ===== DAILY GAME PLAN (roadmap) ===== */
+.gp-card{background:#fff;border:1px solid #e3eaf4;border-radius:16px;padding:16px 16px 10px;margin:14px 0 18px;box-shadow:0 6px 20px rgba(13,27,42,.07)}
+html.dark .gp-card{background:#141d2b;border-color:#26374e}
+.gp-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px}
+.gp-eyebrow{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#35729a}
+.gp-title{font-size:18px;font-weight:800;color:#0e1726;font-family:'Poppins','Inter',sans-serif}
+html.dark .gp-title{color:#e6eefb}
+.gp-prog{min-width:190px;text-align:right}
+.gp-pct{font-size:20px;font-weight:800;color:#1e3970;line-height:1}
+html.dark .gp-pct{color:#8fc3ff}
+.gp-bar{height:8px;background:#e8eef6;border-radius:99px;overflow:hidden;margin:6px 0 3px}
+.gp-bar span{display:block;height:100%;background:linear-gradient(90deg,#1e3970,#4facb3);border-radius:99px;transition:width .3s}
+.gp-cnt{font-size:11.5px;color:#64748b}
+.gp-now{background:linear-gradient(135deg,#1e3970,#35729a 60%,#4facb3);color:#fff;border-radius:12px;padding:11px 14px;font-size:13.5px;margin-bottom:10px}
+.gp-now b{color:#fff}
+.gp-oe{background:#fff7e6;border:1px solid #fcd9a0;color:#7a4b00;border-radius:12px;padding:9px 13px;font-size:12.5px;margin-bottom:10px}
+.gp-tools{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.gp-blk{border:1px solid #e3eaf4;border-left:4px solid #94a3b8;border-radius:12px;margin-bottom:8px;overflow:hidden;background:#fff}
+html.dark .gp-blk{background:#101a28;border-color:#26374e}
+.gp-t-dial{border-left-color:#1e3970}.gp-t-plan{border-left-color:#64748b}.gp-t-leads{border-left-color:#2f7de0}
+.gp-t-close{border-left-color:#35729a}.gp-t-growth{border-left-color:#4facb3}.gp-t-retain{border-left-color:#10b981}
+.gp-t-break,.gp-t-rest{border-left-color:#cbd5e1}
+.gp-blk.gp-cur{box-shadow:0 0 0 2px #4facb3;border-color:#4facb3}
+.gp-blk.gp-done{opacity:.6}
+.gp-blk.gp-missed .gp-bc{color:#dc2626}
+.gp-bh{display:flex;align-items:center;gap:10px;padding:10px 13px;cursor:pointer;user-select:none}
+.gp-bh:hover{background:#f4f8fe}
+html.dark .gp-bh:hover{background:#1a2d42}
+.gp-time{font-weight:800;font-size:12.5px;color:#35729a;min-width:138px;font-variant-numeric:tabular-nums}
+.gp-bt{flex:1;font-weight:700;font-size:13.5px;color:#0e1726}
+html.dark .gp-bt{color:#e6eefb}
+.gp-tag{font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:99px;background:#eaf2ff;color:#1d4ed8;text-transform:uppercase;letter-spacing:.04em}
+.gp-cur .gp-tag{background:#4facb3;color:#fff}
+.gp-bc{font-size:12px;color:#64748b;font-weight:700;min-width:44px;text-align:right}
+.gp-steps{padding:2px 13px 10px 13px;border-top:1px solid #eef2f8}
+html.dark .gp-steps{border-color:#243246}
+.gp-step{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px dashed #eef2f8;cursor:pointer;font-size:13px}
+.gp-step:last-child{border-bottom:none}
+.gp-step input{width:17px;height:17px;margin-top:1px;accent-color:#10b981;flex-shrink:0;cursor:pointer}
+.gp-st{font-weight:700;color:#1e3970;min-width:70px;font-variant-numeric:tabular-nums}
+html.dark .gp-st{color:#8fc3ff}
+.gp-sx{flex:1;color:#33455c}
+html.dark .gp-sx{color:#b8cce4}
+.gp-step.on .gp-sx{text-decoration:line-through;opacity:.55}
+.gp-sub{font-size:13px;color:#475569;margin:4px 0 2px}
+@media(max-width:640px){.gp-time{min-width:0;font-size:11.5px}.gp-bh{flex-wrap:wrap;gap:6px}.gp-bt{flex-basis:100%;order:3}.gp-prog{text-align:left}}
+
 #tasks-container .seq-card{border:2px solid #bcccea;border-radius:14px;box-shadow:0 3px 10px rgba(11,35,70,.09);margin-bottom:16px;overflow:hidden;transition:box-shadow .15s,transform .15s,border-color .15s}
 #tasks-container .seq-card:hover{border-color:#8fb0e6;box-shadow:0 10px 26px rgba(11,35,70,.14);transform:translateY(-1px)}
 html.dark #tasks-container .seq-card{border-color:#37527c}
@@ -1713,7 +1760,8 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
     <!-- MY TASKS -->
     <div id="p-mytasks" class="panel">
       <h3>My Tasks</h3>
-      <p class="lede">Your personal to-do board. Add what you're working on, set a deadline, and move it across the four states.</p>
+      <p class="lede">Your daily game plan and growth roadmap. Check off each step as you go — the plan resets every morning.</p>
+      <div id="gp-container"></div>
       <div class="mt-addbar">
         <input id="mt-title" type="text" placeholder="What needs to get done?" />
         <input id="mt-due" type="date" title="Deadline" />
@@ -4161,6 +4209,158 @@ function renderDashboard(){
   });
 }
 
+/* ===================== DAILY GAME PLAN (from the VS Health Benefits Roadmap) =====================
+   Time-stamped daily schedule shown at the top of My Tasks. Checkmarks reset every day.
+   Stored locally under vs_gameplan_<YYYY-MM-DD>. Roadmap milestones are seeded once into My Tasks.
+================================================================================================ */
+var GP_OPEN={};
+function gpToday(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function gpKey(){return "vs_gameplan_"+gpToday();}
+function gpGet(){try{return JSON.parse(localStorage.getItem(gpKey())||"{}");}catch(e){return {};}}
+function gpSet(v){try{localStorage.setItem(gpKey(),JSON.stringify(v||{}));}catch(e){}}
+function gpMin(t){var p=t.split(":");return (+p[0])*60+(+p[1]);}
+function gpFmt(t){var m=gpMin(t),h=Math.floor(m/60),mm=m%60,ap=h>=12?"PM":"AM";h=h%12||12;return h+":"+String(mm).padStart(2,"0")+" "+ap;}
+
+var GP_ENGINE={
+  1:{title:"Own Lead Engine · Trucking partners",steps:[["13:00","Contact 5 trucking partners (dispatch, factoring, lease-purchase) with the free value-add offer"],["13:20","Log each partner in Business Leads with next follow-up date"],["13:25","Ask one sold client for a referral"]]},
+  2:{title:"Own Lead Engine · Referrals",steps:[["13:00","Text 10 past clients: open enrollment is coming, who do you know who needs coverage?"],["13:15","Follow up on every open referral in the Referrals tab"],["13:25","Request 1 Google review from a happy client"]]},
+  3:{title:"Own Lead Engine · Professional partners",steps:[["13:00","Contact 5 partners: CPAs, payroll companies, P&C / auto insurance agents"],["13:20","Send your one-pager to anyone who replied"],["13:25","Ask one sold client for a referral"]]},
+  4:{title:"Own Lead Engine · Small business outbound",steps:[["13:00","Send 10 emails from the restaurant / contractor lists in GoHighLevel"],["13:15","Call anyone who opened an email twice"],["13:25","Add new businesses to Business Leads"]]},
+  5:{title:"Own Lead Engine · Content",steps:[["13:00","Record 1 short video answering one question (e.g. what owner-operators pay)"],["13:15","Post it to Facebook trucker groups + LinkedIn"],["13:25","Comment in 3 owner-operator / small business groups"]]}
+};
+
+function gpBlocks(dow){
+  if(dow===0)return [{s:"00:00",e:"23:59",title:"Sunday · Off",tag:"Rest",steps:[["00:00","Rest and recharge — no dialing today"]]}];
+  if(dow===6)return [
+    {s:"10:00",e:"11:00",title:"Saturday · Weekly review & prep",tag:"Plan",steps:[["10:00","Review the week: dials, contacts, quotes, sales, cost per sale"],["10:15","Check % of sales from your own sources (goal: 50%)"],["10:25","Batch-record 2–3 short videos for next week"],["10:45","Build next week's list of 10 new partners to contact"]]}
+  ];
+  var eng=GP_ENGINE[dow];
+  var fri=dow===5;
+  var at=function(s,add){var m=gpMin(s)+add;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");};
+  var dial=function(s,e,n){return {s:s,e:e,title:"Power dial block "+n,tag:"Dial",steps:[[s,"Dial nonstop — no email, no social media"],[at(s,25),"Quick stand-up + water; keep dialing"],[at(s,50),"Log dispositions and set callbacks in GoHighLevel"]]};};
+  return [
+    {s:"08:00",e:"08:30",title:"Morning prep",tag:"Plan",steps:[["08:00","Review yesterday's numbers: dials, contacts, quotes, sales"],["08:10","Check portal: new leads, support inbox, referrals"],["08:20","Set today's targets and your top 3 must-dos"]]},
+    {s:"08:30",e:"09:00",title:"Speed-to-lead & confirmations",tag:"Leads",steps:[["08:30","Call every new web / partner / referral lead from overnight"],["08:45","Text to confirm today's appointments"]]},
+    dial("09:00","10:00",1),
+    dial("10:00","11:00",2),
+    {s:"11:00",e:"12:00",title:"Quotes & applications",tag:"Close",steps:[["11:00","Send quotes from this morning's calls"],["11:30","Finish applications and collect documents"],["11:50","Schedule follow-up for every open quote"]]},
+    {s:"12:00",e:"12:30",title:"Lunch & reset",tag:"Break",steps:[["12:00","Step away from the phone — eat, walk, reset"]]},
+    {s:"12:30",e:"13:00",title:"Follow-ups",tag:"Close",steps:[["12:30","Call quoted-but-not-closed prospects"],["12:45","Work the Follow-ups tab — clear anything overdue"]]},
+    {s:"13:00",e:"13:30",title:eng.title,tag:"Growth",steps:eng.steps},
+    dial("13:30","14:30",3),
+    dial("14:30","15:30",4),
+    {s:"15:30",e:"16:00",title:"Client care",tag:"Retain",steps:[["15:30","30-day check-in calls with new clients + ask for review/referral"],["15:45","Answer support messages and carrier issues"]]},
+    {s:"16:00",e:"17:00",title:"Power dial block 5 · after-work callers",tag:"Dial",steps:[["16:00","Dial + callbacks — people pick up more after work"],["16:30","Run scheduled appointments"],["16:50","Log dispositions and set callbacks"]]},
+    {s:"17:00",e:"17:30",title:"Wrap-up",tag:"Plan",steps:[["17:00","Log every call, sale, and lead source in GoHighLevel"],["17:15","Set tomorrow's callbacks and first 3 calls"],["17:25","Update today's KPI numbers"]]},
+    fri?{s:"17:30",e:"18:00",title:"Weekly scorecard",tag:"Growth",steps:[["17:30","Fill the weekly KPI scorecard (close rate, cost per sale, 90-day persistency)"],["17:45","Pick next week's 1 focus from the roadmap"]]}
+       :{s:"17:30",e:"18:00",title:"Skill builder",tag:"Growth",steps:[["17:30","Review 1 recorded call (win, loss, or no-show)"],["17:45","Rehearse your top 5 objection answers out loud"]]}
+  ];
+}
+
+function gpInOE(){var d=new Date(),m=d.getMonth()+1,day=d.getDate();return (m===11||m===12||(m===1&&day<=15));}
+
+function renderGamePlan(){
+  var box=$("gp-container"); if(!box)return;
+  var now=new Date(),dow=now.getDay(),mins=now.getHours()*60+now.getMinutes();
+  var blocks=gpBlocks(dow),done=gpGet();
+  var total=0,checked=0,curIdx=-1,nextIdx=-1;
+  blocks.forEach(function(b,i){
+    b.steps.forEach(function(s,j){total++;if(done[i+"-"+j])checked++;});
+    if(mins>=gpMin(b.s)&&mins<gpMin(b.e))curIdx=i;
+    if(nextIdx<0&&gpMin(b.s)>mins)nextIdx=i;
+  });
+  var pct=total?Math.round(checked/total*100):0;
+  var dayName=now.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"});
+  box.innerHTML="";
+  var card=el("div",{class:"gp-card"});
+  var head=el("div",{class:"gp-head"});
+  head.appendChild(el("div",{html:"<div class='gp-eyebrow'>Daily Game Plan · Roadmap Phase 1</div><div class='gp-title'>"+dayName+"</div>"}));
+  head.appendChild(el("div",{class:"gp-prog",html:"<div class='gp-pct'>"+pct+"%</div><div class='gp-bar'><span style='width:"+pct+"%'></span></div><div class='gp-cnt'>"+checked+" of "+total+" done</div>"}));
+  card.appendChild(head);
+
+  if(gpInOE())card.appendChild(el("div",{class:"gp-oe",html:"<b>Open enrollment mode (Nov 1 – Jan 15):</b> dial more hours than any other month, pre-contact last year's clients, and push Dec 15 deadlines for Jan 1 coverage."}));
+
+  var nowTxt="";
+  if(curIdx>=0){var cb=blocks[curIdx],cs=null;cb.steps.forEach(function(s){if(gpMin(s[0])<=mins)cs=s;});nowTxt="<b>Right now ("+gpFmt(cb.s)+"–"+gpFmt(cb.e)+"):</b> "+cb.title+(cs?" — "+cs[1]:"");}
+  else if(nextIdx>=0){nowTxt="<b>Up next at "+gpFmt(blocks[nextIdx].s)+":</b> "+blocks[nextIdx].title;}
+  else nowTxt="<b>Day complete.</b> Log your numbers and rest up for tomorrow.";
+  card.appendChild(el("div",{class:"gp-now",html:nowTxt}));
+
+  var tools=el("div",{class:"gp-tools"});
+  tools.appendChild(el("button",{class:"mt-chip",type:"button",text:"Expand all",onclick:function(){blocks.forEach(function(b,i){GP_OPEN[i]=true;});renderGamePlan();}}));
+  tools.appendChild(el("button",{class:"mt-chip",type:"button",text:"Collapse all",onclick:function(){blocks.forEach(function(b,i){GP_OPEN[i]=false;});renderGamePlan();}}));
+  tools.appendChild(el("button",{class:"mt-chip",type:"button",text:"Reset today",onclick:function(){if(confirm("Clear today's checkmarks?")){gpSet({});renderGamePlan();}}}));
+  card.appendChild(tools);
+
+  blocks.forEach(function(b,i){
+    var bDone=b.steps.every(function(s,j){return done[i+"-"+j];});
+    var isCur=i===curIdx,isPast=gpMin(b.e)<=mins&&dow!==0;
+    var open=(i in GP_OPEN)?GP_OPEN[i]:(isCur||(curIdx<0&&i===nextIdx));
+    var blk=el("div",{class:"gp-blk gp-t-"+b.tag.toLowerCase()+(isCur?" gp-cur":"")+(bDone?" gp-done":"")+(isPast&&!bDone?" gp-missed":"")});
+    var bh=el("div",{class:"gp-bh",onclick:function(){GP_OPEN[i]=!open;renderGamePlan();}});
+    bh.appendChild(el("span",{class:"gp-time",text:gpFmt(b.s)+" – "+gpFmt(b.e)}));
+    bh.appendChild(el("span",{class:"gp-bt",text:b.title}));
+    bh.appendChild(el("span",{class:"gp-tag",text:isCur?"NOW":b.tag}));
+    var n=b.steps.filter(function(s,j){return done[i+"-"+j];}).length;
+    bh.appendChild(el("span",{class:"gp-bc",text:n+"/"+b.steps.length+(open?" ▾":" ▸")}));
+    blk.appendChild(bh);
+    if(open){
+      var ul=el("div",{class:"gp-steps"});
+      b.steps.forEach(function(s,j){
+        var id=i+"-"+j,on=!!done[id];
+        var row=el("label",{class:"gp-step"+(on?" on":"")});
+        var cbx=el("input",{type:"checkbox"}); cbx.checked=on;
+        cbx.addEventListener("change",function(){var d=gpGet();if(cbx.checked){d[id]=1;if(typeof playTaskDoneSound==="function"){try{playTaskDoneSound();}catch(e){}}}else delete d[id];gpSet(d);renderGamePlan();});
+        row.appendChild(cbx);
+        row.appendChild(el("span",{class:"gp-st",text:gpFmt(s[0])}));
+        row.appendChild(el("span",{class:"gp-sx",text:s[1]}));
+        ul.appendChild(row);
+      });
+      blk.appendChild(ul);
+    }
+    card.appendChild(blk);
+  });
+  box.appendChild(card);
+  box.appendChild(el("div",{class:"gp-sub",html:"<b>Roadmap tasks</b> — your 30-day plan and phase milestones are listed below with deadlines. Update the status as you go."}));
+}
+setInterval(function(){var p=$("p-mytasks");if(p&&p.classList.contains("active"))renderGamePlan();},60000);
+
+/* One-time seed: roadmap 30-day plan + phase milestones into My Tasks */
+function mtSeedRoadmap(){
+  if(localStorage.getItem("vs_my_tasks_seeded_roadmap_v1"))return;
+  var items=[
+    ["Wk 1 · Set up KPI scorecard and track numbers every day","2026-09-25"],
+    ["Wk 1 · Calculate cost per sale on company leads (lead spend ÷ policies sold)","2026-09-25"],
+    ["Wk 1 · Write your top 5 objections + best answer to each","2026-09-25"],
+    ["Wk 1 · Open a separate savings account for your 3–6 month reserve","2026-09-25"],
+    ["Wk 2 · Switch on referral automation in GoHighLevel","2026-10-02"],
+    ["Wk 2 · Send the 37 verified restaurant contacts through the email sequence","2026-10-02"],
+    ["Wk 2 · Fix sitemap + orphan pages from the Sept 8 SEO report","2026-10-02"],
+    ["Wk 2 · Add a 'Lead Source' field in GoHighLevel (Referral / Partner / Outbound / Web / Dialer)","2026-10-02"],
+    ["Wk 3 · Contact 10 trucking partners with the free value-add offer","2026-10-09"],
+    ["Wk 3 · Reach every past client to book an open enrollment review","2026-10-09"],
+    ["Wk 3 · Ask 5 happy clients for a Google review","2026-10-09"],
+    ["Wk 4 · Block your calendar Nov 1 – Jan 15 for selling first","2026-10-16"],
+    ["Wk 4 · Load open enrollment emails and texts into GoHighLevel","2026-10-16"],
+    ["Wk 4 · Pick your one niche for 2027","2026-10-16"],
+    ["Wk 4 · Add a 'Get your quote in 2 minutes' button above the fold on trucker pages","2026-10-16"],
+    ["Phase 1 · Work open enrollment hard (ends Jan 15)","2027-01-15"],
+    ["Phase 1 exit · 3–6 months of expenses saved + steady close rate","2027-03-31"],
+    ["Phase 2 · Test $500–$1,000/mo paid ads on one niche","2027-03-01"],
+    ["Phase 2 · Rewrite titles on your top 20 website pages","2027-02-28"],
+    ["Phase 3 · Write the 8 core SOPs (record a Loom for each task)","2027-06-30"],
+    ["Phase 3 · Hire a part-time virtual assistant","2027-07-31"],
+    ["Phase 2 exit · 50%+ of sales from your own sources for 3 straight months","2027-12-31"],
+    ["Phase 4 · Secure agency-level carrier contracts with FMO/IMO (overrides)","2028-01-31"],
+    ["Phase 4 · Recruit and train your first 3 agents","2028-06-30"],
+    ["Phase 5 · Hire a sales manager to run the floor","2029-06-30"]
+  ];
+  var now=Date.now(),arr=mtGet();
+  items.forEach(function(t,i){arr.push({id:uid(),title:t[0],status:"new",due:t[1],created:now-i});});
+  mtSave(arr);
+  localStorage.setItem("vs_my_tasks_seeded_roadmap_v1","1");
+}
+
 /* ===================== MY TASKS — personal to-do board =====================
    Simple, self-contained. Stored locally under vs_my_tasks.
    Statuses: new | in-progress | completed | incomplete
@@ -4212,6 +4412,8 @@ function mtDueInfo(due){
 function renderMyTasks(){
   var box=$("mytasks-container"); if(!box)return;
   mtSeed();
+  try{mtSeedRoadmap();}catch(e){}
+  try{renderGamePlan();}catch(e){}
   var all=mtGet();
 
   /* filter chips */
