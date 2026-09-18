@@ -222,7 +222,7 @@ def service_schema(slug, name):
     return {"@context": "https://schema.org", "@type": "Service", "serviceType": name, "name": name,
             "url": SITE + "/" + slug,
             "provider": {"@type": "InsuranceAgency", "name": "VS Health Benefits", "url": SITE + "/",
-                         "telephone": "+1-954-825-1009", "email": "info@vshealthbenefits.com",
+                         "telephone": "+1-954-866-6872", "email": "info@vshealthbenefits.com",
                          "address": {"@type": "PostalAddress", "addressLocality": "Miami",
                                      "addressRegion": "FL", "addressCountry": "US"}},
             "areaServed": {"@type": "Country", "name": "United States"}}

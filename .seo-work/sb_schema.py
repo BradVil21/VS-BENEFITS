@@ -34,7 +34,7 @@ for f,svc in PAGES.items():
       "@context":"https://schema.org","@type":"Service",
       "serviceType":svc,"name":svc,"url":url,
       "provider":{"@type":"InsuranceAgency","name":"VS Health Benefits","url":BASE+"/",
-        "telephone":"+1-954-825-1009","email":"info@vshealthbenefits.com",
+        "telephone":"+1-954-866-6872","email":"info@vshealthbenefits.com",
         "address":{"@type":"PostalAddress","addressLocality":"Miami","addressRegion":"FL","addressCountry":"US"}},
       "areaServed":[{"@type":"City","name":c,"addressRegion":"FL"} for c in FL_METRO]
                   +[{"@type":"State","name":"Florida"},{"@type":"Country","name":"United States"}],
@@ -43,7 +43,7 @@ for f,svc in PAGES.items():
       "offers":{"@type":"Offer","price":"0","priceCurrency":"USD",
                 "description":"Free comparison and setup of group health coverage; carriers pay the broker commission."},
       "availableChannel":{"@type":"ServiceChannel","serviceUrl":BASE+"/quote?type=business",
-                          "servicePhone":{"@type":"ContactPoint","telephone":"+1-954-825-1009"}}
+                          "servicePhone":{"@type":"ContactPoint","telephone":"+1-954-866-6872"}}
     }
     block='<script type="application/ld+json" id="vs-service-schema">\n%s\n</script>\n'%json.dumps(schema,indent=2)
     s=s.replace('</head>', block+'</head>',1)

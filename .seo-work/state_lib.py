@@ -113,6 +113,6 @@ def build(out, url, title, desc, region, placename, body, faq, schema_extra):
 
 def provider(city, state_code):
     return {"@type": "InsuranceAgency", "name": "VS Health Benefits", "url": BASE + "/",
-            "telephone": "+1-954-825-1009", "email": "info@vshealthbenefits.com",
+            "telephone": "+1-954-866-6872", "email": "info@vshealthbenefits.com",
             "address": {"@type": "PostalAddress", "addressLocality": "Miami",
                         "addressRegion": "FL", "addressCountry": "US"}}

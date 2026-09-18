@@ -44,7 +44,7 @@ SCHEMA = [
   "serviceType": "Group health insurance for Kentucky small business",
   "name": "Group Health Insurance for Kentucky Small Business", "url": URL,
   "provider": {"@type": "InsuranceAgency", "name": "VS Health Benefits", "url": BASE + "/",
-               "telephone": "+1-954-825-1009", "email": "info@vshealthbenefits.com",
+               "telephone": "+1-954-866-6872", "email": "info@vshealthbenefits.com",
                "address": {"@type": "PostalAddress", "addressLocality": "Miami",
                            "addressRegion": "FL", "addressCountry": "US"}},
   "areaServed": [{"@type": "City", "name": c, "addressRegion": "KY"} for c in
@@ -62,7 +62,7 @@ SCHEMA = [
   "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD",
              "description": "Free group health comparison and setup; carriers pay the broker commission."},
   "availableChannel": {"@type": "ServiceChannel", "serviceUrl": BASE + "/quote?type=business",
-                       "servicePhone": {"@type": "ContactPoint", "telephone": "+1-954-825-1009"}}},
+                       "servicePhone": {"@type": "ContactPoint", "telephone": "+1-954-866-6872"}}},
 ]
 
 BODY = '''<section class="hero">

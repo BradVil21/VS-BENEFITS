@@ -163,7 +163,7 @@ SCHEMA=[
  {"@context":"https://schema.org","@type":"Service","serviceType":"Group health insurance brokerage",
   "name":"Group Health Insurance by Industry","url":URL,
   "provider":{"@type":"InsuranceAgency","name":"VS Health Benefits","url":BASE+"/",
-              "telephone":"+1-954-825-1009","areaServed":[{"@type":"State","name":"Florida"},{"@type":"Country","name":"United States"}]},
+              "telephone":"+1-954-866-6872","areaServed":[{"@type":"State","name":"Florida"},{"@type":"Country","name":"United States"}]},
   "audience":{"@type":"BusinessAudience","name":"Small businesses with 1-50 employees"},
   "offers":{"@type":"Offer","price":"0","priceCurrency":"USD",
             "description":"Free group health insurance comparison and setup; carriers pay the broker commission."}},
