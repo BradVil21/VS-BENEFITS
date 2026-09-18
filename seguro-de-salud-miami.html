@@ -204,6 +204,18 @@ footer a:hover{color:#fff}
   .process{grid-template-columns:repeat(4,1fr)}
   .foot-grid{grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px}
 }
+
+/* login modal (matches home) */
+.modal-backdrop{position:fixed;inset:0;background:rgba(13,27,42,.55);backdrop-filter:blur(2px);display:none;align-items:center;justify-content:center;z-index:200;padding:20px;overflow-y:auto}
+.modal-backdrop.open{display:flex}
+.modal{background:#fff;border-radius:16px;max-width:440px;width:100%;padding:28px 24px;box-shadow:0 20px 48px rgba(13,27,42,.25);position:relative;margin:auto}
+.modal h2{margin-bottom:6px;font-size:1.4rem}
+.modal p.lede{color:var(--muted);margin-bottom:20px;font-size:.95rem}
+.modal .close-x{position:absolute;top:10px;right:12px;background:transparent;border:0;width:36px;height:36px;font-size:1.6rem;color:var(--muted);cursor:pointer;line-height:1;border-radius:8px}
+.modal .close-x:hover{background:var(--blue-50);color:var(--ink)}
+.modal .choice-row{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.modal .choice-row .btn{width:100%;padding:14px 18px}
+.modal .small{font-size:.82rem;color:var(--muted);text-align:center}
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"InsuranceAgency","@id":"https://vshealthbenefits.com/#org","name":"VS Health Benefits","url":"https://vshealthbenefits.com/","image":"https://vshealthbenefits.com/favicon.png","logo":{"@type":"ImageObject","url":"https://vshealthbenefits.com/favicon.png","width":512,"height":512},"telephone":"+1-954-866-6872","email":"info@vshealthbenefits.com","areaServed":[{"@type":"State","name":"Florida"},{"@type":"Country","name":"United States"}],"address":{"@type":"PostalAddress","addressLocality":"Miami","addressRegion":"FL","addressCountry":"US"},"sameAs":["https://www.linkedin.com/company/vsbenefits/","https://www.instagram.com/vshealthbenefits","https://www.facebook.com/profile.php?id=61588058885222","https://www.tiktok.com/@vshealthbenefits",
@@ -233,8 +245,9 @@ footer a:hover{color:#fff}
       <a href="/about">Nosotros</a>
       <a href="/blog">Blog</a>
       <a href="/contact">Contacto</a>
-      <a href="/refer-and-earn">Refer &amp; Earn</a>
-      <a class="nav-cta" href="#cotizacion">Cotizacion Gratis</a>
+      <a href="/refer-and-earn">Refiere y Gana</a>
+      <button type="button" class="nav-login" data-open-login>Acceso de Miembros</button>
+      <a class="nav-cta" href="/quote">Obtener Cotización</a>
     </nav>
   </div>
 </header>
@@ -636,5 +649,30 @@ function qfSubmitEs() {
   <script src="/vs-conversions.js" defer></script>
 <!-- GoHighLevel external tracking -->
 <script src="https://link.msgsndr.com/js/external-tracking.js" data-tracking-id="tk_e89392b2cfc34b548ae43b1ea975ae50"></script>
+
+<!-- LOGIN MODAL (matches home) -->
+<div class="modal-backdrop" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
+  <div class="modal">
+    <button class="close-x" type="button" aria-label="Close" data-close-login>&times;</button>
+    <h2 id="login-modal-title">Sign in</h2>
+    <p class="lede">Choose where you'd like to go.</p>
+    <div class="choice-row">
+      <a class="btn btn-primary" href="/client">Client / Member Portal</a>
+      <a class="btn btn-secondary" href="/admin">Admin Portal</a>
+    </div>
+    <p class="small">Not a member yet? <a href="/client">Create a client account</a></p>
+  </div>
+</div>
+<script>
+(function(){
+  var modal=document.getElementById("login-modal");
+  function openModal(){ if(modal){ modal.classList.add("open"); document.body.style.overflow="hidden"; } var l=document.getElementById("nav-links"); if(l) l.classList.remove("open"); var t=document.querySelector(".menu-toggle"); if(t) t.setAttribute("aria-expanded","false"); }
+  function closeModal(){ if(modal){ modal.classList.remove("open"); document.body.style.overflow=""; } }
+  document.querySelectorAll("[data-open-login]").forEach(function(b){ b.addEventListener("click",function(e){ e.preventDefault(); openModal(); }); });
+  document.querySelectorAll("[data-close-login]").forEach(function(b){ b.addEventListener("click",function(e){ e.preventDefault(); closeModal(); }); });
+  if(modal) modal.addEventListener("click",function(e){ if(e.target===modal) closeModal(); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeModal(); });
+})();
+</script>
 </body>
 </html>
