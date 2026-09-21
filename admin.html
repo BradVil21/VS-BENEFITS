@@ -4229,31 +4229,36 @@ var GP_ENGINE={
   5:{title:"Own Lead Engine · Content",steps:[["13:00","Record 1 short video answering one question (e.g. what owner-operators pay)"],["13:15","Post it to Facebook trucker groups + LinkedIn"],["13:25","Comment in 3 owner-operator / small business groups"]]}
 };
 
+/* Eating window opens at 2:00 PM — break-fast block */
+var GP_BREAKFAST={id:"breakfast",s:"14:00",e:"14:30",title:"Break fast · eating window opens",tag:"Break",steps:[["14:00","Step away from the phone and eat your first meal"],["14:20","Hydrate, quick walk, then reset for dial block 4"]]};
+
 function gpBlocks(dow){
-  if(dow===0)return [{s:"00:00",e:"23:59",title:"Sunday · Off",tag:"Rest",steps:[["00:00","Rest and recharge — no dialing today"]]}];
+  if(dow===0)return [{id:"sunday",s:"00:00",e:"23:59",title:"Sunday · Off",tag:"Rest",steps:[["00:00","Rest and recharge — no dialing today"]]}];
   if(dow===6)return [
-    {s:"10:00",e:"11:00",title:"Saturday · Weekly review & prep",tag:"Plan",steps:[["10:00","Review the week: dials, contacts, quotes, sales, cost per sale"],["10:15","Check % of sales from your own sources (goal: 50%)"],["10:25","Batch-record 2–3 short videos for next week"],["10:45","Build next week's list of 10 new partners to contact"]]}
+    {id:"satreview",s:"10:00",e:"11:00",title:"Saturday · Weekly review & prep",tag:"Plan",steps:[["10:00","Review the week: dials, contacts, quotes, sales, cost per sale"],["10:15","Check % of sales from your own sources (goal: 50%)"],["10:25","Batch-record 2–3 short videos for next week"],["10:45","Build next week's list of 10 new partners to contact"]]},
+    GP_BREAKFAST
   ];
   var eng=GP_ENGINE[dow];
+  var shift=function(steps,add){return steps.map(function(x){var m=gpMin(x[0])+add;return [String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0"),x[1]];});};
   var fri=dow===5;
   var at=function(s,add){var m=gpMin(s)+add;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");};
-  var dial=function(s,e,n){return {s:s,e:e,title:"Power dial block "+n,tag:"Dial",steps:[[s,"Dial nonstop — no email, no social media"],[at(s,25),"Quick stand-up + water; keep dialing"],[at(s,50),"Log dispositions and set callbacks in GoHighLevel"]]};};
+  var dial=function(s,e,n){return {id:"dial"+n,s:s,e:e,title:"Power dial block "+n,tag:"Dial",steps:[[s,"Dial nonstop — no email, no social media"],[at(s,25),"Quick stand-up + water; keep dialing"],[at(s,50),"Log dispositions and set callbacks in GoHighLevel"]]};};
   return [
-    {s:"08:00",e:"08:30",title:"Morning prep",tag:"Plan",steps:[["08:00","Review yesterday's numbers: dials, contacts, quotes, sales"],["08:10","Check portal: new leads, support inbox, referrals"],["08:20","Set today's targets and your top 3 must-dos"]]},
-    {s:"08:30",e:"09:00",title:"Speed-to-lead & confirmations",tag:"Leads",steps:[["08:30","Call every new web / partner / referral lead from overnight"],["08:45","Text to confirm today's appointments"]]},
+    {id:"prep",s:"08:00",e:"08:30",title:"Morning prep",tag:"Plan",steps:[["08:00","Review yesterday's numbers: dials, contacts, quotes, sales"],["08:10","Check portal: new leads, support inbox, referrals"],["08:20","Set today's targets and your top 3 must-dos"]]},
+    {id:"speed",s:"08:30",e:"09:00",title:"Speed-to-lead & confirmations",tag:"Leads",steps:[["08:30","Call every new web / partner / referral lead from overnight"],["08:45","Text to confirm today's appointments"]]},
     dial("09:00","10:00",1),
     dial("10:00","11:00",2),
-    {s:"11:00",e:"12:00",title:"Quotes & applications",tag:"Close",steps:[["11:00","Send quotes from this morning's calls"],["11:30","Finish applications and collect documents"],["11:50","Schedule follow-up for every open quote"]]},
-    {s:"12:00",e:"12:30",title:"Lunch & reset",tag:"Break",steps:[["12:00","Step away from the phone — eat, walk, reset"]]},
-    {s:"12:30",e:"13:00",title:"Follow-ups",tag:"Close",steps:[["12:30","Call quoted-but-not-closed prospects"],["12:45","Work the Follow-ups tab — clear anything overdue"]]},
-    {s:"13:00",e:"13:30",title:eng.title,tag:"Growth",steps:eng.steps},
-    dial("13:30","14:30",3),
+    {id:"quotes",s:"11:00",e:"12:00",title:"Quotes & applications",tag:"Close",steps:[["11:00","Send quotes from this morning's calls"],["11:30","Finish applications and collect documents"],["11:50","Schedule follow-up for every open quote"]]},
+    {id:"followups",s:"12:00",e:"12:30",title:"Follow-ups",tag:"Close",steps:[["12:00","Call quoted-but-not-closed prospects"],["12:15","Work the Follow-ups tab — clear anything overdue"]]},
+    {id:"engine",s:"12:30",e:"13:00",title:eng.title,tag:"Growth",steps:shift(eng.steps,-30)},
+    dial("13:00","14:00",3),
+    GP_BREAKFAST,
     dial("14:30","15:30",4),
-    {s:"15:30",e:"16:00",title:"Client care",tag:"Retain",steps:[["15:30","30-day check-in calls with new clients + ask for review/referral"],["15:45","Answer support messages and carrier issues"]]},
-    {s:"16:00",e:"17:00",title:"Power dial block 5 · after-work callers",tag:"Dial",steps:[["16:00","Dial + callbacks — people pick up more after work"],["16:30","Run scheduled appointments"],["16:50","Log dispositions and set callbacks"]]},
-    {s:"17:00",e:"17:30",title:"Wrap-up",tag:"Plan",steps:[["17:00","Log every call, sale, and lead source in GoHighLevel"],["17:15","Set tomorrow's callbacks and first 3 calls"],["17:25","Update today's KPI numbers"]]},
-    fri?{s:"17:30",e:"18:00",title:"Weekly scorecard",tag:"Growth",steps:[["17:30","Fill the weekly KPI scorecard (close rate, cost per sale, 90-day persistency)"],["17:45","Pick next week's 1 focus from the roadmap"]]}
-       :{s:"17:30",e:"18:00",title:"Skill builder",tag:"Growth",steps:[["17:30","Review 1 recorded call (win, loss, or no-show)"],["17:45","Rehearse your top 5 objection answers out loud"]]}
+    {id:"care",s:"15:30",e:"16:00",title:"Client care",tag:"Retain",steps:[["15:30","30-day check-in calls with new clients + ask for review/referral"],["15:45","Answer support messages and carrier issues"]]},
+    {id:"dial5",s:"16:00",e:"17:00",title:"Power dial block 5 · after-work callers",tag:"Dial",steps:[["16:00","Dial + callbacks — people pick up more after work"],["16:30","Run scheduled appointments"],["16:50","Log dispositions and set callbacks"]]},
+    {id:"wrap",s:"17:00",e:"17:30",title:"Wrap-up",tag:"Plan",steps:[["17:00","Log every call, sale, and lead source in GoHighLevel"],["17:15","Set tomorrow's callbacks and first 3 calls"],["17:25","Update today's KPI numbers"]]},
+    fri?{id:"scorecard",s:"17:30",e:"18:00",title:"Weekly scorecard",tag:"Growth",steps:[["17:30","Fill the weekly KPI scorecard (close rate, cost per sale, 90-day persistency)"],["17:45","Pick next week's 1 focus from the roadmap"]]}
+       :{id:"skill",s:"17:30",e:"18:00",title:"Skill builder",tag:"Growth",steps:[["17:30","Review 1 recorded call (win, loss, or no-show)"],["17:45","Rehearse your top 5 objection answers out loud"]]}
   ];
 }
 
@@ -4263,9 +4268,9 @@ function renderGamePlan(){
   var box=$("gp-container"); if(!box)return;
   var now=new Date(),dow=now.getDay(),mins=now.getHours()*60+now.getMinutes();
   var blocks=gpBlocks(dow),done=gpGet();
-  var total=0,checked=0,curIdx=-1,nextIdx=-1;
+  var total=0,checked=0,due=0,dueDone=0,curIdx=-1,nextIdx=-1;
   blocks.forEach(function(b,i){
-    b.steps.forEach(function(s,j){total++;if(done[i+"-"+j])checked++;});
+    b.steps.forEach(function(s,j){total++;var k=b.id+"-"+j;if(done[k])checked++;if(dow!==0&&gpMin(s[0])<=mins){due++;if(done[k])dueDone++;}});
     if(mins>=gpMin(b.s)&&mins<gpMin(b.e))curIdx=i;
     if(nextIdx<0&&gpMin(b.s)>mins)nextIdx=i;
   });
@@ -4275,7 +4280,7 @@ function renderGamePlan(){
   var card=el("div",{class:"gp-card"});
   var head=el("div",{class:"gp-head"});
   head.appendChild(el("div",{html:"<div class='gp-eyebrow'>Daily Game Plan · Roadmap Phase 1</div><div class='gp-title'>"+dayName+"</div>"}));
-  head.appendChild(el("div",{class:"gp-prog",html:"<div class='gp-pct'>"+pct+"%</div><div class='gp-bar'><span style='width:"+pct+"%'></span></div><div class='gp-cnt'>"+checked+" of "+total+" done</div>"}));
+  head.appendChild(el("div",{class:"gp-prog",html:"<div class='gp-pct'>"+pct+"%</div><div class='gp-bar'><span style='width:"+pct+"%'></span></div><div class='gp-cnt'>"+checked+" of "+total+" done"+(due?" · "+(dueDone>=due?"<b style='color:#1f8a4c'>on pace</b>":"<b style='color:#c0392b'>"+(due-dueDone)+" behind</b>"):"")+"</div>"}));
   card.appendChild(head);
 
   if(gpInOE())card.appendChild(el("div",{class:"gp-oe",html:"<b>Open enrollment mode (Nov 1 – Jan 15):</b> dial more hours than any other month, pre-contact last year's clients, and push Dec 15 deadlines for Jan 1 coverage."}));
@@ -4293,7 +4298,7 @@ function renderGamePlan(){
   card.appendChild(tools);
 
   blocks.forEach(function(b,i){
-    var bDone=b.steps.every(function(s,j){return done[i+"-"+j];});
+    var bDone=b.steps.every(function(s,j){return done[b.id+"-"+j];});
     var isCur=i===curIdx,isPast=gpMin(b.e)<=mins&&dow!==0;
     var open=(i in GP_OPEN)?GP_OPEN[i]:(isCur||(curIdx<0&&i===nextIdx));
     var blk=el("div",{class:"gp-blk gp-t-"+b.tag.toLowerCase()+(isCur?" gp-cur":"")+(bDone?" gp-done":"")+(isPast&&!bDone?" gp-missed":"")});
@@ -4301,13 +4306,13 @@ function renderGamePlan(){
     bh.appendChild(el("span",{class:"gp-time",text:gpFmt(b.s)+" – "+gpFmt(b.e)}));
     bh.appendChild(el("span",{class:"gp-bt",text:b.title}));
     bh.appendChild(el("span",{class:"gp-tag",text:isCur?"NOW":b.tag}));
-    var n=b.steps.filter(function(s,j){return done[i+"-"+j];}).length;
+    var n=b.steps.filter(function(s,j){return done[b.id+"-"+j];}).length;
     bh.appendChild(el("span",{class:"gp-bc",text:n+"/"+b.steps.length+(open?" ▾":" ▸")}));
     blk.appendChild(bh);
     if(open){
       var ul=el("div",{class:"gp-steps"});
       b.steps.forEach(function(s,j){
-        var id=i+"-"+j,on=!!done[id];
+        var id=b.id+"-"+j,on=!!done[id];
         var row=el("label",{class:"gp-step"+(on?" on":"")});
         var cbx=el("input",{type:"checkbox"}); cbx.checked=on;
         cbx.addEventListener("change",function(){var d=gpGet();if(cbx.checked){d[id]=1;if(typeof playTaskDoneSound==="function"){try{playTaskDoneSound();}catch(e){}}}else delete d[id];gpSet(d);renderGamePlan();});
