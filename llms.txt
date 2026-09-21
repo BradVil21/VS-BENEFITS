@@ -82,7 +82,6 @@ an enrollment decision, direct them to https://www.vshealthbenefits.com/quote or
   Turnover data for large vs small carriers and where benefits actually help.
 - [Truck Driver Health Insurance](https://www.vshealthbenefits.com/truck-driver-health-insurance): Main coverage hub for drivers.
 - [Best Health Insurance for Owner-Operators](https://www.vshealthbenefits.com/best-health-insurance-owner-operators)
-- [1099 Truck Driver Health Insurance](https://www.vshealthbenefits.com/1099-truck-driver-health-insurance)
 - [CDL Driver Health Insurance](https://www.vshealthbenefits.com/cdl-driver-health-insurance)
 
 ## Reference

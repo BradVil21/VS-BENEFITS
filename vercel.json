@@ -124,7 +124,7 @@
     },
     {
       "source": "/1099-truck-driver-health-insurance.html",
-      "destination": "/1099-truck-driver-health-insurance",
+      "destination": "/best-health-insurance-owner-operators",
       "permanent": true
     },
     {
@@ -154,7 +154,7 @@
     },
     {
       "source": "/blog/do-truck-drivers-get-health-insurance.html",
-      "destination": "/blog/do-truck-drivers-get-health-insurance",
+      "destination": "/truck-driver-health-insurance",
       "permanent": true
     },
     {
@@ -969,7 +969,7 @@
     },
     {
       "source": "/can-truckers-deduct-health-insurance.html",
-      "destination": "/can-truckers-deduct-health-insurance",
+      "destination": "/blog/can-owner-operators-deduct-health-insurance",
       "permanent": true
     },
     {
@@ -1084,7 +1084,7 @@
     },
     {
       "source": "/health-insurance-for-self-employed-truck-drivers.html",
-      "destination": "/health-insurance-for-self-employed-truck-drivers",
+      "destination": "/best-health-insurance-owner-operators",
       "permanent": true
     },
     {
@@ -1214,7 +1214,7 @@
     },
     {
       "source": "/blog/health-insurance-dot-physical.html",
-      "destination": "/blog/health-insurance-dot-physical",
+      "destination": "/does-health-insurance-cover-dot-physical",
       "permanent": true
     },
     {
@@ -1249,7 +1249,7 @@
     },
     {
       "source": "/blog/miami-small-business-health-insurance.html",
-      "destination": "/blog/miami-small-business-health-insurance",
+      "destination": "/miami-small-business-health-insurance",
       "permanent": true
     },
     {
@@ -1414,12 +1414,12 @@
     },
     {
       "source": "/blog/truck-driver-family-health-insurance-guide.html",
-      "destination": "/blog/truck-driver-family-health-insurance-guide",
+      "destination": "/truck-driver-health-insurance",
       "permanent": true
     },
     {
       "source": "/blog/affordable-health-insurance-truck-drivers.html",
-      "destination": "/blog/affordable-health-insurance-truck-drivers",
+      "destination": "/truck-driver-health-insurance",
       "permanent": true
     },
     {
@@ -1455,6 +1455,61 @@
     {
       "source": "/blog/seasonal-part-time-crew-health-insurance.html",
       "destination": "/blog/seasonal-part-time-crew-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/can-truckers-deduct-health-insurance",
+      "destination": "/blog/can-owner-operators-deduct-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/health-insurance-dot-physical",
+      "destination": "/does-health-insurance-cover-dot-physical",
+      "permanent": true
+    },
+    {
+      "source": "/blog/miami-small-business-health-insurance",
+      "destination": "/miami-small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/do-truck-drivers-get-health-insurance",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/affordable-health-insurance-truck-drivers",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/truck-driver-family-health-insurance-guide",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-self-employed-truck-drivers",
+      "destination": "/best-health-insurance-owner-operators",
+      "permanent": true
+    },
+    {
+      "source": "/1099-truck-driver-health-insurance",
+      "destination": "/best-health-insurance-owner-operators",
+      "permanent": true
+    },
+    {
+      "source": "/aca-sidsub-calculator",
+      "destination": "/aca-subsidy-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/blog/what-happens-if-vous-miss-open-enrollment",
+      "destination": "/blog/what-happens-if-you-miss-open-enrollment",
+      "permanent": true
+    },
+    {
+      "source": "/blog/how-many-employees-do-you-need-for-group-health-insurance-florida",
+      "destination": "/blog/how-many-employees-group-health-insurance-florida",
       "permanent": true
     }
   ],
