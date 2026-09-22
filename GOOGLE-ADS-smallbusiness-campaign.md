@@ -66,7 +66,9 @@ Two weeks is the real number here — not the months the phrase "certification p
 
 ## Ad group 4 — Dental & vision (no certification needed)
 
-Landing page: `https://www.vshealthbenefits.com/dental-vision-insurance-florida`
+Landing page: `https://www.vshealthbenefits.com/quote/dental-vision?for=business&utm_source=google&utm_medium=cpc&utm_campaign=dental-vision-test`
+
+(The dental & vision quote funnel. `for=business` skips the "business or family" question, and the UTM tags make every lead show up on the board as **Dental/Vision: Google Ads**. Auto-tagging adds the gclid on top.)
 
 ```
 [group dental insurance florida]

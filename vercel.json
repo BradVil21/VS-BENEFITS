@@ -2,6 +2,18 @@
   "cleanUrls": true,
   "redirects": [
     {
+      "source": "/quote",
+      "has": [
+        {
+          "type": "query",
+          "key": "type",
+          "value": "(?:dental|vision|dental-vision|dentalvision|dental-and-vision)"
+        }
+      ],
+      "destination": "/quote/dental-vision",
+      "permanent": false
+    },
+    {
       "source": "/:path*",
       "has": [
         {

@@ -105,6 +105,13 @@ const VALID_BIZ_STAGES = ["prospect", "contacted", "meeting", "proposal", "won",
 // the merge can replace the previous one instead of appending another.
 const AUTO_NOTE = /^Auto-captured before submit/;
 
+// A card opened by a pre-submit capture says "(in progress)" in its source, or -
+// when the lead was attributed to a channel - in its sourceDetail.
+function isInProgress(x) {
+  return /\(in progress\)/i.test(String((x && x.source) || "")) ||
+         /\(in progress\)/i.test(String((x && x.sourceDetail) || ""));
+}
+
 // ---------- sanitisers ----------
 function clean(v, max) {
   return String(v == null ? "" : v).trim().slice(0, max || 120);
@@ -143,6 +150,16 @@ function normTag(v) {
 
 function todayStr() { return new Date().toISOString().slice(0, 10); }
 
+// A funnel for one product (d.product, e.g. "Dental/Vision") labels its leads
+// "<product>: <channel>" - "Dental/Vision: Google Ads" - so the board says both
+// WHAT they asked about and WHERE they came from in one glance.
+function productSource(d, channel) {
+  const product = clean(d && d.product, 40);
+  if (!product) return channel;
+  const attrChannel = clean(d.attribution && d.attribution.source, 80);
+  return product + ": " + (attrChannel || "Website");
+}
+
 // ══════════════════════════════════════════════════════════════════════════
 // to-crm : website / portal  ->  GoHighLevel
 // ══════════════════════════════════════════════════════════════════════════
@@ -156,8 +173,8 @@ async function toCrm(d, req, res) {
     state:     clean(d.state, 4).toUpperCase(),
     zip:       clean(d.zip || d.zipCode, 12),
     // GHL's source field gets the channel too, so the CRM and the board agree.
-    source:    clean(d.attribution && d.attribution.source, 80) ||
-               clean(d.source || d.leadSource, 80) || "Website",
+    source:    productSource(d, clean(d.attribution && d.attribution.source, 80) ||
+               clean(d.source || d.leadSource, 80) || "Website"),
     notes:     clean(d.notes, 1500),
   };
 
@@ -316,14 +333,17 @@ function normalize(c, d) {
   // bury the real answer. His own entry wins.
   const attr = (d.attribution && typeof d.attribution === "object" &&
                 !/^admin portal/i.test(formSource)) ? d.attribution : null;
+  const product = clean(d.product, 40);
   const source = webchat
     ? "Website live chat"
-    : (clean(attr && attr.source, 80) || formSource || "GoHighLevel");
+    : product
+      ? product + ": " + (clean(attr && attr.source, 80) || "Website")
+      : (clean(attr && attr.source, 80) || formSource || "GoHighLevel");
 
   return {
     webchat: webchat,
     attribution: attr,
-    sourceDetail: (attr && formSource) ? formSource : "",
+    sourceDetail: ((attr || product) && formSource) ? formSource : "",
     contactId: contactId,
     tags: tags,
     firstName: firstName,
@@ -437,12 +457,12 @@ async function syncToBoards(n, opts) {
         if (n.company && !String(existing.company || "").trim()) existing.company = n.company;
         if (!existing.state && n.state) existing.state = n.state;
         if (!existing.employees && n.employees) existing.employees = n.employees;
+        if (!existing.requestedCoverage && n.requestedCoverage) existing.requestedCoverage = n.requestedCoverage;
         if (n.meta && n.meta.ip && !(existing.meta && existing.meta.ip)) existing.meta = n.meta;
         if (!existing.attribution && n.attribution) existing.attribution = n.attribution;
         // The card was opened by a pre-submit capture, whose source says
         // "(in progress)". They are not in progress any more.
-        if (n.source && /\(in progress\)/i.test(String(existing.source || "")) &&
-            !/\(in progress\)/i.test(n.source)) {
+        if (n.source && isInProgress(existing) && !isInProgress(n)) {
           existing.source = n.source;
           if (n.sourceDetail) existing.sourceDetail = n.sourceDetail;
         }
@@ -452,6 +472,10 @@ async function syncToBoards(n, opts) {
         if (AUTO_NOTE.test(String(n.notesIn || ""))) {
           bizPrev = bizPrev.split("\n").filter(function (l) { return !AUTO_NOTE.test(l.trim()); }).join("\n");
           if (n.notesIn) bizPrev = (bizPrev ? bizPrev + "\n" : "") + n.notesIn;
+        } else if (n.notesIn && bizPrev.indexOf(n.notesIn) < 0) {
+          // The finished form knows what the partial did not (name, email, the
+          // final answers). Keep it on the card instead of only the arrival line.
+          bizPrev = (bizPrev ? bizPrev + "\n" : "") + n.notesIn;
         }
         if (bizPrev.indexOf(bizLine) < 0) bizPrev = (bizPrev ? bizPrev + "\n" : "") + bizLine;
         existing.notes = bizPrev;
@@ -538,8 +562,7 @@ async function syncToBoards(n, opts) {
       // looked at.
       // The card was opened by a pre-submit capture, whose source says
       // "(in progress)". They are not in progress any more.
-      if (n.source && /\(in progress\)/i.test(String(existing.source || "")) &&
-          !/\(in progress\)/i.test(n.source)) {
+      if (n.source && isInProgress(existing) && !isInProgress(n)) {
         existing.source = n.source;
         if (n.sourceDetail) existing.sourceDetail = n.sourceDetail;
       }

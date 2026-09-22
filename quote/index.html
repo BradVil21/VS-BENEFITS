@@ -2539,6 +2539,13 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
         var p = new URLSearchParams(window.location.search);
         var t = (p.get('type') || p.get('for') || '').toLowerCase().replace(/[^a-z]/g,'');
         if(!t) return;
+        // Dental / vision has its own funnel. vercel.json redirects these on the
+        // server; this catches any path that slips past it, keeping UTMs/gclid.
+        if(['dental','vision','dentalvision','dentalandvision'].indexOf(t) > -1){
+          p.delete('type'); var qs = p.toString();
+          window.location.replace('/quote/dental-vision' + (qs ? '?' + qs : ''));
+          return;
+        }
         var biz = ['business','group','employer','smallbusiness','company'];
         var ind = ['individual','family','personal','self'];
         var pick = biz.indexOf(t) > -1 ? 'business' : (ind.indexOf(t) > -1 ? 'individual' : null);

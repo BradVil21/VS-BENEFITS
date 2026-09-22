@@ -120,6 +120,13 @@ module.exports = async (req, res) => {
   // Whatever the funnel knows that is not a plain contact field - situation,
   // income band, employee count. It is what makes the card worth calling.
   const extras = clean(d.notes, 600);
+  // Optional product funnel (the dental/vision quote). Labels the card
+  // "<product>: <channel>" and tags the CRM contact so a workflow can pick it up.
+  const product = clean(d.product, 40);
+  const employees = clean(d.employees, 20);
+  const requestedCoverage = clean(d.requestedCoverage, 80);
+  const srcLabel = clean(d.source, 80);
+  const tags = L.normTags(Array.isArray(d.tags) ? d.tags.slice(0, 6) : []);
 
   // 4) Upsert the contact (dedup by email) and tag it as a recoverable draft.
   let contactId = null;
@@ -153,9 +160,10 @@ module.exports = async (req, res) => {
           company ? "Business: " + L.esc(company) : "",
           extras ? L.esc(extras) : "",
           "Opt-in checkbox: " + (optIn ? "yes" : "no (passive capture)"),
-          "Source: /quote autosave",
+          "Source: " + (srcLabel ? L.esc(srcLabel) : "/quote autosave"),
         ].filter(Boolean).join("<br>");
       await L.addNoteToContact(contactId, note);
+      if (tags.length) await L.addTagsToContact(contactId, tags);
     }
   } catch (e) { /* non-fatal */ }
 
@@ -173,7 +181,11 @@ module.exports = async (req, res) => {
       state: state,
       zip: zip,
       type: type,
-      source: clean(d.source, 80) || (type === "business"
+      product: product,
+      employees: employees,
+      requestedCoverage: requestedCoverage,
+      tags: tags,
+      source: srcLabel || (type === "business"
         ? "Quote funnel — business (in progress)"
         : "Quote funnel (in progress)"),
       attribution: (d.attribution && typeof d.attribution === "object") ? d.attribution : null,
