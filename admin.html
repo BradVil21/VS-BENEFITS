@@ -7845,6 +7845,12 @@ html.dark #vsd-pick .vsd-box{background:#1c2d42}
 html.dark #vsd-pick h3{color:#f0f4fa}
 html.dark #vsd-pick .vsd-num,html.dark #vsd-pick .vsd-rem{color:#b8cce4}
 html.dark #vsd-pick .vsd-go{background:#111d2b;border-color:#253a54;color:#f0f4fa}
+.vsd-pill{display:inline-flex;align-items:center;gap:5px;border:1px solid #d8e0ee;background:#fff;border-radius:999px;padding:3px 6px 3px 10px;margin-right:8px;color:#16447f;cursor:pointer}
+.vsd-pill svg{width:13px;height:13px;flex-shrink:0}
+.vsd-pill select{border:0;background:transparent;font-size:12px;font-weight:700;color:#16447f;cursor:pointer;outline:none;padding:2px 0;max-width:120px}
+html.dark .vsd-pill{background:#111d2b;border-color:#253a54;color:#9cc3f0}
+html.dark .vsd-pill select{color:#9cc3f0}
+html.dark .vsd-pill select option{background:#111d2b}
 #vsd-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:100001;background:#0d1b2a;color:#fff;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;transition:opacity .2s;pointer-events:none;max-width:calc(100vw - 32px)}
 #vsd-toast.show{opacity:1}
 </style>
@@ -7852,9 +7858,12 @@ html.dark #vsd-pick .vsd-go{background:#111d2b;border-color:#253a54;color:#f0f4f
 (function(){
  try{
   var KEY="vs_dialer_prefs_v1";
-  var DEF={provider:"ask",vsScheme:"callto",rcMode:"desktop",rcAction:"call",numFmt:"1",mobile:"native"};
-  function load(){var p={};try{p=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){}var o={};for(var k in DEF)o[k]=(p[k]!=null?p[k]:DEF[k]);return o;}
-  function save(p){try{localStorage.setItem(KEY,JSON.stringify(p));}catch(e){}}
+  var DEF={provider:"ask",vsScheme:"sip",vsCustom:"",rcMode:"desktop",rcAction:"call",numFmt:"1",mobile:"native"};
+  function load(){var p={};try{p=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){}
+    /* v2: VS Connect moves from callto: (RingCentral also claims it on Mac) to sip:, which only VS Connect handles */
+    if(p.v!==2){if(!p.vsScheme||p.vsScheme==="callto")p.vsScheme="sip";p.v=2;try{localStorage.setItem(KEY,JSON.stringify(p));}catch(e){}}
+    var o={};for(var k in DEF)o[k]=(p[k]!=null?p[k]:DEF[k]);return o;}
+  function save(p){p.v=2;try{localStorage.setItem(KEY,JSON.stringify(p));}catch(e){}try{syncPill();}catch(e){}}
   var isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
 
   var NAMES={vsconnect:"VS Connect",ringcentral:"RingCentral",native:"this device's phone app"};
@@ -7877,9 +7886,10 @@ html.dark #vsd-pick .vsd-go{background:#111d2b;border-color:#253a54;color:#f0f4f
   function buildUrl(provider,d,p){
     var n=fmt(d,p);
     if(provider==="vsconnect"){
+      if(p.vsScheme==="custom"&&p.vsCustom&&p.vsCustom.indexOf("{number}")>-1)return p.vsCustom.split("{number}").join(n);
       if(p.vsScheme==="tel")return "tel:"+n;
-      if(p.vsScheme==="sip")return "sip:"+n;
-      return "callto:"+n;
+      if(p.vsScheme==="callto")return "callto:"+n;
+      return "sip:"+n;
     }
     if(provider==="ringcentral"){
       var act=p.rcAction==="dialer"?"dialer":"call", en=encodeURIComponent(n);
@@ -7967,8 +7977,9 @@ html.dark #vsd-pick .vsd-go{background:#111d2b;border-color:#253a54;color:#f0f4f
         opt("vsd-prov","native","Computer default","Whatever opens phone links now")+
       '</div>'+
       '<div class="vsd-sub" id="vsd-sub-vs"><div class="field"><label for="vsd-vs">VS Connect link type</label>'+
-        '<select id="vsd-vs"><option value="callto">callto: (recommended — doesn’t fight RingCentral or FaceTime)</option><option value="tel">tel:</option><option value="sip">sip:</option></select></div>'+
-        '<div class="vsd-hint">One-time setup: make VS Connect the default app for <code>callto:</code> links (VS Connect → Settings → set as default dialer, or your computer’s Default apps). The first time you click, your browser asks to open VS Connect — tick <em>Always allow</em>.</div></div>'+
+        '<select id="vsd-vs"><option value="sip">sip: (recommended — RingCentral doesn’t grab these)</option><option value="callto">callto:</option><option value="tel">tel:</option><option value="custom">Custom link…</option></select></div>'+
+        '<div class="field" id="vsd-vscustom-wrap"><label for="vsd-vscustom">Custom link (use {number} where the number goes)</label><input id="vsd-vscustom" type="text" placeholder="sip:{number}" style="padding:9px 12px;border:1px solid #d8e0ee;border-radius:9px;min-height:40px;width:100%"></div>'+
+        '<div class="vsd-hint">One-time setup on your Mac: open VS Connect → <strong>Preferences → Application</strong> → turn on <em>Set application as your default softphone</em>. The first time you click Call, your browser asks to open VS Connect — tick <em>Always allow</em>. If calls still land in RingCentral, try the other link types here.</div></div>'+
       '<div class="vsd-sub" id="vsd-sub-rc"><div class="field"><label for="vsd-rcmode">RingCentral opens in</label>'+
         '<select id="vsd-rcmode"><option value="desktop">RingCentral app installed on this computer</option><option value="web">RingCentral web app (new browser tab)</option><option value="legacy">Older RingCentral Phone app</option></select></div>'+
         '<div class="field"><label for="vsd-rcact">When I click Call</label>'+
@@ -7987,6 +7998,8 @@ html.dark #vsd-pick .vsd-go{background:#111d2b;border-color:#253a54;color:#f0f4f
     var p=load();
     c.querySelectorAll(".vsd-opt").forEach(function(l){var on=l.getAttribute("data-v")===p.provider;l.classList.toggle("on",on);l.querySelector("input").checked=on;});
     c.querySelector("#vsd-vs").value=p.vsScheme;
+    c.querySelector("#vsd-vscustom").value=p.vsCustom||"";
+    c.querySelector("#vsd-vscustom-wrap").style.display=p.vsScheme==="custom"?"":"none";
     c.querySelector("#vsd-rcmode").value=p.rcMode;
     c.querySelector("#vsd-rcact").value=p.rcAction;
     c.querySelector("#vsd-fmt").value=p.numFmt;
@@ -8006,6 +8019,7 @@ html.dark #vsd-pick .vsd-go{background:#111d2b;border-color:#253a54;color:#f0f4f
       var p=load(),t=e.target;
       if(t.name==="vsd-prov")p.provider=t.value;
       else if(t.id==="vsd-vs")p.vsScheme=t.value;
+      else if(t.id==="vsd-vscustom")p.vsCustom=t.value.trim();
       else if(t.id==="vsd-rcmode")p.rcMode=t.value;
       else if(t.id==="vsd-rcact")p.rcAction=t.value;
       else if(t.id==="vsd-fmt")p.numFmt=t.value;
@@ -8021,9 +8035,22 @@ html.dark #vsd-pick .vsd-go{background:#111d2b;border-color:#253a54;color:#f0f4f
     });
     syncCard();
   }
+  /* ── Quick "Dialer" switch in the top bar ── */
+  function syncPill(){var sel=document.getElementById("vsd-pill-sel");if(sel)sel.value=load().provider;}
+  function mountPill(){
+    if(document.getElementById("vsd-pill"))return;
+    var bar=document.querySelector("#topbar .topbar-right");if(!bar)return;
+    var w=document.createElement("label");w.id="vsd-pill";w.className="vsd-pill";w.title="Where Call buttons send the number";
+    w.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'+
+      '<select id="vsd-pill-sel" aria-label="Call with"><option value="vsconnect">VS Connect</option><option value="ringcentral">RingCentral</option><option value="ask">Ask each call</option><option value="native">Default app</option></select>';
+    bar.insertBefore(w,bar.firstChild);
+    w.querySelector("select").addEventListener("change",function(){var p=load();p.provider=this.value;save(p);syncCard();toast("Call buttons now use "+(p.provider==="ask"?"a “Call with…” picker":p.provider==="native"?"your default phone app":NAMES[p.provider]));});
+    syncPill();
+  }
   if(typeof renderSettings==="function"){var _r=renderSettings;renderSettings=function(){var o=_r.apply(this,arguments);try{mount();}catch(e){}return o;};}
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",mount);else mount();
-  setTimeout(mount,800);
+  function boot(){try{mount();}catch(e){}try{mountPill();}catch(e){}}
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
+  setTimeout(boot,800);setTimeout(boot,2500);
  }catch(err){if(window.console)console.warn("dialer init failed",err);}
 })();
 </script>
