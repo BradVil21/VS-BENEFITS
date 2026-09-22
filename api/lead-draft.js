@@ -164,6 +164,10 @@ module.exports = async (req, res) => {
         ].filter(Boolean).join("<br>");
       await L.addNoteToContact(contactId, note);
       if (tags.length) await L.addTagsToContact(contactId, tags);
+      if (product) {
+        const who = (firstName + " " + lastName).trim() || company || phone || email;
+        await LEADSYNC.ensureOpportunity(contactId, product + " - " + who, srcLabel);
+      }
     }
   } catch (e) { /* non-fatal */ }
 

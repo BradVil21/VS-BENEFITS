@@ -150,6 +150,36 @@ function normTag(v) {
 
 function todayStr() { return new Date().toISOString().slice(0, 10); }
 
+// ---- GoHighLevel opportunity: Marketing Pipeline -> New Lead ----
+// Product funnels (dental/vision) open an opportunity for the contact so the
+// lead shows up in GHL's pipeline, not just as a contact. Only ever CREATES:
+// if the contact already has an opportunity in this pipeline it is left where
+// it is, so a lead Bradley has moved to Contacted is never dragged back.
+const GHL_PIPELINE_ID = process.env.GHL_PIPELINE_ID || "AV0Va9ERjPnSxa7VywZO";          // Marketing Pipeline
+const GHL_NEW_LEAD_STAGE = process.env.GHL_NEW_LEAD_STAGE_ID || "60830209-7195-4fdb-b4a8-45973f043b70"; // New Lead
+async function ensureOpportunity(contactId, name, source) {
+  if (!contactId) return { ok: false, skipped: "no_contact" };
+  try {
+    const q = "/opportunities/search?location_id=" + encodeURIComponent(LOCATION_ID) +
+      "&pipeline_id=" + encodeURIComponent(GHL_PIPELINE_ID) +
+      "&contact_id=" + encodeURIComponent(contactId) + "&status=all&limit=1";
+    const found = await L.ghl(q, "GET");
+    const list = found.json && (found.json.opportunities || found.json.data);
+    if (found.ok && Array.isArray(list) && list.length) return { ok: true, action: "exists", id: list[0].id };
+    const r = await L.ghl("/opportunities/", "POST", {
+      locationId: LOCATION_ID,
+      pipelineId: GHL_PIPELINE_ID,
+      pipelineStageId: GHL_NEW_LEAD_STAGE,
+      contactId: contactId,
+      name: clean(name, 120) || "Dental/Vision lead",
+      status: "open",
+      source: clean(source, 80),
+    });
+    const o = r.json && (r.json.opportunity || r.json);
+    return { ok: r.ok, action: r.ok ? "created" : "error", status: r.status, id: o && o.id };
+  } catch (e) { return { ok: false, action: "exception" }; }
+}
+
 // A funnel for one product (d.product, e.g. "Dental/Vision") labels its leads
 // "<product>: <channel>" - "Dental/Vision: Google Ads" - so the board says both
 // WHAT they asked about and WHERE they came from in one glance.
@@ -217,6 +247,12 @@ async function toCrm(d, req, res) {
     if (p.notes) {
       try { await L.ghl("/contacts/" + contactId + "/notes", "POST", { body: p.notes }); out.noted = true; }
       catch (e) { out.noted = false; }
+    }
+
+    if (clean(d.product, 40)) {
+      const who = (p.firstName + " " + p.lastName).trim() || p.company || p.phone || p.email;
+      const opp = await ensureOpportunity(contactId, clean(d.product, 40) + " - " + who, p.source);
+      out.opportunity = opp.action;
     }
   }
 
@@ -362,7 +398,9 @@ function normalize(c, d) {
     currentlyInsured: clean(d.currentlyInsured, 40),
     coverageStart: clean(d.coverageStart, 40),
     meta: (d.meta && typeof d.meta === "object") ? d.meta : null,
-    business: L.isBusinessLead(d.pipeline || d.leadType || d.coverageType || d.type, tags),
+    // Product funnels (dental/vision) always land in the main pipeline's New
+    // Lead column, business or family - they are worked like any new lead.
+    business: product ? false : L.isBusinessLead(d.pipeline || d.leadType || d.coverageType || d.type, tags),
     fullName: (firstName + " " + lastName).trim() || company || email || phone,
   };
 }
@@ -866,3 +904,4 @@ module.exports = async (req, res) => {
 };
 
 module.exports.pushLeadToBoards = pushLeadToBoards;
+module.exports.ensureOpportunity = ensureOpportunity;
