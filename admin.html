@@ -7805,5 +7805,228 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
 .blk-un{flex:0 0 auto}
 @media(max-width:640px){.blk-row{flex-direction:column}.blk-un{width:100%}}
 </style>
+
+<!-- ═══════════════ CLICK-TO-CALL ROUTER — send Call buttons to VS Connect or RingCentral (added) ═══════════════ -->
+<style id="vs-dialer-css">
+.vsd-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:10px}
+.vsd-opt{position:relative;display:flex;flex-direction:column;gap:3px;padding:12px 14px;border:2px solid #e4e9f2;border-radius:12px;background:#fff;cursor:pointer;transition:border-color .15s,background .15s}
+.vsd-opt:hover{border-color:#9db8dc}
+.vsd-opt input{position:absolute;opacity:0;pointer-events:none}
+.vsd-opt b{font-size:13.5px;color:#0d1b2a}
+.vsd-opt span{font-size:11.5px;color:#5a6b80;line-height:1.35}
+.vsd-opt.on{border-color:#16447f;background:#f4f8fe}
+.vsd-opt.on::after{content:"✓";position:absolute;top:8px;right:10px;font-weight:800;color:#16447f}
+html.dark .vsd-opt{background:#111d2b;border-color:#253a54}
+html.dark .vsd-opt b{color:#f0f4fa}
+html.dark .vsd-opt span{color:#9fb3cc}
+html.dark .vsd-opt.on{border-color:#5b9be6;background:#16263a}
+.vsd-sub{margin-top:12px;padding:12px 14px;border:1px solid #e4e9f2;border-radius:10px;background:#f8fafd}
+html.dark .vsd-sub{background:#111d2b;border-color:#253a54}
+.vsd-sub .field{margin-bottom:8px}
+.vsd-sub .field:last-child{margin-bottom:0}
+.vsd-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.vsd-row input{flex:1 1 180px;padding:9px 12px;border:1px solid #d8e0ee;border-radius:9px;min-height:40px;font-size:13px}
+html.dark .vsd-row input{background:#111d2b;border-color:#253a54;color:#f0f4fa}
+.vsd-hint{font-size:11.5px;color:#5a6b80;margin-top:6px;line-height:1.45}
+html.dark .vsd-hint{color:#9fb3cc}
+.vsd-hint code{background:#eef2f8;border-radius:4px;padding:1px 5px;font-size:11px}
+html.dark .vsd-hint code{background:#1c2d42}
+/* "Call with…" chooser */
+#vsd-pick{position:fixed;inset:0;z-index:100000;background:rgba(13,27,42,.45);display:flex;align-items:center;justify-content:center;padding:16px}
+#vsd-pick .vsd-box{background:#fff;border-radius:16px;max-width:360px;width:100%;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,.32)}
+#vsd-pick h3{margin:0 0 2px;font-size:17px;color:#0d1b2a}
+#vsd-pick .vsd-num{margin:0 0 14px;color:#41536b;font-size:13.5px}
+#vsd-pick .vsd-go{display:block;width:100%;text-align:left;margin-bottom:8px;padding:11px 14px;border:1px solid #d8e0ee;border-radius:11px;background:#f8fafd;cursor:pointer;font-size:14px;font-weight:700;color:#0d1b2a}
+#vsd-pick .vsd-go:hover{border-color:#16447f;background:#eef4fd}
+#vsd-pick .vsd-go small{display:block;font-weight:500;font-size:11.5px;color:#5a6b80;margin-top:1px}
+#vsd-pick .vsd-rem{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#41536b;margin:4px 0 10px}
+#vsd-pick .vsd-x{width:100%;padding:9px;border:0;background:none;color:#5a6b80;cursor:pointer;font-weight:600}
+html.dark #vsd-pick .vsd-box{background:#1c2d42}
+html.dark #vsd-pick h3{color:#f0f4fa}
+html.dark #vsd-pick .vsd-num,html.dark #vsd-pick .vsd-rem{color:#b8cce4}
+html.dark #vsd-pick .vsd-go{background:#111d2b;border-color:#253a54;color:#f0f4fa}
+#vsd-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:100001;background:#0d1b2a;color:#fff;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;transition:opacity .2s;pointer-events:none;max-width:calc(100vw - 32px)}
+#vsd-toast.show{opacity:1}
+</style>
+<script>
+(function(){
+ try{
+  var KEY="vs_dialer_prefs_v1";
+  var DEF={provider:"ask",vsScheme:"callto",rcMode:"desktop",rcAction:"call",numFmt:"1",mobile:"native"};
+  function load(){var p={};try{p=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){}var o={};for(var k in DEF)o[k]=(p[k]!=null?p[k]:DEF[k]);return o;}
+  function save(p){try{localStorage.setItem(KEY,JSON.stringify(p));}catch(e){}}
+  var isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+
+  var NAMES={vsconnect:"VS Connect",ringcentral:"RingCentral",native:"this device's phone app"};
+
+  /* Phone number → digits in the chosen format (US default country code 1) */
+  function digits(raw){
+    var s=String(raw||"").replace(/^tel:/i,"").split(/[;,?]/)[0];
+    try{s=decodeURIComponent(s);}catch(e){}
+    var d=s.replace(/\D/g,"");
+    if(d.length===10)d="1"+d;
+    return d;
+  }
+  function fmt(d,p){
+    if(p.numFmt==="10"&&d.length===11&&d.charAt(0)==="1")return d.slice(1);
+    if(p.numFmt==="plus")return "+"+d;
+    return d;
+  }
+  function pretty(d){var x=d.length===11&&d.charAt(0)==="1"?d.slice(1):d;return x.length===10?"("+x.slice(0,3)+") "+x.slice(3,6)+"-"+x.slice(6):"+"+d;}
+
+  function buildUrl(provider,d,p){
+    var n=fmt(d,p);
+    if(provider==="vsconnect"){
+      if(p.vsScheme==="tel")return "tel:"+n;
+      if(p.vsScheme==="sip")return "sip:"+n;
+      return "callto:"+n;
+    }
+    if(provider==="ringcentral"){
+      var act=p.rcAction==="dialer"?"dialer":"call", en=encodeURIComponent(n);
+      if(p.rcMode==="web")return "https://app.ringcentral.com/r/"+act+"?number="+en;
+      if(p.rcMode==="legacy")return "rcmobile://call?number="+en;
+      return "rcapp://r/"+act+"?number="+en;
+    }
+    return "tel:+"+d;
+  }
+
+  var toastT;
+  function toast(msg){
+    var t=document.getElementById("vsd-toast");
+    if(!t){t=document.createElement("div");t.id="vsd-toast";document.body.appendChild(t);}
+    t.textContent=msg;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},2600);
+  }
+
+  function launch(provider,d,p){
+    var url=buildUrl(provider,d,p);
+    try{window.__vsLastDial={provider:provider,url:url,at:Date.now()};}catch(e){}
+    if(/^https?:/i.test(url)){
+      var w=window.open(url,"vs_ringcentral_web");
+      if(!w)location.href=url;
+    }else{
+      /* App links (callto:, rcapp:// …) hand off to the desktop app; the portal stays on screen */
+      try{window.location.assign(url);}catch(e){}
+    }
+    toast("Calling "+pretty(d)+" with "+NAMES[provider]+"…");
+  }
+
+  function pick(d,p){
+    var old=document.getElementById("vsd-pick");if(old)old.remove();
+    var ov=document.createElement("div");ov.id="vsd-pick";
+    ov.innerHTML='<div class="vsd-box" role="dialog" aria-label="Call with"><h3>Call with…</h3><p class="vsd-num">'+pretty(d)+'</p>'+
+      '<button type="button" class="vsd-go" data-p="vsconnect">VS Connect<small>VanillaSoft dialer</small></button>'+
+      '<button type="button" class="vsd-go" data-p="ringcentral">RingCentral<small>'+(p.rcMode==="web"?"Web app in a new tab":"RingCentral app")+'</small></button>'+
+      '<button type="button" class="vsd-go" data-p="native">Phone app<small>Whatever this device opens for phone links</small></button>'+
+      '<label class="vsd-rem"><input type="checkbox" id="vsd-rem"> Always use this — don’t ask again</label>'+
+      '<button type="button" class="vsd-x">Cancel</button></div>';
+    document.body.appendChild(ov);
+    function close(){ov.remove();document.removeEventListener("keydown",esc);}
+    function esc(e){if(e.key==="Escape")close();}
+    document.addEventListener("keydown",esc);
+    ov.addEventListener("click",function(e){
+      if(e.target===ov||e.target.closest(".vsd-x")){close();return;}
+      var b=e.target.closest(".vsd-go");if(!b)return;
+      var prov=b.getAttribute("data-p");
+      if(ov.querySelector("#vsd-rem").checked){var q=load();q.provider=prov;save(q);syncCard();}
+      close();launch(prov,d,load());
+    });
+  }
+
+  /* Public entry point — other code can call window.vsDial("+15551234567") */
+  window.vsDial=function(raw,opts){
+    var d=digits(raw);if(d.length<7)return false;
+    var p=load(),prov=p.provider;
+    if(isMobile&&p.mobile==="native"&&!(opts&&opts.force))prov="native";
+    if(opts&&opts.ask)prov="ask";
+    if(prov==="ask")pick(d,p);else launch(prov,d,p);
+    return true;
+  };
+
+  /* Catch every Call button / phone link in the portal (they're all tel: links, including ones added later) */
+  document.addEventListener("click",function(e){
+    if(e.defaultPrevented||e.button>0)return;
+    var a=e.target&&e.target.closest?e.target.closest('a[href^="tel:"],a[href^="TEL:"]'):null;
+    if(!a||a.closest("#vsd-pick"))return;
+    var href=a.getAttribute("href");
+    var p=load();
+    if(isMobile&&p.mobile==="native"&&!e.altKey)return;       // let the phone handle it
+    if(p.provider==="native"&&!e.altKey)return;                 // default behaviour
+    e.preventDefault();e.stopPropagation();
+    window.vsDial(href,{ask:e.altKey,force:e.altKey});
+  },true);
+
+  /* ── Settings card ─────────────────────────────────────── */
+  function opt(name,val,title,sub){return '<label class="vsd-opt" data-v="'+val+'"><input type="radio" name="'+name+'" value="'+val+'"><b>'+title+'</b><span>'+sub+'</span></label>';}
+  function cardHtml(){
+    return '<h4 style="margin:0 0 6px;font-size:15px"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Calling</h4>'+
+      '<p class="lede">Pick where the <strong>Call</strong> buttons send a lead’s number. Every Call button in the portal — leads, pipeline, business leads, clients, tasks and callback reminders — follows this setting.</p>'+
+      '<div class="vsd-opts">'+
+        opt("vsd-prov","vsconnect","VS Connect","VanillaSoft dialer app")+
+        opt("vsd-prov","ringcentral","RingCentral","RingCentral app or web")+
+        opt("vsd-prov","ask","Ask me each time","Pick VS Connect or RingCentral per call")+
+        opt("vsd-prov","native","Computer default","Whatever opens phone links now")+
+      '</div>'+
+      '<div class="vsd-sub" id="vsd-sub-vs"><div class="field"><label for="vsd-vs">VS Connect link type</label>'+
+        '<select id="vsd-vs"><option value="callto">callto: (recommended — doesn’t fight RingCentral or FaceTime)</option><option value="tel">tel:</option><option value="sip">sip:</option></select></div>'+
+        '<div class="vsd-hint">One-time setup: make VS Connect the default app for <code>callto:</code> links (VS Connect → Settings → set as default dialer, or your computer’s Default apps). The first time you click, your browser asks to open VS Connect — tick <em>Always allow</em>.</div></div>'+
+      '<div class="vsd-sub" id="vsd-sub-rc"><div class="field"><label for="vsd-rcmode">RingCentral opens in</label>'+
+        '<select id="vsd-rcmode"><option value="desktop">RingCentral app installed on this computer</option><option value="web">RingCentral web app (new browser tab)</option><option value="legacy">Older RingCentral Phone app</option></select></div>'+
+        '<div class="field"><label for="vsd-rcact">When I click Call</label>'+
+        '<select id="vsd-rcact"><option value="call">Start the call right away</option><option value="dialer">Open the dial pad with the number filled in (lets me pick caller ID)</option></select></div>'+
+        '<div class="vsd-hint">The first time, your browser asks to open RingCentral — tick <em>Always allow</em>. Calls use your default RingCentral caller ID unless you choose the dial-pad option.</div></div>'+
+      '<div class="vsd-sub"><div class="field"><label for="vsd-fmt">Number format sent</label>'+
+        '<select id="vsd-fmt"><option value="1">15551234567 (with country code)</option><option value="plus">+15551234567</option><option value="10">5551234567 (10 digits)</option></select></div>'+
+        '<div class="field"><label for="vsd-mob">On a phone or tablet</label>'+
+        '<select id="vsd-mob"><option value="native">Use the phone’s dialer</option><option value="same">Use the same setting as above</option></select></div>'+
+        '<div class="vsd-hint">Tip: hold <strong>Option/Alt</strong> while clicking any Call button to choose the app for just that call.</div></div>'+
+      '<div class="vsd-row"><input id="vsd-testnum" type="tel" placeholder="Test number, e.g. your cell"><button id="vsd-test" type="button" class="btn btn-ghost btn-sm">Test call</button></div>'+
+      '<div id="vsd-saved" class="vsd-hint" aria-live="polite"></div>';
+  }
+  function syncCard(){
+    var c=document.getElementById("vs-dialer-card");if(!c)return;
+    var p=load();
+    c.querySelectorAll(".vsd-opt").forEach(function(l){var on=l.getAttribute("data-v")===p.provider;l.classList.toggle("on",on);l.querySelector("input").checked=on;});
+    c.querySelector("#vsd-vs").value=p.vsScheme;
+    c.querySelector("#vsd-rcmode").value=p.rcMode;
+    c.querySelector("#vsd-rcact").value=p.rcAction;
+    c.querySelector("#vsd-fmt").value=p.numFmt;
+    c.querySelector("#vsd-mob").value=p.mobile;
+    c.querySelector("#vsd-sub-vs").style.display=(p.provider==="vsconnect"||p.provider==="ask")?"":"none";
+    c.querySelector("#vsd-sub-rc").style.display=(p.provider==="ringcentral"||p.provider==="ask")?"":"none";
+  }
+  function mount(){
+    var panel=document.getElementById("p-settings");if(!panel||document.getElementById("vs-dialer-card"))return;
+    var card=document.createElement("div");card.className="card";card.id="vs-dialer-card";card.innerHTML=cardHtml();
+    var snd=document.getElementById("snd-toggle"),sndCard=snd&&snd.closest(".card");
+    if(sndCard&&sndCard.parentNode===panel)panel.insertBefore(card,sndCard);
+    else{var h3=panel.querySelector("h3");if(h3&&h3.nextSibling)panel.insertBefore(card,h3.nextSibling);else panel.appendChild(card);}
+    var savedT;
+    function saved(){var s=card.querySelector("#vsd-saved");var p=load();s.textContent="Saved — Call buttons now go to "+(p.provider==="ask"?"a quick “Call with…” picker":p.provider==="native"?"your computer’s default phone app":NAMES[p.provider])+".";clearTimeout(savedT);savedT=setTimeout(function(){s.textContent="";},4000);}
+    card.addEventListener("change",function(e){
+      var p=load(),t=e.target;
+      if(t.name==="vsd-prov")p.provider=t.value;
+      else if(t.id==="vsd-vs")p.vsScheme=t.value;
+      else if(t.id==="vsd-rcmode")p.rcMode=t.value;
+      else if(t.id==="vsd-rcact")p.rcAction=t.value;
+      else if(t.id==="vsd-fmt")p.numFmt=t.value;
+      else if(t.id==="vsd-mob")p.mobile=t.value;
+      else return;
+      save(p);syncCard();saved();
+    });
+    card.querySelector("#vsd-test").addEventListener("click",function(){
+      var v=card.querySelector("#vsd-testnum").value;
+      if(digits(v).length<11){card.querySelector("#vsd-saved").textContent="Enter a full phone number to test.";return;}
+      var p=load();
+      if(p.provider==="native")location.href="tel:+"+digits(v);else window.vsDial(v,{force:true});
+    });
+    syncCard();
+  }
+  if(typeof renderSettings==="function"){var _r=renderSettings;renderSettings=function(){var o=_r.apply(this,arguments);try{mount();}catch(e){}return o;};}
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",mount);else mount();
+  setTimeout(mount,800);
+ }catch(err){if(window.console)console.warn("dialer init failed",err);}
+})();
+</script>
+
 </body>
 </html>
