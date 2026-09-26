@@ -7759,7 +7759,7 @@ try{(function(){
   /* ---------- 1. Own / Agency / No source ---------- */
   var AGENCY_RE=/^(bought lead|agency|dialer|agency lead|warm transfer)$/i;
   function odKind(c){var s=String((c&&c.source)||"").trim();if(!s)return "none";return AGENCY_RE.test(s)?"agency":"own";}
-  function odBadge(c){var k=odKind(c);return '<span class="od-badge od-'+k+'">'+(k==="own"?"OWN":k==="agency"?"AGENCY":"NO SOURCE")+'</span>';}
+  function odBadge(c){var k=odKind(c);if(k==="agency"&&/^agency/i.test(czSourceLabel(c.source)))return "";return '<span class="od-badge od-'+k+'">'+(k==="own"?"OWN":k==="agency"?"AGENCY":"NO SOURCE")+'</span>';}
   window.vsLeadKind=odKind;
   function odTime(c){return Number(c.created)||(c.createdAt?Date.parse(c.createdAt):0)||0;}
   function odSoldTime(c){return Number(c.soldAt)||Number(c.updated)||odTime(c);}
@@ -7771,7 +7771,7 @@ try{(function(){
     czSourceCell=function(s,detail,style){
       var out=_srcCell.apply(this,arguments);
       var k=String(s||"").trim()?(AGENCY_RE.test(String(s).trim())?"agency":"own"):"none";
-      if(k==="none")return out;
+      if(k==="none"||(k==="agency"&&/^agency/i.test(czSourceLabel(s))))return out;
       return out+'<span class="od-badge od-'+k+'" style="margin-left:0;margin-top:3px">'+(k==="own"?"OWN":"AGENCY")+'</span>';
     };
   }
@@ -8061,6 +8061,38 @@ try{(function(){
   }
   if(typeof renderReferrals==="function"){var _rr=renderReferrals;renderReferrals=function(){var o=_rr.apply(this,arguments);try{odReferrals();}catch(e){}return o;};}
   if(typeof renderSettings==="function"){var _rs=renderSettings;renderSettings=function(){var o=_rs.apply(this,arguments);setTimeout(function(){try{odSettingsNav();}catch(e){}},50);return o;};}
+
+  /* Show the stored source "Bought lead" as "Agency bought lead" everywhere. */
+  try{CZ_SRC_LABELS["Bought lead"]="Agency bought lead";}catch(e){}
+
+  /* ONE-TIME CLEANUP (Sept 26 2026): every lead and business lead that came in before
+     today with no source is an agency (dialer) lead, so label it "Bought lead".
+     Reads the live cloud copy first so nothing newer is overwritten. Leads created
+     after the cutoff are never touched, so a website lead missing its source still shows up. */
+  var OD_MIG_CUTOFF=Date.parse("2026-09-27T00:00:00-04:00");
+  function odMigCreated(x){return Number(x.created)||(x.createdAt?Date.parse(x.createdAt):0)||0;}
+  function odMigNeeds(x){return x&&!String(x.source||"").trim()&&odMigCreated(x)<OD_MIG_CUTOFF;}
+  var odMigRunning=false,odMigDone=false;
+  async function odLabelMigration(){
+    if(odMigRunning||odMigDone||!cloud.ready)return;
+    var sh=document.getElementById("shell");if(!sh||sh.hidden)return;
+    odMigRunning=true;
+    try{
+      var total=0;
+      for(const [rk,lk] of [["leads",K.leads],["biz_leads",K.bizLeads]]){
+        var snap=await getDoc(doc(db,"vs_state",rk));if(!snap.exists())continue;
+        var items=snap.data().items||[];var n=0;
+        items.forEach(function(x){if(odMigNeeds(x)){x.source="Bought lead";x.updated=Date.now();n++;}});
+        if(n){var ok=await setArr(lk,items,true);if(ok)total+=n;else{odMigRunning=false;return;}}
+      }
+      odMigDone=true;
+      if(total){if(typeof czCurrentRender==="function")czCurrentRender();if(typeof renderBizLeads==="function")renderBizLeads();
+        if(typeof addNotif==="function")addNotif("lead",total+" leads labeled Agency bought lead","Every older lead with no source is now marked as an agency lead","leads");}
+    }catch(e){console.warn("label migration",e);}
+    odMigRunning=false;
+  }
+  setTimeout(odLabelMigration,4000);setTimeout(odLabelMigration,9000);
+  var odMigTimer=setInterval(function(){if(odMigDone){clearInterval(odMigTimer);return;}odLabelMigration();},15000);
 
   function odBoot(){try{odWrapDash();}catch(e){}try{odNav();}catch(e){}
     try{var a=document.querySelector(".panel.active");if(a&&a.id==="p-dashboard"&&typeof window.renderDash3D==="function")window.renderDash3D();if(a&&a.id==="p-pipeline")czPipeResults();}catch(e){}}
