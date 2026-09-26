@@ -1875,7 +1875,7 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
 
     <!-- BUSINESS LEADS (B2B / 1099 companies) -->
     <div id="p-bizleads" class="panel">
-      <h3>Business Leads <span style="font-size:13px;font-weight:500;color:var(--muted)">(1099 companies)</span></h3>
+      <h3>Business Leads <span style="font-size:13px;font-weight:500;color:var(--muted)">Small groups &amp; partners</span></h3>
       <p class="lede">Move business leads between stages. Drag a card or use its dropdown to change stage.</p>
       <div class="toolbar">
         <input id="biz-search" class="search" type="search" placeholder="Search company, contact, phone..." />
@@ -7695,6 +7695,377 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
 /* ═══════════════ IPMETA — submission origin (added) ═══════════════ */
 (function(){ try{ var st=document.createElement("style"); st.setAttribute("data-ipmeta","1"); st.textContent="\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 IPMETA \u2014 submission origin box \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\n.cz-ipbox{margin-top:14px;background:#f7faff;border:1px solid var(--w-line,#e4e9f2);border-radius:12px;padding:12px 14px}\n.cz-ipbox .cz-iphd{font-size:12px;font-weight:800;letter-spacing:.02em;color:#16447f;margin-bottom:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}\n.cz-ipbox .cz-ipline{font-size:13px;color:#334155;font-weight:600;margin-top:3px;word-break:break-word}\n.cz-ipbox .cz-ipline b{color:#0d1b2a;font-weight:800}\n.cz-ipbox .cz-iplink{color:#0db5a6;font-weight:800;text-decoration:none;font-size:12px;margin-left:4px}\n.cz-ipbox .cz-iplink:hover{text-decoration:underline}\n.cz-ipbox .cz-ipdup{background:#fdeaea;color:#c0392b;border:1px solid #f5c6cb;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:800;margin-left:auto}\n"; document.head.appendChild(st); }catch(e){} })();
 
+/* ===== OFF THE DIALER: portal upgrades (2026-09-25) ===== */
+
+/* ═══════════════ OFF-THE-DIALER PORTAL UPDATE (added Sept 2026) ═══════════════
+   1. Every lead is "Own", "Agency" (source = Bought lead) or "No source".
+      Source is required when saving a lead; new leads default to Bought lead.
+      One-click tool to label old leads with no source as Bought lead.
+   2. Dashboard leads with the off-the-dialer numbers.
+   3. Pipeline grouped into 7 columns (Nurture + Lost hold the old sub-stages),
+      compact cards, and a stage picker on phones.
+   4. Sold leads missing from Active Clients can be added quietly (no texts).
+   5. My Tasks follows the month-by-month plan.
+   6. Navigation, Business Leads title, Settings toggle and sections, Referrals.
+   Existing stage ids and data are untouched, so the server, GoHighLevel sync
+   and every older view keep working. */
+try{(function(){
+  var ODS=document.createElement("style");ODS.id="od-style";ODS.textContent=[
+  ".od-badge{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.03em;padding:1px 7px;border-radius:999px;margin-left:6px;vertical-align:1px;white-space:nowrap}",
+  ".od-own{background:#e6f7f5;color:#098374}.od-agency{background:#eef2f8;color:#475569}.od-none{background:#fff1f2;color:#be123c}",
+  ".od-banner{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:12px 14px;margin:0 0 14px;font-size:13px;color:#7c2d12}",
+  ".od-banner b{color:#7c2d12}.od-banner .od-sp{flex:1 1 260px}",
+  ".od-btn{border:0;border-radius:999px;padding:8px 14px;font-weight:700;font-size:12.5px;cursor:pointer;background:#16447f;color:#fff;white-space:nowrap}",
+  ".od-btn.soft{background:#fff;color:#16447f;border:1px solid #cfdcef}",
+  /* dashboard */
+  ".od-tiles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:6px 0 22px}",
+  "@media(max-width:1100px){.od-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:640px){.od-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}",
+  ".od-tile{background:#fff;border:1px solid #e4e9f2;border-radius:14px;padding:14px 16px;box-shadow:0 1px 3px rgba(11,35,70,.05);cursor:default;text-align:left}",
+  ".od-tile.click{cursor:pointer}.od-tile.click:hover{border-color:#9db8dc}",
+  ".od-tile .k{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#5a6b80}",
+  ".od-tile .v{font-size:26px;font-weight:900;letter-spacing:-.02em;color:#0b2346;line-height:1.1;margin-top:6px}",
+  ".od-tile .s{font-size:12px;color:#5a6b80;margin-top:4px;line-height:1.35}",
+  ".od-tile .bar{height:6px;background:#eef2f8;border-radius:999px;margin-top:8px;overflow:hidden}.od-tile .bar span{display:block;height:100%;background:linear-gradient(90deg,#16447f,#0db5a6);border-radius:999px}",
+  ".od-tile.warn .v{color:#c2410c}.od-tile.good .v{color:#098374}",
+  ".od-src{width:100%;border-collapse:collapse;font-size:13px}.od-src td{padding:7px 4px;border-bottom:1px solid #eef2f8}.od-src td:last-child{text-align:right;font-weight:700}",
+  "html.dark .od-tile{background:#1c2d42;border-color:#253a54}html.dark .od-tile .v{color:#f0f4fa}",
+  /* pipeline */
+  ".od-jump{display:none;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}.od-jump::-webkit-scrollbar{display:none}",
+  ".od-jump button{flex:0 0 auto;border:1px solid #d8e0ee;background:#fff;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;color:#16447f;cursor:pointer}",
+  "@media(max-width:820px){.od-jump{display:flex}}",
+  ".od-card .cz-dates,.od-card .cz-cctl{display:none}.od-card.open .cz-dates,.od-card.open .cz-cctl{display:flex}",
+  ".od-card .od-more{margin-top:8px;border:0;background:none;color:#16447f;font-size:11.5px;font-weight:700;padding:0;cursor:pointer}",
+  ".od-sub{display:inline-block;margin-top:6px;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid}",
+  ".od-colmore{font-size:12px;color:#5a6b80;text-align:center;padding:8px}",
+  "@media(max-width:820px){#p-pipeline .cz-card{padding:10px 12px}}",
+  /* my tasks month card */
+  ".od-month{background:#fff;border:1px solid #e4e9f2;border-radius:16px;padding:16px 18px;margin-bottom:16px}",
+  ".od-month .mh{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:baseline}",
+  ".od-month .mt{font-size:18px;font-weight:900;color:#0b2346}.od-month .th{font-size:13px;font-weight:700;color:#098374}",
+  ".od-month .ph{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:#16447f;color:#fff;border-radius:999px;padding:3px 9px}",
+  ".od-month .gl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0}@media(max-width:640px){.od-month .gl{grid-template-columns:1fr}}",
+  ".od-month .g{background:#f4f8fe;border-radius:10px;padding:8px 10px;font-size:12px;color:#334155}.od-month .g b{display:block;font-size:16px;color:#16447f}",
+  ".od-month label.it{display:flex;gap:9px;align-items:flex-start;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:13px;color:#334155;cursor:pointer}",
+  ".od-month label.it input{margin-top:3px;width:16px;height:16px;accent-color:#0db5a6;flex:0 0 auto}.od-month label.it.done span{color:#94a3b8;text-decoration:line-through}",
+  ".od-month .chk{margin-top:10px;background:#0b2346;color:#fff;border-radius:10px;padding:9px 12px;font-size:12.5px}.od-month .chk b{color:#8ef0e2}",
+  "html.dark .od-month{background:#1c2d42;border-color:#253a54}html.dark .od-month .mt{color:#f0f4fa}",
+  /* settings */
+  ".sound-row label.tog{flex:0 0 44px!important;width:44px!important}",
+  ".od-setnav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px;position:sticky;top:64px;z-index:5;background:inherit;padding:6px 0}",
+  ".od-setnav button{border:1px solid #d8e0ee;background:#fff;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;color:#16447f;cursor:pointer}",
+  ".od-refcard{background:#fff;border:1px solid #e4e9f2;border-radius:14px;padding:14px 16px;margin-bottom:14px}.od-refcard textarea{width:100%;min-height:70px;border:1px solid #d8e0ee;border-radius:10px;padding:8px 10px;font:inherit;font-size:13px;margin:8px 0}"
+  ].join("\n");document.head.appendChild(ODS);
+
+  /* ---------- 1. Own / Agency / No source ---------- */
+  var AGENCY_RE=/^(bought lead|agency|dialer|agency lead|warm transfer)$/i;
+  function odKind(c){var s=String((c&&c.source)||"").trim();if(!s)return "none";return AGENCY_RE.test(s)?"agency":"own";}
+  function odBadge(c){var k=odKind(c);return '<span class="od-badge od-'+k+'">'+(k==="own"?"OWN":k==="agency"?"AGENCY":"NO SOURCE")+'</span>';}
+  window.vsLeadKind=odKind;
+  function odTime(c){return Number(c.created)||(c.createdAt?Date.parse(c.createdAt):0)||0;}
+  function odSoldTime(c){return Number(c.soldAt)||Number(c.updated)||odTime(c);}
+
+  /* show "Referral: client" instead of the stored "Referral — client" (display only; stored values unchanged) */
+  if(typeof czSourceLabel==="function"){var _srcLab=czSourceLabel;czSourceLabel=function(s){return String(_srcLab.apply(this,arguments)||"").replace(/\s*\u2014\s*/g,": ");};}
+  if(typeof czSourceCell==="function"){
+    var _srcCell=czSourceCell;
+    czSourceCell=function(s,detail,style){
+      var out=_srcCell.apply(this,arguments);
+      var k=String(s||"").trim()?(AGENCY_RE.test(String(s).trim())?"agency":"own"):"none";
+      if(k==="none")return out;
+      return out+'<span class="od-badge od-'+k+'" style="margin-left:0;margin-top:3px">'+(k==="own"?"OWN":"AGENCY")+'</span>';
+    };
+  }
+
+  /* record when a lead became Sold, so "sales this month" is exact from now on */
+  if(typeof czSetStage==="function"){
+    var _setStage=czSetStage;
+    czSetStage=function(id,stage){
+      if(stage==="sold"){var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(c&&c.stage!=="sold"){c.soldAt=Date.now();saveLeads(arr);}}
+      return _setStage.apply(this,arguments);
+    };
+  }
+
+  /* Lead modal: source required, new leads default to Bought lead */
+  document.addEventListener("click",function(e){
+    var b=e.target&&e.target.closest?e.target.closest("#cz-mSave"):null;if(!b)return;
+    var inp=document.getElementById("cz_source");if(!inp)return;
+    if(!inp.value.trim()){
+      e.preventDefault();e.stopImmediatePropagation();
+      inp.style.borderColor="#e11d48";inp.focus();
+      var m=document.getElementById("od-src-err");
+      if(!m){m=document.createElement("div");m.id="od-src-err";m.style.cssText="color:#be123c;font-size:12px;font-weight:700;margin-top:4px";m.textContent="Pick where this lead came from. Agency dialer leads = Bought lead.";inp.parentNode.appendChild(m);}
+      return;
+    }
+    var st=document.getElementById("cz_stage");
+    if(st&&st.value==="sold"){ /* stamp soldAt on save through the modal */
+      var h=document.querySelector("#modal-content h2");var nm=h?h.textContent.trim():"";
+      setTimeout(function(){var arr=getLeads(),ch=false;arr.forEach(function(x){if(x.stage==="sold"&&!x.soldAt&&czName(x)===nm){x.soldAt=Date.now();ch=true;}});if(ch)saveLeads(arr);},400);
+    }
+  },true);
+  function odModalPrep(){
+    var inp=document.getElementById("cz_source");if(!inp||inp.getAttribute("data-od"))return;
+    inp.setAttribute("data-od","1");
+    var h=document.querySelector("#modal-content h2");
+    if(h&&/^add client$/i.test(h.textContent.trim())&&!inp.value)inp.value="Bought lead";
+    var lab=inp.closest("label");var sp=lab&&lab.querySelector("span");
+    if(sp&&!sp.querySelector(".od-req"))sp.insertAdjacentHTML("beforeend",' <b class="od-req" style="color:#be123c">*</b>');
+    var row=document.createElement("div");row.style.cssText="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px";
+    [["Agency (dialer)","Bought lead"],["Referral","Referral — client"],["Partner","Referral — partner"],["Website","Organic search"],["Google Ads","Google Ads"],["Walk-in","Walk-in"]].forEach(function(p){
+      var b=document.createElement("button");b.type="button";b.textContent=p[0];
+      b.style.cssText="border:1px solid #d8e0ee;background:#fff;border-radius:999px;padding:4px 10px;font-size:11.5px;font-weight:700;color:#16447f;cursor:pointer";
+      b.addEventListener("click",function(){inp.value=p[1];inp.style.borderColor="";var m=document.getElementById("od-src-err");if(m)m.remove();});
+      row.appendChild(b);
+    });
+    (lab||inp).insertAdjacentElement("afterend",row);
+  }
+  new MutationObserver(function(){try{odModalPrep();}catch(e){}}).observe(document.body,{childList:true,subtree:true});
+
+  function odLabelBanner(){
+    var n=getLeads().filter(function(c){return odKind(c)==="none"&&!String(c.sourceDetail||"").trim();}).length;
+    if(!n)return "";
+    return '<div class="od-banner" id="od-label-banner"><span class="od-sp"><b>'+n+' leads have no source.</b> The portal cannot tell your own leads from agency leads without it. Leads you typed in or imported from the dialer are agency leads.</span><button class="od-btn" type="button" data-od-label="1">Mark all '+n+' as Bought lead (agency)</button></div>';
+  }
+  function odBindLabel(root){
+    root.querySelectorAll("[data-od-label]").forEach(function(b){b.addEventListener("click",function(){
+      var arr=getLeads();var ids=arr.filter(function(c){return odKind(c)==="none"&&!String(c.sourceDetail||"").trim();});
+      if(!ids.length)return;
+      if(!confirm("Set the source to \"Bought lead\" (agency) on "+ids.length+" leads that have no source?\n\nOnly leads with an empty source are changed. You can change any single lead later in its card."))return;
+      arr.forEach(function(c){if(odKind(c)==="none"&&!String(c.sourceDetail||"").trim()){c.source="Bought lead";c.updated=Date.now();}});
+      saveLeads(arr);if(typeof czCurrentRender==="function")czCurrentRender();
+    });});
+  }
+  if(typeof czClientResults==="function"){
+    var _clientRes=czClientResults;
+    czClientResults=function(){
+      var o=_clientRes.apply(this,arguments);
+      try{var box=document.getElementById("cz-clients-results");if(box&&!box.querySelector("#od-label-banner")){var html=odLabelBanner();if(html){box.insertAdjacentHTML("afterbegin",html);odBindLabel(box);}}}catch(e){}
+      return o;
+    };
+  }
+
+  /* ---------- 2. Dashboard ---------- */
+  function odMetrics(){
+    var L=getLeads(),now=Date.now(),d=new Date(),ms=new Date(d.getFullYear(),d.getMonth(),1).getTime();
+    var sold=L.filter(function(c){return c.stage==="sold"&&odSoldTime(c)>=ms;});
+    var ownSold=sold.filter(function(c){return odKind(c)==="own";});
+    var own90=L.filter(function(c){return odKind(c)==="own"&&now-odTime(c)<90*864e5;});
+    var own90Sold=own90.filter(function(c){return c.stage==="sold";});
+    var own7=L.filter(function(c){return odKind(c)==="own"&&now-odTime(c)<7*864e5;});
+    var overdue=L.filter(function(c){try{return czFU(c).key==="overdue";}catch(e){return false;}});
+    var unl=L.filter(function(c){return odKind(c)==="none";});
+    var bySrc={};sold.forEach(function(c){var s=String(c.source||"").trim()||"No source";s=(typeof czSourceLabel==="function"?czSourceLabel(s):s)||s;bySrc[s]=(bySrc[s]||0)+1;});
+    var accts=(typeof getAccounts==="function"?getAccounts():[]).filter(function(a){return (a.status||"active")!=="revoked";});
+    return {sold:sold,ownSold:ownSold,share:sold.length?Math.round(ownSold.length/sold.length*100):0,own90:own90,own90Sold:own90Sold,close:own90.length?Math.round(own90Sold.length/own90.length*100):0,own7:own7,overdue:overdue,unl:unl,bySrc:bySrc,accts:accts,monthName:d.toLocaleDateString(undefined,{month:"long"})};
+  }
+  function odDashEnhance(){
+    var mount=document.getElementById("cz-dashboard");if(!mount)return;
+    var w=mount.querySelector(".d3-wrap");if(!w)return;
+    var M=odMetrics();
+    var labels=w.querySelectorAll(".d3-seclabel .l");
+    if(labels[0])labels[0].textContent="Off the dialer · "+M.monthName;
+    var grid=w.querySelector(".d3-grid");
+    var tiles=document.createElement("div");tiles.className="od-tiles";
+    function tile(cls,k,v,s,bar,go){return '<div class="od-tile '+cls+(go?' click" data-cz-go="'+go:'')+'"><div class="k">'+k+'</div><div class="v">'+v+'</div>'+(bar!=null?'<div class="bar"><span style="width:'+Math.max(2,Math.min(100,bar))+'%"></span></div>':'')+'<div class="s">'+s+'</div></div>';}
+    tiles.innerHTML=
+      tile(M.share>=50?"good":"", "Sales from own leads", M.share+"%", M.ownSold.length+" of "+M.sold.length+" sales this month · goal 50%", M.share*2, "leads")+
+      tile(M.close>=15?"good":"", "Own-lead close rate", M.close+"%", M.own90Sold.length+" sold of "+M.own90.length+" own leads (90 days) · goal 15%", M.close/25*100, "leads")+
+      tile("", "New own leads · 7d", String(M.own7.length), "Website, referrals, partners, ads · goal 25/week", M.own7.length/25*100, "pipeline")+
+      tile(M.overdue.length?"warn":"good", "Overdue follow-ups", String(M.overdue.length), M.overdue.length?"Clear these first":"All caught up", null, "pipeline")+
+      tile(M.unl.length?"warn":"", M.unl.length?"Leads with no source":"Active clients", M.unl.length?String(M.unl.length):String(M.accts.length), M.unl.length?"Label them on the Leads page so the numbers are right":"Your book: renewals and referrals", null, M.unl.length?"leads":"accounts");
+    if(grid)grid.replaceWith(tiles);else w.insertBefore(tiles,w.children[2]||null);
+    /* sales by source this month */
+    if(!w.querySelector(".od-srccard")){
+      var rows=Object.keys(M.bySrc).sort(function(a,b){return M.bySrc[b]-M.bySrc[a];}).map(function(k){return '<tr><td>'+escapeHtml(k)+'</td><td>'+M.bySrc[k]+'</td></tr>';}).join("")||'<tr><td colspan="2" style="color:#94a3b8">No sales marked this month yet.</td></tr>';
+      var sc=document.createElement("div");sc.className="glass-3d od-srccard";sc.style.marginTop="18px";
+      sc.innerHTML='<div class="g-inner"><div class="d3-mhead"><div><div class="k">This month</div><h3>Sales by source</h3></div></div><table class="od-src">'+rows+'</table></div>';
+      var two=w.querySelector(".d3-two");if(two)two.insertAdjacentElement("afterend",sc);
+    }
+    /* grouped pipeline counts */
+    var sg=w.querySelector(".d3-stagegrid");
+    if(sg){var L=getLeads();sg.innerHTML=OD_GROUPS.map(function(g){var n=L.filter(function(c){return g.ids.indexOf(c.stage)>=0;}).length;return '<button class="d3-stage" data-cz-go="pipeline"><div class="c">'+n+'</div><div class="sl"><span class="dot" style="background:'+g.color+';width:8px;height:8px;border-radius:50%;display:inline-block"></span>'+g.label+'</div></button>';}).join("");}
+    if(typeof czBind==="function")czBind(mount);
+    var banner=odLabelBanner();
+    if(banner&&!w.querySelector("#od-label-banner")){tiles.insertAdjacentHTML("afterend",banner);odBindLabel(w);}
+  }
+  function odWrapDash(){
+    var base=window.renderDash3D;if(typeof base!=="function"||base.__od)return;
+    var wrapped=function(){var o=base.apply(this,arguments);try{odDashEnhance();}catch(e){console.warn("od dash",e);}return o;};
+    wrapped.__od=true;window.renderDash3D=wrapped;
+    try{czDashboard=wrapped;}catch(e){}
+  }
+
+  /* ---------- 3. Pipeline ---------- */
+  var OD_GROUPS=[
+    {key:"new",label:"New",ids:["new_lead"],drop:"new_lead",color:"#2f7de0"},
+    {key:"contacted",label:"Contacted",ids:["follow_up"],drop:"follow_up",color:"#0ea5e9"},
+    {key:"appt",label:"Appointment",ids:["appointment_scheduled"],drop:"appointment_scheduled",color:"#14b8a6"},
+    {key:"quoted",label:"Quoted",ids:["quoted"],drop:"quoted",color:"#8b5cf6"},
+    {key:"nurture",label:"Nurture · OE / 60+",ids:["sixty_plus","open_enrollment","affordable_care_act"],drop:"sixty_plus",color:"#f59e0b"},
+    {key:"sold",label:"Sold",ids:["sold"],drop:"sold",color:"#10b981"},
+    {key:"lost",label:"Lost",ids:["ghosted","no_longer_interested","disqualified"],drop:"no_longer_interested",color:"#94a3b8"}
+  ];
+  var OD_CAP=25;
+  czPipeResults=function(){
+    var box=$("cz-pipe-results");if(!box)return;
+    var cs=czFiltered();
+    var jump='<div class="od-jump">'+OD_GROUPS.map(function(g){var n=cs.filter(function(c){return g.ids.indexOf(c.stage)>=0;}).length;return '<button type="button" data-od-jump="'+g.key+'">'+g.label.split(" ·")[0]+' '+n+'</button>';}).join("")+'</div>';
+    box.innerHTML=jump+'<div class="cz-board" id="cz-board">'+OD_GROUPS.map(function(g){
+      var items=cs.filter(function(c){return g.ids.indexOf(c.stage)>=0;});
+      if(g.key==="sold"||g.key==="lost")items.sort(function(a,b){return (Number(b.updated)||0)-(Number(a.updated)||0);});
+      var total=items.reduce(function(a,c){return a+czVal(c);},0);
+      var shown=(g.key==="sold"||g.key==="lost")?items.slice(0,OD_CAP):items;
+      var body=items.length===0?'<div class="cz-empty-col">Drop here</div>':shown.map(function(c){
+        var fu=czFU(c);
+        var val=czVal(c)>0?'<span style="font-size:12px;font-weight:600;color:#047857;white-space:nowrap">'+money(czVal(c))+'</span>':'';
+        var contact=(c.phone||c.email)?'<div class="cz-sub" style="margin-top:4px">'+escapeHtml(c.phone||c.email)+'</div>':'';
+        var src='<div class="cz-sub" style="margin-top:3px;font-size:11px;color:#94a3b8">'+(c.source?escapeHtml(czSourceLabel(c.source)):'')+odBadge(c)+'</div>';
+        var sub=g.ids.length>1&&czMETA[c.stage]?'<span class="od-sub" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage].label)+'</span>':'';
+        var fup=fu.key!=="none"?'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+';margin-top:8px">'+fu.label+'</span>':'';
+        var resetBtn=czCLOSED.indexOf(c.stage)<0?'<button class="cz-iconbtn" data-cz-reset="'+c.id+'" title="Reset 14-day follow-up">↻</button>':'';
+        var opts=czSTAGES.map(function(st){return '<option value="'+st.id+'" '+(st.id===c.stage?"selected":"")+'>'+st.label+'</option>';}).join("");
+        var fuCls=fu.key==="overdue"?" cz-fu-overdue":(fu.key==="today"?" cz-fu-today":"");
+        var dates='<div class="cz-dates"><label class="cz-cdate'+fuCls+'" title="When to follow up next"><span>Follow up</span><input type="date" data-cz-fudate="'+c.id+'" value="'+escapeHtml(c.followUpDue||"")+'"/></label>'
+          +'<label class="cz-cdate'+(c.apptDate?' has-appt':'')+'" title="Appointment date and time"><span>Appt</span><input type="datetime-local" data-cz-apptdate="'+c.id+'" value="'+escapeHtml(c.apptDate||"")+'"/></label></div>';
+        return '<div class="cz-card od-card" draggable="true" data-cz-card="'+c.id+'"><div class="cz-ctop"><div class="cz-nm">'+escapeHtml(czName(c))+'</div>'+val+'</div>'+contact+src+sub+fup+'<div><button type="button" class="od-more" data-od-more="1">Dates &amp; stage ▾</button></div>'+dates+'<div class="cz-cctl"><select data-cz-stage="'+c.id+'">'+opts+'</select>'+resetBtn+'</div></div>';
+      }).join("")+(items.length>shown.length?'<div class="od-colmore">+'+(items.length-shown.length)+' more on the Leads page</div>':'');
+      return '<div class="cz-col" id="od-col-'+g.key+'" data-cz-drop="'+g.drop+'" data-od-group="'+g.key+'" style="border-top-color:'+g.color+'"><div class="cz-col-head"><div class="cz-row" style="gap:8px"><span class="cz-dot" style="background:'+g.color+'"></span><span style="font-size:14px;font-weight:600">'+g.label+'</span><span class="cz-faint" style="font-size:12px">'+items.length+'</span></div><span class="cz-faint" style="font-size:11px">'+money(total)+'</span></div><div class="cz-col-body">'+body+'</div></div>';
+    }).join("")+'</div>';
+    czBind(box);czBindPipe(box);
+    /* a card dropped into a group it is already in keeps its sub-stage */
+    box.querySelectorAll("[data-od-group]").forEach(function(col){
+      col.addEventListener("drop",function(){},true);
+      col.addEventListener("dragenter",function(){var g=OD_GROUPS.filter(function(x){return x.key===col.getAttribute("data-od-group");})[0];var c=czDragId&&getLeads().filter(function(x){return x.id===czDragId;})[0];col.setAttribute("data-cz-drop",(c&&g&&g.ids.indexOf(c.stage)>=0)?c.stage:g.drop);});
+    });
+    box.querySelectorAll("[data-od-more]").forEach(function(b){b.addEventListener("click",function(e){e.stopPropagation();var card=b.closest(".od-card");card.classList.toggle("open");b.innerHTML=card.classList.contains("open")?"Hide ▴":"Dates &amp; stage ▾";});});
+    box.querySelectorAll("[data-od-jump]").forEach(function(b){b.addEventListener("click",function(){var col=document.getElementById("od-col-"+b.getAttribute("data-od-jump"));if(col)col.scrollIntoView({behavior:"smooth",inline:"start",block:"nearest"});});});
+  };
+
+  /* ---------- 4. Sold leads missing from Active Clients ---------- */
+  function odLast10(v){return String(v||"").replace(/\D/g,"").slice(-10);}
+  function odMissingSold(){
+    var accts=getAccounts();var em={},ph={},ids={};
+    accts.forEach(function(a){if(a.email)em[String(a.email).trim().toLowerCase()]=1;var p=odLast10(a.phone);if(p.length===10)ph[p]=1;if(a._convertedFromLead)ids[a._convertedFromLead]=1;});
+    return getLeads().filter(function(c){if(c.stage!=="sold")return false;if(ids[c.id])return false;var e=String(c.email||"").trim().toLowerCase();if(e&&em[e])return false;var p=odLast10(c.phone);if(p.length===10&&ph[p])return false;return true;});
+  }
+  function odAccountsBanner(){
+    var panel=document.getElementById("p-accounts");if(!panel)return;
+    var old=document.getElementById("od-acc-banner");if(old)old.remove();
+    var miss=odMissingSold();if(!miss.length)return;
+    var div=document.createElement("div");div.className="od-banner";div.id="od-acc-banner";
+    div.innerHTML='<span class="od-sp"><b>'+miss.length+' sold leads are not in Active Clients.</b> They are part of your book for renewals and referrals. Adding them does not send them any text or email.</span><button class="od-btn" type="button">Add '+miss.length+' to Active Clients</button>';
+    var h=panel.querySelector("h3,h2");if(h&&h.nextSibling)h.parentNode.insertBefore(div,h.nextSibling.nextSibling||null);else panel.insertBefore(div,panel.firstChild);
+    div.querySelector("button").addEventListener("click",function(){
+      if(!confirm("Add "+miss.length+" sold leads to Active Clients?\n\nNo welcome texts, emails or GoHighLevel workflows are triggered. They will not have a portal login until you set one."))return;
+      var accts=getAccounts();
+      odMissingSold().forEach(function(l){var qv=czVal(l);accts.push({id:uid(),firstName:l.firstName||"",lastName:l.lastName||"",name:czName(l),email:l.email||"",phone:l.phone||"",dob:l.dob||"",address:l.address||"",city:l.city||"",state:l.state||"",zipcode:l.zipcode||l.zipCode||"",passwordHash:"",created:Date.now(),lastSignIn:0,status:"active",plan:(qv>0?{carrier:"",planName:"",effectiveDate:"",renewalDate:"",monthlyPremium:qv,notes:"Premium from quote value."}:null),quoteValue:qv,value:qv,photoDataUrl:"",documents:[],notes:l.notes||"",pipelineStatus:"sold",source:l.source||"",_convertedFromLead:l.id,_addedFromSoldSync:Date.now()});});
+      saveAccounts(accts);if(typeof renderAccounts==="function")renderAccounts();odAccountsBanner();
+    });
+  }
+  if(typeof renderAccounts==="function"){var _ra=renderAccounts;renderAccounts=function(){var o=_ra.apply(this,arguments);try{odAccountsBanner();}catch(e){}return o;};}
+
+  /* ---------- 5. My Tasks: month-by-month plan ---------- */
+  var OD_MONTHS={
+   "2026-09":["September 2026","Phase 1 · Set up","Get protected, organized and fast.",[["5 min","to call a new own lead"],["100%","of leads labeled Own or Agency"],["10","partner conversations started"]],["Read your agency contract: lead ownership, non-solicit, appointments, renewals.","Label every agency lead \"Bought lead\" (use the button on the Leads page).","Turn on new-lead alerts in the LeadConnector app.","Turn on the review request and referral workflows in GoHighLevel.","Apply for G2 health insurance ad certification (Florida only).","Request indexing for the 4 key pages in Search Console."],"every own lead called within 5 minutes for 2 straight weeks."],
+   "2026-10":["October 2026","Phase 1 · Set up","Get protected, organized and fast.",[["5 min","to call a new own lead"],["100%","past clients contacted for an OE review"],["10","partner conversations started"]],["Read your agency contract: lead ownership, non-solicit, appointments, renewals.","Label every agency lead \"Bought lead\" (use the button on the Leads page).","Turn on new-lead alerts plus the review and referral workflows.","Apply for G2 certification and request indexing for your 4 key pages.","Launch the $50 dental and vision ad test.","Open a separate savings account for your 3 to 6 month cushion.","Text every past client to book an Open Enrollment review."],"every own lead called within 5 minutes for 2 weeks, and every past client contacted."],
+   "2026-11":["November 2026","Phase 2 · Open Enrollment","Max the dialer. Catch every own lead.",[["10%","of sales from own leads"],["20","Google reviews total"],["25%","of every check saved"]],["Send the \"Open Enrollment is open\" text to opted-in past clients and leads.","Check Search Console: is the OE guide moving toward the top 5?","Review the dental and vision ad test. Keep or stop.","If G2 approved, apply for Google's health insurance advertiser program."],"10% of sales from own leads and 25% of commissions saved."],
+   "2026-12":["December 2026","Phase 2 · Open Enrollment","Beat the December 15 deadline.",[["20%","of sales from own leads"],["3 months","of expenses saved"],["5","active partners"]],["Dec 1 to 15: countdown posts (enroll by Dec 15 for Jan 1).","Dec 16: switch messaging to \"Enroll by Jan 15 for Feb 1\".","Add up 2026 sales by source. Write down your own-lead share.","Set your 2027 marketing budget."],"20% of December sales from own leads and 3 months saved."],
+   "2027-01":["January 2027","Phase 3 · Build","Close Open Enrollment. Keep every client.",[["90%+","of OE sales with first payment made"],["25+","Google reviews"],["15%","own-lead close rate"]],["Jan 16: thank-you text with your review link to every new client.","Switch website messaging to Special Enrollment.","Send Claude your Search Console export for title fixes.","Write your top 5 objections and best answers on one card."],"own-lead close rate 15%+ and 90% of OE clients paid."],
+   "2027-02":["February 2027","Phase 3 · Build","Tax season: CPAs and self-employed.",[["10","active partners"],["25%","of sales from own leads"],["1","small group quoted"]],["Make a one-page self-employed deduction handout for CPAs.","Add partner tracking links (/quote?ref=partnername).","One new website page for 1099 truck drivers at tax time.","Check whether health insurance ads are approved."],"25% of sales from own leads and 10 partners contacted."],
+   "2027-03":["March 2027","Phase 3 · Build","Groups and paid ads.",[["35%","of sales from own leads (trigger)"],["1","small group closed"],["$500","first health ad budget (if approved)"]],["Launch health ads on one niche.","Set up ad conversion tracking.","Q1 review: sales, close rate and best partner by source.","Decide if admin takes 15+ hours a week (assistant)."],"35% own leads and 15%+ close rate. If yes, start the shift in April."],
+   "2027-04":["April 2027","Phase 4 · Shift","Start cutting dialer hours, not income.",[["40%","of sales from own leads"],["-5 hrs","agency hours a week (if trigger hit)"],["2","groups in proposal"]],["Tell the agency your new schedule in writing.","Hire a part-time assistant if admin takes 15+ hours a week.","Record Loom videos of your 3 most repeated tasks.","Scale or stop ads based on cost per sale."],"40% own leads with no drop in income."],
+   "2027-05":["May 2027","Phase 4 · Shift","Be the face truckers and owners trust.",[["45%","of sales from own leads"],["12","videos this month"],["40+","Google reviews"]],["Update Google Business Profile with photos and weekly posts.","Ask 3 partners to link to your website.","Send Claude your Search Console export."],"45% own leads and a steady content habit."],
+   "2027-06":["June 2027","Phase 4 · Shift","The finish line check.",[["50%","of sales from own leads (trigger)"],["25%","own-lead close rate"],["6 months","of expenses saved"]],["Mid-year review: keep what works, cut what does not.","Final proposals for July 1 group renewals.","Plan your contract move for July."],"50% own leads for April, May and June."],
+   "2027-07":["July 2027","Phase 5 · Own it","Your own contracts.",[["60%","of sales from own leads"],["Own","carrier contracts in progress"],["Half","days on the dialer"]],["Apply for carrier contracts or your own FMO.","Confirm your own E&O covers your book.","Confirm with your attorney which clients and renewals are yours.","Write the 8 core SOPs."],"60% own leads and contract applications in."],
+   "2027-08":["August 2027","Phase 5 · Own it","Systems and your first real hire.",[["70%","of sales from own leads"],["1","assistant on your SOPs"],["<10 hrs","admin a week for you"]],["Hire or grow the assistant role.","Hand off document collection, CRM updates and review requests.","Build a weekly report the assistant fills in."],"70% own leads and under 10 hours of admin."],
+   "2027-09":["September 2027","Phase 5 · Own it","Get ready for Open Enrollment 2028.",[["80%","of sales from own leads"],["All","OE pages updated"],["100%","of your book scheduled"]],["Update OE pages once 2028 dates are announced.","Refresh titles with the latest Search Console export.","Plan the OE ad budget from your cost per sale."],"80% own leads and every client booked for a review."],
+   "2027-10":["October 2027","Phase 5 · Own it","Book review season.",[["90%","of sales from own leads"],["90%+","client retention"],["50+","Google reviews"]],["Load OE emails and texts for opted-in contacts.","Cross-sell dental and vision at every review.","Decide your final day on the agency dialer."],"90% own leads and your last dialer day set."],
+   "2027-11":["November 2027","Phase 5 · Own it","Your first Open Enrollment on your own.",[["100%","of sales from own leads"],["5 min","speed to lead at peak"],["Record","best sales month"]],["Track speed to lead daily.","Ask every new client for a review when the card arrives."],"100% of sales from own leads."],
+   "2027-12":["December 2027","Phase 5 · Own it","Off the dialer. Plan the agency.",[["100%","own leads for 3 months"],["6 months","of expenses saved"],["1","plan for your first agent"]],["Year review: sales and own-lead share by month.","Write your 2028 plan: first agent, team roles, lead budget.","Celebrate."],"100% own leads for 3 months and 6 months saved."]
+  };
+  function odMonthKey(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");}
+  function odMonthCard(){
+    var box=document.getElementById("gp-container");if(!box)return;
+    var key=odMonthKey(),m=OD_MONTHS[key];var old=document.getElementById("od-month");if(old)old.remove();
+    if(!m)return;
+    var store="vs_month_plan_"+key,done={};try{done=JSON.parse(localStorage.getItem(store)||"{}");}catch(e){}
+    var c=document.createElement("div");c.className="od-month";c.id="od-month";
+    var M=odMetrics();
+    c.innerHTML='<div class="mh"><div><div class="mt">'+m[0]+'</div><div class="th">'+m[2]+'</div></div><span class="ph">'+m[1]+'</span></div>'
+      +'<div class="gl">'+m[3].map(function(g){return '<div class="g"><b>'+escapeHtml(g[0])+'</b>'+escapeHtml(g[1])+'</div>';}).join("")+'</div>'
+      +'<div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#16447f;margin:6px 0 2px">One-time tasks this month</div>'
+      +m[4].map(function(t,i){var d=!!done[i];return '<label class="it'+(d?" done":"")+'"><input type="checkbox" data-od-mt="'+i+'"'+(d?" checked":"")+'><span>'+escapeHtml(t)+'</span></label>';}).join("")
+      +'<div class="chk"><b>Right now:</b> '+M.share+'% of this month\'s sales came from your own leads. <b>End-of-month check:</b> '+escapeHtml(m[5])+'</div>';
+    box.insertBefore(c,box.firstChild);
+    c.querySelectorAll("[data-od-mt]").forEach(function(cb){cb.addEventListener("change",function(){var i=cb.getAttribute("data-od-mt");if(cb.checked)done[i]=1;else delete done[i];try{localStorage.setItem(store,JSON.stringify(done));}catch(e){}cb.closest("label").classList.toggle("done",cb.checked);});});
+  }
+  var OD_ENGINE={1:["Build block · Clients",["Text 5 past clients: check in, ask for a referral or review","Follow up on every open referral"]],2:["Build block · Partners",["Reach out to 5 new partners (dispatch, factoring, CPAs, P&C agents)","Follow up with 2 partners you already contacted"]],3:["Build block · Small business",["Email 10 small businesses from your lists","Call anyone who opened twice"]],4:["Build block · Website",["Improve one website page or ask Claude for one","Check the New Lead column for web leads"]],5:["Build block · Scorecard",["Fill in the Friday scorecard: own leads, minutes to call, own-lead share","Pick one thing to fix next week"]]};
+  if(typeof gpBlocks==="function"){
+    gpBlocks=function(dow){
+      if(dow===0)return [{id:"sunday",s:"00:00",e:"23:59",title:"Sunday · Off",tag:"Rest",steps:[["00:00","Rest. Optional: batch-record 2 or 3 short videos for the week"]]}];
+      if(dow===6)return [{id:"satreview",s:"10:00",e:"11:00",title:"Saturday · Weekly review",tag:"Plan",steps:[["10:00","Check % of sales from own leads this week"],["10:20","Batch-record 2 or 3 short videos"],["10:40","List next week's partners and past clients to contact"]]}];
+      var eng=OD_ENGINE[dow]||OD_ENGINE[1];
+      var list=[
+        {id:"own",s:"07:30",e:"08:15",title:"Own leads first",tag:"Leads",steps:[["07:30","Call back every own lead from overnight (website, referral, partner, chat)"],["07:50","Reply to partner texts and emails"],["08:05","Check New Lead and today's callbacks in the portal"]]},
+        {id:"dial1",s:"08:30",e:"12:00",title:"Agency dialing",tag:"Dial",steps:[["08:30","Dial the agency's warm leads at full effort"],["10:00","Between calls: any new own lead gets a call within 5 minutes"],["11:45","After every sale today: ask for a referral"]]},
+        {id:"build",s:"12:00",e:"12:30",title:eng[0],tag:"Growth",steps:[["12:00",eng[1][0]],["12:20",eng[1][1]]]},
+        {id:"dial2",s:"12:30",e:"17:00",title:"Agency dialing",tag:"Dial",steps:[["12:30","Dial and callbacks at full effort"],["15:30","Own leads still get a call within 5 minutes"],["16:45","Referral ask on every sale"]]},
+        {id:"wrap",s:"17:00",e:"17:20",title:"Wrap-up",tag:"Plan",steps:[["17:00","Every lead has a source: Bought lead (agency) or where it really came from"],["17:10","Set tomorrow's callbacks"]]},
+        {id:"seen",s:"19:00",e:"19:30",title:"Be seen",tag:"Growth",steps:[["19:00","One LinkedIn post, short video, or helpful trucker-group answer"],["19:20","Review request text to this week's sold clients"]]}
+      ];
+      if(typeof GP_BREAKFAST!=="undefined")list.splice(4,0,GP_BREAKFAST);
+      return list.sort(function(a,b){return gpMin(a.s)-gpMin(b.s);});
+    };
+  }
+  if(typeof renderGamePlan==="function"){
+    var _rgp=renderGamePlan;
+    renderGamePlan=function(){
+      var o=_rgp.apply(this,arguments);
+      try{
+        var box=document.getElementById("gp-container");
+        var eb=box&&box.querySelector(".gp-eyebrow");if(eb){var m=OD_MONTHS[odMonthKey()];eb.textContent="Off the Dialer · Daily plan"+(m?" · "+m[1]:"");}
+        var cnt=box&&box.querySelector(".gp-cnt");if(cnt)cnt.innerHTML=cnt.innerHTML.replace(/<b style="color:#c0392b">(\d+) behind<\/b>/,'<b style="color:#5a6b80">$1 to catch up</b>');
+        odMonthCard();
+      }catch(e){}
+      return o;
+    };
+  }
+
+  /* ---------- 6. Navigation, Settings, Referrals ---------- */
+  function odNav(){
+    var nav=document.getElementById("sidebar-nav");if(!nav)return;
+    function btn(t){return nav.querySelector('.sidebar-nav-item[data-tab="'+t+'"]');}
+    var leads=btn("leads"),biz=btn("bizleads"),dash=btn("dashboard"),mt=btn("mytasks");
+    if(leads&&biz&&leads.nextElementSibling!==biz)leads.insertAdjacentElement("afterend",biz);
+    if(dash&&mt&&dash.nextElementSibling!==mt)dash.insertAdjacentElement("afterend",mt);
+    var menu=document.querySelector(".vs-acct-menu"),blocked=document.querySelector('.sidebar-nav-item[data-tab="blocked"]');
+    if(menu&&blocked&&blocked.parentNode!==menu){var dv=menu.querySelector(".vs-acct-div");if(dv)menu.insertBefore(blocked,dv);else menu.appendChild(blocked);}
+  }
+  function odSettingsNav(){
+    var p=document.getElementById("p-settings");if(!p||document.getElementById("od-setnav"))return;
+    var h=p.querySelector("h3");if(!h)return;
+    var targets=[["Calling","vs-dialer-card"],["Notifications","snd-toggle"],["Account","pw-form"],["Data","wh-form"],["History","vs-history-card"]];
+    var nv=document.createElement("div");nv.className="od-setnav";nv.id="od-setnav";
+    targets.forEach(function(t){var b=document.createElement("button");b.type="button";b.textContent=t[0];b.addEventListener("click",function(){var e=document.getElementById(t[1]);if(e){var card=e.closest(".card")||e;card.scrollIntoView({behavior:"smooth",block:"start"});}});nv.appendChild(b);});
+    h.insertAdjacentElement("afterend",nv);
+  }
+  function odReferrals(){
+    var p=document.getElementById("p-referrals");if(!p)return;
+    var n=getAccounts().filter(function(a){return (a.status||"active")!=="revoked";}).length;
+    var ex=document.getElementById("od-refcard");if(ex){var nb=ex.querySelector("[data-od-n]");if(nb)nb.textContent=n;return;}
+    var c=document.createElement("div");c.className="od-refcard";c.id="od-refcard";
+    var msg="Hi {first name}, it's Bradley at VS Health Benefits. Glad you're covered! Who else do you know who's self-employed, driving for a living, or paying too much for health insurance? I'll take great care of them too.";
+    c.innerHTML='<div style="font-weight:800;color:#0b2346;font-size:15px">Ask your book for referrals</div><div style="font-size:13px;color:#5a6b80;margin-top:2px">You have <b data-od-n>'+n+'</b> active clients. Text 5 of them every Monday. Copy this message:</div><textarea readonly>'+escapeHtml(msg)+'</textarea><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="od-btn" type="button" data-od-copy>Copy message</button><button class="od-btn soft" type="button" data-cz-go="accounts">Open Active Clients</button></div>';
+    var h=p.querySelector("h3");if(h)h.insertAdjacentElement("afterend",c);else p.insertBefore(c,p.firstChild);
+    c.querySelector("[data-od-copy]").addEventListener("click",function(){var t=c.querySelector("textarea");t.select();try{navigator.clipboard.writeText(t.value);}catch(e){document.execCommand("copy");}this.textContent="Copied";});
+    c.querySelector("[data-cz-go]").addEventListener("click",function(){switchTab("accounts");});
+  }
+  if(typeof renderReferrals==="function"){var _rr=renderReferrals;renderReferrals=function(){var o=_rr.apply(this,arguments);try{odReferrals();}catch(e){}return o;};}
+  if(typeof renderSettings==="function"){var _rs=renderSettings;renderSettings=function(){var o=_rs.apply(this,arguments);setTimeout(function(){try{odSettingsNav();}catch(e){}},50);return o;};}
+
+  function odBoot(){try{odWrapDash();}catch(e){}try{odNav();}catch(e){}
+    try{var a=document.querySelector(".panel.active");if(a&&a.id==="p-dashboard"&&typeof window.renderDash3D==="function")window.renderDash3D();if(a&&a.id==="p-pipeline")czPipeResults();}catch(e){}}
+  setTimeout(odBoot,0);setTimeout(odBoot,900);setTimeout(odBoot,2200);
+})();}catch(err){if(window.console)console.warn("off-dialer update failed",err);}
 })();
 </script>
 <script>
