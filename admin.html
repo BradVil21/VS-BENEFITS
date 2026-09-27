@@ -8356,6 +8356,163 @@ try{(function(){
   function od2Boot(){try{od2Speed();}catch(e){}try{var a=document.querySelector(".panel.active");if(a&&a.id==="p-accounts")od2OE();}catch(e){}}
   setTimeout(od2Boot,1200);setTimeout(od2Boot,3000);
 })();}catch(err){if(window.console)console.warn("off-dialer part 2 failed",err);}
+/* ═══════════════ BUSINESS LEADS BOARD, REDESIGNED (added Sept 27 2026) ═══════════════
+   Same data and stages as before. Adds a numbers strip, quick filters, follow-up
+   status on every card, days since last touch, the latest note, one-click Call /
+   Email / Next step, and tucks Lost deals behind a toggle so the board fits the screen. */
+try{(function(){
+  if(typeof renderBizLeads!=="function")return;
+  var S=document.createElement("style");S.id="bz-style";S.textContent=[
+  "#p-bizleads .bz-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:4px 0 14px}",
+  "@media(max-width:1000px){#p-bizleads .bz-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:560px){#p-bizleads .bz-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
+  "#p-bizleads .bz-kpi{background:#fff;border:1px solid #e4e9f2;border-radius:14px;padding:12px 14px;box-shadow:0 1px 3px rgba(11,35,70,.05)}",
+  "#p-bizleads .bz-kpi .n{font-size:24px;font-weight:900;color:#0b2346;line-height:1.1}",
+  "#p-bizleads .bz-kpi .l{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#5a6b80;margin-top:4px}",
+  "#p-bizleads .bz-kpi .s{font-size:11.5px;color:#5a6b80;margin-top:2px}",
+  "#p-bizleads .bz-kpi.warn .n{color:#be123c}#p-bizleads .bz-kpi.good .n{color:#047857}",
+  "#p-bizleads .bz-chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;align-items:center}",
+  "#p-bizleads .bz-chip{border:1px solid #d8e0ee;background:#fff;color:#334155;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}",
+  "#p-bizleads .bz-chip b{font-weight:800;color:#5a6b80;margin-left:4px}",
+  "#p-bizleads .bz-chip.on{background:#0b2346;border-color:#0b2346;color:#fff}#p-bizleads .bz-chip.on b{color:#9fd8d2}",
+  "#p-bizleads .bz-chip.lost{margin-left:auto}",
+  "#p-bizleads .bz-board{display:grid;grid-template-columns:repeat(var(--bzcols,5),minmax(0,1fr));gap:12px;align-items:start}",
+  "@media(max-width:1100px){#p-bizleads .bz-board{grid-template-columns:repeat(var(--bzcols,5),minmax(250px,1fr));overflow-x:auto;padding-bottom:8px}}",
+  "#p-bizleads .bz-col{background:#f3f6fb;border-radius:14px;padding:8px;border-top:3px solid #94a3b8;min-height:90px}",
+  "#p-bizleads .bz-col.hot{outline:2px dashed #16447f;outline-offset:-2px}",
+  "#p-bizleads .bz-colhd{display:flex;align-items:center;gap:7px;padding:4px 6px 9px;font-weight:800;color:#0b2346;font-size:13.5px}",
+  "#p-bizleads .bz-colhd .dot{width:8px;height:8px;border-radius:50%}",
+  "#p-bizleads .bz-colhd .c{background:#fff;border-radius:999px;padding:0 8px;font-size:11.5px;color:#5a6b80}",
+  "#p-bizleads .bz-colhd .ee{margin-left:auto;font-size:11px;color:#047857;font-weight:800}",
+  "#p-bizleads .bz-card{background:#fff;border:1px solid #e4e9f2;border-radius:12px;padding:11px 12px;margin-bottom:8px;cursor:pointer;box-shadow:0 1px 2px rgba(11,35,70,.05);transition:box-shadow .15s,border-color .15s}",
+  "#p-bizleads .bz-card:hover{border-color:#9db8dc;box-shadow:0 6px 16px rgba(11,35,70,.08)}",
+  "#p-bizleads .bz-top{display:flex;gap:8px;align-items:flex-start}",
+  "#p-bizleads .bz-co{font-weight:800;color:#0b2346;font-size:14px;line-height:1.25;flex:1;min-width:0;word-break:break-word}",
+  "#p-bizleads .bz-ee{font-size:11px;font-weight:800;color:#047857;background:#ecfdf5;border-radius:999px;padding:2px 8px;white-space:nowrap}",
+  "#p-bizleads .bz-sub{font-size:12px;color:#5a6b80;margin-top:3px;line-height:1.35}",
+  "#p-bizleads .bz-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}",
+  "#p-bizleads .bz-tag{font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:999px;white-space:nowrap}",
+  "#p-bizleads .bz-tag.late{background:#ffe4e6;color:#be123c}#p-bizleads .bz-tag.today{background:#fef3c7;color:#92400e}#p-bizleads .bz-tag.soon{background:#eef2f8;color:#475569}",
+  "#p-bizleads .bz-tag.none{background:#fff7ed;color:#c2410c}#p-bizleads .bz-tag.idle{background:#f1f5f9;color:#64748b}#p-bizleads .bz-tag.src{background:#f1f5f9;color:#64748b;font-weight:700}",
+  "#p-bizleads .bz-note{margin-top:8px;font-size:12px;color:#334155;background:#f6f8fc;border-radius:8px;padding:6px 8px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}",
+  "#p-bizleads .bz-acts{display:flex;gap:5px;margin-top:9px;align-items:center}",
+  "#p-bizleads .bz-b{display:inline-flex;align-items:center;border:1px solid #d8e0ee;background:#fff;color:#16447f;border-radius:8px;padding:5px 9px;font-size:11.5px;font-weight:700;cursor:pointer;text-decoration:none;font-family:inherit;white-space:nowrap}",
+  "#p-bizleads .bz-b:hover{border-color:#16447f;text-decoration:none}",
+  "#p-bizleads .bz-b.next{margin-left:auto;background:#0b2346;border-color:#0b2346;color:#fff}",
+  "#p-bizleads .bz-b.won{margin-left:auto;background:#047857;border-color:#047857;color:#fff}",
+  "#p-bizleads .bz-empty{font-size:12px;color:#94a3b8;text-align:center;padding:16px 6px;border:1px dashed #d8e0ee;border-radius:10px;background:#fff}",
+  "#p-bizleads .bz-jump{display:none;gap:6px;overflow-x:auto;margin:0 0 10px;padding-bottom:2px}",
+  "@media(max-width:700px){#p-bizleads .bz-jump{display:flex}}",
+  "#p-bizleads .bz-jump button{flex:0 0 auto;border:1px solid #d8e0ee;background:#fff;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700;color:#0b2346;font-family:inherit}"
+  ].join("");document.head.appendChild(S);
+
+  var D=864e5,bzFilter="all",bzShowLost=false;
+  function esc(s){return escapeHtml(s==null?"":String(s));}
+  function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+  function eeNum(v){var m=String(v||"").match(/\d+/g);if(!m)return 0;var a=m.map(Number).filter(function(x){return x>0&&x<5000;});if(!a.length)return 0;return Math.round(a.reduce(function(s,x){return s+x;},0)/a.length);}
+  function isOpen(b){var s=b.stage||"prospect";return s!=="won"&&s!=="lost";}
+  function fuState(b){if(!isOpen(b))return null;var d=b.nextFollowUp;if(!d)return "none";var t=ymd(new Date());if(d<t)return "late";if(d===t)return "today";return "soon";}
+  function fuLabel(b){var st=fuState(b);if(!st)return "";if(st==="none")return "No next step set";
+    var dt=new Date(b.nextFollowUp+"T12:00:00"),days=Math.round((dt-new Date(ymd(new Date())+"T12:00:00"))/D);
+    var pretty=dt.toLocaleDateString(undefined,{month:"short",day:"numeric"});
+    if(st==="late")return "Follow-up "+(-days)+(days===-1?" day":" days")+" late";
+    if(st==="today")return "Follow up today";
+    return "Follow up "+pretty+(days<=7?" ("+days+"d)":"");}
+  function touched(b){return Number(b.stageAt)||Number(b.updated)||Number(b.created)||0;}
+  function lastNote(b){var n=String(b.notes||"").trim();if(!n)return "";var line=n.split(/\n+/).filter(function(x){return x.trim();})[0]||"";return line.replace(/^\[[^\]]*\]\s*/,"").trim();}
+  function nextStage(id){var ids=BIZ_STAGES.map(function(s){return s.id;});var i=ids.indexOf(id||"prospect");if(i<0||id==="won"||id==="lost")return null;var n=ids[i+1];return n==="lost"?null:n;}
+  function title(s){s=String(s||"").trim();if(s&&(s===s.toUpperCase()||s===s.toLowerCase())&&/[a-z]/i.test(s))return s.toLowerCase().replace(/(^|[\s'\-&\/])([a-z])/g,function(m,p,c){return p+c.toUpperCase();});return s;}
+  var FILTERS=[["all","All open"],["due","Needs follow-up"],["none","No next step"],["proposal","Proposals out"],["mine","From website"]];
+  function passes(b,f){
+    if(f==="all")return true;
+    if(f==="due"){var s=fuState(b);return s==="late"||s==="today";}
+    if(f==="none")return fuState(b)==="none";
+    if(f==="proposal")return (b.stage||"prospect")==="proposal";
+    if(f==="mine")return /website|index-funnel|organic|google|webchat|phone-ai/i.test(String(b.source||""));
+    return true;
+  }
+
+  var _set=bizSetStage;
+  bizSetStage=function(id,stage){
+    var arr=getBizLeads();arr.forEach(function(b){if(b.id===id&&(b.stage||"prospect")!==stage){b.stageAt=Date.now();if(stage==="won")b.wonAt=Date.now();}});saveBizLeads(arr);
+    return _set.apply(this,arguments);
+  };
+
+  renderBizLeads=function(){
+    var box=$("biz-list");if(!box)return;
+    var all=getBizLeads();
+    var bdg=$("b-biz");if(bdg){var openN=all.filter(isOpen).length;bdg.textContent=openN;bdg.style.display=openN>0?"":"none";}
+    var panel=$("p-bizleads");
+    var lede=panel&&panel.querySelector("p.lede");if(lede&&!lede.__bz){lede.__bz=1;lede.textContent="Every small-group and partner deal from first call to signed. Click a card for details, drag it, or use Next step to move it along.";}
+    var q=(($("biz-search")&&$("biz-search").value)||"").toLowerCase().trim();
+    var searched=all.filter(function(b){return !q||[b.company,b.contact,b.email,b.phone,b.niche,b.notes].join(" ").toLowerCase().indexOf(q)>=0;});
+    var open=all.filter(isOpen);
+    var yr=new Date().getFullYear();
+    var wonYr=all.filter(function(b){return b.stage==="won"&&new Date(Number(b.wonAt)||Number(b.updated)||Number(b.created)||0).getFullYear()===yr;});
+    var lostN=all.filter(function(b){return b.stage==="lost";}).length;
+    var closed=wonYr.length+all.filter(function(b){return b.stage==="lost"&&new Date(Number(b.stageAt)||Number(b.updated)||0).getFullYear()===yr;}).length;
+    var due=open.filter(function(b){var s=fuState(b);return s==="late"||s==="today";}).length;
+    var eeOpen=open.reduce(function(s,b){return s+eeNum(b.employees);},0);
+    var props=open.filter(function(b){return b.stage==="proposal";});
+
+    /* top strip + filters, kept above the board */
+    var top=$("bz-top");
+    if(!top){top=document.createElement("div");top.id="bz-top";box.parentNode.insertBefore(top,box);}
+    function kpi(cls,n,l,s){return '<div class="bz-kpi '+cls+'"><div class="n">'+n+'</div><div class="l">'+l+'</div>'+(s?'<div class="s">'+s+'</div>':'')+'</div>';}
+    top.innerHTML='<div class="bz-kpis">'
+      +kpi("",open.length,"Open deals",eeOpen?("About "+eeOpen+" employees to cover"):"")
+      +kpi("",props.length,"Proposals out",props.length?"Close these first":"")
+      +kpi(due?"warn":"good",due,"Follow-ups due",due?"Late or due today":"All caught up")
+      +kpi(open.filter(function(b){return fuState(b)==="none";}).length?"warn":"",open.filter(function(b){return fuState(b)==="none";}).length,"No next step","Set a follow-up date")
+      +kpi("good",wonYr.length,"Won in "+yr,closed?Math.round(wonYr.length/closed*100)+"% win rate":"")
+      +'</div><div class="bz-chips">'
+      +FILTERS.map(function(f){var n=searched.filter(function(b){return isOpen(b)&&passes(b,f[0]);}).length;return '<button type="button" class="bz-chip'+(bzFilter===f[0]?" on":"")+'" data-bzf="'+f[0]+'">'+f[1]+'<b>'+n+'</b></button>';}).join("")
+      +'<button type="button" class="bz-chip lost'+(bzShowLost?" on":"")+'" data-bzlost>'+(bzShowLost?"Hide lost":"Show lost")+'<b>'+lostN+'</b></button></div>';
+    top.querySelectorAll("[data-bzf]").forEach(function(b){b.addEventListener("click",function(){bzFilter=b.getAttribute("data-bzf");renderBizLeads();});});
+    top.querySelector("[data-bzlost]").addEventListener("click",function(){bzShowLost=!bzShowLost;renderBizLeads();});
+
+    var stages=BIZ_STAGES.filter(function(s){return bzShowLost||s.id!=="lost";});
+    var ids=BIZ_STAGES.map(function(x){return x.id;});
+    var cs=searched.filter(function(b){return bzFilter==="all"||(isOpen(b)&&passes(b,bzFilter));});
+    var jump='<div class="bz-jump">'+stages.map(function(s){var n=cs.filter(function(b){var st=ids.indexOf(b.stage)>=0?b.stage:"prospect";return st===s.id;}).length;return '<button type="button" data-bzjump="'+s.id+'">'+s.label+' '+n+'</button>';}).join("")+'</div>';
+    box.innerHTML=jump+'<div class="bz-board" id="biz-board" style="--bzcols:'+stages.length+'">'+stages.map(function(s){
+      var items=cs.filter(function(b){var st=ids.indexOf(b.stage)>=0?b.stage:"prospect";return st===s.id;});
+      items.sort(function(a,b){var fa=a.nextFollowUp||"9999",fb=b.nextFollowUp||"9999";if(s.id==="won"||s.id==="lost")return touched(b)-touched(a);return fa<fb?-1:fa>fb?1:touched(a)-touched(b);});
+      var ee=items.reduce(function(t,b){return t+eeNum(b.employees);},0);
+      var body=items.length?items.map(function(b){
+        var st=b.stage||"prospect",fs=fuState(b),idle=Math.floor((Date.now()-touched(b))/D);
+        var tags='';
+        if(fs)tags+='<span class="bz-tag '+fs+'">'+esc(fuLabel(b))+'</span>';
+        if(isOpen(b)&&idle>=14)tags+='<span class="bz-tag idle">Quiet '+idle+' days</span>';
+        if(b.source)tags+='<span class="bz-tag src">'+esc(czSourceLabel(b.source))+'</span>';
+        var note=lastNote(b);
+        var tel=b.phone?String(b.phone).replace(/[^0-9+]/g,""):"";
+        var nx=nextStage(st);
+        return '<div class="bz-card" draggable="true" data-bizcard="'+esc(b.id)+'"><div class="bz-top"><div class="bz-co">'+esc(title(b.company)||"(no company)")+'</div>'+(b.employees?'<span class="bz-ee">'+esc(b.employees)+' EEs</span>':'')+'</div>'
+          +'<div class="bz-sub">'+esc([title(b.contact),b.niche].filter(Boolean).join(" · "))+(b.phone?'<br>'+esc(b.phone):(b.email?'<br>'+esc(b.email):''))+'</div>'
+          +(tags?'<div class="bz-tags">'+tags+'</div>':'')
+          +(note?'<div class="bz-note">'+esc(note)+'</div>':'')
+          +'<div class="bz-acts">'+(tel?'<a class="bz-b" href="tel:'+esc(tel)+'">Call</a>':'')+(b.email?'<a class="bz-b" href="mailto:'+esc(b.email)+'">Email</a>':'')
+          +(nx?'<button type="button" class="bz-b '+(nx==="won"?"won":"next")+'" data-bznext="'+esc(b.id)+'" data-to="'+nx+'">'+(nx==="won"?"Mark won":"Next: "+esc(bizStageMeta(nx).label))+'</button>':'')+'</div></div>';
+      }).join(""):'<div class="bz-empty">'+(s.id==="prospect"?"No new prospects. Add one or import a list.":"Drag a card here")+'</div>';
+      return '<div class="bz-col" id="bzcol-'+s.id+'" data-bizdrop="'+s.id+'" style="border-top-color:'+s.color+'"><div class="bz-colhd"><span class="dot" style="background:'+s.color+'"></span>'+s.label+'<span class="c">'+items.length+'</span>'+(ee?'<span class="ee">~'+ee+' EEs</span>':'')+'</div>'+body+'</div>';
+    }).join("")+'</div>';
+
+    box.querySelectorAll("[data-bzjump]").forEach(function(b){b.addEventListener("click",function(){var c=$("bzcol-"+b.getAttribute("data-bzjump"));if(c)c.scrollIntoView({behavior:"smooth",block:"nearest",inline:"start"});});});
+    box.querySelectorAll("[data-bizcard]").forEach(function(card){
+      var id=card.getAttribute("data-bizcard");
+      card.addEventListener("click",function(e){if(bizDragging)return;if(e.target.closest("select,button,a,option"))return;var b=getBizLeads().filter(function(x){return x.id===id;})[0];if(b)openBizLeadForm(b);});
+      card.addEventListener("dragstart",function(e){bizDragId=id;bizDragging=true;card.style.opacity="0.4";try{e.dataTransfer.setData("text/plain",id);e.dataTransfer.effectAllowed="move";}catch(_){}});
+      card.addEventListener("dragend",function(){card.style.opacity="";bizDragId=null;setTimeout(function(){bizDragging=false;},60);});
+    });
+    box.querySelectorAll("[data-bznext]").forEach(function(b){b.addEventListener("click",function(e){e.stopPropagation();bizSetStage(b.getAttribute("data-bznext"),b.getAttribute("data-to"));});});
+    box.querySelectorAll("[data-bizdrop]").forEach(function(col){
+      col.addEventListener("dragover",function(e){e.preventDefault();try{e.dataTransfer.dropEffect="move";}catch(_){}col.classList.add("hot");});
+      col.addEventListener("dragleave",function(){col.classList.remove("hot");});
+      col.addEventListener("drop",function(e){e.preventDefault();col.classList.remove("hot");var stage=col.getAttribute("data-bizdrop");var id=bizDragId;bizDragId=null;if(id&&stage)bizSetStage(id,stage);});
+    });
+  };
+  setTimeout(function(){try{var p=$("p-bizleads");if(p&&p.classList.contains("active"))renderBizLeads();}catch(e){}},1500);
+})();}catch(err){if(window.console)console.warn("business leads redesign failed",err);}
 })();
 </script>
 <script>
