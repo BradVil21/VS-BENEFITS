@@ -6599,7 +6599,10 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
       arr.forEach(function(a){
         if(a.id===id){
           var base={funds:false,supportManual:false,stage:"open",note:"",updated:0};
+          var prev=a.assist||{};var wasOn=(prev.funds||prev.supportManual)&&prev.stage!=="resolved";
           a.assist=Object.assign(base,a.assist||{},patch,{updated:Date.now()});
+          /* remember when a case starts so the board can show how long it has been open */
+          if(((patch.funds===true||patch.supportManual===true)&&!wasOn)||(patch.stage==="open"&&prev.stage==="resolved"))a.assist.opened=Date.now();
           /* newly flagging a resolved client re-opens their case */
           if((patch.funds===true||patch.supportManual===true)&&a.assist.stage==="resolved")a.assist.stage="open";
           changed=true;
@@ -6684,191 +6687,204 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
       return wrap;
     }
 
+    /* ── NEEDS HELP BOARD (redesigned Sept 27 2026) ──
+       Three columns (Open, In progress, Resolved) with compact cards. Each card shows
+       why the client needs help, how long the case has been open, the latest update,
+       an optional payment deadline, and one button to move it to the next step.
+       Notes, flags and client actions open under "Details". Same data as before. */
+    var AX_OPEN={}, AX_SHOW_RESOLVED=8;
+    var AX_CSS=document.createElement("style");AX_CSS.textContent=[
+     "#p-assist .ax-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:6px 0 16px}",
+     "@media(max-width:1000px){#p-assist .ax-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:560px){#p-assist .ax-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
+     "#p-assist .ax-kpi{background:#fff;border:1px solid #e4e9f2;border-radius:14px;padding:12px 14px;text-align:left;cursor:pointer;font-family:inherit;box-shadow:0 1px 3px rgba(11,35,70,.05)}",
+     "#p-assist .ax-kpi:hover{border-color:#9db8dc}#p-assist .ax-kpi.on{border-color:#0b2346;box-shadow:0 0 0 2px #0b2346 inset}",
+     "#p-assist .ax-kpi .n{font-size:24px;font-weight:900;color:#0b2346;line-height:1.1}",
+     "#p-assist .ax-kpi .l{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#5a6b80;margin-top:4px}",
+     "#p-assist .ax-kpi.k-funds .n{color:#b91c1c}#p-assist .ax-kpi.k-support .n{color:#b45309}#p-assist .ax-kpi.k-stale .n{color:#be123c}#p-assist .ax-kpi.k-done .n{color:#047857}",
+     "#p-assist .ax-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}",
+     "#p-assist .ax-tools .asst-search{flex:1 1 220px}",
+     "#p-assist .ax-flagbtn{background:#0b2346;color:#fff;border:0;border-radius:10px;padding:9px 14px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit}",
+     "#p-assist .ax-flag{background:#fff;border:1px solid #e4e9f2;border-radius:14px;padding:12px 14px;margin:-4px 0 14px;box-shadow:0 8px 24px rgba(11,35,70,.08)}",
+     "#p-assist .ax-flag .asst-search{width:100%;box-sizing:border-box}",
+     "#p-assist #asst-list.ax-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}",
+     "@media(max-width:1100px){#p-assist #asst-list.ax-board{grid-template-columns:1fr}}",
+     "#p-assist .ax-col{background:#f3f6fb;border-radius:16px;padding:10px;min-height:120px}",
+     "#p-assist .ax-colhd{display:flex;align-items:center;gap:8px;padding:4px 6px 10px;font-weight:800;color:#0b2346;font-size:14px}",
+     "#p-assist .ax-colhd .dot{width:9px;height:9px;border-radius:50%}",
+     "#p-assist .ax-colhd .c{background:#fff;border-radius:999px;padding:1px 9px;font-size:12px;color:#5a6b80;font-weight:800}",
+     "#p-assist .ax-colhd .h{margin-left:auto;font-size:11.5px;color:#5a6b80;font-weight:600}",
+     "#p-assist .ax-card{background:#fff;border:1px solid #e4e9f2;border-left:4px solid #94a3b8;border-radius:12px;padding:12px 13px;margin-bottom:10px;box-shadow:0 1px 2px rgba(11,35,70,.05)}",
+     "#p-assist .ax-card.r-funds{border-left-color:#dc2626}#p-assist .ax-card.r-support{border-left-color:#d97706}#p-assist .ax-card.r-done{border-left-color:#10b981;opacity:.85}",
+     "#p-assist .ax-top{display:flex;gap:10px;align-items:flex-start}",
+     "#p-assist .ax-av{width:36px;height:36px;flex:0 0 36px;border-radius:50%;background:#e8f1fd;color:#1d4ed8;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}",
+     "#p-assist .ax-nm{font-weight:800;color:#0b2346;font-size:14.5px;line-height:1.25}",
+     "#p-assist .ax-sub{font-size:12px;color:#5a6b80;margin-top:1px;word-break:break-word}",
+     "#p-assist .ax-prem{margin-left:auto;font-weight:800;font-size:12.5px;color:#16447f;white-space:nowrap}",
+     "#p-assist .ax-tags{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0 0;align-items:center}",
+     "#p-assist .ax-tag{font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px}",
+     "#p-assist .ax-tag.funds{background:#fee2e2;color:#991b1b}#p-assist .ax-tag.support{background:#fff4e1;color:#8a5000}",
+     "#p-assist .ax-tag.age{background:#eef2f8;color:#475569}#p-assist .ax-tag.stale{background:#ffe4e6;color:#be123c}#p-assist .ax-tag.due{background:#fef3c7;color:#92400e}#p-assist .ax-tag.late{background:#be123c;color:#fff}",
+     "#p-assist .ax-last{margin-top:9px;background:#f6f8fc;border-radius:9px;padding:7px 10px;font-size:12.5px;color:#334155;line-height:1.35}",
+     "#p-assist .ax-last .w{display:block;font-size:11px;color:#8391a7;margin-top:2px}",
+     "#p-assist .ax-acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}",
+     "#p-assist .ax-b{display:inline-flex;align-items:center;gap:5px;border:1px solid #d8e0ee;background:#fff;color:#16447f;border-radius:8px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;font-family:inherit}",
+     "#p-assist .ax-b:hover{border-color:#16447f;text-decoration:none}",
+     "#p-assist .ax-b.go{margin-left:auto;background:#0b2346;border-color:#0b2346;color:#fff}",
+     "#p-assist .ax-b.done{margin-left:auto;background:#047857;border-color:#047857;color:#fff}",
+     "#p-assist .ax-det{margin-top:10px;border-top:1px dashed #e4e9f2;padding-top:10px}",
+     "#p-assist .ax-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px;font-size:12px;color:#5a6b80}",
+     "#p-assist .ax-row input[type=date]{border:1px solid #d8e0ee;border-radius:8px;padding:5px 8px;font:inherit;font-size:12px}",
+     "#p-assist .ax-tgl{border:1px solid #d8e0ee;background:#fff;border-radius:999px;padding:4px 10px;font-size:11.5px;font-weight:700;cursor:pointer;color:#334155;font-family:inherit}",
+     "#p-assist .ax-tgl.on.f{background:#fee2e2;border-color:#fca5a5;color:#991b1b}#p-assist .ax-tgl.on.s{background:#fff4e1;border-color:#f5c26b;color:#8a5000}",
+     "#p-assist .ax-notes{max-height:190px;overflow:auto;display:flex;flex-direction:column;gap:6px}",
+     "#p-assist .ax-note{border-left:3px solid #16447f;background:#f6f8fc;border-radius:6px;padding:6px 9px;font-size:12.5px;color:#1f2d3d}",
+     "#p-assist .ax-note .w{display:block;font-size:11px;color:#8391a7;margin-top:2px}",
+     "#p-assist .ax-noterow{display:flex;gap:6px;margin-top:8px}",
+     "#p-assist .ax-noterow input{flex:1;min-width:0;border:1px solid #d8e0ee;border-radius:8px;padding:7px 9px;font:inherit;font-size:12.5px}",
+     "#p-assist .ax-empty{font-size:12.5px;color:#8391a7;text-align:center;padding:18px 8px;border:1px dashed #d8e0ee;border-radius:12px;background:#fff}",
+     "#p-assist .ax-more{width:100%;border:0;background:none;color:#16447f;font-weight:700;font-size:12.5px;cursor:pointer;padding:6px;font-family:inherit}",
+     "html.dark #p-assist .ax-col{background:#132030}html.dark #p-assist .ax-card,html.dark #p-assist .ax-kpi,html.dark #p-assist .ax-flag,html.dark #p-assist .ax-empty{background:#1c2d42;border-color:#253a54}",
+     "html.dark #p-assist .ax-nm,html.dark #p-assist .ax-kpi .n,html.dark #p-assist .ax-colhd{color:#e2ecf9}html.dark #p-assist .ax-last,html.dark #p-assist .ax-note{background:#162334;color:#d4e8ff}",
+     "html.dark #p-assist .ax-b,html.dark #p-assist .ax-tgl{background:#22364f;border-color:#2f4763;color:#93c5fd}html.dark #p-assist .ax-colhd .c{background:#22364f}"
+    ].join("");document.head.appendChild(AX_CSS);
+
+    var AXD=864e5;
+    function axEsc(s){return (typeof escapeHtml==="function")?escapeHtml(s==null?"":String(s)):String(s==null?"":s);}
+    function axTitle(s){s=String(s||"").trim();if(!s)return s;if(s===s.toUpperCase()||s===s.toLowerCase())return s.toLowerCase().replace(/(^|[\s'\-])([a-z])/g,function(m,p,c){return p+c.toUpperCase();});return s;}
+    function axName(a){return axTitle((typeof fullName==="function")?fullName(a):(a.firstName||a.email||"Client"));}
+    function axInit(a){var p=axName(a).split(/\s+/);return ((p[0]||"").charAt(0)+(p[1]||"").charAt(0)).toUpperCase()||"?";}
+    function axLog(a){var lg=(a.assist&&a.assist.noteLog)?a.assist.noteLog.slice():[];if(!lg.length&&a.assist&&a.assist.note)lg=[{ts:(a.assist.updated||Date.now()),text:a.assist.note,who:""}];return lg;}
+    function axWhen(ts){try{return new Date(ts).toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}catch(e){return "";}}
+    function axOpened(a){var s=a.assist||{};if(s.opened)return s.opened;var lg=axLog(a);var t=lg.reduce(function(m,n){return n.ts&&n.ts<m?n.ts:m;},Infinity);return isFinite(t)?t:(s.updated||0);}
+    function axLastTouch(a){var lg=axLog(a);var t=lg.reduce(function(m,n){return Math.max(m,n.ts||0);},0);return t||axOpened(a);}
+    function axDays(ms){return ms?Math.floor((Date.now()-ms)/AXD):0;}
+    function axDeadline(a){var d=a.assist&&a.assist.deadline;if(!d)return null;var t=Date.parse(d+"T23:59:00");if(isNaN(t))return null;return Math.ceil((t-Date.now())/AXD);}
+    function axWho(){try{var m=(typeof currentAdmin==="function"&&currentAdmin())||{};return m.name||m.username||"You";}catch(e){return "You";}}
+    function axStale(a){return stageOf(a)!=="resolved"&&axDays(axLastTouch(a))>=3;}
+
     function card(a){
-      var r=reasons(a), st=stageOf(a);
-      var accent=isResolved(a)?"ac-resolved":(r.funds?"ac-funds":"ac-support");
-      var card=el("div",{class:"asst-card "+accent});
-      /* top: avatar + name/email + stage/premium */
-      var top=el("div",{class:"asst-top"});
-      top.appendChild(el("div",{class:"asst-av",text:(typeof initials==="function")?initials(a):"?"}));
-      var idc=el("div",{class:"asst-idcol"});
-      idc.appendChild(el("div",{class:"asst-name",text:(typeof fullName==="function")?fullName(a):(a.firstName||a.email||"Client")}));
-      if(a.email)idc.appendChild(el("div",{class:"asst-email",text:a.email}));
-      top.appendChild(idc);
-      var right=el("div",{class:"asst-right"});
-      right.appendChild(el("span",{class:"stage-pill sp-"+st,text:st.replace(/-/g," ")}));
+      var r=reasons(a),st=stageOf(a),done=st==="resolved";
+      var c=el("div",{class:"ax-card "+(done?"r-done":(r.funds?"r-funds":"r-support"))});
       var prem=(a.plan&&a.plan.monthlyPremium)?Number(a.plan.monthlyPremium):0;
-      if(prem>0)right.appendChild(el("span",{class:"asst-prem",text:"$"+(prem%1===0?prem:prem.toFixed(2))+"/mo"}));
-      top.appendChild(right);
-      card.appendChild(top);
-      /* reason badges */
-      var tags=el("div",{class:"asst-reasons"});
-      if(r.funds)tags.appendChild(el("span",{class:"reason-tag rt-funds",text:"Insufficient funds"}));
-      if(r.support){
-        tags.appendChild(el("span",{class:"reason-tag rt-support",text:"Needs support"}));
-        var hint=r.supportAuto?(r.msgCount?(r.msgCount+" new message"+(r.msgCount>1?"s":"")):(r.tixCount+" open ticket"+(r.tixCount>1?"s":""))):"manually flagged";
-        tags.appendChild(el("span",{class:"sub",text:hint,style:"font-size:12px;color:var(--muted)"}));
+      var lg=axLog(a),last=lg.length?lg.reduce(function(x,y){return (y.ts||0)>(x.ts||0)?y:x;}):null;
+      var age=axDays(axOpened(a)),idle=axDays(axLastTouch(a)),dl=axDeadline(a);
+      var tags='';
+      if(r.funds)tags+='<span class="ax-tag funds">Insufficient funds</span>';
+      if(r.support)tags+='<span class="ax-tag support">'+(r.supportAuto?(r.msgCount?(r.msgCount+" new message"+(r.msgCount>1?"s":"")):(r.tixCount+" open ticket"+(r.tixCount>1?"s":""))):"Needs support")+'</span>';
+      if(!done){
+        if(dl!=null)tags+='<span class="ax-tag '+(dl<0?"late":dl<=7?"due":"age")+'">'+(dl<0?"Deadline passed":dl===0?"Due today":"Due in "+dl+(dl===1?" day":" days"))+'</span>';
+        tags+='<span class="ax-tag age">Open '+(age<1?"today":age+(age===1?" day":" days"))+'</span>';
+        if(idle>=3)tags+='<span class="ax-tag stale">No update in '+idle+' days</span>';
       }
-      card.appendChild(tags);
-      /* meta row */
-      var meta=el("div",{class:"asst-meta"});
-      function mi(txt){if(!txt)return;meta.appendChild(el("span",{class:"mi",text:txt}));}
-      if(a.phone)mi("☎ "+a.phone);
-      var lastTs=(typeof presenceMap!=="undefined"&&presenceMap[a.id])||a.lastSignIn||0;
-      mi((typeof isOnline==="function"&&isOnline(a.id))?"● Online now":(lastTs?("Last seen "+fmtDateTime(lastTs)):"Never signed in"));
-      if(a.plan&&(a.plan.carrier||a.plan.planName))mi([a.plan.carrier,a.plan.planName].filter(Boolean).join(" – "));
-      card.appendChild(meta);
-      /* control bar: stage + flag toggles */
-      var bar=el("div",{class:"asst-bar"});
-      bar.appendChild(el("span",{class:"lbl",text:"Stage"}));
-      var sel=el("select",{class:"asst-stage"});
-      [["open","Open"],["in-progress","In Progress"],["resolved","Resolved"]].forEach(function(o){
-        var op=el("option",{value:o[0],text:o[1]}); if(o[0]===st)op.selected=true; sel.appendChild(op);
-      });
-      sel.addEventListener("change",function(){assistSet(a.id,{stage:sel.value});});
-      bar.appendChild(sel);
-      var fb=el("button",{type:"button",class:"abtn tgl"+(r.funds?" on-funds":""),text:r.funds?"✓ Funds":"+ Funds"});
-      fb.addEventListener("click",function(){assistSet(a.id,{funds:!r.funds});});
-      bar.appendChild(fb);
-      var sb=el("button",{type:"button",class:"abtn tgl"+(r.supportManual?" on-support":""),text:r.supportManual?"✓ Support":"+ Support"});
-      sb.addEventListener("click",function(){assistSet(a.id,{supportManual:!r.supportManual});});
-      bar.appendChild(sb);
-      var _done=(st==="resolved");
-      var mc=el("button",{type:"button",class:"abtn asst-complete"+(_done?" is-done":""),text:_done?"↩ Reopen":"✓ Mark completed"});
-      mc.addEventListener("click",function(){assistSet(a.id,{stage:_done?"open":"resolved"});});
-      bar.appendChild(mc);
-      card.appendChild(bar);
-      /* ── timestamped note log ── */
-      function _who(){ try{ var m=(typeof currentAdmin==="function"&&currentAdmin())||{}; return m.name||m.username||"You"; }catch(e){ return "You"; } }
-      function _when(ts){ try{ return new Date(ts).toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}); }catch(e){ return ""; } }
-      function _log(acct){
-        var lg=(acct.assist&&acct.assist.noteLog)?acct.assist.noteLog.slice():[];
-        if(!lg.length && acct.assist && acct.assist.note){ lg=[{ts:(acct.assist.updated||Date.now()),text:acct.assist.note,who:""}]; }
-        return lg;
+      var next=st==="open"?'<button class="ax-b go" type="button" data-ax-stage="in-progress">Start working</button>':st==="in-progress"?'<button class="ax-b done" type="button" data-ax-stage="resolved">Mark resolved</button>':'<button class="ax-b" type="button" data-ax-stage="open" style="margin-left:auto">Reopen</button>';
+      var tel=a.phone?String(a.phone).replace(/[^0-9+]/g,""):"";
+      c.innerHTML='<div class="ax-top"><div class="ax-av">'+axEsc(axInit(a))+'</div><div style="min-width:0;flex:1"><div class="ax-nm">'+axEsc(axName(a))+'</div><div class="ax-sub">'+axEsc([a.phone,String(a.email||"").toLowerCase()].filter(Boolean).join(" · "))+'</div></div>'+(prem>0?'<div class="ax-prem">$'+(prem%1===0?prem:prem.toFixed(2))+'/mo</div>':'')+'</div>'
+        +'<div class="ax-tags">'+tags+'</div>'
+        +'<div class="ax-last">'+(last?axEsc(last.text)+'<span class="w">'+axWhen(last.ts)+(last.who?" · "+axEsc(last.who):"")+(lg.length>1?" · "+lg.length+" updates":"")+'</span>':'<span style="color:#8391a7">No updates yet. Add a note after you reach out.</span>')+'</div>'
+        +'<div class="ax-acts">'+(tel?'<a class="ax-b" href="tel:'+axEsc(tel)+'">Call</a><a class="ax-b" href="sms:'+axEsc(tel)+'">Text</a>':'')+(a.email?'<a class="ax-b" href="mailto:'+axEsc(a.email)+'">Email</a>':'')
+        +'<button class="ax-b" type="button" data-ax-det>'+(AX_OPEN[a.id]?"Hide details":"Details & notes")+'</button>'+next+'</div>';
+      if(AX_OPEN[a.id]){
+        var det=el("div",{class:"ax-det"});
+        det.innerHTML='<div class="ax-row">Reason: <button type="button" class="ax-tgl f'+(r.funds?" on":"")+'" data-ax-flag="funds">'+(r.funds?"✓ ":"+ ")+'Insufficient funds</button><button type="button" class="ax-tgl s'+(r.supportManual?" on":"")+'" data-ax-flag="supportManual">'+(r.supportManual?"✓ ":"+ ")+'Needs support</button></div>'
+          +'<div class="ax-row">Payment or fix deadline: <input type="date" data-ax-deadline value="'+axEsc((a.assist&&a.assist.deadline)||"")+'"></div>'
+          +'<div class="ax-notes">'+(lg.length?lg.slice().sort(function(x,y){return (y.ts||0)-(x.ts||0);}).map(function(n){return '<div class="ax-note">'+axEsc(n.text)+'<span class="w">'+axWhen(n.ts)+(n.who?" · "+axEsc(n.who):"")+'</span></div>';}).join(""):'<div class="ax-sub">No notes yet.</div>')+'</div>'
+          +'<div class="ax-noterow"><input type="text" placeholder="Add an update, e.g. Left voicemail, payment link sent" data-ax-note><button class="ax-b" type="button" data-ax-add>Add note</button></div>'
+          +'<div class="ax-acts">'+(r.supportAuto&&typeof selectThread==="function"?'<button class="ax-b" type="button" data-ax-chat>Open chat</button>':'')+(typeof openEditAcctForm==="function"?'<button class="ax-b" type="button" data-ax-edit>Edit client</button>':'')+'</div>';
+        c.appendChild(det);
       }
-      var notesWrap=el("div",{class:"asst-notes"});
-      var lg=_log(a);
-      var listBox=el("div",{class:"asst-notelist"});
-      if(!lg.length){ listBox.appendChild(el("div",{class:"asst-note-empty",text:"No updates yet, add your first note below."})); }
-      else{
-        lg.slice().reverse().forEach(function(n){
-          var it=el("div",{class:"asst-noteitem"});
-          it.appendChild(el("div",{class:"asst-notetext",text:n.text}));
-          it.appendChild(el("div",{class:"asst-notemeta",text:_when(n.ts)+(n.who?(" · "+n.who):"")}));
-          listBox.appendChild(it);
-        });
+      function q(s){return c.querySelector(s);}
+      c.querySelectorAll("[data-ax-stage]").forEach(function(b){b.addEventListener("click",function(){assistSet(a.id,{stage:b.getAttribute("data-ax-stage")});});});
+      q("[data-ax-det]").addEventListener("click",function(){AX_OPEN[a.id]=!AX_OPEN[a.id];renderAssist();});
+      if(AX_OPEN[a.id]){
+        c.querySelectorAll("[data-ax-flag]").forEach(function(b){b.addEventListener("click",function(){var k=b.getAttribute("data-ax-flag");var p={};p[k]=!(k==="funds"?r.funds:r.supportManual);assistSet(a.id,p);});});
+        q("[data-ax-deadline]").addEventListener("change",function(){assistSet(a.id,{deadline:this.value||""});});
+        var inp=q("[data-ax-note]");
+        function add(){var v=inp.value.trim();if(!v)return;var cur=axLog(a);cur.push({ts:Date.now(),text:v,who:axWho()});assistSet(a.id,{noteLog:cur,note:""});}
+        q("[data-ax-add]").addEventListener("click",add);
+        inp.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();add();}});
+        var ch=q("[data-ax-chat]");if(ch)ch.addEventListener("click",function(){switchTab("support");setTimeout(function(){try{selectThread(a.id);}catch(e){}},60);});
+        var ed=q("[data-ax-edit]");if(ed)ed.addEventListener("click",function(){openEditAcctForm(a);});
       }
-      notesWrap.appendChild(listBox);
-      var nrow=el("div",{class:"asst-noterow"});
-      var ninp=el("input",{class:"asst-noteinput",type:"text",placeholder:"Add an update…"});
-      var nadd=el("button",{type:"button",class:"abtn asst-noteadd",text:"+ Add note"});
-      function addNote(){
-        var v=ninp.value.trim(); if(!v)return;
-        var cur=_log(a); cur.push({ts:Date.now(),text:v,who:_who()});
-        ninp.value="";
-        assistSet(a.id,{noteLog:cur,note:""});
-      }
-      nadd.addEventListener("click",addNote);
-      ninp.addEventListener("keydown",function(e){ if(e.key==="Enter"){e.preventDefault();addNote();} });
-      nrow.appendChild(ninp); nrow.appendChild(nadd);
-      notesWrap.appendChild(nrow);
-      card.appendChild(notesWrap);
-      /* footer actions */
-      var foot=el("div",{class:"asst-foot"});
-      if(a.email)foot.appendChild(el("a",{class:"abtn",href:"mailto:"+a.email,text:"✉ Email"}));
-      if(a.phone)foot.appendChild(el("a",{class:"abtn",href:"tel:"+String(a.phone).replace(/[^0-9+]/g,""),text:"☎ Call"}));
-      if(r.supportAuto&&typeof selectThread==="function"){
-        foot.appendChild(el("button",{class:"abtn",type:"button",text:"Open chat",onclick:function(){switchTab("support");setTimeout(function(){try{selectThread(a.id);}catch(e){}},60);}}));
-      }
-      if(typeof openEditAcctForm==="function")foot.appendChild(el("button",{class:"abtn",type:"button",text:"Edit client",onclick:function(){openEditAcctForm(a);}}));
-      card.appendChild(foot);
-      return card;
+      return c;
     }
 
     window.renderAssist=function(){
       var panel=document.getElementById("p-assist"); if(!panel) return;
       var accts=[]; try{accts=getAccounts();}catch(e){accts=[];}
       var pipeline=accts.filter(inPipeline);
-      var activeCount=pipeline.filter(function(a){return !isResolved(a);}).length;
-      var fundsCount=pipeline.filter(function(a){return !isResolved(a)&&reasons(a).funds;}).length;
-      var supCount=pipeline.filter(function(a){return !isResolved(a)&&reasons(a).support;}).length;
+      var act=pipeline.filter(function(a){return !isResolved(a);});
+      var monthStart=new Date();monthStart.setDate(1);monthStart.setHours(0,0,0,0);
+      var nOpen=act.filter(function(a){return stageOf(a)==="open";}).length,nProg=act.filter(function(a){return stageOf(a)==="in-progress";}).length;
+      var nFunds=act.filter(function(a){return reasons(a).funds;}).length,nSup=act.filter(function(a){return reasons(a).support;}).length;
+      var nStale=act.filter(axStale).length;
+      var nDone=pipeline.filter(function(a){return isResolved(a)&&(a.assist.updated||0)>=monthStart.getTime();}).length;
 
       panel.innerHTML="";
-      panel.appendChild(el("h3",{text:"Needs Assistance"}));
-      panel.appendChild(el("p",{class:"lede",text:"Clients flagged for insufficient funds or who need customer support. Move each from Open to In Progress to Resolved as you help them."}));
+      panel.appendChild(el("h3",{text:"Needs Help"}));
+      panel.appendChild(el("p",{class:"lede",text:"Clients with a missed payment or a support issue. Reach out, add a note, and move each case across the board until it is resolved."}));
 
-      var kpis=el("div",{class:"asst-kpis"});
-      function kpi(cls,n,l){kpis.appendChild(el("div",{class:"asst-kpi "+cls},[el("div",{class:"n",text:String(n)}),el("div",{class:"l",text:l})]));}
-      kpi("k-funds",fundsCount,"Insufficient funds");
-      kpi("k-support",supCount,"Needs support");
-      kpi("",activeCount,"Total active cases");
-      panel.appendChild(kpis);
+      var k=el("div",{class:"ax-kpis"});
+      function kpi(cls,n,l,fr){var b=el("button",{type:"button",class:"ax-kpi "+cls+(fr&&fReason===fr?" on":"")});b.innerHTML='<div class="n">'+n+'</div><div class="l">'+l+'</div>';b.addEventListener("click",function(){fReason=(fr&&fReason!==fr)?fr:"all";renderAssist();});k.appendChild(b);}
+      kpi("",act.length,"Active cases",null);
+      kpi("k-funds",nFunds,"Insufficient funds","funds");
+      kpi("k-support",nSup,"Needs support","support");
+      kpi("k-stale",nStale,"No update 3+ days","stale");
+      kpi("k-done",nDone,"Resolved this month",null);
+      panel.appendChild(k);
 
-      var filt=el("div",{class:"asst-filters"});
-      filt.appendChild(seg(fReason,[{val:"all",label:"All reasons"},{val:"funds",label:"Insufficient funds"},{val:"support",label:"Needs support"}],function(v){fReason=v;renderAssist();}));
-      filt.appendChild(seg(fStage,[{val:"active",label:"Active"},{val:"open",label:"Open"},{val:"in-progress",label:"In progress"},{val:"resolved",label:"Resolved"},{val:"all",label:"All"}],function(v){fStage=v;renderAssist();}));
-      var search=el("input",{class:"asst-search",type:"search",placeholder:"Search name, email, phone..."});
-      search.value=fQuery;
-      search.addEventListener("input",function(){fQuery=search.value;renderList();});
-      filt.appendChild(search);
-      var exp=el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Export CSV",onclick:exportCsv});
-      filt.appendChild(exp);
-      panel.appendChild(filt);
+      var tools=el("div",{class:"ax-tools"});
+      tools.appendChild(seg(fReason,[{val:"all",label:"All"},{val:"funds",label:"Insufficient funds"},{val:"support",label:"Needs support"},{val:"stale",label:"Needs an update"}],function(v){fReason=v;renderAssist();}));
+      var search=el("input",{class:"asst-search",type:"search",placeholder:"Search name, phone, email or notes..."});
+      search.value=fQuery;search.addEventListener("input",function(){fQuery=search.value;renderList();});
+      tools.appendChild(search);
+      var flagBtn=el("button",{type:"button",class:"ax-flagbtn",text:"+ Flag a client"});
+      tools.appendChild(flagBtn);
+      tools.appendChild(el("button",{class:"btn btn-ghost btn-sm",type:"button",text:"Export CSV",onclick:exportCsv}));
+      panel.appendChild(tools);
 
-      /* add-any-client bar (flag a client who isn't auto-detected) */
-      var addWrap=el("div",{class:"asst-addbar"});
-      addWrap.appendChild(el("div",{class:"hd",text:"Flag a client who needs help"}));
-      var addIn=el("input",{class:"asst-search",type:"search",placeholder:"Search any client by name, email or phone..."});
+      var flag=el("div",{class:"ax-flag"});flag.style.display="none";
+      var addIn=el("input",{class:"asst-search",type:"search",placeholder:"Type a client's name, email or phone..."});
       var addRes=el("div",{class:"asst-add-results"});
+      flag.appendChild(addIn);flag.appendChild(addRes);
+      flagBtn.addEventListener("click",function(){flag.style.display=flag.style.display==="none"?"":"none";if(flag.style.display==="")addIn.focus();});
       addIn.addEventListener("input",function(){
         var q=addIn.value.toLowerCase().trim(); addRes.innerHTML="";
         if(!q) return;
         var toks=q.split(/\s+/).filter(Boolean);
-        var matches=accts.filter(function(a){
-          var hay=[a.firstName,a.lastName,a.name,((typeof fullName==="function")?fullName(a):""),a.email,a.phone,a.address,a.policyNumber].join(" ").toLowerCase();
-          return toks.every(function(t){return hay.indexOf(t)>=0;});
-        }).slice(0,25);
+        var matches=accts.filter(function(a){var hay=[a.firstName,a.lastName,a.name,((typeof fullName==="function")?fullName(a):""),a.email,a.phone,a.address,a.policyNumber].join(" ").toLowerCase();return toks.every(function(t){return hay.indexOf(t)>=0;});}).slice(0,25);
         if(!matches.length){addRes.appendChild(el("div",{class:"asst-add-row"},[el("span",{class:"sub",text:"No clients match your search."})]));return;}
         matches.forEach(function(a){
-          var already=inPipeline(a);
+          var already=inPipeline(a)&&!isResolved(a);
           var r=el("div",{class:"asst-add-row"});
-          r.appendChild(el("div",{class:"nm",text:((typeof fullName==="function")?fullName(a):(a.email||"Client"))+(a.email?(" · "+a.email):"")+(already?"  ✓ already in Needs Help":"")}));
-          r.appendChild(el("button",{class:"btn btn-sm tgl",type:"button",text:"+ Insufficient funds",onclick:function(){assistSet(a.id,{funds:true});}}));
-          r.appendChild(el("button",{class:"btn btn-sm tgl",type:"button",text:"+ Needs support",onclick:function(){assistSet(a.id,{supportManual:true});}}));
+          r.appendChild(el("div",{class:"nm",text:axName(a)+(a.phone?(" · "+a.phone):"")+(already?"  (already in Needs Help)":"")}));
+          r.appendChild(el("button",{class:"ax-tgl",type:"button",text:"+ Insufficient funds",onclick:function(){assistSet(a.id,{funds:true});}}));
+          r.appendChild(el("button",{class:"ax-tgl",type:"button",text:"+ Needs support",onclick:function(){assistSet(a.id,{supportManual:true});}}));
           addRes.appendChild(r);
         });
       });
-      addWrap.appendChild(addIn); addWrap.appendChild(addRes);
-      panel.appendChild(addWrap);
+      panel.appendChild(flag);
 
-      var listBox=el("div",{class:"tbl",id:"asst-list"});
-      panel.appendChild(listBox);
+      var board=el("div",{class:"ax-board",id:"asst-list"});
+      panel.appendChild(board);
 
-      function passesStage(a){
-        if(fStage==="all")return true;
-        if(fStage==="active")return !isResolved(a);
-        return stageOf(a)===fStage;
-      }
-      function passesReason(a){
-        if(fReason==="all")return true;
-        var r=reasons(a);
-        return fReason==="funds"?r.funds:r.support;
-      }
-      function passesQuery(a){
-        var q=fQuery.toLowerCase().trim(); if(!q)return true;
-        return [a.firstName,a.lastName,a.email,a.phone,(a.assist&&a.assist.note),(a.assist&&a.assist.noteLog?a.assist.noteLog.map(function(n){return n.text;}).join(" "):"")].join(" ").toLowerCase().indexOf(q)>=0;
-      }
+      function passesReason(a){if(fReason==="all")return true;if(fReason==="stale")return axStale(a);var r=reasons(a);return fReason==="funds"?r.funds:r.support;}
+      function passesQuery(a){var q=fQuery.toLowerCase().trim();if(!q)return true;
+        return [a.firstName,a.lastName,a.name,a.email,a.phone,(a.assist&&a.assist.note),(a.assist&&a.assist.noteLog?a.assist.noteLog.map(function(n){return n.text;}).join(" "):"")].join(" ").toLowerCase().indexOf(q)>=0;}
       function renderList(){
-        var box=document.getElementById("asst-list"); if(!box)return;
-        box.innerHTML="";
-        var rows=pipeline.filter(passesReason).filter(passesStage).filter(passesQuery);
-        rows.sort(function(x,y){
-          var rank={ "open":0,"in-progress":1,"resolved":2 };
-          var d=(rank[stageOf(x)]||0)-(rank[stageOf(y)]||0); if(d)return d;
-          return (y.assist&&y.assist.updated||0)-(x.assist&&x.assist.updated||0);
+        board.innerHTML="";
+        var rows=pipeline.filter(passesReason).filter(passesQuery);
+        [["open","Open","#2563eb","Not contacted yet"],["in-progress","In progress","#d97706","Working on it"],["resolved","Resolved","#10b981","Fixed"]].forEach(function(colDef){
+          var list=rows.filter(function(a){return stageOf(a)===colDef[0];});
+          if(colDef[0]==="resolved")list.sort(function(x,y){return ((y.assist&&y.assist.updated)||0)-((x.assist&&x.assist.updated)||0);});
+          else list.sort(function(x,y){var dx=axDeadline(x),dy=axDeadline(y);if(dx!=null||dy!=null){if(dx==null)return 1;if(dy==null)return -1;if(dx!==dy)return dx-dy;}return axLastTouch(x)-axLastTouch(y);});
+          var col=el("div",{class:"ax-col"});
+          col.innerHTML='<div class="ax-colhd"><span class="dot" style="background:'+colDef[2]+'"></span>'+colDef[1]+'<span class="c">'+list.length+'</span><span class="h">'+colDef[3]+'</span></div>';
+          var shown=colDef[0]==="resolved"?list.slice(0,AX_SHOW_RESOLVED):list;
+          if(!list.length)col.appendChild(el("div",{class:"ax-empty",text:colDef[0]==="open"?"No new cases. Use + Flag a client when someone misses a payment or needs help.":colDef[0]==="in-progress"?"Nothing in progress.":"No resolved cases yet."}));
+          shown.forEach(function(a){col.appendChild(card(a));});
+          if(list.length>shown.length){var more=el("button",{type:"button",class:"ax-more",text:"Show "+(list.length-shown.length)+" more resolved"});more.addEventListener("click",function(){AX_SHOW_RESOLVED+=20;renderList();});col.appendChild(more);}
+          board.appendChild(col);
         });
-        if(!rows.length){box.appendChild(el("div",{class:"empty",text:"No clients match this filter. Flag a client from here or the Active Clients tab."}));return;}
-        rows.forEach(function(a){box.appendChild(card(a));});
       }
       window.__asstRenderList=renderList;
       renderList();
