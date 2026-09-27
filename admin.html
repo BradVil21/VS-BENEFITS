@@ -9017,6 +9017,143 @@ try{(function(){
   if(typeof renderSettings==="function"){var _rsS=renderSettings;renderSettings=function(){var o=_rsS.apply(this,arguments);setTimeout(soundSettings,60);return o;};}
   setTimeout(soundSettings,1500);
 })();}catch(err){if(window.console)console.warn("profile view / sounds failed",err);}
+/* ═══════════════ BUSINESS LEAD PROFILE CARD (added Sept 27 2026) ═══════════════
+   Same idea as the lead card: a saved business lead opens as a header plus a
+   labeled profile, a notes timeline and an Edit button that reveals the form
+   (grouped into Company, Coverage, Pipeline and Contact). New business leads
+   open straight into the form. Field ids and saving are unchanged. */
+try{(function(){
+  var S=document.createElement("style");S.id="bzp-style";S.textContent=[
+  ".bzp-wrap{display:block!important;margin-top:12px!important}",
+  ".bzp-wrap:not(.vsp-editing) .bzp-form{display:none}",
+  ".bzp-wrap.vsp-editing .bzp-profile{display:none}",
+  ".bzp-wrap:not(.vsp-editing) .bzp-done{display:none!important}",
+  ".bzp-wrap:not(.vsp-editing) .bzp-notes #bz_notes{display:none}",
+  ".bzp-wrap.vsp-editing .bzp-notes .vsp-timeline{display:none}",
+  ".bzp-wrap .vsc-grid>.cz-full{grid-column:1/-1}",
+  ".bzp-head .vsc-av{border-radius:14px}"
+  ].join("");document.head.appendChild(S);
+
+  function $$(id){return document.getElementById(id);}
+  function val(id){var e=$$(id);return e?String(e.value||"").trim():"";}
+  function selText(id){var e=$$(id);if(!e||e.selectedIndex<0)return "";var t=e.options[e.selectedIndex].text;return (t==="-"||t==="—")?"":t;}
+  function esc(s){return escapeHtml(s==null?"":String(s));}
+  function title(s){s=String(s||"").trim();if(s&&(s===s.toUpperCase()||s===s.toLowerCase())&&/[a-z]/i.test(s))return s.toLowerCase().replace(/(^|[\s'\-&\/])([a-z])/g,function(m,p,c){return p+c.toUpperCase();});return s;}
+  function fmtPhone(p){var d=String(p||"").replace(/\D/g,"");if(d.length===11&&d.charAt(0)==="1")d=d.slice(1);if(d.length===10)return "("+d.slice(0,3)+") "+d.slice(3,6)+"-"+d.slice(6);return String(p||"").trim();}
+  function prettyDate(s){if(!s)return "";var d=new Date(String(s).slice(0,10)+"T12:00:00");if(isNaN(d))return s;return d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});}
+  function rel(s){if(!s)return "";var d=new Date(String(s).slice(0,10)+"T12:00:00"),t=new Date();t.setHours(12,0,0,0);var n=Math.round((d-t)/864e5);if(isNaN(n))return "";if(n===0)return "today";if(n===1)return "tomorrow";if(n===-1)return "yesterday";return n>0?"in "+n+" days":(-n)+" days ago";}
+  var PERSON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>';
+  var ICON={
+    co:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/></svg>',
+    shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg>',
+    flow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>',
+    phone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>',
+    note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H8l-4 4z"/></svg>'
+  };
+  function fld(id){var e=$$(id);return e?e.closest(".cz-fld"):null;}
+  function section(cls,label,icon){var s=document.createElement("section");s.className="vsc-sec "+cls;s.innerHTML='<h4>'+icon+label+'</h4>';var g=document.createElement("div");g.className="vsc-grid";s.appendChild(g);return {sec:s,grid:g};}
+  function kindOf(src){try{return window.vsLeadKind?window.vsLeadKind({source:src}):(src?"own":"none");}catch(e){return "none";}}
+
+  function header(box){
+    var h=box.querySelector(".bzp-head");
+    if(!h){h=document.createElement("div");h.className="vsc-head bzp-head";var h2=box.querySelector("h2");if(h2){h2.style.display="none";h2.insertAdjacentElement("afterend",h);}else box.insertBefore(h,box.firstChild);}
+    var co=title(val("bz_company")),who=title(val("bz_contact"));
+    var ini=(co||who||"+").split(/\s+/).slice(0,2).map(function(w){return w.charAt(0);}).join("").toUpperCase();
+    var chips=[];
+    if(who)chips.push('<span class="vsc-chip">'+esc(who)+'</span>');
+    var ph=val("bz_phone");if(ph)chips.push('<span class="vsc-chip">'+esc(fmtPhone(ph))+'</span>');
+    var ee=val("bz_employees");if(ee)chips.push('<span class="vsc-chip">'+esc(ee)+' employees</span>');
+    var ni=val("bz_niche");if(ni)chips.push('<span class="vsc-chip">'+esc(ni)+'</span>');
+    var cov=selText("bz_coverage");if(cov)chips.push('<span class="vsc-chip">'+esc(cov)+'</span>');
+    var k=kindOf(val("bz_source"));chips.push('<span class="vsc-chip '+k+'">'+(k==="own"?"Own lead":k==="agency"?"Agency lead":"No source")+'</span>');
+    var st=selText("bz_stage");if(st)chips.push('<span class="vsc-chip">'+esc(st)+'</span>');
+    var fu=val("bz_followup"),open=!/won|lost/i.test(val("bz_stage"));
+    var fuPill=fu?'<span class="cz-pill" style="background:#fff;color:#0b2346;border:0">Follow up '+esc(prettyDate(fu))+' · '+esc(rel(fu))+'</span>':(open?'<span class="cz-pill" style="background:#fff7ed;color:#c2410c;border:0">No next step set</span>':'');
+    var isNew=/add business lead/i.test((box.querySelector("h2")||{}).textContent||"");
+    h.innerHTML='<div class="vsc-av">'+esc(ini)+'</div><div class="vsc-hmain"><div class="vsc-name">'+esc(co||who||(isNew?"New business lead":"Business lead"))+'</div><div class="vsc-chips">'+chips.join("")+'</div><div class="vsc-pills">'+fuPill+'</div></div>';
+  }
+  function item(k,v,opts){opts=opts||{};return '<div class="vsp-item'+(opts.wide?' wide':'')+'"><div class="vsp-k">'+k+'</div><div class="vsp-v">'+(v||'<span class="vsp-empty" data-vsp-go="'+(opts.field||'')+'">'+(opts.empty||"Not added")+'</span>')+'</div></div>';}
+  function renderProfile(wrap){
+    var p=wrap.querySelector(".bzp-profile");if(!p)return;
+    var ph=val("bz_phone"),em=val("bz_email"),tel=ph.replace(/[^\d+]/g,"");
+    var src=val("bz_source"),k=kindOf(src),start=val("bz_start"),fu=val("bz_followup");
+    var ins=selText("bz_insured");
+    p.innerHTML='<div class="vsp-top"><h4>'+ICON.co+'Company profile</h4><button type="button" class="vsp-edit" data-vsp-edit>&#9998; Edit</button></div><div class="vsp-grid">'
+      +item("Owner / contact",esc(title(val("bz_contact"))),{field:"bz_contact"})
+      +item("Type / niche",esc(val("bz_niche")),{field:"bz_niche"})
+      +item("Phone",ph?'<a href="tel:'+esc(tel)+'">'+esc(fmtPhone(ph))+'</a><button type="button" class="vsp-mini" data-vsp-copy="'+esc(fmtPhone(ph))+'">Copy</button>':"",{field:"bz_phone"})
+      +item("Email",em?'<a href="mailto:'+esc(em)+'">'+esc(em.toLowerCase())+'</a><button type="button" class="vsp-mini" data-vsp-copy="'+esc(em)+'">Copy</button>':"",{field:"bz_email"})
+      +item("Employees",esc(val("bz_employees")),{field:"bz_employees"})
+      +item("Requested coverage",esc(selText("bz_coverage")),{field:"bz_coverage"})
+      +item("Currently insured",ins?esc(ins)+(ins==="No"?' <span class="vsp-tag warn">First group plan</span>':''):"",{field:"bz_insured"})
+      +item("Coverage start",start?esc(prettyDate(start))+' <span class="vsp-sub">'+esc(rel(start))+'</span>':"",{field:"bz_start"})
+      +item("Stage",esc(selText("bz_stage")),{field:"bz_stage"})
+      +item("Source",src?esc(typeof czSourceLabel==="function"?czSourceLabel(src):src)+' <span class="vsp-tag '+k+'">'+(k==="own"?"Own":k==="agency"?"Agency":"No source")+'</span>':"",{field:"bz_source"})
+      +item("Next follow-up",fu?esc(prettyDate(fu))+' <span class="vsp-sub">'+esc(rel(fu))+'</span>':"",{field:"bz_followup",wide:true,empty:"No next step set. Tap to pick a date."})
+      +'</div>';
+  }
+  function renderTimeline(wrap){
+    var tl=wrap.querySelector(".bzp-notes .vsp-timeline");if(!tl)return;
+    var raw=val("bz_notes");
+    if(!raw){tl.innerHTML='<div class="vsp-nonotes">No notes yet. Type a note above and press Add. It saves right away.</div>';return;}
+    var entries=[],cur=null;
+    raw.split(/\r?\n/).forEach(function(line){
+      var t=line.trim();
+      if(!t){cur=null;return;}
+      var m=t.match(/^\[([^\]]{1,40})\]\s*(.*)$/);
+      if(m){cur={w:m[1],t:m[2]};entries.push(cur);}
+      else if(cur){cur.t+=(cur.t?"\n":"")+t;}
+      else{cur={w:"",t:t};entries.push(cur);}
+    });
+    tl.innerHTML=entries.slice(0,40).map(function(e){return '<div class="vsp-note">'+(e.w?'<div class="w">'+esc(e.w)+'</div>':'')+'<div class="t">'+esc(e.t)+'</div></div>';}).join("");
+  }
+  function setEditing(wrap,box,on,focusId){
+    wrap.classList.toggle("vsp-editing",!!on);
+    if(!on){renderProfile(wrap);header(box);}
+    else if(focusId){var f=$$(focusId);if(f)setTimeout(function(){f.scrollIntoView({behavior:"smooth",block:"center"});try{f.focus();}catch(e){}},60);}
+  }
+  function build(box){
+    var grid=box.querySelector(".cz-fgrid");if(!grid||!$$("bz_company")||grid.classList.contains("bzp-wrap"))return;
+    var isNew=/add business lead/i.test((box.querySelector("h2")||{}).textContent||"");
+    var old=box.querySelector(".bzp-head");if(old)old.remove();
+    grid.classList.add("bzp-wrap");
+    var prof=document.createElement("section");prof.className="vsc-sec vsp-profile bzp-profile";
+    var form=document.createElement("div");form.className="bzp-form";
+    var done=document.createElement("button");done.type="button";done.className="vsp-done bzp-done";done.innerHTML="&#10003; Done editing";if(isNew)done.style.display="none";
+    var A=section("bzp-co","Company",ICON.co),B=section("bzp-cov","Coverage",ICON.shield),C=section("bzp-pipe","Pipeline & follow-up",ICON.flow),D=section("bzp-contact","Contact info",ICON.phone),N=section("bzp-notes","Notes",ICON.note);
+    var fc=fld("bz_company");if(fc){fc.classList.add("cz-full");A.grid.appendChild(fc);}
+    ["bz_contact","bz_niche","bz_employees"].forEach(function(id){var f=fld(id);if(f)A.grid.appendChild(f);});
+    ["bz_coverage","bz_insured","bz_start"].forEach(function(id){var f=fld(id);if(f)B.grid.appendChild(f);});
+    ["bz_stage","bz_source","bz_followup"].forEach(function(id){var f=fld(id);if(f)C.grid.appendChild(f);});
+    ["bz_phone","bz_email"].forEach(function(id){var f=fld(id);if(f)D.grid.appendChild(f);});
+    var nf=fld("bz_notes");if(nf){nf.classList.add("cz-full");N.grid.appendChild(nf);}
+    N.grid.style.gridTemplateColumns="1fr";
+    [].slice.call(grid.children).forEach(function(ch){N.grid.appendChild(ch);});
+    form.appendChild(done);[A,D,B,C].forEach(function(x){form.appendChild(x.sec);});
+    grid.appendChild(prof);grid.appendChild(form);grid.appendChild(N.sec);
+    var qn=N.sec.querySelector(".cz-quicknote");
+    var tl=document.createElement("div");tl.className="vsp-timeline";
+    if(qn)qn.insertAdjacentElement("afterend",tl);else N.sec.appendChild(tl);
+    var en=document.createElement("button");en.type="button";en.className="vsp-mini vsp-editnotes";en.textContent="Edit notes";tl.insertAdjacentElement("afterend",en);
+    en.addEventListener("click",function(){var ta=$$("bz_notes");if(!ta)return;var showing=ta.style.display==="block";ta.style.display=showing?"":"block";en.textContent=showing?"Edit notes":"Hide note editor";if(!showing)ta.focus();});
+    N.sec.addEventListener("click",function(){setTimeout(function(){renderTimeline(grid);},80);});
+    N.sec.addEventListener("keydown",function(e){if(e.key==="Enter")setTimeout(function(){renderTimeline(grid);},80);});
+    var ta=$$("bz_notes");if(ta)ta.addEventListener("input",function(){renderTimeline(grid);});
+    prof.addEventListener("click",function(e){
+      var t=e.target;
+      if(t.closest("[data-vsp-edit]")){setEditing(grid,box,true,"bz_company");return;}
+      var c=t.closest("[data-vsp-copy]");if(c){try{navigator.clipboard.writeText(c.getAttribute("data-vsp-copy"));}catch(err){}var o=c.textContent;c.textContent="Copied";setTimeout(function(){c.textContent=o;},1200);return;}
+      var g=t.closest("[data-vsp-go]");if(g)setEditing(grid,box,true,g.getAttribute("data-vsp-go")||"bz_company");
+    });
+    done.addEventListener("click",function(){setEditing(grid,box,false);var h=box.querySelector(".bzp-head");if(h)h.scrollIntoView({behavior:"smooth",block:"start"});});
+    var hT=null;box.addEventListener("input",function(){clearTimeout(hT);hT=setTimeout(function(){header(box);},150);});
+    box.addEventListener("change",function(){clearTimeout(hT);hT=setTimeout(function(){header(box);},150);});
+    header(box);renderTimeline(grid);
+    if(isNew)grid.classList.add("vsp-editing");else renderProfile(grid);
+  }
+  var mo=new MutationObserver(function(){var box=$$("modal-content");if(!box||!$$("bz_company"))return;setTimeout(function(){try{build(box);}catch(e){console.warn("business card",e);}},40);});
+  (function start(){var box=$$("modal-content");if(box)mo.observe(box,{childList:true});else setTimeout(start,500);})();
+})();}catch(err){if(window.console)console.warn("business lead card failed",err);}
 })();
 </script>
 <script>
