@@ -6,7 +6,9 @@
 // address ranges, so it is far more reliable for U.S. street addresses than the
 // OpenStreetMap suggestions used for type-ahead.
 //
-// GET /api/address-verify?address=123 Main St&city=Miami&state=FL&zip=33101
+// Not its own endpoint (the Hobby plan caps a deployment at 12 functions); it is
+// called through api/calendly.js:
+// GET /api/calendly?address_verify=1&address=123 Main St&city=Miami&state=FL&zip=33101
 // -> { ok: true, match: { street, city, state, zip, full }, candidates: n }
 // -> { ok: false, reason: "no_match" | "missing" | "unavailable" }
 //

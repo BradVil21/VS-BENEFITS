@@ -20,6 +20,10 @@ module.exports = async (req, res) => {
   res.setHeader("Cache-Control", "no-store");
   if (req.method === "OPTIONS") { res.status(204).end(); return; }
 
+  // The admin portal's "Verify address" button rides on this function because the
+  // Hobby plan allows 12 serverless functions per deployment. See api/_address-verify.js.
+  if (req.query && req.query.address_verify) { return require("./_address-verify")(req, res); }
+
   const token = process.env.CALENDLY_TOKEN;
   if (!token) { res.status(200).json({ ok: true, configured: false, meetings: [] }); return; }
 

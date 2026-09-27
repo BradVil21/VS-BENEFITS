@@ -8602,7 +8602,7 @@ try{(function(){
    2. ZIP code fills in the right city and state from a built-in USPS ZIP list
       (/data/us-zips.json), and warns when the city or state does not match the ZIP.
    3. "Verify address" checks the street address against the U.S. Census Bureau
-      address records (/api/address-verify) and offers the standardized version.
+      address records (/api/calendly?address_verify=1) and offers the standardized version.
    Fields keep their ids, so saving works exactly as before. */
 try{(function(){
   var S=document.createElement("style");S.id="vsc-style";S.textContent=[
@@ -8698,7 +8698,7 @@ try{(function(){
     var box=document.createElement("div");box.className="vsc-msg vsc-vmsg info";
     if(!addr||(!zip&&!(city&&st))){box.textContent="Add the street address and a ZIP (or city and state) first.";host.appendChild(box);return;}
     btn.disabled=true;btn.textContent="Checking…";
-    fetch("/api/address-verify?address="+encodeURIComponent(addr)+"&city="+encodeURIComponent(city)+"&state="+encodeURIComponent(st)+"&zip="+encodeURIComponent(zip))
+    fetch("/api/calendly?address_verify=1&address="+encodeURIComponent(addr)+"&city="+encodeURIComponent(city)+"&state="+encodeURIComponent(st)+"&zip="+encodeURIComponent(zip))
       .then(function(r){return r.json();})
       .then(function(j){
         if(j&&j.ok&&j.match){
