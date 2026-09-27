@@ -7086,12 +7086,12 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
     window.renderDash3D=renderDash3D;
 
     // keep dashboard live when leads/accounts change
-    function refreshIfDash(){ var p=document.getElementById("p-dashboard"); if(p&&p.classList.contains("active"))renderDash3D(); }
+    function refreshIfDash(){ var p=document.getElementById("p-dashboard"); if(p&&p.classList.contains("active"))(window.renderDash3D||renderDash3D)(); }
     if(typeof renderAccounts==="function"){ var _ra2=renderAccounts; renderAccounts=function(){ var o=_ra2.apply(this,arguments); try{refreshIfDash();}catch(e){} return o; }; }
     if(typeof renderLeads==="function"){ var _rl=renderLeads; renderLeads=function(){ var o=_rl.apply(this,arguments); try{refreshIfDash();}catch(e){} return o; }; }
 
     // initial paint if dashboard is the active tab
-    setTimeout(function(){ try{ var p=document.getElementById("p-dashboard"); if(p&&p.classList.contains("active"))renderDash3D(); }catch(e){} },120);
+    setTimeout(function(){ try{ var p=document.getElementById("p-dashboard"); if(p&&p.classList.contains("active"))(window.renderDash3D||renderDash3D)(); }catch(e){} },120);
   }catch(err){ if(window.console)console.warn("dash3d init failed",err); }
 })();
 
@@ -8143,6 +8143,13 @@ try{(function(){
   ".od2-ghost{background:#fff;color:#16447f;border:1px solid #cfdcef;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit}",
   ".od2-ghost:hover{border-color:#16447f}",
   ".od2-empty{padding:14px 4px;font-size:13px;color:#5a6b80}",
+  ".od2-hide{border:0;background:none;color:#94a3b8;font-size:20px;line-height:1;cursor:pointer;padding:2px 4px;font-family:inherit}.od2-hide:hover{color:#be123c}",
+  ".od2-dispo{background:#f6f8fc;border-radius:10px;padding:10px 10px!important;flex-wrap:wrap}",
+  ".od2-dbtns{display:flex;flex-wrap:wrap;gap:6px;align-items:center}",
+  ".od2-dq{font-size:12px;font-weight:800;color:#0b2346;margin-right:2px}",
+  ".od2-dbtns button{border:1px solid #cfdcef;background:#fff;color:#16447f;border-radius:999px;padding:6px 11px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}",
+  ".od2-dbtns button:hover{background:#0b2346;color:#fff;border-color:#0b2346}",
+  ".od2-dbtns button.x{color:#64748b}",
   ".od2-pair{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:18px;margin-top:18px;align-items:start}",
   ".od2-pair>*{margin:0!important}",
   "@media(max-width:900px){.od2-pair{grid-template-columns:1fr}}",
@@ -8222,9 +8229,47 @@ try{(function(){
   setInterval(od2Speed,20000);
 
   /* ---------- 2. Dashboard ---------- */
+  /* dispositions: after you tap Call on the money list, the row asks how it went */
+  function od2Get(store,key){try{return JSON.parse(store.getItem(key)||"[]");}catch(e){return [];}}
+  function od2Put(store,key,v){try{store.setItem(key,JSON.stringify(v));}catch(e){}}
+  function od2HideKey(){return "od2_money_hide_"+todayStr();}
+  function od2Pending(){return od2Get(sessionStorage,"od2_money_pending");}
+  function od2SetPending(id,on){var p=od2Pending().filter(function(x){return x!==id;});if(on)p.push(id);od2Put(sessionStorage,"od2_money_pending",p);}
+  function od2Hide(id){var h=od2Get(localStorage,od2HideKey());if(h.indexOf(id)<0)h.push(id);od2Put(localStorage,od2HideKey(),h);}
+  function od2Dispo(id,kind){
+    od2SetPending(id,false);od2Hide(id);
+    var arr=getLeads(),c=arr.filter(function(x){return x.id===id;})[0];if(!c){od2Redraw();return;}
+    if(!c.firstDialAt){c.firstDialAt=Date.now();saveLeads(arr);}
+    if(kind==="noanswer"){czFuNoAnswer(id);}
+    else if(kind==="talked"){
+      if(c.stage==="new_lead")czSetStage(id,"follow_up");
+      arr=getLeads();c=arr.filter(function(x){return x.id===id;})[0];
+      var t=todayStr();c.lastContact=t;c.followUpDue=czAddDays(t,3);c.fuCleared=false;c.updated=Date.now();
+      czStampNote(c,"Talked, follow up in 3 days");saveLeads(arr);
+      if(typeof addLeadActivity==="function")addLeadActivity(id,"call","Talked · follow up in 3 days");
+      czCurrentRender();
+    }
+    else if(kind==="appt"){czSetStage(id,"appointment_scheduled");setTimeout(function(){openLead(id);},150);}
+    else if(kind==="notint"){
+      arr=getLeads();c=arr.filter(function(x){return x.id===id;})[0];czStampNote(c,"Not interested");saveLeads(arr);
+      czSetStage(id,"no_longer_interested");
+    }
+    else{od2Redraw();}
+  }
+  /* the call router stops the click at the document, so listen there too */
+  document.addEventListener("click",function(e){
+    var a=e.target&&e.target.closest?e.target.closest("[data-od2-money]"):null;if(!a)return;
+    var row=a.closest(".od2-row"),id=row&&row.getAttribute("data-id");if(!id)return;
+    od2SetPending(id,true);setTimeout(od2Redraw,300);
+  },true);
+  function od2Redraw(){try{var p=document.getElementById("p-dashboard");if(p&&p.classList.contains("active")&&window.renderDash3D)window.renderDash3D();}catch(e){}}
+
   function od2MoneyList(){
     var L=getLeads(),t=Date.now(),today=todayStr(),items=[];
+    var hidden=od2Get(localStorage,od2HideKey()),pend=od2Pending();
     L.forEach(function(c){
+      if(pend.indexOf(c.id)>=0){items.push({c:c,rank:-1,sort:0,pending:true,chip:'<span class="od2-chip new">Called just now</span>'});return;}
+      if(hidden.indexOf(c.id)>=0)return;
       if(czCLOSED.indexOf(c.stage)>=0)return;
       var am=apptMs(c);
       if(am&&String(c.apptDate).slice(0,10)===today){items.push({c:c,rank:0,sort:am,chip:'<span class="od2-chip appt">Appt '+new Date(am).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})+'</span>'});return;}
@@ -8256,15 +8301,21 @@ try{(function(){
     var items=od2MoneyList();
     var card=document.createElement("div");card.className="od2-card";card.id="od2-money";
     var rows=items.slice(0,8).map(function(it){var c=it.c;var v=czVal(c);
-      return '<div class="od2-row"><div class="od2-grow"><button class="od2-nm" type="button" data-od2-open="'+esc(c.id)+'">'+esc(czName(c))+'</button><div class="od2-meta">'+it.chip+' <span style="margin-left:4px">'+esc(c.phone||c.email||"")+'</span></div></div>'
+      var nm='<div class="od2-grow"><button class="od2-nm" type="button" data-od2-open="'+esc(c.id)+'">'+esc(czName(c))+'</button><div class="od2-meta">'+it.chip+' <span style="margin-left:4px">'+esc(c.phone||c.email||"")+'</span></div></div>';
+      if(it.pending)return '<div class="od2-row od2-dispo" data-id="'+esc(c.id)+'">'+nm+'<div class="od2-dbtns"><span class="od2-dq">How did it go?</span>'
+        +'<button type="button" data-d="noanswer">No answer</button><button type="button" data-d="talked">Talked</button><button type="button" data-d="appt">Appt set</button><button type="button" data-d="notint">Not interested</button><button type="button" data-d="skip" class="x">Skip</button></div></div>';
+      return '<div class="od2-row" data-id="'+esc(c.id)+'">'+nm
         +(v>0?'<span class="od2-val">'+money(v)+'</span>':'')
-        +(c.phone?'<a class="od2-call" href="'+esc(telHref(c.phone))+'">Call</a>':'')+'</div>';}).join("");
-    card.innerHTML='<div class="od2-head"><div><div class="od2-k">Money list · today</div><div class="od2-h">Call these first</div><div class="od2-sub">Today\'s appointments, new leads nobody has called yet, and quotes with no contact in 3+ days.</div></div>'
+        +(c.phone?'<a class="od2-call" data-od2-money href="'+esc(telHref(c.phone))+'">Call</a>':'')
+        +'<button type="button" class="od2-hide" data-od2-hide title="Remove from today\'s list">&times;</button></div>';}).join("");
+    card.innerHTML='<div class="od2-head"><div><div class="od2-k">Money list · today</div><div class="od2-h">Call these first</div><div class="od2-sub">Today\'s appointments, new leads nobody has called yet, and quotes with no contact in 3+ days. After you call, tap how it went and they come off the list.</div></div>'
       +(items.length>8?'<button class="od2-ghost" type="button" data-cz-go="pipeline">See all '+items.length+' in Pipeline</button>':'')+'</div>'
       +(rows||'<div class="od2-empty">Nobody is waiting on you right now. Good time to text 5 clients for referrals or reach out to a partner.</div>');
     var anchor=w.querySelector("#od-label-banner")||w.querySelector(".od-tiles");
     if(anchor)anchor.insertAdjacentElement("afterend",card);else w.insertBefore(card,w.firstChild);
     card.querySelectorAll("[data-od2-open]").forEach(function(b){b.addEventListener("click",function(){openLead(b.getAttribute("data-od2-open"));});});
+    card.querySelectorAll("[data-od2-hide]").forEach(function(b){b.addEventListener("click",function(){var id=b.closest(".od2-row").getAttribute("data-id");od2Hide(id);od2Redraw();});});
+    card.querySelectorAll(".od2-dispo [data-d]").forEach(function(b){b.addEventListener("click",function(){var id=b.closest(".od2-row").getAttribute("data-id");od2Dispo(id,b.getAttribute("data-d"));});});
     card.querySelectorAll("[data-cz-go]").forEach(function(b){b.addEventListener("click",function(){switchTab(b.getAttribute("data-cz-go"));});});
     /* This week vs last week, next to Sales by source */
     var W=od2WeekStats();
