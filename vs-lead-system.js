@@ -20,7 +20,7 @@
 (function(){
   "use strict";
   var CONSENT_KEY='vs_consent';
-  var GA_ID='G-Z6EVXL76GG', ADS_ID='AW-17950389267';
+  var GA_ID='G-Z6EVXL76GG', ADS_ID='AW-18479284900';
 
   function $(id){return document.getElementById(id);}
   function store(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}

@@ -131,12 +131,12 @@ Checked 25 Aug 2026 under `bradleyvilsaint@gmail.com`. Six accounts exist:
   "Not installed yet"
 - **Luxury For Less Car Service** — unrelated business
 
-**None is VS Health Benefits**, and none matches `AW-17950389267`, which is hardcoded into the
+**None is VS Health Benefits**, and none matches `AW-18479284900`, which is hardcoded into the
 tracking on all 205 pages of vshealthbenefits.com. That ID most likely belongs to one of the four
 cancelled accounts — meaning the site's Google Ads conversion tracking has probably been
 reporting into a dead account for months.
 
-Decision: a fresh **VS Health Benefits** account. Once it exists, `AW-17950389267` gets replaced
+Decision: a fresh **VS Health Benefits** account. Once it exists, `AW-18479284900` gets replaced
 across all 205 pages and in `vs-conversions.js` **before** any spend, so the tracking follows the
 money rather than the other way round.
 
@@ -156,7 +156,7 @@ Google Ads → Goals → Conversions → New conversion action → Website:
 | Phone Call Click | Contact | Don't use a value | One |
 
 For each, open **Tag setup → Use Google tag** and copy the part **after** the slash in
-`AW-17950389267/AbC-D1efGhIjKl`.
+`AW-18479284900/AbC-D1efGhIjKl`.
 
 **2. Send me both labels.** They go into `vs-conversions.js` (lines 40-43) and I deploy. Until
 then GA4 records everything and Google Ads can bid on nothing.

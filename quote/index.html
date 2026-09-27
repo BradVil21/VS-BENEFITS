@@ -2192,7 +2192,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   // ---- LEAD CONVERSION TRACKING ----
   // Google Ads conversion LABEL. Get it in Google Ads -> Goals -> Conversions ->
   // (your "Quote Form Lead" action) -> Tag setup -> "Use Google tag". It looks
-  // like  AW-17950389267/AbC-D1efGhIjKl  -- paste ONLY the part after the slash:
+  // like  AW-18479284900/AbC-D1efGhIjKl  -- paste ONLY the part after the slash:
   // Read from vs-conversions.js so there is a single place to paste labels.
   // The old inline PASTE_LABEL_HERE was a second copy that would silently
   // drift out of step with the sitewide one.
@@ -2210,7 +2210,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       gtag('event','generate_lead',{ currency:'USD', value:0, lead_type:leadType });
       // Google Ads conversion (needs the label above)
       if(GADS_CONVERSION_LABEL && GADS_CONVERSION_LABEL.indexOf('PASTE_') === -1){
-        gtag('event','conversion',{ send_to:'AW-17950389267/'+GADS_CONVERSION_LABEL, value:0, currency:'USD' });
+        gtag('event','conversion',{ send_to:'AW-18479284900/'+GADS_CONVERSION_LABEL, value:0, currency:'USD' });
       }
     }catch(e){}
   }

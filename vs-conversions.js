@@ -26,20 +26,20 @@
    ── The one thing you have to paste ──────────────────────────────────
    Google Ads needs a conversion LABEL per action. Get them in
    Google Ads -> Goals -> Conversions -> (your action) -> Tag setup ->
-   "Use Google tag". The value looks like  AW-17950389267/AbC-D1efGhIjKl
+   "Use Google tag". The value looks like  AW-18479284900/AbC-D1efGhIjKl
    Paste ONLY the part after the slash, below. GA4 events fire either way;
    the labels are what lets Google Ads bid on them.
    ===================================================================== */
 (function () {
   "use strict";
 
-  var ADS_ID = "AW-17950389267";
+  var ADS_ID = "AW-18479284900";
 
   // Paste your labels here. Leave blank and everything still records in
   // GA4 - you just cannot optimise ad bidding on it yet.
   var LABELS = {
-    lead:  "",   // "Quote Form Lead"  conversion action
-    phone: "",   // "Phone Call Click" conversion action
+    lead:  "CjpNCInIsogdEKSFzutE",   // "Quote Form Lead"  conversion action (VS Health Benefits, 294-975-7547)
+    phone: "88yHCI_IsogdEKSFzutE",   // "Phone Call Click" conversion action
   };
 
   // Shared so the quote funnel reads the same values instead of keeping a
