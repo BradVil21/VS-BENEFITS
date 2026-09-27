@@ -8596,6 +8596,205 @@ try{(function(){
   ].join("")+"}";
   document.head.appendChild(S);
 })();}catch(err){if(window.console)console.warn("mobile fixes failed",err);}
+/* ═══════════════ LEAD CARD REDESIGN + ACCURATE ADDRESSES (added Sept 27 2026) ═══════════════
+   1. The lead card opens with a header (initials, name, phone, age, location,
+      source, quote) and the fields grouped into Contact, Location, Pipeline and Notes.
+   2. ZIP code fills in the right city and state from a built-in USPS ZIP list
+      (/data/us-zips.json), and warns when the city or state does not match the ZIP.
+   3. "Verify address" checks the street address against the U.S. Census Bureau
+      address records (/api/address-verify) and offers the standardized version.
+   Fields keep their ids, so saving works exactly as before. */
+try{(function(){
+  var S=document.createElement("style");S.id="vsc-style";S.textContent=[
+  "#modal-content .cz-fgrid.vsc-wrap{display:block!important;margin-top:12px!important}",
+  ".vsc-head{display:flex;gap:14px;align-items:center;background:linear-gradient(135deg,#0b2346,#16447f 60%,#0d8f84);color:#fff;border-radius:16px;padding:16px 18px;margin:0 0 12px}",
+  ".modal-card:has(.vsc-head) .close-x{top:22px!important;right:24px!important;color:#fff!important;z-index:6;background:rgba(255,255,255,.14)!important;border-radius:10px}",
+  ".vsc-head{padding-right:56px!important}",
+  ".vsc-av{width:52px;height:52px;flex:0 0 52px;border-radius:50%;background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;letter-spacing:.02em}",
+  ".vsc-hmain{min-width:0;flex:1}",
+  ".vsc-name{font-size:19px;font-weight:900;line-height:1.2;letter-spacing:-.01em;word-break:break-word}",
+  ".vsc-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}",
+  ".vsc-chip{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;white-space:nowrap}",
+  ".vsc-chip.own{background:#d1fae5;color:#065f46;border-color:#a7f3d0}.vsc-chip.agency{background:#e2e8f0;color:#334155;border-color:#cbd5e1}.vsc-chip.none{background:#ffe4e6;color:#9f1239;border-color:#fecdd3}",
+  ".vsc-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.vsc-pills .cz-pill{margin:0!important}",
+  ".vsc-sec{border:1px solid #e6ecf5;border-radius:14px;padding:12px 14px 14px;margin:0 0 12px;background:#fff}",
+  ".vsc-sec h4{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#0d8f84;margin:0 0 10px}",
+  ".vsc-sec h4 svg{width:14px;height:14px}",
+  ".vsc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}",
+  ".vsc-grid>.cz-full,.vsc-grid>.vsc-full{grid-column:1/-1}",
+  ".vsc-loc{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px 12px;margin-top:10px}",
+  ".vsc-tools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}",
+  ".vsc-btn{border:1px solid #cfdcef;background:#fff;color:#16447f;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}",
+  ".vsc-btn:hover{border-color:#16447f}.vsc-btn[disabled]{opacity:.6;cursor:wait}",
+  ".vsc-msg{font-size:12.5px;line-height:1.4;border-radius:10px;padding:8px 10px;margin-top:8px;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}",
+  ".vsc-msg.ok{background:#ecfdf5;color:#065f46}.vsc-msg.warn{background:#fff7ed;color:#9a3412}.vsc-msg.info{background:#f1f5f9;color:#334155}",
+  ".vsc-msg .vsc-btn{padding:4px 10px}",
+  "#modal-content .cz-callbar{margin:0 0 10px!important}",
+  "html.dark .vsc-sec{background:#1c2d42;border-color:#253a54}",
+  "@media(max-width:560px){.vsc-grid{grid-template-columns:1fr}.vsc-loc{grid-template-columns:1fr 1fr}.vsc-loc>.vsc-city{grid-column:1/-1}.vsc-head{padding:14px}.vsc-av{width:44px;height:44px;flex-basis:44px;font-size:16px}.vsc-name{font-size:17px}}"
+  ].join("");document.head.appendChild(S);
+
+  var ICON={
+    user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+    pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
+    flow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>',
+    note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H8l-4 4z"/></svg>'
+  };
+  function $$(id){return document.getElementById(id);}
+  function val(id){var e=$$(id);return e?String(e.value||"").trim():"";}
+  function esc(s){return escapeHtml(s==null?"":String(s));}
+  function title(s){s=String(s||"").trim();if(s&&(s===s.toUpperCase()||s===s.toLowerCase())&&/[a-z]/i.test(s))return s.toLowerCase().replace(/(^|[\s'\-])([a-z])/g,function(m,p,c){return p+c.toUpperCase();});return s;}
+  function fmtPhone(p){var d=String(p||"").replace(/\D/g,"");if(d.length===11&&d.charAt(0)==="1")d=d.slice(1);if(d.length===10)return "("+d.slice(0,3)+") "+d.slice(3,6)+"-"+d.slice(6);return String(p||"").trim();}
+  function age(dob){if(!dob)return null;var b=new Date(dob+"T12:00:00");if(isNaN(b))return null;var n=new Date();var a=n.getFullYear()-b.getFullYear();var m=n.getMonth()-b.getMonth();if(m<0||(m===0&&n.getDate()<b.getDate()))a--;return (a>=0&&a<120)?a:null;}
+
+  /* ---------- ZIP list ---------- */
+  var ZIPS=null,zipLoading=null;
+  function loadZips(){
+    if(ZIPS)return Promise.resolve(ZIPS);
+    if(zipLoading)return zipLoading;
+    zipLoading=fetch("/data/us-zips.json",{cache:"force-cache"}).then(function(r){if(!r.ok)throw new Error("zip list");return r.json();}).then(function(j){ZIPS=j;return j;}).catch(function(){zipLoading=null;return null;});
+    return zipLoading;
+  }
+  function zipInfo(z){if(!ZIPS)return null;z=String(z||"").replace(/\D/g,"").slice(0,5);if(z.length!==5)return null;var v=ZIPS[z];if(!v)return {zip:z,missing:true};var p=v.split("|");return {zip:z,city:p[0],state:p[1],alts:p[2]?p[2].split(";"):[]};}
+  function sameCity(a,b){return String(a||"").toLowerCase().replace(/[^a-z]/g,"")===String(b||"").toLowerCase().replace(/[^a-z]/g,"");}
+
+  /* Check ZIP against city/state; fill blanks, warn on mismatch. ids = {city,state,zip,msgHost} */
+  function zipCheck(ids){
+    var zEl=$$(ids.zip),cEl=$$(ids.city),sEl=$$(ids.state);if(!zEl)return;
+    var host=ids.msgHost&&ids.msgHost();if(!host)return;
+    var old=host.querySelector(".vsc-zipmsg");if(old)old.remove();
+    var z=String(zEl.value||"").replace(/\D/g,"");
+    if(z.length<5)return;
+    loadZips().then(function(){
+      var info=zipInfo(z);if(!info)return;
+      var o=host.querySelector(".vsc-zipmsg");if(o)o.remove();
+      var box=document.createElement("div");box.className="vsc-msg vsc-zipmsg";
+      if(info.missing){box.classList.add("warn");box.textContent="ZIP "+info.zip+" is not in the USPS ZIP list. Double-check it.";host.appendChild(box);return;}
+      var filled=[];
+      if(cEl&&!String(cEl.value||"").trim()){cEl.value=info.city;filled.push("city");}
+      if(sEl&&!String(sEl.value||"").trim()){sEl.value=info.state;filled.push("state");}
+      var city=cEl?String(cEl.value||"").trim():"",st=sEl?String(sEl.value||"").trim().toUpperCase():"";
+      var cityOk=!city||sameCity(city,info.city)||info.alts.some(function(a){return sameCity(a,city);});
+      var stOk=!st||st===info.state;
+      if(!cityOk||!stOk){
+        box.classList.add("warn");
+        box.innerHTML='<span>ZIP <b>'+esc(info.zip)+'</b> belongs to <b>'+esc(info.city)+', '+esc(info.state)+'</b>'+(info.alts.length?' (also '+esc(info.alts.slice(0,3).join(", "))+')':'')+'. The card says '+esc([city,st].filter(Boolean).join(", "))+'.</span><button type="button" class="vsc-btn">Use '+esc(info.city)+', '+esc(info.state)+'</button>';
+        box.querySelector("button").addEventListener("click",function(){if(cEl)cEl.value=info.city;if(sEl)sEl.value=info.state;fire(cEl);fire(sEl);zipCheck(ids);});
+      }else if(filled.length){
+        box.classList.add("ok");box.innerHTML='<span>Filled in '+filled.join(" and ")+' from ZIP '+esc(info.zip)+': <b>'+esc(info.city)+', '+esc(info.state)+'</b>.</span>';
+        fire(cEl);fire(sEl);
+      }else{
+        box.classList.add("ok");box.innerHTML='<span>ZIP '+esc(info.zip)+' matches '+esc(info.city)+', '+esc(info.state)+'.</span>';
+      }
+      host.appendChild(box);
+    });
+  }
+  function fire(el){if(!el)return;try{el.dispatchEvent(new Event("input",{bubbles:true}));el.dispatchEvent(new Event("change",{bubbles:true}));}catch(e){}}
+
+  /* Census address check */
+  function verifyAddress(ids,btn,host){
+    var addr=val(ids.addr),city=val(ids.city),st=val(ids.state),zip=val(ids.zip);
+    var old=host.querySelector(".vsc-vmsg");if(old)old.remove();
+    var box=document.createElement("div");box.className="vsc-msg vsc-vmsg info";
+    if(!addr||(!zip&&!(city&&st))){box.textContent="Add the street address and a ZIP (or city and state) first.";host.appendChild(box);return;}
+    btn.disabled=true;btn.textContent="Checking…";
+    fetch("/api/address-verify?address="+encodeURIComponent(addr)+"&city="+encodeURIComponent(city)+"&state="+encodeURIComponent(st)+"&zip="+encodeURIComponent(zip))
+      .then(function(r){return r.json();})
+      .then(function(j){
+        if(j&&j.ok&&j.match){
+          var m=j.match;
+          var same=sameCity(m.street,addr)&&sameCity(m.city,city)&&m.state===st.toUpperCase()&&String(m.zip)===zip.slice(0,5);
+          box.className="vsc-msg vsc-vmsg ok";
+          box.innerHTML='<span>'+(same?'Verified with U.S. Census address records: ':'Census address records match: ')+'<b>'+esc(m.full)+'</b></span>'+(same?'':'<button type="button" class="vsc-btn">Use this address</button>');
+          var b=box.querySelector("button");
+          if(b)b.addEventListener("click",function(){var a=$$(ids.addr),c=$$(ids.city),s=$$(ids.state),z=$$(ids.zip);if(a)a.value=m.street;if(c)c.value=m.city;if(s)s.value=m.state;if(z)z.value=m.zip;[a,c,s,z].forEach(fire);box.className="vsc-msg vsc-vmsg ok";box.innerHTML='<span>Address updated to <b>'+esc(m.full)+'</b>. Save the card to keep it.</span>';});
+        }else{
+          box.className="vsc-msg vsc-vmsg warn";
+          box.textContent=(j&&j.reason==="no_match")?"No exact match in Census address records. Check the house number, street name and ZIP. Brand-new streets and PO boxes may not be listed.":"The address checker is not available right now. Try again in a minute.";
+        }
+      })
+      .catch(function(){box.className="vsc-msg vsc-vmsg warn";box.textContent="The address checker is not available right now. Try again in a minute.";})
+      .then(function(){btn.disabled=false;btn.textContent="Verify address";host.appendChild(box);});
+  }
+
+  /* ---------- lead card layout ---------- */
+  function fld(id){var e=$$(id);return e?e.closest(".cz-fld"):null;}
+  function section(key,label,icon){var s=document.createElement("section");s.className="vsc-sec vsc-"+key;s.innerHTML='<h4>'+ICON[icon]+label+'</h4>';var g=document.createElement("div");g.className="vsc-grid";s.appendChild(g);return {sec:s,grid:g};}
+  function header(box){
+    var h=box.querySelector(".vsc-head");
+    if(!h){h=document.createElement("div");h.className="vsc-head";var h2=box.querySelector("h2");if(h2){h2.style.display="none";h2.insertAdjacentElement("afterend",h);}else box.insertBefore(h,box.firstChild);}
+    var fn=title(val("cz_firstName")),ln=title(val("cz_lastName"));var name=(fn+" "+ln).trim();
+    var isNew=/add client/i.test((box.querySelector("h2")||{}).textContent||"");
+    var ini=((fn.charAt(0)||"")+(ln.charAt(0)||"")).toUpperCase()||"+";
+    var chips=[];
+    var ph=val("cz_phone");if(ph)chips.push('<span class="vsc-chip">'+esc(fmtPhone(ph))+'</span>');
+    var a=age(val("cz_dob"));if(a!=null)chips.push('<span class="vsc-chip">Age '+a+'</span>');
+    var city=title(val("cz_city")),st=val("cz_state"),z=val("cz_zipCode");
+    var loc=[city,[st,z].filter(Boolean).join(" ")].filter(Boolean).join(", ");if(loc)chips.push('<span class="vsc-chip">'+esc(loc)+'</span>');
+    var src=val("cz_source");var k="none";try{k=window.vsLeadKind?window.vsLeadKind({source:src}):(src?"own":"none");}catch(e){}
+    chips.push('<span class="vsc-chip '+k+'">'+(k==="own"?"Own lead":k==="agency"?"Agency lead":"No source")+'</span>');
+    var q=val("cz_quoteValue");if(q&&Number(q)>0)chips.push('<span class="vsc-chip">'+(typeof money==="function"?money(Number(q)):"$"+q)+' quote</span>');
+    var stage=$$("cz_stage");if(stage&&stage.selectedIndex>=0)chips.push('<span class="vsc-chip">'+esc(stage.options[stage.selectedIndex].text)+'</span>');
+    h.innerHTML='<div class="vsc-av">'+esc(ini)+'</div><div class="vsc-hmain"><div class="vsc-name">'+esc(name||(isNew?"New lead":"Unnamed lead"))+'</div><div class="vsc-chips">'+chips.join("")+'</div><div class="vsc-pills"></div></div>';
+    var pills=h.querySelector(".vsc-pills");
+    box.querySelectorAll(":scope > .cz-pill").forEach(function(p){pills.appendChild(p);});
+    if(!pills.children.length){var keep=box.__vscPills||[];keep.forEach(function(p){pills.appendChild(p);});}
+    box.__vscPills=[].slice.call(pills.children);
+  }
+  function layout(box){
+    var grid=box.querySelector(".cz-fgrid");if(!grid||!$$("cz_firstName")||grid.classList.contains("vsc-wrap"))return;
+    box.__vscPills=null;var oldHead=box.querySelector(".vsc-head");if(oldHead)oldHead.remove();
+    grid.classList.add("vsc-wrap");
+    var srcChips=(function(){var l=fld("cz_source");var n=l&&l.nextElementSibling;return (n&&n.tagName==="DIV"&&!n.classList.contains("cz-fld"))?n:null;})();
+    var notes=fld("cz_notes");
+    var C=section("contact","Contact","user"),L=section("location","Location","pin"),P=section("pipeline","Pipeline & follow-up","flow"),N=section("notes","Notes","note");
+    ["cz_firstName","cz_lastName","cz_phone","cz_email","cz_dob"].forEach(function(id){var f=fld(id);if(f)C.grid.appendChild(f);});
+    var addr=fld("cz_address");if(addr){addr.classList.add("vsc-full");L.grid.appendChild(addr);}
+    L.grid.style.gridTemplateColumns="1fr";
+    var locRow=document.createElement("div");locRow.className="vsc-loc";
+    var fc=fld("cz_city"),fs=fld("cz_state"),fz=fld("cz_zipCode");
+    if(fc){fc.classList.add("vsc-city");locRow.appendChild(fc);}if(fs)locRow.appendChild(fs);if(fz)locRow.appendChild(fz);
+    L.sec.appendChild(locRow);
+    var tools=document.createElement("div");tools.className="vsc-tools";tools.innerHTML='<button type="button" class="vsc-btn" data-vsc-verify>Verify address</button><span style="font-size:12px;color:#64748b">Checks U.S. Census address records. ZIP fills in city and state.</span>';
+    L.sec.appendChild(tools);
+    var msgHost=document.createElement("div");msgHost.className="vsc-msgs";L.sec.appendChild(msgHost);
+    ["cz_stage","cz_source"].forEach(function(id){var f=fld(id);if(f)P.grid.appendChild(f);});
+    if(srcChips){srcChips.classList.add("vsc-full");P.grid.appendChild(srcChips);}
+    ["cz_followUpDue","cz_apptDate","cz_quoteValue"].forEach(function(id){var f=fld(id);if(f)P.grid.appendChild(f);});
+    if(notes){notes.classList.add("vsc-full");N.grid.appendChild(notes);}
+    /* anything else other scripts put in the grid goes to Notes, in order */
+    [].slice.call(grid.children).forEach(function(ch){N.grid.appendChild(ch);});
+    [C,L,P,N].forEach(function(x){grid.appendChild(x.sec);});
+    N.grid.style.gridTemplateColumns="1fr";
+    var ids={addr:"cz_address",city:"cz_city",state:"cz_state",zip:"cz_zipCode",msgHost:function(){return msgHost;}};
+    var cph=$$("cz_city");if(cph&&cph.placeholder==="Miami")cph.placeholder="City";
+    var zph=$$("cz_zipCode");if(zph){zph.placeholder="5-digit ZIP";zph.setAttribute("inputmode","numeric");zph.setAttribute("maxlength","10");}
+    tools.querySelector("[data-vsc-verify]").addEventListener("click",function(){verifyAddress(ids,this,msgHost);});
+    var t=null;function recheck(){clearTimeout(t);t=setTimeout(function(){zipCheck(ids);},250);}
+    ["cz_zipCode","cz_city"].forEach(function(id){var e=$$(id);if(e)e.addEventListener("input",function(ev){if(ev.isTrusted)recheck();});});
+    var se=$$("cz_state");if(se)se.addEventListener("change",function(ev){if(ev.isTrusted)recheck();});
+    /* after picking an autocomplete suggestion, re-check the ZIP */
+    box.addEventListener("mousedown",function(e){if(e.target.closest&&e.target.closest(".cz-ac-item"))setTimeout(function(){zipCheck(ids);},120);},true);
+    /* live header */
+    var hT=null;box.addEventListener("input",function(){clearTimeout(hT);hT=setTimeout(function(){header(box);},150);});
+    box.addEventListener("change",function(){clearTimeout(hT);hT=setTimeout(function(){header(box);},150);});
+    header(box);
+    setTimeout(function(){zipCheck(ids);},60);
+  }
+  /* Edit client (Active Clients) form uses ca-* ids: ZIP check only */
+  function acctForm(box){
+    if(box.__vscAcct||!$$("ca-zip"))return;box.__vscAcct=true;
+    var host=document.createElement("div");var z=$$("ca-zip");(z.closest("label")||z.parentNode).insertAdjacentElement("afterend",host);
+    var ids={addr:"ca-address",city:"ca-city",state:"ca-state",zip:"ca-zip",msgHost:function(){return host;}};
+    z.addEventListener("input",function(ev){if(ev.isTrusted)setTimeout(function(){zipCheck(ids);},250);});
+  }
+  var mo=new MutationObserver(function(){var box=$$("modal-content");if(!box)return;
+    if($$("cz_firstName"))setTimeout(function(){try{layout(box);}catch(e){console.warn("lead card layout",e);}},40);
+    if($$("ca-zip"))acctForm(box);else box.__vscAcct=false;
+  });
+  function start(){var box=$$("modal-content");if(box)mo.observe(box,{childList:true});else setTimeout(start,500);}
+  start();
+})();}catch(err){if(window.console)console.warn("lead card redesign failed",err);}
 })();
 </script>
 <script>
