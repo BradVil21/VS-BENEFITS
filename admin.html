@@ -8795,6 +8795,228 @@ try{(function(){
   function start(){var box=$$("modal-content");if(box)mo.observe(box,{childList:true});else setTimeout(start,500);}
   start();
 })();}catch(err){if(window.console)console.warn("lead card redesign failed",err);}
+/* ═══════════════ PROFILE VIEW + NOTIFICATION SOUNDS (added Sept 27 2026) ═══════════════
+   1. A saved lead now opens as a read-only profile card with every field labeled,
+      a notes timeline and an Edit button that reveals the form. New leads open
+      straight into the form. Saving works exactly as before.
+   2. Each kind of alert has its own sound (new lead, hot new own lead, client
+      message, task reminder, sale), chosen in Settings > Notification sounds.
+      Sounds are generated in the browser, so there are no audio files to load. */
+try{(function(){
+  var S=document.createElement("style");S.id="vsp-style";S.textContent=[
+  /* view vs edit */
+  ".vsc-wrap:not(.vsp-editing) .vsc-contact,.vsc-wrap:not(.vsp-editing) .vsc-location,.vsc-wrap:not(.vsp-editing) .vsc-pipeline{display:none}",
+  ".vsc-wrap.vsp-editing .vsp-profile{display:none}",
+  ".vsc-wrap:not(.vsp-editing) .vsc-notes #cz_notes{display:none}",
+  ".vsc-wrap.vsp-editing .vsp-timeline{display:none}",
+  ".vsp-profile .vsp-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}",
+  ".vsp-profile .vsp-top h4{margin:0}",
+  ".vsp-edit{display:inline-flex;align-items:center;gap:6px;background:#0b2346;color:#fff;border:0;border-radius:999px;padding:8px 14px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit}",
+  ".vsp-edit:hover{background:#16447f}",
+  ".vsp-done{display:inline-flex;align-items:center;gap:6px;background:#fff;color:#0b2346;border:1px solid #cfdcef;border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;margin:0 0 12px}",
+  ".vsp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border:1px solid #eef2f8;border-radius:12px;overflow:hidden}",
+  ".vsp-item{padding:10px 12px;border-bottom:1px solid #eef2f8;min-width:0}",
+  ".vsp-item:nth-child(odd){border-right:1px solid #eef2f8}",
+  ".vsp-item.wide{grid-column:1/-1;border-right:0}",
+  ".vsp-k{font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#7b8aa0;margin-bottom:3px}",
+  ".vsp-v{font-size:14px;font-weight:700;color:#0b2346;line-height:1.35;word-break:break-word;display:flex;flex-wrap:wrap;align-items:center;gap:6px}",
+  ".vsp-v a{color:#16447f;text-decoration:none}.vsp-v a:hover{text-decoration:underline}",
+  ".vsp-empty{color:#a0acbd;font-weight:600;font-style:italic;cursor:pointer}",
+  ".vsp-empty:hover{color:#16447f}",
+  ".vsp-mini{border:1px solid #d8e0ee;background:#fff;color:#16447f;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none!important}",
+  ".vsp-tag{font-size:10.5px;font-weight:800;border-radius:999px;padding:2px 8px}",
+  ".vsp-tag.ok{background:#ecfdf5;color:#047857}.vsp-tag.warn{background:#fff7ed;color:#c2410c}.vsp-tag.own{background:#d1fae5;color:#065f46}.vsp-tag.agency{background:#e2e8f0;color:#334155}.vsp-tag.none{background:#ffe4e6;color:#9f1239}",
+  ".vsp-sub{font-size:12px;color:#64748b;font-weight:600}",
+  ".vsp-timeline{display:flex;flex-direction:column;gap:8px;margin-top:10px;max-height:320px;overflow:auto}",
+  ".vsp-note{border-left:3px solid #0d8f84;background:#f6f8fc;border-radius:8px;padding:8px 10px}",
+  ".vsp-note .t{font-size:13px;color:#1f2d3d;white-space:pre-wrap;line-height:1.4}",
+  ".vsp-note .w{font-size:11px;color:#7b8aa0;font-weight:700;margin-bottom:2px}",
+  ".vsp-nonotes{font-size:12.5px;color:#94a3b8;padding:6px 2px}",
+  ".vsp-editnotes{margin-top:8px}",
+  "html.dark .vsp-grid,html.dark .vsp-item{border-color:#253a54}html.dark .vsp-v{color:#e2ecf9}html.dark .vsp-note{background:#162334}html.dark .vsp-note .t{color:#d4e8ff}",
+  "@media(max-width:560px){.vsp-grid{grid-template-columns:1fr}.vsp-item:nth-child(odd){border-right:0}}",
+  ".vsc-wrap:not(.vsp-editing) .vsp-done{display:none!important}",
+  ".od-setnav{background:#f3f6fb;padding:6px 0;z-index:5}",
+  "html.dark .od-setnav{background:#0f1a28}",
+  /* sound settings */
+  ".vss-table{width:100%;border-collapse:collapse;margin-top:12px}",
+  ".vss-table td{padding:8px 6px;border-top:1px solid var(--line,#e2e8f0);font-size:13px;vertical-align:middle}",
+  ".vss-table td:first-child{font-weight:700;color:var(--ink-2,#334155)}",
+  ".vss-table .vss-sub{display:block;font-size:11.5px;font-weight:500;color:#64748b}",
+  ".vss-table select{padding:6px 8px;border:1px solid var(--line,#d8e0ee);border-radius:8px;font:inherit;font-size:13px;background:#fff;max-width:160px}",
+  ".vss-play{border:1px solid #cfdcef;background:#fff;color:#16447f;border-radius:999px;width:34px;height:34px;cursor:pointer;font-size:13px}",
+  "html.dark .vss-table select,html.dark .vss-play{background:#162030;color:#d4e8ff;border-color:#253a54}"
+  ].join("");document.head.appendChild(S);
+
+  function $$(id){return document.getElementById(id);}
+  function val(id){var e=$$(id);return e?String(e.value||"").trim():"";}
+  function esc(s){return escapeHtml(s==null?"":String(s));}
+  function title(s){s=String(s||"").trim();if(s&&(s===s.toUpperCase()||s===s.toLowerCase())&&/[a-z]/i.test(s))return s.toLowerCase().replace(/(^|[\s'\-])([a-z])/g,function(m,p,c){return p+c.toUpperCase();});return s;}
+  function fmtPhone(p){var d=String(p||"").replace(/\D/g,"");if(d.length===11&&d.charAt(0)==="1")d=d.slice(1);if(d.length===10)return "("+d.slice(0,3)+") "+d.slice(3,6)+"-"+d.slice(6);return String(p||"").trim();}
+  function prettyDate(s){if(!s)return "";var d=new Date(String(s).length<=10?s+"T12:00:00":s);if(isNaN(d))return s;return d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});}
+  function prettyDT(s){if(!s)return "";var d=new Date(s);if(isNaN(d))return s;return d.toLocaleString(undefined,{weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
+  function rel(s){if(!s)return "";var d=new Date(String(s).slice(0,10)+"T12:00:00"),t=new Date();t.setHours(12,0,0,0);var n=Math.round((d-t)/864e5);if(isNaN(n))return "";if(n===0)return "today";if(n===1)return "tomorrow";if(n===-1)return "yesterday";return n>0?"in "+n+" days":(-n)+" days ago";}
+  function age(dob){if(!dob)return null;var b=new Date(dob+"T12:00:00");if(isNaN(b))return null;var n=new Date();var a=n.getFullYear()-b.getFullYear();var m=n.getMonth()-b.getMonth();if(m<0||(m===0&&n.getDate()<b.getDate()))a--;return (a>=0&&a<120)?a:null;}
+  function copy(t,btn){try{navigator.clipboard.writeText(t);}catch(e){}if(btn){var o=btn.textContent;btn.textContent="Copied";setTimeout(function(){btn.textContent=o;},1200);}}
+
+  /* ---------- profile card ---------- */
+  function item(k,v,opts){opts=opts||{};return '<div class="vsp-item'+(opts.wide?' wide':'')+'"><div class="vsp-k">'+k+'</div><div class="vsp-v">'+(v||'<span class="vsp-empty" data-vsp-go="'+(opts.field||'')+'">Not added</span>')+'</div></div>';}
+  function renderProfile(wrap){
+    var p=wrap.querySelector(".vsp-profile");if(!p)return;
+    var ph=val("cz_phone"),em=val("cz_email"),dob=val("cz_dob"),a=age(dob);
+    var addr=title(val("cz_address")),city=title(val("cz_city")),st=val("cz_state"),zip=val("cz_zipCode");
+    var full=[addr,city,[st,zip].filter(Boolean).join(" ")].filter(Boolean).join(", ");
+    var stageEl=$$("cz_stage"),stage=stageEl&&stageEl.selectedIndex>=0?stageEl.options[stageEl.selectedIndex].text:"";
+    var src=val("cz_source"),k="none";try{k=window.vsLeadKind?window.vsLeadKind({source:src}):(src?"own":"none");}catch(e){}
+    var fu=val("cz_followUpDue"),ap=val("cz_apptDate"),q=val("cz_quoteValue");
+    var zipMsg=wrap.querySelector(".vsc-zipmsg");var addrTag="";
+    if(zipMsg&&zipMsg.classList.contains("warn"))addrTag='<span class="vsp-tag warn">City/state do not match ZIP</span>';
+    else if(zipMsg&&zipMsg.classList.contains("ok"))addrTag='<span class="vsp-tag ok">ZIP checked</span>';
+    var tel=ph.replace(/[^\d+]/g,"");
+    var html='<div class="vsp-top"><h4>'+document.querySelector(".vsc-sec h4 svg").outerHTML+'Profile</h4><button type="button" class="vsp-edit" data-vsp-edit>&#9998; Edit</button></div><div class="vsp-grid">'
+      +item("Phone",ph?'<a href="tel:'+esc(tel)+'">'+esc(fmtPhone(ph))+'</a><button type="button" class="vsp-mini" data-vsp-copy="'+esc(fmtPhone(ph))+'">Copy</button>':"",{field:"cz_phone"})
+      +item("Email",em?'<a href="mailto:'+esc(em)+'">'+esc(em.toLowerCase())+'</a><button type="button" class="vsp-mini" data-vsp-copy="'+esc(em)+'">Copy</button>':"",{field:"cz_email"})
+      +item("Date of birth",dob?esc(prettyDate(dob))+(a!=null?' <span class="vsp-sub">Age '+a+'</span>':''):"",{field:"cz_dob"})
+      +item("Lead source",src?esc(typeof czSourceLabel==="function"?czSourceLabel(src):src)+' <span class="vsp-tag '+k+'">'+(k==="own"?"Own":k==="agency"?"Agency":"No source")+'</span>':"",{field:"cz_source"})
+      +item("Address",full?esc(full)+' '+addrTag+' <a class="vsp-mini" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(full)+'">Map</a>':"",{wide:true,field:"cz_address"})
+      +item("Pipeline stage",stage?esc(stage):"",{field:"cz_stage"})
+      +item("Quote / value",q&&Number(q)>0?esc(typeof money==="function"?money(Number(q)):"$"+q):"",{field:"cz_quoteValue"})
+      +item("Next follow-up",fu?esc(prettyDate(fu))+' <span class="vsp-sub">'+esc(rel(fu))+'</span>':"",{field:"cz_followUpDue"})
+      +item("Appointment",ap?esc(prettyDT(ap)):"",{field:"cz_apptDate"})
+      +'</div>';
+    p.innerHTML=html;
+  }
+  function renderTimeline(wrap){
+    var tl=wrap.querySelector(".vsp-timeline");if(!tl)return;
+    var raw=val("cz_notes");
+    if(!raw){tl.innerHTML='<div class="vsp-nonotes">No notes yet. Type a note above and press Add. It saves right away.</div>';return;}
+    var parts=raw.split(/\n\s*\n/).map(function(x){return x.trim();}).filter(Boolean);
+    tl.innerHTML=parts.slice(0,40).map(function(x){var m=x.match(/^\[([^\]]{1,40})\]\s*([\s\S]*)$/);return '<div class="vsp-note">'+(m?'<div class="w">'+esc(m[1])+'</div><div class="t">'+esc(m[2])+'</div>':'<div class="t">'+esc(x)+'</div>')+'</div>';}).join("")+(parts.length>40?'<div class="vsp-nonotes">Showing the latest 40 notes. Tap Edit notes to see everything.</div>':'');
+  }
+  function setEditing(wrap,on,focusId){
+    wrap.classList.toggle("vsp-editing",!!on);
+    if(!on){renderProfile(wrap);}
+    else if(focusId){var f=$$(focusId);if(f){setTimeout(function(){f.scrollIntoView({behavior:"smooth",block:"center"});try{f.focus();}catch(e){}},60);}}
+  }
+  function build(){
+    var box=$$("modal-content");if(!box)return false;
+    var wrap=box.querySelector(".cz-fgrid.vsc-wrap");if(!wrap)return false;
+    if(wrap.__vsp)return true;wrap.__vsp=true;
+    var isNew=/add client/i.test((box.querySelector("h2")||{}).textContent||"");
+    var prof=document.createElement("section");prof.className="vsc-sec vsp-profile";
+    wrap.insertBefore(prof,wrap.firstChild);
+    var done=document.createElement("button");done.type="button";done.className="vsp-done";done.innerHTML="&#10003; Done editing";
+    var contact=wrap.querySelector(".vsc-contact");if(contact)wrap.insertBefore(done,contact);
+    if(isNew)done.style.display="none";
+    /* notes: timeline + edit toggle */
+    var notesSec=wrap.querySelector(".vsc-notes");
+    if(notesSec){
+      var tl=document.createElement("div");tl.className="vsp-timeline";
+      var qn=notesSec.querySelector(".cz-quicknote");if(qn)qn.insertAdjacentElement("afterend",tl);else notesSec.appendChild(tl);
+      var en=document.createElement("button");en.type="button";en.className="vsp-mini vsp-editnotes";en.textContent="Edit notes";
+      tl.insertAdjacentElement("afterend",en);
+      en.addEventListener("click",function(){var ta=$$("cz_notes");if(!ta)return;var showing=ta.style.display==="block";ta.style.display=showing?"":"block";en.textContent=showing?"Edit notes":"Hide note editor";if(!showing)ta.focus();});
+      notesSec.addEventListener("click",function(){setTimeout(function(){renderTimeline(wrap);},80);});
+      notesSec.addEventListener("keydown",function(e){if(e.key==="Enter")setTimeout(function(){renderTimeline(wrap);},80);});
+      var ta=$$("cz_notes");if(ta)ta.addEventListener("input",function(){renderTimeline(wrap);});
+    }
+    prof.addEventListener("click",function(e){
+      var t=e.target;
+      if(t.closest("[data-vsp-edit]")){setEditing(wrap,true,"cz_firstName");return;}
+      var c=t.closest("[data-vsp-copy]");if(c){copy(c.getAttribute("data-vsp-copy"),c);return;}
+      var g=t.closest("[data-vsp-go]");if(g){setEditing(wrap,true,g.getAttribute("data-vsp-go")||"cz_firstName");}
+    });
+    done.addEventListener("click",function(){setEditing(wrap,false);var h=box.querySelector(".vsc-head");if(h)h.scrollIntoView({behavior:"smooth",block:"start"});});
+    renderTimeline(wrap);
+    if(isNew){wrap.classList.add("vsp-editing");}else{renderProfile(wrap);setTimeout(function(){renderProfile(wrap);},900);}
+    return true;
+  }
+  /* saving from the profile view with a missing required field: open the form so the error shows */
+  window.addEventListener("click",function(e){
+    var b=e.target&&e.target.closest?e.target.closest("#cz-mSave"):null;if(!b)return;
+    var wrap=document.querySelector("#modal-content .cz-fgrid.vsc-wrap");if(!wrap||wrap.classList.contains("vsp-editing"))return;
+    if(!val("cz_source")||!(val("cz_firstName")||val("cz_lastName")))setEditing(wrap,true,!val("cz_source")?"cz_source":"cz_firstName");
+  },true);
+  var mo=new MutationObserver(function(){
+    if(!$$("cz_firstName"))return;
+    var tries=0;(function wait(){if(build())return;if(++tries<25)setTimeout(wait,60);})();
+  });
+  (function start(){var box=$$("modal-content");if(box)mo.observe(box,{childList:true});else setTimeout(start,500);})();
+
+  /* ---------- notification sounds ---------- */
+  var SND_KEY="vs_sound_map_v1";
+  var EVENTS=[
+    ["lead","New lead","Website, chatbot, phone AI and new business leads"],
+    ["hot","Hot new own lead","Your own lead nobody has called yet (the pop-up)"],
+    ["support","Client message","Support tickets and portal messages"],
+    ["task","Task reminder","Follow-ups due, tasks and birthdays"],
+    ["sale","Sale closed","When a lead becomes an active client"]
+  ];
+  var SOUNDS=[["cash","Cash register"],["chime","Bright chime"],["marimba","Marimba"],["bubble","Bubble pop"],["bell","Soft bell"],["alert","Triple ping (urgent)"],["fanfare","Fanfare"],["classic","Classic ding"],["off","No sound"]];
+  var DEFAULTS={lead:"cash",hot:"alert",support:"bubble",task:"marimba",sale:"fanfare"};
+  function map(){var m={};try{m=JSON.parse(localStorage.getItem(SND_KEY)||"{}")||{};}catch(e){}var o={};Object.keys(DEFAULTS).forEach(function(k){o[k]=m[k]||DEFAULTS[k];});return o;}
+  function saveMap(m){try{localStorage.setItem(SND_KEY,JSON.stringify(m));}catch(e){}}
+  function ctxReady(fn){var ctx=(typeof _getCtx==="function")?_getCtx():null;if(!ctx)return;if(ctx.state==="suspended"){ctx.resume().then(function(){fn(ctx);}).catch(function(){});}else fn(ctx);}
+  function vol(){try{return typeof getSoundVol==="function"?getSoundVol():0.7;}catch(e){return 0.7;}}
+  function tone(ctx,f,start,dur,type,gain,f2){
+    var o=ctx.createOscillator(),g=ctx.createGain();o.type=type||"sine";
+    o.frequency.setValueAtTime(f,ctx.currentTime+start);if(f2)o.frequency.exponentialRampToValueAtTime(f2,ctx.currentTime+start+dur*0.6);
+    var v=Math.max(0.0001,(gain||0.3)*vol());
+    g.gain.setValueAtTime(0.0001,ctx.currentTime+start);g.gain.exponentialRampToValueAtTime(v,ctx.currentTime+start+0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+start+dur);
+    o.connect(g);g.connect(ctx.destination);o.start(ctx.currentTime+start);o.stop(ctx.currentTime+start+dur+0.05);
+  }
+  function noise(ctx,start,dur,gain){
+    var n=Math.floor(ctx.sampleRate*dur),buf=ctx.createBuffer(1,n,ctx.sampleRate),d=buf.getChannelData(0);
+    for(var i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
+    var s=ctx.createBufferSource(),g=ctx.createGain(),hp=ctx.createBiquadFilter();hp.type="highpass";hp.frequency.value=2500;
+    g.gain.value=(gain||0.15)*vol();s.buffer=buf;s.connect(hp);hp.connect(g);g.connect(ctx.destination);s.start(ctx.currentTime+start);
+  }
+  var PLAY={
+    cash:function(c){noise(c,0,0.06,0.25);tone(c,2093,0.03,0.25,"triangle",0.22);tone(c,2637,0.12,0.55,"sine",0.28);tone(c,3136,0.12,0.45,"sine",0.12);},
+    chime:function(c){[1047,1319,1568].forEach(function(f,i){tone(c,f,i*0.09,0.6,"sine",0.26);tone(c,f*2,i*0.09,0.25,"sine",0.05);});},
+    marimba:function(c){[523,659,784].forEach(function(f,i){tone(c,f,i*0.12,0.28,"triangle",0.34);tone(c,f*4,i*0.12,0.06,"sine",0.06);});},
+    bubble:function(c){tone(c,420,0,0.12,"sine",0.32,900);tone(c,520,0.14,0.14,"sine",0.3,1100);},
+    bell:function(c){tone(c,880,0,1.1,"sine",0.26);tone(c,880*2.76,0,0.5,"sine",0.06);tone(c,660,0.22,1.2,"sine",0.22);tone(c,660*2.76,0.22,0.5,"sine",0.05);},
+    alert:function(c){[0,0.16,0.32].forEach(function(t){tone(c,1760,t,0.12,"square",0.08);tone(c,1760,t,0.12,"sine",0.2);});},
+    fanfare:function(c){[523,659,784,1047].forEach(function(f,i){tone(c,f,i*0.1,0.22,"triangle",0.28);});tone(c,1047,0.42,0.9,"triangle",0.26);tone(c,1319,0.42,0.9,"sine",0.18);tone(c,1568,0.42,0.9,"sine",0.12);},
+    classic:function(c){tone(c,880,0,0.28,"sine",0.3);tone(c,1100,0.17,0.38,"sine",0.3);},
+    off:function(){}
+  };
+  function playSound(name,force){if(!force){try{if(typeof isSoundOn==="function"&&!isSoundOn())return;}catch(e){}}var fn=PLAY[name]||PLAY.classic;ctxReady(fn);}
+  var PRI={hot:5,sale:4,lead:3,support:2,task:1},lastPlay={t:0,p:0};
+  function playEvent(ev){var now=Date.now(),p=PRI[ev]||0;if(now-lastPlay.t<1500&&p<=lastPlay.p)return;lastPlay={t:now,p:p};playSound(map()[ev]||"classic");}
+  window.vsPlaySound=playEvent;
+  /* route every alert to its own sound */
+  if(typeof addNotif==="function"){
+    addNotif=function(type,title,sub,tab){
+      var notifs=getNotifs();notifs.unshift({id:uid(),type:type,title:stripIco(title),sub:stripIco(sub||""),tab:tab||"",read:false,ts:Date.now()});
+      if(notifs.length>60)notifs=notifs.slice(0,60);saveNotifs(notifs);
+      playEvent(type==="support"?"support":type==="task"?"task":"lead");
+      updateBellBadge();
+      var btn=$("bell-btn");if(btn){btn.classList.remove("bell-shake");void btn.offsetWidth;btn.classList.add("bell-shake");}
+    };
+  }
+  /* the celebration when a lead becomes a client */
+  if(typeof playNotifSound==="function"){playNotifSound=function(){playEvent("sale");};}
+  /* hot new own lead pop-up */
+  var lastHot=null;
+  new MutationObserver(function(){var p=$$("od2-speed");var id=p&&p.getAttribute("data-id");if(id&&id!==lastHot){lastHot=id;playEvent("hot");}}).observe(document.body,{childList:true,subtree:false,attributes:false});
+  setInterval(function(){var p=$$("od2-speed");var id=p&&p.getAttribute("data-id");if(id&&id!==lastHot){lastHot=id;playEvent("hot");}},5000);
+  /* Settings card */
+  function soundSettings(){
+    var tog=$$("snd-toggle");if(!tog)return;var card=tog.closest(".card");if(!card||card.querySelector(".vss-table"))return;
+    var lede=card.querySelector(".lede");if(lede)lede.textContent="Each kind of alert has its own sound so you know what came in without looking. Pick a sound and press play to hear it.";
+    var m=map();
+    var t=document.createElement("table");t.className="vss-table";
+    t.innerHTML=EVENTS.map(function(e){return '<tr><td>'+e[1]+'<span class="vss-sub">'+e[2]+'</span></td><td style="text-align:right;white-space:nowrap"><select data-vss="'+e[0]+'">'+SOUNDS.map(function(s){return '<option value="'+s[0]+'"'+(m[e[0]]===s[0]?' selected':'')+'>'+s[1]+'</option>';}).join("")+'</select> <button type="button" class="vss-play" data-vss-play="'+e[0]+'" aria-label="Play">&#9654;</button></td></tr>';}).join("");
+    var test=$$("snd-test");if(test){test.insertAdjacentElement("beforebegin",t);test.style.display="none";}else card.appendChild(t);
+    t.addEventListener("change",function(e){var s=e.target.closest("[data-vss]");if(!s)return;var mm=map();mm[s.getAttribute("data-vss")]=s.value;saveMap(mm);playSound(s.value,true);});
+    t.addEventListener("click",function(e){var b=e.target.closest("[data-vss-play]");if(!b)return;playSound(map()[b.getAttribute("data-vss-play")],true);});
+  }
+  if(typeof renderSettings==="function"){var _rsS=renderSettings;renderSettings=function(){var o=_rsS.apply(this,arguments);setTimeout(soundSettings,60);return o;};}
+  setTimeout(soundSettings,1500);
+})();}catch(err){if(window.console)console.warn("profile view / sounds failed",err);}
 })();
 </script>
 <script>
