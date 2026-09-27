@@ -8564,6 +8564,38 @@ try{(function(){
   };
   setTimeout(function(){try{var p=$("p-bizleads");if(p&&p.classList.contains("active"))renderBizLeads();}catch(e){}},1500);
 })();}catch(err){if(window.console)console.warn("business leads redesign failed",err);}
+/* ═══════════════ PHONE LAYOUT FIXES (added Sept 27 2026) ═══════════════
+   Only applies on screens 760px wide or less. Stops iPhone zooming into
+   form fields, gives small buttons a bigger tap area, and fixes rows that
+   squeezed text into a single-letter column (My Tasks roadmap, Follow-ups). */
+try{(function(){
+  var S=document.createElement("style");S.id="od4-mobile";S.textContent="@media (max-width:760px){"+[
+  /* iOS zooms into any field under 16px; keep them at 16 */
+  "input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}",
+  /* My Tasks roadmap rows: title gets the full width, date/status/delete wrap underneath */
+  ".mt-item{flex-wrap:wrap!important;gap:8px 10px!important}",
+  ".mt-item .mt-main{flex:1 1 100%!important;min-width:0}",
+  ".mt-item input[type=date]{flex:1 1 150px;min-width:0}",
+  ".mt-item select{flex:1 1 120px;min-width:0}",
+  ".mt-del{padding:10px 12px!important;font-size:20px!important}",
+  /* Follow-ups rows: name and stage on top, due pill and buttons below */
+  "#p-followups .cz-listitem{flex-wrap:wrap!important;gap:8px 10px!important;align-items:center!important}",
+  "#p-followups .cz-listitem>div:first-child{flex:1 1 100%!important;min-width:0}",
+  "#p-followups .cz-listitem .cz-row{flex-wrap:wrap!important;row-gap:4px}",
+  "#p-followups .cz-listitem .cz-nm{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;max-width:none!important}",
+  /* bigger tap targets */
+  ".od-more{padding:8px 0!important;min-height:36px}",
+  ".od2-nm{padding:4px 0!important;min-height:32px}",
+  ".od2-hide{padding:8px 10px!important;min-width:40px;min-height:40px}",
+  ".od2-call,.bz-b,.ax-b{min-height:36px}",
+  ".od2-meta span{white-space:nowrap}",
+  ".od2-dbtns button{min-height:38px;padding:8px 12px!important}",
+  ".bz-chip,.od2-f,.ax-tgl,#p-bizleads .bz-jump button,.od-jump button{min-height:36px}",
+  /* new-lead pop-up spans the bottom of the screen */
+  "#od2-speed{left:10px!important;right:10px!important;bottom:10px!important;width:auto!important;max-width:none!important}"
+  ].join("")+"}";
+  document.head.appendChild(S);
+})();}catch(err){if(window.console)console.warn("mobile fixes failed",err);}
 })();
 </script>
 <script>
