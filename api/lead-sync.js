@@ -88,8 +88,8 @@ const LOCATION_ID = process.env.GHL_LOCATION_ID || "cNCy6JUURpb4eBDdb9bU";
 
 // Stages that mean the old card is finished business, so a new enquiry from the
 // same person deserves a new card rather than a merge.
-const CLOSED_INDIVIDUAL = ["sold", "no_longer_interested", "disqualified", "ghosted"];
-const CLOSED_BUSINESS = ["won", "lost"];
+const CLOSED_INDIVIDUAL = ["sold", "no_longer_interested", "disqualified", "ghosted", "dead"];
+const CLOSED_BUSINESS = ["won", "lost", "dead"];
 
 // The board renders a card by exact stage match, so a stage outside these lists
 // means the card is in the data and in no column - invisible. Keep in step with
@@ -97,9 +97,9 @@ const CLOSED_BUSINESS = ["won", "lost"];
 const VALID_STAGES = [
   "new_lead", "follow_up", "appointment_scheduled", "quoted", "sixty_plus",
   "open_enrollment", "affordable_care_act", "ghosted", "no_longer_interested",
-  "disqualified", "sold",
+  "disqualified", "sold", "dead",
 ];
-const VALID_BIZ_STAGES = ["prospect", "contacted", "meeting", "proposal", "won", "lost"];
+const VALID_BIZ_STAGES = ["prospect", "contacted", "meeting", "proposal", "won", "lost", "dead"];
 
 // A note line written by a pre-submit capture (api/lead-draft). Recognisable so
 // the merge can replace the previous one instead of appending another.

@@ -94,7 +94,7 @@ module.exports = async (req, res) => {
         updated: now,
       },
       function (x) {
-        if (x.stage === "won" || x.stage === "lost") return false;
+        if (x.stage === "won" || x.stage === "lost" || x.stage === "dead") return false;
         if (contactId && x.ghlContactId && x.ghlContactId === contactId) return true;
         if (email && String(x.email || "").toLowerCase() === email.toLowerCase()) return true;
         if (businessName && String(x.company || "").trim().toLowerCase() === businessName.toLowerCase()) return true;

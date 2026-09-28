@@ -281,10 +281,10 @@ module.exports = async (req, res) => {
   try {
     const push = business
       ? await FS.appendRecord("biz_leads", bizLead, function (x) {
-          return x.stage !== "won" && x.stage !== "lost" && sameCaller(x);
+          return x.stage !== "won" && x.stage !== "lost" && x.stage !== "dead" && sameCaller(x);
         }, touch)
       : await FS.appendRecord("leads", lead, function (x) {
-          return ["sold", "no_longer_interested", "disqualified", "ghosted"].indexOf(x.stage) < 0 && sameCaller(x);
+          return ["sold", "no_longer_interested", "disqualified", "ghosted", "dead"].indexOf(x.stage) < 0 && sameCaller(x);
         }, touch);
     out.pipeline = Boolean(push.ok);
     if (push.action) out.pipelineAction = push.action;

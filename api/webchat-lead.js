@@ -243,10 +243,10 @@ module.exports = async (req, res) => {
   try {
     portal = business
       ? await FS.appendRecord("biz_leads", bizLead, function (x) {
-          return x.stage !== "won" && x.stage !== "lost" && sameLead(x);
+          return x.stage !== "won" && x.stage !== "lost" && x.stage !== "dead" && sameLead(x);
         }, touch)
       : await FS.appendRecord("leads", lead, function (x) {
-          return ["sold", "no_longer_interested", "disqualified", "ghosted"].indexOf(x.stage) < 0 && sameLead(x);
+          return ["sold", "no_longer_interested", "disqualified", "ghosted", "dead"].indexOf(x.stage) < 0 && sameLead(x);
         }, touch);
   } catch (e) { portal = { ok: false, reason: "exception" }; }
 

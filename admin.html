@@ -4754,7 +4754,7 @@ function renderAll(){renderDashboard();renderLeads();renderAccounts();renderSupp
 
 /* ===================== VS BENEFITS CRM — clean Lead Tracker views ===================== */
 var czFollowupDays=14;
-var czCLOSED=["sold","no_longer_interested","disqualified"];
+var czCLOSED=["sold","no_longer_interested","disqualified","dead"];
 var czSTAGES=[
   {id:"new_lead",label:"New Lead",color:"#2f7de0"},
   {id:"follow_up",label:"Follow Up",color:"#0ea5e9"},
@@ -4766,7 +4766,8 @@ var czSTAGES=[
   {id:"ghosted",label:"Ghosted",color:"#f43f5e"},
   {id:"no_longer_interested",label:"No Longer Interested",color:"#94a3b8"},
   {id:"disqualified",label:"Disqualified",color:"#64748b"},
-  {id:"sold",label:"Sold",color:"#10b981"}
+  {id:"sold",label:"Sold",color:"#10b981"},
+  {id:"dead",label:"Dead Lead",color:"#475569"}
 ];
 var czMETA={};czSTAGES.forEach(function(s){czMETA[s.id]=s;});
 var czUS=["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"];
@@ -4965,8 +4966,8 @@ function czDaysBetween(a,b){return Math.round((czParseYMD(a)-czParseYMD(b))/8640
 function czPretty(ymd){if(!ymd)return"";return czParseYMD(ymd).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}
 function czName(c){return ((c.firstName||"")+" "+(c.lastName||"")).trim()||c.name||c.email||"(no name)";}
 function czVal(c){var v=(c.quoteValue!=null&&c.quoteValue!=="")?c.quoteValue:leadValue(c);return Number(v)||0;}
-function czStatusToStage(s){s=(s||"new");var m={"new":"new_lead","contacted":"follow_up","follow-up":"follow_up","appointment-scheduled":"appointment_scheduled","quoted":"quoted","60-days-out":"sixty_plus","open-enrollment":"open_enrollment","ghosted":"ghosted","sold":"sold","enrolled":"sold","declined":"no_longer_interested","lost":"no_longer_interested","no-longer-interested":"no_longer_interested","affordable-care-act":"affordable_care_act","disqualified":"disqualified"};return m[s]||"new_lead";}
-function czStageToStatus(st){var m={"new_lead":"new","follow_up":"follow-up","appointment_scheduled":"appointment-scheduled","quoted":"quoted","sixty_plus":"60-days-out","open_enrollment":"open-enrollment","ghosted":"ghosted","no_longer_interested":"no-longer-interested","sold":"sold","affordable_care_act":"affordable-care-act","disqualified":"disqualified"};return m[st]||"follow-up";}
+function czStatusToStage(s){s=(s||"new");var m={"new":"new_lead","contacted":"follow_up","follow-up":"follow_up","appointment-scheduled":"appointment_scheduled","quoted":"quoted","60-days-out":"sixty_plus","open-enrollment":"open_enrollment","ghosted":"ghosted","sold":"sold","enrolled":"sold","declined":"no_longer_interested","lost":"no_longer_interested","no-longer-interested":"no_longer_interested","affordable-care-act":"affordable_care_act","disqualified":"disqualified","dead":"dead"};return m[s]||"new_lead";}
+function czStageToStatus(st){var m={"new_lead":"new","follow_up":"follow-up","appointment_scheduled":"appointment-scheduled","quoted":"quoted","sixty_plus":"60-days-out","open_enrollment":"open-enrollment","ghosted":"ghosted","no_longer_interested":"no-longer-interested","sold":"sold","affordable_care_act":"affordable-care-act","disqualified":"disqualified","dead":"dead"};return m[st]||"follow-up";}
 function czEnsure(){
   var arr=getLeads();var changed=false;
   arr.forEach(function(l){
@@ -9304,6 +9305,885 @@ try{(function(){
   var mo=new MutationObserver(function(){var box=$$("modal-content");if(!box||!$$("bz_company"))return;setTimeout(function(){try{build(box);}catch(e){console.warn("business card",e);}},40);});
   (function start(){var box=$$("modal-content");if(box)mo.observe(box,{childList:true});else setTimeout(start,500);})();
 })();}catch(err){if(window.console)console.warn("business lead card failed",err);}
+/* ═══════════════ PIPELINE DEAD LEADS, SECTION EXPORT, SMART IMPORT (added Sept 28 2026) ═══════════════
+   1. Regular pipeline gets the same Dead leads folder as Business Leads:
+      mark a bad lead dead with a reason, keep it out of the board and the
+      follow-up list, and Rework or Restore it later.
+   2. Export any section: a picker for both pipelines, plus a download icon
+      on every board column that exports just that column.
+   3. Smart import for CSV and Excel (.xlsx) files. It reads the column
+      names (and the values when the names are unclear), fills in the right
+      fields, cleans phones, names, dates, states and zips, detects whether
+      the file is business or individual leads, skips duplicates or fills in
+      what is missing, and can undo the whole batch. */
+try{(function(){
+  var $$=function(id){return document.getElementById(id);};
+  function esc(s){return escapeHtml(s==null?"":String(s));}
+  function pad2(n){return String(n).padStart(2,"0");}
+  function ymdOf(d){return d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());}
+  function addDays(n){var d=new Date();d.setDate(d.getDate()+n);return ymdOf(d);}
+  function stamp(){return new Date().toLocaleString(undefined,{month:"numeric",day:"numeric",hour:"numeric",minute:"2-digit"});}
+  function tcase(s){s=String(s||"").trim().replace(/\s+/g," ");if(s&&(s===s.toUpperCase()||s===s.toLowerCase())&&/[a-z]/i.test(s))return s.toLowerCase().replace(/(^|[\s'\-&\/.(])([a-z])/g,function(m,p,c){return p+c.toUpperCase();}).replace(/\b(Llc|Llp|Pllc|Dds|Usa|Hvac|Ii|Iii|Iv)\b/g,function(m){return m.toUpperCase();});return s;}
+  function fmtPhone(p){var d=String(p||"").replace(/\D/g,"");if(d.length===11&&d.charAt(0)==="1")d=d.slice(1);if(d.length===10)return "("+d.slice(0,3)+") "+d.slice(3,6)+"-"+d.slice(6);return String(p||"").trim();}
+  function last10(v){return String(v||"").replace(/\D/g,"").slice(-10);}
+  function plural(n,one,many){return n+" "+(n===1?one:(many||one+"s"));}
+  function notify(a,b,c,d){try{if(typeof addNotif==="function")addNotif(a,b,c,d);}catch(e){}}
+  var FOLDER='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
+  var DL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>';
+  var UL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21V9m0 0-4 4m4-4 4 4M4 7V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2"/></svg>';
+
+  var S=document.createElement("style");S.id="od9-css";S.textContent=[
+  ".czx-btn{display:inline-flex;align-items:center;gap:6px;border:1.5px solid #cbd5e1;background:#f8fafc;color:#334155;border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;min-height:36px}",
+  ".czx-btn:hover{border-color:#475569}.czx-btn svg{width:15px;height:15px;flex:0 0 auto}.czx-btn b{font-weight:800;color:#5a6b80}",
+  ".czx-btn.on{background:#475569;border-color:#475569;color:#fff}.czx-btn.on b{color:#e2e8f0}",
+  ".czx-row{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px;align-items:center}",
+  ".czx-row .sp{flex:1}",
+  ".czx-colx{margin-left:4px;border:0;background:none;color:#94a3b8;cursor:pointer;padding:3px;border-radius:6px;display:inline-flex;align-items:center;font-family:inherit}",
+  ".czx-colx:hover{color:#16447f;background:#eef2f8}.czx-colx svg{width:14px;height:14px}",
+  ".od-card .czd-kill{margin:8px 0 0 12px;border:0;background:none;color:#9f1239;font-size:11.5px;font-weight:700;padding:0;cursor:pointer;font-family:inherit}",
+  ".czd-rtag{display:inline-block;margin-top:6px;font-size:10.5px;font-weight:800;background:#ccfbf1;color:#115e59;border-radius:999px;padding:2px 8px}",
+  ".czd{background:#fff;border:1px solid #e6ecf5;border-radius:16px;padding:16px 18px}",
+  ".czd-hd{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}",
+  ".czd-hd h3{margin:0;font-size:17px;font-weight:900;color:#0b2346;display:flex;align-items:center;gap:8px}.czd-hd h3 svg{width:20px;height:20px;color:#475569}",
+  ".czd-hd p{margin:4px 0 0;font-size:12.5px;color:#5a6b80;max-width:640px;line-height:1.45}",
+  ".czd-tools{display:flex;gap:6px;flex-wrap:wrap}",
+  ".czd-rs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}",
+  ".czd-chip{border:1px solid #d8e0ee;background:#fff;color:#334155;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}",
+  ".czd-chip b{font-weight:800;color:#5a6b80;margin-left:4px}.czd-chip.on{background:#0b2346;border-color:#0b2346;color:#fff}.czd-chip.on b{color:#9fd8d2}",
+  ".czd-row{display:flex;gap:12px;align-items:center;border-top:1px solid #eef2f8;padding:11px 2px;cursor:pointer}.czd-row:hover{background:#f8fafc}",
+  ".czd-main{flex:1;min-width:0}.czd-nm{font-weight:800;color:#334155;font-size:14px;word-break:break-word}",
+  ".czd-sub{font-size:12px;color:#64748b;margin-top:2px;line-height:1.35}.czd-from{display:inline-block;font-size:11px;font-weight:700;color:#64748b;margin-top:4px}",
+  ".czd-why{font-size:11px;font-weight:800;background:#f1f5f9;color:#475569;border-radius:999px;padding:3px 9px;white-space:nowrap}",
+  ".czd-when{font-size:11.5px;color:#94a3b8;white-space:nowrap;min-width:78px;text-align:right}",
+  ".czd-acts{display:flex;gap:6px;flex-wrap:wrap;align-items:center}",
+  ".czd-b{display:inline-flex;align-items:center;gap:5px;border:1px solid #d8e0ee;background:#fff;color:#16447f;border-radius:8px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;text-decoration:none;font-family:inherit;white-space:nowrap;min-height:32px}",
+  ".czd-b:hover{border-color:#16447f;text-decoration:none}.czd-b.dark{background:#0b2346;border-color:#0b2346;color:#fff}.czd-b.rework{background:#0f766e;border-color:#0f766e;color:#fff}.czd-b.rework:hover{background:#115e59}",
+  ".czd-empty{padding:28px 10px;text-align:center;color:#64748b;font-size:13px;border-top:1px solid #eef2f8}",
+  ".czd-msg{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:10px;padding:9px 12px;font-size:13px;font-weight:600;margin:0 0 12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}",
+  ".czd-msg button{border:0;background:none;color:#065f46;text-decoration:underline;cursor:pointer;font:inherit;font-weight:800;padding:0}",
+  "@media(max-width:700px){.czd-row{flex-wrap:wrap;gap:6px 10px}.czd-main{flex:1 1 100%}.czd-when{text-align:left;min-width:0}.czd-acts{flex:1 1 100%}.czd-acts .rework{margin-left:auto}}",
+  /* dialogs */
+  ".vi-ov{position:fixed;inset:0;z-index:10060;background:rgba(11,35,70,.5);display:flex;align-items:center;justify-content:center;padding:16px}",
+  ".vi-bx{background:#fff;border-radius:18px;width:100%;max-width:780px;max-height:calc(100vh - 32px);display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(11,35,70,.3);font-family:inherit;color:#0b2346}",
+  ".vi-bx.sm{max-width:480px}",
+  ".vi-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 20px 12px;border-bottom:1px solid #eef2f8}",
+  ".vi-hd h3{margin:0;font-size:18px;font-weight:900}.vi-hd p{margin:4px 0 0;font-size:13px;color:#5a6b80;line-height:1.45}",
+  ".vi-x{border:0;background:#f1f5f9;border-radius:10px;width:34px;height:34px;flex:0 0 auto;cursor:pointer;font-size:18px;color:#334155;font-family:inherit}",
+  ".vi-body{padding:14px 20px;overflow:auto;flex:1}",
+  ".vi-ft{display:flex;gap:8px;align-items:center;justify-content:flex-end;padding:12px 20px 16px;border-top:1px solid #eef2f8;flex-wrap:wrap}",
+  ".vi-ft .sp{flex:1;font-size:12.5px;color:#5a6b80;min-width:160px}",
+  ".vi-go{border:0;background:#16447f;color:#fff;border-radius:10px;padding:11px 18px;font-weight:800;font-size:14px;cursor:pointer;font-family:inherit;min-height:44px}.vi-go[disabled]{background:#94a3b8;cursor:not-allowed}",
+  ".vi-cx{border:1.5px solid #cbd5e1;background:#fff;color:#334155;border-radius:10px;padding:10px 16px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;min-height:44px}",
+  ".vi-link{border:0;background:none;color:#16447f;font-weight:700;cursor:pointer;text-decoration:underline;font:inherit;font-size:12.5px;padding:0}",
+  ".vi-seg{display:inline-flex;background:#f1f5f9;border-radius:12px;padding:4px;gap:4px;margin:0 0 12px}",
+  ".vi-seg button{border:0;background:none;border-radius:9px;padding:8px 14px;font-weight:800;font-size:13px;color:#475569;cursor:pointer;font-family:inherit}",
+  ".vi-seg button.on{background:#fff;color:#0b2346;box-shadow:0 1px 3px rgba(11,35,70,.15)}",
+  ".vi-drop{border:2px dashed #cbd5e1;border-radius:14px;padding:28px 16px;text-align:center;background:#f8fafc;transition:.15s}",
+  ".vi-drop.hot{border-color:#16447f;background:#eef4ff}",
+  ".vi-drop svg{width:34px;height:34px;color:#16447f}.vi-drop h4{margin:8px 0 4px;font-size:15px}.vi-drop p{margin:0 0 12px;font-size:12.5px;color:#5a6b80}",
+  ".vi-note{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;border-radius:10px;padding:9px 12px;font-size:12.5px;line-height:1.45;margin:0 0 12px}",
+  ".vi-warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:10px;padding:9px 12px;font-size:12.5px;line-height:1.45;margin:0 0 12px}",
+  ".vi-err{background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;border-radius:10px;padding:9px 12px;font-size:12.5px;line-height:1.45;margin:10px 0 0}",
+  ".vi-h{font-size:12px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;color:#5a6b80;margin:16px 0 8px}",
+  ".vi-map{border:1px solid #e6ecf5;border-radius:12px;overflow:hidden}",
+  ".vi-mr{display:grid;grid-template-columns:minmax(120px,1fr) minmax(120px,1.3fr) minmax(170px,1fr);gap:10px;align-items:center;padding:8px 12px;border-top:1px solid #eef2f8}",
+  ".vi-mr:first-child{border-top:0}.vi-mr.head{background:#f8fafc;font-size:11px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.04em}",
+  ".vi-mr .cn{font-weight:800;font-size:13px;word-break:break-word}.vi-mr .sv{font-size:12px;color:#64748b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}",
+  ".vi-mr select{width:100%;border:1.5px solid #cbd5e1;border-radius:9px;padding:7px 8px;font-size:13px;font-family:inherit;background:#fff;color:#0b2346}",
+  ".vi-mr.ok select{border-color:#5eead4;background:#f0fdfa}.vi-mr.skip{opacity:.6}",
+  ".vi-tag{display:inline-block;font-size:10px;font-weight:900;border-radius:999px;padding:1px 7px;margin-left:6px;vertical-align:1px}.vi-tag.ok{background:#ccfbf1;color:#115e59}.vi-tag.nt{background:#f1f5f9;color:#64748b}",
+  ".vi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}",
+  ".vi-f{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:800;color:#334155}",
+  ".vi-f input,.vi-f select{border:1.5px solid #cbd5e1;border-radius:9px;padding:9px 10px;font-size:14px;font-family:inherit;font-weight:500;color:#0b2346;background:#fff;min-height:42px;box-sizing:border-box;width:100%}",
+  ".vi-f small{font-weight:500;color:#64748b;font-size:11.5px;line-height:1.35}",
+  ".vi-chk{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:#334155;margin:8px 0 0;line-height:1.4;cursor:pointer}.vi-chk input{margin-top:2px;width:16px;height:16px;flex:0 0 auto}",
+  ".vi-prev{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}",
+  ".vi-pc{border:1px solid #e6ecf5;border-radius:12px;padding:10px 12px;font-size:12px;color:#475569;line-height:1.45;background:#fbfcfe;min-width:0}",
+  ".vi-pc b{display:block;font-size:13.5px;color:#0b2346;margin-bottom:2px;word-break:break-word}.vi-pc .st{display:inline-block;margin-top:5px;font-size:10.5px;font-weight:800;border-radius:999px;padding:2px 8px;background:#eef2f8;color:#16447f}",
+  ".vi-stats{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 0}",
+  ".vi-stat{font-size:12px;font-weight:800;border-radius:999px;padding:5px 11px;background:#f1f5f9;color:#334155}.vi-stat.g{background:#dcfce7;color:#166534}.vi-stat.a{background:#fef3c7;color:#92400e}",
+  ".vi-xl{display:flex;flex-direction:column;border:1px solid #e6ecf5;border-radius:12px;overflow:hidden}",
+  ".vi-xr{display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid #eef2f8;font-size:13.5px;font-weight:700;cursor:pointer}.vi-xr:first-child{border-top:0}.vi-xr:hover{background:#f8fafc}",
+  ".vi-xr input{width:17px;height:17px}.vi-xr .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}.vi-xr .n{margin-left:auto;color:#64748b;font-weight:800;font-size:12.5px}",
+  ".vi-quick{display:flex;gap:12px;margin:0 0 10px;flex-wrap:wrap}",
+  ".vi-done{text-align:center;padding:10px 0 4px}.vi-done .ok{width:54px;height:54px;border-radius:50%;background:#dcfce7;color:#166534;display:inline-flex;align-items:center;justify-content:center;font-size:28px;font-weight:900}",
+  ".vi-done h4{margin:10px 0 4px;font-size:18px}.vi-done p{margin:0;color:#5a6b80;font-size:13.5px;line-height:1.5}",
+  "@media(max-width:640px){.vi-ov{padding:0;align-items:flex-end}.vi-bx{border-radius:18px 18px 0 0;max-height:94vh}.vi-mr{grid-template-columns:1fr 1fr}.vi-mr .sv{grid-column:1/-1;order:3;white-space:normal}.vi-mr.head{display:none}.vi-grid{grid-template-columns:1fr}.vi-prev{grid-template-columns:1fr}.vi-ft .sp{flex:1 1 100%;order:-1}.vi-f input,.vi-f select,.vi-mr select{font-size:16px}}"
+  ].join("");document.head.appendChild(S);
+
+  /* ════════ 1. REGULAR PIPELINE: DEAD LEADS ════════ */
+  var CZ_DEAD_REASONS=["Wrong or disconnected number","Never answers","Not interested, do not call","Not eligible or can't afford","Spam or fake info","Duplicate lead","Outside our states","Other"];
+  var GROUPS=[
+    {key:"new",label:"New",ids:["new_lead"]},{key:"contacted",label:"Contacted",ids:["follow_up"]},
+    {key:"appt",label:"Appointment",ids:["appointment_scheduled"]},{key:"quoted",label:"Quoted",ids:["quoted"]},
+    {key:"nurture",label:"Nurture",ids:["sixty_plus","open_enrollment","affordable_care_act"]},
+    {key:"sold",label:"Sold",ids:["sold"]},{key:"lost",label:"Lost",ids:["ghosted","no_longer_interested","disqualified"]}
+  ];
+  var czShowDead=false,czDeadReason="all",czDeadMsg=null;
+  function leadById(id){return getLeads().filter(function(x){return x.id===id;})[0]||null;}
+  function czDeadAt(c){return Number(c.deadAt)||Number(c.updated)||0;}
+  function czRestoreStage(c){var s=c.deadFrom;return (s&&czMETA[s]&&s!=="dead"&&s!=="sold")?s:"new_lead";}
+  function czReworkStage(c){var s=czRestoreStage(c);return czCLOSED.indexOf(s)>=0||s==="ghosted"?"follow_up":s;}
+  function czAfter(){try{czCurrentRender();}catch(e){}try{if(typeof renderTasks==="function")renderTasks();}catch(e){}}
+  function czMarkDead(id,reason,note){
+    var arr=getLeads(),c=null;arr.forEach(function(x){if(x.id===id)c=x;});if(!c)return;
+    c.deadFrom=(c.stage&&c.stage!=="dead")?c.stage:(c.deadFrom||"new_lead");
+    c.stage="dead";c.status="dead";c.deadReason=reason||"Other";c.deadAt=Date.now();c.updated=Date.now();
+    c.followUpDue="";c.fuCleared=true;
+    czStampNote(c,"Marked dead lead: "+c.deadReason+(note?". "+note:""));
+    saveLeads(arr);
+    try{addLeadActivity(id,"note","Marked dead lead: "+c.deadReason);}catch(e){}
+    try{if(window.__czOpenId===id&&$$("cz_stage"))closeModal();}catch(e){}
+    czAfter();
+    notify("lead","Moved to Dead leads",czName(c)+": "+c.deadReason,"pipeline");
+  }
+  function czBringBack(id,rework){
+    var arr=getLeads(),c=null;arr.forEach(function(x){if(x.id===id)c=x;});if(!c)return;
+    var back=rework?czReworkStage(c):czRestoreStage(c),closed=czCLOSED.indexOf(back)>=0;
+    c.stage=back;c.status=czStageToStatus(back);c.updated=Date.now();
+    if(rework){c.reworkedAt=Date.now();c.followUpDue=todayStr();c.fuCleared=false;}
+    else{c.followUpDue=closed?"":czAddDays(todayStr(),czFollowupDays);c.fuCleared=closed;}
+    czStampNote(c,rework?"Pulled from Dead leads to rework (was: "+(c.deadReason||"Other")+"). Follow-up set for today.":"Restored from Dead leads to "+czMETA[back].label+".");
+    saveLeads(arr);
+    try{addLeadActivity(id,"note",rework?"Reworking lead from Dead leads":"Restored from Dead leads");}catch(e){}
+    czDeadMsg={text:czName(c)+" is back in "+czMETA[back].label+(rework?" with a follow-up for today.":".")};
+    czAfter();
+    if(rework)notify("lead","Lead back in play",czName(c)+" moved from Dead leads to "+czMETA[back].label,"pipeline");
+  }
+  function czPickDead(id){
+    var c=leadById(id);if(!c)return;
+    var old=$$("bzd-pick");if(old)old.remove();
+    var ov=document.createElement("div");ov.id="bzd-pick";var chosen="";
+    ov.innerHTML='<div class="bx" role="dialog" aria-modal="true" aria-label="Mark as dead lead"><h3>Mark as dead lead</h3><div class="who">'+esc(tcase(czName(c)))+(c.phone?' · '+esc(fmtPhone(c.phone)):'')+'</div>'
+      +'<div class="rs">'+CZ_DEAD_REASONS.map(function(r){return '<button type="button" data-r="'+esc(r)+'">'+esc(r)+'</button>';}).join("")+'</div>'
+      +'<textarea placeholder="Optional note, e.g. number belongs to someone else"></textarea>'
+      +'<div class="tip">Dead leads leave the pipeline and stop follow-up reminders. Use <b>No Longer Interested</b> for a real person who said no. You can rework a dead lead any time from the Dead leads folder.</div>'
+      +'<div class="ft"><button type="button" class="cx">Cancel</button><button type="button" class="go" disabled>Move to Dead leads</button></div></div>';
+    document.body.appendChild(ov);
+    var go=ov.querySelector(".go");
+    ov.querySelectorAll("[data-r]").forEach(function(x){x.addEventListener("click",function(){ov.querySelectorAll("[data-r]").forEach(function(y){y.classList.remove("on");});x.classList.add("on");chosen=x.getAttribute("data-r");go.disabled=false;});});
+    function close(){ov.remove();document.removeEventListener("keydown",onKey,true);}
+    function onKey(e){if(e.key==="Escape"){e.stopPropagation();close();}}
+    document.addEventListener("keydown",onKey,true);
+    ov.addEventListener("click",function(e){if(e.target===ov)close();});
+    ov.querySelector(".cx").addEventListener("click",close);
+    go.addEventListener("click",function(){if(!chosen)return;var note=ov.querySelector("textarea").value.trim();close();czMarkDead(id,chosen,note);});
+  }
+  window.vsCzPickDead=czPickDead;
+
+  /* picking "Dead Lead" in any stage dropdown asks for the reason first */
+  var _czSet=czSetStage;
+  czSetStage=function(id,stage){
+    var c=leadById(id);
+    if(stage==="dead"&&c&&c.stage!=="dead"){czPickDead(id);czCurrentRender();return;}
+    if(c&&c.stage==="dead"&&stage!=="dead"){var arr=getLeads();arr.forEach(function(x){if(x.id===id){x.fuCleared=false;czStampNote(x,"Moved out of Dead leads to "+(czMETA[stage]?czMETA[stage].label:stage)+".");}});saveLeads(arr);}
+    return _czSet.apply(this,arguments);
+  };
+  /* saving the lead form with the stage set to Dead Lead: record the when and the where-from */
+  document.addEventListener("click",function(e){
+    var b=e.target&&e.target.closest?e.target.closest("#cz-mSave"):null;if(!b)return;
+    var st=$$("cz_stage"),id=window.__czOpenId;if(!st||!id||st.value!=="dead")return;
+    var before=leadById(id);if(!before||before.stage==="dead")return;
+    var from=before.stage;
+    setTimeout(function(){var arr=getLeads(),ch=false;arr.forEach(function(x){if(x.id===id&&x.stage==="dead"&&!x.deadAt){x.deadAt=Date.now();x.deadFrom=from;x.deadReason=x.deadReason||"Other";x.followUpDue="";x.fuCleared=true;x.status="dead";ch=true;}});if(ch){saveLeads(arr);czAfter();}},350);
+  },true);
+  /* lead form: Mark dead lead / Rework buttons */
+  var _czOpen=czOpenModal;
+  czOpenModal=function(client){
+    window.__czOpenId=client&&client.id||null;
+    var o=_czOpen.apply(this,arguments);
+    try{
+      if(client&&client.id){
+        var foot=document.querySelector("#modal-content .cz-mfoot");
+        if(foot&&!foot.querySelector("[data-czd-m]")){
+          var dead=client.stage==="dead";
+          var b=document.createElement("button");b.type="button";b.className="cz-btn-ghost";b.setAttribute("data-czd-m","1");
+          b.style.cssText=dead?"color:#0f766e;border-color:#99f6e4":"color:#9f1239;border-color:#fecdd3";
+          b.textContent=dead?"Rework this lead":"Mark dead lead";
+          b.title=dead?"Put it back where it was with a follow-up for today":"Wrong number, spam, never answers and so on";
+          foot.insertBefore(b,foot.children[1]||null);
+          b.addEventListener("click",function(){var id=client.id;if(dead){closeModal();czBringBack(id,true);}else czPickDead(id);});
+        }
+      }
+    }catch(e){}
+    return o;
+  };
+
+  function czRenderDead(box){
+    var list=czFiltered().filter(function(c){return c.stage==="dead";}).sort(function(a,b){return czDeadAt(b)-czDeadAt(a);});
+    var counts={};list.forEach(function(c){var r=c.deadReason||"Other";counts[r]=(counts[r]||0)+1;});
+    var reasons=CZ_DEAD_REASONS.filter(function(r){return counts[r];});Object.keys(counts).forEach(function(r){if(reasons.indexOf(r)<0)reasons.push(r);});
+    if(czDeadReason!=="all"&&!counts[czDeadReason])czDeadReason="all";
+    var shown=list.filter(function(c){return czDeadReason==="all"||(c.deadReason||"Other")===czDeadReason;});
+    var searching=!!String(czQuery||"").trim();
+    var rows=shown.length?shown.map(function(c){
+      var d=czDeadAt(c)?new Date(czDeadAt(c)).toLocaleDateString(undefined,{month:"short",day:"numeric"}):"";
+      var sub=[c.phone?fmtPhone(c.phone):"",c.email,c.source?czSourceLabel(c.source):"",[c.city?tcase(c.city):"",c.state].filter(Boolean).join(", ")].filter(Boolean).map(esc).join(" · ");
+      var tel=c.phone?String(c.phone).replace(/[^0-9+]/g,""):"";
+      return '<div class="czd-row" data-czd-open="'+esc(c.id)+'"><div class="czd-main"><div class="czd-nm">'+esc(tcase(czName(c)))+'</div>'+(sub?'<div class="czd-sub">'+sub+'</div>':'')+'<span class="czd-from">Was in: '+esc(czMETA[czRestoreStage(c)].label)+'</span></div>'
+        +'<span class="czd-why">'+esc(c.deadReason||"Other")+'</span><span class="czd-when">'+(d?"Marked "+esc(d):"")+'</span>'
+        +'<div class="czd-acts">'+(tel?'<a class="czd-b" href="tel:'+esc(tel)+'">Call</a><a class="czd-b" href="sms:'+esc(tel)+'">Text</a>':'')+(c.email?'<a class="czd-b" href="mailto:'+esc(c.email)+'">Email</a>':'')
+        +'<button type="button" class="czd-b" data-czd-restore="'+esc(c.id)+'" title="Put it back where it was on the normal 14-day follow-up">Restore</button>'
+        +'<button type="button" class="czd-b rework" data-czd-rework="'+esc(c.id)+'" title="Put it back and set a follow-up for today">Rework</button></div></div>';
+    }).join(""):'<div class="czd-empty">'+(list.length?"No dead leads for this reason.":(searching?"No dead leads match your search.":"No dead leads yet. On any card, tap <b>Dead</b> to move a bad lead here."))+'</div>';
+    var msg=czDeadMsg;czDeadMsg=null;
+    box.innerHTML='<div class="czd"><div class="czd-hd"><div><h3>'+FOLDER+'Dead leads folder <span style="color:#94a3b8;font-weight:800">'+list.length+'</span></h3><p>Leads you stopped chasing, kept here in case you want to try again. <b>Rework</b> puts one back where it was with a follow-up for today. <b>Restore</b> puts it back on the normal 14-day follow-up. Tap a row for the full history.</p></div>'
+      +'<div class="czd-tools">'+(shown.length?'<button type="button" class="czd-b" data-czd-csv>'+DL+'Download list</button>':'')+'<button type="button" class="czd-b dark" data-czd-back>Back to pipeline</button></div></div>'
+      +(msg?'<div class="czd-msg"><span>'+esc(msg.text)+'</span><button type="button" data-czd-go>See it in the pipeline</button></div>':'')
+      +(list.length?'<div class="czd-rs"><button type="button" class="czd-chip'+(czDeadReason==="all"?" on":"")+'" data-czd-r="all">All<b>'+list.length+'</b></button>'+reasons.map(function(r){return '<button type="button" class="czd-chip'+(czDeadReason===r?" on":"")+'" data-czd-r="'+esc(r)+'">'+esc(r)+'<b>'+counts[r]+'</b></button>';}).join("")+'</div>':'')
+      +rows+'</div>';
+    function back(){czShowDead=false;czPipeResults();}
+    box.querySelector("[data-czd-back]").addEventListener("click",back);
+    var gg=box.querySelector("[data-czd-go]");if(gg)gg.addEventListener("click",back);
+    var cv=box.querySelector("[data-czd-csv]");if(cv)cv.addEventListener("click",function(){exportLeads(shown,czDeadReason==="all"?"dead":"dead-"+czDeadReason);});
+    box.querySelectorAll("[data-czd-r]").forEach(function(x){x.addEventListener("click",function(){czDeadReason=x.getAttribute("data-czd-r");czPipeResults();});});
+    box.querySelectorAll("[data-czd-restore]").forEach(function(x){x.addEventListener("click",function(e){e.stopPropagation();czBringBack(x.getAttribute("data-czd-restore"),false);});});
+    box.querySelectorAll("[data-czd-rework]").forEach(function(x){x.addEventListener("click",function(e){e.stopPropagation();czBringBack(x.getAttribute("data-czd-rework"),true);});});
+    box.querySelectorAll("[data-czd-open]").forEach(function(r){r.addEventListener("click",function(e){if(e.target.closest("button,a"))return;var c=leadById(r.getAttribute("data-czd-open"));if(c)czOpenModal(c);});});
+  }
+
+  /* toolbar row above the board: dead folder, download, import */
+  function czTools(){
+    var mount=$$("cz-pipeline"),res=$$("cz-pipe-results");if(!mount||!res)return;
+    var row=$$("czx-row");
+    if(!row){row=document.createElement("div");row.id="czx-row";row.className="czx-row";res.parentNode.insertBefore(row,res);}
+    var deadN=getLeads().filter(function(c){return c.stage==="dead";}).length;
+    row.innerHTML='<button type="button" class="czx-btn" data-czx-export>'+DL+'Download CSV</button><button type="button" class="czx-btn" data-czx-import>'+UL+'Import leads</button><span class="sp"></span>'
+      +'<button type="button" class="czx-btn'+(czShowDead?" on":"")+'" data-czx-dead title="Open the folder of leads you marked dead">'+FOLDER+(czShowDead?"Close dead leads":"Dead leads folder")+' <b>'+deadN+'</b></button>';
+    row.querySelector("[data-czx-export]").addEventListener("click",function(){openExport("leads");});
+    row.querySelector("[data-czx-import]").addEventListener("click",function(){openImporter("leads");});
+    row.querySelector("[data-czx-dead]").addEventListener("click",function(){czShowDead=!czShowDead;czPipeResults();});
+  }
+  function czDecorate(box){
+    var byId={};getLeads().forEach(function(c){byId[c.id]=c;});
+    box.querySelectorAll(".cz-card[data-cz-card]").forEach(function(card){
+      var c=byId[card.getAttribute("data-cz-card")];if(!c||c.stage==="sold"||c.stage==="dead")return;
+      var more=card.querySelector("[data-od-more]");var host=more?more.parentNode:null;
+      if(host&&!host.querySelector("[data-czd-kill]")){var k=document.createElement("button");k.type="button";k.className="czd-kill";k.setAttribute("data-czd-kill",c.id);k.textContent="Dead";k.title="Bad lead: wrong number, spam, never answers";host.appendChild(k);
+        k.addEventListener("click",function(e){e.stopPropagation();czPickDead(c.id);});}
+      if(c.reworkedAt&&czCLOSED.indexOf(c.stage)<0&&!card.querySelector(".czd-rtag")){var top=card.querySelector(".cz-ctop");if(top)top.insertAdjacentHTML("afterend",'<span class="czd-rtag">Reworked</span>');}
+    });
+    box.querySelectorAll("[data-od-group]").forEach(function(col){
+      var hd=col.querySelector(".cz-col-head .cz-row");if(!hd||hd.querySelector("[data-czx-col]"))return;
+      var key=col.getAttribute("data-od-group"),g=GROUPS.filter(function(x){return x.key===key;})[0];if(!g)return;
+      var b=document.createElement("button");b.type="button";b.className="czx-colx";b.setAttribute("data-czx-col",key);b.title="Download "+g.label+" as CSV";b.setAttribute("aria-label",b.title);b.innerHTML=DL;hd.appendChild(b);
+      b.addEventListener("click",function(e){e.stopPropagation();var list=czFiltered().filter(function(c){return g.ids.indexOf(c.stage)>=0;});exportLeads(list,g.label);});
+    });
+  }
+  var _pipe=czPipeResults;
+  czPipeResults=function(){
+    var box=$$("cz-pipe-results");if(!box)return _pipe.apply(this,arguments);
+    try{czTools();}catch(e){console.warn("od9 tools",e);}
+    if(czShowDead){czRenderDead(box);return;}
+    var o=_pipe.apply(this,arguments);
+    try{czDecorate(box);}catch(e){console.warn("od9 board",e);}
+    return o;
+  };
+
+  /* ════════ 2. EXPORT ════════ */
+  function csvOut(rows){return "﻿"+rows.map(function(r){return r.map(csvEscape).join(",");}).join("\r\n");}
+  function slug(s){return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"all";}
+  function isoDay(ts){return ts?ymdOf(new Date(Number(ts))):"";}
+  function exportLeads(list,label){
+    var head=["First Name","Last Name","Email","Phone","Date of Birth","Address","City","State","Zip","Stage","Quote Value","Source","Follow-up Due","Appointment","Last Contact","Date Added","Dead Reason","Marked Dead","Notes"];
+    var rows=[head].concat(list.map(function(c){return [c.firstName||"",c.lastName||"",c.email||"",c.phone||"",c.dob||"",c.address||"",c.city||"",c.state||"",c.zipCode||c.zipcode||"",
+      czMETA[c.stage]?czMETA[c.stage].label:(c.stage||""),czVal(c)||"",c.source||"",c.followUpDue||"",c.apptDate||"",c.lastContact||"",c.createdAt||isoDay(c.created),
+      c.stage==="dead"?(c.deadReason||"Other"):"",c.stage==="dead"?isoDay(c.deadAt):"",String(c.notes||"").replace(/\r?\n+/g," | ")];}));
+    downloadFile("leads-"+slug(label)+"-"+todayStr()+".csv",csvOut(rows),"text/csv;charset=utf-8");
+  }
+  function exportBiz(list,label){
+    var head=["Company","Contact","Email","Phone","Employees","Industry","Requested Coverage","Currently Insured","Coverage Start","City","State","Stage","Source","Next Follow-up","Date Added","Dead Reason","Marked Dead","Notes"];
+    var rows=[head].concat(list.map(function(b){return [b.company||"",b.contact||"",b.email||"",b.phone||"",b.employees||"",b.niche||"",b.requestedCoverage||"",b.currentlyInsured||"",b.coverageStart||"",b.city||"",b.state||"",
+      bizStageMeta(b.stage||"prospect").label,b.source||"",b.nextFollowUp||"",isoDay(b.created),b.stage==="dead"?(b.deadReason||"Other"):"",b.stage==="dead"?isoDay(b.deadAt):"",String(b.notes||"").replace(/\r?\n+/g," | ")];}));
+    downloadFile("business-leads-"+slug(label)+"-"+todayStr()+".csv",csvOut(rows),"text/csv;charset=utf-8");
+  }
+  window.vsExportLeads=exportLeads;window.vsExportBiz=exportBiz;
+  function bizSearchQ(){return String(($$("biz-search")&&$$("biz-search").value)||"").toLowerCase().trim();}
+  function bizSearched(){var q=bizSearchQ();return getBizLeads().filter(function(b){return !q||[b.company,b.contact,b.email,b.phone,b.niche,b.notes].join(" ").toLowerCase().indexOf(q)>=0;});}
+  function openExport(kind){
+    var biz=kind==="biz";
+    var q=biz?bizSearchQ():String(czQuery||"").trim();
+    var stages=biz?BIZ_STAGES.map(function(s){return {id:s.id,label:s.label,color:s.color};}):czSTAGES.map(function(s){return {id:s.id,label:s.label,color:s.color};});
+    var closedIds=biz?["won","lost","dead"]:czCLOSED.concat(["ghosted"]);
+    var ov=document.createElement("div");ov.className="vi-ov";
+    ov.innerHTML='<div class="vi-bx sm" role="dialog" aria-modal="true" aria-label="Download leads"><div class="vi-hd"><div><h3>Download '+(biz?"business leads":"leads")+'</h3><p>Pick the sections you want. You get one spreadsheet file (CSV) with a Stage column, ready for Excel, Google Sheets or GoHighLevel.</p></div><button type="button" class="vi-x" aria-label="Close">&times;</button></div>'
+      +'<div class="vi-body"><div class="vi-quick"><button type="button" class="vi-link" data-q="all">Select all</button><button type="button" class="vi-link" data-q="open">Open only</button><button type="button" class="vi-link" data-q="none">Clear</button></div><div class="vi-xl"></div>'
+      +(q?'<label class="vi-chk"><input type="checkbox" data-only checked/>Only leads that match your search "'+esc(q)+'"</label>':'')+'</div>'
+      +'<div class="vi-ft"><span class="sp" data-count></span><button type="button" class="vi-cx">Cancel</button><button type="button" class="vi-go" data-go>Download</button></div></div>';
+    document.body.appendChild(ov);
+    var sel={};stages.forEach(function(s){sel[s.id]=true;});
+    function pool(){var only=ov.querySelector("[data-only]");var usingQ=only&&only.checked;
+      if(biz)return usingQ?bizSearched():getBizLeads();
+      return usingQ?czFiltered():getLeads();}
+    function stageOf(x){return biz?(x.stage||"prospect"):x.stage;}
+    function draw(){
+      var p=pool();
+      ov.querySelector(".vi-xl").innerHTML=stages.map(function(s){var n=p.filter(function(x){return stageOf(x)===s.id;}).length;return '<label class="vi-xr"><input type="checkbox" data-s="'+s.id+'"'+(sel[s.id]?" checked":"")+'/><span class="dot" style="background:'+s.color+'"></span>'+esc(s.label)+'<span class="n">'+n+'</span></label>';}).join("");
+      ov.querySelectorAll("[data-s]").forEach(function(c){c.addEventListener("change",function(){sel[c.getAttribute("data-s")]=c.checked;count();});});
+      count();
+    }
+    function picked(){return pool().filter(function(x){return sel[stageOf(x)];});}
+    function count(){var n=picked().length;ov.querySelector("[data-count]").textContent=plural(n,"lead")+" selected";ov.querySelector("[data-go]").disabled=!n;}
+    ov.querySelectorAll("[data-q]").forEach(function(b){b.addEventListener("click",function(){var m=b.getAttribute("data-q");stages.forEach(function(s){sel[s.id]=m==="all"||(m==="open"&&closedIds.indexOf(s.id)<0);});draw();});});
+    var only=ov.querySelector("[data-only]");if(only)only.addEventListener("change",draw);
+    function close(){ov.remove();document.removeEventListener("keydown",onKey,true);}
+    function onKey(e){if(e.key==="Escape"){e.stopPropagation();close();}}
+    document.addEventListener("keydown",onKey,true);
+    ov.addEventListener("click",function(e){if(e.target===ov)close();});
+    ov.querySelector(".vi-x").addEventListener("click",close);ov.querySelector(".vi-cx").addEventListener("click",close);
+    ov.querySelector("[data-go]").addEventListener("click",function(){
+      var ids=stages.filter(function(s){return sel[s.id];});
+      var label=ids.length===stages.length?"all":(ids.length===1?ids[0].label:ids.length+"-sections");
+      var list=picked();if(!list.length)return;
+      if(biz)exportBiz(list,label);else exportLeads(list,label);close();
+    });
+    draw();
+  }
+  window.vsOpenExport=openExport;
+  czExportLeadsCsv=function(){openExport("leads");};
+
+  /* Business Leads: column download icons, and the toolbar buttons go to the new dialogs */
+  function swapBtn(id,html,fn){var x=$$(id);if(!x||x.__od9)return;var n=x.cloneNode(true);n.__od9=true;if(html)n.innerHTML=html;x.parentNode.replaceChild(n,x);n.addEventListener("click",fn);}
+  swapBtn("biz-export","&#11015; Download CSV",function(){openExport("biz");});
+  swapBtn("biz-import","&#11014; Import leads",function(){openImporter("biz");});
+  var _rbl=renderBizLeads;
+  renderBizLeads=function(){
+    var o=_rbl.apply(this,arguments);
+    try{
+      document.querySelectorAll("#p-bizleads .bz-col[data-bizdrop]").forEach(function(col){
+        var hd=col.querySelector(".bz-colhd");if(!hd||hd.querySelector("[data-czx-bcol]"))return;
+        var st=col.getAttribute("data-bizdrop"),meta=bizStageMeta(st);
+        var b=document.createElement("button");b.type="button";b.className="czx-colx";b.setAttribute("data-czx-bcol",st);b.title="Download "+meta.label+" as CSV";b.setAttribute("aria-label",b.title);b.innerHTML=DL;hd.appendChild(b);
+        b.addEventListener("click",function(e){e.stopPropagation();exportBiz(bizSearched().filter(function(x){return (x.stage||"prospect")===st;}),meta.label);});
+      });
+    }catch(e){console.warn("od9 biz cols",e);}
+    return o;
+  };
+
+  /* ════════ 3. SMART IMPORT ════════ */
+  var US={AL:"alabama",AK:"alaska",AZ:"arizona",AR:"arkansas",CA:"california",CO:"colorado",CT:"connecticut",DE:"delaware",DC:"district of columbia",FL:"florida",GA:"georgia",HI:"hawaii",ID:"idaho",IL:"illinois",IN:"indiana",IA:"iowa",KS:"kansas",KY:"kentucky",LA:"louisiana",ME:"maine",MD:"maryland",MA:"massachusetts",MI:"michigan",MN:"minnesota",MS:"mississippi",MO:"missouri",MT:"montana",NE:"nebraska",NV:"nevada",NH:"new hampshire",NJ:"new jersey",NM:"new mexico",NY:"new york",NC:"north carolina",ND:"north dakota",OH:"ohio",OK:"oklahoma",OR:"oregon",PA:"pennsylvania",RI:"rhode island",SC:"south carolina",SD:"south dakota",TN:"tennessee",TX:"texas",UT:"utah",VT:"vermont",VA:"virginia",WA:"washington",WV:"west virginia",WI:"wisconsin",WY:"wyoming",PR:"puerto rico"};
+  var US_BY_NAME={};Object.keys(US).forEach(function(k){US_BY_NAME[US[k]]=k;});
+  function toState(v){var s=String(v||"").trim();if(!s)return "";var u=s.toUpperCase().replace(/\./g,"");if(US[u])return u;var n=US_BY_NAME[s.toLowerCase().replace(/\s+/g," ")];return n||"";}
+  var EMAIL_RE=/^[^\s@,;]+@[^\s@,;]+\.[a-z]{2,}$/i;
+  function phoneLike(v){var d=String(v||"").replace(/\D/g,"");return /^[\s\d()+.\-x#ext]+$/i.test(String(v||""))&&(d.length===10||(d.length===11&&d.charAt(0)==="1"));}
+  function zipClean(v,st){var d=String(v||"").replace(/[^\d]/g,"");if(d.length===9)d=d.slice(0,5);if(d.length===4&&/^(CT|MA|ME|NH|NJ|RI|VT|PR)$/.test(st||""))d="0"+d;if(d.length===3&&/^(PR)$/.test(st||""))d="00"+d;return d.length===5?d:(String(v||"").trim().length?"":"");}
+  function serialYmd(n){var d=new Date(Date.UTC(1899,11,30)+Math.round(n*864e5));return d.getUTCFullYear()+"-"+pad2(d.getUTCMonth()+1)+"-"+pad2(d.getUTCDate());}
+  function toYmd(v,isDob){
+    var s=String(v||"").trim();if(!s)return "";var m,y,mo,d;
+    if((m=s.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})/))){y=+m[1];mo=+m[2];d=+m[3];}
+    else if((m=s.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})\b/))){mo=+m[1];d=+m[2];y=+m[3];if(mo>12&&d<=12){var t=mo;mo=d;d=t;}
+      if(m[3].length===2){var cy=new Date().getFullYear()%100;y=isDob?(y>cy?1900+y:2000+y):2000+y;}}
+    else if(/^\d{5}(\.\d+)?$/.test(s)&&+s>7000&&+s<80000)return serialYmd(+s);
+    else{var p=Date.parse(s);if(isNaN(p))return "";var dd=new Date(p);y=dd.getFullYear();mo=dd.getMonth()+1;d=dd.getDate();}
+    if(!(mo>=1&&mo<=12&&d>=1&&d<=31&&y>=1900&&y<=2100))return "";
+    return y+"-"+pad2(mo)+"-"+pad2(d);
+  }
+  function toDT(v){var s=String(v||"").trim();if(!s)return "";var day=toYmd(s,false);if(!day)return "";var m=s.match(/(\d{1,2}):(\d{2})\s*([ap]\.?m\.?)?/i);var h=9,mi=0;if(m){h=+m[1];mi=+m[2];if(m[3]){var pm=/p/i.test(m[3]);if(pm&&h<12)h+=12;if(!pm&&h===12)h=0;}}return day+"T"+pad2(h)+":"+pad2(mi);}
+  function parseAddress(v){
+    var s=String(v||"").trim().replace(/\s+/g," "),o={};if(!s)return o;
+    var m=s.match(/^(.*?),\s*([^,]+?),?\s+([A-Za-z]{2}|[A-Za-z][A-Za-z ]+?)\.?,?\s+(\d{5})(?:-\d{4})?(?:,?\s*(?:USA|US|United States))?$/i);
+    if(m&&toState(m[3])){o.address=m[1].trim();o.city=m[2].trim();o.state=toState(m[3]);o.zip=m[4];return o;}
+    var z=s.match(/(\d{5})(?:-\d{4})?\s*$/);if(z)o.zip=z[1];
+    var st=s.match(/[,\s]([A-Za-z]{2})[,\s]+\d{5}/);if(st&&toState(st[1]))o.state=toState(st[1]);
+    o.address=s;return o;
+  }
+  function money2(v){var n=Number(String(v||"").replace(/[^0-9.\-]/g,""));return isFinite(n)&&n>0?Math.round(n*100)/100:0;}
+
+  /* field lists for each destination */
+  var FIELDS={
+    leads:[["firstName","First name"],["lastName","Last name"],["fullName","Full name (split for me)"],["email","Email"],["phone","Phone"],["phone2","Other phone"],["dob","Date of birth"],["address","Street address"],["city","City"],["state","State"],["zip","Zip code"],["fullAddress","Full address (split for me)"],["quoteValue","Quote / value"],["source","Lead source"],["stage","Stage / status"],["followUp","Follow-up date"],["appt","Appointment"],["created","Date added"],["deadReason","Dead reason"],["ghl","GoHighLevel contact ID"],["notes","Notes"]],
+    biz:[["company","Company"],["fullName","Contact name"],["firstName","Contact first name"],["lastName","Contact last name"],["email","Email"],["phone","Phone"],["phone2","Other phone"],["employees","Employees"],["niche","Industry"],["requestedCoverage","Coverage wanted"],["currentlyInsured","Currently insured"],["coverageStart","Coverage start"],["address","Street address"],["city","City"],["state","State"],["zip","Zip code"],["fullAddress","Full address (split for me)"],["source","Lead source"],["stage","Stage / status"],["followUp","Next follow-up"],["created","Date added"],["deadReason","Dead reason"],["ghl","GoHighLevel contact ID"],["notes","Notes"]]
+  };
+  function fieldLabel(kind,k){var f=FIELDS[kind].filter(function(x){return x[0]===k;})[0];return f?f[1]:k;}
+  function normH(h){return String(h||"").toLowerCase().replace(/[^a-z0-9]/g,"");}
+  var NOISE=/(email|phone|mobile)(status|valid|verif|type|optin|optout|consent|bounce|score|quality)|status(email|phone)|linkedin|facebook|twitter|instagram|tiktok|youtube|website|^url$|^web$|domain|^tags?$|ipaddress|^ip$|password|latitude|longitude|^lat$|^lng$|^lon$|timezone|^id$|recordid|leadid|rowid|^fax/;
+  var RULES=[
+    ["ghl",/^(ghl|gohighlevel|highlevel|lc|leadconnector)?contactid$|^ghlid$/],
+    ["email",/^e?mail|emailaddress|^email\d?$|workemail|personalemail|businessemail/],
+    ["deadReason",/deadreason|lostreason|disqualreason|reasonlost|reasondead/],
+    ["dob",/^(dob|dateofbirth|birthdate|birthday|bday|birth|dobmmddyyyy)$|dateofbirth|birthdate/],
+    ["followUp",/followup|callback|nextcall|nextcontact|nexttouch|nextstep|nextfollow|followupdate|followupdue/],
+    ["appt",/appt|appointment/],
+    ["created",/^(created|createdat|createddate|datecreated|dateadded|added|leaddate|datereceived|received|optindate|submitted|submitdate|datesubmitted|leadcreated|createdon|timestamp|date)$|datelead|leadreceived|leaddate|dateadded/],
+    ["employees",/employee|headcount|^ees?$|^staff$|companysize|businesssize|groupsize|^size$|numberof(staff|people)|^emps?$|teamsize|fulltime|fte/],
+    ["niche",/industry|niche|sector|vertical|^sic|naics|businesstype|typeofbusiness|category|^trade$/],
+    ["company",/company|business|organization|organisation|^org$|employer|^account(name)?$|^dba$|legalname|firm|practice|agencyname|groupname|^group$/],
+    ["firstName",/^(first|firstname|fname|givenname|forename|contactfirst|ownerfirst)|firstname$/],
+    ["lastName",/^(last|lastname|lname|surname|familyname|contactlast|ownerlast)|lastname$/],
+    ["fullName",/^(name|fullname|contact|contactname|contactperson|client|clientname|customer|customername|leadname|owner|ownername|decisionmaker|primarycontact|insured|applicant|person|prospect|prospectname|member|membername)$|fullname|contactname|ownername/],
+    ["phone2",/(home|work|office|alt|alternate|other|second|secondary|business|landline|direct)(phone|number|tel|line)|phone2$|phone3$|^tel2$/],
+    ["phone",/phone|mobile|cell|^tel$|telephone|^number$|contactnumber|^ph$|^wireless$/],
+    ["fullAddress",/fulladdress|^location$|completeaddress|^addressfull|streetcitystatezip|addresscitystate/],
+    ["address",/address|street|^addr|line1/],
+    ["city",/^(city|town|municipality|cityname)$|city$/],
+    ["state",/^(st|state|province|region|statecode|stateabbr|stateprovince|stateabbreviation)$|^state/],
+    ["zip",/zip|postal|postcode/],
+    ["requestedCoverage",/coverage(type|wanted|requested|interest)|requestedcoverage|plantype|product|interestedin|lookingfor|^coverage$|^interest$|^plan$/],
+    ["currentlyInsured",/insured|currentcoverage|currentcarrier|hascoverage|currentplan|currentinsurance/],
+    ["coverageStart",/coveragestart|effective|startdate|^start$/],
+    ["quoteValue",/quote|premium|^value$|price|amount|^monthly|dealvalue/],
+    ["source",/source|campaign|vendor|origin|^list$|listname|utm|channel|referredby|referral|leadtype|leadprovider|provider/],
+    ["stage",/stage|status|disposition|pipeline|outcome|result/],
+    ["notes",/note|comment|memo|description|remark|details|message|summary|history/]
+  ];
+  function guessByHeader(h,kind){
+    var n=normH(h);if(!n)return "";
+    if(NOISE.test(n))return "";
+    var keys=FIELDS[kind].map(function(f){return f[0];});
+    for(var i=0;i<RULES.length;i++){if(RULES[i][1].test(n)){var k=RULES[i][0];
+      if(k==="company"&&kind==="leads")return "";
+      if(k==="employees"&&kind==="leads")return "";
+      if(k==="niche"&&kind==="leads")return "";
+      return keys.indexOf(k)>=0?k:"";}}
+    return "";
+  }
+  var NAME_RE=/^[A-Za-z][A-Za-z'.\-]+,?(\s+[A-Za-z][A-Za-z'.\-]*){1,3}$/;
+  function sniff(vals,headerless){
+    var v=vals.filter(function(x){return String(x).trim();}).slice(0,40);if(v.length<2)return "";
+    function share(fn){return v.filter(fn).length/v.length;}
+    if(share(function(x){return EMAIL_RE.test(String(x).trim());})>=.7)return "email";
+    if(share(phoneLike)>=.7)return "phone";
+    if(share(function(x){return /^\d{5}(-\d{4})?$/.test(String(x).trim());})>=.8)return "zip";
+    if(share(function(x){return !!toState(x);})>=.8)return "state";
+    if(share(function(x){var y=toYmd(x,true);return y&&+y.slice(0,4)<new Date().getFullYear()-15&&+y.slice(0,4)>1915;})>=.7)return "dob";
+    if(headerless&&share(function(x){var s=String(x).trim();return NAME_RE.test(s)&&!toState(s);})>=.8)return "fullName";
+    return "";
+  }
+  function autoMap(headers,body,kind,headerless){
+    var map=[],used={};
+    headers.forEach(function(h,i){
+      var k=guessByHeader(h,kind);
+      var vals=body.map(function(r){return r[i];});
+      if(k==="address"){var full=vals.filter(function(x){return String(x||"").trim();}).slice(0,30);if(full.length&&full.filter(function(x){var a=parseAddress(x);return a.city&&a.state;}).length/full.length>=.6)k="fullAddress";}
+      if(!k&&!NOISE.test(normH(h))){var s=sniff(vals,headerless);if(s&&FIELDS[kind].some(function(f){return f[0]===s;}))k=s;}
+      if(k&&k!=="notes"&&used[k]){k=(k==="phone"&&!used.phone2)?"phone2":"";}
+      if(k&&k!=="notes")used[k]=1;
+      map.push(k);
+    });
+    return map;
+  }
+  function detectKind(headers,body,fallback){
+    var m=autoMap(headers,body,"biz");
+    var has=function(k){return m.indexOf(k)>=0;};
+    var ml=autoMap(headers,body,"leads");
+    if(has("company")&&(has("employees")||has("niche")))return "biz";
+    if(has("company")&&ml.indexOf("dob")<0&&fallback==="biz")return "biz";
+    if(has("company")&&ml.indexOf("dob")<0&&ml.indexOf("zip")<0)return "biz";
+    if(!has("company")&&fallback==="biz"&&(ml.indexOf("dob")>=0))return "leads";
+    return fallback;
+  }
+
+  /* ---- file reading: CSV / TSV / TXT, and .xlsx without any outside library ---- */
+  function parseDelimited(text){
+    text=String(text||"").replace(/^﻿/,"");
+    var sample=text.slice(0,4000),best=",",bestN=-1;
+    [",","\t",";","|"].forEach(function(d){var n=0,q=false;for(var i=0;i<sample.length;i++){var ch=sample[i];if(ch==='"')q=!q;else if(!q&&ch===d)n++;else if(!q&&ch==="\n")break;}if(n>bestN){bestN=n;best=d;}});
+    var rows=[],row=[],cur="",q=false;
+    for(var i=0;i<text.length;i++){
+      var ch=text[i];
+      if(q){if(ch==='"'){if(text[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=ch;}
+      else if(ch==='"'&&cur==="")q=true;
+      else if(ch===best){row.push(cur);cur="";}
+      else if(ch==="\n"||ch==="\r"){if(ch==="\r"&&text[i+1]==="\n")i++;row.push(cur);cur="";rows.push(row);row=[];}
+      else cur+=ch;
+    }
+    if(cur.length||row.length){row.push(cur);rows.push(row);}
+    return rows.filter(function(r){return r.some(function(c){return String(c).trim()!=="";});});
+  }
+  async function unzip(buf){
+    var dv=new DataView(buf),u8=new Uint8Array(buf),eocd=-1;
+    for(var i=u8.length-22;i>=Math.max(0,u8.length-65557);i--){if(dv.getUint32(i,true)===0x06054b50){eocd=i;break;}}
+    if(eocd<0)throw new Error("notzip");
+    var n=dv.getUint16(eocd+10,true),off=dv.getUint32(eocd+16,true),files={},td=new TextDecoder();
+    for(var k=0;k<n;k++){
+      if(dv.getUint32(off,true)!==0x02014b50)break;
+      var nl=dv.getUint16(off+28,true),xl=dv.getUint16(off+30,true),cl=dv.getUint16(off+32,true);
+      files[td.decode(u8.subarray(off+46,off+46+nl))]={m:dv.getUint16(off+10,true),cs:dv.getUint32(off+20,true),lo:dv.getUint32(off+42,true)};
+      off+=46+nl+xl+cl;
+    }
+    return async function get(name){
+      var e=files[name];if(!e)return null;
+      var s=e.lo+30+dv.getUint16(e.lo+26,true)+dv.getUint16(e.lo+28,true),data=u8.subarray(s,s+e.cs);
+      if(e.m===0)return td.decode(data);
+      if(e.m!==8)throw new Error("zipmethod");
+      var out=await new Response(new Blob([data]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).arrayBuffer();
+      return td.decode(out);
+    };
+  }
+  function colIdx(ref){var m=String(ref||"").match(/^([A-Z]+)/);if(!m)return -1;var n=0;for(var i=0;i<m[1].length;i++)n=n*26+(m[1].charCodeAt(i)-64);return n-1;}
+  async function readXlsx(buf){
+    if(typeof DecompressionStream==="undefined")throw new Error("nodecomp");
+    var get=await unzip(buf),P=new DOMParser();
+    function xml(s){return s?P.parseFromString(s,"application/xml"):null;}
+    function tags(node,t){return node?Array.prototype.slice.call(node.getElementsByTagNameNS("*",t)):[];}
+    var path="xl/worksheets/sheet1.xml";
+    var wb=xml(await get("xl/workbook.xml")),rels=xml(await get("xl/_rels/workbook.xml.rels"));
+    var sh=tags(wb,"sheet")[0];
+    if(sh&&rels){var rid=sh.getAttribute("r:id")||sh.getAttributeNS("http://schemas.openxmlformats.org/officeDocument/2006/relationships","id");
+      tags(rels,"Relationship").forEach(function(r){if(r.getAttribute("Id")===rid){var t=r.getAttribute("Target")||"";path=t.charAt(0)==="/"?t.slice(1):"xl/"+t.replace(/^\.\//,"");}});}
+    var ss=[];tags(xml(await get("xl/sharedStrings.xml")),"si").forEach(function(si){ss.push(tags(si,"t").filter(function(t){return !t.parentNode||t.parentNode.localName!=="rPh";}).map(function(t){return t.textContent;}).join(""));});
+    var dateXf={},st=xml(await get("xl/styles.xml"));
+    if(st){var custom={};tags(st,"numFmt").forEach(function(f){custom[f.getAttribute("numFmtId")]=f.getAttribute("formatCode")||"";});
+      var cx=tags(st,"cellXfs")[0];
+      if(cx)Array.prototype.slice.call(cx.children).forEach(function(xf,i){var id=+xf.getAttribute("numFmtId"),code=custom[id]||"";if((id>=14&&id<=22)||(id>=45&&id<=47)||(code&&/[dy]/i.test(code.replace(/\[[^\]]*\]|"[^"]*"/g,""))))dateXf[i]=1;});}
+    var doc=xml(await get(path));if(!doc)throw new Error("nosheet");
+    var rows=[];
+    tags(doc,"row").forEach(function(r){var out=[];
+      Array.prototype.slice.call(r.children).forEach(function(c){if(c.localName!=="c")return;
+        var col=colIdx(c.getAttribute("r"));if(col<0)col=out.length;
+        var t=c.getAttribute("t"),s=c.getAttribute("s"),v=tags(c,"v")[0],val="";
+        if(t==="s")val=v?(ss[+v.textContent]||""):"";
+        else if(t==="inlineStr")val=tags(c,"t").map(function(x){return x.textContent;}).join("");
+        else if(t==="b")val=v&&v.textContent==="1"?"TRUE":"FALSE";
+        else{val=v?v.textContent:"";if(val&&s!=null&&dateXf[+s]&&/^\d+(\.\d+)?$/.test(val))val=serialYmd(+val);}
+        while(out.length<col)out.push("");out[col]=val;});
+      rows.push(out);});
+    return rows.filter(function(r){return r.some(function(c){return String(c).trim()!=="";});});
+  }
+  function readFile(f){
+    return new Promise(function(res,rej){
+      var nm=String(f.name||"");
+      if(/\.xls$/i.test(nm)){rej(new Error("xls"));return;}
+      if(/\.xlsx$/i.test(nm)||/spreadsheetml/.test(f.type||"")){f.arrayBuffer().then(readXlsx).then(res,rej);return;}
+      if(/\.(numbers|pdf|docx?)$/i.test(nm)){rej(new Error("type"));return;}
+      var fr=new FileReader();fr.onload=function(){try{res(parseDelimited(String(fr.result||"")));}catch(e){rej(e);}};fr.onerror=function(){rej(fr.error||new Error("read"));};fr.readAsText(f);
+    });
+  }
+  function findHeader(rows){
+    for(var i=0;i<Math.min(10,rows.length);i++){
+      var r=rows[i],hits=0,dataish=false;
+      r.forEach(function(h){if(guessByHeader(h,"leads")||guessByHeader(h,"biz"))hits++;if(EMAIL_RE.test(String(h).trim())||phoneLike(h))dataish=true;});
+      if((hits>=2||(i===0&&hits>=1))&&!dataish)return i;
+    }
+    return -1;
+  }
+
+  /* ---- stage words to stages ---- */
+  var STAGE_WORDS={
+    leads:[[/not contacted|uncontacted|never contacted/,"new_lead"],[/\bdead\b|bad lead|wrong (number|#)|disconnected|spam|fake|junk|invalid/,"dead"],[/no longer|not interested|declined|do not call|\bdnc\b|closed lost|\blost\b/,"no_longer_interested"],[/disqual|not eligible|ineligible|\bdq\b/,"disqualified"],[/\bsold\b|enrolled|closed won|\bwon\b|\bclient\b|bound|issued|active policy|customer/,"sold"],[/ghost|no answer|unresponsive|no response|no contact/,"ghosted"],[/open enroll|\boe\b/,"open_enrollment"],[/\baca\b|marketplace|obamacare|affordable/,"affordable_care_act"],[/60|nurture|future|later|not ready/,"sixty_plus"],[/quot|proposal/,"quoted"],[/appt|appointment|scheduled|booked|meeting/,"appointment_scheduled"],[/contact|follow|callback|call back|voicemail|\bvm\b|left message|attempt|working|in progress|warm|hot|engaged/,"follow_up"],[/\bnew\b|fresh|\bopen\b|lead/,"new_lead"]],
+    biz:[[/\bdead\b|bad lead|wrong (number|#)|disconnected|spam|fake|junk|invalid/,"dead"],[/\bwon\b|\bsold\b|\bclient\b|closed won|enrolled|signed|customer/,"won"],[/\blost\b|not interested|declined|closed lost|\bdnc\b|do not call/,"lost"],[/proposal|quot/,"proposal"],[/meeting|appt|appointment|scheduled|booked/,"meeting"],[/not contacted|uncontacted/,"prospect"],[/contact|follow|called|emailed|voicemail|attempt|working|engaged/,"contacted"],[/\bnew\b|prospect|lead|\bopen\b|cold/,"prospect"]]
+  };
+  function stageFrom(v,kind){
+    var s=String(v||"").trim().toLowerCase();if(!s)return null;var n=s.replace(/[^a-z0-9]/g,"");
+    var list=kind==="biz"?BIZ_STAGES:czSTAGES;
+    for(var i=0;i<list.length;i++){if(n===list[i].id.replace(/_/g,"")||n===String(list[i].label).toLowerCase().replace(/[^a-z0-9]/g,""))return list[i].id;}
+    var w=STAGE_WORDS[kind];for(var j=0;j<w.length;j++)if(w[j][0].test(s))return w[j][1];
+    return null;
+  }
+
+  /* ---- turn file rows into clean records ---- */
+  function build(st){
+    var kind=st.kind,out=[],bad=0;
+    st.body.forEach(function(row,ri){
+      var r={},extra=[],notes=[];
+      st.headers.forEach(function(h,i){
+        var v=String(row[i]==null?"":row[i]).trim();if(!v)return;
+        var k=st.map[i];
+        if(k==="skip")return;
+        if(k==="notes"){notes.push((st.headerless||/^notes?$|^comments?$/i.test(h.trim())?"":h.trim()+": ")+v);return;}
+        if(!k){if(st.keepExtra)extra.push(h.trim()+": "+v);return;}
+        if(r[k]!=null){if(st.keepExtra)extra.push(h.trim()+": "+v);return;}
+        r[k]=v;
+      });
+      var o={row:ri+(st.headerRow+2)};
+      if(r.fullAddress){var pa=parseAddress(r.fullAddress);["address","city","state","zip"].forEach(function(k){if(!r[k]&&pa[k])r[k]=pa[k];});}
+      var first=r.firstName||"",last=r.lastName||"";
+      if(r.fullName&&!first&&!last){var fn=String(r.fullName).trim();if(fn.indexOf(",")>0){last=fn.split(",")[0];first=fn.split(",").slice(1).join(" ");}else{var p=fn.split(/\s+/);first=p[0];last=p.slice(1).join(" ");}}
+      o.firstName=tcase(first);o.lastName=tcase(last);
+      o.contact=kind==="biz"?tcase(r.fullName&&!r.firstName&&!r.lastName?r.fullName:(o.firstName+" "+o.lastName).trim()):"";
+      var em=String(r.email||"").trim().toLowerCase().replace(/^mailto:/,"");
+      if(em&&!EMAIL_RE.test(em)){var found=em.match(/[^\s@,;<>]+@[^\s@,;<>]+\.[a-z]{2,}/i);if(found)em=found[0].toLowerCase();else{extra.push("Email (looks wrong): "+r.email);em="";}}
+      o.email=em;
+      var ph=r.phone||"";if(ph&&!phoneLike(ph)&&r.phone2&&phoneLike(r.phone2)){var tmp=ph;ph=r.phone2;r.phone2=tmp;}
+      o.phone=ph?fmtPhone(ph):"";
+      if(r.phone2)extra.unshift("Other phone: "+fmtPhone(r.phone2));
+      o.state=toState(r.state);if(r.state&&!o.state)extra.push("State: "+r.state);
+      o.zip=r.zip?zipClean(r.zip,o.state):"";if(r.zip&&!o.zip)extra.push("Zip: "+r.zip);
+      o.city=tcase(r.city||"");o.address=tcase(r.address||"");
+      o.dob=r.dob?toYmd(r.dob,true):"";if(r.dob&&!o.dob)extra.push("Date of birth: "+r.dob);
+      o.followUp=r.followUp?toYmd(r.followUp,false):"";
+      o.appt=r.appt?toDT(r.appt):"";
+      o.created=r.created?toYmd(r.created,false):"";
+      o.quoteValue=r.quoteValue?money2(r.quoteValue):0;
+      o.source=r.source?String(r.source).trim():"";
+      o.fileStage=r.stage?stageFrom(r.stage,kind):null;o.rawStage=r.stage||"";
+      if(r.stage&&!o.fileStage)extra.push("Status in file: "+r.stage);
+      o.deadReason=r.deadReason||(o.fileStage==="dead"?(/wrong|disconnect|not in service/i.test(o.rawStage)?"Wrong or disconnected number":/spam|fake|junk/i.test(o.rawStage)?"Spam or fake info":/dup/i.test(o.rawStage)?"Duplicate lead":""):"");
+      o.ghl=r.ghl||"";
+      o.company=tcase(r.company||"");o.employees=r.employees||"";o.niche=tcase(r.niche||"");
+      o.requestedCoverage=r.requestedCoverage||"";o.currentlyInsured=r.currentlyInsured||"";o.coverageStart=r.coverageStart?(toYmd(r.coverageStart,false)||r.coverageStart):"";
+      if(kind==="biz"){var loc=[o.city,[o.state,o.zip].filter(Boolean).join(" ")].filter(Boolean).join(", ");if(o.address||loc)extra.unshift("Location: "+[o.address,loc].filter(Boolean).join(", "));}
+      o.notes=notes.concat(extra);
+      if(kind==="leads"){if(!o.email&&!o.phone){bad++;o.bad="no phone or email";}}
+      else{if(!o.company&&!o.contact){bad++;o.bad="no company or contact";}if(!o.company)o.company=o.contact;}
+      out.push(o);
+    });
+    return {recs:out,bad:bad};
+  }
+  function normCo(s){return String(s||"").toLowerCase().replace(/\b(llc|inc|corp|co|ltd|llp|pllc|pa|company|the)\b/g,"").replace(/[^a-z0-9]/g,"");}
+  function plan(st){
+    var b=build(st),kind=st.kind;
+    var existing=kind==="biz"?getBizLeads():getLeads();
+    var byEm={},byPh={},byCo={};
+    existing.forEach(function(x){if(x.email)byEm[String(x.email).toLowerCase().trim()]=x;var p=last10(x.phone);if(p.length===10)byPh[p]=x;if(kind==="biz"&&x.company)byCo[normCo(x.company)]=x;});
+    var seen={},news=[],dups=[],inFile=0;
+    b.recs.forEach(function(o){
+      if(o.bad)return;
+      var p=last10(o.phone),key=(o.email||"")+"|"+p+"|"+(kind==="biz"?normCo(o.company):"");
+      var fk=[o.email?"e:"+o.email:"",p.length===10?"p:"+p:"",kind==="biz"&&o.company&&!o.email&&p.length!==10?"c:"+normCo(o.company):""].filter(Boolean);
+      if(fk.some(function(k){return seen[k];})){inFile++;return;}
+      fk.forEach(function(k){seen[k]=1;});
+      var hit=(o.email&&byEm[o.email])||(p.length===10&&byPh[p])||(kind==="biz"&&o.company&&byCo[normCo(o.company)])||null;
+      if(hit){o.match=hit;dups.push(o);}else news.push(o);
+    });
+    return {recs:b.recs,news:news,dups:dups,bad:b.bad,inFile:inFile};
+  }
+  function followUpFor(st,o,stage,closed){
+    if(o.followUp)return o.followUp;if(closed)return "";
+    return {today:todayStr(),tomorrow:addDays(1),week:addDays(7),two:addDays(14),none:""}[st.firstFu]||"";
+  }
+  function makeLead(st,o,batch){
+    var stage=(st.useFileStage&&o.fileStage)||st.stage,closed=czCLOSED.indexOf(stage)>=0;
+    var created=o.created?new Date(o.created+"T12:00:00").getTime():Date.now();
+    var noteHead="["+stamp()+"] Imported from "+st.filename+" ("+st.source+")";
+    var rec={id:uid(),firstName:o.firstName,lastName:o.lastName,name:(o.firstName+" "+o.lastName).trim(),email:o.email,phone:o.phone,dob:o.dob,address:o.address,city:o.city,state:o.state,zipCode:o.zip,zipcode:o.zip,
+      notes:[noteHead].concat(o.notes).join("\n\n")+"\n",quoteValue:o.quoteValue||0,status:czStageToStatus(stage),stage:stage,
+      source:o.source||st.source,sourceDetail:"CSV import: "+st.filename,followUpDue:followUpFor(st,o,stage,closed),fuCleared:closed||st.firstFu==="none"&&!o.followUp,
+      apptDate:o.appt||"",lastContact:todayStr(),createdAt:o.created||todayStr(),created:created,updated:Date.now(),importBatch:batch,
+      activity:[{id:uid(),ts:Date.now(),type:"created",text:"Imported from "+st.filename+" ("+st.source+")"}]};
+    if(o.ghl)rec.ghlContactId=o.ghl;
+    if(stage==="dead"){rec.deadReason=o.deadReason||"Other";rec.deadAt=Date.now();rec.deadFrom="new_lead";}
+    if(stage==="sold")rec.soldAt=created;
+    return rec;
+  }
+  function makeBiz(st,o,batch){
+    var stage=(st.useFileStage&&o.fileStage)||st.stage,closed=["won","lost","dead"].indexOf(stage)>=0;
+    var created=o.created?new Date(o.created+"T12:00:00").getTime():Date.now();
+    var rec={id:uid(),company:o.company,contact:o.contact,firstName:o.firstName,lastName:o.lastName,niche:o.niche,employees:o.employees,requestedCoverage:o.requestedCoverage,currentlyInsured:o.currentlyInsured,coverageStart:o.coverageStart,
+      stage:stage,stageAt:Date.now(),email:o.email,phone:o.phone,address:o.address,city:o.city,state:o.state,zipCode:o.zip,source:o.source||st.source,sourceDetail:"CSV import: "+st.filename,
+      nextFollowUp:followUpFor(st,o,stage,closed),notes:["["+stamp()+"] Imported from "+st.filename+" ("+st.source+")"].concat(o.notes).join("\n"),created:created,updated:Date.now(),importBatch:batch};
+    if(o.ghl)rec.ghlContactId=o.ghl;
+    if(stage==="dead"){rec.deadReason=o.deadReason||"Other";rec.deadAt=Date.now();rec.deadFrom="prospect";}
+    if(stage==="won")rec.wonAt=created;
+    return rec;
+  }
+  function mergeInto(st,x,o){
+    var filled=[];
+    function f(k,v,label){if(v&&!String(x[k]==null?"":x[k]).trim()){x[k]=v;filled.push(label);}}
+    if(st.kind==="biz"){f("contact",o.contact,"contact");f("email",o.email,"email");f("phone",o.phone,"phone");f("employees",o.employees,"employees");f("niche",o.niche,"industry");f("state",o.state,"state");f("city",o.city,"city");f("requestedCoverage",o.requestedCoverage,"coverage");f("ghlContactId",o.ghl,"GHL ID");}
+    else{f("firstName",o.firstName,"first name");f("lastName",o.lastName,"last name");f("email",o.email,"email");f("phone",o.phone,"phone");f("dob",o.dob,"date of birth");f("address",o.address,"address");f("city",o.city,"city");f("state",o.state,"state");
+      if(o.zip&&!x.zipCode&&!x.zipcode){x.zipCode=o.zip;x.zipcode=o.zip;filled.push("zip");}
+      if(o.quoteValue&&!(Number(x.quoteValue)>0)){x.quoteValue=o.quoteValue;filled.push("quote value");}f("ghlContactId",o.ghl,"GHL ID");
+      if(!x.name&&(x.firstName||x.lastName))x.name=((x.firstName||"")+" "+(x.lastName||"")).trim();}
+    var extra=o.notes.filter(function(n){return String(x.notes||"").indexOf(n)<0;});
+    if(filled.length||extra.length){
+      var line="["+stamp()+"] Updated from "+st.filename+(filled.length?": added "+filled.join(", "):"")+(extra.length?"\n"+extra.join("\n"):"");
+      x.notes=st.kind==="biz"?line+"\n"+(x.notes||""):(line+"\n\n"+(x.notes||"")).replace(/\n+$/,"")+"\n";
+      x.updated=Date.now();
+    }
+    return filled.length||extra.length?1:0;
+  }
+  function byteLen(v){try{return new Blob([JSON.stringify(v)]).size;}catch(e){return JSON.stringify(v).length;}}
+  var LIMIT=950000;
+
+  function template(kind){
+    var h=kind==="biz"?["Company","Contact","Email","Phone","Employees","Industry","City","State","Stage","Source","Notes"]:["First Name","Last Name","Phone","Email","Date of Birth","Address","City","State","Zip","Stage","Source","Notes"];
+    downloadFile((kind==="biz"?"business-leads":"leads")+"-import-template.csv",csvOut([h]),"text/csv;charset=utf-8");
+  }
+
+  function openImporter(kind0){
+    var st={kind:kind0||"leads",entry:kind0||"leads",firstFu:null,dupMode:"skip",keepExtra:true,useFileStage:true,stage:null,source:""};
+    var ov=document.createElement("div");ov.className="vi-ov";
+    ov.innerHTML='<div class="vi-bx" role="dialog" aria-modal="true" aria-label="Import leads"></div>';
+    document.body.appendChild(ov);
+    var bx=ov.querySelector(".vi-bx");
+    function close(){ov.remove();document.removeEventListener("keydown",onKey,true);}
+    function onKey(e){if(e.key==="Escape"&&!ov.querySelector("select:focus")){e.stopPropagation();close();}}
+    document.addEventListener("keydown",onKey,true);
+    ov.addEventListener("click",function(e){if(e.target===ov&&!st.rows)close();});
+    function seg(){return '<div class="vi-seg" role="tablist"><button type="button" data-kind="leads" class="'+(st.kind==="leads"?"on":"")+'">Leads pipeline</button><button type="button" data-kind="biz" class="'+(st.kind==="biz"?"on":"")+'">Business leads</button></div>';}
+    function bindSeg(after){bx.querySelectorAll("[data-kind]").forEach(function(b){b.addEventListener("click",function(){if(st.kind===b.getAttribute("data-kind"))return;st.kind=b.getAttribute("data-kind");after();});});}
+
+    /* step 1: pick a file */
+    function stepPick(err){
+      st.rows=null;
+      bx.innerHTML='<div class="vi-hd"><div><h3>Import leads</h3><p>Drop in a spreadsheet from any lead vendor, GoHighLevel, or your own list. The portal reads your columns and fills in the right fields for you.</p></div><button type="button" class="vi-x" aria-label="Close">&times;</button></div>'
+        +'<div class="vi-body">'+seg()
+        +'<div class="vi-drop" data-drop>'+UL+'<h4>Drop your file here</h4><p>CSV or Excel (.xlsx). The first sheet is used.</p><button type="button" class="vi-go" data-choose>Choose file</button></div>'
+        +(err?'<div class="vi-err">'+err+'</div>':'')
+        +'<p style="font-size:12.5px;color:#5a6b80;margin:12px 0 0;line-height:1.5">Column names do not need to match exactly. "Cell", "Mobile" and "Phone Number" all land in Phone, "Business Name" lands in Company, and so on. You will see every match before anything is saved. No texts or emails go out to imported leads. <button type="button" class="vi-link" data-tpl>Download a blank template</button></p>'
+        +'</div>';
+      bx.querySelector(".vi-x").addEventListener("click",close);
+      bindSeg(function(){stepPick(err);});
+      bx.querySelector("[data-tpl]").addEventListener("click",function(){template(st.kind);});
+      var inp=document.createElement("input");inp.type="file";inp.accept=".csv,.tsv,.txt,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";inp.style.display="none";bx.appendChild(inp);
+      bx.querySelector("[data-choose]").addEventListener("click",function(){inp.click();});
+      inp.addEventListener("change",function(){if(inp.files&&inp.files[0])load(inp.files[0]);});
+      var dz=bx.querySelector("[data-drop]");
+      ["dragenter","dragover"].forEach(function(t){dz.addEventListener(t,function(e){e.preventDefault();dz.classList.add("hot");});});
+      ["dragleave","drop"].forEach(function(t){dz.addEventListener(t,function(e){e.preventDefault();dz.classList.remove("hot");});});
+      dz.addEventListener("drop",function(e){var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];if(f)load(f);});
+    }
+    function load(f){
+      var dz=bx.querySelector("[data-drop] h4");if(dz)dz.textContent="Reading "+f.name+"...";
+      readFile(f).then(function(rows){
+        if(!rows||rows.length<1)return stepPick("That file looks empty.");
+        var hr=findHeader(rows);
+        st.filename=f.name;st.headerRow=hr;st.headerless=hr<0;
+        var width=rows.reduce(function(m,r){return Math.max(m,r.length);},0);
+        st.headers=hr<0?Array.from({length:width},function(_,i){return "Column "+String.fromCharCode(65+(i%26))+(i>=26?Math.floor(i/26):"");}):rows[hr].map(function(h,i){return String(h||"").trim()||("Column "+(i+1));});
+        while(st.headers.length<width)st.headers.push("Column "+(st.headers.length+1));
+        st.body=rows.slice(hr+1).map(function(r){while(r.length<width)r.push("");return r;});
+        if(!st.body.length)return stepPick("That file has column names but no rows of data.");
+        st.kind=detectKind(st.headers,st.body,st.kind);st.detected=st.kind;
+        st.map=autoMap(st.headers,st.body,st.kind,st.headerless);st.auto=st.map.slice();
+        st.stage=null;st.firstFu=null;
+        stepMap();
+      }).catch(function(e){
+        var m=String(e&&e.message||"");
+        stepPick(m==="xls"?"That is an old Excel file (.xls). In Excel, choose File, Save As, and pick .xlsx or CSV, then try again."
+          :m==="nodecomp"?"This browser cannot open Excel files. Save the sheet as CSV and try again, or use Chrome."
+          :m==="type"?"That file type is not a spreadsheet. Use a CSV or .xlsx file."
+          :"Could not read that file. If it is from Excel or Google Sheets, save or download it as CSV and try again.");
+      });
+    }
+
+    /* step 2: check the matches, settings, preview */
+    function stepMap(){
+      var kind=st.kind,biz=kind==="biz";
+      var stages=biz?BIZ_STAGES:czSTAGES;
+      if(!st.stage)st.stage=biz?"prospect":"new_lead";
+      if(!stages.some(function(s){return s.id===st.stage;}))st.stage=biz?"prospect":"new_lead";
+      if(!st.firstFu)st.firstFu=biz?"today":"two";
+      var fOpts=FIELDS[kind];
+      var detectedNote=st.detected!==st.entry?'<div class="vi-note">This file looks like <b>'+(st.detected==="biz"?"business leads":"individual leads")+'</b>'+(st.detected==="biz"?' (it has a company column)':'')+', so it is set to import into '+(st.detected==="biz"?"Business Leads":"your Leads pipeline")+'. Switch above if that is wrong.</div>':'';
+      var nonEmpty=st.headers.map(function(h,i){return st.body.some(function(r){return String(r[i]||"").trim();});});
+      var mapRows=st.headers.map(function(h,i){
+        if(!nonEmpty[i])return "";
+        var samples=[];st.body.some(function(r){var v=String(r[i]||"").trim();if(v&&samples.indexOf(v)<0)samples.push(v);return samples.length>=2;});
+        var k=st.map[i]==null?"":st.map[i];
+        var cls=k==="skip"?"skip":(k&&k!=="notes"?"ok":"");
+        var tag=k&&k!=="notes"&&k!=="skip"?(st.auto[i]===k?'<span class="vi-tag ok">Auto</span>':'<span class="vi-tag ok">Set</span>'):(k==="skip"?'':'<span class="vi-tag nt">Notes</span>');
+        return '<div class="vi-mr '+cls+'"><div class="cn">'+esc(h)+tag+'</div><div class="sv" title="'+esc(samples.join("  |  "))+'">'+esc(samples.join("  |  "))+'</div><select data-map="'+i+'" aria-label="Field for '+esc(h)+'">'
+          +fOpts.map(function(f){return '<option value="'+f[0]+'"'+(k===f[0]?" selected":"")+'>'+esc(f[1])+'</option>';}).join("")
+          +'<option value=""'+(!k?" selected":"")+'>Add to notes</option><option value="skip"'+(k==="skip"?" selected":"")+'>Do not import</option></select></div>';
+      }).join("");
+      var hasStageCol=st.map.indexOf("stage")>=0,hasSrcCol=st.map.indexOf("source")>=0;
+      bx.innerHTML='<div class="vi-hd"><div><h3>Import '+plural(st.body.length,"row")+'</h3><p>From <b>'+esc(st.filename)+'</b>. Check the matches, then import. Nothing is saved until you press Import.</p></div><button type="button" class="vi-x" aria-label="Close">&times;</button></div>'
+        +'<div class="vi-body">'+seg()+detectedNote
+        +'<div class="vi-h">Your columns and where they go</div><div class="vi-map"><div class="vi-mr head"><div>Column in file</div><div>Example</div><div>Goes to</div></div>'+mapRows+'</div>'
+        +'<div class="vi-h">Settings</div><div class="vi-grid">'
+        +'<label class="vi-f"><span>Where did these come from? <b style="color:#be123c">*</b></span><input data-src list="cz-sources" placeholder="e.g. Aged leads, Sept 2026" value="'+esc(st.source)+'"/><small>'+(hasSrcCol?'Used for rows with an empty Source column.':'Every lead in this file is tagged with it so you can tell later what the list was worth.')+'</small></label>'
+        +'<label class="vi-f">Put new leads in<select data-stage>'+stages.map(function(s){return '<option value="'+s.id+'"'+(s.id===st.stage?" selected":"")+'>'+esc(s.label)+'</option>';}).join("")+'</select><small>'+(hasStageCol?'Rows whose Stage column matches a stage go there instead (option below).':'You can move them later.')+'</small></label>'
+        +'<label class="vi-f">First follow-up<select data-fu>'+[["today","Today"],["tomorrow","Tomorrow"],["week","In 1 week"],["two","In 14 days"],["none","No date"]].map(function(o){return '<option value="'+o[0]+'"'+(st.firstFu===o[0]?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select><small>A follow-up date in the file always wins.</small></label>'
+        +'<label class="vi-f">Already in the portal?<select data-dup><option value="skip"'+(st.dupMode==="skip"?" selected":"")+'>Skip them</option><option value="merge"'+(st.dupMode==="merge"?" selected":"")+'>Fill in their missing info</option></select><small>Matched on email or phone'+(biz?', then company name':'')+'.</small></label>'
+        +'</div>'
+        +(hasStageCol?'<label class="vi-chk"><input type="checkbox" data-usestage'+(st.useFileStage?" checked":"")+'/>Use the Stage column from the file when it matches one of my stages</label>':'')
+        +'<label class="vi-chk"><input type="checkbox" data-extra'+(st.keepExtra?" checked":"")+'/>Save the other columns in each lead\'s notes (so nothing in the file is lost)</label>'
+        +'<div class="vi-h">Preview</div><div data-prev></div>'
+        +'</div>'
+        +'<div class="vi-ft"><span class="sp" data-sum></span><button type="button" class="vi-cx" data-back>Back</button><button type="button" class="vi-go" data-go disabled>Import</button></div>';
+      bx.querySelector(".vi-x").addEventListener("click",close);
+      bx.querySelector("[data-back]").addEventListener("click",function(){stepPick();});
+      bindSeg(function(){st.map=autoMap(st.headers,st.body,st.kind,st.headerless);st.auto=st.map.slice();st.stage=null;st.firstFu=null;stepMap();});
+      bx.querySelectorAll("[data-map]").forEach(function(s){s.addEventListener("change",function(){
+        var i=+s.getAttribute("data-map"),v=s.value;
+        if(v&&v!=="skip"&&v!=="notes"){st.map.forEach(function(k,j){if(j!==i&&k===v)st.map[j]="";});}
+        st.map[i]=v;stepMap();});});
+      var src=bx.querySelector("[data-src]");src.addEventListener("input",function(){st.source=src.value.trim();refresh();});
+      bx.querySelector("[data-stage]").addEventListener("change",function(e){st.stage=e.target.value;refresh();});
+      bx.querySelector("[data-fu]").addEventListener("change",function(e){st.firstFu=e.target.value;refresh();});
+      bx.querySelector("[data-dup]").addEventListener("change",function(e){st.dupMode=e.target.value;refresh();});
+      var us=bx.querySelector("[data-usestage]");if(us)us.addEventListener("change",function(){st.useFileStage=us.checked;refresh();});
+      bx.querySelector("[data-extra]").addEventListener("change",function(e){st.keepExtra=e.target.checked;refresh();});
+      try{czEnsureSourceList();}catch(e){}
+      refresh();
+    }
+    function refresh(){
+      var kind=st.kind,biz=kind==="biz",P=plan(st);st.plan=P;
+      var stageLabel=function(id){return biz?bizStageMeta(id).label:(czMETA[id]?czMETA[id].label:id);};
+      var prev=P.news.slice(0,3).map(function(o){
+        var stg=(st.useFileStage&&o.fileStage)||st.stage;
+        var title=biz?(o.company||o.contact):((o.firstName+" "+o.lastName).trim()||"(no name)");
+        var lines=[biz&&o.contact&&o.contact!==o.company?o.contact:"",o.phone,o.email,biz?[o.employees?o.employees+" employees":"",o.niche].filter(Boolean).join(" · "):"",[o.city,[o.state,o.zip].filter(Boolean).join(" ")].filter(Boolean).join(", "),!biz&&o.dob?"Born "+o.dob:"",o.notes.length?plural(o.notes.length,"note line"):""].filter(Boolean);
+        return '<div class="vi-pc"><b>'+esc(title)+'</b>'+lines.map(esc).join("<br>")+'<br><span class="st">'+esc(stageLabel(stg))+'</span></div>';
+      }).join("");
+      var box=bx.querySelector("[data-prev]");
+      var needContact=biz?false:st.map.indexOf("phone")<0&&st.map.indexOf("email")<0;
+      var fileStageN=P.news.filter(function(o){return o.fileStage;}).length;
+      var soldN=!biz?P.news.filter(function(o){return ((st.useFileStage&&o.fileStage)||st.stage)==="sold";}).length:0;
+      box.innerHTML=(needContact?'<div class="vi-warn">No column is set as Phone or Email, so every row would be skipped. Pick the phone or email column above.</div>':'')
+        +(prev?'<div class="vi-prev">'+prev+'</div>':'<div class="vi-warn">No new leads to import with these settings.</div>')
+        +'<div class="vi-stats"><span class="vi-stat g">'+plural(P.news.length,"new lead")+'</span>'
+        +(P.dups.length?'<span class="vi-stat">'+P.dups.length+' already in the portal: '+(st.dupMode==="merge"?"missing info filled in":"skipped")+'</span>':'')
+        +(P.inFile?'<span class="vi-stat">'+plural(P.inFile,"duplicate row")+' in the file: skipped</span>':'')
+        +(P.bad?'<span class="vi-stat a">'+P.bad+' row'+(P.bad===1?"":"s")+' with '+(biz?"no company or contact":"no phone or email")+': skipped</span>':'')
+        +(st.useFileStage&&fileStageN?'<span class="vi-stat">'+fileStageN+' placed by the Stage column</span>':'')
+        +'</div>'
+        +(soldN?'<div class="vi-warn" style="margin-top:10px">'+plural(soldN,"row")+' will land in Sold. Imported sold leads do not create client accounts or send anything. Add clients from Active Clients if you need portal logins.</div>':'');
+      /* storage check: all leads live in one cloud record with a size limit */
+      var existing=biz?getBizLeads():getLeads(),batch="x";
+      var sample=P.news.slice(0,50).map(function(o){return biz?makeBiz(st,o,batch):makeLead(st,o,batch);});
+      var per=sample.length?byteLen(sample)/sample.length:0,base=byteLen(existing);
+      var room=per?Math.max(0,Math.floor((LIMIT-base)/per)):P.news.length;
+      st.cap=Math.min(P.news.length,room);
+      if(st.cap<P.news.length)box.insertAdjacentHTML("beforeend",'<div class="vi-warn" style="margin-top:10px">Your '+(biz?"business leads":"pipeline")+' is close to its storage limit, so only the first '+st.cap+' of '+P.news.length+' new leads can be added. Clean out old or dead leads, or ask Claude to move leads to larger storage.</div>');
+      var srcOk=st.source.length>1||(st.map.indexOf("source")>=0&&P.news.every(function(o){return o.source;}));
+      var n=st.cap,m=st.dupMode==="merge"?P.dups.length:0;
+      var go=bx.querySelector("[data-go]");
+      go.disabled=!srcOk||(n+m)===0||needContact;
+      go.textContent=n?("Import "+plural(n,biz?"business lead":"lead")):(m?"Update "+plural(m,"lead"):"Import");
+      bx.querySelector("[data-sum]").textContent=!srcOk?"Add where these came from to continue.":(n+m?"":"Nothing new to import.");
+      go.onclick=function(){doImport();};
+    }
+    function doImport(){
+      var P=st.plan,kind=st.kind,biz=kind==="biz",batch="imp_"+Date.now().toString(36);
+      if(!st.source&&P.news.length&&!P.news.every(function(o){return o.source;}))return;
+      if(!st.source)st.source="CSV import";
+      var arr=biz?getBizLeads():getLeads();
+      var adds=P.news.slice(0,st.cap).map(function(o){return biz?makeBiz(st,o,batch):makeLead(st,o,batch);});
+      var merged=0;
+      if(st.dupMode==="merge"){var ids={};arr.forEach(function(x){ids[x.id]=x;});P.dups.forEach(function(o){var x=ids[o.match.id];if(x)merged+=mergeInto(st,x,o);});}
+      arr=adds.concat(arr);
+      if(biz){saveBizLeads(arr);try{renderBizLeads();}catch(e){}}
+      else{saveLeads(arr);try{renderLeads();renderPipeline();}catch(e){}try{czBadges();}catch(e){}}
+      if(adds.length)notify("lead","Imported "+plural(adds.length,biz?"business lead":"lead"),st.filename+" ("+st.source+")",biz?"bizleads":"pipeline");
+      stepDone(adds.length,merged,batch);
+    }
+    function stepDone(n,merged,batch){
+      var biz=st.kind==="biz",P=st.plan;
+      var skipped=(st.dupMode==="merge"?0:P.dups.length)+P.inFile+P.bad+(P.news.length-n);
+      bx.innerHTML='<div class="vi-hd"><div><h3>Import finished</h3></div><button type="button" class="vi-x" aria-label="Close">&times;</button></div>'
+        +'<div class="vi-body"><div class="vi-done"><div class="ok">&#10003;</div><h4>'+(n?"Added "+plural(n,biz?"business lead":"lead"):"No new leads added")+'</h4><p>'
+        +[merged?"Filled in missing info on "+plural(merged,"existing lead")+".":"",skipped?plural(skipped,"row")+" skipped (duplicates or missing contact info).":"","Tagged with source: "+esc(st.source)+"."].filter(Boolean).join("<br>")
+        +'</p></div></div>'
+        +'<div class="vi-ft"><span class="sp">'+(n?'Made a mistake? Undo removes the '+n+' new lead'+(n===1?"":"s")+' from this file.':'')+'</span>'+(n?'<button type="button" class="vi-cx" data-undo>Undo import</button>':'')+'<button type="button" class="vi-cx" data-close>Done</button><button type="button" class="vi-go" data-view>'+(biz?"View business leads":"View pipeline")+'</button></div>';
+      bx.querySelector(".vi-x").addEventListener("click",close);
+      bx.querySelector("[data-close]").addEventListener("click",close);
+      bx.querySelector("[data-view]").addEventListener("click",function(){close();try{switchTab(biz?"bizleads":"pipeline");}catch(e){}});
+      var u=bx.querySelector("[data-undo]");
+      if(u)u.addEventListener("click",function(){
+        if(biz){saveBizLeads(getBizLeads().filter(function(x){return x.importBatch!==batch;}));try{renderBizLeads();}catch(e){}}
+        else{saveLeads(getLeads().filter(function(x){return x.importBatch!==batch;}));try{renderLeads();renderPipeline();czBadges();}catch(e){}}
+        bx.querySelector(".vi-done h4").textContent="Import undone";
+        bx.querySelector(".vi-done p").textContent="The "+plural(n,"lead")+" from "+st.filename+" were removed."+(merged?" Info filled in on existing leads was kept.":"");
+        u.remove();var sp=bx.querySelector(".vi-ft .sp");if(sp)sp.textContent="";
+      });
+    }
+    stepPick();
+  }
+  window.vsOpenImporter=openImporter;
+  window.__vsImportTest={parseDelimited:parseDelimited,autoMap:autoMap,detectKind:detectKind,toYmd:toYmd,toState:toState,stageFrom:stageFrom,parseAddress:parseAddress,findHeader:findHeader,readXlsx:readXlsx};
+  czImportLeadsCsv=function(){openImporter("leads");};
+  document.addEventListener("click",function(e){
+    var t=e.target&&e.target.closest?e.target.closest("[data-cz-import],[data-cz-export]"):null;if(!t)return;
+    e.preventDefault();e.stopImmediatePropagation();
+    if(t.hasAttribute("data-cz-import"))openImporter("leads");else openExport("leads");
+  },true);
+  bizImportCsv=function(){openImporter("biz");};
+  setTimeout(function(){try{if($$("p-pipeline")&&$$("p-pipeline").classList.contains("active"))czPipeline();if($$("p-bizleads")&&$$("p-bizleads").classList.contains("active"))renderBizLeads();}catch(e){}},1600);
+})();}catch(err){if(window.console)console.warn("pipeline dead leads / import failed",err);}
+
 })();
 </script>
 <script>
