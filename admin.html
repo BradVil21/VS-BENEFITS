@@ -8463,6 +8463,19 @@ try{(function(){
   "#p-bizleads .bzd-when{font-size:11.5px;color:#94a3b8;white-space:nowrap;min-width:78px;text-align:right}",
   "#p-bizleads .bzd-empty{padding:28px 10px;text-align:center;color:#64748b;font-size:13px;border-top:1px solid #eef2f8}",
   "@media(max-width:700px){#p-bizleads .bzd-row{flex-wrap:wrap;gap:6px 10px}#p-bizleads .bzd-main{flex:1 1 100%}#p-bizleads .bzd-when{text-align:left;min-width:0}}",
+  "#p-bizleads .bz-chip.folder{display:inline-flex;align-items:center;gap:6px;border:1.5px solid #cbd5e1;background:#f8fafc;color:#334155}",
+  "#p-bizleads .bz-chip.folder svg{width:15px;height:15px;flex:0 0 auto}",
+  "#p-bizleads .bz-chip.folder:hover{border-color:#475569}",
+  "#p-bizleads .bz-chip.folder.on{background:#475569;border-color:#475569;color:#fff}#p-bizleads .bz-chip.folder.on b{color:#e2e8f0}",
+  "#p-bizleads .bzd-hd h3{display:flex;align-items:center;gap:8px}#p-bizleads .bzd-hd h3 svg{width:20px;height:20px;color:#475569}",
+  "#p-bizleads .bzd-tools{display:flex;gap:6px;flex-wrap:wrap}",
+  "#p-bizleads .bzd-acts{display:flex;gap:6px;flex-wrap:wrap;align-items:center}",
+  "#p-bizleads .bz-b.rework{background:#0f766e;border-color:#0f766e;color:#fff}#p-bizleads .bz-b.rework:hover{background:#115e59}",
+  "#p-bizleads .bzd-from{display:inline-block;font-size:11px;font-weight:700;color:#64748b;margin-top:4px}",
+  "#p-bizleads .bzd-msg{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:10px;padding:9px 12px;font-size:13px;font-weight:600;margin:0 0 12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}",
+  "#p-bizleads .bzd-msg button{border:0;background:none;color:#065f46;font-weight:800;text-decoration:underline;cursor:pointer;font:inherit;font-weight:800;padding:0}",
+  "#p-bizleads .bz-tag.rework{background:#ccfbf1;color:#115e59}",
+  "@media(max-width:700px){#p-bizleads .bzd-acts{flex:1 1 100%}#p-bizleads .bzd-acts .rework{margin-left:auto}}",
   "#bzd-pick{position:fixed;inset:0;background:rgba(11,35,70,.45);z-index:10050;display:flex;align-items:center;justify-content:center;padding:16px}",
   "#bzd-pick .bx{background:#fff;border-radius:18px;max-width:440px;width:100%;padding:18px 18px 16px;box-shadow:0 24px 60px rgba(11,35,70,.3);max-height:calc(100vh - 32px);overflow:auto}",
   "#bzd-pick h3{margin:0;font-size:17px;font-weight:900;color:#0b2346}",
@@ -8487,7 +8500,8 @@ try{(function(){
   "#p-bizleads .bz-jump button{flex:0 0 auto;border:1px solid #d8e0ee;background:#fff;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700;color:#0b2346;font-family:inherit}"
   ].join("");document.head.appendChild(S);
 
-  var D=864e5,bzFilter="all",bzShowLost=false,bzShowDead=false,bzDeadReason="all";
+  var D=864e5,bzFilter="all",bzShowLost=false,bzShowDead=false,bzDeadReason="all",bzDeadMsg=null;
+  var FOLDER_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
   function esc(s){return escapeHtml(s==null?"":String(s));}
   function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
   function eeNum(v){var m=String(v||"").match(/\d+/g);if(!m)return 0;var a=m.map(Number).filter(function(x){return x>0&&x<5000;});if(!a.length)return 0;return Math.round(a.reduce(function(s,x){return s+x;},0)/a.length);}
@@ -8534,6 +8548,25 @@ try{(function(){
       b.notes="["+stampNow()+"] Restored from Dead leads to "+bizStageMeta(back).label+"\n"+(b.notes||"");});
     saveBizLeads(arr);renderBizLeads();
   }
+  /* Rework: bring a dead lead back to the stage it was in, with a follow-up set for today */
+  function reworkDead(id){
+    var arr=getBizLeads(),hit=null,back="prospect",today=ymd(new Date());
+    arr.forEach(function(b){if(b.id!==id)return;hit=b;back=(b.deadFrom&&b.deadFrom!=="dead"&&b.deadFrom!=="won"&&b.deadFrom!=="lost")?b.deadFrom:"prospect";
+      b.stage=back;b.stageAt=Date.now();b.updated=Date.now();b.reworkedAt=Date.now();b.nextFollowUp=today;
+      b.notes="["+stampNow()+"] Pulled from Dead leads to rework (was: "+(b.deadReason||"Other")+"). Follow-up set for today.\n"+(b.notes||"");});
+    if(!hit)return;saveBizLeads(arr);
+    bzDeadMsg={id:id,text:(title(hit.company)||title(hit.contact)||"Lead")+" is back in "+bizStageMeta(back).label+" with a follow-up for today."};
+    renderBizLeads();
+    if(typeof addNotif==="function"){try{addNotif("lead","Lead back in play",(hit.company||hit.contact||"Business lead")+" moved from Dead leads to "+bizStageMeta(back).label,"bizleads");}catch(e){}}
+  }
+  function deadCsv(list){
+    function c(v){v=String(v==null?"":v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+    var head=["Company","Contact","Phone","Email","Employees","Industry","Source","Dead reason","Marked dead","Was in stage","Latest note"];
+    var rows=list.map(function(b){var n=String(b.notes||"").split(/\n+/).filter(function(x){return x.trim()&&!/Marked dead lead:/i.test(x);})[0]||"";
+      return [title(b.company),title(b.contact),b.phone,b.email,b.employees,b.niche,b.source?czSourceLabel(b.source):"",b.deadReason||"Other",deadAt(b)?ymd(new Date(deadAt(b))):"",bizStageMeta(b.deadFrom||"prospect").label,n.replace(/^\[[^\]]*\]\s*/,"")].map(c).join(",");});
+    var blob=new Blob(["\ufeff"+head.join(",")+"\n"+rows.join("\n")],{type:"text/csv;charset=utf-8"});
+    var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="dead-business-leads-"+ymd(new Date())+".csv";document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500);
+  }
   function pickDead(id){
     var b=getBizLeads().filter(function(x){return x.id===id;})[0];if(!b)return;
     var old=document.getElementById("bzd-pick");if(old)old.remove();
@@ -8553,7 +8586,7 @@ try{(function(){
     ov.querySelector(".cx").addEventListener("click",close);
     go.addEventListener("click",function(){if(!chosen)return;var note=ov.querySelector("textarea").value.trim();close();markDead(id,chosen,note);});
   }
-  window.vsBzPickDead=pickDead;window.vsBzRestoreDead=restoreDead;
+  window.vsBzPickDead=pickDead;window.vsBzRestoreDead=restoreDead;window.vsBzReworkDead=reworkDead;
   var _obf=openBizLeadForm;openBizLeadForm=function(b){window.__bzOpenId=(b&&b.id)||null;return _obf.apply(this,arguments);};
   function renderDead(box,list){
     var dead=list.filter(function(b){return b.stage==="dead";}).sort(function(a,b){return deadAt(b)-deadAt(a);});
@@ -8565,17 +8598,26 @@ try{(function(){
       var d=new Date(deadAt(b)),when=deadAt(b)?d.toLocaleDateString(undefined,{month:"short",day:"numeric"}):"";
       var sub=[title(b.contact),b.phone||b.email,b.source?czSourceLabel(b.source):""].filter(Boolean).map(esc).join(" · ");
       var n=lastNote(b);if(/^Marked dead lead:/i.test(n))n="";
-      return '<div class="bzd-row" data-bzdopen="'+esc(b.id)+'"><div class="bzd-main"><div class="bzd-co">'+esc(title(b.company)||"(no company)")+'</div>'+(sub?'<div class="bzd-sub">'+sub+'</div>':'')+(n?'<div class="bzd-sub">'+esc(n)+'</div>':'')+'</div>'
+      var tel=b.phone?String(b.phone).replace(/[^0-9+]/g,""):"";
+      var from=bizStageMeta((b.deadFrom&&b.deadFrom!=="dead")?b.deadFrom:"prospect").label;
+      return '<div class="bzd-row" data-bzdopen="'+esc(b.id)+'"><div class="bzd-main"><div class="bzd-co">'+esc(title(b.company)||"(no company)")+'</div>'+(sub?'<div class="bzd-sub">'+sub+'</div>':'')+(n?'<div class="bzd-sub">'+esc(n)+'</div>':'')+'<span class="bzd-from">Was in: '+esc(from)+'</span></div>'
         +'<span class="bzd-why">'+esc(b.deadReason||"Other")+'</span><span class="bzd-when">'+(when?"Marked "+esc(when):"")+'</span>'
-        +'<button type="button" class="bz-b" data-bzrestore="'+esc(b.id)+'">Restore</button></div>';
-    }).join(""):'<div class="bzd-empty">'+(dead.length?"No dead leads for this reason.":"No dead leads yet. On any card, tap <b>Dead</b> to move a bad lead here.")+'</div>';
-    box.innerHTML='<div class="bzd"><div class="bzd-hd"><div><h3>Dead leads <span style="color:#94a3b8;font-weight:800">'+dead.length+'</span></h3><p>Bad leads you will not chase: wrong numbers, spam, fake info, duplicates. They are kept here for your records, left out of open deals, follow-ups and your win rate, and can be restored any time.</p></div>'
-      +'<button type="button" class="bz-b next" data-bzdback>Back to board</button></div>'
+        +'<div class="bzd-acts">'+(tel?'<a class="bz-b" href="tel:'+esc(tel)+'">Call</a>':'')+(b.email?'<a class="bz-b" href="mailto:'+esc(b.email)+'">Email</a>':'')
+        +'<button type="button" class="bz-b" data-bzrestore="'+esc(b.id)+'" title="Put it back where it was, no follow-up date">Restore</button>'
+        +'<button type="button" class="bz-b rework" data-bzrework="'+esc(b.id)+'" title="Put it back where it was and set a follow-up for today">Rework</button></div></div>';
+    }).join(""):'<div class="bzd-empty">'+(dead.length?"No dead leads for this reason.":(list.length&&(($("biz-search")&&$("biz-search").value)||"").trim()?"No dead leads match your search.":"No dead leads yet. On any card, tap <b>Dead</b> to move a bad lead here."))+'</div>';
+    var msg=bzDeadMsg;bzDeadMsg=null;
+    box.innerHTML='<div class="bzd"><div class="bzd-hd"><div><h3>'+FOLDER_SVG+'Dead leads folder <span style="color:#94a3b8;font-weight:800">'+dead.length+'</span></h3><p>Leads you stopped chasing, kept here in case you want to try again. Tap <b>Rework</b> to put one back where it was with a follow-up for today, or <b>Restore</b> to put it back with no date. Tap a row to see the full history.</p></div>'
+      +'<div class="bzd-tools">'+(shown.length?'<button type="button" class="bz-b" data-bzdcsv>Download list</button>':'')+'<button type="button" class="bz-b next" data-bzdback>Back to board</button></div></div>'
+      +(msg?'<div class="bzd-msg"><span>'+esc(msg.text)+'</span><button type="button" data-bzdgo>See it on the board</button></div>':'')
       +(dead.length?'<div class="bzd-rs"><button type="button" class="bz-chip'+(bzDeadReason==="all"?" on":"")+'" data-bzdr="all">All<b>'+dead.length+'</b></button>'+reasons.map(function(r){return '<button type="button" class="bz-chip'+(bzDeadReason===r?" on":"")+'" data-bzdr="'+esc(r)+'">'+esc(r)+'<b>'+counts[r]+'</b></button>';}).join("")+'</div>':'')
       +rows+'</div>';
     box.querySelector("[data-bzdback]").addEventListener("click",function(){bzShowDead=false;renderBizLeads();});
     box.querySelectorAll("[data-bzdr]").forEach(function(x){x.addEventListener("click",function(){bzDeadReason=x.getAttribute("data-bzdr");renderBizLeads();});});
-    box.querySelectorAll("[data-bzrestore]").forEach(function(x){x.addEventListener("click",function(e){e.stopPropagation();restoreDead(x.getAttribute("data-bzrestore"));});});
+    box.querySelectorAll("[data-bzrestore]").forEach(function(x){x.addEventListener("click",function(e){e.stopPropagation();var id=x.getAttribute("data-bzrestore");var b=getBizLeads().filter(function(y){return y.id===id;})[0];restoreDead(id);if(b&&bzShowDead){bzDeadMsg={id:id,text:(title(b.company)||title(b.contact)||"Lead")+" is back on the board."};renderBizLeads();}});});
+    box.querySelectorAll("[data-bzrework]").forEach(function(x){x.addEventListener("click",function(e){e.stopPropagation();reworkDead(x.getAttribute("data-bzrework"));});});
+    var cv=box.querySelector("[data-bzdcsv]");if(cv)cv.addEventListener("click",function(){deadCsv(shown);});
+    var go=box.querySelector("[data-bzdgo]");if(go)go.addEventListener("click",function(){bzShowDead=false;bzFilter="all";renderBizLeads();});
     box.querySelectorAll("[data-bzdopen]").forEach(function(r){r.addEventListener("click",function(e){if(e.target.closest("button,a"))return;var b=getBizLeads().filter(function(x){return x.id===r.getAttribute("data-bzdopen");})[0];if(b)openBizLeadForm(b);});});
   }
 
@@ -8616,7 +8658,7 @@ try{(function(){
       +'</div><div class="bz-chips">'
       +FILTERS.map(function(f){var n=searched.filter(function(b){return isOpen(b)&&passes(b,f[0]);}).length;return '<button type="button" class="bz-chip'+(bzFilter===f[0]?" on":"")+'" data-bzf="'+f[0]+'">'+f[1]+'<b>'+n+'</b></button>';}).join("")
       +'<button type="button" class="bz-chip lost'+(bzShowLost?" on":"")+'" data-bzlost>'+(bzShowLost?"Hide lost":"Show lost")+'<b>'+lostN+'</b></button>'
-      +'<button type="button" class="bz-chip dead'+(bzShowDead?" on":"")+'" data-bzdeadview title="Bad leads: wrong numbers, spam, not a real business, duplicates">Dead leads<b>'+deadN+'</b></button></div>';
+      +'<button type="button" class="bz-chip folder'+(bzShowDead?" on":"")+'" data-bzdeadview title="Open the folder of leads you marked dead">'+FOLDER_SVG+(bzShowDead?"Close dead leads":"Dead leads folder")+'<b>'+deadN+'</b></button></div>';
     top.querySelectorAll("[data-bzf]").forEach(function(b){b.addEventListener("click",function(){bzFilter=b.getAttribute("data-bzf");renderBizLeads();});});
     top.querySelector("[data-bzlost]").addEventListener("click",function(){bzShowLost=!bzShowLost;bzShowDead=false;renderBizLeads();});
     top.querySelector("[data-bzdeadview]").addEventListener("click",function(){bzShowDead=!bzShowDead;renderBizLeads();});
@@ -8635,6 +8677,7 @@ try{(function(){
         var tags='';
         if(fs)tags+='<span class="bz-tag '+fs+'">'+esc(fuLabel(b))+'</span>';
         if(isOpen(b)&&idle>=14)tags+='<span class="bz-tag idle">Quiet '+idle+' days</span>';
+        if(isOpen(b)&&b.reworkedAt)tags+='<span class="bz-tag rework">Reworked</span>';
         if(b.source)tags+='<span class="bz-tag src">'+esc(czSourceLabel(b.source))+'</span>';
         var note=lastNote(b);
         var tel=b.phone?String(b.phone).replace(/[^0-9+]/g,""):"";
