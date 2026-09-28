@@ -9425,6 +9425,10 @@ try{(function(){
     {key:"sold",label:"Sold",ids:["sold"]},{key:"lost",label:"Lost",ids:["ghosted","no_longer_interested","disqualified"]}
   ];
   var czShowDead=false,czDeadReason="all",czDeadMsg=null;
+  var LOST_IDS=["ghosted","no_longer_interested","disqualified"];
+  function inFolder(c){return c.stage==="dead"||LOST_IDS.indexOf(c.stage)>=0;}
+  function folderReason(c){return c.stage==="dead"?(c.deadReason||"Other"):(czMETA[c.stage]?czMETA[c.stage].label:c.stage);}
+  function folderAt(c){return c.stage==="dead"?czDeadAt(c):(Number(c.updated)||Number(c.created)||0);}
   function leadById(id){return getLeads().filter(function(x){return x.id===id;})[0]||null;}
   function czDeadAt(c){return Number(c.deadAt)||Number(c.updated)||0;}
   function czRestoreStage(c){var s=c.deadFrom;return (s&&czMETA[s]&&s!=="dead"&&s!=="sold")?s:"new_lead";}
@@ -9444,11 +9448,12 @@ try{(function(){
   }
   function czBringBack(id,rework){
     var arr=getLeads(),c=null;arr.forEach(function(x){if(x.id===id)c=x;});if(!c)return;
-    var back=rework?czReworkStage(c):czRestoreStage(c),closed=czCLOSED.indexOf(back)>=0;
+    var wasLost=c.stage!=="dead",why=folderReason(c);
+    var back=wasLost?"follow_up":(rework?czReworkStage(c):czRestoreStage(c)),closed=czCLOSED.indexOf(back)>=0;
     c.stage=back;c.status=czStageToStatus(back);c.updated=Date.now();
     if(rework){c.reworkedAt=Date.now();c.followUpDue=todayStr();c.fuCleared=false;}
     else{c.followUpDue=closed?"":czAddDays(todayStr(),czFollowupDays);c.fuCleared=closed;}
-    czStampNote(c,rework?"Pulled from Dead leads to rework (was: "+(c.deadReason||"Other")+"). Follow-up set for today.":"Restored from Dead leads to "+czMETA[back].label+".");
+    czStampNote(c,rework?"Pulled from Dead leads to rework (was: "+why+"). Follow-up set for today.":"Restored from Dead leads to "+czMETA[back].label+".");
     saveLeads(arr);
     try{addLeadActivity(id,"note",rework?"Reworking lead from Dead leads":"Restored from Dead leads");}catch(e){}
     czDeadMsg={text:czName(c)+" is back in "+czMETA[back].label+(rework?" with a follow-up for today.":".")};
@@ -9515,25 +9520,26 @@ try{(function(){
   };
 
   function czRenderDead(box){
-    var list=czFiltered().filter(function(c){return c.stage==="dead";}).sort(function(a,b){return czDeadAt(b)-czDeadAt(a);});
-    var counts={};list.forEach(function(c){var r=c.deadReason||"Other";counts[r]=(counts[r]||0)+1;});
-    var reasons=CZ_DEAD_REASONS.filter(function(r){return counts[r];});Object.keys(counts).forEach(function(r){if(reasons.indexOf(r)<0)reasons.push(r);});
+    var list=czFiltered().filter(inFolder).sort(function(a,b){return folderAt(b)-folderAt(a);});
+    var counts={};list.forEach(function(c){var r=folderReason(c);counts[r]=(counts[r]||0)+1;});
+    var reasons=CZ_DEAD_REASONS.concat(LOST_IDS.map(function(s){return czMETA[s].label;})).filter(function(r){return counts[r];});Object.keys(counts).forEach(function(r){if(reasons.indexOf(r)<0)reasons.push(r);});
     if(czDeadReason!=="all"&&!counts[czDeadReason])czDeadReason="all";
-    var shown=list.filter(function(c){return czDeadReason==="all"||(c.deadReason||"Other")===czDeadReason;});
+    var shown=list.filter(function(c){return czDeadReason==="all"||folderReason(c)===czDeadReason;});
     var searching=!!String(czQuery||"").trim();
     var rows=shown.length?shown.map(function(c){
-      var d=czDeadAt(c)?new Date(czDeadAt(c)).toLocaleDateString(undefined,{month:"short",day:"numeric"}):"";
+      var d=folderAt(c)?new Date(folderAt(c)).toLocaleDateString(undefined,{month:"short",day:"numeric"}):"";
+      var isDead=c.stage==="dead";
       var sub=[c.phone?fmtPhone(c.phone):"",c.email,c.source?czSourceLabel(c.source):"",[c.city?tcase(c.city):"",c.state].filter(Boolean).join(", ")].filter(Boolean).map(esc).join(" · ");
       var tel=c.phone?String(c.phone).replace(/[^0-9+]/g,""):"";
-      return '<div class="czd-row" data-czd-open="'+esc(c.id)+'"><div class="czd-main"><div class="czd-nm">'+esc(tcase(czName(c)))+'</div>'+(sub?'<div class="czd-sub">'+sub+'</div>':'')+'<span class="czd-from">Was in: '+esc(czMETA[czRestoreStage(c)].label)+'</span></div>'
-        +'<span class="czd-why">'+esc(c.deadReason||"Other")+'</span><span class="czd-when">'+(d?"Marked "+esc(d):"")+'</span>'
+      return '<div class="czd-row" data-czd-open="'+esc(c.id)+'"><div class="czd-main"><div class="czd-nm">'+esc(tcase(czName(c)))+'</div>'+(sub?'<div class="czd-sub">'+sub+'</div>':'')+(isDead?'<span class="czd-from">Was in: '+esc(czMETA[czRestoreStage(c)].label)+'</span>':'')+'</div>'
+        +'<span class="czd-why">'+esc(folderReason(c))+'</span><span class="czd-when">'+(d?(isDead?"Marked ":"Updated ")+esc(d):"")+'</span>'
         +'<div class="czd-acts">'+(tel?'<a class="czd-b" href="tel:'+esc(tel)+'">Call</a><a class="czd-b" href="sms:'+esc(tel)+'">Text</a>':'')+(c.email?'<a class="czd-b" href="mailto:'+esc(c.email)+'">Email</a>':'')
-        +'<button type="button" class="czd-b" data-czd-restore="'+esc(c.id)+'" title="Put it back where it was on the normal 14-day follow-up">Restore</button>'
-        +'<button type="button" class="czd-b rework" data-czd-rework="'+esc(c.id)+'" title="Put it back and set a follow-up for today">Rework</button></div></div>';
+        +(isDead?'<button type="button" class="czd-b" data-czd-restore="'+esc(c.id)+'" title="Put it back where it was on the normal 14-day follow-up">Restore</button>':'')
+        +'<button type="button" class="czd-b rework" data-czd-rework="'+esc(c.id)+'" title="'+(isDead?"Put it back where it was":"Move it to Follow Up")+' with a follow-up for today">Rework</button></div></div>';
     }).join(""):'<div class="czd-empty">'+(list.length?"No dead leads for this reason.":(searching?"No dead leads match your search.":"No dead leads yet. On any card, tap <b>Dead</b> to move a bad lead here."))+'</div>';
     var msg=czDeadMsg;czDeadMsg=null;
-    box.innerHTML='<div class="czd"><div class="czd-hd"><div><h3>'+FOLDER+'Dead leads folder <span style="color:#94a3b8;font-weight:800">'+list.length+'</span></h3><p>Leads you stopped chasing, kept here in case you want to try again. <b>Rework</b> puts one back where it was with a follow-up for today. <b>Restore</b> puts it back on the normal 14-day follow-up. Tap a row for the full history.</p></div>'
-      +'<div class="czd-tools">'+(shown.length?'<button type="button" class="czd-b" data-czd-csv>'+DL+'Download list</button>':'')+'<button type="button" class="czd-b dark" data-czd-back>Back to pipeline</button></div></div>'
+    box.innerHTML='<div class="czd"><div class="czd-hd"><div><h3>'+FOLDER+'Dead leads folder <span style="color:#94a3b8;font-weight:800">'+list.length+'</span></h3><p>Leads you stopped chasing, kept here in case you want to try again. This includes Ghosted, No Longer Interested and Disqualified leads. <b>Rework</b> puts one back in the pipeline with a follow-up for today. <b>Restore</b> puts a dead lead back where it was on the normal 14-day follow-up. Tap a row for the full history.</p></div>'
+      +'<div class="czd-tools">'+(shown.length?'<button type="button" class="czd-b" data-czd-csv>'+DL+'Download list</button>':'')+'<button type="button" class="czd-b dark" data-czd-back>Hide dead leads</button></div></div>'
       +(msg?'<div class="czd-msg"><span>'+esc(msg.text)+'</span><button type="button" data-czd-go>See it in the pipeline</button></div>':'')
       +(list.length?'<div class="czd-rs"><button type="button" class="czd-chip'+(czDeadReason==="all"?" on":"")+'" data-czd-r="all">All<b>'+list.length+'</b></button>'+reasons.map(function(r){return '<button type="button" class="czd-chip'+(czDeadReason===r?" on":"")+'" data-czd-r="'+esc(r)+'">'+esc(r)+'<b>'+counts[r]+'</b></button>';}).join("")+'</div>':'')
       +rows+'</div>';
@@ -9552,9 +9558,9 @@ try{(function(){
     var mount=$$("cz-pipeline"),res=$$("cz-pipe-results");if(!mount||!res)return;
     var row=$$("czx-row");
     if(!row){row=document.createElement("div");row.id="czx-row";row.className="czx-row";res.parentNode.insertBefore(row,res);}
-    var deadN=getLeads().filter(function(c){return c.stage==="dead";}).length;
+    var deadN=czFiltered().filter(inFolder).length;
     row.innerHTML='<button type="button" class="czx-btn" data-czx-export>'+DL+'Download CSV</button><button type="button" class="czx-btn" data-czx-import>'+UL+'Import leads</button><span class="sp"></span>'
-      +'<button type="button" class="czx-btn'+(czShowDead?" on":"")+'" data-czx-dead title="Open the folder of leads you marked dead">'+FOLDER+(czShowDead?"Close dead leads":"Dead leads folder")+' <b>'+deadN+'</b></button>';
+      +'<button type="button" class="czx-btn'+(czShowDead?" on":"")+'" data-czx-dead aria-pressed="'+(czShowDead?"true":"false")+'" title="Dead, Ghosted, No Longer Interested and Disqualified leads">'+FOLDER+(czShowDead?"Hide dead leads":"View dead leads")+' <b>'+deadN+'</b></button>';
     row.querySelector("[data-czx-export]").addEventListener("click",function(){openExport("leads");});
     row.querySelector("[data-czx-import]").addEventListener("click",function(){openImporter("leads");});
     row.querySelector("[data-czx-dead]").addEventListener("click",function(){czShowDead=!czShowDead;czPipeResults();});
@@ -9581,6 +9587,7 @@ try{(function(){
     try{czTools();}catch(e){console.warn("od9 tools",e);}
     if(czShowDead){czRenderDead(box);return;}
     var o=_pipe.apply(this,arguments);
+    try{var lc=$$("od-col-lost");if(lc)lc.remove();var lj=box.querySelector('[data-od-jump="lost"]');if(lj)lj.remove();}catch(e){}
     try{czDecorate(box);}catch(e){console.warn("od9 board",e);}
     return o;
   };
