@@ -8976,7 +8976,11 @@ try{(function(){
   ".vsp-sub{font-size:12px;color:#64748b;font-weight:600}",
   ".vsp-timeline{display:flex;flex-direction:column;gap:8px;margin-top:10px;max-height:320px;overflow:auto}",
   ".vsp-note{border-left:3px solid #0d8f84;background:#f6f8fc;border-radius:8px;padding:8px 10px}",
-  ".vsp-note .t{font-size:13px;color:#1f2d3d;white-space:pre-wrap;line-height:1.4}",
+  ".vsp-note .t{font-size:13px;color:#1f2d3d;white-space:pre-wrap;line-height:1.4;overflow-wrap:anywhere;word-break:break-word}",
+  ".vsp-note,.vsp-timeline,.vsc-sec{min-width:0;max-width:100%;box-sizing:border-box}",
+  "#modal-content .cz-mfoot{flex-wrap:wrap;row-gap:8px}#modal-content .cz-mfoot [data-czd-m]{color:#9f1239;border-color:#fecdd3}",
+  "@media(max-width:560px){#modal-content .cz-mfoot>button{flex:1 1 auto}}",
+  ".vsp-url{color:#16447f;font-weight:700;text-decoration:underline;overflow-wrap:anywhere}html.dark .vsp-url{color:#9fc6ff}",
   ".vsp-note .w{font-size:11px;color:#7b8aa0;font-weight:700;margin-bottom:2px}",
   ".vsp-nonotes{font-size:12.5px;color:#94a3b8;padding:6px 2px}",
   ".vsp-editnotes{margin-top:8px}",
@@ -8998,6 +9002,8 @@ try{(function(){
   function $$(id){return document.getElementById(id);}
   function val(id){var e=$$(id);return e?String(e.value||"").trim():"";}
   function esc(s){return escapeHtml(s==null?"":String(s));}
+  /* notes: long links (Google referrer URLs etc.) show as a short clickable link instead of breaking the layout */
+  window.vsNoteHtml=function(s){var h=escapeHtml(String(s==null?"":s));return h.replace(/https?:\/\/[^\s<]*[^\s<.,;:)!?]/g,function(u){var raw=u.replace(/&amp;/g,"&"),disp;try{var p=new URL(raw);disp=p.hostname.replace(/^www\./,"")+(p.pathname&&p.pathname!=="/"?(p.pathname.length>28?p.pathname.slice(0,28)+"...":p.pathname):"")+(p.search?" (link)":"");}catch(e){disp=raw.slice(0,40)+"...";}return '<a class="vsp-url" href="'+u+'" target="_blank" rel="noopener noreferrer" title="'+u+'">'+escapeHtml(disp)+'</a>';});};
   function title(s){s=String(s||"").trim();if(s&&(s===s.toUpperCase()||s===s.toLowerCase())&&/[a-z]/i.test(s))return s.toLowerCase().replace(/(^|[\s'\-])([a-z])/g,function(m,p,c){return p+c.toUpperCase();});return s;}
   function fmtPhone(p){var d=String(p||"").replace(/\D/g,"");if(d.length===11&&d.charAt(0)==="1")d=d.slice(1);if(d.length===10)return "("+d.slice(0,3)+") "+d.slice(3,6)+"-"+d.slice(6);return String(p||"").trim();}
   function prettyDate(s){if(!s)return "";var d=new Date(String(s).length<=10?s+"T12:00:00":s);if(isNaN(d))return s;return d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});}
@@ -9038,7 +9044,7 @@ try{(function(){
     var raw=val("cz_notes");
     if(!raw){tl.innerHTML='<div class="vsp-nonotes">No notes yet. Type a note above and press Add. It saves right away.</div>';return;}
     var parts=raw.split(/\n\s*\n/).map(function(x){return x.trim();}).filter(Boolean);
-    tl.innerHTML=parts.slice(0,40).map(function(x){var m=x.match(/^\[([^\]]{1,40})\]\s*([\s\S]*)$/);return '<div class="vsp-note">'+(m?'<div class="w">'+esc(m[1])+'</div><div class="t">'+esc(m[2])+'</div>':'<div class="t">'+esc(x)+'</div>')+'</div>';}).join("")+(parts.length>40?'<div class="vsp-nonotes">Showing the latest 40 notes. Tap Edit notes to see everything.</div>':'');
+    tl.innerHTML=parts.slice(0,40).map(function(x){var m=x.match(/^\[([^\]]{1,40})\]\s*([\s\S]*)$/);return '<div class="vsp-note">'+(m?'<div class="w">'+esc(m[1])+'</div><div class="t">'+window.vsNoteHtml(m[2])+'</div>':'<div class="t">'+window.vsNoteHtml(x)+'</div>')+'</div>';}).join("")+(parts.length>40?'<div class="vsp-nonotes">Showing the latest 40 notes. Tap Edit notes to see everything.</div>':'');
   }
   function setEditing(wrap,on,focusId){
     wrap.classList.toggle("vsp-editing",!!on);
@@ -9254,7 +9260,7 @@ try{(function(){
       else if(cur){cur.t+=(cur.t?"\n":"")+t;}
       else{cur={w:"",t:t};entries.push(cur);}
     });
-    tl.innerHTML=entries.slice(0,40).map(function(e){return '<div class="vsp-note">'+(e.w?'<div class="w">'+esc(e.w)+'</div>':'')+'<div class="t">'+esc(e.t)+'</div></div>';}).join("");
+    tl.innerHTML=entries.slice(0,40).map(function(e){return '<div class="vsp-note">'+(e.w?'<div class="w">'+esc(e.w)+'</div>':'')+'<div class="t">'+window.vsNoteHtml(e.t)+'</div></div>';}).join("");
   }
   function setEditing(wrap,box,on,focusId){
     wrap.classList.toggle("vsp-editing",!!on);
