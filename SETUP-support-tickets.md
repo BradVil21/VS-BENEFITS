@@ -80,12 +80,12 @@ We received your request. Your ticket number is
 
 A team member will reach out to assist you within 24-48 hours.
 
-If it's urgent, call us directly at (954) 866-6872 and reference your ticket
+If it's urgent, call us directly at (954) 825-1009 and reference your ticket
 number.
 
 Thank you,
 VS Health Benefits
-(954) 866-6872
+(954) 825-1009
 ```
 
 ### Internal copy — to you

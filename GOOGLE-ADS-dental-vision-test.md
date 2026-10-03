@@ -243,7 +243,7 @@ Note: "free" is a negative even though a headline says "Free Quote". The negativ
 **Callouts:** No Fee to You · Licensed Broker · Quote in 1 Minute · Individuals & Businesses ·
 Compare Top Carriers
 
-**Call asset:** (954) 866-6872, business hours only.
+**Call asset:** (954) 825-1009, business hours only.
 
 **Business name:** VS Health Benefits. **Logo:** the site logo.
 

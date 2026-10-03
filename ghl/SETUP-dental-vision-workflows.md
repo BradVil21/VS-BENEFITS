@@ -47,7 +47,7 @@ Go to **Automation > Workflows > + Create workflow > Start from scratch** for ea
      Thanks for requesting a dental and vision quote. I'm comparing plans from
      carriers like Ameritas, Guardian, MetLife, VSP and EyeMed for your ZIP code now.
 
-     I'll call you from (954) 866-6872 shortly to go over your options. If you'd
+     I'll call you from (954) 825-1009 shortly to go over your options. If you'd
      rather pick a time, just reply to this email.
 
      Bradley Vilsaint
@@ -61,7 +61,7 @@ Go to **Automation > Workflows > + Create workflow > Start from scratch** for ea
 8. **If/Else** > Condition: Opportunity > Pipeline stage > is > New Lead (Marketing Pipeline)
    - **Yes branch > Send Email:**
      Subject: `Quick question about your dental & vision quote`
-     Body: `Hi {{contact.first_name}}, I tried to reach you about your quote. When is a good time for a 5 minute call? You can reply here or call/text (954) 866-6872. Bradley`
+     Body: `Hi {{contact.first_name}}, I tried to reach you about your quote. When is a good time for a 5 minute call? You can reply here or call/text (954) 825-1009. Bradley`
    - **No branch:** end.
 
 Save > toggle **Publish** > Save.
@@ -100,7 +100,7 @@ Save > toggle **Publish** > Save.
      about a minute:
      https://www.vshealthbenefits.com/quote/dental-vision
 
-     Or call/text me at (954) 866-6872 and I'll do it with you.
+     Or call/text me at (954) 825-1009 and I'll do it with you.
 
      Bradley Vilsaint
      VS Health Benefits

@@ -126,12 +126,12 @@ https://www.vshealthbenefits.com/refer-and-earn
 When you sign in the first time we'll walk you through the portal. Tomorrow
 we'll send that same map in writing so you have it later.
 
-If you didn't create this account, reply to this email or call (954) 866-6872
+If you didn't create this account, reply to this email or call (954) 825-1009
 and we'll take care of it.
 
 Thank you,
 VS Health Benefits
-(954) 866-6872
+(954) 825-1009
 ```
 
 ## SMS — Welcome (sends 5 minutes later)
@@ -216,7 +216,7 @@ ON THE SITE
 Reply to this email any time with a question — it comes straight to us.
 
 VS Health Benefits
-(954) 866-6872
+(954) 825-1009
 ```
 
 ---
