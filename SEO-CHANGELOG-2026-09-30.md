@@ -36,3 +36,32 @@ lastmod set to 2026-09-30 for the 9 edited pages.
    /coral-springs-health-insurance, and ask recent clients for reviews. Local queries already rank #1-3.
 3. Backlinks for the trucking pages (see 24 Sep changelog). This is the main thing holding
    "health insurance for truck drivers" (1,426 impr) at #50.
+
+---
+
+# Part 2 (same day): new pages + calculator data update
+
+## New pages
+| URL | Target | Notes |
+|---|---|---|
+| /blog/aca-income-limits-2027 | "aca subsidies 2027 income limits" (#9, 3.7% CTR), "aca income limits 2027", "400% poverty level 2027" | Chart for households 1-8 (100/138/150/200/250/400% FPL), 2027 contribution table, instant "where does my income land" checker, Florida non-expansion section, 2027 changes, FAQ + FAQPage schema. Calculator CTA top, middle and in the checker result. |
+| /blog/inscripcion-abierta-2027 | Spanish OE searches (558 impr), Miami | Dates, key-date cards, call + quote buttons above the fold, Spanish income table (1-6), 2027 changes (400% cliff, immigrant eligibility, full repayment), Florida section, documents checklist, FAQ + schema. hreflang pair with the English guide. |
+
+Numbers: 2026 HHS poverty guidelines ($15,960 + $5,680/person), used for 2027 coverage. IRS Rev. Proc. 2026-26
+(2.15% / 3.23-4.30 / 4.30-6.78 / 6.78-8.66 / 8.66-10.22 / 10.22%). OE Nov 1 2026 - Jan 15 2027 (court vacated the
+Dec 15 end date in June 2026; CMS confirmed in August). Immigrant PTC eligibility narrows 1 Jan 2027 (LPRs, Cuban/Haitian
+entrants, COFA stay eligible). All verified 30 Sep 2026.
+
+## Calculators fixed (were using 2025 poverty guidelines and 2026 percentages)
+- aca-subsidy-calculator, cobra-vs-marketplace-calculator, truck-driver-health-insurance-cost-calculator:
+  FPL_BASE 15650 -> 15960, FPL_ADD 5500 -> 5680, applicablePct() -> 2027 table.
+- Disclaimer text updated on those + special-enrollment-period-checker and ichra-vs-group-health-calculator.
+- Truck calculator copy: 400% line $62,600 -> $63,840 (single), $128,600 -> $132,000 (family of 4).
+
+## Linking
+- English OE guide: hreflang en/es/x-default + "Leer esta guía en español" link above the H1.
+- what-income-counts-for-aca-subsidies -> income limits chart; seguro-de-salud-miami -> Spanish guide.
+- blog.html: two new post cards. sitemap.xml: 2 new URLs + lastmod on edited pages. llms.txt: both added.
+
+## To do after deploy
+Search Console > URL Inspection > Request indexing for both new URLs.

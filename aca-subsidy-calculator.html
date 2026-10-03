@@ -500,7 +500,7 @@ footer a:hover{color:#fff}
         </ul>
       </div>
     </div>
-    <div class="foot-disc">This calculator provides estimates for educational purposes only and is not an offer of insurance, a quote, or tax advice. Estimates use the 2025 federal poverty guidelines and the 2026 ACA premium tax credit formula (IRS Rev. Proc. 2025-25) that applies after the enhanced credits expired on December 31, 2025, and reflect a hard subsidy cliff above 400% of the federal poverty level. They do not reflect the exact plans or prices in your area. If Congress restores the enhanced credits, subsidy amounts could change — ask us for your exact figure. VS Health Benefits only sends official enrollment materials after direct client confirmation. We do not mail unsolicited insurance packages.</div>
+    <div class="foot-disc">This calculator provides estimates for educational purposes only and is not an offer of insurance, a quote, or tax advice. Estimates use the 2026 federal poverty guidelines and the 2027 ACA premium tax credit formula (IRS Rev. Proc. 2026-26) that applies after the enhanced credits expired on December 31, 2025, and reflect a hard subsidy cliff above 400% of the federal poverty level. They do not reflect the exact plans or prices in your area. If Congress restores the enhanced credits, subsidy amounts could change — ask us for your exact figure. VS Health Benefits only sends official enrollment materials after direct client confirmation. We do not mail unsolicited insurance packages.</div>
     
     <div class="vs-foot-priority" style="border-top:1px solid rgba(255,255,255,.18);margin-top:18px;padding-top:16px;margin-bottom:16px">
       <div style="font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.65);margin-bottom:10px">Popular Right Now</div>
@@ -595,12 +595,12 @@ document.addEventListener("DOMContentLoaded",function(){
 (function(){
   "use strict";
   var lastEstimate={};
-  var FPL_BASE=15650,FPL_ADD=5500;
+  var FPL_BASE=15960,FPL_ADD=5680; // 2026 HHS guidelines, used for 2027 coverage
   function fpl(size){return FPL_BASE+(size-1)*FPL_ADD;}
   function lerp(x,x0,x1,y0,y1){return y0+(y1-y0)*(x-x0)/(x1-x0);}
-  // 2026/2027 required-contribution sliding scale (IRS Rev. Proc. 2025-25, original ACA rules after
+  // 2027 required-contribution sliding scale (IRS Rev. Proc. 2026-26, original ACA rules after
   // the enhanced credits expired 12/31/2025). Returns null above 400% FPL = subsidy cliff, no credit.
-  function applicablePct(p){if(p<133)return 2.10;if(p<150)return lerp(p,133,150,3.14,4.19);if(p<200)return lerp(p,150,200,4.19,6.60);if(p<250)return lerp(p,200,250,6.60,8.44);if(p<300)return lerp(p,250,300,8.44,9.96);if(p<=400)return 9.96;return null;}
+  function applicablePct(p){if(p<133)return 2.15;if(p<150)return lerp(p,133,150,3.23,4.30);if(p<200)return lerp(p,150,200,4.30,6.78);if(p<250)return lerp(p,200,250,6.78,8.66);if(p<300)return lerp(p,250,300,8.66,10.22);if(p<=400)return 10.22;return null;}
   function ageFactor(a){if(a<21)return 0.765;if(a>=64)return 3.0;var pts=[[21,1.0],[25,1.004],[30,1.135],[35,1.222],[40,1.278],[45,1.444],[50,1.786],[55,2.230],[60,2.714],[64,3.0]];for(var i=0;i<pts.length-1;i++){if(a>=pts[i][0]&&a<pts[i+1][0])return lerp(a,pts[i][0],pts[i+1][0],pts[i][1],pts[i+1][1]);}return 1.0;}
   var BASE21=375;
   function prem(a){return BASE21*ageFactor(a);}
