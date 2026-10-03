@@ -50,3 +50,17 @@ Site phone switched back from (954) 866-6872 to **(954) 825-1009** everywhere: 1
 +1-954-825-1009. Older changelogs left as historical records.
 Also update the number in: Google Business Profile, Google Ads call assets, GHL (Sarah/Vee phone agents,
 email signatures, SMS sender), social profiles, so Google sees one consistent number.
+
+---
+# Update 3 Oct 2026: real Google reviews
+Copied from the Google Business Profile (47 reviews, 5.0) on 3 Oct 2026. Text is verbatim (typos kept);
+names shortened to first name + last initial. 17 reviews used.
+- 47 carousel pages (homepage, city/state/industry pages): all 17 reviews scroll again (120s loop),
+  long ones clamp to 8 lines. Badge now reads "5.0 from 47 Google reviews".
+- 20 "Client Stories" pages: 3 real reviews each (business pages: Chloe B. small-business review first;
+  Spanish pages: Carolyn F. "bilingual" review first).
+- /quote and /open-enrollment: 6-review rotating testimonial.
+Left out on purpose: the review posted under "Bradley Vilsaint" (owner reviewing own business is against
+Google policy; delete it from Google too), and generic reviews that describe claims processing (a carrier's
+job, not a broker's), which read as less credible.
+To add a new review later: add it to the `reviews` array (same format) or ask Claude to refresh from Google.
