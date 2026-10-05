@@ -1523,6 +1523,21 @@
       "source": "/blog/how-many-employees-do-you-need-for-group-health-insurance-florida",
       "destination": "/blog/how-many-employees-group-health-insurance-florida",
       "permanent": true
+    },
+    {
+      "source": "/dot-physical-blood-pressure-requirements.html",
+      "destination": "/dot-physical-blood-pressure-requirements",
+      "permanent": true
+    },
+    {
+      "source": "/how-long-is-a-dot-physical-good-for.html",
+      "destination": "/how-long-is-a-dot-physical-good-for",
+      "permanent": true
+    },
+    {
+      "source": "/examen-medico-dot.html",
+      "destination": "/examen-medico-dot",
+      "permanent": true
     }
   ],
   "rewrites": [
