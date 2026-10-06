@@ -355,6 +355,25 @@ html{scroll-behavior:smooth}#reviews-anchor{scroll-margin-top:90px}
 @media(min-width:960px){.vs-pick-row{max-width:460px}.vs-pick-row a{white-space:nowrap}}
 </style>
 <style id="vs-footli-fix">footer li{color:rgba(255,255,255,.88)}</style>
+<style id="vs-showcase-css">
+.vs-showcase{padding:64px 0 24px}
+.vs-showcase-head{text-align:center;max-width:720px;margin:0 auto 32px}
+.vs-showcase-head h2{margin:10px 0 12px;text-wrap:balance}
+.vs-showcase-head p{color:var(--muted);font-size:1.02rem}
+.vs-showcase-grid{display:grid;grid-template-columns:1fr;gap:20px}
+.vs-tile{position:relative;display:block;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:var(--blue-50);box-shadow:0 18px 40px rgba(13,27,42,.16);text-decoration:none;isolation:isolate}
+.vs-tile img,.vs-tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.vs-tile video{opacity:0;transition:opacity .8s ease,transform .6s ease;pointer-events:none}
+.vs-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,27,42,0) 35%,rgba(13,27,42,.78) 100%);z-index:1}
+.vs-tile-body{position:absolute;left:0;right:0;bottom:0;padding:24px;z-index:2;color:#fff}
+.vs-tile-tag{display:inline-block;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:5px 12px;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.vs-tile h3{color:#fff;font-size:1.45rem;line-height:1.25;margin:12px 0 14px;text-shadow:0 2px 12px rgba(0,0,0,.25)}
+.vs-tile-cta{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--blue-900,#0d1b2a);font-weight:700;font-size:.92rem;padding:11px 18px;border-radius:999px;transition:gap .2s,background .2s}
+.vs-tile:hover img,.vs-tile:hover video{transform:scale(1.04)}
+.vs-tile:hover .vs-tile-cta{gap:12px;background:var(--teal,#0db5a6);color:#fff}
+@media(min-width:860px){.vs-showcase-grid{grid-template-columns:1fr 1fr;gap:24px}.vs-tile{aspect-ratio:5/4}.vs-tile h3{font-size:1.6rem}}
+@media(prefers-reduced-motion:reduce){.vs-tile img,.vs-tile video{transition:none}.vs-tile:hover img,.vs-tile:hover video{transform:none}}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Enroll by Dec 15 for a January 1 start.</a></span><a href="/quote" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -412,8 +431,8 @@ html{scroll-behavior:smooth}#reviews-anchor{scroll-margin-top:90px}
           </div>
         </div>
       </div>
-      <div class="hero-image" style="position:relative">
-        <img src="/compressed/family-picture.jpg" alt="VS Health Benefits independent health insurance advisor" loading="eager" /><video data-vs-video="home-family-park" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s ease;pointer-events:none"></video>
+      <div class="hero-image">
+        <img src="/compressed/family-picture.jpg" alt="VS Health Benefits independent health insurance advisor" loading="eager" />
       </div>
     </div>
   </div>
@@ -450,6 +469,37 @@ html{scroll-behavior:smooth}#reviews-anchor{scroll-margin-top:90px}
     </div>
   </div>
 </div>
+
+<!-- ====================== FAMILY VIDEO SHOWCASE ====================== -->
+<section class="vs-showcase">
+  <div class="container">
+    <div class="vs-showcase-head">
+      <span class="eyebrow">Coverage for real life</span>
+      <h2>Protect the people who make it all worth it</h2>
+      <p>Doctor visits, prescriptions, the surprise ER trip. We compare every major carrier so your family gets the right plan at the lowest price, with no cost to use us.</p>
+    </div>
+    <div class="vs-showcase-grid">
+      <a class="vs-tile" href="/quote?type=family">
+        <img src="/compressed/home-family-park.jpg" alt="Mother and kids playing together in a sunny park" loading="lazy" width="960" height="720" />
+        <video data-vs-video="home-family-park" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture></video>
+        <div class="vs-tile-body">
+          <span class="vs-tile-tag">Individual &amp; Family</span>
+          <h3>Family plans from $0/mo after credits</h3>
+          <span class="vs-tile-cta">Quote my family <span aria-hidden="true">&rarr;</span></span>
+        </div>
+      </a>
+      <a class="vs-tile" href="/family-health-insurance">
+        <img src="/compressed/home-siblings-couch.jpg" alt="Siblings laughing together on the living room couch" loading="lazy" width="960" height="540" />
+        <video data-vs-video="home-siblings-couch" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture></video>
+        <div class="vs-tile-body">
+          <span class="vs-tile-tag">Kids, partners &amp; parents</span>
+          <h3>One plan that covers the whole household</h3>
+          <span class="vs-tile-cta">Compare family plans <span aria-hidden="true">&rarr;</span></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
 
 <!-- ====================== SERVICES ====================== -->
 <section class="section bg-soft">
@@ -497,7 +547,7 @@ html{scroll-behavior:smooth}#reviews-anchor{scroll-margin-top:90px}
         </div>
       </div>
       <div class="card">
-        <div class="card-image" style="position:relative"><img src="/compressed/happy-child-outdoors.jpg" alt="Family health plans" loading="lazy" /><video data-vs-video="home-siblings-couch" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s ease;pointer-events:none"></video></div>
+        <div class="card-image"><img src="/compressed/happy-child-outdoors.jpg" alt="Family health plans" loading="lazy" /></div>
         <div class="card-body">
           <div class="ic">F</div>
           <h3>Family Plans</h3>
