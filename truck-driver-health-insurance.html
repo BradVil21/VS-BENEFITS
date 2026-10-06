@@ -535,6 +535,7 @@ body{padding-bottom:0}
       </div>
       <div class="hero-photo">
         <img src="/compressed/truck1.jpg" alt="Truck driver owner-operator health insurance" loading="eager" />
+        <video data-vs-video="trucker-driving-cab" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s ease;pointer-events:none"></video>
         <div class="hero-photo-badge"><span>$0</span>Cost to consult</div>
       </div>
     </div>
@@ -1756,5 +1757,6 @@ function qfSubmit(pid, label) {
   <a class="vs-quote" href="/quote" data-vs-cta="sticky-quote">Get quote</a>
 </div>
 <script>(function(){var b=document.getElementById("vs-callbar");if(!b)return;b.addEventListener("click",function(e){var a=e.target.closest("a[data-vs-cta]");if(!a)return;var c=a.getAttribute("data-vs-cta");try{if(window.vsTrack)window.vsTrack(c==="sticky-call"?"contact_call":c==="sticky-text"?"contact_text":"quote_start",{lead_type:"sticky_bar"});}catch(_){}try{if(window.gtag&&c==="sticky-text")gtag("event","contact_text",{lead_type:"sticky_bar",page:location.pathname});}catch(_){}});})();</script>
+<script src="/vs-video.js" defer></script>
 </body>
 </html>

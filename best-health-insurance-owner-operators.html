@@ -426,7 +426,7 @@ body{padding-bottom:0}
         <div class="eyebrow">For Owner-Operators</div>
         <h1>Health Insurance for Owner-Operators <span>and Independent Truckers</span></h1>
         <p class="hero-sub">You run your own truck, so nobody hands you a benefits packet. Compare national PPO plans, ACA subsidies, and private coverage side by side, and find out what you actually qualify for in about two minutes.</p>
-        <figure style="margin:0 0 20px;border-radius:14px;overflow:hidden"><img src="/compressed/Truckermore.jpg" alt="Owner-operator semi truck hauling on a desert highway with nationwide health coverage" width="1600" height="1062" style="width:100%;height:auto;display:block" loading="eager" /></figure>
+        <figure style="margin:0 0 20px;border-radius:14px;overflow:hidden"><div style="position:relative"><img src="/compressed/Truckermore.jpg" alt="Owner-operator semi truck hauling on a desert highway with nationwide health coverage" width="1600" height="1062" style="width:100%;height:auto;display:block" loading="eager" /><video data-vs-video="owner-operator-truck" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s ease;pointer-events:none"></video></div></figure>
         <div class="hero-ctas">
           <a class="btn btn-primary" href="/quote?from=best-health-insurance-owner-operators">Compare My Plans &rarr;</a>
           <a class="btn btn-secondary" href="tel:+19548251009">Call an Advisor</a>
@@ -1459,5 +1459,6 @@ function qfSubmit(pid, label) {
   <a class="vs-quote" href="/quote" data-vs-cta="sticky-quote">Get quote</a>
 </div>
 <script>(function(){var b=document.getElementById("vs-callbar");if(!b)return;b.addEventListener("click",function(e){var a=e.target.closest("a[data-vs-cta]");if(!a)return;var c=a.getAttribute("data-vs-cta");try{if(window.vsTrack)window.vsTrack(c==="sticky-call"?"contact_call":c==="sticky-text"?"contact_text":"quote_start",{lead_type:"sticky_bar"});}catch(_){}try{if(window.gtag&&c==="sticky-text")gtag("event","contact_text",{lead_type:"sticky_bar",page:location.pathname});}catch(_){}});})();</script>
+<script src="/vs-video.js" defer></script>
 </body>
 </html>

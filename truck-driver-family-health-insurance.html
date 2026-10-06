@@ -270,7 +270,7 @@ body{padding-bottom:0}
 <h1>Health Insurance for Truck Driver Families: One Plan for Home and the Road</h1>
 <p class="lede">Your family sees doctors in your hometown. You see whatever state the load takes you to. A truck driver family plan has to pass two tests at once: national coverage for the driver, local coverage for everyone else. Get that combination right and one plan protects the whole household, often for less than you expect once family subsidies and CHIP are applied.</p>
 <figure style="margin:24px auto 30px;max-width:520px">
-  <img src="/compressed/father-lifting-daughter-sunset.jpg" alt="Truck driver lifting his daughter in the air at sunset, representing family health coverage for drivers" width="1200" height="1200" loading="lazy" decoding="async" style="width:100%;height:auto;display:block;border-radius:16px" />
+  <div style="position:relative"><img src="/compressed/father-lifting-daughter-sunset.jpg" alt="Truck driver lifting his daughter in the air at sunset, representing family health coverage for drivers" width="1200" height="1200" loading="lazy" decoding="async" style="width:100%;height:auto;display:block;border-radius:16px" /><video data-vs-video="trucker-kid-big-rig" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s ease;pointer-events:none;border-radius:16px"></video></div>
 </figure>
 
 <div style="background:linear-gradient(135deg,#16447f,#0db5a6);border-radius:16px;padding:26px 22px;margin:22px 0">
@@ -504,5 +504,6 @@ btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"
   <a class="vs-quote" href="/quote" data-vs-cta="sticky-quote">Get quote</a>
 </div>
 <script>(function(){var b=document.getElementById("vs-callbar");if(!b)return;b.addEventListener("click",function(e){var a=e.target.closest("a[data-vs-cta]");if(!a)return;var c=a.getAttribute("data-vs-cta");try{if(window.vsTrack)window.vsTrack(c==="sticky-call"?"contact_call":c==="sticky-text"?"contact_text":"quote_start",{lead_type:"sticky_bar"});}catch(_){}try{if(window.gtag&&c==="sticky-text")gtag("event","contact_text",{lead_type:"sticky_bar",page:location.pathname});}catch(_){}});})();</script>
+<script src="/vs-video.js" defer></script>
 </body>
 </html>
