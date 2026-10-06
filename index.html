@@ -441,13 +441,6 @@ html{scroll-behavior:smooth}#reviews-anchor{scroll-margin-top:90px}
             </div>
             <p class="vs-zip-err" id="vs-zip-err" role="alert" hidden>Please enter a valid 5-digit ZIP code.</p>
           </form>
-          <p class="vs-pick-label vs-pick-sub">Or choose what you need:</p>
-          <div class="vs-pick-row">
-            <a href="/quote?type=family"><span aria-hidden="true">&#128106;</span>Me &amp; my family</a>
-            <a href="/quote?type=business"><span aria-hidden="true">&#127970;</span>My small business</a>
-            <a href="/truck-driver-health-insurance"><span aria-hidden="true">&#128666;</span>Truck driver / 1099</a>
-            <a href="/quote/dental-vision"><span aria-hidden="true">&#129463;</span>Dental &amp; vision</a>
-          </div>
         </div>
       </div>
       <div class="hero-image">
@@ -1511,14 +1504,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var q=carry(); q.set('zip',input.value.trim()); q.set('from','home_zip');
     try{ if(typeof gtag==='function') gtag('event','zip_quote_start',{zip_prefix:input.value.slice(0,3)}); }catch(_){}
     location.href='/quote?'+q.toString();
-  });
-  // Quick-pick buttons carry the ZIP too, if one was typed
-  document.querySelectorAll('.vs-pick-row a').forEach(function(a){
-    a.addEventListener('click',function(){
-      if(!zipOk() || a.getAttribute('href').indexOf('/quote')!==0) return;
-      var u=new URL(a.getAttribute('href'),location.origin); u.searchParams.set('zip',input.value.trim());
-      carry().forEach(function(v,k){u.searchParams.set(k,v)}); a.setAttribute('href',u.pathname+u.search);
-    });
   });
 })();
 </script>
