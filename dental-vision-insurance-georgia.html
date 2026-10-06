@@ -405,6 +405,7 @@ footer a:hover{color:#fff}
     "https://www.chamberofcommerce.com/business-directory/florida/carol-city/health-insurance-agency/2034499618-vs-health-benefits"],"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"08:00","closes":"18:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Saturday","Sunday"],"opens":"08:00","closes":"13:00"}]}
 </script>
 <style id="carrier-logo-css">.carriers .carrier img{max-height:32px;max-width:122px;width:auto;height:auto;object-fit:contain;display:block}.carriers .carrier:has(img){opacity:1}</style>
+<style id="vs-footli-fix">footer li{color:rgba(255,255,255,.88)}</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Enroll by Dec 15 for a January 1 start.</a></span><a href="/quote" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -635,7 +636,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var y = document.getElementById("year"); if(y) y.textContent = new Date().getFullYear();
   // Scroll bar
   var bar = document.createElement("div"); bar.id="vs-scroll-bar"; document.body.appendChild(bar);
-  window.addEventListener("scroll", function(){ var s=window.scrollY, t=document.documentElement.scrollHeight-window.innerHeight; bar.style.width=t>0?(s/t*100)+"%":"0%"; },{passive:true});
+  window.addEventListener("scroll", function(){ var s=window.scrollY, t=document.documentElement.scrollHeight-window.innerHeight; if(bar)bar.style.width=t>0?(s/t*100)+"%":"0%"; },{passive:true});
   // Back to top
   var btn = document.getElementById("back-to-top");
   window.addEventListener("scroll", function(){ btn.classList.toggle("visible", window.scrollY>300); },{passive:true});

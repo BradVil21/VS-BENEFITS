@@ -341,6 +341,20 @@ footer a:hover{color:#fff}
 <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "ItemList", "name": "VS Health Benefits site navigation", "itemListElement": [{"@type": "SiteNavigationElement", "position": 1, "name": "Get a Quote", "url": "https://www.vshealthbenefits.com/quote"}, {"@type": "SiteNavigationElement", "position": 2, "name": "Services", "url": "https://www.vshealthbenefits.com/services"}, {"@type": "SiteNavigationElement", "position": 3, "name": "Truck Driver Health Insurance", "url": "https://www.vshealthbenefits.com/truck-driver-health-insurance"}, {"@type": "SiteNavigationElement", "position": 4, "name": "Small Business Health Insurance", "url": "https://www.vshealthbenefits.com/small-business-health-insurance"}, {"@type": "SiteNavigationElement", "position": 5, "name": "ACA Subsidy Calculator", "url": "https://www.vshealthbenefits.com/aca-subsidy-calculator"}, {"@type": "SiteNavigationElement", "position": 6, "name": "Open Enrollment 2027", "url": "https://www.vshealthbenefits.com/open-enrollment"}, {"@type": "SiteNavigationElement", "position": 7, "name": "Blog", "url": "https://www.vshealthbenefits.com/blog"}, {"@type": "SiteNavigationElement", "position": 8, "name": "About", "url": "https://www.vshealthbenefits.com/about"}, {"@type": "SiteNavigationElement", "position": 9, "name": "Contact", "url": "https://www.vshealthbenefits.com/contact"}, {"@type": "SiteNavigationElement", "position": 10, "name": "Member Portal", "url": "https://www.vshealthbenefits.com/client"}]}
 </script>
+<style id="vs-hero-pick-css">
+html{scroll-behavior:smooth}#reviews-anchor{scroll-margin-top:90px}
+.vs-hero-pick{margin-top:22px}
+.vs-rating{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:.88rem;color:var(--ink);text-decoration:none;box-shadow:0 2px 10px rgba(13,27,42,.06)}
+.vs-rating .vs-stars{color:#f5b400;letter-spacing:1px;font-size:.95rem}
+.vs-rating span:last-child{color:var(--muted)}
+.vs-pick-label{margin:18px 0 10px;font-weight:700;font-size:.92rem;color:var(--ink)}
+.vs-pick-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vs-pick-row a{display:flex;align-items:center;gap:8px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--blue-900,#0d1b2a);font-weight:600;font-size:.9rem;text-decoration:none;transition:border-color .2s,transform .2s,box-shadow .2s}
+.vs-pick-row a span{font-size:1.15rem}
+.vs-pick-row a:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:0 8px 20px rgba(13,27,42,.10)}
+@media(min-width:960px){.vs-pick-row{max-width:460px}.vs-pick-row a{white-space:nowrap}}
+</style>
+<style id="vs-footli-fix">footer li{color:rgba(255,255,255,.88)}</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Enroll by Dec 15 for a January 1 start.</a></span><a href="/quote" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -383,6 +397,19 @@ footer a:hover{color:#fff}
           <span><span class="dot"></span>Free 15-min consultation</span>
           <span><span class="dot"></span>40+ states licensed</span>
           <span><span class="dot"></span>No carrier bias</span>
+        </div>
+        <div class="vs-hero-pick">
+          <a class="vs-rating" href="#reviews-anchor" aria-label="Rated 5.0 out of 5 from 47 Google reviews">
+            <span class="vs-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <strong>5.0</strong><span>from 47 Google reviews</span>
+          </a>
+          <p class="vs-pick-label">What do you need coverage for?</p>
+          <div class="vs-pick-row">
+            <a href="/quote?type=family"><span aria-hidden="true">&#128106;</span>Me &amp; my family</a>
+            <a href="/quote?type=business"><span aria-hidden="true">&#127970;</span>My small business</a>
+            <a href="/truck-driver-health-insurance"><span aria-hidden="true">&#128666;</span>Truck driver / 1099</a>
+            <a href="/quote/dental-vision"><span aria-hidden="true">&#129463;</span>Dental &amp; vision</a>
+          </div>
         </div>
       </div>
       <div class="hero-image" style="position:relative">
@@ -623,7 +650,7 @@ footer a:hover{color:#fff}
 
 
 <!-- ====================== TESTIMONIALS ====================== -->
-<section class="section">
+<section class="section" id="reviews-anchor">
   <div class="container">
     <div class="center" style="margin-bottom:6px">
       <span class="eyebrow">In their words</span>

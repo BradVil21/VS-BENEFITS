@@ -364,6 +364,7 @@ body{padding-bottom:0}
 <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.vshealthbenefits.com/"}, {"@type": "ListItem", "position": 2, "name": "DOT Physical Requirements", "item": "https://www.vshealthbenefits.com/dot-physical-requirements"}, {"@type": "ListItem", "position": 3, "name": "DOT Blood Pressure Requirements", "item": "https://www.vshealthbenefits.com/dot-physical-blood-pressure-requirements"}]}
 </script>
+<style id="vs-footli-fix">footer li{color:rgba(255,255,255,.88)}</style>
 </head>
 <body>
 <header class="site-header">
@@ -668,7 +669,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var y = document.getElementById("year"); if(y) y.textContent = new Date().getFullYear();
   // Scroll bar
   var bar = document.createElement("div"); bar.id="vs-scroll-bar"; document.body.appendChild(bar);
-  window.addEventListener("scroll", function(){ var s=window.scrollY, t=document.documentElement.scrollHeight-window.innerHeight; bar.style.width=t>0?(s/t*100)+"%":"0%"; },{passive:true});
+  window.addEventListener("scroll", function(){ var s=window.scrollY, t=document.documentElement.scrollHeight-window.innerHeight; if(bar)bar.style.width=t>0?(s/t*100)+"%":"0%"; },{passive:true});
   // Back to top
   var btn = document.getElementById("back-to-top");
   window.addEventListener("scroll", function(){ btn.classList.toggle("visible", window.scrollY>300); },{passive:true});

@@ -177,6 +177,7 @@ footer a:hover{color:#fff}
 .tldr{background:linear-gradient(135deg,#f4f8fe,#eef5ff);border:1px solid var(--blue-100);border-radius:18px;padding:24px;max-width:860px;margin:0 auto}
 .tldr h2{font-size:1.3rem;margin-bottom:8px}.tldr p{margin-bottom:0}
 </style>
+<style id="vs-footli-fix">footer li{color:rgba(255,255,255,.88)}</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Enroll by Dec 15 for a January 1 start.</a></span><a href="/quote" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -263,7 +264,7 @@ document.addEventListener("DOMContentLoaded",function(){
   if(modal)modal.addEventListener("click",function(e){if(e.target===modal)closeModal();});
   document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeMenu();closeModal();}});
   var y=document.getElementById("year");if(y)y.textContent=new Date().getFullYear();
-  var bar=document.getElementById("vs-scroll-bar");window.addEventListener("scroll",function(){var s=window.scrollY,t=document.documentElement.scrollHeight-window.innerHeight;bar.style.width=t>0?(s/t*100)+"%":"0%";},{passive:true});
+  var bar=document.getElementById("vs-scroll-bar");window.addEventListener("scroll",function(){var s=window.scrollY,t=document.documentElement.scrollHeight-window.innerHeight;if(bar)bar.style.width=t>0?(s/t*100)+"%":"0%";},{passive:true});
   var btn=document.getElementById("back-to-top");window.addEventListener("scroll",function(){btn.classList.toggle("visible",window.scrollY>300);},{passive:true});btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});
 });
 </script>
