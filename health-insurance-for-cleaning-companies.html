@@ -270,6 +270,27 @@ footer{background:var(--blue-900);color:#ffffff;padding:48px 0 24px}footer a{col
 {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.vshealthbenefits.com/"}, {"@type": "ListItem", "position": 2, "name": "Group Health Insurance for Janitorial & Cleaning Firms"}]}
 </script>
 <style id="vs-footli-fix">footer li{color:rgba(255,255,255,.88)}</style>
+<style id="vsz-css">
+.vsz{margin:22px 0 26px;width:100%;max-width:480px;min-width:0;box-sizing:border-box}
+.vsz-rating{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #e4e9f2;border-radius:999px;padding:7px 14px;font-size:.88rem;line-height:1.2;color:#0d1b2a;text-decoration:none;box-shadow:0 2px 10px rgba(13,27,42,.06)}
+.vsz-rating:hover{text-decoration:none;color:#0d1b2a}
+.vsz-stars{color:#f5b400;letter-spacing:1px;font-size:.95rem}
+.vsz-rc{color:#5b6b7f}
+.vsz-label{display:block;margin:18px 0 10px;font-weight:700;font-size:.92rem;line-height:1.4;color:#0d1b2a}
+.vsz-row{display:flex;gap:8px;background:#fff;border:1.5px solid #e4e9f2;border-radius:14px;padding:6px;box-shadow:0 10px 28px rgba(13,27,42,.08);transition:border-color .2s,box-shadow .2s}
+.vsz-row:focus-within{border-color:#0db5a6;box-shadow:0 10px 28px rgba(13,181,166,.18)}
+.vsz-row input{flex:1 1 0;width:0;min-width:0;min-height:0;margin:0;border:0;outline:0;box-shadow:none;font:inherit;font-size:1.05rem;font-weight:600;letter-spacing:.08em;padding:10px 12px;color:#0d1b2a;background:transparent}
+.vsz-row input::placeholder{letter-spacing:0;font-weight:500;color:#6b7a8d}
+.vsz-btn{flex:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;margin:0;padding:12px 18px;border:0;border-radius:10px;background:#16447f;color:#fff;font:inherit;font-size:.98rem;font-weight:700;line-height:1;cursor:pointer;transition:background .15s}
+.vsz-btn:hover{background:#1e5ab0}
+.vsz-err{color:#c0392b;font-size:.85rem;margin:8px 0 0}
+.vsz.has-err .vsz-row{border-color:#c0392b}
+.vsz--dark .vsz-label{color:#fff}
+.vsz--dark .vsz-row{border-color:transparent}
+.vsz--dark .vsz-err{color:#ffd9d3}
+.vsz--dark.has-err .vsz-row{border-color:#ff8a7a}
+@media(max-width:420px){.vsz-btn{padding:12px 13px;font-size:.92rem}.vsz-row input{letter-spacing:.04em}}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Enroll by Dec 15 for a January 1 start.</a></span><a href="/quote" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -301,6 +322,13 @@ footer{background:var(--blue-900);color:#ffffff;padding:48px 0 24px}footer a{col
           <span><span class="dot"></span>Year-round setup</span>
           <span><span class="dot"></span>Zero cost to use us</span>
         </div>
+<form class="vsz" action="/quote" method="get" novalidate data-type="business" data-from="health-insurance-for-cleaning-companies_zip">
+  <a class="vsz-rating" href="/#reviews-anchor" aria-label="Rated 5.0 out of 5 from 47 Google reviews"><span class="vsz-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><strong>5.0</strong><span class="vsz-rc">from 47 Google reviews</span></a>
+  <label class="vsz-label" for="vsz-in-health-insurance-for-cleaning-companies">Get group quotes for your team. Start with your ZIP code:</label>
+  <div class="vsz-row"><input id="vsz-in-health-insurance-for-cleaning-companies" name="zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="ZIP code" autocomplete="postal-code" required /><button type="submit" class="vsz-btn">Get My Quote <span aria-hidden="true">&rarr;</span></button></div>
+  <p class="vsz-err" role="alert" hidden>Please enter a valid 5-digit ZIP code.</p>
+</form>
+
       </div>
       <div class="hero-photo">
         <img src="/compressed/microemployee.jpg" alt="Cleaning company owner and crew covered by group health insurance" loading="eager" />
@@ -559,5 +587,23 @@ document.addEventListener("DOMContentLoaded",function(){var toggle=document.quer
 <!-- GoHighLevel external tracking -->
 <script src="https://link.msgsndr.com/js/external-tracking.js" data-tracking-id="tk_e89392b2cfc34b548ae43b1ea975ae50"></script>
 <script src="/vs-video.js" defer></script>
+<script id="vsz-js">
+(function(){
+  var forms=document.querySelectorAll('form.vsz'); if(!forms.length) return;
+  function carry(){var o=new URLSearchParams(),c=new URLSearchParams(location.search);c.forEach(function(v,k){if(/^(utm_|gclid|gbraid|wbraid|fbclid|msclkid)/i.test(k))o.set(k,v);});return o;}
+  [].forEach.call(forms,function(form){
+    var input=form.querySelector('input'),err=form.querySelector('.vsz-err');
+    function ok(){return /^\d{5}$/.test(input.value.trim());}
+    input.addEventListener('input',function(){input.value=input.value.replace(/\D/g,'').slice(0,5);if(ok()){err.hidden=true;form.classList.remove('has-err');}});
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(!ok()){err.hidden=false;form.classList.add('has-err');input.focus();return;}
+      var q=carry();q.set('zip',input.value.trim());if(form.dataset.type)q.set('type',form.dataset.type);q.set('from',form.dataset.from||'niche_zip');
+      try{if(typeof gtag==='function')gtag('event','zip_quote_start',{zip_prefix:input.value.slice(0,3),page:location.pathname});}catch(_){}
+      location.href='/quote?'+q.toString();
+    });
+  });
+})();
+</script>
 </body>
 </html>
