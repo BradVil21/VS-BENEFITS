@@ -5303,6 +5303,70 @@ function czFollowups(){
   var sb=mount.querySelector("[data-cz-search]");if(sb)sb.addEventListener("input",function(){czQuery=sb.value;czFuResults();});
   czFuResults();
 }
+/* ── Follow-ups list: Call / Text right on the row, then disposition inline (Oct 2026) ── */
+var czFuDispOpen="";
+var FUQ_PHONE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>';
+var FUQ_TEXT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.9-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 4 11.5a8.5 8.5 0 0 1 17 0z"/></svg>';
+function czFuQuick(c){
+  var tel=c.phone?String(c.phone).replace(/[^0-9+]/g,""):"";
+  if(!tel)return "";
+  return '<span class="fuq-acts"><a class="fuq-b fuq-call" href="tel:'+escapeHtml(tel)+'" data-fuq="'+c.id+'">'+FUQ_PHONE+'Call</a>'
+    +'<a class="fuq-b" href="sms:'+escapeHtml(tel)+'" data-fuq="'+c.id+'">'+FUQ_TEXT+'Text</a></span>';
+}
+function czFuDispRow(c){
+  var open=czFuDispOpen===c.id;
+  return '<div class="fuq-disp" data-fuq-disp="'+c.id+'"'+(open?'':' hidden')+'><span class="fuq-q">How did it go?</span>'
+    +'<button type="button" class="cz-resetbtn vsfu-done" data-fuq-do="complete">\u2713 Completed</button>'
+    +'<button type="button" class="cz-resetbtn vsfu-no" data-fuq-do="noanswer">\u260e No answer</button>'
+    +'<select class="cz-resetbtn" data-fuq-do="snooze"><option value="">\u23f1 Snooze</option><option value="30">30 days out</option><option value="60">60 days out</option><option value="90">90 days out</option></select>'
+    +'<button type="button" class="cz-resetbtn" data-fuq-do="reset" title="Log contact \u2014 restart 14-day clock">\u21bb Reset</button>'
+    +'<button type="button" class="fuq-x" data-fuq-do="close" aria-label="Close">\u2715</button></div>';
+}
+function czFuBindQuick(box){
+  box.querySelectorAll("[data-fuq]").forEach(function(a){
+    /* pointerdown fires before the site-wide "Call with…" chooser grabs the click */
+    var id=a.getAttribute("data-fuq"),last=0;
+    function openDisp(){
+      var t=Date.now();if(t-last<1500)return;last=t;
+      czFuDispOpen=id;
+      box.querySelectorAll("[data-fuq-disp]").forEach(function(d){d.hidden=d.getAttribute("data-fuq-disp")!==id;});
+      if(typeof addLeadActivity==="function")addLeadActivity(id,"followup",(a.classList.contains("fuq-call")?"Called":"Texted")+" from follow-up list");
+    }
+    a.addEventListener("pointerdown",openDisp);
+    a.addEventListener("keydown",function(e){if(e.key==="Enter")openDisp();});
+    a.addEventListener("click",function(e){e.stopPropagation();openDisp();});
+  });
+  box.querySelectorAll("[data-fuq-disp]").forEach(function(d){
+    var id=d.getAttribute("data-fuq-disp");
+    d.addEventListener("click",function(e){e.stopPropagation();});
+    d.querySelectorAll("button[data-fuq-do]").forEach(function(b){
+      b.addEventListener("click",function(e){
+        e.stopPropagation();var k=b.getAttribute("data-fuq-do");
+        if(k==="close"){czFuDispOpen="";d.hidden=true;return;}
+        czFuDispOpen="";
+        if(k==="complete")czFuComplete(id);else if(k==="noanswer")czFuNoAnswer(id);else if(k==="reset")czRestart(id);
+      });
+    });
+    var sn=d.querySelector("select[data-fuq-do]");
+    if(sn)sn.addEventListener("change",function(){var n=parseInt(sn.value,10);sn.value="";if(n>0){czFuDispOpen="";czFuSnooze(id,n);}});
+  });
+}
+(function(){try{var st=document.createElement("style");st.setAttribute("data-fuq","1");st.textContent=
+  "#cz-fu-results .cz-listitem{flex-wrap:wrap}"
+  +".fuq-acts{display:inline-flex;gap:6px;flex:none}"
+  +".fuq-b{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;white-space:nowrap;text-decoration:none!important;border-radius:999px;padding:6px 13px;border:1px solid #c9dcf5;background:#fff;color:#16447f}"
+  +".fuq-b svg{width:14px;height:14px}"
+  +".fuq-b:hover{background:#eef4fd}"
+  +".fuq-call{background:#0a7a4f;border-color:#0a7a4f;color:#fff!important}"
+  +".fuq-call:hover{background:#086640}"
+  +".fuq-open{font-size:12.5px;font-weight:700;color:#64748b;white-space:nowrap;padding:6px 4px}"
+  +".fuq-disp{flex:1 1 100%;display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:4px;padding:10px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;cursor:default}"
+  +".fuq-disp[hidden]{display:none}"
+  +".fuq-q{font-size:12.5px;font-weight:800;color:#334155;margin-right:4px}"
+  +".fuq-x{margin-left:auto;border:0;background:none;color:#94a3b8;font-size:15px;cursor:pointer;padding:6px 8px;border-radius:8px}"
+  +".fuq-x:hover{background:#e2e8f0;color:#334155}"
+  +"@media (max-width:760px){.fuq-b{min-height:38px;padding:8px 14px}.fuq-open{display:none}}";
+  document.head.appendChild(st);}catch(e){}})();
 function czFuResults(){
   var box=$("cz-fu-results");if(!box)return;
   var cs=czFiltered();
@@ -5317,11 +5381,12 @@ function czFuResults(){
   var blocks=secs.map(function(sec){
     var list=g[sec.key];if(!list.length)return"";
     var items=list.map(function(o){var c=o.c,fu=o.fu;
-      return '<div class="cz-listitem" data-cz-open="'+c.id+'" style="cursor:pointer"><div style="min-width:0;flex:1"><div class="cz-row" style="gap:8px"><span class="cz-nm">'+escapeHtml(czName(c))+'</span><span class="cz-chip" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></div><div class="cz-sub" style="margin-top:2px">'+escapeHtml(c.phone||c.email||"no contact info")+' \u00b7 last contact '+(c.lastContact?czPretty(c.lastContact):"\u2014")+'</div></div><span class="cz-pill" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span><span style="font-size:12.5px;font-weight:800;color:#16447f;white-space:nowrap;background:#eef4fd;border:1px solid #c9dcf5;border-radius:999px;padding:6px 14px">Open \u2192</span></div>';
+      return '<div class="cz-listitem" data-cz-open="'+c.id+'" style="cursor:pointer"><div style="min-width:0;flex:1"><div class="cz-row" style="gap:8px"><span class="cz-nm">'+escapeHtml(czName(c))+'</span><span class="cz-chip" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></div><div class="cz-sub" style="margin-top:2px">'+escapeHtml(c.phone||c.email||"no contact info")+' \u00b7 last contact '+(c.lastContact?czPretty(c.lastContact):"\u2014")+'</div></div><span class="cz-pill" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span>'+czFuQuick(c)+'<span class="fuq-open">Open \u2192</span>'+czFuDispRow(c)+'</div>';
     }).join("");
     return '<div class="cz-panel" style="overflow:hidden;margin-bottom:20px"><div class="cz-sec-head"><h2><span style="color:'+sec.accent+'">'+sec.ico+'</span> '+sec.title+' <span class="cz-faint" style="font-size:12px;font-weight:400">'+list.length+'</span></h2><button class="cz-resetbtn vsfu-done" data-cz-clearall="'+sec.key+'" title="Mark every follow-up in this section as completed">\u2713 Clear all '+list.length+'</button></div>'+items+'</div>';
   }).join("");
   box.innerHTML=intro+blocks;
+  czFuBindQuick(box);
   czBind(box);
   box.querySelectorAll("[data-cz-clearall]").forEach(function(b){b.addEventListener("click",function(e){e.stopPropagation();czFuClearAll(b.getAttribute("data-cz-clearall"));});});
 }
