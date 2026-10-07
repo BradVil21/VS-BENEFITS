@@ -352,82 +352,76 @@ input,select,textarea{font-family:inherit;font-size:16px}
 }
 @media(max-width:560px){#sync-label{display:none}.sync-pill{padding:5px 6px}}
 
-/* soft photo backdrop behind the sign-in view */
-body{background-color:var(--bg);background-image:linear-gradient(180deg,rgba(246,249,252,.50) 0%,rgba(246,249,252,.66) 46%,rgba(246,249,252,.93) 100%),url('/compressed/portal-bg-soft.jpg');background-size:cover;background-position:center top;background-repeat:no-repeat;min-height:100vh}
-@media(max-width:900px){body{background-image:linear-gradient(180deg,rgba(246,249,252,.58) 0%,rgba(246,249,252,.74) 42%,rgba(246,249,252,.95) 100%),url('/compressed/portal-bg-soft.jpg')}}
-
-/* ── Member portal hero (auth view) ── */
-.portal-hero{position:relative;overflow:hidden;border-radius:24px;margin:10px 0 0;background:linear-gradient(135deg,#0b2346 0%,#16447f 58%,#0b6f79 100%);box-shadow:0 24px 60px rgba(11,35,70,.22)}
-.portal-hero::before{content:"";position:absolute;inset:0;background-image:url('/compressed/member-portal-happy-client.jpg');background-size:cover;background-position:72% 30%;opacity:.46}
-.portal-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(104deg,rgba(11,35,70,.95) 0%,rgba(11,35,70,.9) 34%,rgba(11,35,70,.55) 72%,rgba(9,58,78,.34) 100%)}
-.portal-hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1.02fr .98fr;gap:38px;align-items:center;padding:46px 42px}
-.portal-copy{color:#fff;min-width:0}
-.portal-eyebrow{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8ff0e4;background:rgba(13,181,166,.18);border:1px solid rgba(13,181,166,.42);padding:6px 13px;border-radius:999px;margin-bottom:16px}
-.portal-title{color:#fff;font-size:clamp(1.75rem,3.4vw,2.6rem);line-height:1.16;font-weight:800;margin:0 0 14px;letter-spacing:-.5px}
-.portal-title .hl{background:linear-gradient(90deg,#5ee7d5,#8ff0e4);-webkit-background-clip:text;background-clip:text;color:transparent}
-.portal-type{color:rgba(255,255,255,.94);font-size:clamp(1rem,1.5vw,1.14rem);font-weight:500;margin:0 0 24px;min-height:3.1em;line-height:1.55}
-.portal-perks{list-style:none;padding:0;margin:0 0 4px;display:grid;gap:11px}
-.portal-perks li{display:flex;align-items:flex-start;gap:10px;color:rgba(255,255,255,.93);font-size:.95rem;line-height:1.45}
-.portal-perks svg{flex:none;width:19px;height:19px;margin-top:1px;color:#5ee7d5}
-.portal-formcol{min-width:0}
-.portal-formcol .card{margin-bottom:0;padding:26px 24px;border:0;border-radius:18px;box-shadow:0 18px 44px rgba(11,35,70,.28)}
-.portal-note{color:rgba(255,255,255,.72);font-size:.8rem;margin:18px 0 0;display:flex;align-items:center;gap:7px}
-.portal-note svg{flex:none;width:15px;height:15px;color:#8ff0e4}
-@media(max-width:900px){
-  /* below 900px the dark panel and the sign-in card become two separate cards */
-  .portal-hero{background:none;box-shadow:none;border-radius:0;overflow:visible;margin-top:4px}
-  .portal-hero::before,.portal-hero::after{display:none}
-  .portal-hero-inner{grid-template-columns:1fr;gap:18px;padding:0}
-  .portal-copy{position:relative;overflow:hidden;border-radius:20px;padding:30px 22px 26px;background:linear-gradient(135deg,#0b2346 0%,#16447f 58%,#0b6f79 100%);box-shadow:0 16px 40px rgba(11,35,70,.22)}
-  .portal-copy::before{content:"";position:absolute;inset:0;background-image:url('/compressed/member-portal-happy-client.jpg');background-size:cover;background-position:70% 28%;opacity:.42}
-  .portal-copy::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,35,70,.93) 0%,rgba(11,35,70,.87) 55%,rgba(11,35,70,.74) 100%)}
-  .portal-copy>*{position:relative;z-index:2}
-  .portal-type{min-height:4.4em}
-  .portal-formcol .card{border:1px solid var(--line);box-shadow:0 12px 32px rgba(11,35,70,.13)}
-}
-@media(prefers-reduced-motion:reduce){.cp-caret::after{animation:none}}
-
-/* ── Sign-in card refresh + Google sign-in (Sept 2026) ── */
-.cp-authcard{position:relative}
-.ac-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px}
-.ac-badge{flex:0 0 46px;width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--blue-700),var(--teal));color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(22,68,127,.25)}
-.ac-badge svg{width:22px;height:22px}
-.ac-head h2{margin:0 0 4px;font-size:21px;letter-spacing:-.01em}
-.ac-head .lede{margin:0!important;font-size:13.5px!important;color:var(--muted)!important;line-height:1.5}
-.g-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:50px;padding:12px 18px;background:#fff;border:1.5px solid #d6dde8;border-radius:12px;font-family:inherit;font-size:15.5px;font-weight:700;color:#1f2937;cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .15s}
-.g-btn:hover{border-color:#aab8cc;box-shadow:0 6px 18px rgba(11,35,70,.10);transform:translateY(-1px)}
-.g-btn:active{transform:none}
-.g-btn[disabled]{opacity:.7;cursor:wait;transform:none}
-.g-logo{width:20px;height:20px;flex:0 0 20px}
-.g-note{margin:8px 0 0;font-size:12px;color:var(--muted);text-align:center}
-.ac-or{display:flex;align-items:center;gap:12px;margin:18px 0 14px;color:#8a97a8;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+/* ── Member sign-in (Oct 2026 refresh: static copy, cleaner split panel) ── */
+body:has(#auth-view:not([hidden])){background:#eef2f7;background-image:none}
+#auth-view{padding:30px 0 6px}
+.ap-shell{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);max-width:1040px;margin:0 auto;background:#fff;border:1px solid #d9e1ec;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(11,35,70,.05),0 24px 56px -18px rgba(11,35,70,.22)}
+.ap-info{position:relative;display:flex;flex-direction:column;background:#0b2346;color:#fff;padding:44px 42px 34px;overflow:hidden}
+.ap-info::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 70% at 100% 0%,rgba(13,181,166,.16) 0%,rgba(13,181,166,0) 60%),radial-gradient(90% 60% at 0% 100%,rgba(47,125,224,.18) 0%,rgba(47,125,224,0) 65%);pointer-events:none}
+.ap-info>*{position:relative}
+.ap-brand{display:flex;align-items:center;gap:12px;margin-bottom:38px}
+.ap-mark{width:40px;height:40px;border-radius:10px;background:#fff;color:#0b2346;display:flex;align-items:center;justify-content:center;font:800 14px/1 Poppins,Inter,sans-serif;letter-spacing:-.5px;flex:none}
+.ap-brand-name{font-weight:700;font-size:15px;line-height:1.2;color:#fff}
+.ap-brand-sub{font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#93a9c6}
+.ap-title{color:#fff;font-size:clamp(1.6rem,2.6vw,2.05rem);line-height:1.2;font-weight:700;letter-spacing:-.4px;margin:0 0 12px}
+.ap-sub{color:#c3d1e3;font-size:15px;line-height:1.6;margin:0 0 30px;max-width:40ch}
+.ap-feats{list-style:none;margin:0 0 32px;padding:0;display:grid;gap:18px}
+.ap-feats li{display:flex;gap:14px;align-items:flex-start}
+.ap-ic{flex:none;width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:#7fe3d6}
+.ap-ic svg{width:18px;height:18px}
+.ap-feats strong{display:block;color:#fff;font-size:14.5px;font-weight:600;margin-bottom:1px}
+.ap-feats li>div>span{display:block;color:#a9bbd2;font-size:13.5px;line-height:1.45}
+.ap-trust{margin-top:auto;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-wrap:wrap;gap:10px 22px;font-size:12.5px;color:#a9bbd2}
+.ap-trust span{display:inline-flex;align-items:center;gap:7px}
+.ap-trust svg{width:15px;height:15px;color:#7fe3d6;flex:none}
+.ap-trust a{color:#dbe6f3}
+.ap-form{padding:44px 48px 34px;min-width:0}
+.ap-secure{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-dark);margin-bottom:10px}
+.ap-secure svg{width:13px;height:13px}
+.ap-form h2{margin:0 0 6px;font-size:24px;font-weight:700;letter-spacing:-.02em;color:var(--blue-900)}
+.ap-form .lede{margin:0 0 22px;font-size:14.5px;color:var(--muted);line-height:1.5}
+.ap-form .tabs{display:flex;gap:0;border:0;border-bottom:1px solid var(--line);margin:0 0 22px;background:none;padding:0}
+.ap-form .tabs button{flex:0 0 auto;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:10px 2px;margin-right:26px;font-size:14.5px;font-weight:600;color:var(--muted);min-height:44px;cursor:pointer;border-radius:0}
+.ap-form .tabs button:hover{color:var(--ink)}
+.ap-form .tabs button.active{color:var(--blue-800);border-bottom-color:var(--blue-700)}
+.g-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:48px;padding:11px 18px;background:#fff;border:1px solid #cfd8e4;border-radius:10px;font-family:inherit;font-size:15px;font-weight:600;color:#1f2937;cursor:pointer;transition:background .15s,border-color .15s}
+.g-btn:hover{background:#f8fafc;border-color:#b7c3d3}
+.g-btn[disabled]{opacity:.7;cursor:wait}
+.g-logo{width:19px;height:19px;flex:0 0 19px}
+.ac-or{display:flex;align-items:center;gap:12px;margin:20px 0 16px;color:#8592a3;font-size:12.5px}
 .ac-or::before,.ac-or::after{content:"";flex:1;height:1px;background:var(--line)}
-.cp-authcard .tabs{border:0;background:#eef2f8;border-radius:12px;padding:4px;gap:4px;margin-bottom:16px}
-.cp-authcard .tabs button{border:0;border-radius:9px;padding:9px 8px;font-size:14px;min-height:40px;color:var(--ink-2)}
-.cp-authcard .tabs button.active{background:#fff;color:var(--blue-800);box-shadow:0 1px 3px rgba(11,35,70,.14)}
-.cp-authcard .field label{font-size:13px;font-weight:700;color:var(--ink-2)}
-.cp-authcard .field input{border-radius:10px;border-color:#d6dde8;min-height:48px}
+.ap-form .field label{font-size:13px;font-weight:600;color:var(--ink-2)}
+.ap-form .field input{border-radius:9px;border-color:#cfd8e4;min-height:46px}
+.ap-labelrow{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.ap-labelrow a{font-size:12.5px;font-weight:600}
 .pw-wrap{position:relative;display:block}
 .pw-wrap input{padding-right:64px!important}
-.pw-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--blue-600);font-size:12.5px;font-weight:700;padding:8px 10px;cursor:pointer;border-radius:8px;font-family:inherit}
+.pw-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:var(--blue-600);font-size:12.5px;font-weight:600;padding:8px 10px;cursor:pointer;border-radius:8px;font-family:inherit}
 .pw-eye:hover{background:var(--blue-50)}
-.cp-authcard .btn-primary{min-height:50px;border-radius:12px;font-size:15.5px;background:linear-gradient(135deg,var(--blue-700),var(--blue-600));box-shadow:0 8px 20px rgba(30,90,176,.25)}
-.cp-authcard .btn-primary:hover{background:linear-gradient(135deg,var(--blue-800),var(--blue-700))}
+.ap-form .btn-primary{min-height:48px;border-radius:10px;font-size:15px;font-weight:600;background:var(--blue-800);box-shadow:none;margin-top:4px}
+.ap-form .btn-primary:hover{background:var(--blue-900)}
 .btn.is-busy{opacity:.75;cursor:wait}
-.ac-foot{display:flex;gap:8px;align-items:flex-start;margin:16px 0 0;padding-top:14px;border-top:1px solid var(--line-2);font-size:12px;color:var(--muted);line-height:1.5}
-.ac-foot svg{flex:0 0 15px;width:15px;height:15px;margin-top:1px;color:var(--teal-dark)}
-#g-finish h3{margin:0 0 4px;font-size:18px}
-#g-finish .who{display:flex;align-items:center;gap:10px;background:var(--blue-50);border-radius:12px;padding:10px 12px;margin:12px 0 14px;font-size:13.5px;color:var(--ink-2)}
+.ac-foot{display:flex;gap:9px;align-items:flex-start;margin:22px 0 0;padding-top:16px;border-top:1px solid var(--line-2);font-size:12.5px;color:var(--muted);line-height:1.55}
+.ac-foot svg{flex:0 0 15px;width:15px;height:15px;margin-top:2px;color:var(--teal-dark)}
+#g-finish h3{margin:0 0 4px;font-size:19px}
+#g-finish .who{display:flex;align-items:center;gap:10px;background:var(--blue-50);border-radius:10px;padding:10px 12px;margin:12px 0 14px;font-size:13.5px;color:var(--ink-2)}
 #g-finish .who img,#g-finish .who .ini{width:34px;height:34px;border-radius:50%;flex:0 0 34px;object-fit:cover;background:var(--blue-700);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
 #g-finish .skip{display:block;width:100%;margin-top:10px;background:none;border:0;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;padding:8px}
 .pv-google{display:inline-flex;align-items:center;gap:6px;background:#f1f5f9;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700;color:#334155;margin-left:6px;vertical-align:middle}
 .pv-google svg,.g-mini{width:13px;height:13px}
+.ap-legal{max-width:1040px;margin:18px auto 0;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:12.5px;color:#6b7a8d}
+.ap-legal a{color:#4b5b70}
 @media(max-width:900px){
-  .portal-formcol{order:-1}
-  .portal-copy .portal-perks,.portal-copy .portal-type{display:none}
-  .portal-copy{padding:22px 20px!important}
-  .portal-title{font-size:1.55rem!important;margin-bottom:6px!important}
+  #auth-view{padding-top:14px}
+  .ap-shell{grid-template-columns:1fr}
+  .ap-form{order:-1;padding:30px 22px 26px}
+  .ap-info{padding:28px 22px 24px}
+  .ap-brand{margin-bottom:22px}
+  .ap-title{font-size:1.4rem}
+  .ap-sub{margin-bottom:22px}
 }
+@media(max-width:560px){.ap-feats{display:none}.ap-sub{margin-bottom:6px}.ap-trust{margin-top:18px}}
+@media(prefers-reduced-motion:reduce){.cp-caret::after{animation:none}}
 </style>
 <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.vshealthbenefits.com/"}, {"@type": "ListItem", "position": 2, "name": "Member Portal"}]}
@@ -464,52 +458,55 @@ body{background-color:var(--bg);background-image:linear-gradient(180deg,rgba(246
 
   <!-- ====================== AUTH VIEW ====================== -->
   <section id="auth-view">
-    <div class="portal-hero">
-      <div class="portal-hero-inner">
-        <div class="portal-copy">
-          <span class="portal-eyebrow">VS Health Benefits Member Portal</span>
-          <h1 class="portal-title">Your coverage, <span class="hl">always within reach.</span></h1>
-          <p class="portal-type" id="portal-type" aria-live="polite"></p>
-          <ul class="portal-perks">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Your plan details and documents in one place, any time.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Message your licensed advisor directly &mdash; no phone tag.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Send referrals and track your rewards.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Renewal and open enrollment reminders before deadlines hit.</span></li>
-          </ul>
-          <p class="portal-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Private and secure. Your information is never sold or shared.</p>
+    <div class="ap-shell">
+      <aside class="ap-info">
+        <div class="ap-brand">
+          <span class="ap-mark">VS</span>
+          <div><div class="ap-brand-name">VS Health Benefits</div><div class="ap-brand-sub">Member Portal</div></div>
         </div>
-        <div class="portal-formcol">
-    <div class="card cp-authcard">
+        <h1 class="ap-title">Your benefits, in one secure place.</h1>
+        <p class="ap-sub">Sign in to review your coverage, reach your licensed advisor and manage your referrals from a single account.</p>
+        <ul class="ap-feats">
+          <li><span class="ap-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></span><div><strong>Plan &amp; coverage</strong><span>Carrier, plan details and documents, available any time.</span></div></li>
+          <li><span class="ap-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.9-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 4 11.5a8.5 8.5 0 0 1 17 0z"/></svg></span><div><strong>Direct advisor messaging</strong><span>Reach your licensed advisor without the phone tag.</span></div></li>
+          <li><span class="ap-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><div><strong>Referral tracking</strong><span>Send referrals and follow each one through to enrollment.</span></div></li>
+          <li><span class="ap-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><div><strong>Renewal reminders</strong><span>Notice ahead of open enrollment and renewal deadlines.</span></div></li>
+        </ul>
+        <div class="ap-trust">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Licensed in 40+ states</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Encrypted connection</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg><a href="tel:+19548251009">(954) 825-1009</a></span>
+        </div>
+      </aside>
+
+      <div class="ap-form cp-authcard">
       <div id="ac-main">
-      <div class="ac-head">
-        <span class="ac-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
-        <div><h2 id="ac-title">Welcome back</h2><p class="lede" id="ac-lede">Sign in to see your plan, message your advisor and send referrals.</p></div>
-      </div>
+        <div class="ap-secure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Secure sign-in</div>
+        <h2 id="ac-title">Sign in to your account</h2>
+        <p class="lede" id="ac-lede">Access your plan details, advisor messages and referrals.</p>
 
-      <button id="g-signin" class="g-btn" type="button"><svg class="g-logo" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span id="g-label">Continue with Google</span></button>
-      <p class="g-note">Fastest way in. No new password to remember.</p>
-      <div id="g-msg" style="margin-top:10px"></div>
+        <div class="tabs" role="tablist">
+          <button id="tab-login" class="active" type="button" role="tab">Sign in</button>
+          <button id="tab-signup" type="button" role="tab">Create account</button>
+        </div>
 
-      <div class="ac-or"><span>or use your email</span></div>
+        <button id="g-signin" class="g-btn" type="button"><svg class="g-logo" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span id="g-label">Continue with Google</span></button>
+        <div id="g-msg" style="margin-top:10px"></div>
 
-      <div class="tabs" role="tablist">
-        <button id="tab-login" class="active" type="button" role="tab">Sign in</button>
-        <button id="tab-signup" type="button" role="tab">Create account</button>
-      </div>
+        <div class="ac-or"><span>or continue with email</span></div>
 
       <!-- Sign in -->
       <form id="login-form" autocomplete="on" novalidate>
         <div id="login-msg"></div>
         <div class="field">
-          <label for="li-email">Email</label>
+          <label for="li-email">Email address</label>
           <input id="li-email" type="email" autocomplete="email" required />
         </div>
         <div class="field">
-          <label for="li-pw">Password</label>
+          <div class="ap-labelrow"><label for="li-pw">Password</label><a href="/contact">Forgot password?</a></div>
           <input id="li-pw" type="password" autocomplete="current-password" required />
         </div>
         <button class="btn btn-primary" type="submit">Sign in</button>
-        <p class="muted" style="margin-top:14px;text-align:center">Forgot your password? <a href="/contact">Contact your advisor</a> to reset it.</p>
       </form>
 
       <!-- Sign up -->
@@ -544,7 +541,7 @@ body{background-color:var(--bg);background-image:linear-gradient(180deg,rgba(246
         </div>
         <button class="btn btn-primary" type="submit">Create account</button>
       </form>
-      <p class="ac-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Your information is sent over an encrypted connection and is never sold or shared. Need help signing in? Call <a href="tel:+19548251009">(954) 825-1009</a>.</span></p>
+        <p class="ac-foot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Your information is transmitted over an encrypted connection and is never sold or shared. Trouble signing in? Call <a href="tel:+19548251009">(954) 825-1009</a>.</span></p>
       </div>
 
       <!-- Shown once, right after a first-time Google sign-in -->
@@ -560,10 +557,9 @@ body{background-color:var(--bg);background-image:linear-gradient(180deg,rgba(246
         <button class="btn btn-primary" type="submit">Go to my portal</button>
         <button class="skip" id="gf-skip" type="button">Skip for now</button>
       </form>
-    </div>
-        </div>
       </div>
     </div>
+    <p class="ap-legal"><span>&copy; VS Health Benefits &middot; Miami, FL</span><a href="/privacy">Privacy Policy</a><a href="/terms">Terms of Use</a><a href="/contact">Help</a></p>
   </section>
 
   <!-- ====================== DASHBOARD VIEW ====================== -->
@@ -969,15 +965,15 @@ $("tab-login").addEventListener("click",function(){
   $("tab-login").classList.add("active");$("tab-signup").classList.remove("active");
   $("login-form").hidden=false;$("signup-form").hidden=true;
   showNotice("login-msg","",""); showNotice("signup-msg","","");
-  if($("ac-title"))$("ac-title").textContent="Welcome back";
-  if($("ac-lede"))$("ac-lede").textContent="Sign in to see your plan, message your advisor and send referrals.";
+  if($("ac-title"))$("ac-title").textContent="Sign in to your account";
+  if($("ac-lede"))$("ac-lede").textContent="Access your plan details, advisor messages and referrals.";
 });
 $("tab-signup").addEventListener("click",function(){
   $("tab-signup").classList.add("active");$("tab-login").classList.remove("active");
   $("signup-form").hidden=false;$("login-form").hidden=true;
   showNotice("login-msg","",""); showNotice("signup-msg","","");
   if($("ac-title"))$("ac-title").textContent="Create your account";
-  if($("ac-lede"))$("ac-lede").textContent="Takes about a minute. Use Google for the quickest setup.";
+  if($("ac-lede"))$("ac-lede").textContent="Set up your member account in about a minute.";
 });
 
 /* ── GoHighLevel referral sync ──────────────────────────────────────
@@ -1877,35 +1873,6 @@ if(getSession())showDashboard();
   window.addEventListener('resize', function(){
     if(window.innerWidth > 700 && links.classList.contains('open')) setOpen(false);
   });
-})();
-</script>
-<script>
-/* Member-portal hero: looping typewriter for the benefit lines */
-(function(){
-  var el = document.getElementById('portal-type');
-  if(!el) return;
-  var lines = [
-    'See your plan, carrier and coverage details the moment you sign in.',
-    'Message your licensed advisor directly, and get a real answer back.',
-    'Send a referral and watch your rewards add up.',
-    'Get renewal and open enrollment reminders before the deadline.',
-    'One secure login for your whole household.'
-  ];
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce){ el.textContent = lines[0]; return; }
-  var li = 0, ci = 0, deleting = false;
-  el.classList.add('cp-caret');
-  (function tick(){
-    var t = lines[li];
-    if(!deleting){
-      ci++; el.textContent = t.slice(0, ci);
-      if(ci >= t.length){ deleting = true; return setTimeout(tick, 2100); }
-      return setTimeout(tick, 34);
-    }
-    ci--; el.textContent = t.slice(0, ci);
-    if(ci <= 0){ deleting = false; li = (li + 1) % lines.length; return setTimeout(tick, 340); }
-    return setTimeout(tick, 16);
-  })();
 })();
 </script>
 </body>
