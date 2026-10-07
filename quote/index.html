@@ -733,6 +733,56 @@ p{color:var(--ink-2)}
   ]
 }
 </script>
+<style id="quote-refresh-css">
+/* ===== Quote page refresh (Oct 2026): advisor sidebar, calmer header ===== */
+.header-inner,.progress-inner{max-width:1080px}
+.qh-right{display:flex;align-items:center;gap:18px}
+.qh-secure{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;color:var(--muted)}
+.qh-secure svg{width:14px;height:14px;color:var(--teal-dark)}
+.qh-phone{display:inline-flex;align-items:center;gap:9px;text-decoration:none;color:var(--blue-900);font-weight:700;font-size:.98rem;line-height:1.15}
+.qh-phone svg{width:34px;height:34px;padding:8px;border-radius:50%;background:var(--blue-50);border:1px solid var(--blue-100);color:var(--blue-700);flex:none}
+.qh-phone small{display:block;font-size:.7rem;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.qh-phone:hover svg{background:var(--blue-100)}
+.funnel-wrap{max-width:1080px}
+.start-badge{background:var(--teal-light);border-color:transparent;color:var(--teal-dark)}
+.start-card h1{font-size:clamp(1.6rem,4.4vw,2.15rem);letter-spacing:-.025em}
+.start-card .sub{max-width:470px}
+.qa-aside{margin-top:22px}
+.qa-card{background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:22px 22px 18px}
+.qa-adv{display:flex;align-items:center;gap:14px}
+.qa-adv img{width:72px;height:72px;border-radius:50%;object-fit:cover;display:block;border:3px solid #fff;box-shadow:0 0 0 2px var(--teal),0 6px 16px rgba(13,27,42,.15)}
+.qa-name{font-family:'Poppins',sans-serif;font-weight:700;color:var(--blue-900);font-size:1.05rem;line-height:1.25}
+.qa-role{font-size:.84rem;color:var(--muted);line-height:1.35;margin-top:2px}
+.qa-msg{margin:14px 0 12px;font-size:.92rem;line-height:1.55;color:var(--ink-2);font-style:italic}
+.qa-rating{white-space:nowrap;display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:.84rem;color:var(--ink);text-decoration:none;background:#fff}
+.qa-rating span:last-child{color:var(--muted)}
+.qa-stars{color:#f5b400;letter-spacing:1px}
+.qa-next{margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.qa-next-t{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.qa-next ol{list-style:none;counter-reset:qa;display:grid;gap:12px}
+.qa-next li{counter-increment:qa;position:relative;padding-left:36px;font-size:.88rem;line-height:1.45;color:var(--ink-2)}
+.qa-next li::before{content:counter(qa);position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;background:var(--blue-50);border:1px solid var(--blue-100);color:var(--blue-700);font-weight:700;font-size:.78rem;display:flex;align-items:center;justify-content:center}
+.qa-next li strong{color:var(--blue-900);display:block}
+.qa-call{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;padding:12px 14px;border-radius:12px;background:var(--blue-50);border:1px solid var(--blue-100);color:var(--blue-700);font-weight:700;font-size:.92rem;text-decoration:none}
+.qa-call svg{width:16px;height:16px}
+.qa-call:hover{background:var(--blue-100)}
+.qa-facts{list-style:none;margin:14px 4px 0;display:grid;gap:9px}
+.qa-facts li{display:flex;align-items:center;gap:9px;font-size:.85rem;color:var(--muted)}
+.qa-facts svg{width:16px;height:16px;color:var(--teal-dark);flex:none}
+@media(min-width:980px){
+  .funnel-wrap{display:grid;grid-template-columns:minmax(0,1fr) 330px;column-gap:28px;align-items:start;padding-top:32px}
+  .funnel-wrap>.panel{grid-column:1;grid-row:1;min-width:0}
+  .qa-aside{grid-column:2;grid-row:1;margin-top:0;position:sticky;top:94px}
+  body:has(#progressWrap:not([style*="none"])) .qa-aside{top:150px}
+}
+@media(max-width:620px){
+  .qh-secure{display:none}
+  .qh-phone-txt small{display:none}
+  .qh-phone{font-size:.9rem}
+  .qh-phone svg{width:32px;height:32px;padding:7px}
+}
+@media(max-width:350px){.qh-phone-txt{display:none}.brand-name{font-size:.9rem}}
+</style>
 </head>
 <body>
 
@@ -743,9 +793,9 @@ p{color:var(--ink-2)}
       <div class="brand-badge">VS</div>
       <span class="brand-name">VS Health Benefits</span>
     </a>
-    <div class="header-trust">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      Secure &amp; Confidential
+    <div class="qh-right">
+      <span class="qh-secure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Secure &amp; confidential</span>
+      <a class="qh-phone" href="tel:+19548251009" aria-label="Call (954) 825-1009"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg><span class="qh-phone-txt"><small>Questions? Call or text</small>(954) 825-1009</span></a>
     </div>
   </div>
 </header>
@@ -771,10 +821,10 @@ p{color:var(--ink-2)}
     <div class="start-card">
       <div class="start-badge">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        Free Quote, No Obligation
+        Takes about 2 minutes
       </div>
-      <h1>Get a Free <span>Health Insurance Quote</span><br/>in About Two Minutes</h1>
-      <p class="sub">Answer a few quick questions and we will match you with the best health insurance options available in your area. Takes about 2 minutes.</p>
+      <h1>Get your free health insurance quote</h1>
+      <p class="sub">Answer a few quick questions and a licensed advisor will compare plans from top carriers in your area for you. Takes about 2 minutes. No cost, no obligation.</p>
 
       <div class="type-grid">
         <div class="type-card" id="typeIndividual" onclick="selectType('individual')">
@@ -1504,6 +1554,35 @@ p{color:var(--ink-2)}
       </a>
     </div>
   </div>
+
+  <!-- ===== ADVISOR / TRUST SIDEBAR (Oct 2026) ===== -->
+  <aside class="qa-aside" aria-label="About your advisor">
+    <div class="qa-card">
+      <div class="qa-adv">
+        <picture><source srcset="/compressed/bradley-headshot.webp" type="image/webp"><img src="/compressed/bradley-headshot.jpg" alt="Bradley Vilsaint, licensed health insurance advisor" width="72" height="72" loading="eager"></picture>
+        <div>
+          <div class="qa-name">Bradley Vilsaint</div>
+          <div class="qa-role">Founder &amp; licensed health insurance advisor</div>
+        </div>
+      </div>
+      <p class="qa-msg">&ldquo;I personally review every quote request. You&rsquo;ll talk to me, not a call center.&rdquo;</p>
+      <div class="qa-rating" aria-label="Rated 5.0 out of 5 from 47 Google reviews"><span class="qa-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><strong>5.0</strong><span>from 47 Google reviews</span></div>
+      <div class="qa-next">
+        <div class="qa-next-t">What happens next</div>
+        <ol>
+          <li><strong>Answer a few questions.</strong> About 2 minutes.</li>
+          <li><strong>We compare plans for you.</strong> Every carrier available in your area.</li>
+          <li><strong>Get your options.</strong> A licensed advisor calls or emails you within 1 business day, often within hours.</li>
+        </ol>
+      </div>
+      <a class="qa-call" href="tel:+19548251009"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>Prefer to talk? (954) 825-1009</a>
+    </div>
+    <ul class="qa-facts">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Your information is never sold</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Licensed in 40+ states</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Free service: carriers pay us, not you</li>
+    </ul>
+  </aside>
 
 </div><!-- /funnel-wrap -->
 
