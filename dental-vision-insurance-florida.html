@@ -406,6 +406,32 @@ footer a:hover{color:#fff}
 </script>
 <style id="carrier-logo-css">.carriers .carrier img{max-height:32px;max-width:122px;width:auto;height:auto;object-fit:contain;display:block}.carriers .carrier:has(img){opacity:1}</style>
 <style id="vs-footli-fix">footer li{color:rgba(255,255,255,.88)}</style>
+<style id="vcov-css">
+.vcov{position:relative;display:flex;align-items:center}
+.vcov-btn{display:inline-flex;align-items:center;gap:5px;background:none;border:0;margin:0;cursor:pointer;font:inherit;font-weight:600;color:inherit;text-align:left;line-height:inherit}
+.vcov-chev{width:15px;height:15px;transition:transform .2s;flex:none}
+.vcov.open .vcov-chev{transform:rotate(180deg)}
+.vcov-menu{display:none;position:absolute;top:calc(100% + 12px);left:50%;transform:translateX(-50%);min-width:300px;background:#fff;border:1px solid #e4e9f2;border-radius:14px;box-shadow:0 18px 44px rgba(13,27,42,.16);padding:8px;z-index:300;text-align:left}
+.vcov-menu::before{content:"";position:absolute;left:0;right:0;top:-14px;height:14px}
+.vcov.open .vcov-menu{display:block}
+@media (hover:hover){.vcov:not(.vcov-col):hover .vcov-menu{display:block}.vcov:not(.vcov-col):hover .vcov-chev{transform:rotate(180deg)}}
+.nav-links .vcov-menu a{display:flex!important;flex-direction:column;align-items:flex-start;gap:2px;width:auto!important;min-height:0!important;margin:0!important;padding:10px 12px!important;border:0!important;border-radius:10px;background:none!important;color:#0d1b2a!important;font-size:.92rem!important;font-weight:600;line-height:1.3;text-align:left;white-space:normal;text-decoration:none!important;box-shadow:none!important}
+.nav-links .vcov-menu a:hover{background:#f4f8fe!important}
+.vcov-menu strong{font-weight:700;color:#0b2346}
+.vcov-menu span{font-size:.8rem;font-weight:500;color:#5b6b7f}
+.nav-links .vcov-menu a.vcov-foot{margin-top:4px!important;padding-top:11px!important;border-top:1px solid #eef2f7!important;border-radius:0 0 10px 10px;color:#0b7f74!important;font-size:.84rem!important;font-weight:700}
+.vcov.vcov-col{flex-direction:column;align-items:stretch;width:100%}
+.vcov.vcov-col .vcov-btn{justify-content:space-between;width:100%}
+.vcov.vcov-col .vcov-menu{position:static;transform:none;min-width:0;box-shadow:none;border:0;border-radius:0;background:#f8fafc;padding:6px 10px 10px}
+.vcov.vcov-col .vcov-menu::before{display:none}
+@media (min-width:960px) and (max-width:1239px){
+.nav-links{gap:14px!important}
+.nav-links>a,.nav-links>button,.nav-links .vcov-btn{white-space:nowrap;font-size:.88rem!important}
+.nav-links>a[href="/"]{display:none!important}
+.brand,.site-nav .brand{white-space:nowrap;flex-shrink:0}
+.nav-links>a.nav-cta{padding-left:15px!important;padding-right:15px!important}
+}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Enroll by Dec 15 for a January 1 start.</a></span><a href="/quote" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -423,7 +449,7 @@ footer a:hover{color:#fff}
     </button>
     <nav id="nav-links" class="nav-links">
       <a href="/">Home</a>
-      <a href="/services">Services</a>
+      <a href="/services">Services</a><div class="vcov"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">Coverage<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu" role="menu"><a href="/private-health-insurance" role="menuitem"><strong>Private Market Plans</strong><span>PPO plans outside the Marketplace</span></a><a href="/short-term-health-insurance" role="menuitem"><strong>Short-Term Health Insurance</strong><span>Temporary coverage between plans</span></a><a href="/small-business-health-insurance" role="menuitem"><strong>Employer Group Plans</strong><span>Group health for your team</span></a><a class="vcov-foot" href="/quote">Not sure which fits? Get a quote &rarr;</a></div></div>
       <a href="/about">About</a>
       <a href="/blog">Blog</a>
       <a href="/contact">Contact</a>
@@ -993,5 +1019,27 @@ function qfSubmit(pid, label) {
   <script src="/vs-conversions.js" defer></script>
 <!-- GoHighLevel external tracking -->
 <script src="https://link.msgsndr.com/js/external-tracking.js" data-tracking-id="tk_e89392b2cfc34b548ae43b1ea975ae50"></script>
+<script id="vcov-js">
+(function(){
+  function init(){
+    document.querySelectorAll('.vcov').forEach(function(w){
+      if(w._vcov)return;w._vcov=1;
+      var nav=w.closest('.nav-links'),btn=w.querySelector('.vcov-btn');
+      function sync(){
+        if(!nav)return;
+        w.classList.toggle('vcov-col',getComputedStyle(nav).flexDirection==='column');
+        var ref=null;[].some.call(nav.children,function(c){if(c.tagName==='A'&&!c.classList.contains('nav-cta')){ref=c;return true;}});
+        if(ref){var cs=getComputedStyle(ref);['fontFamily','fontSize','fontWeight','color','paddingTop','paddingRight','paddingBottom','paddingLeft','borderBottom','letterSpacing','minHeight'].forEach(function(p){btn.style[p]=cs[p];});}
+      }
+      function set(open){w.classList.toggle('open',open);btn.setAttribute('aria-expanded',open?'true':'false');}
+      sync();window.addEventListener('resize',sync);
+      btn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();sync();set(!w.classList.contains('open'));});
+      document.addEventListener('click',function(e){if(!w.contains(e.target))set(false);});
+      document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false);});
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </body>
 </html>

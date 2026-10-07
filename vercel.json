@@ -1400,6 +1400,21 @@
       "permanent": true
     },
     {
+      "source": "/short-term-health-insurance.html",
+      "destination": "/short-term-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/short-term-health-plans",
+      "destination": "/short-term-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/short-term-medical-insurance",
+      "destination": "/short-term-health-insurance",
+      "permanent": true
+    },
+    {
       "source": "/private-health-insurance.html",
       "destination": "/private-health-insurance",
       "permanent": true
