@@ -126,6 +126,10 @@ async function readAccounts() {
 }
 
 module.exports = async (req, res) => {
+  // GET /api/google-rating is rewritten here (see vercel.json); see api/_google-rating.js
+  if (req.method === "GET" && ((req.query && req.query.op === "google-rating") || /google-rating/.test(req.url || ""))) {
+    return require("./_google-rating")(req, res);
+  }
   res.setHeader("Cache-Control", "no-store");
   if (req.method === "OPTIONS") { res.status(204).end(); return; }
   if (req.method !== "POST") { res.status(405).json({ error: "Method not allowed" }); return; }

@@ -1,4 +1,9 @@
-// Vercel serverless function: live Google rating + review count for the site.
+// Live Google rating + review count for the site (helper, NOT its own function).
+//
+// Vercel's Hobby plan allows 12 serverless functions, so this runs inside
+// api/voice-lookup.js: vercel.json rewrites GET /api/google-rating to
+// /api/voice-lookup?op=google-rating, and voice-lookup hands GETs with that
+// op to this module. voice-lookup's own POST behaviour is untouched.
 //
 //   GET /api/google-rating  ->  { "rating": 5, "count": 48, "updated": "2026-10-07T21:40:00.000Z" }
 //
