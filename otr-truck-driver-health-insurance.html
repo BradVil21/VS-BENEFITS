@@ -216,7 +216,7 @@ body{padding-bottom:0}
     <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <nav id="nav-links" class="nav-links">
       <a href="/">Home</a>
-      <a href="/services">Services</a><div class="vcov"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">Coverage<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu" role="menu"><a href="/private-health-insurance" role="menuitem"><strong>Private Market Plans</strong><span>PPO plans outside the Marketplace</span></a><a href="/short-term-health-insurance" role="menuitem"><strong>Short-Term Health Insurance</strong><span>Temporary coverage between plans</span></a><a href="/dental-vision-insurance" role="menuitem"><strong>Dental &amp; Vision</strong><span>Cleanings, glasses and contacts</span></a><a href="/small-business-health-insurance" role="menuitem"><strong>Employer Group Plans</strong><span>Group health for your team</span></a><a class="vcov-foot" href="/quote">Not sure which fits? Get a quote &rarr;</a></div></div>
+      <a href="/services">Services</a><div class="vcov"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">Coverage<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu" role="menu"><a href="/private-health-insurance" role="menuitem"><strong>Private Market Plans</strong><span>PPO plans outside the Marketplace</span></a><a href="/truck-driver-health-insurance" role="menuitem"><strong>Truck Drivers &amp; Owner-Operators</strong><span>Nationwide plans for life on the road</span></a><a href="/short-term-health-insurance" role="menuitem"><strong>Short-Term Health Insurance</strong><span>Temporary coverage between plans</span></a><a href="/dental-vision-insurance" role="menuitem"><strong>Dental &amp; Vision</strong><span>Cleanings, glasses and contacts</span></a><a href="/small-business-health-insurance" role="menuitem"><strong>Employer Group Plans</strong><span>Group health for your team</span></a><a class="vcov-foot" href="/quote">Not sure which fits? Get a quote &rarr;</a></div></div>
       <a href="/about">About</a>
       <a href="/blog" aria-current="page">Blog</a>
       <a href="/contact">Contact</a>
@@ -242,7 +242,7 @@ body{padding-bottom:0}
 <div style="background:linear-gradient(135deg,#16447f,#0db5a6);border-radius:16px;padding:26px 22px;margin:22px 0">
   <div style="font-family:'Poppins',sans-serif;font-weight:700;color:#fff;font-size:1.15rem;margin-bottom:4px">Get an OTR-ready quote in 5 minutes</div>
   <div style="color:rgba(255,255,255,.88);font-size:.92rem;margin-bottom:14px">Enter your home ZIP. We compare every carrier and filter for national networks first.</div>
-  <form onsubmit="var z=this.zip.value.replace(/\D/g,'');if(z.length===5){location.href='/quote?zip='+z}else{this.zip.focus()};return false" style="display:flex;flex-wrap:wrap;gap:10px">
+  <form onsubmit="var z=this.zip.value.replace(/\D/g,'');if(z.length===5){location.href='/truckers/quote?zip='+z}else{this.zip.focus()};return false" style="display:flex;flex-wrap:wrap;gap:10px">
     <input name="zip" type="text" inputmode="numeric" maxlength="5" pattern="[0-9]{5}" placeholder="Enter home ZIP code" aria-label="ZIP code" required style="flex:1;min-width:150px;padding:13px 16px;border-radius:999px;border:none;font-size:1rem;font-family:inherit" />
     <button type="submit" style="background:#0b2346;color:#fff;font-weight:700;font-size:.98rem;padding:13px 26px;border-radius:999px;border:none;cursor:pointer;font-family:inherit">Get My Free Quote</button>
   </form>
@@ -259,7 +259,7 @@ body{padding-bottom:0}
 <li><strong>DOT physical friendly coverage.</strong> Blood pressure, sleep apnea, and diabetes managed on the road is what keeps your med card alive. Our <a href="/cdl-driver-health-insurance">CDL and DOT physical guide</a> goes deep on this.</li>
 </ol>
 <h2 id="how">How We Set It Up While You Keep Rolling</h2>
-<p>Everything happens by phone. One call from the cab: home ZIP, income, household, doctors, and meds. We compare every carrier in your home state, filter for the national networks, apply every subsidy you qualify for, and send the paperwork to your phone. Most drivers are enrolled without ever parking for it. Costs and subsidy math live on our <a href="/truck-driver-health-insurance-cost">truck driver insurance cost page</a> if you want numbers first.</p><div class="cta-block"><h3>48 States. One Plan. Zero Detours.</h3><p>Free comparison from advisors who quote drivers every week. If your current plan is better, we will tell you to keep it.</p><a class="btn btn-teal" href="/quote">Get My Free OTR Quote</a></div>
+<p>Everything happens by phone. One call from the cab: home ZIP, income, household, doctors, and meds. We compare every carrier in your home state, filter for the national networks, apply every subsidy you qualify for, and send the paperwork to your phone. Most drivers are enrolled without ever parking for it. Costs and subsidy math live on our <a href="/truck-driver-health-insurance-cost">truck driver insurance cost page</a> if you want numbers first.</p><div class="cta-block"><h3>48 States. One Plan. Zero Detours.</h3><p>Free comparison from advisors who quote drivers every week. If your current plan is better, we will tell you to keep it.</p><a class="btn btn-teal" href="/truckers/quote?from=otr-truck-driver-health-insurance">Get My Free OTR Quote</a></div>
 <h2 id="who">Company OTR or Owner-Operator, the Answer Differs</h2>
 <p>Company drivers with no benefits should read our <a href="/blog/company-truck-driver-health-insurance">company driver coverage guide</a>, because W-2 wages make subsidies simple. Owner-operators get a different playbook with net income subsidies and the premium tax deduction, covered in our <a href="/best-health-insurance-owner-operators">owner-operator guide</a>. Either way the quote process is the same five minutes.</p><h2 id="faq">OTR Health Insurance FAQ</h2>
 <h3>What is the best health insurance for OTR truck drivers?</h3>
@@ -272,7 +272,7 @@ body{padding-bottom:0}
 <p>Depends on age, home state, household, and income. Subsidies cut the price for many drivers. One call gets your real number.</p>
 <h3>Can I enroll from the road?</h3>
 <p>Yes. The entire process works by phone while you keep driving.</p>
-<div class="cta-block"><h3>Your Next 34-Hour Reset Is Enough Time</h3><p>Actually, five minutes is. Call or start the quote and get coverage that rides with you.</p><a class="btn btn-teal" href="/quote">Start My Free Quote</a></div>
+<div class="cta-block"><h3>Your Next 34-Hour Reset Is Enough Time</h3><p>Actually, five minutes is. Call or start the quote and get coverage that rides with you.</p><a class="btn btn-teal" href="/truckers/quote?from=otr-truck-driver-health-insurance">Start My Free Quote</a></div>
 <div style="margin-top:36px"><h3 style="margin-top:0">Related Pages</h3><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><a href="/truck-driver-health-insurance" style="background:var(--bg-soft);border:1px solid var(--line);border-radius:12px;padding:16px;text-decoration:none;display:block"><div style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">All Drivers</div><div style="font-weight:700;color:var(--blue-900);font-size:.95rem;line-height:1.4">Truck Driver Health Insurance: Plans and Quotes</div></a><a href="/truck-driver-health-insurance" style="background:var(--bg-soft);border:1px solid var(--line);border-radius:12px;padding:16px;text-decoration:none;display:block"><div style="font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Family Coverage</div><div style="font-weight:700;color:var(--blue-900);font-size:.95rem;line-height:1.4">Health Insurance for Truck Driver Families</div></a></div></div>
 <div style="background:var(--blue-50);border-left:3px solid var(--blue-700);padding:12px 16px;border-radius:0 8px 8px 0;margin:18px 0;font-size:.95rem">
         <strong>More for drivers who are never home</strong><br />
@@ -286,14 +286,14 @@ body{padding-bottom:0}
     <aside class="article-sidebar">
 <a href="/blog" class="back-link">&larr; All Guides</a>
 <div class="sidebar-card"><h4>On This Page</h4><ul class="toc-list"><li><a href="#problem">The OTR Coverage Problem</a></li><li><a href="#checklist">The 5 Must-Haves</a></li><li><a href="#how">Enroll While Rolling</a></li><li><a href="#who">Company vs Owner-Op</a></li><li><a href="#faq">FAQ</a></li></ul></div>
-<div class="sidebar-card" style="background:linear-gradient(135deg,var(--blue-700),var(--teal));border:none"><h4 style="color:#fff">Free Quote</h4><p style="color:rgba(255,255,255,.9);font-size:.88rem;margin-bottom:14px">We check your Special Enrollment eligibility and compare plans at no cost to you.</p><a class="btn" href="/quote" style="background:#fff;color:var(--blue-700);width:100%;justify-content:center;font-weight:700">Get Started</a></div>
+<div class="sidebar-card" style="background:linear-gradient(135deg,var(--blue-700),var(--teal));border:none"><h4 style="color:#fff">Free Quote</h4><p style="color:rgba(255,255,255,.9);font-size:.88rem;margin-bottom:14px">We check your Special Enrollment eligibility and compare plans at no cost to you.</p><a class="btn" href="/truckers/quote?from=otr-truck-driver-health-insurance" style="background:#fff;color:var(--blue-700);width:100%;justify-content:center;font-weight:700">Get Started</a></div>
 <div class="sidebar-card"><h4>Call Us Directly</h4><p style="font-size:.88rem;color:var(--muted);margin-bottom:10px">Mon to Fri 8am to 6pm, Sat to Sun 8am to 1pm ET</p><a href="tel:+19548251009" style="font-size:1.1rem;font-weight:700;color:var(--blue-700)">(954) 825-1009</a></div>
 </aside>
   </div>
 </main><section class="vs-related-guides" data-block="vs-driver-cities">
   <div class="vs-rg-inner">
     <h2>Coverage by trucking hub</h2>
-    <p class="vs-rg-sub">What changes city to city: which lanes you run, which network you actually need, and state enrollment rules. Ready for numbers instead? <a href="/quote" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
+    <p class="vs-rg-sub">What changes city to city: which lanes you run, which network you actually need, and state enrollment rules. Ready for numbers instead? <a href="/truckers/quote?from=otr-truck-driver-health-insurance" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
     <div class="vs-rg-grid">
         <a class="vs-rg-card" href="/truck-driver-health-insurance-atlanta-ga">
           <strong>Atlanta, GA Drivers</strong>
@@ -323,7 +323,7 @@ body{padding-bottom:0}
 <section class="vs-related-guides" data-block="vs-trucking-tools">
   <div class="vs-rg-inner">
     <h2>Driver tools and coverage guides</h2>
-    <p class="vs-rg-sub">Work out the number first, then choose where to buy. Ready to talk to somebody? <a href="/quote?type=individual" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
+    <p class="vs-rg-sub">Work out the number first, then choose where to buy. Ready to talk to somebody? <a href="/truckers/quote?from=otr-truck-driver-health-insurance" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
     <div class="vs-rg-grid">
         <a class="vs-rg-card" href="/dot-physical-blood-pressure-requirements">
           <strong>DOT Blood Pressure Limits</strong>
