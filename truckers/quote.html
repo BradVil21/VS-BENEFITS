@@ -148,6 +148,87 @@ body{padding-bottom:0}
 #vs-callbar{display:none!important}
 body{padding-bottom:0!important}
 </style>
+
+<style id="tq-css-v2">
+/* hero with photo */
+.tq-hero{position:relative;background:#0b2346;padding:34px 0 128px;overflow:hidden;isolation:isolate}
+.tq-hero::before{content:"";position:absolute;inset:0;z-index:-2;background:url(/compressed/truckingimage.webp) center 40%/cover no-repeat}
+.tq-hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(11,35,70,.62) 0%,rgba(11,35,70,.80) 55%,rgba(11,35,70,.96) 100%)}
+.tq-hero h1 span{color:#8ff0e4}
+.tq-rating{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:7px 14px 7px 10px;color:#fff;font-size:.88rem;text-decoration:none;backdrop-filter:blur(4px)}
+.tq-rating:hover{text-decoration:none;background:rgba(255,255,255,.18);color:#fff}
+.tq-rating .s{color:#fbbf24;letter-spacing:1px;font-size:.95rem}
+.tq-rating strong{color:#fff}
+.tq-hero-pts{display:flex;flex-wrap:wrap;gap:6px 16px;margin:14px 0 0;padding:0;list-style:none;font-size:.86rem;color:rgba(255,255,255,.9)}
+.tq-hero-pts li{display:inline-flex;align-items:center;gap:6px}
+.tq-hero-pts li::before{content:"";width:16px;height:16px;border-radius:50%;background:#0db5a6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center/10px no-repeat;flex:none}
+/* advisor strip inside the card */
+.tq-adv{display:flex;align-items:center;gap:12px;margin:0 0 18px;padding:0 0 16px;border-bottom:1px solid #eef2f7}
+.tq-adv img{width:48px;height:48px;border-radius:50%;object-fit:cover;flex:none;border:2px solid #e9faf7}
+.tq-adv p{margin:0;font-size:.86rem;line-height:1.45;color:#334155}
+.tq-adv strong{color:#0b2346}
+.tq-saved{font-size:.76rem;color:#5a6b80;margin:6px 0 0}
+.tq-trust .gr{color:#b7791f;font-weight:700}
+/* shared section bits */
+.tq-sec{padding:52px 0}
+.tq-sec .container{max-width:1080px}
+.tq-sec h2{text-align:center;margin:0 0 8px}
+.tq-sec .lede{text-align:center;color:#5a6b80;max-width:620px;margin:0 auto 28px}
+.tq-alt{background:#f7faff;border-top:1px solid #e4e9f2;border-bottom:1px solid #e4e9f2}
+/* who we help */
+.tq-who{display:grid;grid-template-columns:1fr;gap:16px}
+.tq-who-card{background:#fff;border:1px solid #e4e9f2;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px rgba(13,27,42,.05)}
+.tq-who-card img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:center 30%}
+.tq-who-card div{padding:16px 18px 18px}
+.tq-who-card h3{margin:0 0 4px;font-size:1.05rem}
+.tq-who-card p{margin:0;font-size:.92rem}
+/* reviews */
+.tqr-head{display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:26px}
+.tqr-score{display:flex;align-items:center;gap:10px;font-family:'Poppins',sans-serif}
+.tqr-score b{font-size:2.4rem;color:#0b2346;line-height:1}
+.tqr-score .s{color:#f59e0b;font-size:1.3rem;letter-spacing:2px}
+.tqr-score small{display:block;font-family:'Inter',sans-serif;font-size:.85rem;color:#5a6b80}
+.tqr-grid{columns:1;column-gap:16px}
+.tqr-card{break-inside:avoid;background:#fff;border:1px solid #e4e9f2;border-radius:16px;padding:20px;margin:0 0 16px;box-shadow:0 4px 12px rgba(13,27,42,.04)}
+.tqr-top{display:flex;align-items:center;gap:10px}
+.tqr-av{width:40px;height:40px;border-radius:50%;color:#fff;font-weight:700;font-size:.85rem;display:flex;align-items:center;justify-content:center;flex:none}
+.tqr-name{font-weight:700;color:#0b2346;font-size:.95rem;line-height:1.2}
+.tqr-src{display:inline-flex;align-items:center;gap:5px;font-size:.76rem;color:#5a6b80}
+.tqr-stars{color:#f59e0b;letter-spacing:2px;margin:10px 0 6px}
+.tqr-card blockquote{margin:0;color:#334155;font-size:.94rem;line-height:1.6}
+.tqr-more{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:8px}
+.tqr-note{text-align:center;font-size:.78rem;color:#5a6b80;margin:16px 0 0}
+/* advisor split */
+.tq-split{display:grid;grid-template-columns:1fr;gap:28px;align-items:center}
+.tq-split-img{position:relative}
+.tq-split-img img{width:100%;border-radius:18px;aspect-ratio:16/10;object-fit:cover;box-shadow:0 10px 30px rgba(13,27,42,.10)}
+.tq-split-img .tag{position:absolute;left:14px;bottom:14px;display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;padding:8px 14px 8px 8px;box-shadow:0 6px 18px rgba(13,27,42,.16)}
+.tq-split-img .tag img{width:44px;height:44px;border-radius:50%;aspect-ratio:1;box-shadow:none}
+.tq-split-img .tag b{display:block;color:#0b2346;font-size:.9rem;line-height:1.2}
+.tq-split-img .tag span{font-size:.76rem;color:#5a6b80}
+.tq-split h2{text-align:left}
+.tq-split ul{list-style:none;padding:0;margin:14px 0 18px;display:flex;flex-direction:column;gap:12px}
+.tq-split li{position:relative;padding-left:32px;color:#334155;font-size:.97rem}
+.tq-split li::before{content:"";position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:50%;background:#0db5a6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center/13px no-repeat}
+/* steps */
+.tq-steps{display:grid;grid-template-columns:1fr;gap:14px;counter-reset:s}
+.tq-steps div{background:#fff;border:1px solid #e4e9f2;border-radius:14px;padding:20px 20px 18px 66px;position:relative}
+.tq-steps div::before{counter-increment:s;content:counter(s);position:absolute;left:18px;top:18px;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.tq-steps h3{margin:0 0 4px;font-size:1rem}.tq-steps p{margin:0;font-size:.92rem}
+/* final cta */
+.tq-final{background:linear-gradient(135deg,#0b2346,#16447f 60%,#0b6f79);color:#fff;border-radius:20px;padding:34px 22px;text-align:center;max-width:860px;margin:0 auto}
+.tq-final h2{color:#fff}.tq-final p{color:rgba(255,255,255,.9);margin:0 auto 18px;max-width:520px}
+.tq-final .row{display:flex;flex-direction:column;gap:10px;align-items:center}
+.tq-final .btn{min-width:230px}
+/* mobile bar once the form is off-screen */
+#tq-bar{position:fixed;left:0;right:0;bottom:0;z-index:120;display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);border-top:1px solid #e4e9f2;box-shadow:0 -6px 18px rgba(13,27,42,.10);transform:translateY(110%);transition:transform .25s}
+#tq-bar.show{transform:none}
+#tq-bar a{flex:1;display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:999px;font-weight:700;font-size:.95rem;text-decoration:none;color:#fff}
+#tq-bar .c{background:#098374}#tq-bar .q{background:#16447f}
+@media(min-width:760px){#tq-bar{display:none}}
+@media(min-width:640px){.tq-who{grid-template-columns:repeat(3,1fr)}.tqr-grid{columns:2}.tq-steps{grid-template-columns:repeat(3,1fr)}.tq-final .row{flex-direction:row;justify-content:center}}
+@media(min-width:960px){.tqr-grid{columns:3}.tq-split{grid-template-columns:1fr 1fr;gap:48px}}
+</style>
 </head>
 <body>
 <div id="vs-scroll-bar"></div>
@@ -166,12 +247,15 @@ body{padding-bottom:0!important}
 <section class="tq-hero">
   <div class="container">
     <span class="tq-eyebrow">Truck driver quick quote</span>
-    <h1>Health insurance for drivers, quoted from the cab</h1>
+    <h1>Health insurance for drivers, <span>quoted from the cab</span></h1>
     <p>Three quick questions, about 60 seconds. A licensed advisor checks every plan and subsidy for your home ZIP, including nationwide PPO options.</p>
+    <a class="tq-rating" href="#reviews" aria-label="Rated 5.0 out of 5 from 49 Google reviews"><span class="s" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span><strong>5.0</strong> from 49 Google reviews</span></a>
+    <ul class="tq-hero-pts"><li>Free, no obligation</li><li>Licensed in 40+ states</li><li>Text-friendly</li></ul>
   </div>
 </section>
 <div class="tq-wrap">
   <form class="tq-card" id="tq-form" novalidate>
+    <div class="tq-adv"><img src="/compressed/bradley-headshot.webp" alt="Bradley Vilsaint" width="48" height="48" /><p><strong>Bradley Vilsaint</strong>, licensed advisor<br>I personally review every driver quote, usually the same day.</p></div>
     <div class="tq-prog" aria-hidden="true"><span class="on"></span><span></span><span></span></div>
 
     <div class="tq-step active" data-step="1">
@@ -205,6 +289,7 @@ body{padding-bottom:0!important}
       </div>
       <label class="tq-lbl" for="tq-phone">Mobile number</label>
       <input class="tq-in" id="tq-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(305) 555-0123" />
+      <p class="tq-saved">If you get cut off, we save your number so an advisor can still get you your quote.</p>
       <label class="tq-lbl" for="tq-email">Email <span style="font-weight:400;color:#5a6b80">(optional)</span></label>
       <input class="tq-in" id="tq-email" type="email" autocomplete="email" />
       <div class="tq-consent"><input id="tq-sms" type="checkbox" /><label for="tq-sms">I agree to receive SMS text messages and/or phone calls from <strong>VS BENEFITS LLC</strong> (d/b/a VS Health Benefits) at the number provided, including quote information, appointment confirmations and reminders, and policy service updates. Message &amp; data rates may apply. Message frequency varies. Reply <strong>STOP</strong> to opt out at any time or <strong>HELP</strong> for help. Consent is not a condition of purchase. <a href="/privacy#sms" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms#sms-terms" target="_blank" rel="noopener">Terms</a>.</label></div>
@@ -220,20 +305,108 @@ body{padding-bottom:0!important}
       <p class="tq-call" style="margin-top:6px">Driving right now? Call or text <a href="tel:+19548251009">(954) 825-1009</a> whenever you're parked.</p>
     </div>
 
-    <div class="tq-trust"><span><i></i>Licensed in 40+ states</span><span><i></i>Nationwide PPO options</span><span><i></i>Free: carriers pay us</span></div>
+    <div class="tq-trust"><span class="gr">&#9733; 5.0 on Google</span><span><i></i>Licensed in 40+ states</span><span><i></i>Nationwide PPO options</span><span><i></i>Free: carriers pay us</span></div>
   </form>
   <p class="tq-call">Rather talk? Call or text <a href="tel:+19548251009">(954) 825-1009</a></p>
 </div>
 
-<section class="tq-why">
-  <h2>Why drivers use us</h2>
-  <ul>
-    <li>We price plans by your <strong>net</strong> income after truck expenses, which is what subsidies use.</li>
-    <li>We check whether a plan's network works on your lanes, not just at home.</li>
-    <li>One advisor for renewals, claims questions and open enrollment, by text when you're on the road.</li>
-  </ul>
-  <p style="margin-top:14px;font-size:.92rem"><a href="/truck-driver-health-insurance" style="font-weight:700;color:#16447f">Read the full truck driver health insurance guide &rarr;</a></p>
+<div class="carriers">
+  <div class="container">
+    <h2>We compare all major carriers</h2>
+    <div class="carrier-track-wrap"><div class="carrier-track"><div class="carrier" data-logo="/images/carriers/bluecross.png">Blue Cross Blue Shield</div><div class="carrier accent" data-logo="/images/carriers/unitedhealthcare.png">UnitedHealthcare</div><div class="carrier" data-logo="/images/carriers/aetna.png">Aetna</div><div class="carrier accent" data-logo="/images/carriers/cigna.png">Cigna</div><div class="carrier" data-logo="/images/carriers/humana.png">Humana</div><div class="carrier accent" data-logo="/images/carriers/floridablue.png">Florida Blue</div><div class="carrier" data-logo="/images/carriers/molina.png">Molina</div><div class="carrier accent" data-logo="/images/carriers/oscar.png">Oscar</div><div class="carrier" data-logo="/images/carriers/ambetter.png">Ambetter</div><div class="carrier" data-logo="/images/carriers/bluecross.png">Blue Cross Blue Shield</div><div class="carrier accent" data-logo="/images/carriers/unitedhealthcare.png">UnitedHealthcare</div><div class="carrier" data-logo="/images/carriers/aetna.png">Aetna</div><div class="carrier accent" data-logo="/images/carriers/cigna.png">Cigna</div><div class="carrier" data-logo="/images/carriers/humana.png">Humana</div><div class="carrier accent" data-logo="/images/carriers/floridablue.png">Florida Blue</div><div class="carrier" data-logo="/images/carriers/molina.png">Molina</div><div class="carrier accent" data-logo="/images/carriers/oscar.png">Oscar</div><div class="carrier" data-logo="/images/carriers/ambetter.png">Ambetter</div></div></div>
+  </div>
+</div>
+
+<section class="tq-sec">
+  <div class="container">
+    <h2>Built for every kind of driver</h2>
+    <p class="lede">Whether you run your own authority or lease on, we find coverage that works on the road, not just at home.</p>
+    <div class="tq-who">
+      <div class="tq-who-card"><img src="/compressed/owner-operator-in-cab.webp" alt="Owner-operator smiling in the cab of his truck" loading="lazy" width="1200" height="525" /><div><h3>Owner-operators</h3><p>Plans priced on your net income after truck expenses, which is what subsidies are based on.</p></div></div>
+      <div class="tq-who-card"><img src="/compressed/new-cdl-driver-smiling.webp" alt="Truck driver smiling behind the wheel" loading="lazy" width="547" height="239" /><div><h3>Lease operators &amp; 1099 drivers</h3><p>Your own plan that stays with you if you switch carriers, not tied to one company.</p></div></div>
+      <div class="tq-who-card"><img src="/compressed/trucking-family-child-at-truck-900.webp" alt="Child climbing up to a red semi truck cab" loading="lazy" width="900" height="380" /><div><h3>Drivers with families</h3><p>Cover your spouse and kids at home while you're out on a run, with doctors near where they live.</p></div></div>
+    </div>
+  </div>
 </section>
+
+<section class="tq-sec tq-alt" id="reviews">
+  <div class="container">
+    <div class="tqr-head">
+      <h2>What our clients say</h2>
+      <div class="tqr-score"><b>5.0</b><div><span class="s" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><small>from 49 Google reviews</small></div></div>
+    </div>
+    <div class="tqr-grid">
+<figure class="tqr-card"><div class="tqr-top"><span class="tqr-av" style="background:#16447f" aria-hidden="true">JR</span><div><figcaption class="tqr-name">Jordan R.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>Bradley is such a caring person, he didn’t only help my mom find an amazing option, but then helped me find an option even though my schedule is crazy and I get home from work at 9:30pm every night. Thank you Brad!!</blockquote></figure>
+<figure class="tqr-card"><div class="tqr-top"><span class="tqr-av" style="background:#0b7f74" aria-hidden="true">JR</span><div><figcaption class="tqr-name">Julian R.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>I can’t recommend Bradley enough for anyone feeling overwhelmed by health insurance options. From the very first conversation, he took the time to actually listen to my specific needs and budget rather than just pushing a standard plan. What I appreciated most was his ability to break down complex terms into plain English, ensuring I understood exactly what my coverage included and what it didn’t. He made the entire process seamless, efficient, and stress-free. If you’re looking for a professional who combines deep industry knowledge with a genuine client first attitude, Bradley is your guy!</blockquote></figure>
+<figure class="tqr-card"><div class="tqr-top"><span class="tqr-av" style="background:#1e5ab0" aria-hidden="true">SE</span><div><figcaption class="tqr-name">Sinai E.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>Brad was the friendliest, most helpful advisor! He matched my family and I with a great coverage plan that fits all of our needs. Will definitely keep him close for any future needs!</blockquote></figure>
+<figure class="tqr-card"><div class="tqr-top"><span class="tqr-av" style="background:#0b2346" aria-hidden="true">EG</span><div><figcaption class="tqr-name">Estrella G.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>10/10 Bradley was fast, efficient and got me exactly what I needed. Thank you so much! Definitely and HIGHLY recommend.</blockquote></figure>
+<figure class="tqr-card"><div class="tqr-top"><span class="tqr-av" style="background:#16447f" aria-hidden="true">KP</span><div><figcaption class="tqr-name">Kimberly P.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>Bradley is genuinely one of the most helpful and supportive people I’ve talk to on the phone. He genuinely cared to help me with my situation, and I’m beyond thankful because he gave me lots of support and encouragement to help find the perfect insurance for me, which I was in great need of.</blockquote></figure>
+<figure class="tqr-card"><div class="tqr-top"><span class="tqr-av" style="background:#0b7f74" aria-hidden="true">AD</span><div><figcaption class="tqr-name">Alex D.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>Mr. Bradley was excellent with his communication and service, really helped my family out find the best option we&#x27;d had seen on the market!</blockquote></figure>
+<figure class="tqr-card" data-more hidden><div class="tqr-top"><span class="tqr-av" style="background:#1e5ab0" aria-hidden="true">AS</span><div><figcaption class="tqr-name">Ashley S.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>I had a great experience getting my health insurance! The process was smooth, stress-free, and easy to understand. Everything was explained clearly, and I felt confident choosing a plan that fit my needs and budget. Excellent customer service, very professional, and genuinely helpful. Highly recommend to anyone looking for affordable, reliable health coverage!</blockquote></figure>
+<figure class="tqr-card" data-more hidden><div class="tqr-top"><span class="tqr-av" style="background:#0b2346" aria-hidden="true">ND</span><div><figcaption class="tqr-name">Nick D.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>Great experience! My agent took the time to explain my health insurance options clearly and answer all my questions without making me feel rushed or pressured. I felt supported throughout the process and more confident choosing my coverage. Highly recommend!</blockquote></figure>
+<figure class="tqr-card" data-more hidden><div class="tqr-top"><span class="tqr-av" style="background:#16447f" aria-hidden="true">GF</span><div><figcaption class="tqr-name">Gabrielle F.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>Absolutely an amazing experience! Brad was the best agent I have ever worked with. Not only is he super kind but made sure to put me on the best plan possible that fits my situation. 10/10 would recommend!</blockquote></figure>
+<figure class="tqr-card" data-more hidden><div class="tqr-top"><span class="tqr-av" style="background:#0b7f74" aria-hidden="true">SH</span><div><figcaption class="tqr-name">Selah H.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>Brad has been the BEST in helping me , sharing information, and being in the loop with my insurance. I genuinely couldn’t have asked for anyone better and will be only using him in the future ! Amazing costumer service , beyond expectations. I’m 25 and not very educated or experienced with insurance and he made everything so clear and understandable. Outstanding truly.</blockquote></figure>
+<figure class="tqr-card" data-more hidden><div class="tqr-top"><span class="tqr-av" style="background:#1e5ab0" aria-hidden="true">EM</span><div><figcaption class="tqr-name">Edwin M.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>I had an amazing experience working with Bradley! His professionalism, patience, and extensive knowledge of health insurance made the entire process smooth and stress-free. He took the time to explain all my options clearly and helped me choose the best plan for my needs and budget. Bradley truly cares about helping his clients and made me feel confident in my decision every step of the way. I’m incredibly grateful for his guidance and support. Thank you so much, Bradley, for your outstanding service — highly recommend!</blockquote></figure>
+<figure class="tqr-card" data-more hidden><div class="tqr-top"><span class="tqr-av" style="background:#0b2346" aria-hidden="true">RC</span><div><figcaption class="tqr-name">Rebekah C.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>Bradley was very helpful, especially for someone like me who’s new to health insurance. He explained everything clearly and made the process feel easy and stress-free.</blockquote></figure>
+<figure class="tqr-card" data-more hidden><div class="tqr-top"><span class="tqr-av" style="background:#16447f" aria-hidden="true">CB</span><div><figcaption class="tqr-name">Chloe B.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>I worked with Brad when I was looking for insurance for my small business. He was great! He showed me several different plans and explained everything in simple terms. We got a great plan with bcbs that we’re very happy with. 10/10 great service and I would recommend him.</blockquote></figure>
+<figure class="tqr-card" data-more hidden><div class="tqr-top"><span class="tqr-av" style="background:#0b7f74" aria-hidden="true">GV</span><div><figcaption class="tqr-name">Gustavo V.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>Bradley was very helpful, professional, and easy to work with. He answered all my questions and made the process simple. I highly recommend him if you’re looking for health insurance!</blockquote></figure>
+<figure class="tqr-card" data-more hidden><div class="tqr-top"><span class="tqr-av" style="background:#1e5ab0" aria-hidden="true">SD</span><div><figcaption class="tqr-name">Savannah D.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>Bradley was very helpful and professional and made sure I understood everything without making me feel silly.</blockquote></figure>
+<figure class="tqr-card" data-more hidden><div class="tqr-top"><span class="tqr-av" style="background:#0b2346" aria-hidden="true">LL</span><div><figcaption class="tqr-name">Lesley Ann L.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>Bradley was informative, helpful and professional. He educated me on all my options and was able to secure health insurance. I recommend them to everyone</blockquote></figure>
+<figure class="tqr-card" data-more hidden><div class="tqr-top"><span class="tqr-av" style="background:#16447f" aria-hidden="true">LM</span><div><figcaption class="tqr-name">Logan M.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>Owner gave me a lot of incredibly helpful advice, was very patient explained in detail the process of this business and made me understand what to look for when looking into this. Bradley is a phenomenal individual that I would recommend close family and friends to.</blockquote></figure>
+<figure class="tqr-card" data-more hidden><div class="tqr-top"><span class="tqr-av" style="background:#0b7f74" aria-hidden="true">CF</span><div><figcaption class="tqr-name">Carolyn F.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>Bradley provided an exceptional level of customer service that truly distinguished him from the rest. His professionalism, attentiveness, and ability to create such a comforting yet informative experience were genuinely impressive. He was articulate, patient, and incredibly knowledgeable, ensuring I felt supported and well-informed throughout every interaction. His bilingual communication skills made the experience even more seamless and welcoming, further reflecting his dedication to providing outstanding service to everyone he assists. Bradley carries himself with remarkable professionalism and grace, and it is evident that he genuinely cares about the people he helps, he exceeded expectations and left a lasting impression. An absolute asset to the team and truly exceptional at what he does.</blockquote></figure>
+<figure class="tqr-card" data-more hidden><div class="tqr-top"><span class="tqr-av" style="background:#1e5ab0" aria-hidden="true">RP</span><div><figcaption class="tqr-name">Ross P.</figcaption><span class="tqr-src"><svg width="13" height="13" viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h11.8c-.5 2.8-2.1 5.1-4.4 6.7v5.6h7.1c4.2-3.8 6.6-9.5 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.6c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.1 15.5 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.2c-.4-1.3-.7-2.7-.7-4.2s.3-2.9.7-4.2v-5.7H4.5C3 17.1 2 20.4 2 24s1 6.9 2.5 9.9l7.3-5.7z"/><path fill="#EA4335" d="M24 10.8c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.2 29.9 2 24 2 15.5 2 8.1 6.9 4.5 14.1l7.3 5.7c1.7-5.2 6.5-9 12.2-9z"/></svg>Google review</span></div></div><div class="tqr-stars" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><blockquote>I had a great experience with VS Health Benefits. I worked with Bradley and Jake and they were both extremely friendly and helpful and made the entire process so much less stressful and easier than I thought it was going to be. We went over what I needed and 10 minutes later they had me set up with the perfect plan for me and it costs way less than I was expecting. I specifically appreciate how Jake explained exactly what I was getting and what it meant, he made it very simple and easy to understand. I highly recommend VS Health Benefits for anyone looking for affordable personalized healthcare coverage!!</blockquote></figure>
+    </div>
+    <div class="tqr-more">
+      <button type="button" class="btn btn-secondary" id="tqr-more-btn">Show more reviews</button>
+      <a class="btn btn-secondary" href="https://g.page/r/CTz8LoxJRazwEBM" target="_blank" rel="noopener">See all on Google</a>
+    </div>
+    <p class="tqr-note">Unedited reviews from our Google Business Profile.</p>
+  </div>
+</section>
+
+<section class="tq-sec">
+  <div class="container">
+    <div class="tq-split">
+      <div class="tq-split-img">
+        <img src="/compressed/truck-driver-tipping-cap-640.webp" alt="Truck driver tipping his cap from the driver's seat" loading="lazy" width="640" height="280" />
+        <div class="tag"><img src="/compressed/bradley-headshot.webp" alt="" width="44" height="44" /><div><b>Bradley Vilsaint</b><span>Founder, licensed advisor</span></div></div>
+      </div>
+      <div>
+        <h2>Why drivers use us</h2>
+        <ul>
+          <li>We price plans by your <strong>net</strong> income after truck expenses, which is what subsidies use.</li>
+          <li>We check whether a plan's network works on your lanes, not just at home.</li>
+          <li>One advisor for renewals, claims questions and open enrollment, by text when you're on the road.</li>
+          <li>Free to you. Carriers pay us, and the price is the same as going direct.</li>
+        </ul>
+        <a href="/truck-driver-health-insurance" style="font-weight:700;color:#16447f">Read the full truck driver health insurance guide &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tq-sec tq-alt">
+  <div class="container">
+    <h2>How it works</h2>
+    <p class="lede">No call center, no pressure. One licensed advisor from start to finish.</p>
+    <div class="tq-steps">
+      <div><h3>Answer 3 questions</h3><p>ZIP, how you drive, and who needs coverage. About 60 seconds.</p></div>
+      <div><h3>We compare every plan</h3><p>Marketplace and private PPO options, with any subsidy you qualify for.</p></div>
+      <div><h3>Get your options by text</h3><p>Pick a plan when you're parked. We handle the enrollment.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="tq-sec">
+  <div class="container">
+    <div class="tq-final">
+      <h2>Ready when you are</h2>
+      <p>Finish your quote in about a minute, or call or text whenever you're parked.</p>
+      <div class="row"><a class="btn btn-ghost" style="background:#fff;color:#16447f;border-color:#fff" href="#tq-form" data-tq-top>Get my quote</a><a class="btn btn-ghost" href="tel:+19548251009">Call (954) 825-1009</a></div>
+    </div>
+  </div>
+</section>
+<div id="tq-bar"><a class="c" href="sms:+19548251009?&amp;body=TRUCK%20-%20">Text us</a><a class="q" href="#tq-form" data-tq-top>Finish my quote</a></div>
 </main>
 
 
@@ -328,6 +501,19 @@ document.addEventListener("DOMContentLoaded",function(){var toggle=document.quer
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
+<script src="/vs-reviews.js" defer></script>
+<script id="tq-ui-js">
+(function(){
+  var more=document.getElementById('tqr-more-btn');
+  if(more)more.addEventListener('click',function(){var h=document.querySelectorAll('.tqr-card[data-more]'),open=more.getAttribute('data-open')==='1';
+    [].forEach.call(h,function(c){c.hidden=open;});more.setAttribute('data-open',open?'0':'1');more.textContent=open?'Show more reviews':'Show fewer reviews';
+    if(open)document.getElementById('reviews').scrollIntoView({behavior:'smooth'});});
+  [].forEach.call(document.querySelectorAll('[data-tq-top]'),function(a){a.addEventListener('click',function(e){e.preventDefault();var f=document.getElementById('tq-form');
+    window.scrollTo({top:Math.max(0,f.getBoundingClientRect().top+window.pageYOffset-80),behavior:'smooth'});});});
+  var bar=document.getElementById('tq-bar'),form=document.getElementById('tq-form');
+  if(bar&&form&&'IntersectionObserver' in window){new IntersectionObserver(function(es){bar.classList.toggle('show',!es[0].isIntersecting);}).observe(form);}
+})();
+</script>
 <script id="tq-js">
 (function(){
   var R=[[10,27,'MA'],[28,29,'RI'],[30,38,'NH'],[39,49,'ME'],[50,54,'VT'],[55,55,'MA'],[56,59,'VT'],[60,69,'CT'],[70,89,'NJ'],[100,149,'NY'],[150,196,'PA'],[197,199,'DE'],[200,200,'DC'],[201,201,'VA'],[202,205,'DC'],[206,219,'MD'],[220,246,'VA'],[247,268,'WV'],[270,289,'NC'],[290,299,'SC'],[300,319,'GA'],[320,339,'FL'],[341,349,'FL'],[350,369,'AL'],[370,385,'TN'],[386,397,'MS'],[398,399,'GA'],[400,427,'KY'],[430,459,'OH'],[460,479,'IN'],[480,499,'MI'],[500,528,'IA'],[530,549,'WI'],[550,567,'MN'],[570,577,'SD'],[580,588,'ND'],[590,599,'MT'],[600,629,'IL'],[630,658,'MO'],[660,679,'KS'],[680,693,'NE'],[700,714,'LA'],[716,729,'AR'],[730,732,'OK'],[733,733,'TX'],[734,749,'OK'],[750,799,'TX'],[800,816,'CO'],[820,831,'WY'],[832,838,'ID'],[840,847,'UT'],[850,865,'AZ'],[870,884,'NM'],[885,885,'TX'],[889,898,'NV'],[900,961,'CA'],[967,968,'HI'],[970,979,'OR'],[980,994,'WA'],[995,999,'AK']];
@@ -348,6 +534,43 @@ document.addEventListener("DOMContentLoaded",function(){var toggle=document.quer
   [].forEach.call(f.querySelectorAll('[data-next]'),function(b){b.addEventListener('click',function(){var n=+b.getAttribute('data-next');if(n===2&&!ok1())return;if(n===3&&!ok2())return;
     try{if(window.vsTrack)window.vsTrack('trucker_quote_step',{step:n});}catch(e){} step(n);});});
   [].forEach.call(f.querySelectorAll('[data-back]'),function(b){b.addEventListener('click',function(){step(+b.getAttribute('data-back'));});});
+
+  /* ---- Auto-capture (no submit needed) ----
+     As soon as a valid mobile number is typed, the lead goes to /api/lead-draft,
+     which writes it to GoHighLevel and the admin portal board (deduped on phone).
+     Name/email are added on blur, and one last update goes out if the visitor
+     leaves the page. Pressing "Send my options" later updates the same card. */
+  var submitted=false,lastKey='',tmr=null;
+  function digits(){var d=document.getElementById('tq-phone').value.replace(/\D/g,'');if(d.length===11&&d[0]==='1')d=d.slice(1);return d;}
+  function phoneOk(d){return d.length===10&&/^[2-9]\d{2}[2-9]\d{6}$/.test(d)&&!/^(\d)\1{9}$/.test(d);}
+  function draft(){
+    var d=digits(); if(!phoneOk(d))return null;
+    var em=document.getElementById('tq-email').value.trim(); if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(em))em='';
+    var z=/^\d{5}$/.test(zip.value)?zip.value:'', sms=document.getElementById('tq-sms').checked;
+    var bits=['Trucker Quick Quote'];
+    if(st.driver)bits.push('Driver type: '+st.driver);if(st.household)bits.push('Coverage for: '+st.household);if(st.income)bits.push('Household net income: '+st.income);
+    var body={type:'individual',capture:'auto',optIn:sms,step:'Step '+cur+' of 3',phone:d,email:em,
+      firstName:document.getElementById('tq-first').value.trim(),lastName:document.getElementById('tq-last').value.trim(),
+      zip:z,state:z?stateFor(z):'',source:'Trucker Quick Quote (in progress)',
+      tags:['trucker','trucker-quick-quote','trucker-draft'].concat(sms?['sms-opt-in']:[]),notes:bits.join('; ')};
+    try{if(window.vsAttribution)body.attribution=window.vsAttribution;}catch(e){}
+    return body;
+  }
+  function capture(beacon){
+    if(submitted)return; var b=draft(); if(!b)return;
+    var key=JSON.stringify(b); if(key===lastKey)return; lastKey=key;
+    try{
+      if(beacon&&navigator.sendBeacon){navigator.sendBeacon('/api/lead-draft',new Blob([key],{type:'application/json'}));}
+      else{fetch('/api/lead-draft',{method:'POST',headers:{'Content-Type':'application/json'},body:key,keepalive:true}).catch(function(){});}
+      if(!window._tqDraftTracked){window._tqDraftTracked=1;try{if(window.gtag)gtag('event','trucker_quote_partial',{lead_type:'trucker'});}catch(e){}}
+    }catch(e){}
+  }
+  var ph=document.getElementById('tq-phone');
+  ph.addEventListener('input',function(){clearTimeout(tmr);if(phoneOk(digits()))tmr=setTimeout(function(){capture(false);},700);});
+  ['tq-phone','tq-first','tq-last','tq-email','tq-sms'].forEach(function(id){var el=document.getElementById(id);
+    el.addEventListener('change',function(){capture(false);});if(id!=='tq-sms')el.addEventListener('blur',function(){capture(false);});});
+  window.addEventListener('pagehide',function(){capture(true);});
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')capture(true);});
   f.addEventListener('submit',function(e){e.preventDefault();if(cur!==3)return;
     var first=document.getElementById('tq-first').value.trim(),last=document.getElementById('tq-last').value.trim(),
         phone=document.getElementById('tq-phone').value.trim(),email=document.getElementById('tq-email').value.trim(),sms=document.getElementById('tq-sms').checked;
@@ -360,7 +583,7 @@ document.addEventListener("DOMContentLoaded",function(){var toggle=document.quer
     var notes='Trucker Quick Quote\nDriver type: '+st.driver+'\nCoverage for: '+st.household+'\nHousehold net income: '+st.income+'\nHome ZIP: '+zip.value+(state?' ('+state+')':'')+'\nSMS opt-in: '+(sms?'yes':'no')+'\nPage: '+location.pathname;
     var tags=['trucker','trucker-quick-quote'];if(sms)tags.push('sms-opt-in');
     var body={firstName:first,lastName:last,phone:d,email:email,state:state,zip:zip.value,source:'Trucker Quick Quote',notes:notes,tags:tags,sms_opt_in:sms?'yes':'no',driverType:st.driver,household:st.household,income:st.income};
-    function done(){document.getElementById('tq-done-h').textContent="You're all set, "+first+".";
+    function done(){submitted=true;document.getElementById('tq-done-h').textContent="You're all set, "+first+".";
       document.getElementById('tq-done-p').textContent=sms?'A licensed advisor will text you your options within 1 business day, often within hours.':'A licensed advisor will call or email you within 1 business day, often within hours.';
       step('done');}
     try{if(window.vsTrack)window.vsTrack('generate_lead',{currency:'USD',value:0,lead_type:'trucker'});else if(window.gtag)gtag('event','generate_lead',{lead_type:'trucker'});}catch(e){}
