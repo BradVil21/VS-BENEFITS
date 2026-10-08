@@ -842,18 +842,45 @@ body{padding-bottom:0}
 
 
 <!-- TESTIMONIALS -->
-<section class="section">
+<section class="section" id="reviews-anchor">
   <div class="container">
-    <div class="center" style="margin-bottom:30px">
-      <span class="eyebrow">Historias de Clientes</span>
+    <div class="center" style="margin-bottom:6px">
+      <span class="eyebrow">En sus palabras</span>
       <h2>Lo Que Dicen los Camioneros y Owner-Operators</h2>
+      <p style="max-width:600px;margin:0 auto">Rese&ntilde;as reales en Google de clientes que hemos ayudado.</p>
     </div>
-    <div class="quotes">
-      <div class="quote-card-t"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Bradley provided an exceptional level of customer service that truly distinguished him from the rest. His professionalism, attentiveness, and ability to create such a comforting yet informative experience were genuinely impressive. He was articulate, patient, and incredibly knowledgeable, ensuring I felt supported and well-informed throughout every interaction. His bilingual communication skills made the experience even more seamless and welcoming, further reflecting his dedication to providing outstanding service to everyone he assists. Bradley carries himself with remarkable professionalism and grace, and it is evident that he genuinely cares about the people he helps, he exceeded expectations and left a lasting impression. An absolute asset to the team and truly exceptional at what he does.&rdquo;</p><div><div class="who">Carolyn F.</div><div class="role">Reseña de Google</div></div></div>
-      <div class="quote-card-t"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Bradley is such a caring person, he didn’t only help my mom find an amazing option, but then helped me find an option even though my schedule is crazy and I get home from work at 9:30pm every night. Thank you Brad!!&rdquo;</p><div><div class="who">Jordan R.</div><div class="role">Reseña de Google</div></div></div>
-      <div class="quote-card-t"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>&ldquo;Brad has been the BEST in helping me , sharing information, and being in the loop with my insurance. I genuinely couldn’t have asked for anyone better and will be only using him in the future ! Amazing costumer service , beyond expectations. I’m 25 and not very educated or experienced with insurance and he made everything so clear and understandable. Outstanding truly.&rdquo;</p><div><div class="who">Selah H.</div><div class="role">Reseña de Google</div></div></div>
+
+    <!-- Google Rating Badge -->
+    <div style="display:flex;justify-content:center;margin:16px 0 32px">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 16px;box-shadow:var(--shadow-sm)">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        <span style="font-size:.87rem;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:6px">
+          <span style="color:#FBBC05;letter-spacing:1px">★★★★★</span>
+          <strong>5.0</strong>
+          <span style="color:var(--muted);font-weight:400">de 49 rese&ntilde;as en Google</span>
+        </span>
+      </div>
     </div>
-    <p class="center" style="margin-top:18px"><a href="https://share.google/sNYDD65PdbiJiqhHo" target="_blank" rel="noopener" style="font-weight:700">Ver nuestras reseñas en Google &rarr;</a></p>
+
+    <!-- Looping carousel track -->
+    <div style="overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 8%,#000 92%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0%,#000 8%,#000 92%,transparent 100%)">
+      <div id="reviews-track" style="display:flex;gap:16px;width:max-content;animation:reviewScroll 120s linear infinite">
+      </div>
+    </div>
+
+    <!-- Reviews CTA -->
+    <div class="center" style="margin-top:36px">
+      <p style="max-width:580px;margin:0 auto 18px;color:var(--ink-2)">&iquest;Le gust&oacute; trabajar con nosotros? Deje una rese&ntilde;a en Google y podr&iacute;a aparecer aqu&iacute; en nuestro sitio.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
+        <a class="btn btn-primary" href="https://share.google/sNYDD65PdbiJiqhHo" target="_blank" rel="noopener" aria-label="Leer m&aacute;s rese&ntilde;as en Google">
+          <svg width="17" height="17" viewBox="0 0 48 48" aria-hidden="true" style="flex-shrink:0;background:#fff;border-radius:50%;padding:1px"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Leer m&aacute;s rese&ntilde;as en Google
+        </a>
+        <a class="btn btn-secondary" href="https://g.page/r/CTz8LoxJRazwEBM/review" target="_blank" rel="noopener">&#9733; Dejar una rese&ntilde;a</a>
+      </div>
+      <p style="font-size:.82rem;color:var(--muted);margin-top:14px">Las mejores rese&ntilde;as pueden aparecer en esta p&aacute;gina.</p>
+      <p style="font-size:.78rem;color:var(--muted);max-width:620px;margin:8px auto 0;line-height:1.5">Deje solo rese&ntilde;as genuinas de su propia experiencia. Las rese&ntilde;as falsas o automatizadas est&aacute;n prohibidas y se reportan a Google.</p>
+    </div>
   </div>
 </section>
 
@@ -1588,5 +1615,6 @@ function qfSubmit(pid, label) {
 })();
 </script>
 <script src="/vs-reviews.js" defer></script>
+<script src="/vs-reviews-carousel.js" defer></script>
 </body>
 </html>
