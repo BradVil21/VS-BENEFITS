@@ -161,7 +161,7 @@ body{padding-bottom:0}
       <span class="eyebrow">Trucking partner program</span>
       <h1>Health coverage for your drivers, <span>at no cost to you</span></h1>
       <p class="hero-sub">Most owner-operators and lease drivers are 1099, so nobody helps them with health insurance. Send them to us. A licensed advisor gets them covered, you keep good drivers longer, and you earn a referral payout when they enroll.</p>
-      <div class="hero-ctas"><a class="btn btn-primary" href="#join">Become a partner</a><a class="btn btn-secondary" href="tel:+19548251009">Call (954) 825-1009</a></div>
+      <div class="hero-ctas"><a class="btn btn-primary" href="#join">Become a partner</a><a class="btn btn-secondary" href="tel:+19548251009">Speak to an advisor</a></div>
       <div class="hero-meta"><span><span class="dot"></span>Free for partners and drivers</span><span><span class="dot"></span>Licensed in 40+ states</span><span><span class="dot"></span>English &amp; Spanish</span></div>
     </div>
   </div>
@@ -220,7 +220,7 @@ body{padding-bottom:0}
       <p class="tp-lbl" style="margin-top:18px">Text you can forward to your drivers</p>
       <div class="tp-msg" id="tp-text"></div>
       <button type="button" class="tp-btn" id="tp-copytext" style="background:#0db5a6">Copy driver message</button>
-      <p style="font-size:.86rem;color:#334155;margin:14px 0 0">Bradley will reach out within 1 business day with your partner materials. Questions? Call or text <a href="tel:+19548251009">(954) 825-1009</a>.</p>
+      <p style="font-size:.86rem;color:#334155;margin:14px 0 0">Bradley will reach out within 1 business day with your partner materials. Questions? <a href="tel:+19548251009">Speak to an advisor</a>.</p>
     </div>
   </div>
 </section>
@@ -358,7 +358,7 @@ document.addEventListener("DOMContentLoaded",function(){var toggle=document.quer
       f.hidden=true;$('tp-done').hidden=false;$('tp-co').textContent=co;$('tp-url').value=link;
       $('tp-text').textContent='Need health insurance? '+co+' partners with VS Health Benefits, a licensed broker that helps drivers get covered for free. Answer 3 quick questions from the cab and they\'ll text you your options: '+link;
       try{$('tp-done').scrollIntoView({behavior:'smooth',block:'start'});}catch(x){}
-    },function(){b.disabled=false;b.textContent='Get my partner link';bad('Something went wrong. Please try again or call (954) 825-1009.');});
+    },function(){b.disabled=false;b.textContent='Get my partner link';bad('Something went wrong. Please try again or speak to an advisor at (954) 825-1009.');});
   });
   function copy(t,btn,label){try{navigator.clipboard.writeText(t).then(function(){btn.textContent='Copied!';setTimeout(function(){btn.textContent=label;},1600);});}catch(x){}}
   $('tp-copy').addEventListener('click',function(){copy($('tp-url').value,this,'Copy');});

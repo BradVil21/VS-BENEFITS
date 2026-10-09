@@ -66,7 +66,7 @@
       fetch('/api/lead-sync',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
         body:JSON.stringify({firstName:first,phone:d,email:email,source:'Owner-Operator Guide',notes:notes,tags:tags,sms_opt_in:sms?'yes':'no'})})
       .then(function(){ls(KEY,'1');done(f,first);try{window.open(PDF,'_blank','noopener');}catch(x){}},
-            function(){b.disabled=false;b.textContent='Get the free guide';bad('Something went wrong. Please try again or call (954) 825-1009.');});
+            function(){b.disabled=false;b.textContent='Get the free guide';bad('Something went wrong. Please try again or speak to an advisor at (954) 825-1009.');});
     });
   }
   function init(){

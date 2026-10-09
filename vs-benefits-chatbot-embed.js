@@ -208,7 +208,7 @@
       '<p>A licensed VS Health Benefits advisor will reach out within <strong>1 business day</strong> with your personalized plan options.</p>'+
       '<p style="margin-top:8px">Need help sooner?<br><a href="tel:+19548251009">(954) 825-1009</a></p>';
     r.appendChild(av);r.appendChild(box);msgs.appendChild(r);scroll();
-    inp.disabled=true;inp.placeholder='Chat complete \u00B7 Call (954) 825-1009';snd.disabled=true;
+    inp.disabled=true;inp.placeholder='Chat complete \u00B7 Speak to an advisor: (954) 825-1009';snd.disabled=true;
   }
 
   var SYS='You are Ava, a warm health insurance specialist for VS Health Benefits (Miami FL, licensed in 40+ states).\n\nMISSION: Qualify visitors through friendly conversation. Collect their info so an advisor can call with a personalized quote.\n\nSTYLE: Warm, short (2-3 sentences), conversational. Use first name once known.\n\nCOLLECT naturally in order:\n1. First name\n2. Coverage type (individual/family, small business, dental/vision)\n3. ZIP or state\n4. Number of people/employees\n5. Age or DOB\n6. Email ("so I can send plan options")\n7. Phone ("so our advisor can call with your quote")\n\nRULES:\n- Never promise instant quote — team will call/email with options\n- Pricing questions: rates vary, advisor covers exact numbers\n- VS Health Benefits questions: answer then redirect to info collection or (954) 825-1009\n- Urgent issues: give (954) 825-1009 immediately\n- Services: Group 10-99, Micro 2-9, ACA/Individual, Family, Dental & Vision, Private Market\n- Hours: Mon-Fri 8am-6pm ET, Sat-Sun 8am-1pm ET\n\nWHEN you have name + email + phone + coverage type:\nWarmly confirm all collected info and say the team will be in touch within 1 business day.\nThen append at the very end (never shown to user):\n<LEAD_DATA>{"firstName":"","lastName":"","email":"","phone":"","zip":"","state":"","dob":"","coverageType":"","employees":"","extraNotes":""}</LEAD_DATA>';
@@ -252,8 +252,8 @@
       }
     }).catch(function(){
       hideTyp();
-      addB('Sorry about that! Please call us at (954) 825-1009 and we\'ll help right away.');
-      history.push({role:'assistant',content:'Please call (954) 825-1009.'});
+      addB('Sorry about that! Please speak to an advisor at (954) 825-1009 and we\'ll help right away.');
+      history.push({role:'assistant',content:'Please speak to an advisor at (954) 825-1009.'});
     }).finally(function(){isBusy=false;snd.disabled=!inp.value.trim()||isSubmitted;});
   }
 
