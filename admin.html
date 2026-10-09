@@ -3198,7 +3198,9 @@ async function changePw(a){
 }
 async function deleteAcct(a){
   var nm=fullName(a);
-  if(!confirm("PERMANENTLY delete "+nm+"? Cannot be undone."))return;
+  var nMsg=getMessages().filter(function(m){return m.accountId===a.id;}).length;
+  var nRef=getReferrals().filter(function(r){return r.fromAccountId===a.id;}).length;
+  if(!confirm("PERMANENTLY delete "+nm+(a.email?" ("+a.email+")":"")+"?\n\nThis removes:\n\u2022 Their member login\n\u2022 "+nMsg+" support message"+(nMsg===1?"":"s")+"\n\u2022 "+nRef+" referral"+(nRef===1?"":"s")+" they sent\n\nIf they're signed in, they'll be signed out. This cannot be undone."))return;
   saveAccounts(getAccounts().filter(function(x){return x.id!==a.id;}));
   saveMessages(getMessages().filter(function(m){return m.accountId!==a.id;}));
   saveReferrals(getReferrals().filter(function(r){return r.fromAccountId!==a.id;}));
@@ -3206,6 +3208,7 @@ async function deleteAcct(a){
   if(activeThreadId===a.id)activeThreadId=null;
   webhookFire({event:"admin_deleted_client",accountId:a.id,email:a.email||"",ts:Date.now()});
   renderAccounts();renderSupport();renderReferrals();renderPipeline();
+  if(typeof renderUsers==="function")renderUsers();
 }
 function msgClient(a){switchTab("support");selectThread(a.id);}
 function openPlanForm(a){
@@ -6183,6 +6186,7 @@ function renderUsers(){
       if(typeof renderUsers==="function")renderUsers();
       switchTab("accounts");var sB=$("acct-search");if(sB){sB.value=a.email||fullName(a);}renderAccounts();
     }}));
+    acts.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",title:"Permanently delete this member account",html:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M10 11v6M14 11v6'/></svg> Delete",onclick:function(){deleteAcct(a);}}));
     row.appendChild(acts);
     box.appendChild(row);
   });
