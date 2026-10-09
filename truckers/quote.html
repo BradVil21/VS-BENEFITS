@@ -566,7 +566,7 @@ document.addEventListener("DOMContentLoaded",function(){var toggle=document.quer
 
   /* ---- steps ---- */
   var zip=$('tq-zip');
-  var qs=new URLSearchParams(location.search);var z0=(qs.get('zip')||'').replace(/\D/g,'').slice(0,5);if(z0.length===5)zip.value=z0;
+  var qs=new URLSearchParams(location.search);var z0=(qs.get('zip')||'').replace(/\D/g,'').slice(0,5);if(z0.length===5)zip.value=z0;var p0=(qs.get('phone')||'').replace(/\D/g,'');if(p0.length===11&&p0[0]==='1')p0=p0.slice(1);if(p0.length===10){var pe=document.getElementById('tq-phone');if(pe)pe.value='('+p0.slice(0,3)+') '+p0.slice(3,6)+'-'+p0.slice(6);}
   function step(n){cur=n;[].forEach.call(f.querySelectorAll('.tq-step'),function(s){s.classList.toggle('active',String(s.getAttribute('data-step'))===String(n));});
     var k=n==='done'?STEPS:n;
     [].forEach.call(f.querySelectorAll('.tq-prog span'),function(b,i){b.classList.toggle('on',i<k);});

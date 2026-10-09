@@ -828,7 +828,7 @@ function qfFunnelRedirect() {
   params.set('from', 'truck-driver');
   var btn = document.getElementById('qf-btn-truck');
   if (btn) { btn.disabled = true; btn.textContent = 'Loading your plans…'; }
-  window.location.href = '/quote' + (params.toString() ? '?' + params.toString() : '');
+  window.location.href = '/truckers/quote' + (params.toString() ? '?' + params.toString() : '');
 }
 
 function qfSubmit(pid, label) {
@@ -1160,5 +1160,6 @@ function qfSubmit(pid, label) {
 </script>
 <script src="/vs-reviews.js" defer></script>
 <script src="/vs-guide.js" defer></script>
+<script id="qf-unstick">window.addEventListener("pageshow",function(){document.querySelectorAll(".qf-submit").forEach(function(b){b.disabled=false;if(/Loading/.test(b.textContent))b.textContent="See My Truck Driver Plans \u2192";});});</script>
 </body>
 </html>

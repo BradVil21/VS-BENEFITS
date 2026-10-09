@@ -757,18 +757,7 @@ body{padding-bottom:0}
         </div>
         <h2>Encuentra el Seguro Médico Adecuado <span>para Camioneros</span></h2>
         <p class="qf-sub">Responde unas cuantas preguntas rápidas y te conectaremos con las mejores opciones de seguro médico para owner-operators y conductores CDL. Toma unos 2 minutos.</p>
-        <div class="qf-types">
-          <div class="qf-type" id="qt-ind" onclick="qfSelect('individual')">
-            <div class="qf-type-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-            <h3>Individual o Familiar</h3>
-            <p>Cobertura para ti y tus seres queridos</p>
-          </div>
-          <div class="qf-type" id="qt-biz" onclick="qfSelect('business')">
-            <div class="qf-type-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg></div>
-            <h3>Flota Pequeña / Empresa</h3>
-            <p>Planes grupales para tus conductores</p>
-          </div>
-        </div>
+        <p class="qf-fleet" style="text-align:center;font-size:.86rem;color:#5a6b80;margin:4px 0 0">¿Tiene una flota? <a href="/health-insurance-for-trucking-companies">Vea planes grupales para empresas de transporte &rarr;</a></p>
       </div>
 
       <div class="qf-divider"></div>
@@ -1284,8 +1273,8 @@ async function qfFunnelRedirect() {
   var params = new URLSearchParams();
   if (zip)   params.set('zip', zip);
   if (phone) params.set('phone', phone);
-  params.set('from', 'truck-driver');
-  window.location.href = '/quote' + (params.toString() ? '?' + params.toString() : '');
+  params.set('from', 'seguro-medico-camioneros-florida');
+  window.location.href = '/truckers/quote' + (params.toString() ? '?' + params.toString() : '');
 }
 
 function qfSubmit(pid, label) {
@@ -1616,5 +1605,6 @@ function qfSubmit(pid, label) {
 </script>
 <script src="/vs-reviews.js" defer></script>
 <script src="/vs-reviews-carousel.js" defer></script>
+<script id="qf-unstick">window.addEventListener("pageshow",function(){document.querySelectorAll(".qf-submit").forEach(function(b){b.disabled=false;if(/Loading/.test(b.textContent))b.textContent="See My Truck Driver Plans \u2192";});});</script>
 </body>
 </html>

@@ -643,18 +643,7 @@ body{padding-bottom:0}
         </div>
         <h2>Find the Best Plan <span>for Your Truck</span></h2>
         <p class="qf-sub">Answer two quick questions and we will compare owner-operator health plans across every major carrier. Takes about 2 minutes and costs nothing.</p>
-        <div class="qf-types">
-          <div class="qf-type" id="qt-ind" onclick="qfSelect('individual')">
-            <div class="qf-type-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-            <h3>Individual or Family</h3>
-            <p>Coverage for you and your loved ones</p>
-          </div>
-          <div class="qf-type" id="qt-biz" onclick="qfSelect('business')">
-            <div class="qf-type-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg></div>
-            <h3>Small Fleet / Business</h3>
-            <p>Group plans for your drivers</p>
-          </div>
-        </div>
+        <p class="qf-fleet" style="text-align:center;font-size:.86rem;color:#5a6b80;margin:4px 0 0">Running a fleet? <a href="/health-insurance-for-trucking-companies">See group plans for trucking companies &rarr;</a></p>
       </div>
 
       <div class="qf-divider"></div>
@@ -734,7 +723,7 @@ function qfFunnelRedirect_can_truckers_deduct_health_insurance() {
   params.set('from', 'can-truckers-deduct-health-insurance');
   var btn = document.getElementById('qf-btn-can-truckers-deduct-health-insurance');
   if (btn) { btn.disabled = true; btn.textContent = 'Loading your plans...'; }
-  window.location.href = '/quote' + (params.toString() ? '?' + params.toString() : '');
+  window.location.href = '/truckers/quote' + (params.toString() ? '?' + params.toString() : '');
 }
 </script>
 
@@ -1103,7 +1092,7 @@ function qfFunnelRedirect() {
   params.set('from', 'truck-driver');
   var btn = document.getElementById('qf-btn-truck');
   if (btn) { btn.disabled = true; btn.textContent = 'Loading your plans…'; }
-  window.location.href = '/quote' + (params.toString() ? '?' + params.toString() : '');
+  window.location.href = '/truckers/quote' + (params.toString() ? '?' + params.toString() : '');
 }
 
 function qfSubmit(pid, label) {
@@ -1435,5 +1424,6 @@ function qfSubmit(pid, label) {
 </script>
 <script src="/vs-reviews.js" defer></script>
 <script src="/vs-guide.js" defer></script>
+<script id="qf-unstick">window.addEventListener("pageshow",function(){document.querySelectorAll(".qf-submit").forEach(function(b){b.disabled=false;if(/Loading/.test(b.textContent))b.textContent="See My Truck Driver Plans \u2192";});});</script>
 </body>
 </html>

@@ -1245,11 +1245,6 @@
       "permanent": true
     },
     {
-      "source": "/blog/small-business-group-health-guide.html",
-      "destination": "/blog/small-business-group-health-guide",
-      "permanent": true
-    },
-    {
       "source": "/blog/turning-26-health-insurance.html",
       "destination": "/blog/turning-26-health-insurance",
       "permanent": true
@@ -1552,6 +1547,36 @@
     {
       "source": "/blog/health-insurance-dot-physical.html",
       "destination": "/does-health-insurance-cover-dot-physical",
+      "permanent": true
+    },
+    {
+      "source": "/blog/small-business-group-health-guide",
+      "destination": "/small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/small-business-group-health-guide.html",
+      "destination": "/small-business-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/employer-health-insurance-cost-calculator",
+      "destination": "/small-business-health-insurance-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/employer-health-insurance-cost-calculator.html",
+      "destination": "/small-business-health-insurance-calculator",
+      "permanent": true
+    },
+    {
+      "source": "/blog/health-insurance-for-auto-repair-shops",
+      "destination": "/health-insurance-for-auto-repair-shops",
+      "permanent": true
+    },
+    {
+      "source": "/blog/health-insurance-for-auto-repair-shops.html",
+      "destination": "/health-insurance-for-auto-repair-shops",
       "permanent": true
     }
   ],
