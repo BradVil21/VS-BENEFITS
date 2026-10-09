@@ -85,6 +85,10 @@
   window.vsTrack = function (name, params) {
     ga(name, params);
     if (name === "generate_lead") adsConversion("lead", { value: 0, currency: "USD" });
+    // Trucker funnel: the lead reaches the CRM at the phone step, before name/email.
+    // Count it there so Google Ads bids on the drivers who actually leave a number.
+    // "Quote Form Lead" counts One per click, so the later submit is not double counted.
+    if (name === "trucker_quote_partial") adsConversion("lead", { value: 0, currency: "USD" });
     if (name === "phone_click") adsConversion("phone", { value: 0, currency: "USD" });
   };
 
