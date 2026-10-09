@@ -139,6 +139,50 @@ body{padding-bottom:0}
 .tp-link input{flex:1;min-width:0;font:inherit;font-size:.9rem;padding:11px 12px;border:1.5px solid #0db5a6;border-radius:10px;background:#f4fbfa;color:#0b2346}
 .tp-link button{flex:none;font:inherit;font-weight:700;border:0;border-radius:10px;padding:0 16px;background:#0db5a6;color:#fff;cursor:pointer}
 .tp-msg{background:#f7faff;border:1px dashed #c9dcf5;border-radius:12px;padding:12px 14px;font-size:.9rem;color:#334155;white-space:pre-wrap}
+
+/* ===== partners page v2: photos + polish ===== */
+.tp-hero .hero-grid{align-items:center}
+.tp-hero-art{position:relative;padding:0 0 26px}
+.tp-hero .hero-photo{aspect-ratio:5/4}
+.tp-hero .hero-photo img{object-position:62% 40%}
+.tp-float{position:absolute;display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.97);border:1px solid var(--line);border-radius:14px;padding:10px 14px;box-shadow:0 14px 34px rgba(13,27,42,.14);font-size:.84rem;color:var(--ink-2)}
+.tp-float strong{color:var(--blue-900);display:block;font-size:.92rem}
+.tp-float small{display:block;color:var(--muted);font-size:.76rem}
+.tp-float-a{left:-6px;bottom:0}
+.tp-float-b{right:-6px;top:18px}
+.tp-float-b strong{display:inline}
+.tp-float-ic{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.tp-float-ic svg{width:16px;height:16px}
+.tp-stars{color:#f5b301;letter-spacing:1px}
+@media(max-width:520px){.tp-float-b{display:none}.tp-float-a{left:10px}}
+.tp-stats{background:#0b2346;color:#fff;padding:22px 0}
+.tp-stats .container{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;text-align:center}
+@media(min-width:760px){.tp-stats .container{grid-template-columns:repeat(4,1fr)}}
+.tp-stats strong{display:block;font-family:'Poppins',sans-serif;font-size:1.6rem;line-height:1.1;color:#fff}
+.tp-stats span{font-size:.84rem;color:rgba(255,255,255,.78)}
+.tp-split{display:grid;grid-template-columns:1fr;gap:30px;align-items:center;max-width:1080px}
+@media(min-width:900px){.tp-split{grid-template-columns:1fr 1fr;gap:52px}.tp-split-rev>div:first-child{order:1}}
+.tp-photo{position:relative;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line);aspect-ratio:4/3;background:var(--blue-50)}
+.tp-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.tp-photo-tag{position:absolute;left:14px;bottom:14px;background:rgba(11,35,70,.86);color:#fff;font-weight:700;font-size:.82rem;padding:8px 12px;border-radius:999px}
+.tp-list{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:12px}
+.tp-list li{display:flex;gap:10px;align-items:flex-start;color:var(--ink-2)}
+.tp-list li svg{flex:none;width:20px;height:20px;padding:3px;border-radius:50%;background:#e9faf7;color:#098374;margin-top:2px}
+.tp-list strong{color:var(--blue-900)}
+.tp-join{display:grid;grid-template-columns:1fr;gap:24px;max-width:1080px;align-items:start}
+@media(min-width:900px){.tp-join{grid-template-columns:.85fr 1.15fr;gap:32px}}
+.tp-join .tp-form{max-width:none;margin:0}
+.tp-join-side{background:linear-gradient(160deg,#0b2346,#16447f);border-radius:20px;overflow:hidden;color:#fff;box-shadow:0 20px 50px rgba(13,27,42,.16)}
+.tp-join-img{aspect-ratio:16/9;overflow:hidden}
+.tp-join-img img{width:100%;height:100%;object-fit:cover;object-position:60% 35%;display:block}
+.tp-join-body{padding:22px 22px 24px}
+.tp-join-body h3{color:#fff;margin:0 0 4px;font-size:1.15rem}
+.tp-list-light li{color:rgba(255,255,255,.9)}
+.tp-list-light li svg{background:rgba(13,181,166,.22);color:#8ff0e4}
+.tp-join-note{margin:16px 0 0;font-size:.84rem;color:rgba(255,255,255,.7)}
+.tp-in::placeholder{color:#9aa7b8}
+.tp-saved{display:none;font-size:.78rem;color:#098374;font-weight:600;margin:8px 0 0}
+.tp-saved.on{display:block}
 </style>
 </head>
 <body>
@@ -155,15 +199,31 @@ body{padding-bottom:0}
   </div>
 </header>
 <main>
-<section class="hero">
+<section class="hero tp-hero">
   <div class="container">
-    <div style="max-width:800px">
-      <span class="eyebrow">Trucking partner program</span>
-      <h1>Health coverage for your drivers, <span>at no cost to you</span></h1>
-      <p class="hero-sub">Most owner-operators and lease drivers are 1099, so nobody helps them with health insurance. Send them to us. A licensed advisor gets them covered, you keep good drivers longer, and you earn a referral payout when they enroll.</p>
-      <div class="hero-ctas"><a class="btn btn-primary" href="#join">Become a partner</a><a class="btn btn-secondary" href="tel:+19548251009">Speak to an advisor</a></div>
-      <div class="hero-meta"><span><span class="dot"></span>Free for partners and drivers</span><span><span class="dot"></span>Licensed in 40+ states</span><span><span class="dot"></span>English &amp; Spanish</span></div>
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">Trucking partner program</span>
+        <h1>Health coverage for your drivers, <span>at no cost to you</span></h1>
+        <p class="hero-sub">Most owner-operators and lease drivers are 1099, so nobody helps them with health insurance. Send them to us. A licensed advisor gets them covered, you keep good drivers longer, and you earn a referral payout when they enroll.</p>
+        <div class="hero-ctas"><a class="btn btn-primary" href="#join">Become a partner</a><a class="btn btn-secondary" href="tel:+19548251009">Speak to an advisor</a></div>
+        <div class="hero-meta"><span><span class="dot"></span>Free for partners and drivers</span><span><span class="dot"></span>Licensed in 40+ states</span><span><span class="dot"></span>English &amp; Spanish</span></div>
+      </div>
+      <div class="tp-hero-art">
+        <div class="hero-photo"><img src="/compressed/truck-driver-tipping-cap.webp" alt="Smiling truck driver tipping his cap from the cab" width="1200" height="525" fetchpriority="high"></div>
+        <div class="tp-float tp-float-a"><span class="tp-float-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><div><strong>Driver covered</strong><small>Nationwide PPO &middot; home ZIP pricing</small></div></div>
+        <div class="tp-float tp-float-b"><span class="tp-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><div><strong>5.0</strong> from 49 Google reviews</div></div>
+      </div>
     </div>
+  </div>
+</section>
+
+<section class="tp-stats" aria-label="Program at a glance">
+  <div class="container">
+    <div><strong>$0</strong><span>Cost to your company</span></div>
+    <div><strong>40+</strong><span>States licensed</span></div>
+    <div><strong>2 min</strong><span>To get your driver link</span></div>
+    <div><strong>5.0&#9733;</strong><span>Google rating</span></div>
   </div>
 </section>
 
@@ -179,31 +239,66 @@ body{padding-bottom:0}
   </div>
 </section>
 
+<section class="section tp-split-sec">
+  <div class="container tp-split">
+    <div class="tp-photo"><img src="/compressed/trucking-family-child-at-truck-900.webp" alt="Child climbing into a red semi truck with a parent" width="900" height="380" loading="lazy"><span class="tp-photo-tag">Coverage for the family at home</span></div>
+    <div>
+      <span class="eyebrow">What your drivers get</span>
+      <h2>Real coverage that works on the road</h2>
+      <ul class="tp-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Plans compared for their home ZIP.</strong> Every carrier available to them, side by side.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Nationwide PPO options.</strong> Doctors and urgent care in any state they haul through.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Tax credits applied.</strong> Many 1099 drivers qualify for help that cuts the premium, often a lot.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><strong>Handled by text.</strong> A licensed advisor works around their schedule, in English or Spanish.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <section class="section bg-soft">
-  <div class="container" style="max-width:820px">
-    <h2>How it works</h2>
+  <div class="container tp-split tp-split-rev">
+    <div>
+    <span class="eyebrow">How it works</span>
+    <h2>Set up once. We handle the rest.</h2>
     <ol class="tp-steps">
       <li><strong>Sign up below (2 minutes).</strong>You get your personal driver link right away, plus a text message you can forward to your drivers.</li>
       <li><strong>Share it with your drivers.</strong>Put it in your onboarding packet, driver app, weekly settlement email or group text.</li>
-      <li><strong>We take it from there.</strong>Drivers answer three questions from the cab. A licensed advisor follows up by text or call and handles everything.</li>
+      <li><strong>We take it from there.</strong>Drivers answer a few quick questions from the cab. A licensed advisor follows up by text or call and handles everything.</li>
       <li><strong>Get credited.</strong>Every driver who comes through your link is tagged to your company, and eligible enrollments earn a referral payout.</li>
     </ol>
+    </div>
+    <div class="tp-photo"><img src="/compressed/truck-driver-cb-radio.webp" alt="Truck driver smiling while talking on his CB radio" width="1182" height="517" loading="lazy"></div>
   </div>
 </section>
 
 <section class="section" id="join">
-  <div class="container">
+  <div class="container tp-join">
+    <aside class="tp-join-side">
+      <div class="tp-join-img"><img src="/compressed/new-cdl-driver-smiling.webp" alt="Smiling truck driver in the cab" width="547" height="239" loading="lazy"></div>
+      <div class="tp-join-body">
+        <h3>What partners get</h3>
+        <ul class="tp-list tp-list-light">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Your own driver link, ready the moment you sign up</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>A forwardable text for your group chat or settlement email</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Every driver you send credited to your company</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Referral payouts on eligible enrollments</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>A licensed advisor as your point of contact</span></li>
+        </ul>
+        <p class="tp-join-note">No contracts, no fees, no admin on your side.</p>
+      </div>
+    </aside>
+    <div class="tp-join-main">
     <form class="tp-form" id="tp-form" novalidate>
       <h2>Become a partner</h2>
-      <p style="color:var(--muted,#5a6b80);margin:0 0 6px">Free. We'll reach out to say hello and send your partner materials.</p>
-      <label class="tp-lbl" for="tp-company">Company name</label><input class="tp-in" id="tp-company" autocomplete="organization">
+      <p style="color:var(--muted,#5a6b80);margin:0 0 6px">Free. Your driver link appears instantly, and a licensed advisor follows up with your partner materials.</p>
+      <label class="tp-lbl" for="tp-company">Company name</label><input class="tp-in" id="tp-company" placeholder="ABC Logistics" autocomplete="organization">
       <div class="tp-row">
-        <div><label class="tp-lbl" for="tp-first">Your first name</label><input class="tp-in" id="tp-first" autocomplete="given-name"></div>
-        <div><label class="tp-lbl" for="tp-last">Last name</label><input class="tp-in" id="tp-last" autocomplete="family-name"></div>
+        <div><label class="tp-lbl" for="tp-first">Your first name</label><input class="tp-in" id="tp-first" placeholder="Jane" autocomplete="given-name"></div>
+        <div><label class="tp-lbl" for="tp-last">Last name</label><input class="tp-in" id="tp-last" placeholder="Smith" autocomplete="family-name"></div>
       </div>
       <div class="tp-row">
-        <div><label class="tp-lbl" for="tp-phone">Phone</label><input class="tp-in" id="tp-phone" type="tel" inputmode="tel" autocomplete="tel"></div>
-        <div><label class="tp-lbl" for="tp-email">Email</label><input class="tp-in" id="tp-email" type="email" autocomplete="email"></div>
+        <div><label class="tp-lbl" for="tp-phone">Phone</label><input class="tp-in" id="tp-phone" placeholder="(305) 555-0100" type="tel" inputmode="tel" autocomplete="tel"></div>
+        <div><label class="tp-lbl" for="tp-email">Email</label><input class="tp-in" id="tp-email" placeholder="you@company.com" type="email" autocomplete="email"></div>
       </div>
       <div class="tp-row">
         <div><label class="tp-lbl" for="tp-type">Company type</label><select class="tp-in" id="tp-type"><option value="">Choose one</option><option>Fleet using owner-operators</option><option>Lease-purchase program</option><option>Dispatch service</option><option>Factoring company</option><option>CDL school</option><option>Freight broker</option><option>Other</option></select></div>
@@ -220,7 +315,8 @@ body{padding-bottom:0}
       <p class="tp-lbl" style="margin-top:18px">Text you can forward to your drivers</p>
       <div class="tp-msg" id="tp-text"></div>
       <button type="button" class="tp-btn" id="tp-copytext" style="background:#0db5a6">Copy driver message</button>
-      <p style="font-size:.86rem;color:#334155;margin:14px 0 0">Bradley will reach out within 1 business day with your partner materials. Questions? <a href="tel:+19548251009">Speak to an advisor</a>.</p>
+      <p style="font-size:.86rem;color:#334155;margin:14px 0 0">A licensed advisor will reach out within 1 business day with your partner materials. Questions? <a href="tel:+19548251009">Speak to an advisor</a>.</p>
+    </div>
     </div>
   </div>
 </section>
@@ -341,24 +437,57 @@ document.addEventListener("DOMContentLoaded",function(){var toggle=document.quer
   function $(i){return document.getElementById(i);}
   function slug(t){return String(t).toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,32)||'partner';}
   var err=f.querySelector('.tp-err');function bad(m){err.textContent=m;err.hidden=false;return false;}
+  /* ---- Auto-capture: the partner is a lead before they press the button ----
+     As soon as a valid phone or email is in, the details go to /api/lead-draft
+     (GoHighLevel contact + business board, deduped on phone/email). Later
+     fields update the same record on blur, one last update goes out if they
+     leave the page, and "Get my partner link" upgrades it to a full signup. */
+  var submitted=false,lastKey='',tmr=null;
+  function ph10(){var d=$('tp-phone').value.replace(/\D/g,'');if(d.length===11&&d[0]==='1')d=d.slice(1);return d;}
+  function phOk(d){return /^[2-9]\d{2}[2-9]\d{6}$/.test(d)&&!/^(\d)\1{9}$/.test(d)&&d.slice(3,6)!=='555';}
+  function emOk(v){return /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v);}
+  function draft(){
+    var d=ph10(),em=$('tp-email').value.trim();if(!phOk(d))d='';if(!emOk(em))em='';if(!d&&!em)return null;
+    var co=$('tp-company').value.trim(),type=$('tp-type').value,drv=$('tp-drivers').value;
+    var a=null;try{a=window.vsAttribution?window.vsAttribution():null;}catch(x){}
+    return {type:'business',capture:'auto',optIn:false,consent:true,step:'Partner form (not submitted yet)',
+      phone:d,email:em,firstName:$('tp-first').value.trim(),lastName:$('tp-last').value.trim(),company:co,
+      source:'Trucking Partner Signup (in progress)',tags:['trucking-partner','trucking-partner-partial','business-lead'],
+      notes:['Trucking partner signup (in progress)',co?'Company: '+co:'',type?'Type: '+type:'',drv?'Drivers: '+drv:''].filter(Boolean).join('; '),
+      attribution:a};
+  }
+  function capture(beacon){
+    if(submitted)return;var b=draft();if(!b)return;var key=JSON.stringify(b);if(key===lastKey)return;lastKey=key;
+    try{if(beacon&&navigator.sendBeacon)navigator.sendBeacon('/api/lead-draft',new Blob([key],{type:'application/json'}));
+      else fetch('/api/lead-draft',{method:'POST',headers:{'Content-Type':'application/json'},body:key,keepalive:true}).catch(function(){});}catch(x){}
+  }
+  $('tp-phone').addEventListener('input',function(){
+    var d=this.value.replace(/\D/g,'');if(d.length===11&&d[0]==='1')d=d.slice(1);
+    if(d.length===10)this.value='('+d.slice(0,3)+') '+d.slice(3,6)+'-'+d.slice(6);
+    clearTimeout(tmr);if(phOk(ph10()))tmr=setTimeout(function(){capture(false);},700);
+  });
+  ['tp-company','tp-first','tp-last','tp-phone','tp-email','tp-type','tp-drivers'].forEach(function(id){var el=$(id);
+    el.addEventListener('change',function(){capture(false);});el.addEventListener('blur',function(){capture(false);});});
+  window.addEventListener('pagehide',function(){capture(true);});
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')capture(true);});
   f.addEventListener('submit',function(e){e.preventDefault();
     var co=$('tp-company').value.trim(),first=$('tp-first').value.trim(),last=$('tp-last').value.trim(),email=$('tp-email').value.trim(),type=$('tp-type').value,drv=$('tp-drivers').value;
     var d=$('tp-phone').value.replace(/\D/g,'');if(d.length===11&&d[0]==='1')d=d.slice(1);
     if(!co)return bad('Please enter your company name.');if(!first)return bad('Please enter your first name.');
-    if(d.length!==10)return bad('Please enter a 10-digit phone number.');
+    if(!phOk(d))return bad('Please enter a valid 10-digit phone number.');
     if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email))return bad('Please enter a valid email.');
     if(!type)return bad('Pick your company type.');
-    err.hidden=true;var b=$('tp-submit');b.disabled=true;b.textContent='Creating your link...';
+    submitted=true;err.hidden=true;var b=$('tp-submit');b.disabled=true;b.textContent='Creating your link...';
     var code=slug(co)+'-'+Math.random().toString(36).slice(2,5);
     var link='https://www.vshealthbenefits.com/truckers/quote?ref='+code+'&utm_source=partner&utm_medium=referral&utm_campaign='+code;
     var notes='Trucking partner signup\nCompany: '+co+'\nType: '+type+'\nDrivers: '+(drv||'n/a')+'\nPartner code: '+code+'\nDriver link: '+link+'\n(Drivers from this partner are tagged partner-'+code+')';
-    var body={firstName:first,lastName:last,phone:d,email:email,company:co,source:'Trucking Partner Signup',pipeline:'business',notes:notes,tags:['trucking-partner','business-lead','partner-code-'+code]};
+    var body={firstName:first,lastName:last,phone:d,email:email,company:co,source:'Trucking Partner Signup',pipeline:'business',notes:notes,tags:['trucking-partner','business-lead','partner-code-'+code]};try{if(window.vsAttribution)body.attribution=window.vsAttribution();}catch(x){}
     try{if(window.vsTrack)window.vsTrack('generate_lead',{currency:'USD',value:0,lead_type:'trucking_partner'});}catch(x){}
     fetch('/api/lead-sync',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,body:JSON.stringify(body)}).then(function(){
       f.hidden=true;$('tp-done').hidden=false;$('tp-co').textContent=co;$('tp-url').value=link;
-      $('tp-text').textContent='Need health insurance? '+co+' partners with VS Health Benefits, a licensed broker that helps drivers get covered for free. Answer 3 quick questions from the cab and they\'ll text you your options: '+link;
+      $('tp-text').textContent='Need health insurance? '+co+' partners with VS Health Benefits, a licensed broker that helps drivers get covered for free. Answer a few quick questions from the cab and a licensed advisor will send your options: '+link;
       try{$('tp-done').scrollIntoView({behavior:'smooth',block:'start'});}catch(x){}
-    },function(){b.disabled=false;b.textContent='Get my partner link';bad('Something went wrong. Please try again or speak to an advisor at (954) 825-1009.');});
+    },function(){submitted=false;b.disabled=false;b.textContent='Get my partner link';bad('Something went wrong. Please try again or speak to an advisor at (954) 825-1009.');});
   });
   function copy(t,btn,label){try{navigator.clipboard.writeText(t).then(function(){btn.textContent='Copied!';setTimeout(function(){btn.textContent=label;},1600);});}catch(x){}}
   $('tp-copy').addEventListener('click',function(){copy($('tp-url').value,this,'Copy');});
