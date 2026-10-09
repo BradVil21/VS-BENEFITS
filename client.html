@@ -653,6 +653,7 @@ body:has(#auth-view:not([hidden])) .nav-links{margin-right:0}
         <div class="cp-hero">
           <span class="cp-eyebrow"><span class="cp-eyedot"></span> Dashboard Overview</span>
           <h1 id="cp-greeting">Welcome back</h1>
+          <p class="cp-hero-sub" id="cp-hero-sub"></p>
           <div class="cp-hero-actions">
             <button class="cp-hbtn" data-sec="send" type="button">+ New Referral</button>
             <button class="cp-hbtn ghost" data-sec="plan" type="button">View My Plan</button>
@@ -663,6 +664,7 @@ body:has(#auth-view:not([hidden])) .nav-links{margin-right:0}
           <div class="cp-sec active" id="sec-dashboard">
             <div class="ref-stats" id="ref-stats"></div>
             <div id="getting-started"></div>
+            <div id="db-extra"></div>
           </div>
 
           <div class="cp-sec" id="sec-send">
@@ -863,6 +865,160 @@ body:has(#auth-view:not([hidden])) .nav-links{margin-right:0}
       </div>
     </div>
 </footer>
+
+<style id="cp-v2-css">
+/* ===== Member portal v2 (Oct 2026) ===== */
+.cp-hero{position:relative;overflow:hidden}
+.cp-hero::after{content:"";position:absolute;right:-80px;top:-120px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 65%);pointer-events:none}
+.cp-hero-sub{color:rgba(255,255,255,.86);font-size:15px;margin:-8px 0 16px;max-width:620px;line-height:1.5}
+.cp-hero.compact{padding:22px 28px 20px}
+.cp-hero.compact h1{font-size:clamp(1.35rem,3.6vw,1.7rem);margin-bottom:6px}
+.cp-hero.compact .cp-hero-sub{margin:0}
+.cp-hero.compact .cp-hero-actions{display:none}
+.cp-topbrand{display:none;align-items:center;gap:9px;color:#fff;font-weight:700;font-size:14px}
+.cp-topbrand .cp-logo{width:30px;height:30px;font-size:11px;border-radius:8px}
+.cp-topsup{display:inline-flex;align-items:center;gap:7px;background:transparent;font:inherit;cursor:pointer;color:#cdd9ec;text-decoration:none;font-size:13px;font-weight:600;margin-right:10px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12)}
+.cp-topsup:hover{background:rgba(255,255,255,.06);color:#fff;text-decoration:none}
+.cp-topsup svg{width:15px;height:15px}
+/* stat cards */
+.rstat{position:relative;transition:transform .15s,box-shadow .15s}
+.rstat[data-goto]{cursor:pointer}
+.rstat[data-goto]:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(13,27,42,.08)}
+.rstat-ic{width:38px;height:38px;border-radius:10px;background:#eef4fd;color:#16447f;display:flex;align-items:center;justify-content:center;font-size:18px}
+.rstat:nth-child(2) .rstat-ic{background:#e9faf7;color:#098374}
+.rstat:nth-child(3) .rstat-ic{background:#fff6dd;color:#9a6b00}
+.rstat-hint{font-size:12px;color:var(--muted);margin-top:6px}
+/* dashboard grid */
+.db-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-bottom:16px}
+.db-grid>div{min-width:0}
+@media(min-width:980px){.db-grid{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}}
+.db-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-sm);padding:20px}
+.db-card h3{font-size:15px;color:var(--blue-900);margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.db-card .db-sub{font-size:13px;color:var(--muted);margin:0 0 14px}
+.db-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}
+.db-link{background:none;border:0;padding:0;color:var(--blue-600);font:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.db-link:hover{text-decoration:underline}
+/* coverage card */
+.cov{border-radius:14px;background:linear-gradient(135deg,#0b2346,#16447f 60%,#0e8f86);color:#fff;padding:18px 18px 16px;position:relative;overflow:hidden}
+.cov::after{content:"";position:absolute;right:-40px;bottom:-60px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.07)}
+.cov-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.cov-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:rgba(52,211,153,.18);color:#a7f3d0;padding:4px 10px;border-radius:999px}
+.cov-pill i{width:7px;height:7px;border-radius:50%;background:#34d399}
+.cov-name{font-family:'Poppins',sans-serif;font-size:19px;font-weight:700;margin:10px 0 2px;color:#fff}
+.cov-carrier{font-size:13.5px;color:rgba(255,255,255,.8)}
+.cov-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;position:relative;z-index:1}
+.cov-grid .l{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.65)}
+.cov-grid .v{font-size:15px;font-weight:700;margin-top:2px}
+.cov-renew{margin-top:14px;font-size:12.5px;color:rgba(255,255,255,.85);position:relative;z-index:1}
+.cov-bar{height:6px;border-radius:999px;background:rgba(255,255,255,.18);margin-top:6px;overflow:hidden}
+.cov-bar span{display:block;height:100%;background:linear-gradient(90deg,#34d399,#8ff0e4);border-radius:999px}
+.cov-empty{border:1.5px dashed #c9dcf5;border-radius:14px;padding:20px;text-align:center;background:#f7faff}
+.cov-empty strong{display:block;color:var(--blue-900);font-size:15px;margin-bottom:4px}
+.cov-empty p{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+.db-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.db-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font:inherit;font-size:13.5px;font-weight:700;border-radius:10px;padding:10px 14px;cursor:pointer;border:1.5px solid var(--line);background:#fff;color:var(--blue-900);text-decoration:none;line-height:1.1}
+.db-btn:hover{border-color:#9fb6d6;text-decoration:none}
+.db-btn.primary{background:var(--blue-700);border-color:var(--blue-700);color:#fff}
+.db-btn.primary:hover{background:var(--blue-600)}
+.db-btn svg{width:15px;height:15px;flex:none}
+.db-btn[disabled]{opacity:.65;cursor:default}
+/* advisor card */
+.adv-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.adv-av{color:#fff;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.adv-av svg{width:22px;height:22px}
+.adv-row strong{display:block;color:var(--blue-900);font-size:14.5px}
+.adv-row span{font-size:12.5px;color:var(--muted)}
+.adv-row .adv-av{color:#fff}
+.adv-row .adv-open{color:#0a8754;font-size:12px}
+.adv-row .adv-open.closed{color:#5a6b80}
+.adv-open{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:#e6f7ef;color:#0a8754;margin-top:4px}
+.adv-open i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.adv-open.closed{background:#f1f5f9;color:#5a6b80}
+.adv-acts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.adv-acts .db-btn{width:100%}
+.adv-hours{font-size:12px;color:var(--muted);margin:12px 0 0;line-height:1.5}
+/* open enrollment banner */
+.oe-banner{display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:linear-gradient(120deg,#fff8e6,#fffdf6);border:1px solid #f6dfa0;border-radius:var(--r-lg);padding:16px 18px;margin-bottom:16px}
+.oe-ic{width:44px;height:44px;border-radius:12px;background:#fdecb5;color:#8a5a00;display:flex;align-items:center;justify-content:center;flex:none}
+.oe-ic svg{width:22px;height:22px}
+.oe-tx{flex:1;min-width:220px}
+.oe-tx strong{display:block;color:#5c3d00;font-size:15px}
+.oe-tx span{font-size:13.5px;color:#6b5a33}
+.oe-acts{display:flex;gap:8px;flex-wrap:wrap}
+.oe-acts .db-btn.primary{background:#16447f;border-color:#16447f}
+.oe-done{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#0a8754;background:#e6f7ef;border-radius:999px;padding:8px 12px}
+/* activity */
+.act-list{display:flex;flex-direction:column}
+.act{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #f1f5f9;cursor:pointer}
+.act:last-child{border-bottom:0}
+.act:hover .act-t{color:var(--blue-600)}
+.act-ic{width:34px;height:34px;border-radius:10px;background:#eef4fd;color:#16447f;display:flex;align-items:center;justify-content:center;flex:none}
+.act-ic svg{width:16px;height:16px}
+.act-ic.ok{background:#e6f7ef;color:#0a8754}
+.act-ic.msg{background:#f3eefe;color:#6d28d9}
+.act-t{font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.35}
+.act-s{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.act-empty{font-size:13.5px;color:var(--muted);padding:6px 0}
+/* quick help chips */
+.qh-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media(min-width:640px){.qh-grid{grid-template-columns:repeat(3,1fr)}}
+.qh-chip{display:flex;align-items:center;gap:8px;text-align:left;font:inherit;font-size:13px;font-weight:600;color:var(--blue-900);background:#f7faff;border:1.5px solid #e4e9f2;border-radius:11px;padding:11px 12px;cursor:pointer;line-height:1.25}
+.qh-chip:hover{border-color:#0db5a6;background:#f0fbf9}
+.qh-chip svg{width:16px;height:16px;color:#098374;flex:none}
+/* referral promo */
+.ref-promo{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:linear-gradient(120deg,#eef4fd,#e9faf7);border:1px solid #d7e6f7;border-radius:var(--r-lg);padding:16px 18px;margin-bottom:16px}
+.ref-promo .rp-tx{flex:1;min-width:220px}
+.ref-promo strong{color:var(--blue-900);display:block;font-size:15px}
+.ref-promo span{font-size:13.5px;color:var(--ink-2)}
+/* plan page extras */
+.pl-renew{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:12.5px;font-weight:700;background:rgba(255,255,255,.16);border-radius:999px;padding:5px 11px;color:#fff}
+.pl-help{display:grid;grid-template-columns:1fr;gap:10px;margin-top:6px}
+@media(min-width:700px){.pl-help{grid-template-columns:1fr 1fr}}
+.pl-help-item{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fff;cursor:pointer;text-align:left;font:inherit}
+.pl-help-item:hover{border-color:#9fb6d6}
+.pl-help-item svg{width:18px;height:18px;color:#16447f;flex:none;margin-top:1px}
+.pl-help-item strong{display:block;font-size:13.5px;color:var(--blue-900)}
+.pl-help-item span{font-size:12.5px;color:var(--muted)}
+/* support extras */
+.sup-contact{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.sup-topics{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.sup-topic{font:inherit;font-size:12.5px;font-weight:600;color:#16447f;background:#eef4fd;border:1px solid #d7e6f7;border-radius:999px;padding:6px 11px;cursor:pointer}
+.sup-topic:hover{background:#e0ecfb}
+.sup-sent{display:none;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#0a8754;margin:8px 0 0}
+.sup-sent.on{display:flex}
+.msg-hint{font-size:11.5px;color:var(--muted);margin:6px 0 10px}
+/* referrals extras */
+.rf-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.rf-steps{display:flex;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:0 0 14px;align-items:center}
+.rf-steps b{color:var(--ink-2);font-weight:600}
+.rf-steps i{font-style:normal;color:#b0bccc}
+.rf-empty{text-align:center;padding:26px 10px}
+.rf-empty strong{display:block;color:var(--blue-900);font-size:15px;margin-bottom:4px}
+.rf-empty p{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+/* mobile tab bar */
+.cp-tabbar{display:none}
+@media(max-width:860px){
+  .cp-topbrand{display:flex}
+  .cp-topsup span{display:none}
+  .cp-topsup{padding:8px;margin-right:6px}
+  .cp-tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;background:#fff;border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -6px 20px rgba(13,27,42,.06)}
+  .cp-tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;font:inherit;font-size:10.5px;font-weight:600;color:#5a6b80;padding:4px 2px;cursor:pointer;position:relative}
+  .cp-tab svg{width:21px;height:21px}
+  .cp-tab.active{color:#16447f}
+  .cp-tab.active svg{color:#0db5a6}
+  .cp-tab .cp-navbadge{position:absolute;top:0;right:calc(50% - 20px);margin:0}
+  .cp-scroll{padding-bottom:74px}
+  #back-to-top{display:none!important}
+  .ref-stats{grid-template-columns:repeat(3,1fr)!important;gap:8px}
+  .rstat{padding:12px 10px}
+  .rstat-ic{width:30px;height:30px;font-size:14px;margin-bottom:6px;border-radius:8px}
+  .rstat-num{font-size:20px}
+  .rstat-lbl{font-size:10px;letter-spacing:.03em}
+  .rstat-hint{display:none}
+  .cov-grid{grid-template-columns:1fr 1fr}
+  .cp-hero.compact{padding:18px 18px 16px}
+}
+</style>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -1311,7 +1467,7 @@ function renderGettingStarted(acct,s){
   var steps=[
     {label:"Complete your profile (name, email, phone)",done:!!(acct.firstName&&acct.lastName&&acct.email&&acct.phone)},
     {label:"Send your first referral",done:s.sent>0},
-    {label:"Close your first deal",done:s.sold>0}
+    {label:"Get your first referral enrolled",done:s.sold>0}
   ];
   var done=steps.filter(function(x){return x.done;}).length;
   if(done>=steps.length){box.innerHTML="";return;}
@@ -1874,6 +2030,338 @@ document.querySelectorAll('input[type="password"]').forEach(function(inp){
 });
 /* busy state on the email buttons so a slow connection doesn't look frozen */
 ["login-form","signup-form"].forEach(function(id){var f=$(id);if(!f)return;f.addEventListener("submit",function(){var b=f.querySelector("button[type=submit]");if(!b)return;var t=b.textContent;b.classList.add("is-busy");b.textContent="One moment...";setTimeout(function(){b.classList.remove("is-busy");b.textContent=t;},2500);},true);});
+
+
+/* ===================================================================
+   Member portal v2 (Oct 2026)
+   - Section-aware header (dashboard keeps the greeting, other pages get
+     a compact title) and a mobile tab bar.
+   - Dashboard: coverage summary with renewal countdown, advisor card
+     with live office hours, Open Enrollment banner + one-tap plan review
+     request, recent activity, quick-help topics, referral promo.
+   - Plan, Support and Referrals pages get next steps and helpers.
+   All writes reuse the existing data paths (messages / accounts arrays
+   + webhookFire), so the admin portal sees everything as before.
+   =================================================================== */
+var CP_PHONE="+19548251009", CP_EMAIL="info@vshealthbenefits.com";
+function svgI(d,w){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(w||2)+'" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>';}
+var IC={
+  chat:svgI('<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.9-.9L3 21l1.9-5.1A8.4 8.4 0 0 1 4 11.5a8.5 8.5 0 0 1 17 0z"/>'),
+  phone:svgI('<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/>'),
+  sms:svgI('<rect x="3" y="4" width="18" height="14" rx="3"/><path d="M8 21l3-3M8 10h8M8 13h5"/>'),
+  mail:svgI('<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>'),
+  cal:svgI('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'),
+  shield:svgI('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>'),
+  send:svgI('<path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/>'),
+  home:svgI('<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>'),
+  list:svgI('<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'),
+  user:svgI('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'),
+  family:svgI('<circle cx="9" cy="7" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20a6 6 0 0 1 12 0M14 20a4.5 4.5 0 0 1 7.5-3.3"/>'),
+  pin:svgI('<path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>'),
+  bill:svgI('<path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 7h6M9 11h6M9 15h4"/>'),
+  doc:svgI('<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/>'),
+  card:svgI('<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/>'),
+  swap:svgI('<path d="M17 3l4 4-4 4M21 7H9M7 21l-4-4 4-4M3 17h12"/>'),
+  star:svgI('<path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/>'),
+  check:svgI('<path d="M20 6 9 17l-5-5"/>',2.6),
+  gift:svgI('<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v9H5v-9M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/>'),
+  more:svgI('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/>')
+};
+var QUICK_HELP=[
+  {ic:"family",t:"Add a family member",m:"Hi, I'd like to add a family member to my plan. Their name and date of birth are: "},
+  {ic:"pin",t:"I moved or changed jobs",m:"Hi, I have a change to report (new address, income or job). Here are the details: "},
+  {ic:"bill",t:"Question about a bill",m:"Hi, I have a question about my premium or a bill: "},
+  {ic:"doc",t:"Find a doctor or medicine",m:"Hi, can you help me check whether my doctor or prescription is covered? Doctor / medication: "},
+  {ic:"card",t:"I need my ID card",m:"Hi, I need help getting my insurance ID card."},
+  {ic:"swap",t:"Change or cancel my plan",m:"Hi, I'd like to talk about changing or canceling my plan. Reason: "}
+];
+function cpPlanDate(s){if(!s)return null;var t=new Date(s+"T00:00:00").getTime();return isNaN(t)?null:t;}
+function cpDaysUntil(t){return Math.ceil((t-Date.now())/864e5);}
+function cpHasPlan(a){var p=a&&a.plan;return !!(p&&(p.carrier||p.planName));}
+
+/* ---- office hours (Mon-Fri 8-6, Sat-Sun 8-1 Eastern) ---- */
+function cpOfficeStatus(){
+  try{
+    var parts=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",weekday:"short",hour:"numeric",minute:"numeric",hour12:false}).formatToParts(new Date());
+    var wd="",h=0,m=0;parts.forEach(function(p){if(p.type==="weekday")wd=p.value;if(p.type==="hour")h=+p.value%24;if(p.type==="minute")m=+p.value;});
+    var mins=h*60+m,wknd=(wd==="Sat"||wd==="Sun"),close=wknd?13*60:18*60;
+    if(mins>=480&&mins<close)return{open:true,text:"Open now · until "+(wknd?"1 PM":"6 PM")+" ET"};
+    if(mins<480)return{open:false,text:"Closed · opens 8 AM ET"};
+    return{open:false,text:"Closed · opens 8 AM ET tomorrow"};
+  }catch(e){return{open:false,text:"Mon-Fri 8-6, Sat-Sun 8-1 ET"};}
+}
+
+/* ---- Open Enrollment window for 2027 plans ---- */
+function cpOE(){
+  var now=new Date(),y=now.getFullYear(),mo=now.getMonth();
+  // window shown Oct 1 -> Jan 15
+  var cov=mo>=9?y+1:y;                   // coverage year being shopped
+  var start=new Date(cov-1,10,1),end=new Date(cov,0,15,23,59);
+  var showFrom=new Date(cov-1,9,1);
+  if(now<showFrom||now>end)return null;
+  return{year:cov,before:now<start,daysToStart:Math.ceil((start-now)/864e5),daysLeft:Math.ceil((end-now)/864e5)};
+}
+function cpReviewRequested(acct){
+  if(!acct)return false;var oe=cpOE();var yr=oe?oe.year:0;
+  if(acct.planReviewYear&&acct.planReviewYear===yr)return true;
+  return getMessages().some(function(m){return m.accountId===acct.id&&m.kind==="plan-review"&&(!yr||m.reviewYear===yr);});
+}
+function cpRequestReview(btn){
+  var acct=currentAccount();if(!acct)return;
+  var oe=cpOE(),yr=oe?oe.year:(new Date().getFullYear()+1);
+  var text="Plan review request: I'd like a free review of my coverage for "+yr+". Please check whether there's a better price or plan for me.";
+  var m={id:uid(),accountId:acct.id,from:"client",text:text,ts:Date.now(),read:false,kind:"plan-review",reviewYear:yr};
+  var arr=getMessages();arr.push(m);saveMessages(arr);
+  saveAccounts(getAccounts().map(function(a){if(a.id===acct.id){a.planReviewYear=yr;a.planReviewAt=Date.now();}return a;}));
+  webhookFire({event:"client_message",account_id:acct.id,email:acct.email,text:text,kind:"plan_review",ts:Date.now()});
+  if(btn){btn.disabled=true;btn.innerHTML=IC.check+" Review requested";}
+  cpToast("Plan review requested. Your advisor will reach out within 1 business day.");
+  setTimeout(function(){cpRenderDashboard();renderMessages();},900);
+}
+function cpToast(t){
+  var d=document.createElement("div");
+  d.style.cssText="position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#0b2346;color:#fff;font-size:13.5px;font-weight:600;padding:11px 16px;border-radius:12px;box-shadow:0 14px 30px rgba(11,35,70,.3);z-index:100003;max-width:92vw;text-align:center";
+  d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.style.transition="opacity .4s";d.style.opacity="0";setTimeout(function(){d.remove();},450);},3200);
+}
+
+/* ---- header per section ---- */
+var CP_HERO={
+  dashboard:{eb:"Dashboard"},
+  send:{eb:"Refer & Earn",t:"Send a referral",s:"Know someone who needs coverage? Share their details and a licensed advisor takes it from there."},
+  referrals:{eb:"Referrals",t:"Your referrals",s:"Track every referral from submitted to paid."},
+  plan:{eb:"My Plan",t:"Your coverage",s:"Your plan details, kept up to date by your advisor."},
+  support:{eb:"Support",t:"How can we help?",s:"Message your advisor, or call or text during office hours."},
+  settings:{eb:"Settings",t:"Account settings",s:"Your profile, photo and sign-in details."}
+};
+function cpSetHero(sec){
+  var acct=currentAccount();var h=CP_HERO[sec]||CP_HERO.dashboard;
+  var hero=document.querySelector(".cp-hero");if(!hero)return;
+  var eb=hero.querySelector(".cp-eyebrow");if(eb)eb.innerHTML='<span class="cp-eyedot"></span> '+h.eb;
+  var sub=$("cp-hero-sub");
+  if(sec==="dashboard"){
+    hero.classList.remove("compact");
+    $("cp-greeting").textContent=cpGreeting((acct&&acct.firstName)||"there");
+    var s="Welcome to your member portal. Your advisor is one message away.";
+    if(cpHasPlan(acct)){var p=acct.plan,rt=cpPlanDate(p.renewalDate),d=rt?cpDaysUntil(rt):null;
+      s="Your "+(p.carrier?p.carrier+" ":"")+"plan is active"+(d!==null&&d>0?" · renews in "+d+" day"+(d===1?"":"s"):"")+".";}
+    if(sub)sub.textContent=s;
+  }else{
+    hero.classList.add("compact");
+    $("cp-greeting").textContent=h.t;
+    if(sub)sub.textContent=h.s;
+  }
+}
+
+/* ---- dashboard ---- */
+function cpCoverageCard(acct){
+  if(!cpHasPlan(acct)){
+    return '<div class="db-card"><div class="db-head"><div><h3>'+IC.shield.replace('<svg','<svg style="width:18px;height:18px;color:#16447f"')+' My coverage</h3></div></div>'
+      +'<div class="cov-empty"><strong>No plan on file yet</strong><p>Once you enroll, your plan, premium and renewal date show up here. Not covered yet? Get a free quote in about 2 minutes.</p>'
+      +'<div class="db-btns" style="justify-content:center;margin-top:0"><a class="db-btn primary" href="/quote">'+IC.shield+' Get a free quote</a><button class="db-btn" type="button" data-goto="support">'+IC.chat+' Ask my advisor</button></div></div></div>';
+  }
+  var p=acct.plan,ef=cpPlanDate(p.effectiveDate),rn=cpPlanDate(p.renewalDate);
+  var renew="";
+  if(rn){var d=cpDaysUntil(rn);var pct=ef&&rn>ef?Math.max(0,Math.min(100,Math.round((Date.now()-ef)/(rn-ef)*100))):null;
+    renew='<div class="cov-renew">'+(d>0?"Renews "+fmtDate(rn)+" · "+d+" day"+(d===1?"":"s")+" left":"Renewal date reached · ask your advisor about next year")
+      +(pct!==null?'<div class="cov-bar"><span style="width:'+pct+'%"></span></div>':'')+'</div>';}
+  return '<div class="db-card"><div class="db-head"><div><h3>My coverage</h3></div><button class="db-link" type="button" data-goto="plan">View details &rarr;</button></div>'
+    +'<div class="cov"><div class="cov-top"><span class="cov-pill"><i></i>Active</span></div>'
+    +'<div class="cov-name">'+escapeHtml(p.planName||"Your plan")+'</div><div class="cov-carrier">'+escapeHtml(p.carrier||"")+'</div>'
+    +'<div class="cov-grid"><div><div class="l">Premium</div><div class="v">'+(p.monthlyPremium?"$"+Number(p.monthlyPremium).toFixed(2)+"/mo":"--")+'</div></div>'
+    +'<div><div class="l">Effective</div><div class="v">'+(ef?fmtDate(ef):"--")+'</div></div>'
+    +'<div><div class="l">Renewal</div><div class="v">'+(rn?fmtDate(rn):"--")+'</div></div></div>'+renew+'</div>'
+    +'<div class="db-btns"><button class="db-btn" type="button" data-help="0">'+IC.family+' Add family</button><button class="db-btn" type="button" data-help="1">'+IC.pin+' Report a change</button><button class="db-btn" type="button" data-help="4">'+IC.card+' ID card help</button></div></div>';
+}
+function cpAdvisorCard(){
+  var st=cpOfficeStatus();
+  return '<div class="db-card"><div class="adv-row"><span class="adv-av">'+IC.user+'</span><div><strong>Your licensed advisor</strong><span>VS Health Benefits &middot; English &amp; Spanish</span><br><span class="adv-open'+(st.open?"":" closed")+'"><i></i>'+st.text+'</span></div></div>'
+    +'<div class="adv-acts">'
+    +'<button class="db-btn primary" type="button" data-goto="support">'+IC.chat+' Message</button>'
+    +'<a class="db-btn" href="tel:'+CP_PHONE+'">'+IC.phone+' Call</a>'
+    +'<a class="db-btn" href="sms:'+CP_PHONE+'">'+IC.sms+' Text</a>'
+    +'<a class="db-btn" href="/book" target="_blank" rel="noopener">'+IC.cal+' Book a call</a>'
+    +'</div><p class="adv-hours">Mon&ndash;Fri 8am&ndash;6pm, Sat&ndash;Sun 8am&ndash;1pm ET. Messages are answered within 1 business day. Email <a href="mailto:'+CP_EMAIL+'">'+CP_EMAIL+'</a>.</p></div>';
+}
+function cpOEBanner(acct){
+  var oe=cpOE();if(!oe)return "";
+  if(!cpHasPlan(acct)){
+    return '<div class="oe-banner"><span class="oe-ic">'+IC.cal+'</span><div class="oe-tx"><strong>'+(oe.before?"Open Enrollment for "+oe.year+" starts November 1":"Open Enrollment is open · "+oe.daysLeft+" day"+(oe.daysLeft===1?"":"s")+" left")+'</strong><span>'+(oe.before?"It's the once-a-year window to get covered. We'll compare plans and tax credits for you, free.":"Enroll by December 15 for coverage starting January 1 (in most states). We'll compare plans and tax credits for you, free.")+'</span></div>'
+      +'<div class="oe-acts"><a class="db-btn primary" href="/quote">Get my '+oe.year+' quote</a><a class="db-btn" href="/book" target="_blank" rel="noopener">'+IC.cal+' Book a call</a></div></div>';
+  }
+  var done=cpReviewRequested(acct);
+  var head=oe.before?("Open Enrollment for "+oe.year+" starts November 1"):("Open Enrollment is open · "+oe.daysLeft+" day"+(oe.daysLeft===1?"":"s")+" left");
+  var body=oe.before?"Prices and plans change every year. Let your advisor check whether you can save before your plan renews."
+    :"Enroll or switch by December 15 for coverage starting January 1 (in most states). Your advisor can check for a better price.";
+  return '<div class="oe-banner"><span class="oe-ic">'+IC.cal+'</span><div class="oe-tx"><strong>'+head+'</strong><span>'+body+'</span></div>'
+    +'<div class="oe-acts">'+(done?'<span class="oe-done">'+IC.check.replace('<svg','<svg style="width:15px;height:15px"')+' Plan review requested</span>':'<button class="db-btn primary" type="button" id="oe-review">Request my free plan review</button>')
+    +'<a class="db-btn" href="/book" target="_blank" rel="noopener">'+IC.cal+' Book a call</a></div></div>';
+}
+function cpActivity(acct){
+  var ev=[];
+  getReferrals().filter(function(r){return r.fromAccountId===acct.id;}).forEach(function(r){
+    var nm=r.referralName||"your referral",st=r.status||"in-progress";
+    ev.push({ts:r.ts,ic:"send",cls:"",t:"You referred "+nm,s:"Status: "+st.replace(/-/g," "),sec:"referrals"});
+    if(st==="sold"&&r.soldAt)ev.push({ts:r.soldAt,ic:"star",cls:"ok",t:nm+" enrolled",s:r.payout?"You earned $"+Number(r.payout).toFixed(2):"",sec:"referrals"});
+    if(st==="paid"&&r.paidAt)ev.push({ts:r.paidAt,ic:"gift",cls:"ok",t:"Payout sent for "+nm,s:r.payout?"$"+Number(r.payout).toFixed(2):"",sec:"referrals"});
+  });
+  getMessages().filter(function(m){return m.accountId===acct.id;}).forEach(function(m){
+    ev.push({ts:m.ts,ic:"chat",cls:"msg",t:m.from==="advisor"?"Your advisor replied":"You sent a message",s:(m.text||"").slice(0,90),sec:"support"});
+  });
+  if(acct.plan&&acct.plan.updated)ev.push({ts:acct.plan.updated,ic:"shield",cls:"ok",t:"Your plan details were updated",s:acct.plan.planName||"",sec:"plan"});
+  if(acct.created)ev.push({ts:acct.created,ic:"user",cls:"",t:"You joined the member portal",s:"",sec:"settings"});
+  ev.sort(function(a,b){return(b.ts||0)-(a.ts||0);});
+  ev=ev.slice(0,5);
+  var list=ev.length?ev.map(function(e){return '<div class="act" data-goto="'+e.sec+'"><span class="act-ic '+e.cls+'">'+IC[e.ic]+'</span><div style="min-width:0"><div class="act-t">'+escapeHtml(e.t)+'</div><div class="act-s">'+fmtTime(e.ts)+(e.s?" · "+escapeHtml(e.s):"")+'</div></div></div>';}).join(""):'<div class="act-empty">Nothing yet. Your messages, plan updates and referrals will show up here.</div>';
+  return '<div class="db-card"><div class="db-head"><div><h3>Recent activity</h3></div></div><div class="act-list">'+list+'</div></div>';
+}
+function cpQuickHelp(){
+  return '<div class="db-card"><h3>Need something?</h3><p class="db-sub">Tap a topic and we\'ll start the message for you.</p><div class="qh-grid">'
+    +QUICK_HELP.map(function(q,i){return '<button class="qh-chip" type="button" data-help="'+i+'">'+IC[q.ic]+q.t+'</button>';}).join("")+'</div></div>';
+}
+function cpRefPromo(s){
+  return '<div class="ref-promo"><span class="oe-ic" style="background:#dcebfb;color:#16447f">'+IC.gift+'</span><div class="rp-tx"><strong>Know someone who needs coverage?</strong><span>'+(s.sent?"Thanks for your "+s.sent+" referral"+(s.sent===1?"":"s")+"! ":"")+'Refer a friend or family member. A licensed advisor helps them for free, and you can earn a payout when they enroll.</span></div>'
+    +'<button class="db-btn primary" type="button" data-goto="send">'+IC.send+' Send a referral</button></div>';
+}
+function cpRenderDashboard(){
+  var acct=currentAccount();if(!acct)return;
+  var box=$("db-extra");if(!box)return;
+  var s=refStats(acct);
+  box.innerHTML=cpOEBanner(acct)
+    +'<div class="db-grid"><div style="display:flex;flex-direction:column;gap:16px">'+cpCoverageCard(acct)+cpActivity(acct)+'</div>'
+    +'<div style="display:flex;flex-direction:column;gap:16px">'+cpAdvisorCard()+cpQuickHelp()+'</div></div>'
+    +cpRefPromo(s);
+  var b=$("oe-review");if(b)b.addEventListener("click",function(){cpRequestReview(b);});
+}
+/* stat cards: clickable + a hint line */
+var _origRenderRefStats=renderRefStats;
+renderRefStats=function(){
+  _origRenderRefStats();
+  var box=$("ref-stats");if(!box)return;
+  var c=box.querySelectorAll(".rstat");var hints=["Track their status","Enrolled through you","Referral payouts"];
+  c.forEach(function(el,i){el.setAttribute("data-goto","referrals");if(!el.querySelector(".rstat-hint")){var h=document.createElement("div");h.className="rstat-hint";h.textContent=hints[i]||"";el.appendChild(h);}});
+};
+
+/* ---- quick help -> prefilled support message ---- */
+function cpOpenHelp(i){
+  var q=QUICK_HELP[i];if(!q)return;
+  cpNav("support");
+  var t=$("msg-text");if(t){t.value=q.m;setTimeout(function(){try{t.focus();t.setSelectionRange(t.value.length,t.value.length);}catch(e){}},60);}
+}
+document.addEventListener("click",function(e){var h=e.target.closest&&e.target.closest("[data-help]");if(h){e.preventDefault();cpOpenHelp(+h.getAttribute("data-help"));}});
+
+/* ---- plan page extras ---- */
+var _origRenderPlan=renderPlan;
+renderPlan=function(){
+  _origRenderPlan();
+  var acct=currentAccount();var box=$("plan-display");if(!acct||!box)return;
+  if(cpHasPlan(acct)){
+    var rn=cpPlanDate(acct.plan.renewalDate),card=box.querySelector(".plan-card");
+    if(rn&&card&&!card.querySelector(".pl-renew")){var d=cpDaysUntil(rn);var s=document.createElement("span");s.className="pl-renew";s.innerHTML=IC.cal.replace('<svg','<svg style="width:14px;height:14px"')+(d>0?" Renews in "+d+" day"+(d===1?"":"s"):" Renewal due, message your advisor");card.appendChild(s);}
+  }else{
+    var e=box.querySelector(".plan-empty");
+    if(e)e.innerHTML='<strong>No plan on file yet.</strong><br/>Once your advisor enrolls you, your plan details will appear here.<div class="db-btns"><a class="db-btn primary" href="/quote">'+IC.shield+' Get a free quote</a><button class="db-btn" type="button" data-goto="support">'+IC.chat+' Ask my advisor</button></div>';
+  }
+  var oe=cpOE();var done=cpReviewRequested(acct);
+  var help=document.createElement("div");
+  help.innerHTML='<div class="sec-title"><h3>Common requests</h3></div><div class="pl-help">'
+    +[0,1,2,3,4,5].map(function(i){var q=QUICK_HELP[i];var sub=["Spouse, child or new baby","Address, income or job change","Premium, payment or billing","Check a doctor or prescription","Get a new or digital ID card","Switch plans or end coverage"][i];
+      return '<button class="pl-help-item" type="button" data-help="'+i+'">'+IC[q.ic]+'<div><strong>'+q.t+'</strong><span>'+sub+'</span></div></button>';}).join("")+'</div>'
+    +(cpHasPlan(acct)?'<div class="db-btns" style="margin-top:14px">'+(done?'<span class="oe-done">'+IC.check.replace('<svg','<svg style="width:15px;height:15px"')+' Plan review requested</span>':'<button class="db-btn primary" type="button" id="pl-review">Request a free plan review'+(oe?" for "+oe.year:"")+'</button>')+'<a class="db-btn" href="/book" target="_blank" rel="noopener">'+IC.cal+' Book a call</a></div>':'');
+  box.appendChild(help);
+  var pr=$("pl-review");if(pr)pr.addEventListener("click",function(){cpRequestReview(pr);});
+};
+
+/* ---- support page extras ---- */
+(function(){
+  var form=$("msg-form");if(!form)return;
+  var card=form.closest(".card");
+  var h=card&&card.querySelector("h3");if(h)h.textContent="Message your advisor";
+  var p=card&&card.querySelector("p.muted");if(p)p.textContent="Replies usually come within 1 business day. For anything urgent, call or text during office hours.";
+  if(p&&!$("sup-contact")){
+    var c=document.createElement("div");c.className="sup-contact";c.id="sup-contact";
+    c.innerHTML='<a class="db-btn" href="tel:'+CP_PHONE+'">'+IC.phone+' Call</a><a class="db-btn" href="sms:'+CP_PHONE+'">'+IC.sms+' Text</a><a class="db-btn" href="mailto:'+CP_EMAIL+'">'+IC.mail+' Email</a><a class="db-btn" href="/book" target="_blank" rel="noopener">'+IC.cal+' Book a call</a>';
+    p.parentNode.insertBefore(c,p.nextSibling);
+  }
+  var ta=$("msg-text");
+  if(ta&&!$("sup-topics")){
+    var t=document.createElement("div");t.className="sup-topics";t.id="sup-topics";
+    t.innerHTML=QUICK_HELP.map(function(q,i){return '<button class="sup-topic" type="button" data-topic="'+i+'">'+q.t+'</button>';}).join("");
+    var fld=ta.closest(".field");fld.parentNode.insertBefore(t,fld);
+    t.addEventListener("click",function(e){var b=e.target.closest("[data-topic]");if(!b)return;var q=QUICK_HELP[+b.getAttribute("data-topic")];ta.value=q.m;ta.focus();try{ta.setSelectionRange(ta.value.length,ta.value.length);}catch(x){}});
+    var touch=false;try{touch=window.matchMedia("(pointer:coarse)").matches;}catch(x){}
+    if(!touch){var hint=document.createElement("p");hint.className="msg-hint";hint.textContent="Press Enter to send, Shift + Enter for a new line.";fld.appendChild(hint);}
+    ta.addEventListener("keydown",function(e){if(!touch&&e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();if(ta.value.trim())form.requestSubmit?form.requestSubmit():form.dispatchEvent(new Event("submit",{cancelable:true}));}});
+    var sent=document.createElement("div");sent.className="sup-sent";sent.id="sup-sent";sent.innerHTML=IC.check.replace('<svg','<svg style="width:15px;height:15px"')+" Sent. Your advisor will reply within 1 business day.";
+    form.appendChild(sent);
+    form.addEventListener("submit",function(){setTimeout(function(){sent.classList.add("on");setTimeout(function(){sent.classList.remove("on");},5000);},0);});
+  }
+})();
+
+/* ---- referrals page extras ---- */
+var _origRenderMyReferrals=renderMyReferrals;
+renderMyReferrals=function(){
+  _origRenderMyReferrals();
+  var box=$("my-refs");var acct=currentAccount();if(!box||!acct)return;
+  var card=box.closest(".card");var t=card&&card.querySelector(".sec-title");
+  if(t&&!$("rf-head")){t.outerHTML='<div class="rf-head" id="rf-head"><h3 style="margin:0;font-size:16px;color:var(--blue-900)">Your referrals</h3><button class="db-btn primary" type="button" data-goto="send">'+IC.send+' New referral</button></div><div class="rf-steps"><b>In progress</b><i>&rarr;</i><b>Being reviewed</b><i>&rarr;</i><b>Sold</b><i>&rarr;</i><b>Paid</b></div>';}
+  var mine=getReferrals().filter(function(r){return r.fromAccountId===acct.id;});
+  if(!mine.length){box.innerHTML='<div class="rf-empty"><strong>No referrals yet</strong><p>Refer a friend, family member or coworker who needs health insurance. A licensed advisor helps them for free.</p><button class="db-btn primary" type="button" data-goto="send">'+IC.send+' Send your first referral</button></div>';}
+};
+
+/* ---- referral form helpers: phone format, ZIP -> state, DOB slashes ---- */
+(function(){
+  var ZR=[[10,27,'MA'],[28,29,'RI'],[30,38,'NH'],[39,49,'ME'],[50,59,'VT'],[60,69,'CT'],[70,89,'NJ'],[100,149,'NY'],[150,196,'PA'],[197,199,'DE'],[200,205,'DC'],[206,219,'MD'],[220,246,'VA'],[247,268,'WV'],[270,289,'NC'],[290,299,'SC'],[300,319,'GA'],[320,349,'FL'],[350,369,'AL'],[370,385,'TN'],[386,397,'MS'],[398,399,'GA'],[400,427,'KY'],[430,459,'OH'],[460,479,'IN'],[480,499,'MI'],[500,528,'IA'],[530,549,'WI'],[550,567,'MN'],[570,577,'SD'],[580,588,'ND'],[590,599,'MT'],[600,629,'IL'],[630,658,'MO'],[660,679,'KS'],[680,693,'NE'],[700,714,'LA'],[716,729,'AR'],[730,749,'OK'],[750,799,'TX'],[800,816,'CO'],[820,831,'WY'],[832,838,'ID'],[840,847,'UT'],[850,865,'AZ'],[870,884,'NM'],[885,885,'TX'],[889,898,'NV'],[900,961,'CA'],[967,968,'HI'],[970,979,'OR'],[980,994,'WA'],[995,999,'AK']];
+  function fmtPhone(el){var d=el.value.replace(/\D/g,"");if(d.length===11&&d[0]==="1")d=d.slice(1);if(d.length===10)el.value="("+d.slice(0,3)+") "+d.slice(3,6)+"-"+d.slice(6);}
+  ["rf-phone","prof-phone","gf-phone"].forEach(function(id){var el=$(id);if(el){el.addEventListener("blur",function(){fmtPhone(el);});el.addEventListener("input",function(){if(el.value.replace(/\D/g,"").length>=10)fmtPhone(el);});}});
+  var z=$("rf-zip"),st=$("rf-state");
+  if(z)z.addEventListener("input",function(){z.value=z.value.replace(/\D/g,"").slice(0,5);if(z.value.length===5&&st&&!st.value){var p=parseInt(z.value.slice(0,3),10);for(var i=0;i<ZR.length;i++){if(p>=ZR[i][0]&&p<=ZR[i][1]){st.value=ZR[i][2];break;}}}});
+  var dob=$("rf-dob");
+  if(dob)dob.addEventListener("input",function(e){if(e.inputType&&e.inputType.indexOf("delete")===0)return;var d=dob.value.replace(/\D/g,"").slice(0,8);dob.value=d.length>4?d.slice(0,2)+"/"+d.slice(2,4)+"/"+d.slice(4):d.length>2?d.slice(0,2)+"/"+d.slice(2):d;});
+  var lt=$("rf-leadtype");
+  if(lt){var labels={"Insurance":"Health insurance","Medical":"Medical / doctor visits","Dental & Vision":"Dental & vision","Medicare":"Medicare","Life":"Life insurance","Other":"Other"};
+    [].forEach.call(lt.options,function(o){var v=o.value||o.text;o.value=v;if(labels[v])o.text=labels[v];});}
+})();
+
+/* ---- mobile tab bar + top bar brand / help link ---- */
+(function(){
+  var main=document.querySelector(".cp-main");if(!main||$("cp-tabbar"))return;
+  var top=document.querySelector(".cp-topbar");
+  if(top){
+    var sp=top.querySelector('div[style*="flex:1"]');
+    var brand=document.createElement("div");brand.className="cp-topbrand";brand.innerHTML='<span class="cp-logo">VS</span>Member Portal';
+    if(sp)top.insertBefore(brand,sp);
+    var help=document.createElement("button");help.type="button";help.className="cp-topsup";help.setAttribute("data-goto","support");help.innerHTML=IC.chat+"<span>Message advisor</span>";
+    var bw=top.querySelector(".cp-bell-wrap");if(bw)top.insertBefore(help,bw);
+  }
+  var tb=document.createElement("nav");tb.className="cp-tabbar";tb.id="cp-tabbar";tb.setAttribute("aria-label","Portal sections");
+  var tabs=[["dashboard","Home","home"],["plan","My Plan","shield"],["send","Refer","send"],["support","Support","chat"],["settings","Account","user"]];
+  tb.innerHTML=tabs.map(function(t){return '<button class="cp-tab" type="button" data-tab="'+t[0]+'">'+IC[t[2]]+'<span>'+t[1]+'</span>'+(t[0]==="support"?'<span class="cp-navbadge" id="tab-sup-badge" hidden>0</span>':'')+'</button>';}).join("");
+  main.appendChild(tb);
+  tb.addEventListener("click",function(e){var b=e.target.closest("[data-tab]");if(b)cpNav(b.getAttribute("data-tab"));});
+})();
+
+/* ---- wire into navigation / dashboard refresh ---- */
+var _origCpNav=cpNav;
+cpNav=function(sec){
+  _origCpNav(sec);
+  cpSetHero(sec);
+  document.querySelectorAll(".cp-tab").forEach(function(t){var s=t.getAttribute("data-tab");t.classList.toggle("active",s===sec||(sec==="referrals"&&s==="send"));});
+  if(sec==="dashboard")cpRenderDashboard();
+  var sb=$("nav-sup-badge"),tbb=$("tab-sup-badge");if(sb&&tbb){tbb.textContent=sb.textContent;tbb.hidden=sb.hidden;}
+};
+var _origShowDashboard=showDashboard;
+showDashboard=function(){
+  _origShowDashboard();
+  if($("dash-view").hidden)return;
+  var cur=document.querySelector(".cp-sec.active");var sec=cur?cur.id.replace("sec-",""):"dashboard";
+  cpSetHero(sec);
+  cpRenderDashboard();
+  document.querySelectorAll(".cp-tab").forEach(function(t){t.classList.toggle("active",t.getAttribute("data-tab")===sec);});
+  var sb=$("nav-sup-badge"),tbb=$("tab-sup-badge");if(sb&&tbb){tbb.textContent=sb.textContent;tbb.hidden=sb.hidden;}
+};
+var _origRenderMessages=renderMessages;
+renderMessages=function(){_origRenderMessages();var d=document.querySelector("#sec-dashboard.active");if(d)cpRenderDashboard();};
+setInterval(function(){if(document.querySelector("#sec-dashboard.active")&&!$("dash-view").hidden)cpRenderDashboard();},60000);
 
 $("yr").textContent=new Date().getFullYear();
 setSyncPill("","Connecting");
