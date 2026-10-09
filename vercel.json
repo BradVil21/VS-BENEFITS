@@ -135,11 +135,6 @@
       "permanent": true
     },
     {
-      "source": "/1099-truck-driver-health-insurance.html",
-      "destination": "/best-health-insurance-owner-operators",
-      "permanent": true
-    },
-    {
       "source": "/cdl-driver-health-insurance.html",
       "destination": "/cdl-driver-health-insurance",
       "permanent": true
@@ -162,11 +157,6 @@
     {
       "source": "/blog/how-to-offer-employees-health-insurance.html",
       "destination": "/blog/how-to-offer-employees-health-insurance",
-      "permanent": true
-    },
-    {
-      "source": "/blog/do-truck-drivers-get-health-insurance.html",
-      "destination": "/truck-driver-health-insurance",
       "permanent": true
     },
     {
@@ -980,11 +970,6 @@
       "permanent": true
     },
     {
-      "source": "/can-truckers-deduct-health-insurance.html",
-      "destination": "/blog/can-owner-operators-deduct-health-insurance",
-      "permanent": true
-    },
-    {
       "source": "/careers.html",
       "destination": "/careers",
       "permanent": true
@@ -1092,11 +1077,6 @@
     {
       "source": "/health-insurance-for-salons-and-spas.html",
       "destination": "/health-insurance-for-salons-and-spas",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-for-self-employed-truck-drivers.html",
-      "destination": "/best-health-insurance-owner-operators",
       "permanent": true
     },
     {
@@ -1222,11 +1202,6 @@
     {
       "source": "/blog/florida-small-business-health-insurance-cost.html",
       "destination": "/blog/florida-small-business-health-insurance-cost",
-      "permanent": true
-    },
-    {
-      "source": "/blog/health-insurance-dot-physical.html",
-      "destination": "/does-health-insurance-cover-dot-physical",
       "permanent": true
     },
     {
@@ -1440,16 +1415,6 @@
       "permanent": true
     },
     {
-      "source": "/blog/truck-driver-family-health-insurance-guide.html",
-      "destination": "/truck-driver-health-insurance",
-      "permanent": true
-    },
-    {
-      "source": "/blog/affordable-health-insurance-truck-drivers.html",
-      "destination": "/truck-driver-health-insurance",
-      "permanent": true
-    },
-    {
       "source": "/blog/company-driver-to-owner-operator-health-insurance.html",
       "destination": "/blog/company-driver-to-owner-operator-health-insurance",
       "permanent": true
@@ -1485,43 +1450,8 @@
       "permanent": true
     },
     {
-      "source": "/can-truckers-deduct-health-insurance",
-      "destination": "/blog/can-owner-operators-deduct-health-insurance",
-      "permanent": true
-    },
-    {
-      "source": "/blog/health-insurance-dot-physical",
-      "destination": "/does-health-insurance-cover-dot-physical",
-      "permanent": true
-    },
-    {
       "source": "/blog/miami-small-business-health-insurance",
       "destination": "/miami-small-business-health-insurance",
-      "permanent": true
-    },
-    {
-      "source": "/blog/do-truck-drivers-get-health-insurance",
-      "destination": "/truck-driver-health-insurance",
-      "permanent": true
-    },
-    {
-      "source": "/blog/affordable-health-insurance-truck-drivers",
-      "destination": "/truck-driver-health-insurance",
-      "permanent": true
-    },
-    {
-      "source": "/blog/truck-driver-family-health-insurance-guide",
-      "destination": "/truck-driver-health-insurance",
-      "permanent": true
-    },
-    {
-      "source": "/health-insurance-for-self-employed-truck-drivers",
-      "destination": "/best-health-insurance-owner-operators",
-      "permanent": true
-    },
-    {
-      "source": "/1099-truck-driver-health-insurance",
-      "destination": "/best-health-insurance-owner-operators",
       "permanent": true
     },
     {
@@ -1553,10 +1483,83 @@
       "source": "/examen-medico-dot.html",
       "destination": "/examen-medico-dot",
       "permanent": true
+    },
+    {
+      "source": "/blog/affordable-health-insurance-truck-drivers",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/affordable-health-insurance-truck-drivers.html",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/do-truck-drivers-get-health-insurance",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/do-truck-drivers-get-health-insurance.html",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/truck-driver-family-health-insurance-guide",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/truck-driver-family-health-insurance-guide.html",
+      "destination": "/truck-driver-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-self-employed-truck-drivers",
+      "destination": "/best-health-insurance-owner-operators",
+      "permanent": true
+    },
+    {
+      "source": "/health-insurance-for-self-employed-truck-drivers.html",
+      "destination": "/best-health-insurance-owner-operators",
+      "permanent": true
+    },
+    {
+      "source": "/1099-truck-driver-health-insurance",
+      "destination": "/best-health-insurance-owner-operators",
+      "permanent": true
+    },
+    {
+      "source": "/1099-truck-driver-health-insurance.html",
+      "destination": "/best-health-insurance-owner-operators",
+      "permanent": true
+    },
+    {
+      "source": "/can-truckers-deduct-health-insurance",
+      "destination": "/blog/can-owner-operators-deduct-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/can-truckers-deduct-health-insurance.html",
+      "destination": "/blog/can-owner-operators-deduct-health-insurance",
+      "permanent": true
+    },
+    {
+      "source": "/blog/health-insurance-dot-physical",
+      "destination": "/does-health-insurance-cover-dot-physical",
+      "permanent": true
+    },
+    {
+      "source": "/blog/health-insurance-dot-physical.html",
+      "destination": "/does-health-insurance-cover-dot-physical",
+      "permanent": true
     }
   ],
   "rewrites": [
-    { "source": "/api/google-rating", "destination": "/api/voice-lookup?op=google-rating" },
+    {
+      "source": "/api/google-rating",
+      "destination": "/api/voice-lookup?op=google-rating"
+    },
     {
       "source": "/",
       "destination": "/index.html"
