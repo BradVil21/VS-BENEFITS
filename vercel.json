@@ -1578,6 +1578,11 @@
       "source": "/blog/health-insurance-for-auto-repair-shops.html",
       "destination": "/health-insurance-for-auto-repair-shops",
       "permanent": true
+    },
+    {
+      "source": "/meet-the-team.html",
+      "destination": "/meet-the-team",
+      "permanent": true
     }
   ],
   "rewrites": [
