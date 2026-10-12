@@ -2,6 +2,326 @@
   "cleanUrls": true,
   "redirects": [
     {
+      "source": "/truck-driver-health-insurance-alabama",
+      "destination": "/truck-driver-health-insurance?state=AL",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-alabama.html",
+      "destination": "/truck-driver-health-insurance?state=AL",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-arizona",
+      "destination": "/truck-driver-health-insurance?state=AZ",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-arizona.html",
+      "destination": "/truck-driver-health-insurance?state=AZ",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-arkansas",
+      "destination": "/truck-driver-health-insurance?state=AR",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-arkansas.html",
+      "destination": "/truck-driver-health-insurance?state=AR",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-colorado",
+      "destination": "/truck-driver-health-insurance?state=CO",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-colorado.html",
+      "destination": "/truck-driver-health-insurance?state=CO",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-georgia",
+      "destination": "/truck-driver-health-insurance?state=GA",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-georgia.html",
+      "destination": "/truck-driver-health-insurance?state=GA",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-illinois",
+      "destination": "/truck-driver-health-insurance?state=IL",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-illinois.html",
+      "destination": "/truck-driver-health-insurance?state=IL",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-indiana",
+      "destination": "/truck-driver-health-insurance?state=IN",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-indiana.html",
+      "destination": "/truck-driver-health-insurance?state=IN",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-iowa",
+      "destination": "/truck-driver-health-insurance?state=IA",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-iowa.html",
+      "destination": "/truck-driver-health-insurance?state=IA",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-kansas",
+      "destination": "/truck-driver-health-insurance?state=KS",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-kansas.html",
+      "destination": "/truck-driver-health-insurance?state=KS",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-kentucky",
+      "destination": "/truck-driver-health-insurance?state=KY",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-kentucky.html",
+      "destination": "/truck-driver-health-insurance?state=KY",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-louisiana",
+      "destination": "/truck-driver-health-insurance?state=LA",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-louisiana.html",
+      "destination": "/truck-driver-health-insurance?state=LA",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-maryland",
+      "destination": "/truck-driver-health-insurance?state=MD",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-maryland.html",
+      "destination": "/truck-driver-health-insurance?state=MD",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-michigan",
+      "destination": "/truck-driver-health-insurance?state=MI",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-michigan.html",
+      "destination": "/truck-driver-health-insurance?state=MI",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-minnesota",
+      "destination": "/truck-driver-health-insurance?state=MN",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-minnesota.html",
+      "destination": "/truck-driver-health-insurance?state=MN",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-mississippi",
+      "destination": "/truck-driver-health-insurance?state=MS",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-mississippi.html",
+      "destination": "/truck-driver-health-insurance?state=MS",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-missouri",
+      "destination": "/truck-driver-health-insurance?state=MO",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-missouri.html",
+      "destination": "/truck-driver-health-insurance?state=MO",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-montana",
+      "destination": "/truck-driver-health-insurance?state=MT",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-montana.html",
+      "destination": "/truck-driver-health-insurance?state=MT",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-nebraska",
+      "destination": "/truck-driver-health-insurance?state=NE",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-nebraska.html",
+      "destination": "/truck-driver-health-insurance?state=NE",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-nevada",
+      "destination": "/truck-driver-health-insurance?state=NV",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-nevada.html",
+      "destination": "/truck-driver-health-insurance?state=NV",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-north-carolina",
+      "destination": "/truck-driver-health-insurance-raleigh-nc",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-north-carolina.html",
+      "destination": "/truck-driver-health-insurance-raleigh-nc",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-north-dakota",
+      "destination": "/truck-driver-health-insurance?state=ND",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-north-dakota.html",
+      "destination": "/truck-driver-health-insurance?state=ND",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-ohio",
+      "destination": "/truck-driver-health-insurance?state=OH",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-ohio.html",
+      "destination": "/truck-driver-health-insurance?state=OH",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-oklahoma",
+      "destination": "/truck-driver-health-insurance?state=OK",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-oklahoma.html",
+      "destination": "/truck-driver-health-insurance?state=OK",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-south-carolina",
+      "destination": "/truck-driver-health-insurance?state=SC",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-south-carolina.html",
+      "destination": "/truck-driver-health-insurance?state=SC",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-south-dakota",
+      "destination": "/truck-driver-health-insurance?state=SD",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-south-dakota.html",
+      "destination": "/truck-driver-health-insurance?state=SD",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-tennessee",
+      "destination": "/truck-driver-health-insurance?state=TN",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-tennessee.html",
+      "destination": "/truck-driver-health-insurance?state=TN",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-texas",
+      "destination": "/truck-driver-health-insurance?state=TX",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-texas.html",
+      "destination": "/truck-driver-health-insurance?state=TX",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-utah",
+      "destination": "/truck-driver-health-insurance?state=UT",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-utah.html",
+      "destination": "/truck-driver-health-insurance?state=UT",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-virginia",
+      "destination": "/truck-driver-health-insurance?state=VA",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-virginia.html",
+      "destination": "/truck-driver-health-insurance?state=VA",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-west-virginia",
+      "destination": "/truck-driver-health-insurance?state=WV",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-west-virginia.html",
+      "destination": "/truck-driver-health-insurance?state=WV",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-wisconsin",
+      "destination": "/truck-driver-health-insurance?state=WI",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-wisconsin.html",
+      "destination": "/truck-driver-health-insurance?state=WI",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-wyoming",
+      "destination": "/truck-driver-health-insurance?state=WY",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-wyoming.html",
+      "destination": "/truck-driver-health-insurance?state=WY",
+      "permanent": true
+    },
+    {
       "source": "/quote",
       "has": [
         {
