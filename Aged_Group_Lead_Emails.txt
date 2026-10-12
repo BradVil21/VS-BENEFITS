@@ -1,0 +1,59 @@
+AGED GROUP LEAD EMAIL SEQUENCE - VS HEALTH BENEFITS
+Trigger tag: aged group lead
+Adapted from the Aged Group Lead Playbook (Days 1, 3, 12, 30)
+
+----------------------------------------
+DAY 1
+Subject: the quote you never got
+
+Hi {{contact.first_name}},
+
+A while back you asked for group health numbers for {{contact.company_name}}, and I don't think anyone ever got you real ones.
+
+I'd like to run your group against the full market and show you what's actually available, at no cost and with no obligation to use us.
+
+What month does {{contact.company_name}} renew?
+
+Bradley Vilsaint | VS Health Benefits | (954) 825-1009
+
+----------------------------------------
+DAY 3
+Subject: two things
+
+Hi {{contact.first_name}},
+
+Bumping this up.
+
+To shop {{contact.company_name}} against the whole market I need exactly two things: your zip and a list of employee ages, no names required.
+
+Send those over and you'll have real numbers in 48 hours.
+
+Bradley Vilsaint | VS Health Benefits | (954) 825-1009
+
+----------------------------------------
+DAY 12
+Subject: closing your file
+
+Hi {{contact.first_name}},
+
+Closing your file out today, so this is the last one from me.
+
+If you're already covered, I'd still like to shop your renewal when it comes up, because 75 days out is the only window where it actually matters.
+
+What month does {{contact.company_name}} renew?
+
+Bradley Vilsaint | VS Health Benefits | (954) 825-1009
+
+----------------------------------------
+DAY 30
+Subject: how'd the renewal come back?
+
+Hi {{contact.first_name}},
+
+Renewal letters are out, so I'm circling back to the groups I reached out to last month.
+
+If yours came back with an increase you didn't like, let me run it against the market before you sign anything.
+
+What was the number?
+
+Bradley Vilsaint | VS Health Benefits | (954) 825-1009

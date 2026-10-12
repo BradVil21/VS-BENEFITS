@@ -1,0 +1,28 @@
+=== PROMPT 1: paste into Automation > Workflows > "Build using AI" ===
+
+Create a workflow named "Dental/Vision: Quote Submitted".
+Trigger: Contact Tag added, tag = dental-vision-quote. Allow re-entry off.
+Actions in this order:
+1. Remove contact tag "dental-vision-partial".
+2. Create/Update Opportunity in pipeline "Marketing Pipeline", stage "New Lead", opportunity name "Dental/Vision - {{contact.name}}", do not allow duplicate opportunities, do not allow moving to a previous stage.
+3. Internal notification SMS to the account owner (Bradley): "New Dental/Vision quote: {{contact.name}}, {{contact.phone}}, ZIP {{contact.postal_code}}. Source: {{contact.source}}"
+4. Add task assigned to Bradley, due in 1 hour, title "Call {{contact.first_name}} about dental/vision quote".
+5. Send email to the contact. Subject: "Your dental & vision quote, {{contact.first_name}}". Body: "Hi {{contact.first_name}}, thanks for requesting a dental and vision quote. I'm comparing plans for your ZIP code now and I'll call you from (954) 825-1009 shortly to go over your options. If you'd rather pick a time, just reply to this email. Bradley Vilsaint, VS Health Benefits"
+6. If/Else: contact tags include "sms-opt-in". Yes branch: send SMS "Hi {{contact.first_name}}, it's Bradley at VS Health Benefits. Got your dental & vision quote request. I'll call you shortly from this number. Reply STOP to opt out." No branch: do nothing.
+7. Wait 1 day.
+8. If/Else: opportunity in "Marketing Pipeline" is still in stage "New Lead". Yes branch: send email, subject "Quick question about your dental & vision quote", body "Hi {{contact.first_name}}, I tried to reach you about your quote. When is a good time for a 5 minute call? You can reply here or call/text (954) 825-1009. Bradley". No branch: end.
+
+
+=== PROMPT 2: paste into "Build using AI" (second workflow) ===
+
+Create a workflow named "Dental/Vision: Unfinished Quote".
+Trigger: Contact Tag added, tag = dental-vision-partial. Allow re-entry off.
+Goal event: contact tag "dental-vision-quote" added (contact exits the workflow).
+Actions in this order:
+1. Wait 15 minutes.
+2. If/Else: contact tags include "dental-vision-quote". Yes branch: end workflow. No branch: continue.
+3. Create/Update Opportunity in pipeline "Marketing Pipeline", stage "New Lead", opportunity name "Dental/Vision - {{contact.name}}", do not allow duplicate opportunities, do not allow moving to a previous stage.
+4. Internal notification SMS to the account owner (Bradley): "Unfinished Dental/Vision quote: {{contact.phone}}, ZIP {{contact.postal_code}}. Call them now. Source: {{contact.source}}"
+5. Add task assigned to Bradley, due in 30 minutes, title "Call back unfinished dental/vision quote {{contact.phone}}".
+6. If/Else: contact email is not empty. Yes branch: send email, subject "Finish your dental & vision quote", body "Hi {{contact.first_name}}, it looks like your dental and vision quote didn't quite finish. It takes about a minute: https://www.vshealthbenefits.com/quote/dental-vision . Or call/text me at (954) 825-1009 and I'll do it with you. Bradley Vilsaint, VS Health Benefits". No branch: end.
+Do NOT send any SMS to the contact in this workflow (they have not given text consent).

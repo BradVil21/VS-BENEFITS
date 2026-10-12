@@ -170,11 +170,6 @@
       "permanent": true
     },
     {
-      "source": "/truck-driver-health-insurance-north-carolina",
-      "destination": "/truck-driver-health-insurance-raleigh-nc",
-      "permanent": true
-    },
-    {
       "source": "/dental-vision-insurance-alabama",
       "destination": "/dental-vision-insurance",
       "permanent": true
