@@ -145,6 +145,32 @@ body{padding-bottom:0}
 .vcov.vcov-col .vsa-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (min-width:960px) and (max-width:1239px){.nav-links>a[href="/blog"]{display:none!important}}
 </style>
+<style id="vs-read-css">
+/* Readability for trucker pages: comfortable line length, size and spacing */
+.container.prose{max-width:780px}
+.vs-answer{max-width:820px;margin-left:auto!important;margin-right:auto!important}
+.vs-answer p+p,.callout p+p,.answer-box p+p{margin-top:10px!important}
+@media(max-width:860px){.vs-answer{margin-left:16px!important;margin-right:16px!important}}
+.container.prose p,.prose p,article.article-body p{font-size:1.0625rem;line-height:1.75}
+.container.prose h2,.prose h2,article.article-body h2{margin-top:1.8em}
+.container.prose h3,.prose h3,article.article-body h3{margin-top:1.4em}
+.container.prose li,.prose li,article.article-body li{line-height:1.65;margin-bottom:.4em}
+@media(max-width:640px){
+.container.prose p,.prose p,article.article-body p{font-size:1.02rem;line-height:1.7}
+.container.prose table,.prose table,article.article-body table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+}
+.vs-toc{border:1px solid #e4e9f2;background:#f8fafc;border-radius:14px;margin:8px 0 28px;font-family:Inter,system-ui,-apple-system,sans-serif}
+.vs-toc summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:700;color:#0b2346;font-size:.95rem;display:flex;justify-content:space-between;align-items:center}
+.vs-toc summary::-webkit-details-marker{display:none}
+.vs-toc summary::after{content:"+";color:#0db5a6;font-size:1.25rem;line-height:1}
+.vs-toc details[open] summary::after{content:"\2212"}
+.vs-toc ol{margin:0;padding:0 16px 14px 34px;columns:2;column-gap:28px}
+.vs-toc li{margin:0 0 6px;font-size:.92rem;line-height:1.4;break-inside:avoid}
+.vs-toc li::before{display:none}
+.vs-toc a{color:#16447f;text-decoration:none;font-weight:600}
+.vs-toc a:hover{text-decoration:underline}
+@media(max-width:640px){.vs-toc ol{columns:1}}
+</style>
 </head>
 <body>
 <div id="vs-scroll-bar"></div>
@@ -236,7 +262,8 @@ body{padding-bottom:0}
     It is the wrong conclusion.</p>
     <p>What the plan covers is everything that decides whether you pass: the primary care visit where your blood
     pressure gets caught before it costs you a two-year card, the generic prescription that brings it down, the sleep
-    study, the CPAP supplies, the diabetes management. A driver at 152/94 who could have been at 132/84 on an
+    study, the CPAP supplies, the diabetes management.</p>
+<p>A driver at 152/94 who could have been at 132/84 on an
     inexpensive generic just traded a two-year card for a one-year card. The plan that covers the doctor's visit is
     what prevents that.
     <a href="/does-health-insurance-cover-dot-physical">More on what is and is not covered here</a>, and the
@@ -255,11 +282,15 @@ body{padding-bottom:0}
 <section class="section">
   <div class="container" style="max-width:820px">
 <h2 class="center">Blue Cross Blue Shield and Truck Drivers FAQ</h2><div style="height:18px"></div><div class="faq">
-<details class="faq-item"><summary>Does Blue Cross Blue Shield work for truck drivers in all 48 states?</summary><p>It depends entirely on which Blue plan you buy, which is the part most drivers miss. Blue Cross Blue Shield is not one company; it is an association of independent local plans, each licensed for its own state or region. A Blue PPO generally gives you access to the national BlueCard network, which is what makes care away from home work. A Blue HMO or a narrow-network EPO from the same local plan may cover essentially nothing outside your home service area except genuine emergencies. Same brand on the card, completely different outcome at a clinic in Laredo.</p></details>
+<details class="faq-item"><summary>Does Blue Cross Blue Shield work for truck drivers in all 48 states?</summary><p>It depends entirely on which Blue plan you buy, which is the part most drivers miss. Blue Cross Blue Shield is not one company; it is an association of independent local plans, each licensed for its own state or region.</p>
+<p>A Blue PPO generally gives you access to the national BlueCard network, which is what makes care away from home work. A Blue HMO or a narrow-network EPO from the same local plan may cover essentially nothing outside your home service area except genuine emergencies. Same brand on the card, completely different outcome at a clinic in Laredo.</p></details>
 <details class="faq-item"><summary>What should I look for on the card before I buy?</summary><p>Two things. First, the plan type: PPO travels, HMO generally does not. Second, whether the plan participates in BlueCard, the arrangement that lets you use another state's Blue network at in-network rates. If a driver takes one thing from this page, it is to ask the question in those words - "is this plan PPO, and does it use BlueCard?" - before enrolling, not after.</p></details>
-<details class="faq-item"><summary>Does Blue Cross Blue Shield cover a DOT physical?</summary><p>Usually not as a covered benefit, and this is true of essentially every carrier rather than anything specific to Blue plans. A DOT physical is an employment-related certification exam rather than treatment, so it typically falls outside preventive care and is paid out of pocket. What your plan does cover is everything that determines whether you pass it: the primary care visit, the blood pressure medication, the sleep study, the CPAP supplies and diabetes management. That is where the coverage actually earns its keep for a driver.</p></details>
-<details class="faq-item"><summary>Is a Blue PPO the best option for an owner-operator?</summary><p>Often it is a strong one, because network reach is the feature that matters most when you sleep in a different state than the one on your license. But it is not automatically the cheapest, and after the enhanced subsidies expired at the end of 2025 the arithmetic depends heavily on whether you qualify for a premium tax credit. The right answer is the plan that combines a usable national network with the lowest net cost for your household, and that requires looking at what is actually offered in your rating area.</p></details>
-<details class="faq-item"><summary>Can I buy a Blue plan through VS Health Benefits?</summary><p>We are an independent licensed brokerage and we are appointed with a range of carriers, which varies by state. We do not work for any one carrier and we are not affiliated with the Blue Cross Blue Shield Association. What we do is pull what is genuinely available at your ZIP code, compare networks against the lanes you run, and tell you where the best combination sits. Carriers pay our commission, so the comparison costs you nothing.</p></details>
+<details class="faq-item"><summary>Does Blue Cross Blue Shield cover a DOT physical?</summary><p>Usually not as a covered benefit, and this is true of essentially every carrier rather than anything specific to Blue plans. A DOT physical is an employment-related certification exam rather than treatment, so it typically falls outside preventive care and is paid out of pocket.</p>
+<p>What your plan does cover is everything that determines whether you pass it: the primary care visit, the blood pressure medication, the sleep study, the CPAP supplies and diabetes management. That is where the coverage actually earns its keep for a driver.</p></details>
+<details class="faq-item"><summary>Is a Blue PPO the best option for an owner-operator?</summary><p>Often it is a strong one, because network reach is the feature that matters most when you sleep in a different state than the one on your license. But it is not automatically the cheapest, and after the enhanced subsidies expired at the end of 2025 the arithmetic depends heavily on whether you qualify for a premium tax credit.</p>
+<p>The right answer is the plan that combines a usable national network with the lowest net cost for your household, and that requires looking at what is actually offered in your rating area.</p></details>
+<details class="faq-item"><summary>Can I buy a Blue plan through VS Health Benefits?</summary><p>We are an independent licensed brokerage and we are appointed with a range of carriers, which varies by state. We do not work for any one carrier and we are not affiliated with the Blue Cross Blue Shield Association.</p>
+<p>What we do is pull what is genuinely available at your ZIP code, compare networks against the lanes you run, and tell you where the best combination sits. Carriers pay our commission, so the comparison costs you nothing.</p></details>
 <details class="faq-item"><summary>What if I run mostly regional or home daily?</summary><p>Then the calculus changes and it is worth saying so. If you sleep at home most nights and your lanes stay inside one or two states, a regional HMO can cut your premium meaningfully without hurting your access to care. National reach is a feature you pay for, and paying for it when you do not use it is just a more expensive plan. Buy the network you actually run.</p></details>
 </div>
   </div>
@@ -400,5 +431,22 @@ document.addEventListener("DOMContentLoaded",function(){var toggle=document.quer
 <script src="/vs-reviews.js" defer></script>
 <script src="/vs-guide.js" defer></script>
 <script src="/vs-oe-remind.js" defer></script>
+<script id="vs-read-js">(function(){try{
+var SKIP=".vs-answer,.carriers,.qf-card,.cta-strip,.modal,.modal-backdrop,#tdh-hub,.vs-related-guides,.vs-guide-sec,.sp,.vs-oer,#reviews-anchor,footer,header,.faq-item,.hero,.trust-bar";
+var BAD=/^(why .*choose|get .* in (four|4|3|three) steps|what .* say|ready to|we compare|sign in|find the right health insurance|related guides|more for)/i;
+var hs=[].slice.call(document.querySelectorAll("main h2, body > section h2, body > div h2, article h2")).filter(function(h,i,a){return a.indexOf(h)===i&&!h.closest(SKIP)&&!BAD.test(h.textContent.trim())&&h.textContent.trim().length>2;});
+if(hs.length<6)return;
+var es=(document.documentElement.lang||"").slice(0,2)==="es";
+function slug(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60);}
+var used={},items="";
+hs.forEach(function(h){if(!h.id){var b=slug(h.textContent)||"section",id=b,n=2;while(used[id]||document.getElementById(id))id=b+"-"+(n++);h.id=id;}used[h.id]=1;h.style.scrollMarginTop="90px";
+items+='<li><a href="#'+h.id+'">'+h.textContent.replace(/[<>&]/g,"").trim()+'</a></li>';});
+var nav=document.createElement("nav");nav.className="vs-toc";nav.setAttribute("aria-label",es?"En esta p\u00e1gina":"On this page");
+var open=window.matchMedia&&window.matchMedia("(min-width:760px)").matches;
+nav.innerHTML='<details'+(open?' open':'')+'><summary>'+(es?"En esta p\u00e1gina":"On this page")+' <span style="font-weight:500;color:#5b6b7f;font-size:.85rem;margin-left:6px">'+hs.length+(es?" secciones":" sections")+'</span></summary><ol>'+items+'</ol></details>';
+var ans=document.querySelector(".vs-answer");
+if(ans){nav.style.maxWidth="820px";nav.style.margin="0 auto 28px";var w=document.createElement("div");w.style.padding="0 16px";w.appendChild(nav);ans.parentNode.insertBefore(w,ans.nextSibling);}
+else hs[0].parentNode.insertBefore(nav,hs[0]);
+}catch(e){}})();</script>
 </body>
 </html>

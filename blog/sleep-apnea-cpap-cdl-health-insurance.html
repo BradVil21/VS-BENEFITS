@@ -289,6 +289,32 @@ body{padding-bottom:0}
 .vcov.vcov-col .vsa-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (min-width:960px) and (max-width:1239px){.nav-links>a[href="/blog"]{display:none!important}}
 </style>
+<style id="vs-read-css">
+/* Readability for trucker pages: comfortable line length, size and spacing */
+.container.prose{max-width:780px}
+.vs-answer{max-width:820px;margin-left:auto!important;margin-right:auto!important}
+.vs-answer p+p,.callout p+p,.answer-box p+p{margin-top:10px!important}
+@media(max-width:860px){.vs-answer{margin-left:16px!important;margin-right:16px!important}}
+.container.prose p,.prose p,article.article-body p{font-size:1.0625rem;line-height:1.75}
+.container.prose h2,.prose h2,article.article-body h2{margin-top:1.8em}
+.container.prose h3,.prose h3,article.article-body h3{margin-top:1.4em}
+.container.prose li,.prose li,article.article-body li{line-height:1.65;margin-bottom:.4em}
+@media(max-width:640px){
+.container.prose p,.prose p,article.article-body p{font-size:1.02rem;line-height:1.7}
+.container.prose table,.prose table,article.article-body table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+}
+.vs-toc{border:1px solid #e4e9f2;background:#f8fafc;border-radius:14px;margin:8px 0 28px;font-family:Inter,system-ui,-apple-system,sans-serif}
+.vs-toc summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:700;color:#0b2346;font-size:.95rem;display:flex;justify-content:space-between;align-items:center}
+.vs-toc summary::-webkit-details-marker{display:none}
+.vs-toc summary::after{content:"+";color:#0db5a6;font-size:1.25rem;line-height:1}
+.vs-toc details[open] summary::after{content:"\2212"}
+.vs-toc ol{margin:0;padding:0 16px 14px 34px;columns:2;column-gap:28px}
+.vs-toc li{margin:0 0 6px;font-size:.92rem;line-height:1.4;break-inside:avoid}
+.vs-toc li::before{display:none}
+.vs-toc a{color:#16447f;text-decoration:none;font-weight:600}
+.vs-toc a:hover{text-decoration:underline}
+@media(max-width:640px){.vs-toc ol{columns:1}}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/truck-driver-open-enrollment-2027" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Drivers: Open Enrollment for 2027 runs Nov 1 &ndash; Jan 15. Enroll from the road by Dec 15 for Jan 1 coverage.</a></span><a href="/truckers/quote?from=trucker-oe-bar" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -373,7 +399,8 @@ body{padding-bottom:0}
       <p>Appendix A to Part 391 — the Medical Advisory Criteria, which is <em>in</em> the CFR but says explicitly that it is "strictly advisory" — lists sleep apnea among respiratory conditions and tells examiners to refer possible undiagnosed or inadequately treated respiratory dysfunction to a specialist. <strong>It contains no BMI trigger and no neck circumference trigger.</strong></p>
       <div class="warn-box">
         <h4>Where the BMI 40 and 17-inch neck numbers came from</h4>
-        <p>In August and October 2016, FMCSA's Medical Review Board and Motor Carrier Safety Advisory Committee recommended referral at a BMI of 40 or higher, or a BMI of 33 or higher combined with three of the following: age over 42; male or postmenopausal female; diabetes or hypertension; neck circumference over 17 inches for men or 15.5 inches for women; heart disease; loud snoring; witnessed apneas; small airway; untreated hypothyroidism; micrognathia or retrognathia. These were <strong>recommendations to the agency</strong>. They were never adopted as regulation and they are not in the handbook. Some examiners still use them as an informal screen because they are the only structured guidance that exists.</p>
+        <p>In August and October 2016, FMCSA's Medical Review Board and Motor Carrier Safety Advisory Committee recommended referral at a BMI of 40 or higher, or a BMI of 33 or higher combined with three of the following: age over 42; male or postmenopausal female; diabetes or hypertension; neck circumference over 17 inches for men or 15.5 inches for women; heart disease; loud snoring; witnessed apneas; small airway; untreated hypothyroidism; micrognathia or retrognathia.</p>
+<p>These were <strong>recommendations to the agency</strong>. They were never adopted as regulation and they are not in the handbook. Some examiners still use them as an informal screen because they are the only structured guidance that exists.</p>
       </div>
       <p>The practical consequence: two examiners can look at the same driver and reach different conclusions, and both are within their authority. If you have been referred before and disagreed with it, you are not imagining the inconsistency.</p>
 
@@ -391,7 +418,8 @@ body{padding-bottom:0}
         </tbody>
       </table>
       </div>
-      <p>The 90-day card is the one that costs drivers money. It is issued while you get a study done or gather compliance data, and it means you are back in the examiner's office in three months with documentation you may not have organized. Drivers who go in prepared — with the study, the download, and the treating physician's note — routinely get a full year where an unprepared driver gets 90 days.</p>
+      <p>The 90-day card is the one that costs drivers money. It is issued while you get a study done or gather compliance data, and it means you are back in the examiner's office in three months with documentation you may not have organized.</p>
+<p>Drivers who go in prepared — with the study, the download, and the treating physician's note — routinely get a full year where an unprepared driver gets 90 days.</p>
 
       <h2 id="cpap-compliance">The CPAP Compliance Standard Nobody Wrote Down</h2>
       <p>FMCSA has no compliance rule, so the industry borrowed one. The benchmark comes from Medicare's local coverage determination for positive airway pressure devices, LCD L33718, which requires use of the device for <strong>at least four hours per night on 70% of nights during a consecutive 30-day period</strong> within the first three months of use.</p>
@@ -452,14 +480,19 @@ body{padding-bottom:0}
 
       <h2 id="faq">Sleep Apnea and CDL: FAQs</h2>
       <div class="faq-list">
-<div class="faq-item"><h3>Is there an FMCSA sleep apnea regulation?</h3><p>No. FMCSA and FRA jointly withdrew their sleep apnea advance notice of proposed rulemaking on August 8, 2017 at 82 FR 37038. There is no rule requiring screening, testing or treatment for obstructive sleep apnea. Drivers are evaluated under the general respiratory standard at 49 CFR § 391.41(b)(5), which asks whether the driver has a respiratory dysfunction likely to interfere with safe operation of a commercial motor vehicle. As of August 2026 no new sleep apnea rulemaking is pending.</p></div>
+<div class="faq-item"><h3>Is there an FMCSA sleep apnea regulation?</h3><p>No. FMCSA and FRA jointly withdrew their sleep apnea advance notice of proposed rulemaking on August 8, 2017 at 82 FR 37038. There is no rule requiring screening, testing or treatment for obstructive sleep apnea.</p>
+<p>Drivers are evaluated under the general respiratory standard at 49 CFR § 391.41(b)(5), which asks whether the driver has a respiratory dysfunction likely to interfere with safe operation of a commercial motor vehicle. As of August 2026 no new sleep apnea rulemaking is pending.</p></div>
 <div class="faq-item"><h3>Can a medical examiner still send me for a sleep study?</h3><p>Yes. The absence of a regulation does not remove examiner discretion. FMCSA's 2024 Medical Examiner's Handbook is expressly advisory and does not bind examiners, and FMCSA has stated that federal regulations do not require examiners to screen for sleep apnea or refer drivers for testing. That leaves the decision to the individual examiner's clinical judgment under the general standard. Different examiners genuinely reach different conclusions on similar drivers.</p></div>
-<div class="faq-item"><h3>What BMI triggers a sleep apnea referral?</h3><p>No BMI figure is written into any regulation. In 2016, FMCSA's Medical Review Board and Motor Carrier Safety Advisory Committee recommended referral at a BMI of 40 or higher, or 33 or higher combined with three additional risk factors such as age over 42, diabetes or hypertension, or neck circumference over 17 inches for men and 15.5 inches for women. Those were recommendations to the agency. They were never adopted as regulation and do not appear in the current Medical Advisory Criteria at Appendix A to Part 391.</p></div>
+<div class="faq-item"><h3>What BMI triggers a sleep apnea referral?</h3><p>No BMI figure is written into any regulation. In 2016, FMCSA's Medical Review Board and Motor Carrier Safety Advisory Committee recommended referral at a BMI of 40 or higher, or 33 or higher combined with three additional risk factors such as age over 42, diabetes or hypertension, or neck circumference over 17 inches for men and 15.5 inches for women.</p>
+<p>Those were recommendations to the agency. They were never adopted as regulation and do not appear in the current Medical Advisory Criteria at Appendix A to Part 391.</p></div>
 <div class="faq-item"><h3>How long will I be certified if I have treated sleep apnea?</h3><p>Certification length for treated sleep apnea is not set by regulation. In practice examiners commonly issue a one-year certificate, or a 90-day certificate pending a sleep study or compliance download. The absolute maximum any medical certificate can run is 24 months under 49 CFR § 391.45(b), and examiners may issue shorter periods at their discretion for any condition requiring monitoring.</p></div>
-<div class="faq-item"><h3>What CPAP compliance is required?</h3><p>FMCSA has no compliance rule. The benchmark most examiners and carriers borrow comes from Medicare's local coverage determination for positive airway pressure devices, which requires use of at least four hours per night on 70% of nights during a consecutive 30-day period within the first three months of use. Many examiners request a similar download covering a rolling 30 to 90 days. Ask your examiner what they want before your exam rather than after.</p></div>
+<div class="faq-item"><h3>What CPAP compliance is required?</h3><p>FMCSA has no compliance rule. The benchmark most examiners and carriers borrow comes from Medicare's local coverage determination for positive airway pressure devices, which requires use of at least four hours per night on 70% of nights during a consecutive 30-day period within the first three months of use.</p>
+<p>Many examiners request a similar download covering a rolling 30 to 90 days. Ask your examiner what they want before your exam rather than after.</p></div>
 <div class="faq-item"><h3>Does health insurance cover a sleep study?</h3><p>Yes, when medically necessary. ACA-compliant plans cover sleep studies as outpatient diagnostic services, typically with prior authorization. A home sleep apnea test is substantially cheaper than an in-lab polysomnography and many plans will require you to try the home test first. Your cost is your deductible and coinsurance, and it counts toward your annual out-of-pocket maximum.</p></div>
-<div class="faq-item"><h3>Does health insurance cover a CPAP machine?</h3><p>Generally yes, as durable medical equipment. DME is not itself one of the ten essential health benefit categories, but it is covered through the rehabilitative and habilitative services and devices category and the state's benchmark plan. Florida's benchmark plan for plan years 2025 through 2027 covers durable medical equipment with no quantitative limit. Expect a deductible and coinsurance, and note that many plans use a rent-to-own arrangement for CPAP rather than buying it outright. Some plans apply a separate DME coinsurance tier — worth checking before you pick a plan.</p></div>
-<div class="faq-item"><h3>What does a CPAP cost without insurance?</h3><p>A CPAP or APAP machine commonly runs $400 to $1,600, with an average around $1,000. BiPAP machines run higher, roughly $900 to $3,000. Refurbished machines are available from about $200 to $900. Supplies are ongoing: masks $50 to $200, cushions or nasal pillows $20 to $75 replaced roughly monthly, tubing $5 to $50 every three to six months, filters $5 to $25 every one to three months. A home sleep apnea test runs roughly $150 to $1,000; an in-lab study is billed far higher.</p></div>
+<div class="faq-item"><h3>Does health insurance cover a CPAP machine?</h3><p>Generally yes, as durable medical equipment. DME is not itself one of the ten essential health benefit categories, but it is covered through the rehabilitative and habilitative services and devices category and the state's benchmark plan. Florida's benchmark plan for plan years 2025 through 2027 covers durable medical equipment with no quantitative limit.</p>
+<p>Expect a deductible and coinsurance, and note that many plans use a rent-to-own arrangement for CPAP rather than buying it outright. Some plans apply a separate DME coinsurance tier — worth checking before you pick a plan.</p></div>
+<div class="faq-item"><h3>What does a CPAP cost without insurance?</h3><p>A CPAP or APAP machine commonly runs $400 to $1,600, with an average around $1,000. BiPAP machines run higher, roughly $900 to $3,000. Refurbished machines are available from about $200 to $900.</p>
+<p>Supplies are ongoing: masks $50 to $200, cushions or nasal pillows $20 to $75 replaced roughly monthly, tubing $5 to $50 every three to six months, filters $5 to $25 every one to three months. A home sleep apnea test runs roughly $150 to $1,000; an in-lab study is billed far higher.</p></div>
 </div>
 
 <div class="cta-block">
@@ -804,5 +837,22 @@ btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"
 </script>
 <script src="/vs-guide.js" defer></script>
 <script src="/vs-oe-remind.js" defer></script>
+<script id="vs-read-js">(function(){try{
+var SKIP=".vs-answer,.carriers,.qf-card,.cta-strip,.modal,.modal-backdrop,#tdh-hub,.vs-related-guides,.vs-guide-sec,.sp,.vs-oer,#reviews-anchor,footer,header,.faq-item,.hero,.trust-bar";
+var BAD=/^(why .*choose|get .* in (four|4|3|three) steps|what .* say|ready to|we compare|sign in|find the right health insurance|related guides|more for)/i;
+var hs=[].slice.call(document.querySelectorAll("main h2, body > section h2, body > div h2, article h2")).filter(function(h,i,a){return a.indexOf(h)===i&&!h.closest(SKIP)&&!BAD.test(h.textContent.trim())&&h.textContent.trim().length>2;});
+if(hs.length<6)return;
+var es=(document.documentElement.lang||"").slice(0,2)==="es";
+function slug(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60);}
+var used={},items="";
+hs.forEach(function(h){if(!h.id){var b=slug(h.textContent)||"section",id=b,n=2;while(used[id]||document.getElementById(id))id=b+"-"+(n++);h.id=id;}used[h.id]=1;h.style.scrollMarginTop="90px";
+items+='<li><a href="#'+h.id+'">'+h.textContent.replace(/[<>&]/g,"").trim()+'</a></li>';});
+var nav=document.createElement("nav");nav.className="vs-toc";nav.setAttribute("aria-label",es?"En esta p\u00e1gina":"On this page");
+var open=window.matchMedia&&window.matchMedia("(min-width:760px)").matches;
+nav.innerHTML='<details'+(open?' open':'')+'><summary>'+(es?"En esta p\u00e1gina":"On this page")+' <span style="font-weight:500;color:#5b6b7f;font-size:.85rem;margin-left:6px">'+hs.length+(es?" secciones":" sections")+'</span></summary><ol>'+items+'</ol></details>';
+var ans=document.querySelector(".vs-answer");
+if(ans){nav.style.maxWidth="820px";nav.style.margin="0 auto 28px";var w=document.createElement("div");w.style.padding="0 16px";w.appendChild(nav);ans.parentNode.insertBefore(w,ans.nextSibling);}
+else hs[0].parentNode.insertBefore(nav,hs[0]);
+}catch(e){}})();</script>
 </body>
 </html>

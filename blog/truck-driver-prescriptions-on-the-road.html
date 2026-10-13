@@ -289,6 +289,32 @@ body{padding-bottom:0}
 .vcov.vcov-col .vsa-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (min-width:960px) and (max-width:1239px){.nav-links>a[href="/blog"]{display:none!important}}
 </style>
+<style id="vs-read-css">
+/* Readability for trucker pages: comfortable line length, size and spacing */
+.container.prose{max-width:780px}
+.vs-answer{max-width:820px;margin-left:auto!important;margin-right:auto!important}
+.vs-answer p+p,.callout p+p,.answer-box p+p{margin-top:10px!important}
+@media(max-width:860px){.vs-answer{margin-left:16px!important;margin-right:16px!important}}
+.container.prose p,.prose p,article.article-body p{font-size:1.0625rem;line-height:1.75}
+.container.prose h2,.prose h2,article.article-body h2{margin-top:1.8em}
+.container.prose h3,.prose h3,article.article-body h3{margin-top:1.4em}
+.container.prose li,.prose li,article.article-body li{line-height:1.65;margin-bottom:.4em}
+@media(max-width:640px){
+.container.prose p,.prose p,article.article-body p{font-size:1.02rem;line-height:1.7}
+.container.prose table,.prose table,article.article-body table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+}
+.vs-toc{border:1px solid #e4e9f2;background:#f8fafc;border-radius:14px;margin:8px 0 28px;font-family:Inter,system-ui,-apple-system,sans-serif}
+.vs-toc summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:700;color:#0b2346;font-size:.95rem;display:flex;justify-content:space-between;align-items:center}
+.vs-toc summary::-webkit-details-marker{display:none}
+.vs-toc summary::after{content:"+";color:#0db5a6;font-size:1.25rem;line-height:1}
+.vs-toc details[open] summary::after{content:"\2212"}
+.vs-toc ol{margin:0;padding:0 16px 14px 34px;columns:2;column-gap:28px}
+.vs-toc li{margin:0 0 6px;font-size:.92rem;line-height:1.4;break-inside:avoid}
+.vs-toc li::before{display:none}
+.vs-toc a{color:#16447f;text-decoration:none;font-weight:600}
+.vs-toc a:hover{text-decoration:underline}
+@media(max-width:640px){.vs-toc ol{columns:1}}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/truck-driver-open-enrollment-2027" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Drivers: Open Enrollment for 2027 runs Nov 1 &ndash; Jan 15. Enroll from the road by Dec 15 for Jan 1 coverage.</a></span><a href="/truckers/quote?from=trucker-oe-bar" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -366,13 +392,16 @@ body{padding-bottom:0}
 
       <h2 id="transfers">Moving a Prescription to Where You Actually Are</h2>
       <p>Start with the good news, because it covers most medications drivers take &mdash; blood pressure, cholesterol, metformin, thyroid, most antidepressants.</p>
-      <p>For <strong>non-controlled</strong> drugs, transferring a prescription is routine. You call a pharmacy near you, give them your home pharmacy's name and phone number and the drug, and the two pharmacies handle it. There is no federal limit on the number of transfers; that is left to state boards of pharmacy, and most permit transfer as long as authorized refills remain. Once the refills are used up, no transfer helps &mdash; you need a new prescription.</p>
+      <p>For <strong>non-controlled</strong> drugs, transferring a prescription is routine. You call a pharmacy near you, give them your home pharmacy's name and phone number and the drug, and the two pharmacies handle it.</p>
+<p>There is no federal limit on the number of transfers; that is left to state boards of pharmacy, and most permit transfer as long as authorized refills remain. Once the refills are used up, no transfer helps &mdash; you need a new prescription.</p>
       <p>For <strong>controlled substances</strong>, this used to be a dead end for electronic prescriptions. It changed on <strong>August 28, 2023</strong>, when a DEA final rule (published July 27, 2023 at 88 FR 48379) took effect. Under <strong>21 CFR &sect; 1306.08(e)</strong>, the transfer of an electronic prescription for a Schedule II&ndash;V controlled substance between retail pharmacies for <em>initial dispensing</em> is permitted at the patient's request, <strong>on a one-time basis only</strong>.</p>
       <div class="highlight-box">
         <h4>What the one-time transfer actually gets you</h4>
-        <p>It is genuinely useful and genuinely limited. The transfer must be pharmacist-to-pharmacist, the prescription has to stay electronic the whole way (it cannot be printed or faxed), and it is one transfer regardless of schedule. If the prescription is Schedule III, IV or V and has refills on it, those refills move with it in that single transfer. If you have already filled it once, this rule does not apply &mdash; it is for <em>initial</em> dispensing.</p>
+        <p>It is genuinely useful and genuinely limited. The transfer must be pharmacist-to-pharmacist, the prescription has to stay electronic the whole way (it cannot be printed or faxed), and it is one transfer regardless of schedule.</p>
+<p>If the prescription is Schedule III, IV or V and has refills on it, those refills move with it in that single transfer. If you have already filled it once, this rule does not apply &mdash; it is for <em>initial</em> dispensing.</p>
       </div>
-      <p>One thing no rule fixes: a pharmacist has an independent federal duty under <strong>21 CFR &sect; 1306.04(a)</strong> to resolve red flags on a controlled-substance prescription, even a valid one. An out-of-state driver they have never seen, asking for a stimulant, is a pattern that gets scrutiny. That is not personal and arguing does not help. Being able to show your DOT medical card, your prescriber's number and a pharmacy record does.</p>
+      <p>One thing no rule fixes: a pharmacist has an independent federal duty under <strong>21 CFR &sect; 1306.04(a)</strong> to resolve red flags on a controlled-substance prescription, even a valid one.</p>
+<p>An out-of-state driver they have never seen, asking for a stimulant, is a pattern that gets scrutiny. That is not personal and arguing does not help. Being able to show your DOT medical card, your prescriber's number and a pharmacy record does.</p>
 
       <h2 id="schedule-ii">The Schedule II Wall</h2>
       <p>This is the one that ends trips, and it is worth reading the text.</p>
@@ -392,7 +421,8 @@ body{padding-bottom:0}
       <p>Everything above is damage control. The actual answer is to not be short in the first place.</p>
       <p>Most plans support a 90-day supply for maintenance medications, usually through mail order and often through retail as well, sometimes at different cost sharing to nudge you toward mail. Filling 90 days before a long stretch turns a recurring emergency into a scheduling task.</p>
       <p>Worth knowing if you are on Medicare rather than a marketplace plan: <strong>42 CFR &sect; 423.120(a)(10)</strong> requires a Part D sponsor to let enrollees get a 90-day supply of covered drugs <strong>at any network retail pharmacy</strong>, not only by mail &mdash; though the plan is allowed to charge more at retail. Commercial and marketplace plans are not bound by that rule; their retail-versus-mail structure is plan design, so ask.</p>
-      <p>The other tool is the <strong>vacation override</strong> &mdash; an early refill so you can leave with more on hand. Be clear-eyed about what it is: an administrative accommodation from your plan or pharmacy benefit manager, granted case by case. It is <em>not</em> a legal right. Limits vary enormously; one plan's published policy allows two per year for travel of 7 to 90 days with a 30-day supply auto-approved, but that is one plan's rules and yours may differ completely. You request it by calling the member services number on your card.</p>
+      <p>The other tool is the <strong>vacation override</strong> &mdash; an early refill so you can leave with more on hand. Be clear-eyed about what it is: an administrative accommodation from your plan or pharmacy benefit manager, granted case by case. It is <em>not</em> a legal right.</p>
+<p>Limits vary enormously; one plan's published policy allows two per year for travel of 7 to 90 days with a 30-day supply auto-approved, but that is one plan's rules and yours may differ completely. You request it by calling the member services number on your card.</p>
 
       <h2 id="mail-order">Mail Order Without a Mailbox</h2>
       <p>Mail order is the obvious answer for a driver, right up until you ask where it should be delivered.</p>
@@ -407,7 +437,8 @@ body{padding-bottom:0}
 
       <h2 id="network">In-Network vs. Whatever Pharmacy Is Open</h2>
       <p>Pharmacy networks are built by pharmacy benefit managers, and the three largest processed roughly 80% of U.S. prescription claims in 2025. Their reach is broad, but &ldquo;broad&rdquo; is not the same as &ldquo;every pharmacy is in your plan's tier.&rdquo; Plans commonly split networks into preferred and standard tiers, and independent or rural pharmacies are not always included &mdash; which matters when you are parked somewhere that has exactly one pharmacy.</p>
-      <p>If you fill at an out-of-network pharmacy, you generally pay the pharmacy's cash price at the counter, with no negotiated rate applied. Whether any of that later counts toward your deductible or out-of-pocket maximum <strong>depends entirely on your plan</strong>. Some exclude out-of-network pharmacy spending from accumulators completely; others have a paper claim process that credits part of it. There is no single federal rule here, and anyone who tells you otherwise is guessing.</p>
+      <p>If you fill at an out-of-network pharmacy, you generally pay the pharmacy's cash price at the counter, with no negotiated rate applied. Whether any of that later counts toward your deductible or out-of-pocket maximum <strong>depends entirely on your plan</strong>.</p>
+<p>Some exclude out-of-network pharmacy spending from accumulators completely; others have a paper claim process that credits part of it. There is no single federal rule here, and anyone who tells you otherwise is guessing.</p>
       <p>Practical move: before you sign up for a plan, check its pharmacy network against the chains that actually exist along your regular lanes, not just the ones near your house.</p>
 
       <h2 id="discount-cards">What Discount Cards Quietly Cost You</h2>
@@ -419,7 +450,8 @@ body{padding-bottom:0}
       <p>Prescriptions and your medical card intersect, and drivers underestimate this.</p>
       <p><strong>49 CFR &sect; 391.41(b)(12)</strong> requires that a driver does not use any Schedule I substance, an amphetamine, a narcotic, or other habit-forming drug &mdash; <em>except</em>, for non-Schedule I substances, when the use is prescribed by a licensed medical practitioner who is familiar with the driver's medical history and <strong>has advised the driver that the substance will not adversely affect the driver's ability to safely operate a commercial motor vehicle</strong>.</p>
       <p>Read that carefully. A prescription alone is not the standard. The standard is a prescriber who knows your history and has affirmatively said the medication does not impair your ability to drive. Schedule I has no exception at all.</p>
-      <p>When a medical examiner flags a medication, they may ask your prescribing provider to complete FMCSA's medications form, <strong>MCSA-5895</strong>, documenting what you are prescribed, what condition is being treated, and an attestation that neither the condition nor the medication's side effects would affect safe operation. That form is examiner-initiated, not something every driver carries by default &mdash; but carrying a current prescription label and your prescriber's contact information means a flag becomes a phone call instead of a deferred certification.</p>
+      <p>When a medical examiner flags a medication, they may ask your prescribing provider to complete FMCSA's medications form, <strong>MCSA-5895</strong>, documenting what you are prescribed, what condition is being treated, and an attestation that neither the condition nor the medication's side effects would affect safe operation.</p>
+<p>That form is examiner-initiated, not something every driver carries by default &mdash; but carrying a current prescription label and your prescriber's contact information means a flag becomes a phone call instead of a deferred certification.</p>
       <p>If your medication list is part of a bigger DOT-certification question, see <a href="/blog/cdl-blood-pressure-health-insurance">blood pressure and your medical card</a> and <a href="/blog/sleep-apnea-cpap-cdl-health-insurance">sleep apnea and your CDL</a>.</p>
 
       <h2 id="faq">Prescriptions on the Road: FAQs</h2>
@@ -438,7 +470,8 @@ body{padding-bottom:0}
         </div>
         <div class="faq-item">
           <h3>What is a vacation override and can I get one?</h3>
-          <p>It is an early refill approved by your plan or pharmacy benefit manager so you can leave with extra medication on hand. It is a plan accommodation, not a legal right, and the rules vary widely — number of times per year, length of travel, and days supply are all set by the plan. You request one by calling the member services number on your insurance card, ideally a week or more before you leave.</p>
+          <p>It is an early refill approved by your plan or pharmacy benefit manager so you can leave with extra medication on hand. It is a plan accommodation, not a legal right, and the rules vary widely — number of times per year, length of travel, and days supply are all set by the plan.</p>
+<p>You request one by calling the member services number on your insurance card, ideally a week or more before you leave.</p>
         </div>
         <div class="faq-item">
           <h3>How do I use mail-order pharmacy if I have no fixed address?</h3>
@@ -454,7 +487,8 @@ body{padding-bottom:0}
         </div>
         <div class="faq-item">
           <h3>What do I need to show at my DOT physical about my medications?</h3>
-          <p>Under 49 CFR 391.41(b)(12), use of a non-Schedule I controlled substance is permitted only when prescribed by a licensed practitioner who is familiar with your medical history and has advised you that it will not adversely affect your ability to operate a commercial motor vehicle safely. If an examiner flags a medication, they may require your prescriber to complete FMCSA form MCSA-5895. Carrying a current prescription label and your prescriber's contact details is what keeps this from turning into a deferred certification.</p>
+          <p>Under 49 CFR 391.41(b)(12), use of a non-Schedule I controlled substance is permitted only when prescribed by a licensed practitioner who is familiar with your medical history and has advised you that it will not adversely affect your ability to operate a commercial motor vehicle safely.</p>
+<p>If an examiner flags a medication, they may require your prescriber to complete FMCSA form MCSA-5895. Carrying a current prescription label and your prescriber's contact details is what keeps this from turning into a deferred certification.</p>
         </div>
       </div>
 
@@ -804,5 +838,22 @@ btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"
 </script>
 <script src="/vs-guide.js" defer></script>
 <script src="/vs-oe-remind.js" defer></script>
+<script id="vs-read-js">(function(){try{
+var SKIP=".vs-answer,.carriers,.qf-card,.cta-strip,.modal,.modal-backdrop,#tdh-hub,.vs-related-guides,.vs-guide-sec,.sp,.vs-oer,#reviews-anchor,footer,header,.faq-item,.hero,.trust-bar";
+var BAD=/^(why .*choose|get .* in (four|4|3|three) steps|what .* say|ready to|we compare|sign in|find the right health insurance|related guides|more for)/i;
+var hs=[].slice.call(document.querySelectorAll("main h2, body > section h2, body > div h2, article h2")).filter(function(h,i,a){return a.indexOf(h)===i&&!h.closest(SKIP)&&!BAD.test(h.textContent.trim())&&h.textContent.trim().length>2;});
+if(hs.length<6)return;
+var es=(document.documentElement.lang||"").slice(0,2)==="es";
+function slug(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60);}
+var used={},items="";
+hs.forEach(function(h){if(!h.id){var b=slug(h.textContent)||"section",id=b,n=2;while(used[id]||document.getElementById(id))id=b+"-"+(n++);h.id=id;}used[h.id]=1;h.style.scrollMarginTop="90px";
+items+='<li><a href="#'+h.id+'">'+h.textContent.replace(/[<>&]/g,"").trim()+'</a></li>';});
+var nav=document.createElement("nav");nav.className="vs-toc";nav.setAttribute("aria-label",es?"En esta p\u00e1gina":"On this page");
+var open=window.matchMedia&&window.matchMedia("(min-width:760px)").matches;
+nav.innerHTML='<details'+(open?' open':'')+'><summary>'+(es?"En esta p\u00e1gina":"On this page")+' <span style="font-weight:500;color:#5b6b7f;font-size:.85rem;margin-left:6px">'+hs.length+(es?" secciones":" sections")+'</span></summary><ol>'+items+'</ol></details>';
+var ans=document.querySelector(".vs-answer");
+if(ans){nav.style.maxWidth="820px";nav.style.margin="0 auto 28px";var w=document.createElement("div");w.style.padding="0 16px";w.appendChild(nav);ans.parentNode.insertBefore(w,ans.nextSibling);}
+else hs[0].parentNode.insertBefore(nav,hs[0]);
+}catch(e){}})();</script>
 </body>
 </html>

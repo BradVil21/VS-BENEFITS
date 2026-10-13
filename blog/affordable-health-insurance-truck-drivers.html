@@ -338,6 +338,32 @@ footer a:hover{color:#fff}
 .vcov.vcov-col .vsa-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (min-width:960px) and (max-width:1239px){.nav-links>a[href="/blog"]{display:none!important}}
 </style>
+<style id="vs-read-css">
+/* Readability for trucker pages: comfortable line length, size and spacing */
+.container.prose{max-width:780px}
+.vs-answer{max-width:820px;margin-left:auto!important;margin-right:auto!important}
+.vs-answer p+p,.callout p+p,.answer-box p+p{margin-top:10px!important}
+@media(max-width:860px){.vs-answer{margin-left:16px!important;margin-right:16px!important}}
+.container.prose p,.prose p,article.article-body p{font-size:1.0625rem;line-height:1.75}
+.container.prose h2,.prose h2,article.article-body h2{margin-top:1.8em}
+.container.prose h3,.prose h3,article.article-body h3{margin-top:1.4em}
+.container.prose li,.prose li,article.article-body li{line-height:1.65;margin-bottom:.4em}
+@media(max-width:640px){
+.container.prose p,.prose p,article.article-body p{font-size:1.02rem;line-height:1.7}
+.container.prose table,.prose table,article.article-body table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+}
+.vs-toc{border:1px solid #e4e9f2;background:#f8fafc;border-radius:14px;margin:8px 0 28px;font-family:Inter,system-ui,-apple-system,sans-serif}
+.vs-toc summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:700;color:#0b2346;font-size:.95rem;display:flex;justify-content:space-between;align-items:center}
+.vs-toc summary::-webkit-details-marker{display:none}
+.vs-toc summary::after{content:"+";color:#0db5a6;font-size:1.25rem;line-height:1}
+.vs-toc details[open] summary::after{content:"\2212"}
+.vs-toc ol{margin:0;padding:0 16px 14px 34px;columns:2;column-gap:28px}
+.vs-toc li{margin:0 0 6px;font-size:.92rem;line-height:1.4;break-inside:avoid}
+.vs-toc li::before{display:none}
+.vs-toc a{color:#16447f;text-decoration:none;font-weight:600}
+.vs-toc a:hover{text-decoration:underline}
+@media(max-width:640px){.vs-toc ol{columns:1}}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Get ahead of the deadline.</a></span><a href="/truckers/quote?from=blog-affordable-health-insurance-truck-drivers" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -440,7 +466,8 @@ footer a:hover{color:#fff}
 
       <h2 id="faq">Frequently asked</h2>
       <h3>What is the cheapest health insurance for a truck driver?</h3>
-      <p>The cheapest real coverage for most drivers is a Marketplace plan with a premium tax credit applied, because the credit is money nobody else can match. Cheaper-looking products exist, such as short-term plans, fixed indemnity and accident-only coverage, but they are not comprehensive major medical and several of them do not cover a pre-existing condition at all. Cheap and covered are different questions, and the second one is the one that matters when something happens.</p>
+      <p>The cheapest real coverage for most drivers is a Marketplace plan with a premium tax credit applied, because the credit is money nobody else can match.</p>
+<p>Cheaper-looking products exist, such as short-term plans, fixed indemnity and accident-only coverage, but they are not comprehensive major medical and several of them do not cover a pre-existing condition at all. Cheap and covered are different questions, and the second one is the one that matters when something happens.</p>
       <h3>How much is health insurance for a truck driver per month?</h3>
       <p>Unsubsidized individual plans commonly run a few hundred to roughly $900 a month for a single driver depending on age, state and plan level. With premium tax credits applied, many owner-operators pay far less than that. Because the subsidy is calculated on your net income rather than your gross settlements, two drivers hauling the same freight can pay very different premiums.</p>
       <h3>Does a lower premium mean I pay less overall?</h3>
@@ -448,7 +475,8 @@ footer a:hover{color:#fff}
       <h3>Can I deduct my health insurance premiums as an owner-operator?</h3>
       <p>Generally yes. The self-employed health insurance deduction is taken above the line, so it reduces your adjusted gross income whether or not you itemize. It applies to premiums for you, your spouse and your dependents, subject to the usual limits, and it interacts with your subsidy because both are driven by the same income figure.</p>
       <h3>Is an HSA worth it for a driver?</h3>
-      <p>For a healthy driver on a qualifying high-deductible plan, it is one of the few genuinely free wins available. Contributions reduce taxable income, the money rolls over year to year rather than expiring, and it can be spent on qualified expenses tax-free, including the DOT physical. The catch is that it only works with an HSA-eligible high-deductible plan, so it has to be part of the plan choice rather than an afterthought.</p>
+      <p>For a healthy driver on a qualifying high-deductible plan, it is one of the few genuinely free wins available. Contributions reduce taxable income, the money rolls over year to year rather than expiring, and it can be spent on qualified expenses tax-free, including the DOT physical.</p>
+<p>The catch is that it only works with an HSA-eligible high-deductible plan, so it has to be part of the plan choice rather than an afterthought.</p>
       <h3>What is the cheapest option if I missed open enrollment?</h3>
       <p>It depends on why you missed it. A qualifying life event in the last 60 days, such as losing job-based coverage, reopens the Marketplace. Without one, the honest options are a privately underwritten plan, which is medically underwritten and can decline you, or waiting for the next open enrollment. Anything advertised as guaranteed, instant and cheap outside those windows deserves a close read of what it actually pays.</p>
     </article>
@@ -644,5 +672,22 @@ btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"
 </script>
 <script src="/vs-guide.js" defer></script>
 <script src="/vs-oe-remind.js" defer></script>
+<script id="vs-read-js">(function(){try{
+var SKIP=".vs-answer,.carriers,.qf-card,.cta-strip,.modal,.modal-backdrop,#tdh-hub,.vs-related-guides,.vs-guide-sec,.sp,.vs-oer,#reviews-anchor,footer,header,.faq-item,.hero,.trust-bar";
+var BAD=/^(why .*choose|get .* in (four|4|3|three) steps|what .* say|ready to|we compare|sign in|find the right health insurance|related guides|more for)/i;
+var hs=[].slice.call(document.querySelectorAll("main h2, body > section h2, body > div h2, article h2")).filter(function(h,i,a){return a.indexOf(h)===i&&!h.closest(SKIP)&&!BAD.test(h.textContent.trim())&&h.textContent.trim().length>2;});
+if(hs.length<6)return;
+var es=(document.documentElement.lang||"").slice(0,2)==="es";
+function slug(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60);}
+var used={},items="";
+hs.forEach(function(h){if(!h.id){var b=slug(h.textContent)||"section",id=b,n=2;while(used[id]||document.getElementById(id))id=b+"-"+(n++);h.id=id;}used[h.id]=1;h.style.scrollMarginTop="90px";
+items+='<li><a href="#'+h.id+'">'+h.textContent.replace(/[<>&]/g,"").trim()+'</a></li>';});
+var nav=document.createElement("nav");nav.className="vs-toc";nav.setAttribute("aria-label",es?"En esta p\u00e1gina":"On this page");
+var open=window.matchMedia&&window.matchMedia("(min-width:760px)").matches;
+nav.innerHTML='<details'+(open?' open':'')+'><summary>'+(es?"En esta p\u00e1gina":"On this page")+' <span style="font-weight:500;color:#5b6b7f;font-size:.85rem;margin-left:6px">'+hs.length+(es?" secciones":" sections")+'</span></summary><ol>'+items+'</ol></details>';
+var ans=document.querySelector(".vs-answer");
+if(ans){nav.style.maxWidth="820px";nav.style.margin="0 auto 28px";var w=document.createElement("div");w.style.padding="0 16px";w.appendChild(nav);ans.parentNode.insertBefore(w,ans.nextSibling);}
+else hs[0].parentNode.insertBefore(nav,hs[0]);
+}catch(e){}})();</script>
 </body>
 </html>

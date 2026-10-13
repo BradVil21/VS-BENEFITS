@@ -587,6 +587,32 @@ body{padding-bottom:0}
 .sp-sec{font-weight:700;color:#16447f}
 @media(max-width:760px){.sp{padding:16px}.sp-regions{display:none}.sp-top select{max-width:none}.sp-facts{grid-template-columns:minmax(0,1fr)}}
 </style>
+<style id="vs-read-css">
+/* Readability for trucker pages: comfortable line length, size and spacing */
+.container.prose{max-width:780px}
+.vs-answer{max-width:820px;margin-left:auto!important;margin-right:auto!important}
+.vs-answer p+p,.callout p+p,.answer-box p+p{margin-top:10px!important}
+@media(max-width:860px){.vs-answer{margin-left:16px!important;margin-right:16px!important}}
+.container.prose p,.prose p,article.article-body p{font-size:1.0625rem;line-height:1.75}
+.container.prose h2,.prose h2,article.article-body h2{margin-top:1.8em}
+.container.prose h3,.prose h3,article.article-body h3{margin-top:1.4em}
+.container.prose li,.prose li,article.article-body li{line-height:1.65;margin-bottom:.4em}
+@media(max-width:640px){
+.container.prose p,.prose p,article.article-body p{font-size:1.02rem;line-height:1.7}
+.container.prose table,.prose table,article.article-body table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+}
+.vs-toc{border:1px solid #e4e9f2;background:#f8fafc;border-radius:14px;margin:8px 0 28px;font-family:Inter,system-ui,-apple-system,sans-serif}
+.vs-toc summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:700;color:#0b2346;font-size:.95rem;display:flex;justify-content:space-between;align-items:center}
+.vs-toc summary::-webkit-details-marker{display:none}
+.vs-toc summary::after{content:"+";color:#0db5a6;font-size:1.25rem;line-height:1}
+.vs-toc details[open] summary::after{content:"\2212"}
+.vs-toc ol{margin:0;padding:0 16px 14px 34px;columns:2;column-gap:28px}
+.vs-toc li{margin:0 0 6px;font-size:.92rem;line-height:1.4;break-inside:avoid}
+.vs-toc li::before{display:none}
+.vs-toc a{color:#16447f;text-decoration:none;font-weight:600}
+.vs-toc a:hover{text-decoration:underline}
+@media(max-width:640px){.vs-toc ol{columns:1}}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Enroll by Dec 15 for a January 1 start.</a></span><a href="/truckers/quote?from=trucker-oe-bar" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -668,7 +694,8 @@ body{padding-bottom:0}
 <div id="vs-calc-cta" style="max-width:760px;margin:22px auto;padding:0 16px;box-sizing:border-box"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;background:linear-gradient(135deg,#f4f8fe,#e0f7f5);border:1px solid #cfe3f5;border-left:4px solid #0db5a6;border-radius:14px;padding:16px 18px;font-family:Inter,system-ui,-apple-system,sans-serif"><div style="flex:1 1 280px;min-width:0"><div style="font-weight:800;color:#0b2346;font-size:1.02rem;line-height:1.3">See your 2027 price in 60 seconds</div><div style="color:#334155;font-size:.9rem;line-height:1.5;margin-top:3px">Enter your ZIP, household and income. Our free calculator shows your ACA subsidy and what you would actually pay each month.</div></div><a href="/aca-subsidy-calculator" style="flex:0 0 auto;background:#16447f;color:#fff;font-weight:700;font-size:.92rem;padding:11px 18px;border-radius:999px;text-decoration:none;white-space:nowrap">Estimate my price &rarr;</a></div></div>
 <div class="vs-answer">
   <h2>How do truck drivers get health insurance?</h2>
-  <p>Company drivers usually get a group plan from their carrier. Owner-operators and 1099 drivers buy their own, and for independent truckers two things decide whether health insurance works: network reach and how your income is counted. You need a plan whose network follows you across state lines, not one built around a single metro. And because self-employed drivers are assessed on net income after truck expenses, many qualify for far larger ACA subsidies than they expect.</p>
+  <p>Company drivers usually get a group plan from their carrier. Owner-operators and 1099 drivers buy their own, and for independent truckers two things decide whether health insurance works: network reach and how your income is counted.</p>
+<p>You need a plan whose network follows you across state lines, not one built around a single metro. And because self-employed drivers are assessed on net income after truck expenses, many qualify for far larger ACA subsidies than they expect.</p>
 </div>
 <div class="carriers">
   <div class="container">
@@ -870,11 +897,13 @@ body{padding-bottom:0}
 
 <h2 id="family">Covering Your Family When You Are Not Home</h2>
 <p>Most drivers are insuring a household, not just themselves &mdash; and household coverage has its own logic.</p>
-<p>Subsidies are calculated on household income and household size, so adding dependents raises the subsidy as well as the premium. The net cost of adding a spouse and children is frequently far less than the sticker difference suggests. Children may also qualify for <strong>CHIP</strong> or Medicaid even when the parents do not, depending on state and income &mdash; that is worth checking before you enroll the whole family on one plan.</p>
+<p>Subsidies are calculated on household income and household size, so adding dependents raises the subsidy as well as the premium. The net cost of adding a spouse and children is frequently far less than the sticker difference suggests.</p>
+<p>Children may also qualify for <strong>CHIP</strong> or Medicaid even when the parents do not, depending on state and income &mdash; that is worth checking before you enroll the whole family on one plan.</p>
 <p>One practical note: your family uses providers near home, while you need coverage everywhere. A national PPO solves both. A regional HMO solves only theirs.</p>
 
 <h2 id="by-state">Health Insurance for Truck Drivers by State</h2>
-<p>Your plan is bought in your <strong>home state</strong>, the one on your driver's license and tax return, not where you happen to be parked. That decides which marketplace you use, which carriers you can pick from, and whether Medicaid is an option if your net income drops in a slow season. We're licensed in the 33 states below. Pick yours to see how coverage works there. Whatever your home state, we can show you nationwide PPO options with in-network doctors in all 50 states on select plans.</p>
+<p>Your plan is bought in your <strong>home state</strong>, the one on your driver's license and tax return, not where you happen to be parked. That decides which marketplace you use, which carriers you can pick from, and whether Medicaid is an option if your net income drops in a slow season.</p>
+<p>We're licensed in the 33 states below. Pick yours to see how coverage works there. Whatever your home state, we can show you nationwide PPO options with in-network doctors in all 50 states on select plans.</p>
 <div class="sp" id="state-picker">
 <div class="sp-top"><label for="sp-select">Find your home state</label><select id="sp-select"><option value="">Choose your state&hellip;</option><optgroup label="South"><option value="AL">Alabama</option><option value="AR">Arkansas</option><option value="FL">Florida</option><option value="GA">Georgia</option><option value="KY">Kentucky</option><option value="LA">Louisiana</option><option value="MD">Maryland</option><option value="MS">Mississippi</option><option value="NC">North Carolina</option><option value="OK">Oklahoma</option><option value="SC">South Carolina</option><option value="TN">Tennessee</option><option value="TX">Texas</option><option value="VA">Virginia</option><option value="WV">West Virginia</option></optgroup><optgroup label="Midwest"><option value="IL">Illinois</option><option value="IN">Indiana</option><option value="IA">Iowa</option><option value="KS">Kansas</option><option value="MI">Michigan</option><option value="MN">Minnesota</option><option value="MO">Missouri</option><option value="NE">Nebraska</option><option value="ND">North Dakota</option><option value="OH">Ohio</option><option value="SD">South Dakota</option><option value="WI">Wisconsin</option></optgroup><optgroup label="West"><option value="AZ">Arizona</option><option value="CO">Colorado</option><option value="MT">Montana</option><option value="NV">Nevada</option><option value="UT">Utah</option><option value="WY">Wyoming</option></optgroup></select></div>
 <div class="sp-regions"><div class="sp-reg"><p>South</p><div class="sp-chips"><button type="button" class="sp-chip" data-st="AL" aria-pressed="false">Alabama</button><button type="button" class="sp-chip" data-st="AR" aria-pressed="false">Arkansas</button><button type="button" class="sp-chip" data-st="FL" aria-pressed="false">Florida</button><button type="button" class="sp-chip" data-st="GA" aria-pressed="false">Georgia</button><button type="button" class="sp-chip" data-st="KY" aria-pressed="false">Kentucky</button><button type="button" class="sp-chip" data-st="LA" aria-pressed="false">Louisiana</button><button type="button" class="sp-chip" data-st="MD" aria-pressed="false">Maryland</button><button type="button" class="sp-chip" data-st="MS" aria-pressed="false">Mississippi</button><button type="button" class="sp-chip" data-st="NC" aria-pressed="false">North Carolina</button><button type="button" class="sp-chip" data-st="OK" aria-pressed="false">Oklahoma</button><button type="button" class="sp-chip" data-st="SC" aria-pressed="false">South Carolina</button><button type="button" class="sp-chip" data-st="TN" aria-pressed="false">Tennessee</button><button type="button" class="sp-chip" data-st="TX" aria-pressed="false">Texas</button><button type="button" class="sp-chip" data-st="VA" aria-pressed="false">Virginia</button><button type="button" class="sp-chip" data-st="WV" aria-pressed="false">West Virginia</button></div></div><div class="sp-reg"><p>Midwest</p><div class="sp-chips"><button type="button" class="sp-chip" data-st="IL" aria-pressed="false">Illinois</button><button type="button" class="sp-chip" data-st="IN" aria-pressed="false">Indiana</button><button type="button" class="sp-chip" data-st="IA" aria-pressed="false">Iowa</button><button type="button" class="sp-chip" data-st="KS" aria-pressed="false">Kansas</button><button type="button" class="sp-chip" data-st="MI" aria-pressed="false">Michigan</button><button type="button" class="sp-chip" data-st="MN" aria-pressed="false">Minnesota</button><button type="button" class="sp-chip" data-st="MO" aria-pressed="false">Missouri</button><button type="button" class="sp-chip" data-st="NE" aria-pressed="false">Nebraska</button><button type="button" class="sp-chip" data-st="ND" aria-pressed="false">North Dakota</button><button type="button" class="sp-chip" data-st="OH" aria-pressed="false">Ohio</button><button type="button" class="sp-chip" data-st="SD" aria-pressed="false">South Dakota</button><button type="button" class="sp-chip" data-st="WI" aria-pressed="false">Wisconsin</button></div></div><div class="sp-reg"><p>West</p><div class="sp-chips"><button type="button" class="sp-chip" data-st="AZ" aria-pressed="false">Arizona</button><button type="button" class="sp-chip" data-st="CO" aria-pressed="false">Colorado</button><button type="button" class="sp-chip" data-st="MT" aria-pressed="false">Montana</button><button type="button" class="sp-chip" data-st="NV" aria-pressed="false">Nevada</button><button type="button" class="sp-chip" data-st="UT" aria-pressed="false">Utah</button><button type="button" class="sp-chip" data-st="WY" aria-pressed="false">Wyoming</button></div></div></div>
@@ -1078,13 +1107,15 @@ body{padding-bottom:0}
 <div class="sp-ctas"><a class="btn btn-primary" href="/truckers/quote?from=truck-driver-health-insurance-by-state&amp;state=WY">Get my Wyoming quote &rarr;</a></div>
 </article></div>
 </div>
-<p class="tds-note">What this means for you: you don't have to figure out any of these sites. We're licensed in all 33 states and enroll you directly, whether your state uses HealthCare.gov or runs its <strong>own marketplace</strong> with its own deadlines. In states that <strong>haven't expanded Medicaid</strong>, drivers with very low net income can fall into a gap and need to plan around it. Wherever you live, we compare every plan for your ZIP code, apply any tax credit, and check which networks work on the road. <a href="/truckers/quote?from=truck-driver-health-insurance-by-state">Get your state's options in about 60 seconds &rarr;</a></p>
+<p class="tds-note">What this means for you: you don't have to figure out any of these sites. We're licensed in all 33 states and enroll you directly, whether your state uses HealthCare.gov or runs its <strong>own marketplace</strong> with its own deadlines.</p>
+<p class="tds-note">In states that <strong>haven't expanded Medicaid</strong>, drivers with very low net income can fall into a gap and need to plan around it. Wherever you live, we compare every plan for your ZIP code, apply any tax credit, and check which networks work on the road. <a href="/truckers/quote?from=truck-driver-health-insurance-by-state">Get your state's options in about 60 seconds &rarr;</a></p>
 
 <h2 id="avoid">What to Be Careful With</h2>
 <p>Two products get marketed hard to drivers, often at truck stops and over the phone. Neither is illegal, and neither is health insurance.</p>
 
 <h3>Health care sharing ministries</h3>
-<p>These are faith-based cost-sharing arrangements, not insurance. According to <a href="https://www.healthinsurance.org/other-coverage/healthcare-sharing-ministries-a-leap-of-faith/" rel="nofollow">healthinsurance.org</a>, they are exempt from insurance regulation in about 30 states, which means <strong>members cannot file a complaint with a state insurance department</strong> if a bill goes unpaid. Payment is not guaranteed &mdash; some programs state outright that they do not promise your bills will be paid. They can also decline or exclude pre-existing conditions through medical underwriting, and some cap what they will share per incident.</p>
+<p>These are faith-based cost-sharing arrangements, not insurance. According to <a href="https://www.healthinsurance.org/other-coverage/healthcare-sharing-ministries-a-leap-of-faith/" rel="nofollow">healthinsurance.org</a>, they are exempt from insurance regulation in about 30 states, which means <strong>members cannot file a complaint with a state insurance department</strong> if a bill goes unpaid.</p>
+<p>Payment is not guaranteed &mdash; some programs state outright that they do not promise your bills will be paid. They can also decline or exclude pre-existing conditions through medical underwriting, and some cap what they will share per incident.</p>
 <p>The monthly cost is genuinely lower. The tradeoff is that you carry the risk personally, with no regulator to appeal to. For a driver whose income depends on staying medically certified, that is a meaningful thing to weigh.</p>
 
 <h3>Short-term medical plans</h3>
@@ -1105,8 +1136,10 @@ body{padding-bottom:0}
       <h2>Affordable Health Insurance for Truckers</h2>
     </div>
     <div style="max-width:760px;margin:0 auto">
-      <p>Affordable health insurance for truckers usually comes down to one thing: getting your income counted correctly. Owner-operators and 1099 drivers are assessed on <strong>net income after truck expenses</strong> — fuel, maintenance, insurance, depreciation — not gross settlements. A driver grossing $180,000 might net $55,000 on paper, and at that income level ACA premium tax credits routinely cut a $500 sticker premium to under $100 a month. Many drivers we work with pay $0 to $80 per month after credits.</p>
-      <p style="margin-top:14px">If your income is above the credit threshold, the self-employed health insurance deduction lets most owner-operators write off 100% of premiums, which lowers the true cost of even a full-price national PPO. See real numbers on our <a href="/truck-driver-health-insurance-cost">truck driver health insurance cost guide</a>, or compare subsidized prices for your ZIP on the <a href="/affordable-health-insurance">affordable health insurance page</a>. Not sure which route wins for your operation? The <a href="/owner-operator-plan-finder">owner-operator plan finder</a> takes two minutes.</p>
+      <p>Affordable health insurance for truckers usually comes down to one thing: getting your income counted correctly. Owner-operators and 1099 drivers are assessed on <strong>net income after truck expenses</strong> — fuel, maintenance, insurance, depreciation — not gross settlements.</p>
+<p>A driver grossing $180,000 might net $55,000 on paper, and at that income level ACA premium tax credits routinely cut a $500 sticker premium to under $100 a month. Many drivers we work with pay $0 to $80 per month after credits.</p>
+      <p style="margin-top:14px">If your income is above the credit threshold, the self-employed health insurance deduction lets most owner-operators write off 100% of premiums, which lowers the true cost of even a full-price national PPO.</p>
+<p style="margin-top:14px">See real numbers on our <a href="/truck-driver-health-insurance-cost">truck driver health insurance cost guide</a>, or compare subsidized prices for your ZIP on the <a href="/affordable-health-insurance">affordable health insurance page</a>. Not sure which route wins for your operation? The <a href="/owner-operator-plan-finder">owner-operator plan finder</a> takes two minutes.</p>
     </div>
   </div>
 </section>
@@ -1127,12 +1160,15 @@ body{padding-bottom:0}
       <details class="faq-item"><summary>What is the best health insurance for owner-operators?</summary><p>For most owner-operators, a nationwide PPO plan is the top choice because you can see any doctor in any state without a referral. If your income qualifies for ACA subsidies, an ACA PPO plan combines that broad access with a lower monthly premium. We run both scenarios side by side so you can decide which fits your situation.</p></details>
       <details class="faq-item"><summary>Can 1099 truck drivers get health insurance?</summary><p>Yes. If you receive a 1099 as an independent contractor or owner-operator, you are considered self-employed and eligible for ACA marketplace plans as well as private PPO plans. Many 1099 truck drivers qualify for premium tax credits that bring monthly costs down significantly. We help 1099 drivers enroll every day.</p></details>
       <details class="faq-item"><summary>How do I get health insurance as a truck driver with no employer?</summary><p>You have two main paths. First, the ACA marketplace, you can apply during open enrollment or a special enrollment period if you recently lost other coverage. Second, private off-marketplace plans available year-round through licensed advisors like VS Health Benefits. We compare both options and enroll you in the one that saves the most money with the best coverage.</p></details>
-      <details class="faq-item"><summary>Is there affordable health insurance for truckers?</summary><p>Yes. Because self-employed truckers are assessed on net income after truck expenses, many qualify for ACA premium tax credits that bring a $400 to $500 sticker premium down to under $100 per month, and some drivers pay $0 to $80 after credits. Drivers above the credit threshold can usually deduct 100% of premiums as a business expense, which lowers the real cost of a national PPO. We run both calculations free before you pick a plan.</p></details>
+      <details class="faq-item"><summary>Is there affordable health insurance for truckers?</summary><p>Yes. Because self-employed truckers are assessed on net income after truck expenses, many qualify for ACA premium tax credits that bring a $400 to $500 sticker premium down to under $100 per month, and some drivers pay $0 to $80 after credits.</p>
+<p>Drivers above the credit threshold can usually deduct 100% of premiums as a business expense, which lowers the real cost of a national PPO. We run both calculations free before you pick a plan.</p></details>
       <details class="faq-item"><summary>How do owner operator truck drivers get health insurance?</summary><p>Owner operator truck drivers buy their own coverage rather than getting it from a carrier. The two main routes are ACA marketplace plans, where subsidies are based on your net income after truck expenses, and private nationwide PPO plans available year-round. Which one wins depends on your income, home state, and how many states you run. Our <a href="/best-health-insurance-owner-operators">owner-operator coverage guide</a> compares all four real options side by side.</p></details>
-      <details class="faq-item"><summary>Do CDL drivers need special health insurance?</summary><p>There is no CDL-specific insurance product, but CDL holders have a unique stake in staying covered: the conditions a DOT physical screens for, like blood pressure, sleep apnea, and diabetes, are exactly the ones that untreated can cost you your medical card and your income. A plan that covers those visits and medications protects your career, not just your health. See our <a href="/cdl-driver-health-insurance">CDL driver health insurance guide</a> for how coverage and your DOT physical work together.</p></details>
+      <details class="faq-item"><summary>Do CDL drivers need special health insurance?</summary><p>There is no CDL-specific insurance product, but CDL holders have a unique stake in staying covered: the conditions a DOT physical screens for, like blood pressure, sleep apnea, and diabetes, are exactly the ones that untreated can cost you your medical card and your income.</p>
+<p>A plan that covers those visits and medications protects your career, not just your health. See our <a href="/cdl-driver-health-insurance">CDL driver health insurance guide</a> for how coverage and your DOT physical work together.</p></details>
       <details class="faq-item">
         <summary>Is medical insurance for owner operators different from health insurance?</summary>
-        <div class="faq-a"><p>No — they are two names for the same thing. Drivers search for &ldquo;medical insurance for owner operators&rdquo; and &ldquo;owner operator medical insurance,&rdquo; but on the marketplace the product is a major medical health insurance plan. What matters is not the label but the network: an owner-operator needs a plan whose provider network follows the truck across state lines, which is why we steer drivers toward national PPO networks rather than a local HMO.</p></div>
+        <div class="faq-a"><p>No — they are two names for the same thing. Drivers search for &ldquo;medical insurance for owner operators&rdquo; and &ldquo;owner operator medical insurance,&rdquo; but on the marketplace the product is a major medical health insurance plan.</p>
+<p>What matters is not the label but the network: an owner-operator needs a plan whose provider network follows the truck across state lines, which is why we steer drivers toward national PPO networks rather than a local HMO.</p></div>
       </details>
     </div>
   </div>
@@ -1906,5 +1942,22 @@ sel.addEventListener("change",function(){show(sel.value,true);});chips.forEach(f
 var q=null;try{q=(new URLSearchParams(location.search).get("state")||"").toUpperCase();}catch(e){}
 if(q&&document.getElementById("st-"+q)){show(q,false);var t=document.getElementById("by-state");if(t)setTimeout(function(){t.scrollIntoView({block:"start"});},60);}})();</script>
 <script src="/vs-oe-remind.js" defer></script>
+<script id="vs-read-js">(function(){try{
+var SKIP=".vs-answer,.carriers,.qf-card,.cta-strip,.modal,.modal-backdrop,#tdh-hub,.vs-related-guides,.vs-guide-sec,.sp,.vs-oer,#reviews-anchor,footer,header,.faq-item,.hero,.trust-bar";
+var BAD=/^(why .*choose|get .* in (four|4|3|three) steps|what .* say|ready to|we compare|sign in|find the right health insurance|related guides|more for)/i;
+var hs=[].slice.call(document.querySelectorAll("main h2, body > section h2, body > div h2, article h2")).filter(function(h,i,a){return a.indexOf(h)===i&&!h.closest(SKIP)&&!BAD.test(h.textContent.trim())&&h.textContent.trim().length>2;});
+if(hs.length<6)return;
+var es=(document.documentElement.lang||"").slice(0,2)==="es";
+function slug(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60);}
+var used={},items="";
+hs.forEach(function(h){if(!h.id){var b=slug(h.textContent)||"section",id=b,n=2;while(used[id]||document.getElementById(id))id=b+"-"+(n++);h.id=id;}used[h.id]=1;h.style.scrollMarginTop="90px";
+items+='<li><a href="#'+h.id+'">'+h.textContent.replace(/[<>&]/g,"").trim()+'</a></li>';});
+var nav=document.createElement("nav");nav.className="vs-toc";nav.setAttribute("aria-label",es?"En esta p\u00e1gina":"On this page");
+var open=window.matchMedia&&window.matchMedia("(min-width:760px)").matches;
+nav.innerHTML='<details'+(open?' open':'')+'><summary>'+(es?"En esta p\u00e1gina":"On this page")+' <span style="font-weight:500;color:#5b6b7f;font-size:.85rem;margin-left:6px">'+hs.length+(es?" secciones":" sections")+'</span></summary><ol>'+items+'</ol></details>';
+var ans=document.querySelector(".vs-answer");
+if(ans){nav.style.maxWidth="820px";nav.style.margin="0 auto 28px";var w=document.createElement("div");w.style.padding="0 16px";w.appendChild(nav);ans.parentNode.insertBefore(w,ans.nextSibling);}
+else hs[0].parentNode.insertBefore(nav,hs[0]);
+}catch(e){}})();</script>
 </body>
 </html>

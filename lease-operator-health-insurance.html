@@ -187,6 +187,32 @@ footer a{color:#ffffff}footer a:hover{color:#fff}
 .vcov.vcov-col .vsa-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (min-width:960px) and (max-width:1239px){.nav-links>a[href="/blog"]{display:none!important}}
 </style>
+<style id="vs-read-css">
+/* Readability for trucker pages: comfortable line length, size and spacing */
+.container.prose{max-width:780px}
+.vs-answer{max-width:820px;margin-left:auto!important;margin-right:auto!important}
+.vs-answer p+p,.callout p+p,.answer-box p+p{margin-top:10px!important}
+@media(max-width:860px){.vs-answer{margin-left:16px!important;margin-right:16px!important}}
+.container.prose p,.prose p,article.article-body p{font-size:1.0625rem;line-height:1.75}
+.container.prose h2,.prose h2,article.article-body h2{margin-top:1.8em}
+.container.prose h3,.prose h3,article.article-body h3{margin-top:1.4em}
+.container.prose li,.prose li,article.article-body li{line-height:1.65;margin-bottom:.4em}
+@media(max-width:640px){
+.container.prose p,.prose p,article.article-body p{font-size:1.02rem;line-height:1.7}
+.container.prose table,.prose table,article.article-body table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+}
+.vs-toc{border:1px solid #e4e9f2;background:#f8fafc;border-radius:14px;margin:8px 0 28px;font-family:Inter,system-ui,-apple-system,sans-serif}
+.vs-toc summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:700;color:#0b2346;font-size:.95rem;display:flex;justify-content:space-between;align-items:center}
+.vs-toc summary::-webkit-details-marker{display:none}
+.vs-toc summary::after{content:"+";color:#0db5a6;font-size:1.25rem;line-height:1}
+.vs-toc details[open] summary::after{content:"\2212"}
+.vs-toc ol{margin:0;padding:0 16px 14px 34px;columns:2;column-gap:28px}
+.vs-toc li{margin:0 0 6px;font-size:.92rem;line-height:1.4;break-inside:avoid}
+.vs-toc li::before{display:none}
+.vs-toc a{color:#16447f;text-decoration:none;font-weight:600}
+.vs-toc a:hover{text-decoration:underline}
+@media(max-width:640px){.vs-toc ol{columns:1}}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Enroll by Dec 15 for a January 1 start.</a></span><a href="/truckers/quote?from=lease-operator-health-insurance" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -233,9 +259,11 @@ footer a{color:#ffffff}footer a:hover{color:#fff}
 </div>
 <figure class="vs-fig" style="margin:6px auto 30px;max-width:880px"><picture><source srcset="/compressed/Trcukermore2-900.webp" type="image/webp"><img src="/compressed/Trcukermore2-900.jpg" alt="Lease operator truck" width="900" height="394" loading="lazy" decoding="async" style="display:block;width:100%;height:auto;aspect-ratio:16/7;object-fit:cover;border-radius:16px;box-shadow:0 12px 32px rgba(13,27,42,.10)"></picture></figure>
 <h2 id="gap">The Lease Operator Benefits Gap</h2>
-<p>When you signed the lease, you became a business. The carrier stopped owing you benefits the same day. Most lease drivers know this in theory and still put off coverage, because the settlement math already feels tight. But going uncovered is the one expense mistake that can end the whole run: a single ER visit can cost more than months of truck payments, and an untreated condition can cost you your med card and your income at the same time.</p>
+<p>When you signed the lease, you became a business. The carrier stopped owing you benefits the same day. Most lease drivers know this in theory and still put off coverage, because the settlement math already feels tight.</p>
+<p>But going uncovered is the one expense mistake that can end the whole run: a single ER visit can cost more than months of truck payments, and an untreated condition can cost you your med card and your income at the same time.</p>
 <h2 id="secret">Why Your Lease Payments Lower Your Insurance Price</h2>
-<p>Marketplace subsidies are calculated on net income, not gross settlements. Your lease payment, fuel, maintenance, insurance on the truck, and every legitimate business expense reduces the income number that sets your subsidy. A driver grossing six figures with heavy lease costs can have a taxable income that qualifies for serious help. This is the single most misunderstood fact among lease drivers, and it is why sticker prices mean nothing until we run your real numbers. The full math lives in our guide to <a href="/blog/what-income-counts-for-aca-subsidies">what income counts for subsidies</a>.</p>
+<p>Marketplace subsidies are calculated on net income, not gross settlements. Your lease payment, fuel, maintenance, insurance on the truck, and every legitimate business expense reduces the income number that sets your subsidy. A driver grossing six figures with heavy lease costs can have a taxable income that qualifies for serious help.</p>
+<p>This is the single most misunderstood fact among lease drivers, and it is why sticker prices mean nothing until we run your real numbers. The full math lives in our guide to <a href="/blog/what-income-counts-for-aca-subsidies">what income counts for subsidies</a>.</p>
 <h2 id="own">A Plan You Own Beats a Lease You Do Not</h2>
 <p>Half of lease purchase deals do not end with the driver owning the truck. If you walk away, everything tied to the carrier disappears with the lease. Your health plan should not be on that list. Individual coverage belongs to you: switch carriers, go back to company driving, or start over, and it rides along unchanged.</p><div class="cta-block"><h3>Five Minutes. Real Numbers. No Lecture.</h3><p>Tell us your ZIP, your settlements, and your expenses. We calculate the subsidy, compare national network plans, and give you a price that reflects reality.</p><a class="btn btn-teal" href="/truckers/quote?from=lease-operator-health-insurance">Get My Lease Operator Quote</a></div>
 <h2 id="tax">The Premium Write-Off on Top</h2>
@@ -384,5 +412,22 @@ btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"
 </script>
 <script src="/vs-guide.js" defer></script>
 <script src="/vs-oe-remind.js" defer></script>
+<script id="vs-read-js">(function(){try{
+var SKIP=".vs-answer,.carriers,.qf-card,.cta-strip,.modal,.modal-backdrop,#tdh-hub,.vs-related-guides,.vs-guide-sec,.sp,.vs-oer,#reviews-anchor,footer,header,.faq-item,.hero,.trust-bar";
+var BAD=/^(why .*choose|get .* in (four|4|3|three) steps|what .* say|ready to|we compare|sign in|find the right health insurance|related guides|more for)/i;
+var hs=[].slice.call(document.querySelectorAll("main h2, body > section h2, body > div h2, article h2")).filter(function(h,i,a){return a.indexOf(h)===i&&!h.closest(SKIP)&&!BAD.test(h.textContent.trim())&&h.textContent.trim().length>2;});
+if(hs.length<6)return;
+var es=(document.documentElement.lang||"").slice(0,2)==="es";
+function slug(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60);}
+var used={},items="";
+hs.forEach(function(h){if(!h.id){var b=slug(h.textContent)||"section",id=b,n=2;while(used[id]||document.getElementById(id))id=b+"-"+(n++);h.id=id;}used[h.id]=1;h.style.scrollMarginTop="90px";
+items+='<li><a href="#'+h.id+'">'+h.textContent.replace(/[<>&]/g,"").trim()+'</a></li>';});
+var nav=document.createElement("nav");nav.className="vs-toc";nav.setAttribute("aria-label",es?"En esta p\u00e1gina":"On this page");
+var open=window.matchMedia&&window.matchMedia("(min-width:760px)").matches;
+nav.innerHTML='<details'+(open?' open':'')+'><summary>'+(es?"En esta p\u00e1gina":"On this page")+' <span style="font-weight:500;color:#5b6b7f;font-size:.85rem;margin-left:6px">'+hs.length+(es?" secciones":" sections")+'</span></summary><ol>'+items+'</ol></details>';
+var ans=document.querySelector(".vs-answer");
+if(ans){nav.style.maxWidth="820px";nav.style.margin="0 auto 28px";var w=document.createElement("div");w.style.padding="0 16px";w.appendChild(nav);ans.parentNode.insertBefore(w,ans.nextSibling);}
+else hs[0].parentNode.insertBefore(nav,hs[0]);
+}catch(e){}})();</script>
 </body>
 </html>

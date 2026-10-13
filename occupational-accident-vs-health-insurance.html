@@ -313,6 +313,32 @@ body{padding-bottom:0}
 .vcov.vcov-col .vsa-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (min-width:960px) and (max-width:1239px){.nav-links>a[href="/blog"]{display:none!important}}
 </style>
+<style id="vs-read-css">
+/* Readability for trucker pages: comfortable line length, size and spacing */
+.container.prose{max-width:780px}
+.vs-answer{max-width:820px;margin-left:auto!important;margin-right:auto!important}
+.vs-answer p+p,.callout p+p,.answer-box p+p{margin-top:10px!important}
+@media(max-width:860px){.vs-answer{margin-left:16px!important;margin-right:16px!important}}
+.container.prose p,.prose p,article.article-body p{font-size:1.0625rem;line-height:1.75}
+.container.prose h2,.prose h2,article.article-body h2{margin-top:1.8em}
+.container.prose h3,.prose h3,article.article-body h3{margin-top:1.4em}
+.container.prose li,.prose li,article.article-body li{line-height:1.65;margin-bottom:.4em}
+@media(max-width:640px){
+.container.prose p,.prose p,article.article-body p{font-size:1.02rem;line-height:1.7}
+.container.prose table,.prose table,article.article-body table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+}
+.vs-toc{border:1px solid #e4e9f2;background:#f8fafc;border-radius:14px;margin:8px 0 28px;font-family:Inter,system-ui,-apple-system,sans-serif}
+.vs-toc summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:700;color:#0b2346;font-size:.95rem;display:flex;justify-content:space-between;align-items:center}
+.vs-toc summary::-webkit-details-marker{display:none}
+.vs-toc summary::after{content:"+";color:#0db5a6;font-size:1.25rem;line-height:1}
+.vs-toc details[open] summary::after{content:"\2212"}
+.vs-toc ol{margin:0;padding:0 16px 14px 34px;columns:2;column-gap:28px}
+.vs-toc li{margin:0 0 6px;font-size:.92rem;line-height:1.4;break-inside:avoid}
+.vs-toc li::before{display:none}
+.vs-toc a{color:#16447f;text-decoration:none;font-weight:600}
+.vs-toc a:hover{text-decoration:underline}
+@media(max-width:640px){.vs-toc ol{columns:1}}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Enroll by Dec 15 for a January 1 start.</a></span><a href="/truckers/quote?from=trucker-oe-bar" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -469,7 +495,8 @@ body{padding-bottom:0}
 
       <h3>ACA marketplace coverage</h3>
       <p>For most owner-operators this is the answer. Guaranteed issue, no pre-existing condition exclusions, essential health benefits, and an annual out-of-pocket maximum. Florida had 4,538,772 marketplace plan selections for 2026 — the most of any state — which means genuine carrier competition in the populated counties.</p>
-      <p>The hard part is income. HealthCare.gov asks you to estimate your <strong>net</strong> self-employment income — Schedule C profit, not gross revenue or settlement totals. Underestimate and you repay advance credits at tax time. Overestimate and you leave savings on the table until you file. For a driver whose net swings with freight rates, fuel and a blown turbo, this is legitimately difficult, and it's the single most common reason owner-operators end up with the wrong plan or an unwelcome tax bill.</p>
+      <p>The hard part is income. HealthCare.gov asks you to estimate your <strong>net</strong> self-employment income — Schedule C profit, not gross revenue or settlement totals. Underestimate and you repay advance credits at tax time. Overestimate and you leave savings on the table until you file.</p>
+<p>For a driver whose net swings with freight rates, fuel and a blown turbo, this is legitimately difficult, and it's the single most common reason owner-operators end up with the wrong plan or an unwelcome tax bill.</p>
       <p>Context you should have: the enhanced premium tax credits expired at the end of 2025 and the 400% federal poverty level subsidy cliff is back. Average net premiums rose sharply for 2026. Florida carriers filed an average proposed increase around 15.9% for 2027, pending approval. Coverage is more expensive than it was two years ago. It is still the only product on this list that pays for a cancer diagnosis.</p>
 
       <h3>A spouse's employer plan</h3>
@@ -515,12 +542,17 @@ body{padding-bottom:0}
       <div class="faq-list">
 <div class="faq-item"><h3>Is occupational accident insurance the same as health insurance?</h3><p>No. Occupational accident insurance is an accident-only product covering injury sustained while on duty. Policy language typically states directly that it does not provide coverage for sickness. Health insurance covers illness, chronic disease management, prescriptions, preventive care and hospitalization regardless of how the condition arose. They cover different risks and neither substitutes for the other.</p></div>
 <div class="faq-item"><h3>Is occupational accident insurance the same as workers' compensation?</h3><p>No, and occ-acc policies generally say so explicitly. Workers' compensation is a statutory system with defined benefits and, in most cases, an exclusive remedy protection for the employer. Occupational accident insurance is a commercial policy with contractual limits, exclusions and sub-limits. Motor carriers use occ-acc for lease-on owner-operators precisely because those drivers are independent contractors rather than employees, so workers' comp does not attach.</p></div>
-<div class="faq-item"><h3>What does occupational accident insurance actually pay?</h3><p>Typical structures include occupational accident medical expense up to a stated maximum for expenses incurred within a set period, accidental death and dismemberment benefits, temporary total disability paid weekly after a waiting period and capped as a percentage of average weekly income, and continuous total disability that generally requires a Social Security Disability award. Off-duty accident coverage, where present, is usually capped at a small sub-limit. Read your specific certificate — limits vary substantially between programs.</p></div>
+<div class="faq-item"><h3>What does occupational accident insurance actually pay?</h3><p>Typical structures include occupational accident medical expense up to a stated maximum for expenses incurred within a set period, accidental death and dismemberment benefits, temporary total disability paid weekly after a waiting period and capped as a percentage of average weekly income, and continuous total disability that generally requires a Social Security Disability award.</p>
+<p>Off-duty accident coverage, where present, is usually capped at a small sub-limit. Read your specific certificate — limits vary substantially between programs.</p></div>
 <div class="faq-item"><h3>If I have occ-acc, do I still need health insurance?</h3><p>In almost every case, yes. Occ-acc will not pay for a cancer diagnosis, a heart attack unrelated to a covered accident, diabetes management, a sleep study, CPAP equipment, prescriptions, an annual physical, or a hospitalization from illness. Those are the events that generate the largest medical bills for drivers. Occ-acc protects the specific risk of getting hurt in the truck. Health insurance protects everything else.</p></div>
-<div class="faq-item"><h3>Do owner-operators in Florida need workers' compensation?</h3><p>Fla. Stat. § 440.02(18)(d)4 excludes from the employee definition an owner-operator of a motor vehicle transporting property under written contract with a motor carrier, where the owner-operator furnishes the vehicle and the principal operating costs including fuel and repairs, and is not compensated on an hourly or time basis. Separately, non-construction employers only need workers' comp at four or more employees. Corporate officers and LLC members may file a Notice of Election to be Exempt with the Florida Division of Workers' Compensation. Classification carries real liability — confirm your specific arrangement with the Division or a Florida attorney.</p></div>
-<div class="faq-item"><h3>Does OOIDA offer health insurance to members?</h3><p>OOIDA offers occupational accident insurance, short-term disability, dental, vision, group term life, accidental death and dismemberment, and a limited plan covering preventive services, telemedicine, behavioral health and pharmacy network access. What it does not offer is comprehensive major medical with hospitalization and specialist coverage. Those products are genuinely useful and reasonably priced, but a driver relying on them alone is not protected against a catastrophic claim. Verify current offerings directly with OOIDA.</p></div>
-<div class="faq-item"><h3>Can I use a short-term health plan instead?</h3><p>Proceed carefully. A 2024 federal rule limited short-term limited duration insurance sold on or after September 1, 2024 to an initial term of no more than three months and no more than four months total including renewals. In August 2025 federal agencies announced they would not prioritize enforcement of that definition pending future rulemaking, and Florida has its own statute at Fla. Stat. § 627.6525 with different durations. The regulatory picture is genuinely unsettled. More importantly, short-term plans are medically underwritten, can exclude pre-existing conditions, and are not minimum essential coverage. For a driver managing hypertension, sleep apnea or diabetes — common in trucking — they frequently exclude the very thing you need covered.</p></div>
-<div class="faq-item"><h3>Can I deduct my health insurance premiums as an owner-operator?</h3><p>Generally yes, under IRC § 162(l), claimed on Form 7206 and reported on Schedule 1 of Form 1040. Three limits matter. The deduction cannot exceed net earnings from the business under which the plan is established. It is unavailable for any month you were eligible to participate in a subsidized plan through your own or your spouse's employer — eligibility disqualifies you even if you declined. And it does not reduce self-employment tax; the IRS instructions state you cannot subtract it when figuring net earnings for SE tax purposes. It is income tax relief only.</p></div>
+<div class="faq-item"><h3>Do owner-operators in Florida need workers' compensation?</h3><p>Fla. Stat. § 440.02(18)(d)4 excludes from the employee definition an owner-operator of a motor vehicle transporting property under written contract with a motor carrier, where the owner-operator furnishes the vehicle and the principal operating costs including fuel and repairs, and is not compensated on an hourly or time basis.</p>
+<p>Separately, non-construction employers only need workers' comp at four or more employees. Corporate officers and LLC members may file a Notice of Election to be Exempt with the Florida Division of Workers' Compensation. Classification carries real liability — confirm your specific arrangement with the Division or a Florida attorney.</p></div>
+<div class="faq-item"><h3>Does OOIDA offer health insurance to members?</h3><p>OOIDA offers occupational accident insurance, short-term disability, dental, vision, group term life, accidental death and dismemberment, and a limited plan covering preventive services, telemedicine, behavioral health and pharmacy network access.</p>
+<p>What it does not offer is comprehensive major medical with hospitalization and specialist coverage. Those products are genuinely useful and reasonably priced, but a driver relying on them alone is not protected against a catastrophic claim. Verify current offerings directly with OOIDA.</p></div>
+<div class="faq-item"><h3>Can I use a short-term health plan instead?</h3><p>Proceed carefully. A 2024 federal rule limited short-term limited duration insurance sold on or after September 1, 2024 to an initial term of no more than three months and no more than four months total including renewals. In August 2025 federal agencies announced they would not prioritize enforcement of that definition pending future rulemaking, and Florida has its own statute at Fla.</p>
+<p>Stat. § 627.6525 with different durations. The regulatory picture is genuinely unsettled. More importantly, short-term plans are medically underwritten, can exclude pre-existing conditions, and are not minimum essential coverage. For a driver managing hypertension, sleep apnea or diabetes — common in trucking — they frequently exclude the very thing you need covered.</p></div>
+<div class="faq-item"><h3>Can I deduct my health insurance premiums as an owner-operator?</h3><p>Generally yes, under IRC § 162(l), claimed on Form 7206 and reported on Schedule 1 of Form 1040. Three limits matter. The deduction cannot exceed net earnings from the business under which the plan is established.</p>
+<p>It is unavailable for any month you were eligible to participate in a subsidized plan through your own or your spouse's employer — eligibility disqualifies you even if you declined. And it does not reduce self-employment tax; the IRS instructions state you cannot subtract it when figuring net earnings for SE tax purposes. It is income tax relief only.</p></div>
 </div>
 
 <div class="cta-block">
@@ -887,5 +919,22 @@ btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"
 <script src="/vs-reviews.js" defer></script>
 <script src="/vs-guide.js" defer></script>
 <script src="/vs-oe-remind.js" defer></script>
+<script id="vs-read-js">(function(){try{
+var SKIP=".vs-answer,.carriers,.qf-card,.cta-strip,.modal,.modal-backdrop,#tdh-hub,.vs-related-guides,.vs-guide-sec,.sp,.vs-oer,#reviews-anchor,footer,header,.faq-item,.hero,.trust-bar";
+var BAD=/^(why .*choose|get .* in (four|4|3|three) steps|what .* say|ready to|we compare|sign in|find the right health insurance|related guides|more for)/i;
+var hs=[].slice.call(document.querySelectorAll("main h2, body > section h2, body > div h2, article h2")).filter(function(h,i,a){return a.indexOf(h)===i&&!h.closest(SKIP)&&!BAD.test(h.textContent.trim())&&h.textContent.trim().length>2;});
+if(hs.length<6)return;
+var es=(document.documentElement.lang||"").slice(0,2)==="es";
+function slug(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60);}
+var used={},items="";
+hs.forEach(function(h){if(!h.id){var b=slug(h.textContent)||"section",id=b,n=2;while(used[id]||document.getElementById(id))id=b+"-"+(n++);h.id=id;}used[h.id]=1;h.style.scrollMarginTop="90px";
+items+='<li><a href="#'+h.id+'">'+h.textContent.replace(/[<>&]/g,"").trim()+'</a></li>';});
+var nav=document.createElement("nav");nav.className="vs-toc";nav.setAttribute("aria-label",es?"En esta p\u00e1gina":"On this page");
+var open=window.matchMedia&&window.matchMedia("(min-width:760px)").matches;
+nav.innerHTML='<details'+(open?' open':'')+'><summary>'+(es?"En esta p\u00e1gina":"On this page")+' <span style="font-weight:500;color:#5b6b7f;font-size:.85rem;margin-left:6px">'+hs.length+(es?" secciones":" sections")+'</span></summary><ol>'+items+'</ol></details>';
+var ans=document.querySelector(".vs-answer");
+if(ans){nav.style.maxWidth="820px";nav.style.margin="0 auto 28px";var w=document.createElement("div");w.style.padding="0 16px";w.appendChild(nav);ans.parentNode.insertBefore(w,ans.nextSibling);}
+else hs[0].parentNode.insertBefore(nav,hs[0]);
+}catch(e){}})();</script>
 </body>
 </html>

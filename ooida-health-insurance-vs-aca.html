@@ -145,6 +145,32 @@ body{padding-bottom:0}
 .vcov.vcov-col .vsa-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (min-width:960px) and (max-width:1239px){.nav-links>a[href="/blog"]{display:none!important}}
 </style>
+<style id="vs-read-css">
+/* Readability for trucker pages: comfortable line length, size and spacing */
+.container.prose{max-width:780px}
+.vs-answer{max-width:820px;margin-left:auto!important;margin-right:auto!important}
+.vs-answer p+p,.callout p+p,.answer-box p+p{margin-top:10px!important}
+@media(max-width:860px){.vs-answer{margin-left:16px!important;margin-right:16px!important}}
+.container.prose p,.prose p,article.article-body p{font-size:1.0625rem;line-height:1.75}
+.container.prose h2,.prose h2,article.article-body h2{margin-top:1.8em}
+.container.prose h3,.prose h3,article.article-body h3{margin-top:1.4em}
+.container.prose li,.prose li,article.article-body li{line-height:1.65;margin-bottom:.4em}
+@media(max-width:640px){
+.container.prose p,.prose p,article.article-body p{font-size:1.02rem;line-height:1.7}
+.container.prose table,.prose table,article.article-body table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+}
+.vs-toc{border:1px solid #e4e9f2;background:#f8fafc;border-radius:14px;margin:8px 0 28px;font-family:Inter,system-ui,-apple-system,sans-serif}
+.vs-toc summary{cursor:pointer;list-style:none;padding:13px 16px;font-weight:700;color:#0b2346;font-size:.95rem;display:flex;justify-content:space-between;align-items:center}
+.vs-toc summary::-webkit-details-marker{display:none}
+.vs-toc summary::after{content:"+";color:#0db5a6;font-size:1.25rem;line-height:1}
+.vs-toc details[open] summary::after{content:"\2212"}
+.vs-toc ol{margin:0;padding:0 16px 14px 34px;columns:2;column-gap:28px}
+.vs-toc li{margin:0 0 6px;font-size:.92rem;line-height:1.4;break-inside:avoid}
+.vs-toc li::before{display:none}
+.vs-toc a{color:#16447f;text-decoration:none;font-weight:600}
+.vs-toc a:hover{text-decoration:underline}
+@media(max-width:640px){.vs-toc ol{columns:1}}
+</style>
 </head>
 <body>
 <div id="vs-scroll-bar"></div>
@@ -187,7 +213,8 @@ body{padding-bottom:0}
 
     <p>Nearly every owner-operator researching health coverage looks at OOIDA first, and that is a reasonable place to
     start. The Owner-Operator Independent Drivers Association has represented independent drivers since 1973 and its
-    member benefits are real. What causes trouble is the assumption that an association benefits package and a health
+    member benefits are real.</p>
+<p>What causes trouble is the assumption that an association benefits package and a health
     insurance plan are the same category of thing. They are not, and a driver who finds that out during a hospital
     admission finds it out expensively.</p>
     <p>This page lays out what OOIDA publishes, what each product category does and does not do, and how to run the
@@ -260,7 +287,8 @@ body{padding-bottom:0}
     credit is available and no association product can compete with money the government pays toward your premium.
     For an owner-operator covering a family, that credit is frequently the largest single line item in the comparison.</p>
     <p>The catch, and it is a real one for 2027: the enhanced subsidies expired at the end of 2025, so the credit now
-    ends abruptly at 400% of the federal poverty level rather than tapering. Roughly $62,600 of modified adjusted gross
+    ends abruptly at 400% of the federal poverty level rather than tapering.</p>
+<p>Roughly $62,600 of modified adjusted gross
     income for a single driver, roughly $128,600 for a family of four. Under that line the Marketplace is very hard to
     beat. Over it, the comparison is genuinely open and worth running properly.</p>
     <p>Because an owner-operator's MAGI is built from Schedule C profit rather than settlement gross, a lot of drivers
@@ -290,11 +318,16 @@ body{padding-bottom:0}
 <section class="section bg-soft">
   <div class="container" style="max-width:820px">
 <h2 class="center">OOIDA and Association Health Coverage FAQ</h2><div style="height:18px"></div><div class="faq">
-<details class="faq-item"><summary>Does OOIDA offer major medical health insurance?</summary><p>OOIDA's published life and health benefits page lists occupational accident coverage, short-term disability, accidental death and dismemberment, group term life, dental, voluntary vision, identity theft protection and minimum essential coverage. Those are valuable products, but most of them are supplemental rather than comprehensive major medical. Before you rely on any association benefit as your primary health coverage, ask for the certificate of coverage and check two specific things: whether it pays for a non-work-related illness, and whether it has an annual out-of-pocket maximum.</p></details>
-<details class="faq-item"><summary>Is occupational accident coverage the same as health insurance?</summary><p>No, and this is the most consequential misunderstanding in trucking. Occupational accident coverage responds to injuries arising out of your work. Health insurance responds to illness and injury regardless of how they happened. A driver with occupational accident coverage and nothing else is covered if a load shifts and breaks his ankle on a dock, and is not covered for a heart attack, a cancer diagnosis, a kidney stone at home on his 34, or the blood pressure medication that keeps his medical card at two years. Most owner-operators need both, and they are not substitutes for one another.</p></details>
-<details class="faq-item"><summary>What is minimum essential coverage, and is it enough?</summary><p>Minimum essential coverage is a regulatory category, not a level of benefit. It means a plan satisfies the Affordable Care Act's shared responsibility provision. A plan does not have to be ACA-compliant to count as MEC, and many MEC-only plans cover preventive services well while leaving hospitalisation, surgery and specialist care largely to you. If a plan is described to you as minimum essential coverage, treat that as a starting question rather than an answer: ask what it pays toward an inpatient stay and what your maximum exposure is in a bad year.</p></details>
-<details class="faq-item"><summary>So is OOIDA membership worth it for a driver?</summary><p>For most owner-operators, yes, but for reasons that have little to do with health insurance. OOIDA has represented independent drivers on regulatory and legislative issues since 1973, and the membership itself carries real value. The honest framing is that OOIDA membership and a comprehensive major medical plan solve different problems. Join for the advocacy and the supplemental products; do not assume the benefits package removes the need for major medical coverage.</p></details>
-<details class="faq-item"><summary>Can an association plan beat a Marketplace plan on price?</summary><p>Sometimes on the sticker, rarely on the arithmetic once a premium tax credit is in play. An owner-operator whose net Schedule C income lands under 400% of the federal poverty level may have a substantial credit available, and no association plan can compete with a subsidy. Above that line - the cliff came back when the enhanced subsidies expired at the end of 2025 - the comparison genuinely opens up, and a private PPO or a spouse's group plan deserves a look alongside anything an association offers.</p></details>
+<details class="faq-item"><summary>Does OOIDA offer major medical health insurance?</summary><p>OOIDA's published life and health benefits page lists occupational accident coverage, short-term disability, accidental death and dismemberment, group term life, dental, voluntary vision, identity theft protection and minimum essential coverage. Those are valuable products, but most of them are supplemental rather than comprehensive major medical.</p>
+<p>Before you rely on any association benefit as your primary health coverage, ask for the certificate of coverage and check two specific things: whether it pays for a non-work-related illness, and whether it has an annual out-of-pocket maximum.</p></details>
+<details class="faq-item"><summary>Is occupational accident coverage the same as health insurance?</summary><p>No, and this is the most consequential misunderstanding in trucking. Occupational accident coverage responds to injuries arising out of your work. Health insurance responds to illness and injury regardless of how they happened.</p>
+<p>A driver with occupational accident coverage and nothing else is covered if a load shifts and breaks his ankle on a dock, and is not covered for a heart attack, a cancer diagnosis, a kidney stone at home on his 34, or the blood pressure medication that keeps his medical card at two years. Most owner-operators need both, and they are not substitutes for one another.</p></details>
+<details class="faq-item"><summary>What is minimum essential coverage, and is it enough?</summary><p>Minimum essential coverage is a regulatory category, not a level of benefit. It means a plan satisfies the Affordable Care Act's shared responsibility provision. A plan does not have to be ACA-compliant to count as MEC, and many MEC-only plans cover preventive services well while leaving hospitalisation, surgery and specialist care largely to you.</p>
+<p>If a plan is described to you as minimum essential coverage, treat that as a starting question rather than an answer: ask what it pays toward an inpatient stay and what your maximum exposure is in a bad year.</p></details>
+<details class="faq-item"><summary>So is OOIDA membership worth it for a driver?</summary><p>For most owner-operators, yes, but for reasons that have little to do with health insurance. OOIDA has represented independent drivers on regulatory and legislative issues since 1973, and the membership itself carries real value.</p>
+<p>The honest framing is that OOIDA membership and a comprehensive major medical plan solve different problems. Join for the advocacy and the supplemental products; do not assume the benefits package removes the need for major medical coverage.</p></details>
+<details class="faq-item"><summary>Can an association plan beat a Marketplace plan on price?</summary><p>Sometimes on the sticker, rarely on the arithmetic once a premium tax credit is in play. An owner-operator whose net Schedule C income lands under 400% of the federal poverty level may have a substantial credit available, and no association plan can compete with a subsidy.</p>
+<p>Above that line - the cliff came back when the enhanced subsidies expired at the end of 2025 - the comparison genuinely opens up, and a private PPO or a spouse's group plan deserves a look alongside anything an association offers.</p></details>
 <details class="faq-item"><summary>What should I ask before enrolling in any trucking association plan?</summary><p>Five questions, in writing. Is this major medical or is it supplemental? Is there an annual or lifetime cap on what it pays? What is my out-of-pocket maximum? Are pre-existing conditions covered, and after what waiting period? And is the network usable in the states I actually run, or only near the association's home base? If any answer is vague, that is the answer.</p></details>
 </div>
   </div>
@@ -435,5 +468,22 @@ document.addEventListener("DOMContentLoaded",function(){var toggle=document.quer
 <script src="/vs-reviews.js" defer></script>
 <script src="/vs-guide.js" defer></script>
 <script src="/vs-oe-remind.js" defer></script>
+<script id="vs-read-js">(function(){try{
+var SKIP=".vs-answer,.carriers,.qf-card,.cta-strip,.modal,.modal-backdrop,#tdh-hub,.vs-related-guides,.vs-guide-sec,.sp,.vs-oer,#reviews-anchor,footer,header,.faq-item,.hero,.trust-bar";
+var BAD=/^(why .*choose|get .* in (four|4|3|three) steps|what .* say|ready to|we compare|sign in|find the right health insurance|related guides|more for)/i;
+var hs=[].slice.call(document.querySelectorAll("main h2, body > section h2, body > div h2, article h2")).filter(function(h,i,a){return a.indexOf(h)===i&&!h.closest(SKIP)&&!BAD.test(h.textContent.trim())&&h.textContent.trim().length>2;});
+if(hs.length<6)return;
+var es=(document.documentElement.lang||"").slice(0,2)==="es";
+function slug(t){return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60);}
+var used={},items="";
+hs.forEach(function(h){if(!h.id){var b=slug(h.textContent)||"section",id=b,n=2;while(used[id]||document.getElementById(id))id=b+"-"+(n++);h.id=id;}used[h.id]=1;h.style.scrollMarginTop="90px";
+items+='<li><a href="#'+h.id+'">'+h.textContent.replace(/[<>&]/g,"").trim()+'</a></li>';});
+var nav=document.createElement("nav");nav.className="vs-toc";nav.setAttribute("aria-label",es?"En esta p\u00e1gina":"On this page");
+var open=window.matchMedia&&window.matchMedia("(min-width:760px)").matches;
+nav.innerHTML='<details'+(open?' open':'')+'><summary>'+(es?"En esta p\u00e1gina":"On this page")+' <span style="font-weight:500;color:#5b6b7f;font-size:.85rem;margin-left:6px">'+hs.length+(es?" secciones":" sections")+'</span></summary><ol>'+items+'</ol></details>';
+var ans=document.querySelector(".vs-answer");
+if(ans){nav.style.maxWidth="820px";nav.style.margin="0 auto 28px";var w=document.createElement("div");w.style.padding="0 16px";w.appendChild(nav);ans.parentNode.insertBefore(w,ans.nextSibling);}
+else hs[0].parentNode.insertBefore(nav,hs[0]);
+}catch(e){}})();</script>
 </body>
 </html>
