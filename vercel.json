@@ -2,6 +2,11 @@
   "cleanUrls": true,
   "redirects": [
     {
+      "source": "/truck-driver-health-insurance-texas.html",
+      "destination": "/truck-driver-health-insurance-texas",
+      "permanent": true
+    },
+    {
       "source": "/truck-driver-health-insurance-alabama",
       "destination": "/truck-driver-health-insurance?state=AL",
       "permanent": true
@@ -259,16 +264,6 @@
     {
       "source": "/truck-driver-health-insurance-tennessee.html",
       "destination": "/truck-driver-health-insurance?state=TN",
-      "permanent": true
-    },
-    {
-      "source": "/truck-driver-health-insurance-texas",
-      "destination": "/truck-driver-health-insurance?state=TX",
-      "permanent": true
-    },
-    {
-      "source": "/truck-driver-health-insurance-texas.html",
-      "destination": "/truck-driver-health-insurance?state=TX",
       "permanent": true
     },
     {
