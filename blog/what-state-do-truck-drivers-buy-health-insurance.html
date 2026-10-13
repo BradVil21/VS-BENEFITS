@@ -339,6 +339,17 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 #vs-callbar a{font-size:.86rem!important;padding-left:8px!important;padding-right:8px!important}
 }
 </style>
+<style id="vs-bq-css">
+.vs-bq{margin:22px 0 30px;border:1px solid #d6e6f7;border-left:4px solid #0db5a6;background:#f4f9fd;border-radius:14px;padding:18px 20px;font-family:Inter,system-ui,-apple-system,sans-serif}
+.vs-bq strong.t{display:block;font-size:1.08rem;color:#0b2346;margin-bottom:4px}
+.vs-bq p{margin:0 0 12px!important;font-size:.95rem!important;line-height:1.55!important;color:#3b4b60}
+.vs-bq form{display:flex;gap:8px;flex-wrap:wrap}
+.vs-bq input{flex:1 1 150px;min-height:48px;border:1px solid #cfd9e6;border-radius:10px;padding:0 14px;font:inherit;font-size:16px;background:#fff}
+.vs-bq button{flex:0 0 auto;min-height:48px;border:0;border-radius:10px;padding:0 18px;background:#16447f;color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.vs-bq .alt{display:block;margin-top:10px;font-size:.88rem;color:#5b6b7f}
+.vs-bq .alt a{color:#0b7f74;font-weight:700}
+@media(max-width:420px){.vs-bq button{flex:1 1 100%}}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/truck-driver-open-enrollment-2027" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Drivers: Open Enrollment for 2027 runs Nov 1 &ndash; Jan 15. Enroll from the road by Dec 15 for Jan 1 coverage.</a></span><a href="/truckers/quote?from=trucker-oe-bar" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -411,7 +422,13 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         </picture>
       </div>
 
-      <h2 id="the-rule">The Rule Is Presence Plus Intent, Not Paperwork</h2>
+      <aside class="vs-bq" aria-label="Get a truck driver quote">
+<strong class="t">Get your driver quote in about 60 seconds</strong>
+<p>A licensed advisor checks every plan and tax credit for your home ZIP code, including PPO options that work on the road. Free, no obligation.</p>
+<form action="/truckers/quote" method="get"><input type="hidden" name="from" value="blog-what-state-do-truck-drivers-buy-health-insurance"><input name="zip" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="Home ZIP code" aria-label="Home ZIP code" required autocomplete="postal-code"><button type="submit">See my plans &rarr;</button></form>
+<span class="alt">Driving right now? <a href="tel:+19548251009">Speak to an advisor</a> when you're parked.</span>
+</aside>
+<h2 id="the-rule">The Rule Is Presence Plus Intent, Not Paperwork</h2>
       <p>Most drivers assume the marketplace wants proof of a fixed home, and that having no such home puts them outside the system. It does not. Here is what the regulation actually says.</p>
       <p><strong>45 CFR &sect; 155.305(a)(3)</strong> sets the residency standard for marketplace eligibility. For an adult 21 or older who is not institutionalized, the applicable exchange is the one covering the service area where the person is living and either:</p>
       <ul class="checklist">

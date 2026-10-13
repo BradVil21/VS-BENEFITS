@@ -638,6 +638,24 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 #vs-callbar a{font-size:.86rem!important;padding-left:8px!important;padding-right:8px!important}
 }
 </style>
+<style id="tdh-collapse-css">
+#tdh-hub details.tdh-col>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+#tdh-hub details.tdh-col>summary::-webkit-details-marker{display:none}
+#tdh-hub details.tdh-col>summary h3{margin:0}
+#tdh-hub details.tdh-col>summary::after{content:"+";color:#0db5a6;font-size:1.25rem;line-height:1;font-weight:700}
+#tdh-hub details.tdh-col[open]>summary::after{content:"\2212"}
+#tdh-hub details.tdh-col[open]>summary{margin-bottom:10px}
+@media(min-width:641px){#tdh-hub details.tdh-col>summary{pointer-events:none}#tdh-hub details.tdh-col>summary::after{display:none}}
+@media(max-width:640px){#tdh-hub .tdh-col{padding:14px 16px}#tdh-hub .tdh-grid{gap:10px}}
+</style>
+<style id="faq-more-css">
+details.faq-more{margin-top:10px}
+details.faq-more>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;margin:6px auto 0;padding:11px 18px;border:1px solid #cfd9e6;border-radius:999px;font-weight:700;color:#16447f;background:#fff;font-size:.95rem}
+details.faq-more>summary::-webkit-details-marker{display:none}
+details.faq-more[open]>summary{display:none}
+.faq-more-wrap{text-align:center}
+details.faq-more>.faq-item,details.faq-more>details{text-align:left}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Enroll by Dec 15 for a January 1 start.</a></span><a href="/truckers/quote?from=trucker-oe-bar" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -762,69 +780,10 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 </div>
 
 <!-- WHY TRUCKERS NEED SPECIALIZED COVERAGE -->
-<section class="section bg-soft">
-  <div class="container">
-    <div class="photo-split">
-      <div>
-        <span class="eyebrow">Why It Matters</span>
-        <h2>Why Truck Drivers Need Specialized Health Coverage</h2>
-        <p>Standard employer plans are not available to owner-operators and 1099 truck drivers. You are self-employed, often crossing state lines every day, and need health insurance that works wherever the load takes you, not just in your home state.</p><p>Without the right plan, a single injury or hospital stay can sideline your trucking career financially. Here is what sets health insurance for truck drivers apart from a standard individual plan:</p>
-        <ul class="check-list" style="margin-bottom:24px">
-          <li>Long-haul routes require national or multi-state provider networks</li>
-          <li>No employer to split premiums, so deduction strategy matters</li>
-          <li>Pre-existing conditions from years of physical work need real coverage</li>
-          <li>Injury, illness, or downtime with no coverage can end a trucking career</li>
-          <li>ACA subsidies can dramatically lower your monthly premium</li>
-          <li>PPO plans let you see any doctor anywhere without a referral or prior authorization</li>
-          <li>Supplemental plans pay cash benefits that replace lost income while you are off the road</li>
-        </ul>
-<p><b>DOT physical help:</b> <a href="/dot-physical-blood-pressure-requirements">DOT blood pressure limits</a> &middot; <a href="/how-long-is-a-dot-physical-good-for">how long a DOT physical is good for</a> &middot; <a href="/does-health-insurance-cover-dot-physical">does insurance cover it?</a></p>
-        <a class="btn btn-primary" href="/truckers/quote?from=truck-driver-health-insurance">Find My Plan</a>
-      </div>
-      <img src="/compressed/truck2.jpg" alt="Self-employed truck driver reviewing health insurance options" loading="lazy" />
-    </div>
-  </div>
-</section>
+
 
 <!-- PLAN OPTIONS -->
-<section class="section">
-  <div class="container">
-    <div class="center" style="margin-bottom:32px">
-      <span class="eyebrow">Coverage Options</span>
-      <h2>Health Insurance Plans Available to Truck Drivers</h2>
-      <p style="max-width:680px;margin:0 auto">We compare every option available to owner-operators and CDL drivers so you get the right coverage, not the highest commission plan.</p>
-    </div>
-    <div class="cards">
-      <div class="card">
-        <div class="card-img"><img src="/compressed/familyhappy.jpg" alt="PPO health insurance plan for truckers" loading="lazy" /></div>
-        <div class="card-body">
-          <div class="ic">P</div>
-          <h3>PPO Plans for Truck Drivers</h3>
-          <p>See any provider in any state without a referral or prior authorization. PPO plans are the gold standard for long-haul and OTR drivers who need care on the road. In-network and out-of-network benefits included.</p>
-          <span class="tag">Best for long-haul and OTR</span>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-img"><img src="/compressed/ACA.jpg" alt="ACA marketplace health insurance" loading="lazy" /></div>
-        <div class="card-body">
-          <div class="ic">A</div>
-          <h3>ACA Marketplace</h3>
-          <p>If your net income qualifies, federal premium tax credits can cut your monthly cost significantly. Many owner-operators and 1099 truck drivers pay $0 to $80 per month after credits. We check every subsidy you are eligible for.</p>
-          <span class="tag">Tax credits available</span>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-img"><img src="/compressed/brokenarm.jpg" alt="Short term and supplemental health plans" loading="lazy" /></div>
-        <div class="card-body">
-          <div class="ic">S</div>
-          <h3>Supplemental and Accident Coverage</h3>
-          <p>Accident, critical illness, and hospital indemnity plans that pay cash benefits directly to you when an injury sidelines you from driving. These pair with your main plan to replace lost income and cover gaps.</p>
-          <span class="tag">Income protection on the road</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <!-- COST / PRICING SECTION -->
 <section class="section bg-soft">
@@ -916,18 +875,9 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <div class="tds-call" style="border-left:4px solid #e8a33d;background:#fff8ec;border-radius:0 12px 12px 0;padding:16px 18px;margin:22px 0"><strong>DOT physical flagged your blood pressure or blood sugar? Don't wait.</strong> Every ACA plan covers pre-existing conditions, so a flagged reading can't be used to turn you down. Get covered before your next medical card renewal so you can see a doctor and get treated, instead of hoping the numbers come down on their own. Leaving a company job to lease on or run your own authority? Losing that plan opens a 60-day window to enroll, any time of year.</div>
 
 <h2 id="network-reach">Network Reach: The Thing That Actually Matters on the Road</h2>
-<p>A plan is only as good as the providers who will take it where you happen to be. For a driver, that is the whole ballgame &mdash; and it is where cheap plans quietly fail.</p>
-
-<p>Blue Cross Blue Shield plans are common among drivers for a structural reason: the <strong>BlueCard</strong> program lets a member of one state's Blue plan use in-network providers in other states. For someone running 48 states, that portability is worth real money. It is not the only option, but it explains why so many drivers end up on a Blue plan.</p>
-
-<p>What to check before you enroll, in order of importance:</p>
-<ul>
-<li><strong>Is it a PPO or an HMO?</strong> HMOs generally require in-network care and a referral for specialists. Out of network, you are typically covered only for true emergencies. For a driver, that is a serious constraint.</li>
-<li><strong>Does the network extend beyond your home state?</strong> Ask specifically. Many low-cost marketplace plans are built around a single metro area.</li>
-<li><strong>What counts as an emergency?</strong> Every plan covers emergencies nationwide. The gap is urgent care and follow-up visits &mdash; the things that actually happen on the road.</li>
-<li><strong>Where can you fill prescriptions?</strong> A pharmacy network limited to one regional chain is a real problem when you are 1,200 miles out.</li>
-<li><strong>Is telehealth included?</strong> For a driver this is not a perk. It is often the only practical way to see a provider without losing a day.</li>
-</ul>
+<p>A plan is only as good as the doctors who take it where you are. Before you enroll, check three things: whether it is a PPO, EPO or HMO, whether the network reaches beyond your home state, and whether telehealth and prescriptions work on the road.</p>
+<p>Every plan covers emergencies nationwide. The gap is urgent care and follow-up visits, the care that actually happens on the road. Blue Cross Blue Shield plans are common with drivers because the BlueCard program gives in-network access in other states.</p>
+<p>Full details: <a href="/nationwide-ppo-health-insurance-truck-drivers">nationwide PPO plans for drivers</a> and <a href="/blue-cross-blue-shield-truck-drivers">which Blue plans travel</a>.</p>
 
 <h2 id="family">Covering Your Family When You Are Not Home</h2>
 <p>Most drivers are insuring a household, not just themselves &mdash; and household coverage has its own logic.</p>
@@ -1145,38 +1095,17 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <p class="tds-note">In states that <strong>haven't expanded Medicaid</strong>, drivers with very low net income can fall into a gap and need to plan around it. Wherever you live, we compare every plan for your ZIP code, apply any tax credit, and check which networks work on the road. <a href="/truckers/quote?from=truck-driver-health-insurance-by-state">Get your state's options in about 60 seconds &rarr;</a></p>
 
 <h2 id="avoid">What to Be Careful With</h2>
-<p>Two products get marketed hard to drivers, often at truck stops and over the phone. Neither is illegal, and neither is health insurance.</p>
-
-<h3>Health care sharing ministries</h3>
-<p>These are faith-based cost-sharing arrangements, not insurance. According to <a href="https://www.healthinsurance.org/other-coverage/healthcare-sharing-ministries-a-leap-of-faith/" rel="nofollow">healthinsurance.org</a>, they are exempt from insurance regulation in about 30 states, which means <strong>members cannot file a complaint with a state insurance department</strong> if a bill goes unpaid.</p>
-<p>Payment is not guaranteed &mdash; some programs state outright that they do not promise your bills will be paid. They can also decline or exclude pre-existing conditions through medical underwriting, and some cap what they will share per incident.</p>
-<p>The monthly cost is genuinely lower. The tradeoff is that you carry the risk personally, with no regulator to appeal to. For a driver whose income depends on staying medically certified, that is a meaningful thing to weigh.</p>
-
-<h3>Short-term medical plans</h3>
-<p>Short-term plans are real insurance, but they are not ACA-compliant. They can deny you for pre-existing conditions, they typically exclude maternity and mental health care, and they can decline to renew you after a claim. They serve one legitimate purpose: bridging a genuine gap of a few weeks when no qualifying life event applies. They are not a substitute for year-round coverage.</p>
-
-<div class="highlight-box">
-<h4>The honest version</h4>
-<p style="margin:0">If a plan costs dramatically less than everything else, find out what was removed to get there. Sometimes the answer is fine &mdash; a higher deductible you can absorb. Sometimes the answer is the guarantee that it pays at all. We will tell you which one you are looking at, even when the answer is that your current plan is already the right one.</p>
-</div>
+<p>Two products get marketed hard to drivers, often at truck stops and over the phone. Neither is ACA health insurance.</p>
+<ul>
+<li><strong>Health care sharing ministries:</strong> not insurance. Payment is not guaranteed, and in about 30 states members cannot complain to the state insurance department (<a href="https://www.healthinsurance.org/other-coverage/healthcare-sharing-ministries-a-leap-of-faith/" rel="nofollow">healthinsurance.org</a>).</li>
+<li><strong>Short-term medical plans:</strong> can deny pre-existing conditions, usually leave out maternity and mental health care, and can drop you after a claim. Fine for a gap of a few weeks, not for year-round coverage.</li>
+</ul>
+<p>Trucking association packages are mostly accident, dental and disability coverage. Compare <a href="/ooida-health-insurance-vs-aca">OOIDA vs the Marketplace</a> and <a href="/occupational-accident-vs-health-insurance">occupational accident vs health insurance</a>.</p>
 
 </div>
 </section>
 <!-- vs-trucking-hub -->
-<section class="section">
-  <div class="container">
-    <div class="center" style="margin-bottom:26px">
-      <span class="eyebrow">Keeping the Premium Down</span>
-      <h2>Affordable Health Insurance for Truckers</h2>
-    </div>
-    <div style="max-width:760px;margin:0 auto">
-      <p>Affordable health insurance for truckers usually comes down to one thing: getting your income counted correctly. Owner-operators and 1099 drivers are assessed on <strong>net income after truck expenses</strong> — fuel, maintenance, insurance, depreciation — not gross settlements.</p>
-<p>A driver grossing $180,000 might net $55,000 on paper, and at that income level ACA premium tax credits routinely cut a $500 sticker premium to under $100 a month. Many drivers we work with pay $0 to $80 per month after credits.</p>
-      <p style="margin-top:14px">If your income is above the credit threshold, the self-employed health insurance deduction lets most owner-operators write off 100% of premiums, which lowers the true cost of even a full-price national PPO.</p>
-<p style="margin-top:14px">See real numbers on our <a href="/truck-driver-health-insurance-cost">truck driver health insurance cost guide</a>, or compare subsidized prices for your ZIP on the <a href="/affordable-health-insurance">affordable health insurance page</a>. Not sure which route wins for your operation? The <a href="/owner-operator-plan-finder">owner-operator plan finder</a> takes two minutes.</p>
-    </div>
-  </div>
-</section>
+
 
 <!-- FAQ -->
 <section class="section bg-soft">
@@ -1191,7 +1120,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <details class="faq-item"><summary>Is health insurance tax deductible for owner-operators?</summary><p>Self-employed truck drivers who pay their own premiums may be able to deduct 100% of health insurance costs from their taxable income under the self-employed health insurance deduction. This applies to premiums for yourself, your spouse, and your dependents. It is one of the largest tax benefits available to owner-operators. Consult your tax advisor for your specific situation.</p></details>
       <details class="faq-item"><summary>What is the best health insurance for truck drivers?</summary><p>For long-haul and OTR drivers, a PPO plan with a national network is usually the best fit. You can see any provider in any state without a referral, which matters when you are away from home for weeks at a time. For regional or local drivers, an ACA plan with premium tax credits often provides better value. VS Health Benefits compares both for every client.</p></details>
       <details class="faq-item"><summary>Do I need coverage that works in multiple states?</summary><p>If you cross state lines regularly, yes. HMO plans typically restrict you to a local network, which creates real problems when you need care in another state. PPO plans offer out-of-network benefits nationwide so you can get care wherever you are. We specifically look for plans with broad national networks when working with truck drivers.</p></details>
-      <details class="faq-item"><summary>How much does health insurance cost for a truck driver?</summary><p>It depends on your income, state, age, and family size. Many owner-operators qualify for ACA subsidies that bring premiums down substantially. Some drivers pay as little as $0 to $80 per month after credits. Those above the subsidy threshold typically pay $300 to $600 per month for a strong PPO plan, which may be partially or fully deductible as a self-employed business expense. We run the exact numbers for free.</p></details>
+      <div class="faq-more-wrap"><details class="faq-more"><summary>Show 8 more questions</summary><details class="faq-item"><summary>How much does health insurance cost for a truck driver?</summary><p>It depends on your income, state, age, and family size. Many owner-operators qualify for ACA subsidies that bring premiums down substantially. Some drivers pay as little as $0 to $80 per month after credits. Those above the subsidy threshold typically pay $300 to $600 per month for a strong PPO plan, which may be partially or fully deductible as a self-employed business expense. We run the exact numbers for free.</p></details>
       <details class="faq-item"><summary>What is the best health insurance for owner-operators?</summary><p>For most owner-operators, a nationwide PPO plan is the top choice because you can see any doctor in any state without a referral. If your income qualifies for ACA subsidies, an ACA PPO plan combines that broad access with a lower monthly premium. We run both scenarios side by side so you can decide which fits your situation.</p></details>
       <details class="faq-item"><summary>Can 1099 truck drivers get health insurance?</summary><p>Yes. If you receive a 1099 as an independent contractor or owner-operator, you are considered self-employed and eligible for ACA marketplace plans as well as private PPO plans. Many 1099 truck drivers qualify for premium tax credits that bring monthly costs down significantly. We help 1099 drivers enroll every day.</p></details>
       <details class="faq-item"><summary>How do I get health insurance as a truck driver with no employer?</summary><p>You have two main paths. First, the ACA marketplace, you can apply during open enrollment or a special enrollment period if you recently lost other coverage. Second, private off-marketplace plans available year-round through licensed advisors like VS Health Benefits. We compare both options and enroll you in the one that saves the most money with the best coverage.</p></details>
@@ -1204,7 +1133,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <summary>Is medical insurance for owner operators different from health insurance?</summary>
         <div class="faq-a"><p>No — they are two names for the same thing. Drivers search for &ldquo;medical insurance for owner operators&rdquo; and &ldquo;owner operator medical insurance,&rdquo; but on the marketplace the product is a major medical health insurance plan.</p>
 <p>What matters is not the label but the network: an owner-operator needs a plan whose provider network follows the truck across state lines, which is why we steer drivers toward national PPO networks rather than a local HMO.</p></div>
-      </details>
+      </details></details></div>
     </div>
   </div>
 </section>
@@ -1295,35 +1224,10 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 
 
 <!-- TESTIMONIALS -->
-<section class="section bg-soft">
-  <div class="container">
-    <div class="center" style="margin-bottom:24px">
-      <h2>Why Owner-Operators and Truck Drivers Choose VS Health Benefits</h2>
-    </div>
-    <div class="stats">
-      <div class="stat"><div class="stat-num">40+</div><div class="stat-label">States licensed</div></div>
-      <div class="stat"><div class="stat-num">$0</div><div class="stat-label">Consultation cost</div></div>
-      <div class="stat"><div class="stat-num">10+</div><div class="stat-label">Major carriers compared</div></div>
-      <div class="stat"><div class="stat-num">24h</div><div class="stat-label">Typical reply time</div></div>
-    </div>
-  </div>
-</section>
+
 
 <!-- PROCESS -->
-<section class="section bg-soft">
-  <div class="container">
-    <div class="center" style="margin-bottom:36px">
-      <span class="eyebrow">How It Works</span>
-      <h2>Get Truck Driver Health Insurance in Four Steps</h2>
-    </div>
-    <div class="process">
-      <div class="step"><div class="n">1</div><h3>Free Consult</h3><p>15-minute call. We learn your routes, income, and what your current coverage is missing.</p></div>
-      <div class="step"><div class="n">2</div><h3>Compare Plans</h3><p>We pull PPO, ACA, and private quotes from every carrier that fits your situation and budget.</p></div>
-      <div class="step"><div class="n">3</div><h3>Enroll Fast</h3><p>We handle all the paperwork so you can stay on the road, not on hold.</p></div>
-      <div class="step"><div class="n">4</div><h3>Year-Round Support</h3><p>Claims help, renewals, and plan changes included. One call, we handle it.</p></div>
-    </div>
-  </div>
-</section>
+
 
 <!-- QUOTE FORM -->
 <section class="section" id="reviews-anchor">
@@ -1369,18 +1273,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 </section>
 
 <!-- AFFORDABLE COVERAGE -->
-<section class="section">
-  <div class="container">
-    <div class="cta-strip">
-      <h2>Ready to Get Health Coverage While You Are on the Road?</h2>
-      <p>Free 15-minute consult. No pressure. No fees. Just the right plan for truck drivers and owner-operators.</p>
-      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
-        <a class="btn btn-ghost" href="/truckers/quote?from=truck-driver-health-insurance">Get a Free Quote</a>
-        <a href="tel:+19548251009" class="btn" style="background:#fff;color:var(--blue-700);border-color:#fff">Call an Advisor</a>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <!-- FOOTER -->
 
@@ -1415,7 +1308,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <div class="container"><div class="tdh-wrap">
 <h2>Truck driver health insurance guides</h2>
 <p class="tdh-sub">Everything we have written for owner-operators, company drivers and carriers, in one place.</p>
-<div class="tdh-grid"><div class="tdh-col"><h3>Owner-operators &amp; cost</h3><ul><li><a href="/best-health-insurance-owner-operators">Best Plans for Owner-Operators</a></li><li><a href="/truck-driver-health-insurance-cost">What Coverage Actually Costs</a></li><li><a href="/truck-driver-health-insurance-cost-calculator">Driver Cost Calculator</a></li><li><a href="/owner-operator-subsidy-cliff-calculator">Owner-Operator Subsidy Cliff Calculator</a></li><li><a href="/owner-operator-plan-finder">Owner-Operator Plan Finder</a></li><li><a href="/blog/owner-operator-health-insurance-increase-2027">Owner-Operators: Cut Your 2027 Cost</a></li><li><a href="/blog/can-owner-operators-deduct-health-insurance">Deducting Your Premiums</a></li><li><a href="/blog/company-driver-to-owner-operator-health-insurance">Going Owner-Operator</a></li><li><a href="/aca-vs-private-health-insurance-truck-drivers">ACA vs Private Plans</a></li><li><a href="/ooida-health-insurance-vs-aca">OOIDA vs the Marketplace</a></li></ul></div><div class="tdh-col"><h3>Coverage on the road</h3><ul><li><a href="/nationwide-ppo-health-insurance-truck-drivers">OTR and Long-Haul Drivers</a></li><li><a href="/blue-cross-blue-shield-truck-drivers">Blue Cross Blue Shield for Drivers</a></li><li><a href="/blog/what-state-do-truck-drivers-buy-health-insurance">What state do you buy health insurance in when you live in your truck?</a></li><li><a href="/blog/using-health-insurance-out-of-state-truck-drivers">Using your plan out of state: ER, urgent care and surprise bills</a></li><li><a href="/blog/truck-driver-prescriptions-on-the-road">Filling prescriptions 900 miles from your pharmacy</a></li><li><a href="/family-health-insurance">Coverage for Your Family</a></li><li><a href="/occupational-accident-vs-health-insurance">Occupational Accident vs Health Insurance</a></li><li><a href="/truck-driver-open-enrollment-2027">Open Enrollment 2027 for Drivers</a></li></ul></div><div class="tdh-col"><h3>DOT physical &amp; your health</h3><ul><li><a href="/cdl-driver-health-insurance">CDL Drivers and DOT Physicals</a></li><li><a href="/does-health-insurance-cover-dot-physical">Does Insurance Cover DOT Physicals?</a></li><li><a href="/dot-physical-requirements">DOT Physical Requirements</a></li><li><a href="/dot-physical-blood-pressure-requirements">DOT Blood Pressure Limits</a></li><li><a href="/how-long-is-a-dot-physical-good-for">How Long a DOT Physical Lasts</a></li><li><a href="/blog/sleep-apnea-cpap-cdl-health-insurance">Sleep Apnea and Your CDL</a></li><li><a href="/blog/cdl-blood-pressure-health-insurance">Blood Pressure and Your Medical Card</a></li></ul></div><div class="tdh-col"><h3>Fleets &amp; trucking companies</h3><ul><li><a href="/health-insurance-for-trucking-companies">Fleets and Trucking Companies</a></li><li><a href="/trucking-company-health-benefits-florida">Health Benefits for Small Florida Trucking Companies</a></li><li><a href="/best-trucking-company-health-benefits">Judging a Fleet's Benefits</a></li><li><a href="/group-health-insurance-for-refrigerated-trucking-companies">Reefer Fleet Group Coverage</a></li><li><a href="/group-health-insurance-for-heavy-haul-trucking-companies">Heavy Haul Fleet Coverage</a></li><li><a href="/group-health-insurance-for-oilfield-trucking-companies">Oilfield Trucking Coverage</a></li><li><a href="/group-health-insurance-for-dump-truck-fleets">Dump Truck Fleet Coverage</a></li></ul></div><div class="tdh-col"><h3>By city &amp; state</h3><ul><li><a href="/truck-driver-health-insurance-florida">Florida Drivers</a></li><li><a href="/truck-driver-health-insurance-dallas-tx">Dallas-Fort Worth Drivers</a></li><li><a href="/truck-driver-health-insurance-atlanta-ga">Atlanta, GA Drivers</a></li><li><a href="/truck-driver-health-insurance-memphis-tn">Memphis, TN Drivers</a></li><li><a href="/truck-driver-health-insurance-indianapolis-in">Indianapolis, IN Drivers</a></li><li><a href="/truck-driver-health-insurance-raleigh-nc">Raleigh and North Carolina</a></li><li><a href="#by-state">All 33 states &rarr;</a></li></ul></div></div>
+<div class="tdh-grid"><details class="tdh-col" open><summary><h3>Owner-operators &amp; cost</h3></summary><ul><li><a href="/best-health-insurance-owner-operators">Best Plans for Owner-Operators</a></li><li><a href="/truck-driver-health-insurance-cost">What Coverage Actually Costs</a></li><li><a href="/truck-driver-health-insurance-cost-calculator">Driver Cost Calculator</a></li><li><a href="/owner-operator-subsidy-cliff-calculator">Owner-Operator Subsidy Cliff Calculator</a></li><li><a href="/owner-operator-plan-finder">Owner-Operator Plan Finder</a></li><li><a href="/blog/owner-operator-health-insurance-increase-2027">Owner-Operators: Cut Your 2027 Cost</a></li><li><a href="/blog/can-owner-operators-deduct-health-insurance">Deducting Your Premiums</a></li><li><a href="/blog/company-driver-to-owner-operator-health-insurance">Going Owner-Operator</a></li><li><a href="/aca-vs-private-health-insurance-truck-drivers">ACA vs Private Plans</a></li><li><a href="/ooida-health-insurance-vs-aca">OOIDA vs the Marketplace</a></li></ul></details><details class="tdh-col" open><summary><h3>Coverage on the road</h3></summary><ul><li><a href="/nationwide-ppo-health-insurance-truck-drivers">OTR and Long-Haul Drivers</a></li><li><a href="/blue-cross-blue-shield-truck-drivers">Blue Cross Blue Shield for Drivers</a></li><li><a href="/blog/what-state-do-truck-drivers-buy-health-insurance">What state do you buy health insurance in when you live in your truck?</a></li><li><a href="/blog/using-health-insurance-out-of-state-truck-drivers">Using your plan out of state: ER, urgent care and surprise bills</a></li><li><a href="/blog/truck-driver-prescriptions-on-the-road">Filling prescriptions 900 miles from your pharmacy</a></li><li><a href="/family-health-insurance">Coverage for Your Family</a></li><li><a href="/occupational-accident-vs-health-insurance">Occupational Accident vs Health Insurance</a></li><li><a href="/truck-driver-open-enrollment-2027">Open Enrollment 2027 for Drivers</a></li></ul></details><details class="tdh-col" open><summary><h3>DOT physical &amp; your health</h3></summary><ul><li><a href="/cdl-driver-health-insurance">CDL Drivers and DOT Physicals</a></li><li><a href="/does-health-insurance-cover-dot-physical">Does Insurance Cover DOT Physicals?</a></li><li><a href="/dot-physical-requirements">DOT Physical Requirements</a></li><li><a href="/dot-physical-blood-pressure-requirements">DOT Blood Pressure Limits</a></li><li><a href="/how-long-is-a-dot-physical-good-for">How Long a DOT Physical Lasts</a></li><li><a href="/blog/sleep-apnea-cpap-cdl-health-insurance">Sleep Apnea and Your CDL</a></li><li><a href="/blog/cdl-blood-pressure-health-insurance">Blood Pressure and Your Medical Card</a></li></ul></details><details class="tdh-col" open><summary><h3>Fleets &amp; trucking companies</h3></summary><ul><li><a href="/health-insurance-for-trucking-companies">Fleets and Trucking Companies</a></li><li><a href="/trucking-company-health-benefits-florida">Health Benefits for Small Florida Trucking Companies</a></li><li><a href="/best-trucking-company-health-benefits">Judging a Fleet's Benefits</a></li><li><a href="/group-health-insurance-for-refrigerated-trucking-companies">Reefer Fleet Group Coverage</a></li><li><a href="/group-health-insurance-for-heavy-haul-trucking-companies">Heavy Haul Fleet Coverage</a></li><li><a href="/group-health-insurance-for-oilfield-trucking-companies">Oilfield Trucking Coverage</a></li><li><a href="/group-health-insurance-for-dump-truck-fleets">Dump Truck Fleet Coverage</a></li></ul></details><details class="tdh-col" open><summary><h3>By city &amp; state</h3></summary><ul><li><a href="/truck-driver-health-insurance-florida">Florida Drivers</a></li><li><a href="/truck-driver-health-insurance-dallas-tx">Dallas-Fort Worth Drivers</a></li><li><a href="/truck-driver-health-insurance-atlanta-ga">Atlanta, GA Drivers</a></li><li><a href="/truck-driver-health-insurance-memphis-tn">Memphis, TN Drivers</a></li><li><a href="/truck-driver-health-insurance-indianapolis-in">Indianapolis, IN Drivers</a></li><li><a href="/truck-driver-health-insurance-raleigh-nc">Raleigh and North Carolina</a></li><li><a href="#by-state">All 33 states &rarr;</a></li></ul></details></div>
 <div class="tdh-cta"><a class="btn btn-primary" href="/truckers/quote?from=truck-driver-health-insurance-hub">Get my driver quote &rarr;</a></div>
 </div></div></section>
 <section class="section vs-guide-sec" style="padding-top:36px;padding-bottom:36px"><div class="container"><div data-vs-guide="/truck-driver-health-insurance"></div></div></section>
@@ -1994,5 +1887,6 @@ var ans=document.querySelector(".vs-answer");
 if(ans){nav.style.maxWidth="820px";nav.style.margin="0 auto 28px";var w=document.createElement("div");w.style.padding="0 16px";w.appendChild(nav);ans.parentNode.insertBefore(w,ans.nextSibling);}
 else hs[0].parentNode.insertBefore(nav,hs[0]);
 }catch(e){}})();</script>
+<script id="tdh-collapse-js">(function(){var m=window.matchMedia&&window.matchMedia("(max-width:640px)").matches;document.querySelectorAll("#tdh-hub details.tdh-col").forEach(function(d){if(m)d.removeAttribute("open");else d.setAttribute("open","");});})();</script>
 </body>
 </html>

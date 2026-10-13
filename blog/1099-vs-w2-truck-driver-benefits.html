@@ -262,6 +262,17 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 #vs-callbar a{font-size:.86rem!important;padding-left:8px!important;padding-right:8px!important}
 }
 </style>
+<style id="vs-bq-css">
+.vs-bq{margin:22px 0 30px;border:1px solid #d6e6f7;border-left:4px solid #0db5a6;background:#f4f9fd;border-radius:14px;padding:18px 20px;font-family:Inter,system-ui,-apple-system,sans-serif}
+.vs-bq strong.t{display:block;font-size:1.08rem;color:#0b2346;margin-bottom:4px}
+.vs-bq p{margin:0 0 12px!important;font-size:.95rem!important;line-height:1.55!important;color:#3b4b60}
+.vs-bq form{display:flex;gap:8px;flex-wrap:wrap}
+.vs-bq input{flex:1 1 150px;min-height:48px;border:1px solid #cfd9e6;border-radius:10px;padding:0 14px;font:inherit;font-size:16px;background:#fff}
+.vs-bq button{flex:0 0 auto;min-height:48px;border:0;border-radius:10px;padding:0 18px;background:#16447f;color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.vs-bq .alt{display:block;margin-top:10px;font-size:.88rem;color:#5b6b7f}
+.vs-bq .alt a{color:#0b7f74;font-weight:700}
+@media(max-width:420px){.vs-bq button{flex:1 1 100%}}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/truck-driver-open-enrollment-2027" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Drivers: Open Enrollment for 2027 runs Nov 1 &ndash; Jan 15. Enroll from the road by Dec 15 for Jan 1 coverage.</a></span><a href="/truckers/quote?from=trucker-oe-bar" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -302,6 +313,12 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <p class="lede">Whether your carrier pays you on a W-2 or a 1099 changes almost everything about your benefits, especially health insurance. One usually means the company can offer coverage; the other means you are on your own, with some real advantages if you know how to use them. Here is the honest comparison.</p>
 <div class="hero-img"><img src="/compressed/truckdriver2.jpg" alt="Truck driver comparing 1099 and W-2 benefits including health insurance" width="1200" height="525" itemprop="image" /></div>
 <div class="alert-box"><div class="icon">📋</div><div><strong style="color:var(--ink)">The short version</strong><br><span style="color:var(--ink-2);font-size:.93rem"><strong>W-2 drivers</strong> are employees who may get an employer health plan and have taxes withheld. <strong>1099 drivers</strong> are independent, no company benefits, but you buy your own coverage, control your setup, and can deduct your premiums. Either way, you have good options.</span></div></div>
+<aside class="vs-bq" aria-label="Get a truck driver quote">
+<strong class="t">Get your driver quote in about 60 seconds</strong>
+<p>A licensed advisor checks every plan and tax credit for your home ZIP code, including PPO options that work on the road. Free, no obligation.</p>
+<form action="/truckers/quote" method="get"><input type="hidden" name="from" value="blog-1099-vs-w2-truck-driver-benefits"><input name="zip" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="Home ZIP code" aria-label="Home ZIP code" required autocomplete="postal-code"><button type="submit">See my plans &rarr;</button></form>
+<span class="alt">Driving right now? <a href="tel:+19548251009">Speak to an advisor</a> when you're parked.</span>
+</aside>
 <h2 id="w2">W-2 Company Drivers</h2>
 <p>As a W-2 driver you are an employee. The carrier withholds your taxes and may offer benefits like a group health plan, though many smaller fleets do not, or the plan is expensive for family coverage.</p>
 <p>If your employer's plan is offered and affordable for you, that is usually your simplest path. If it is not offered, or the cost for your family is unaffordable, you have another option most drivers do not know about.</p>

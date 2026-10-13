@@ -496,6 +496,24 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 #vs-callbar a{font-size:.86rem!important;padding-left:8px!important;padding-right:8px!important}
 }
 </style>
+<style id="tdh-collapse-css">
+#tdh-hub details.tdh-col>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+#tdh-hub details.tdh-col>summary::-webkit-details-marker{display:none}
+#tdh-hub details.tdh-col>summary h3{margin:0}
+#tdh-hub details.tdh-col>summary::after{content:"+";color:#0db5a6;font-size:1.25rem;line-height:1;font-weight:700}
+#tdh-hub details.tdh-col[open]>summary::after{content:"\2212"}
+#tdh-hub details.tdh-col[open]>summary{margin-bottom:10px}
+@media(min-width:641px){#tdh-hub details.tdh-col>summary{pointer-events:none}#tdh-hub details.tdh-col>summary::after{display:none}}
+@media(max-width:640px){#tdh-hub .tdh-col{padding:14px 16px}#tdh-hub .tdh-grid{gap:10px}}
+</style>
+<style id="faq-more-css">
+details.faq-more{margin-top:10px}
+details.faq-more>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;margin:6px auto 0;padding:11px 18px;border:1px solid #cfd9e6;border-radius:999px;font-weight:700;color:#16447f;background:#fff;font-size:.95rem}
+details.faq-more>summary::-webkit-details-marker{display:none}
+details.faq-more[open]>summary{display:none}
+.faq-more-wrap{text-align:center}
+details.faq-more>.faq-item,details.faq-more>details{text-align:left}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Enroll by Dec 15 for a January 1 start.</a></span><a href="/truckers/quote?from=trucker-oe-bar" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div>
@@ -571,24 +589,8 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <p>This guide covers what actually matters when you compare plans as an owner-operator, what the real price ranges look like, and the specific traps that catch drivers.</p>
 
 <h2>The One Feature That Matters Most: Network Reach</h2>
-
-<p>Most health insurance advice ignores the thing that defines your job. You are not in one place. A plan that looks cheap and covers you beautifully in your home county can be nearly worthless when you are broken down outside Amarillo.</p>
-
-<p>Health plans fall into a few network types, and the difference is enormous for a driver:</p>
-
-<table class="keytable">
-<thead><tr><th>Plan Type</th><th>How It Works on the Road</th><th>Fit for Owner-Operators</th></tr></thead>
-<tbody>
-<tr><td><strong>PPO</strong></td><td>Large national networks. You can see providers out of state, and out-of-network care is still partially covered.</td><td><strong>Usually the best fit.</strong> Higher premium, but coverage follows you.</td></tr>
-<tr><td><strong>HMO</strong></td><td>Requires a primary care doctor and referrals. Out-of-network care is typically not covered except in emergencies.</td><td>Risky. Cheap at home, exposed on the road.</td></tr>
-<tr><td><strong>EPO</strong></td><td>No referrals needed, but you must stay in network. National EPOs exist, regional ones do not travel well.</td><td>Workable only if the network is genuinely national.</td></tr>
-<tr><td><strong>Catastrophic / Short Term</strong></td><td>Low premium, very high deductible, often excludes pre-existing conditions.</td><td>A gap filler, not a real plan. Read the exclusions carefully.</td></tr>
-</tbody>
-</table>
-
-<div class="callout">
-<p>Rule of thumb for an owner-operator: if a plan cannot tell you it has a national provider network, treat it as a plan that only works at home. Ask that question first, before you look at the premium.</p>
-</div>
+<p>For an owner-operator, the network matters more than the premium. A plan built around one metro area leaves you paying out of pocket for routine care three states from home. Check whether a plan is a PPO, EPO or HMO, how far its network reaches, and whether telehealth is included.</p>
+<p>Read the full breakdown in our <a href="/nationwide-ppo-health-insurance-truck-drivers">nationwide PPO guide for drivers</a>.</p>
 
 <h2>Your Four Real Options</h2>
 
@@ -626,12 +628,8 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <p>That last row matters. A 1099 driver's plan isn't tied to who you're hauling for this month. Change carriers, change lanes or get your own authority, and your coverage doesn't lapse. The playbook is the same either way: check the marketplace using your net income after truck expenses, look hard at a nationwide PPO if you run multiple states, and take the deduction below.</p>
 
 <h2>The Tax Deduction Most Owner-Operators Underuse</h2>
-
-<p>As a self-employed driver, you can generally deduct 100 percent of your health insurance premiums for yourself, your spouse, and your dependents. This is the self-employed health insurance deduction, and it comes off your adjusted gross income, which means you do not need to itemize to take it.</p>
-
-<p>Practically, that changes the math. A plan that costs $520 a month is not really costing you $520 a month once the deduction is applied at your marginal rate. Drivers who compare plans on sticker price alone routinely talk themselves into a cheaper plan with a worse network when the after-tax gap between the two was small.</p>
-
-<p>One important limit: you generally cannot take this deduction for any month you were eligible to participate in a subsidized plan through your own or your spouse's employer. Talk to your tax preparer about your specific situation. We are insurance advisors, not tax advisors, but this is worth raising with whoever does your return.</p>
+<p>Self-employed owner-operators can usually deduct the health insurance premiums they pay for themselves, a spouse and dependents, as long as they are not eligible for an employer plan through a spouse. It lowers your taxable income, and it can lower the income your tax credit is based on. Confirm the details with your tax preparer.</p>
+<p>How it works, step by step: <a href="/blog/can-owner-operators-deduct-health-insurance">can owner-operators deduct health insurance?</a></p>
 
 <h2>Mistakes That Cost Owner-Operators Real Money</h2>
 
@@ -659,14 +657,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <p>The plan that looks best on a comparison chart is not always the plan that is best for you. What you run, where you run it, whether you have a family, and what medications you take all change the answer. That is the entire reason it is worth having someone compare them with you.</p>
 </div>
 
-<h2>Why Work With VS Health Benefits</h2>
-
-<p>We are an independent broker, which means we are not employed by a carrier and we do not have a quota to hit on any one plan. We compare Blue Cross Blue Shield, UnitedHealthcare, Aetna, Cigna, Humana, Ambetter, Oscar, Molina, and others side by side and show you what actually fits.</p>
-
-<p>Our service costs you nothing. Brokers are compensated by the carrier when a policy is issued, and that compensation is built into the premium whether you use a broker or not. Going direct to the carrier does not save you a dollar. It just means you do the comparison alone.</p>
-
-    </div>
-  </div>
+</div>
 </section>
 
 
@@ -699,7 +690,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <summary>Is health insurance tax deductible for owner-operators?</summary>
         <div class="faq-a"><p>Generally yes. Self-employed drivers can typically deduct 100 percent of health insurance premiums for themselves, a spouse, and dependents from their adjusted gross income, without itemizing. Limits apply if you were eligible for a subsidized employer plan. Confirm the details with your tax advisor.</p></div>
       </details>
-      <details class="faq-item">
+      <div class="faq-more-wrap"><details class="faq-more"><summary>Show 8 more questions</summary><details class="faq-item">
         <summary>Will my plan cover me in another state?</summary>
         <div class="faq-a"><p>Only if the network reaches there. PPO plans with national networks generally do. HMO plans generally do not, except for emergencies. This is the single most important question for an owner-operator to ask before buying, and it is the one most often skipped.</p></div>
       </details>
@@ -733,7 +724,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <details class="faq-item">
         <summary>What are the health insurance options for independent truckers?</summary>
         <div class="faq-a"><p>An independent trucker has the same four routes as any owner-operator: an ACA marketplace plan with premium tax credits based on your net 1099 income, a private PPO bought directly from a carrier, an association or trucking-group plan, or coverage through a spouse&rsquo;s employer. For most independent truckers the marketplace wins on price once the subsidy is applied, and the premium is deductible against self-employment income.</p></div>
-      </details>
+      </details></details></div>
     </div>
   </div>
 </section>
@@ -836,21 +827,7 @@ function qfFunnelRedirect_best_health_insurance_owner_operators() {
 
 
 
-<section class="section rel-section">
-  <div class="container">
-    <div class="eyebrow center">Keep Reading</div>
-    <h2 class="center">More Coverage Guides for Truck Drivers</h2>
-    <div class="rel-grid">
-      <a class="rel-card" href="/truck-driver-health-insurance"><strong>Truck Driver Health Insurance</strong><span>The main guide to coverage for CDL drivers and owner-operators.</span></a>
-      <a class="rel-card" href="/truck-driver-health-insurance-cost"><strong>What It Actually Costs</strong><span>Real premium ranges for truckers, plus how subsidies cut the price.</span></a>
-      <a class="rel-card" href="/best-health-insurance-owner-operators"><strong>1099 and Independent Drivers</strong><span>Coverage options when you get a 1099 instead of a W-2.</span></a>
-      <a class="rel-card" href="/cdl-driver-health-insurance"><strong>CDL Drivers and DOT Physicals</strong><span>How your health plan connects to keeping your medical card.</span></a>
-      <a class="rel-card" href="/truck-driver-health-insurance"><strong>OTR Driver Coverage</strong><span>Health insurance built for long-haul drivers who live on the road.</span></a>
-      <a class="rel-card" href="/best-health-insurance-owner-operators"><strong>Lease Operator Coverage</strong><span>Options when you are leased onto a carrier but still self-employed.</span></a>
-      <a class="rel-card" href="/owner-operator-plan-finder"><strong>Owner-Operator Plan Finder</strong><span>Answer a few questions and see which plan type fits your operation.</span></a>
-    </div>
-  </div>
-</section>
+
 
 
 <!-- vs-oo-depth -->
@@ -898,214 +875,46 @@ function qfFunnelRedirect_best_health_insurance_owner_operators() {
 </div>
 </section>
 <!-- vs-trucking-hub -->
-<section class="section" style="background:#f4f8fe"><div class="container"><h2 style="margin-top:0">Trucking Coverage Guides</h2><p style="margin-top:-.4rem;opacity:.8">Everything we publish for drivers, owner-operators and fleets.</p><ul style="columns:2;column-gap:2rem;line-height:2;list-style:none;padding-left:0"><li><a href="/truck-driver-health-insurance">Truck Driver Health Insurance</a></li><li><a href="/truck-driver-health-insurance-cost">What Drivers Actually Pay</a></li><li><a href="/cdl-driver-health-insurance">CDL Drivers &amp; Your Medical Card</a></li><li><a href="/does-health-insurance-cover-dot-physical">Does Insurance Cover DOT Physicals?</a></li><li><a href="/blog/can-owner-operators-deduct-health-insurance">Can Truckers Deduct Premiums?</a></li><li><a href="/health-insurance-for-trucking-companies">Fleet &amp; Company Group Plans</a></li><li><a href="/owner-operator-plan-finder">Owner-Operator Plan Finder</a></li><li><a href="/truck-driver-health-insurance-florida">Florida Truck Drivers</a></li><li><a href="/aca-vs-private-health-insurance-truck-drivers">ACA vs Private Plans</a></li></ul><p style="margin-bottom:0"><a class="btn btn-primary" href="/truckers/quote?from=best-health-insurance-owner-operators">Get a Free Quote</a></p></div></section>
 
+
+<section class="section" id="tdh-hub" style="background:#f4f8fe">
+<style>
+#tdh-hub .tdh-wrap{max-width:1120px;margin:0 auto}
+#tdh-hub h2{text-align:center;margin:0 0 6px}
+#tdh-hub .tdh-sub{text-align:center;color:#5b6b7f;margin:0 0 26px}
+#tdh-hub .tdh-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+#tdh-hub .tdh-col{background:#fff;border:1px solid #e4e9f2;border-radius:16px;padding:18px 20px}
+#tdh-hub h3{font-size:1rem;color:#0b2346;margin:0 0 10px;letter-spacing:.01em}
+#tdh-hub ul{list-style:none;margin:0;padding:0}
+#tdh-hub li{margin:0;padding:0;border-top:1px solid #f0f3f8}
+#tdh-hub li:first-child{border-top:0}
+#tdh-hub li::before{display:none}
+#tdh-hub li a{display:block;padding:8px 0;color:#16447f;font-weight:600;font-size:.93rem;text-decoration:none;line-height:1.35}
+#tdh-hub li a:hover{color:#0b7f74}
+#tdh-hub .tdh-cta{text-align:center;margin-top:24px}
+@media(max-width:980px){#tdh-hub .tdh-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){#tdh-hub .tdh-grid{grid-template-columns:minmax(0,1fr)}}
+</style>
+<div class="container"><div class="tdh-wrap">
+<h2>Truck driver health insurance guides</h2>
+<p class="tdh-sub">Everything we have written for owner-operators, company drivers and carriers, in one place.</p>
+<div class="tdh-grid"><details class="tdh-col" open><summary><h3>Owner-operators &amp; cost</h3></summary><ul><li><a href="/truck-driver-health-insurance">Health insurance for truck drivers: the full guide</a></li><li><a href="/truck-driver-health-insurance-cost">What Coverage Actually Costs</a></li><li><a href="/truck-driver-health-insurance-cost-calculator">Driver Cost Calculator</a></li><li><a href="/owner-operator-subsidy-cliff-calculator">Owner-Operator Subsidy Cliff Calculator</a></li><li><a href="/owner-operator-plan-finder">Owner-Operator Plan Finder</a></li><li><a href="/blog/owner-operator-health-insurance-increase-2027">Owner-Operators: Cut Your 2027 Cost</a></li><li><a href="/blog/can-owner-operators-deduct-health-insurance">Deducting Your Premiums</a></li><li><a href="/blog/company-driver-to-owner-operator-health-insurance">Going Owner-Operator</a></li><li><a href="/aca-vs-private-health-insurance-truck-drivers">ACA vs Private Plans</a></li><li><a href="/ooida-health-insurance-vs-aca">OOIDA vs the Marketplace</a></li></ul></details><details class="tdh-col" open><summary><h3>Coverage on the road</h3></summary><ul><li><a href="/nationwide-ppo-health-insurance-truck-drivers">OTR and Long-Haul Drivers</a></li><li><a href="/blue-cross-blue-shield-truck-drivers">Blue Cross Blue Shield for Drivers</a></li><li><a href="/blog/what-state-do-truck-drivers-buy-health-insurance">What state do you buy health insurance in when you live in your truck?</a></li><li><a href="/blog/using-health-insurance-out-of-state-truck-drivers">Using your plan out of state: ER, urgent care and surprise bills</a></li><li><a href="/blog/truck-driver-prescriptions-on-the-road">Filling prescriptions 900 miles from your pharmacy</a></li><li><a href="/family-health-insurance">Coverage for Your Family</a></li><li><a href="/occupational-accident-vs-health-insurance">Occupational Accident vs Health Insurance</a></li><li><a href="/truck-driver-open-enrollment-2027">Open Enrollment 2027 for Drivers</a></li></ul></details><details class="tdh-col" open><summary><h3>DOT physical &amp; your health</h3></summary><ul><li><a href="/cdl-driver-health-insurance">CDL Drivers and DOT Physicals</a></li><li><a href="/does-health-insurance-cover-dot-physical">Does Insurance Cover DOT Physicals?</a></li><li><a href="/dot-physical-requirements">DOT Physical Requirements</a></li><li><a href="/dot-physical-blood-pressure-requirements">DOT Blood Pressure Limits</a></li><li><a href="/how-long-is-a-dot-physical-good-for">How Long a DOT Physical Lasts</a></li><li><a href="/blog/sleep-apnea-cpap-cdl-health-insurance">Sleep Apnea and Your CDL</a></li><li><a href="/blog/cdl-blood-pressure-health-insurance">Blood Pressure and Your Medical Card</a></li></ul></details><details class="tdh-col" open><summary><h3>Fleets &amp; trucking companies</h3></summary><ul><li><a href="/health-insurance-for-trucking-companies">Fleets and Trucking Companies</a></li><li><a href="/trucking-company-health-benefits-florida">Health Benefits for Small Florida Trucking Companies</a></li><li><a href="/best-trucking-company-health-benefits">Judging a Fleet's Benefits</a></li><li><a href="/group-health-insurance-for-refrigerated-trucking-companies">Reefer Fleet Group Coverage</a></li><li><a href="/group-health-insurance-for-heavy-haul-trucking-companies">Heavy Haul Fleet Coverage</a></li><li><a href="/group-health-insurance-for-oilfield-trucking-companies">Oilfield Trucking Coverage</a></li><li><a href="/group-health-insurance-for-dump-truck-fleets">Dump Truck Fleet Coverage</a></li></ul></details><details class="tdh-col" open><summary><h3>By city &amp; state</h3></summary><ul><li><a href="/truck-driver-health-insurance-florida">Florida Drivers</a></li><li><a href="/truck-driver-health-insurance-dallas-tx">Dallas-Fort Worth Drivers</a></li><li><a href="/truck-driver-health-insurance-atlanta-ga">Atlanta, GA Drivers</a></li><li><a href="/truck-driver-health-insurance-memphis-tn">Memphis, TN Drivers</a></li><li><a href="/truck-driver-health-insurance-indianapolis-in">Indianapolis, IN Drivers</a></li><li><a href="/truck-driver-health-insurance-raleigh-nc">Raleigh and North Carolina</a></li><li><a href="#by-state">All 33 states &rarr;</a></li></ul></details></div>
+<div class="tdh-cta"><a class="btn btn-primary" href="/truckers/quote?from=best-health-insurance-owner-operators-hub">Get my driver quote &rarr;</a></div>
+</div></div></section>
 <section class="section vs-guide-sec" style="padding-top:36px;padding-bottom:36px"><div class="container"><div data-vs-guide="/best-health-insurance-owner-operators"></div></div></section>
-<section class="vs-related-guides">
-  <div class="vs-rg-inner">
-    <h2>Related guides from VS Health Benefits</h2>
-    <p class="vs-rg-sub">Sourced, current, and written for people who have to make a decision. Ready for numbers instead? <a href="/truckers/quote?from=best-health-insurance-owner-operators" style="color:#16447f;font-weight:700">Get a free quote &rarr;</a></p>
-    <div class="vs-rg-grid">
-        <a class="vs-rg-card" href="/occupational-accident-vs-health-insurance">
-          <strong>Occupational Accident vs Health Insurance</strong>
-          <span>Occ-acc covers on-duty accidents only and excludes illness entirely. The gap, laid out side by side.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/blog/owner-operator-new-authority-benefits-checklist">
-          <strong>New Authority? The Insurance Checklist</strong>
-          <span>What is required, what is optional, and the personal coverage gap nobody warns new owner-operators about.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/blog/sleep-apnea-cpap-cdl-health-insurance">
-          <strong>Sleep Apnea and Your CDL</strong>
-          <span>There is no FMCSA sleep apnea rule. What examiners actually look at, and what insurance pays for a study and a CPAP.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-    </div>
-  </div>
-</section>
 
 
-<section class="vs-related-guides" data-block="truck-cluster">
-  <div class="vs-rg-inner">
-    <h2>More for drivers and carriers</h2>
-    <p class="vs-rg-sub">Written for people who run the truck, not for people who sell insurance. Not sure which plan type fits? Start with the plan finder above. Ready for numbers instead? <a href="/owner-operator-plan-finder" style="color:#16447f;font-weight:700">Find your plan in 60 seconds &rarr;</a></p>
-    <div class="vs-rg-grid">
-        <a class="vs-rg-card" href="/owner-operator-plan-finder">
-          <strong>Owner-Operator Plan Finder</strong>
-          <span>Six questions about your routes, income and family, and you see which plan type actually fits your operation. No email required.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/occupational-accident-vs-health-insurance">
-          <strong>Occ-Acc vs Health Insurance</strong>
-          <span>Occupational accident covers on-duty accidents only and excludes illness entirely. The gap, side by side.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/blog/owner-operator-new-authority-benefits-checklist">
-          <strong>New Authority Benefits Checklist</strong>
-          <span>New MC number? The coverage checklist nobody hands you when the paperwork clears.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-    </div>
-  </div>
-</section>
-
-<section class="vs-related-guides" data-block="vs-truck-verticals">
-  <div class="vs-rg-inner">
-    <h2>Fleet coverage and driver medical certification</h2>
-    <p class="vs-rg-sub">Group plans for fleets by segment, plus what actually decides whether a driver keeps a two-year card. Ready for numbers instead? <a href="/truckers/quote?from=best-health-insurance-owner-operators" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
-    <div class="vs-rg-grid">
-        <a class="vs-rg-card" href="/group-health-insurance-for-refrigerated-trucking-companies">
-          <strong>Reefer Fleet Group Coverage</strong>
-          <span>Produce lanes leave the state. What a refrigerated carrier needs from a network, and what it costs per driver.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/group-health-insurance-for-heavy-haul-trucking-companies">
-          <strong>Heavy Haul Fleet Coverage</strong>
-          <span>An older specialist census prices higher - and those drivers are the ones you cannot replace.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/group-health-insurance-for-oilfield-trucking-companies">
-          <strong>Oilfield Trucking Coverage</strong>
-          <span>Headcount follows rig count. How to build a plan that survives a downturn.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/group-health-insurance-for-dump-truck-fleets">
-          <strong>Dump Truck Fleet Coverage</strong>
-          <span>A small W-2 core inside a fleet of leased owner-operators, and why home-daily changes the plan.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-    </div>
-  </div>
-</section>
-
-<section class="vs-related-guides" data-block="vs-driver-cities">
-  <div class="vs-rg-inner">
-    <h2>Coverage by trucking hub</h2>
-    <p class="vs-rg-sub">What changes city to city: which lanes you run, which network you actually need, and state enrollment rules. Ready for numbers instead? <a href="/truckers/quote?from=best-health-insurance-owner-operators" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
-    <div class="vs-rg-grid">
-        <a class="vs-rg-card" href="/truck-driver-health-insurance-atlanta-ga">
-          <strong>Atlanta, GA Drivers</strong>
-          <span>Southeast lanes leave Georgia fast. Why an Atlanta driver needs national reach - unless they run drayage.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/truck-driver-health-insurance-dallas-tx">
-          <strong>Dallas-Fort Worth Drivers</strong>
-          <span>Owner-operator country. Subsidies run on net income after deductions, not gross settlements.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/truck-driver-health-insurance-memphis-tn">
-          <strong>Memphis, TN Drivers</strong>
-          <span>A night-shift freight town, where telehealth and after-hours access matter more than anything else.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/truck-driver-health-insurance-indianapolis-in">
-          <strong>Indianapolis, IN Drivers</strong>
-          <span>Crossroads of America. More regional runs means you may not need to pay for a national network.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-    </div>
-  </div>
-</section>
 
 
-<section class="vs-related-guides" data-block="vs-trucking-tools">
-  <div class="vs-rg-inner">
-    <h2>Driver tools and coverage guides</h2>
-    <p class="vs-rg-sub">Work out the number first, then choose where to buy. Ready to talk to somebody? <a href="/truckers/quote?from=best-health-insurance-owner-operators" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
-    <div class="vs-rg-grid">
-        <a class="vs-rg-card" href="/dot-physical-blood-pressure-requirements">
-          <strong>DOT Blood Pressure Limits</strong>
-          <span>140/90 or under keeps a 2-year card. The full chart, the 3-month card, and how to pass on exam day.</span>
-          <em>See the chart &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/how-long-is-a-dot-physical-good-for">
-          <strong>How Long a DOT Physical Lasts</strong>
-          <span>Up to 24 months, or 1 year, 6 months or 3 months when something needs watching. Card length by condition.</span>
-          <em>Check my card &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/owner-operator-subsidy-cliff-calculator" data-oe27>
-          <strong>Owner-Operator Subsidy Cliff Calculator</strong>
-          <span>Net profit in, MAGI out. See how close you are to the 400% line and what contribution gets your credit back.</span>
-          <em>Check my cliff &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/blog/owner-operator-health-insurance-increase-2027" data-oe27>
-          <strong>Owner-Operators: Cut Your 2027 Cost</strong>
-          <span>Net profit, Solo 401(k) and SEP contributions, HSA bronze plans and the networks that work on the road.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/truck-driver-health-insurance-cost-calculator">
-          <strong>Cost Calculator for Drivers</strong>
-          <span>Your 2027 premium after credits in about a minute, plus what your Schedule C deductions are actually worth.</span>
-          <em>Run the numbers &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/truck-driver-open-enrollment-2027">
-          <strong>Open Enrollment 2027 for Drivers</strong>
-          <span>Nov 1 to Jan 15. The three dates that matter, what changed with the subsidy cliff, and how to enroll from the road.</span>
-          <em>See the dates &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/ooida-health-insurance-vs-aca">
-          <strong>OOIDA vs the Marketplace</strong>
-          <span>What an association benefits package actually covers, and where a subsidized Marketplace plan wins.</span>
-          <em>Compare them &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/blue-cross-blue-shield-truck-drivers">
-          <strong>Blue Cross Blue Shield for Drivers</strong>
-          <span>Which Blue plans travel and which do not. The two questions to ask before you enroll.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/best-trucking-company-health-benefits">
-          <strong>Judging a Fleet's Benefits</strong>
-          <span>The five things that decide whether a company plan is good, and the questions to take to orientation.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/dot-physical-requirements">
-          <strong>DOT Physical Requirements</strong>
-          <span>Blood pressure thresholds, sleep apnea and CPAP, diabetes, vision - and what decides your card length.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/blog/company-driver-to-owner-operator-health-insurance">
-          <strong>Going Owner-Operator</strong>
-          <span>Leaving a company plan starts a 60-day clock. Your four options and a clean timeline.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/truck-driver-health-insurance">
-          <strong>Health Insurance for Truck Drivers</strong>
-          <span>Plans, real costs and where to enroll in your home state.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        </div>
-  </div>
-</section>
 
-<section class="vs-related-guides" data-block="oo-savings-2027">
-  <div class="vs-rg-inner">
-    <h2>Drivers: keep your subsidy in 2027</h2>
-    <p class="vs-rg-sub">A good year can cost an owner-operator the whole credit. Ready for numbers instead? <a href="/truckers/quote?from=best-health-insurance-owner-operators" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
-    <div class="vs-rg-grid">
-        <a class="vs-rg-card" href="/owner-operator-subsidy-cliff-calculator">
-          <strong>Owner-Operator Subsidy Cliff Calculator</strong>
-          <span>Net profit in, MAGI out. See how close you are to the 400% line and what contribution gets your credit back.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/blog/owner-operator-health-insurance-increase-2027">
-          <strong>Owner-Operators: Cut Your 2027 Cost</strong>
-          <span>Net profit, Solo 401(k) and SEP contributions, HSA bronze plans and the networks that work on the road.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/blog/how-to-lower-health-insurance-premiums-2027">
-          <strong>How to Lower Your 2027 Premium</strong>
-          <span>Rates are up a median 15% and the 400% cliff is back. Eleven legal ways to pay less, from income planning to HSA bronze plans.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-        <a class="vs-rg-card" href="/blog/losing-health-insurance-2027">
-          <strong>Losing Coverage in 2027?</strong>
-          <span>Cigna is leaving the Marketplace, Medicaid work rules start and immigrant rules narrow. Your deadline and how to avoid a gap.</span>
-          <em>Read the guide &rarr;</em>
-        </a>
-    </div>
-  </div>
-</section>
+
+
+
+
+
+
+
+
 
 <footer>
   <div class="container">
@@ -1642,5 +1451,6 @@ var ans=document.querySelector(".vs-answer");
 if(ans){nav.style.maxWidth="820px";nav.style.margin="0 auto 28px";var w=document.createElement("div");w.style.padding="0 16px";w.appendChild(nav);ans.parentNode.insertBefore(w,ans.nextSibling);}
 else hs[0].parentNode.insertBefore(nav,hs[0]);
 }catch(e){}})();</script>
+<script id="tdh-collapse-js">(function(){var m=window.matchMedia&&window.matchMedia("(max-width:640px)").matches;document.querySelectorAll("#tdh-hub details.tdh-col").forEach(function(d){if(m)d.removeAttribute("open");else d.setAttribute("open","");});})();</script>
 </body>
 </html>
