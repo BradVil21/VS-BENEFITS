@@ -64,6 +64,9 @@
   // not for a UTM string.
   function label(t) {
     if (!t) return "Direct";
+    // Partner links (?ref=theirname) win over everything else: a partner who
+    // sends a driver gets the credit even if Google was also in the path.
+    if (t.ref) return "Partner — " + String(t.ref).toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 40);
     if (t.gclid || t.utm_source === "google" && t.utm_medium === "cpc") return "Google Ads";
     if (t.fbclid || /facebook|meta|instagram/i.test(t.utm_source || "")) return "Facebook / Instagram Ads";
     if (t.msclkid) return "Microsoft Ads";
@@ -136,7 +139,8 @@
         firstSeen: new Date(f.at || Date.now()).toISOString().slice(0, 10),
       };
       ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
-       "gclid", "fbclid", "msclkid"].forEach(function (k) { if (f[k]) out[k] = f[k]; });
+       "gclid", "fbclid", "msclkid", "ref"].forEach(function (k) { if (f[k]) out[k] = f[k]; });
+      if (!f.ref && l.ref) { out.ref = l.ref; out.source = l.label; }
       return out;
     } catch (e) { return null; }
   }

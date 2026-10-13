@@ -8074,7 +8074,7 @@ try{(function(){
     var d=new Date(),ms=new Date(d.getFullYear(),d.getMonth(),1).getTime();
     if(k==="ownMonth")return getLeads().filter(function(c){return odKind(c)==="own"&&odTime(c)>=ms;}).length;
     if(k==="trucker")return getLeads().filter(function(c){return odKind(c)==="own"&&odTime(c)>=ms&&/truck|cdl|owner.?operator/i.test(JSON.stringify(c));}).length;
-    if(k==="partner")return getLeads().filter(function(c){return odKind(c)==="own"&&odTime(c)>=ms&&/partner/i.test(String(c.source||""));}).length;
+    if(k==="partner")return getLeads().filter(function(c){return odKind(c)==="own"&&odTime(c)>=ms&&/partner/i.test(JSON.stringify(c));}).length;
     if(k==="oe")return (typeof getAccounts==="function"?getAccounts():[]).filter(function(a){var r=a.oeReview||{};return Object.keys(r).some(function(y){return Number(r[y])>=ms;});}).length;
   }catch(e){}return null;}
   function odMonthKey(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");}
