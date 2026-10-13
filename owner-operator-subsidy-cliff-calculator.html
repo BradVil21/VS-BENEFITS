@@ -460,6 +460,30 @@ body{padding-bottom:0}
 .vs-toc a:hover{text-decoration:underline}
 @media(max-width:640px){.vs-toc ol{columns:1}}
 </style>
+<style id="vs-mobile-css">
+/* Mobile polish: no sideways scroll, comfortable tap targets, no iOS zoom on form fields */
+img,video,iframe{max-width:100%}
+.article-wrap>*,.hero-grid>*,.tds-seg>*,.sp-facts>*{min-width:0}
+@media(max-width:640px){
+.article-wrap{grid-template-columns:minmax(0,1fr)!important}
+#oe-annc-bar a{display:inline-flex;align-items:center;min-height:36px}
+footer a{display:inline-flex;align-items:center;min-height:36px}
+.foot-grid{grid-template-columns:1fr 1fr!important;gap:22px 18px!important}
+.foot-grid>:first-child,.foot-grid>:last-child{grid-column:1/-1}
+.foot-grid ul{gap:0!important}
+footer .social-icon,footer a[aria-label]{min-width:40px;min-height:40px;justify-content:center}
+.breadcrumb a,.breadcrumbs a,.crumbs a,nav[aria-label="Breadcrumb"] a,nav[aria-label="breadcrumb"] a{display:inline-flex;align-items:center;min-height:32px}
+.article-tags a,.tags a,.tag-list a{min-height:34px;display:inline-flex;align-items:center}
+.sidebar-card a[href^="tel:"]{display:inline-flex;align-items:center;min-height:36px}
+.article-body table,.cost-table,.vsd-table,.prose table,main table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}
+}
+@media(max-width:380px){
+.tc-nav{flex-wrap:wrap}
+.btn,button.btn,.qf-submit,.tq-go,.vsz-btn{white-space:normal}
+#vs-callbar a{font-size:.86rem!important;padding-left:8px!important;padding-right:8px!important}
+}
+</style>
 </head>
 <body>
 <div id="sb"></div>
