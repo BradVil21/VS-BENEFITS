@@ -386,6 +386,9 @@ body{padding-bottom:0}
 .vcov.vcov-col .vsa-menu{min-width:0}
 .vcov.vcov-col .vsa-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (min-width:960px) and (max-width:1239px){.nav-links>a[href="/blog"]{display:none!important}}
+
+.site-header .brand{white-space:nowrap;flex-shrink:0}
+@media (min-width:960px) and (max-width:1439px){html[lang^="es"] .nav-links>a[href="/"]{display:none!important}html[lang^="es"] .nav-links{gap:14px!important}}
 </style>
 </head>
 <body>
@@ -478,6 +481,7 @@ body{padding-bottom:0}
   <section class="section bg-soft"><div class="container vsd-faq" style="max-width:880px"><h2>Preguntas sobre el examen DOT</h2><details><summary>¿Cuánto dura el examen médico DOT?</summary><p>Hasta 2 años (24 meses) como máximo. El examinador puede darte una tarjeta de 1 año, 6 meses o 3 meses si tienes una condición que necesita seguimiento, como presión alta o diabetes.</p></details><details><summary>¿Cuál es la presión arterial máxima para pasar el examen DOT?</summary><p>140/90. Con 140/90 o menos puedes recibir hasta 2 años. Entre 140&ndash;159/90&ndash;99 recibes 1 año. Entre 160&ndash;179/100&ndash;109 recibes una tarjeta única de 3 meses. Con 180/110 o más quedas descalificado hasta que la bajes.</p></details><details><summary>¿Puedo pasar el examen DOT si tomo medicina para la presión?</summary><p>Sí. Tomar medicina para la presión no te descalifica. Si estás en tratamiento, lo normal es que te certifiquen por un máximo de 1 año.</p></details><details><summary>¿Puedo manejar un camión si uso insulina?</summary><p>Sí. Tu médico llena el formulario MCSA-5870 y el examinador puede certificarte hasta por 12 meses si tu azúcar está estable. El examen tiene que hacerse dentro de los 45 días después de que tu médico firme el formulario.</p></details><details><summary>¿El seguro médico cubre el examen DOT?</summary><p>Normalmente no, porque es un examen requerido por el trabajo. Cuesta entre $50 y $150 aproximadamente. Lo que sí cubre el seguro es lo que te ayuda a pasar: visitas al médico, medicina para la presión y la diabetes, estudios del sueño y CPAP.</p></details><details><summary>¿Cualquier médico puede hacer el examen DOT?</summary><p>No. Tiene que ser un examinador inscrito en el Registro Nacional de Examinadores Médicos Certificados de FMCSA.</p></details></div></section>
   <section class="section"><div class="container" style="max-width:880px"><div class="vsd-cta"><h2>Mantén tu tarjeta de 2 años</h2><p>Un asesor con licencia de VS Health Benefits te busca un plan con médico y medicinas baratas en todo el país. Gratis y en español.</p><a class="btn" href="/quote?from=examen-dot" style="background:#fff;color:var(--blue-700)">Cotizar gratis</a><a class="btn" href="sms:+19548251009?&amp;body=CAMIONERO%20-%20Quiero%20una%20cotizaci%C3%B3n%20de%20seguro%20m%C3%A9dico" style="background:#f59e0b;color:#1a1300">Escríbenos por texto</a></div></div></section>
 </main>
+<div class="container"><div class="vs-oer" data-from="examen-medico-dot" data-lang="es"></div></div>
 <section class="vs-related-guides" data-block="vs-truck-verticals">
   <div class="vs-rg-inner">
     <h2>Fleet coverage and driver medical certification</h2>
@@ -792,7 +796,7 @@ async function qfFunnelRedirect() {
   if (zip)   params.set('zip', zip);
   if (phone) params.set('phone', phone);
   params.set('from', 'examen-medico-dot');
-  window.location.href = '/truckers/quote' + (params.toString() ? '?' + params.toString() : '');
+  window.location.href = '/truckers/cotizar' + (params.toString() ? '?' + params.toString() : '');
 }
 
 function qfSubmit(pid, label) {
@@ -1123,5 +1127,6 @@ function qfSubmit(pid, label) {
 </script>
 <script src="/vs-reviews.js" defer></script>
 <script id="qf-unstick">window.addEventListener("pageshow",function(){document.querySelectorAll(".qf-submit").forEach(function(b){b.disabled=false;if(/Loading/.test(b.textContent))b.textContent="See My Truck Driver Plans \u2192";});});</script>
+<script src="/vs-oe-remind.js" defer></script>
 </body>
 </html>
