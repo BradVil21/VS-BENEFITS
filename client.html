@@ -1539,7 +1539,7 @@ function showSoldCelebration(r){
   bg.style.cssText="position:fixed;inset:0;background:rgba(11,35,70,.55);display:flex;align-items:center;justify-content:center;z-index:100002;padding:20px";
   bg.innerHTML='<div style="background:#fff;border-radius:18px;max-width:420px;width:100%;padding:30px 26px;text-align:center;box-shadow:0 24px 60px rgba(11,35,70,.3)">'
     +'<div style="font-size:54px;line-height:1"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M3 21l5-13 8 8-13 5z"/><path d="M14 6c1-1 3-1 4 0M16 3v3M20 8c1 0 2 1 2 2M13 11l6 6"/></svg></div>'
-    +'<h2 style="margin:8px 0 4px;color:var(--blue-900);font-size:22px">Your referral sold!</h2>'
+    +'<h2 style="margin:8px 0 4px;color:var(--blue-900);font-size:22px">Your referral qualified!</h2>'
     +'<p style="color:var(--ink-2);margin:0 0 6px">'+escapeHtml(r.referralName||"Your referral")+' just became a client.</p>'
     +(earned>0?'<p style="font-weight:700;color:var(--ok);font-size:18px;margin:0 0 16px">You earned $'+earned.toFixed(2)+'</p>':'<div style="height:10px"></div>')
     +'<button class="btn btn-primary" id="sold-ok" style="width:100%">Awesome!</button></div>';
@@ -1801,7 +1801,7 @@ function cpBuildNotifs(){
     var st=r.status||"new";
     if(st!=="new"&&st!=="in-progress"&&seenR[r.id]!==st){
       var nm=r.referralName||"your referral";
-      var text=st==="paid"?("Payment sent for "+nm):st==="sold"?(nm+" was sold!"):("Update: "+nm+" is now "+st.replace(/-/g," "));
+      var text=st==="paid"?("Payment sent for "+nm):st==="sold"?(nm+" qualified!"):("Update: "+nm+" is now "+st.replace(/-/g," "));
       out.push({type:st==="paid"?"payment":(st==="sold"?"sold":"status"),text:text,sub:r.payout?("$"+Number(r.payout).toFixed(2)):"",ts:r.paidAt||r.soldAt||r.ts,sec:"referrals"});
     }
   });
@@ -1869,8 +1869,8 @@ function cpStartOnboarding(name){
   $("cp-tour-skip").addEventListener("click",function(){bg.remove();cpClearWelcome();});
 }
 var CP_TOUR=[
-  {sec:"dashboard",t:"Your dashboard",b:"See your referrals sent, sold, and total earned at a glance, and finish setting up your account."},
-  {sec:"send",t:"Send a referral",b:"Refer anyone who needs health insurance. Add their details and we take care of the rest. You earn when they enroll."},
+  {sec:"dashboard",t:"Your dashboard",b:"See your referrals sent, qualified, and total earned at a glance, and finish setting up your account."},
+  {sec:"send",t:"Send a referral",b:"Refer anyone who needs health insurance. Add their details and we take care of the rest. You earn a flat reward once they complete a free consultation, whether or not they buy."},
   {sec:"referrals",t:"Track your referrals",b:"Every referral you send appears here with its live status, from In Progress to Paid."},
   {sec:"plan",t:"Your plan",b:"View your current coverage and plan details. Your advisor keeps this up to date for you."},
   {sec:"support",t:"Message support",b:"Reach your advisor directly with any question. We typically reply within 24 hours."},
@@ -2235,7 +2235,7 @@ function cpActivity(acct){
   getReferrals().filter(function(r){return r.fromAccountId===acct.id;}).forEach(function(r){
     var nm=r.referralName||"your referral",st=r.status||"in-progress";
     ev.push({ts:r.ts,ic:"send",cls:"",t:"You referred "+nm,s:"Status: "+st.replace(/-/g," "),sec:"referrals"});
-    if(st==="sold"&&r.soldAt)ev.push({ts:r.soldAt,ic:"star",cls:"ok",t:nm+" enrolled",s:r.payout?"You earned $"+Number(r.payout).toFixed(2):"",sec:"referrals"});
+    if(st==="sold"&&r.soldAt)ev.push({ts:r.soldAt,ic:"star",cls:"ok",t:nm+" qualified",s:r.payout?"You earned $"+Number(r.payout).toFixed(2):"",sec:"referrals"});
     if(st==="paid"&&r.paidAt)ev.push({ts:r.paidAt,ic:"gift",cls:"ok",t:"Payout sent for "+nm,s:r.payout?"$"+Number(r.payout).toFixed(2):"",sec:"referrals"});
   });
   getMessages().filter(function(m){return m.accountId===acct.id;}).forEach(function(m){
@@ -2253,7 +2253,7 @@ function cpQuickHelp(){
     +QUICK_HELP.map(function(q,i){return '<button class="qh-chip" type="button" data-help="'+i+'">'+IC[q.ic]+q.t+'</button>';}).join("")+'</div></div>';
 }
 function cpRefPromo(s){
-  return '<div class="ref-promo"><span class="oe-ic" style="background:#dcebfb;color:#16447f">'+IC.gift+'</span><div class="rp-tx"><strong>Know someone who needs coverage?</strong><span>'+(s.sent?"Thanks for your "+s.sent+" referral"+(s.sent===1?"":"s")+"! ":"")+'Refer a friend or family member. A licensed advisor helps them for free, and you can earn a payout when they enroll.</span></div>'
+  return '<div class="ref-promo"><span class="oe-ic" style="background:#dcebfb;color:#16447f">'+IC.gift+'</span><div class="rp-tx"><strong>Know someone who needs coverage?</strong><span>'+(s.sent?"Thanks for your "+s.sent+" referral"+(s.sent===1?"":"s")+"! ":"")+'Refer a friend or family member. A licensed advisor helps them for free, and you earn a flat reward once they complete a consultation, whether or not they buy.</span></div>'
     +'<button class="db-btn primary" type="button" data-goto="send">'+IC.send+' Send a referral</button></div>';
 }
 function cpRenderDashboard(){

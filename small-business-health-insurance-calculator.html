@@ -696,6 +696,8 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
     <div class="foot-bottom">
       <span>&copy; <span id="year">2026</span> VS Health Benefits. All rights reserved.</span>
       <span>vshealthbenefits.com | Licensed health insurance brokerage</span>
+    
+      <span class="vs-legal-links"><a href="/privacy" style="color:inherit">Privacy Policy</a> &middot; <a href="/terms" style="color:inherit">Terms of Use</a> &middot; <a href="/accessibility" style="color:inherit">Accessibility</a></span>
     </div>
   </div>
 </footer>
@@ -774,9 +776,9 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
   // (cNCy6JUURpb4eBDdb9bU). Every group quote request this page collected went
   // to somebody else's GoHighLevel. Removed - /api/lead-sync does the CRM write
   // server-side with the right token.
-  var GADS_CONVERSION_LABEL='PASTE_LABEL_HERE'; // same label as /quote
+  var GADS_CONVERSION_LABEL=(window.VS_ADS&&window.VS_ADS.labels&&window.VS_ADS.labels.lead)||'PASTE_LABEL_HERE'; // same label as /quote, read from vs-conversions.js
   var fired=false;
-  function fireConv(){ if(fired) return; fired=true; try{ if(typeof gtag!=='function') return; gtag('event','generate_lead',{currency:'USD',value:0,lead_type:'business'}); if(GADS_CONVERSION_LABEL.indexOf('PASTE_')===-1) gtag('event','conversion',{send_to:'AW-18479284900/'+GADS_CONVERSION_LABEL,value:0,currency:'USD'}); }catch(e){} }
+  function fireConv(){ if(fired) return; fired=true; try{ if(typeof gtag!=='function') return; gtag('event','generate_lead',{currency:'USD',value:0,lead_type:'business'}); var lbl=(window.VS_ADS&&window.VS_ADS.labels&&window.VS_ADS.labels.lead)||GADS_CONVERSION_LABEL; if(lbl.indexOf('PASTE_')===-1) gtag('event','conversion',{send_to:'AW-18479284900/'+lbl,value:0,currency:'USD'}); }catch(e){} }
   // `type:'business'` and the business-lead tag are what route this to the
   // Business Leads pipeline. Without them isBusinessLead() falls through and
   // every group quote lands in Individuals & Families. The name has to arrive

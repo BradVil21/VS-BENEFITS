@@ -11,3 +11,8 @@ _to_delete/
 .seo-work/__pycache__/
 _to_delete/
 VS-Health-Benefits-Search-Performance-Aug-2026.pdf
+
+# Private business files: keep out of GitHub (added 2026-10-14)
+Aged_Group_Lead*
+*_Prompt_v*.txt
+Individual_Health_Insurance_Proposal.pdf
