@@ -869,7 +869,7 @@ async function qfFunnelRedirect() {
     };
     try { var ex = JSON.parse(localStorage.getItem('vs_leads') || '[]'); ex.unshift(lead); localStorage.setItem('vs_leads', JSON.stringify(ex)); } catch(e) {}
     // Fire into GoHighLevel pipeline (fire-and-forget)
-    try { fetch('https://services.leadconnectorhq.com/hooks/V5Px5jvE14SWLdNrFeGL/webhook-trigger/d9cf69ed-4e52-4c7d-bf11-580204f9cce7', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(lead)}); } catch(e) {}
+    try { fetch('/api/lead-sync', {method:'POST', keepalive:true, headers:{'Content-Type':'application/json'}, body: JSON.stringify({firstName:lead.firstName||'', lastName:lead.lastName||'', phone:lead.phone||'', email:lead.email||'', zip:lead.zipcode||lead.zip||'', state:lead.state||'', source:lead.source||'Website', notes:lead.notes||''})}).catch(function(){}); } catch(e) {}
     // Write to the admin portal (Firestore vs_state/leads), same pattern as the main form
     var save = (async function() {
       try {
