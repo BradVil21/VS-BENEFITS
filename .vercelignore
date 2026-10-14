@@ -1,0 +1,19 @@
+# Internal files that must never be served publicly (added 2026-10-14 compliance sweep).
+# Vercel honors this for Git and CLI deploys. Site pages, /api, /data, assets,
+# robots.txt, llms.txt, sitemap.xml and guides/ stay deployed.
+_to_delete
+.seo-work
+Claude outputs
+contractor-outreach
+restaurant-list
+ghl
+ghl-email-templates
+*.md
+*.csv
+*.xlsx
+*.zip
+*.py
+*.txt
+!llms.txt
+!robots.txt
+/*.pdf
