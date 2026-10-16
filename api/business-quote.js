@@ -37,6 +37,27 @@ module.exports = async (req, res) => {
   const businessName = String(d.businessName || "").trim();
   const zip = String(d.businessZip || "").trim();
 
+  // Attribution: vs-attribution.js folds this into every /api POST. It was being
+  // ignored here, so every group lead read "Website business funnel" and a Google
+  // Ads click was indistinguishable from organic. Keep it short and flat.
+  const A = (d.attribution && typeof d.attribution === "object") ? d.attribution : null;
+  const aStr = function (v, n) { return String(v == null ? "" : v).trim().slice(0, n || 80); };
+  const attribution = A ? {
+    source: aStr(A.source), lastSource: aStr(A.lastSource), landing: aStr(A.landing, 200),
+    utm_source: aStr(A.utm_source), utm_medium: aStr(A.utm_medium), utm_campaign: aStr(A.utm_campaign),
+    utm_term: aStr(A.utm_term, 120), gclid: aStr(A.gclid, 200), firstSeen: aStr(A.firstSeen, 20),
+  } : null;
+  const formName = aStr(d.formName || d.form || "", 60);
+  const channel = attribution && attribution.source ? attribution.source : "";
+  const sourceLabel = "Website business funnel" + (formName ? " (" + formName + ")" : "") + (channel ? " · " + channel : "");
+  const attrLines = attribution ? [
+    channel ? "Channel: " + channel : "",
+    attribution.utm_campaign ? "Campaign: " + attribution.utm_campaign : "",
+    attribution.utm_term ? "Keyword: " + attribution.utm_term : "",
+    attribution.landing ? "Landing page: " + attribution.landing : "",
+    attribution.gclid ? "gclid: " + attribution.gclid : "",
+  ].filter(Boolean) : [];
+
   let contactId = null;
   try {
     contactId = await L.upsertContact({
@@ -76,15 +97,19 @@ module.exports = async (req, res) => {
         stage: "prospect",
         email: email,
         phone: phone,
-        source: "Website business funnel",
+        source: sourceLabel,
+        attribution: attribution,
         nextFollowUp: today,
         notes: [
           "Business quote request from the website.",
           d.businessAddress ? "Address: " + d.businessAddress : "",
           [d.businessState, zip].filter(Boolean).length ? "Location: " + [d.businessState, zip].filter(Boolean).join(" ") : "",
           Array.isArray(d.situations) && d.situations.length ? "Situations: " + d.situations.join(", ") : "",
+          d.renewalIncrease ? "Renewal increase: " + String(d.renewalIncrease).slice(0, 40) : "",
+          d.renewalDate ? "Renewal date: " + String(d.renewalDate).slice(0, 40) : "",
+        ].concat(attrLines).concat([
           "Census link sent; awaiting census.",
-        ].filter(Boolean).join("\n"),
+        ]).filter(Boolean).join("\n"),
         ghlContactId: contactId || "",
         // Visitor origin, read from the request headers rather than from anything the
         // browser posted. Fills the "Submission origin" panel on the card and is what
@@ -108,6 +133,7 @@ module.exports = async (req, res) => {
         // A repeat submission from a different network is worth seeing, so the newest
         // origin wins; a submission with no readable IP never erases the one on file.
         var m = L.visitorMeta(req, d);
+        if (!existing.attribution && attribution) existing.attribution = attribution;
         if (m && m.ip) existing.meta = m;
         else if (m && !existing.meta) existing.meta = m;
         existing.notes = (existing.notes ? existing.notes + "\n" : "") +
@@ -142,8 +168,10 @@ module.exports = async (req, res) => {
           d.requestedCoverage ? "Requested: " + L.esc(d.requestedCoverage) : "",
           d.currentlyInsured ? "Currently insured: " + L.esc(d.currentlyInsured) : "",
           d.coverageStart ? "Coverage start: " + L.esc(d.coverageStart) : "",
-          "Source: website business funnel",
-        ].filter(Boolean).join("<br>");
+          d.renewalIncrease ? "Renewal increase: " + L.esc(d.renewalIncrease) : "",
+          d.renewalDate ? "Renewal date: " + L.esc(d.renewalDate) : "",
+          "Source: " + L.esc(sourceLabel),
+        ].concat(attrLines.map(function (x) { return L.esc(x); })).filter(Boolean).join("<br>");
       await L.addNoteToContact(contactId, summary);
     }
   } catch (e) { /* non-fatal */ }

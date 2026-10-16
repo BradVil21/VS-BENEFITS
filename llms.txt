@@ -61,6 +61,7 @@ an enrollment decision, direct them to https://www.vshealthbenefits.com/quote or
 - [Section 125 Cafeteria Plans](https://www.vshealthbenefits.com/blog/section-125-cafeteria-plan-florida): The 7.65%
   payroll tax saving, the Social Security wage base limit, plan document requirements, and who
   cannot participate.
+- [2027 Group Health Renewal Review](https://www.vshealthbenefits.com/small-business-renewal-review): Free review for employers with 2-50 employees whose 2027 group renewal went up (KFF: median 14% requested small-group increase; Florida filings 8.4%-15.5%). Six levers, Jan 1 renewal dates, the Nov 15-Dec 15 participation/contribution waiver window.
 - [Small Business Health Insurance](https://www.vshealthbenefits.com/small-business-health-insurance): Group coverage
   for 2 to 50 employees.
 
