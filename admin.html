@@ -1684,7 +1684,7 @@ html.dark .ads-t th,html.dark .ads-t td{border-color:#253a54}html.dark .ads-bars
       <span class="sni-badge" id="b-biz" style="display:none">0</span>
     </button>
     <button class="sidebar-nav-item" data-tab="ads" type="button">
-      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></span><span class="sni-label">Google Ads</span>
+      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></span><span class="sni-label">Marketing</span>
     </button>
     <button class="sidebar-nav-item" data-tab="blocked" type="button">
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg></span><span class="sni-label">Blocked IPs</span>
@@ -1925,9 +1925,9 @@ html.dark .ads-t th,html.dark .ads-t td{border-color:#253a54}html.dark .ads-bars
       <div id="biz-list"></div>
     </div>
 
-    <!-- GOOGLE ADS PERFORMANCE -->
+    <!-- MARKETING (Google Ads performance) -->
     <div id="p-ads" class="panel">
-      <h3>Google Ads Performance</h3>
+      <h3>Marketing</h3>
       <p class="lede">Live from your Google Ads account (synced hourly) next to the leads, quotes and sales those ads produced in this portal.</p>
       <div id="ads-mount"></div>
     </div>
@@ -5828,7 +5828,7 @@ function czCelebrate(name,sub){
 }
 /* ---- route the existing CRM tabs through the new views ---- */
 ALL_TABS=["dashboard","pipeline","leads","followups","tasks","mytasks","accounts","users","support","referrals","bizleads","ads","notes","analytics","blocked","settings"];
-TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",mytasks:"My Tasks",accounts:"Active Clients",users:"Users",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",ads:"Google Ads Performance",notes:"Notes",analytics:"Analytics",blocked:"Blocked IPs",settings:"Settings"};
+TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",mytasks:"My Tasks",accounts:"Active Clients",users:"Users",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",ads:"Marketing",notes:"Notes",analytics:"Analytics",blocked:"Blocked IPs",settings:"Settings"};
 function renderDashboard(){czDashboard();}
 function renderLeads(){czClients();}
 function renderPipeline(){czPipeline();}
