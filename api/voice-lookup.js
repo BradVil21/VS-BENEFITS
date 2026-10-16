@@ -126,6 +126,11 @@ async function readAccounts() {
 }
 
 module.exports = async (req, res) => {
+  // POST /api/ads-sync is rewritten here too (Vercel Hobby 12-function limit);
+  // the Google Ads Script posts hourly performance snapshots. See api/_ads-sync.js
+  if (req.method === "POST" && ((req.query && req.query.op === "ads-sync") || /ads-sync/.test(req.url || ""))) {
+    return require("./_ads-sync")(req, res);
+  }
   // GET /api/google-rating is rewritten here (see vercel.json); see api/_google-rating.js
   if (req.method === "GET" && ((req.query && req.query.op === "google-rating") || /google-rating/.test(req.url || ""))) {
     return require("./_google-rating")(req, res);

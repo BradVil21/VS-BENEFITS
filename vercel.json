@@ -1897,6 +1897,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/ads-sync",
+      "destination": "/api/voice-lookup?op=ads-sync"
+    },
+    {
       "source": "/api/google-rating",
       "destination": "/api/voice-lookup?op=google-rating"
     },

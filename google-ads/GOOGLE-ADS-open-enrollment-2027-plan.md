@@ -72,3 +72,11 @@ Start phrase + exact only. Promote converting search terms to exact weekly. Do n
 Everything in the ads is either verifiable or hedged: median 14% (KFF, Aug 2026), Florida small-group filings 8.4–15.5%
 (proposed, ACASignups Sept 24 2026), OE Nov 1 – Jan 15 with Dec 15 for Jan 1 (HealthCare.gov states). "5.0-Star Google
 Rating" and "Licensed in 33 States": confirm both are still true before launch. Nothing promises a price or a savings amount.
+
+## 7. Live performance in the admin portal (Google Ads tab)
+1. Vercel → Project → Settings → Environment Variables: add `ADS_SYNC_SECRET` (Production) and redeploy.
+2. Google Ads → Tools → Bulk actions → Scripts → (+): paste `google-ads/vs-ads-sync-script.js`, set `SECRET` to the same value.
+3. Authorize → Preview (log shows `Sync 200`) → Frequency: Hourly.
+The admin "Google Ads" tab then updates itself every hour: spend, CTR, CPC, cost per conversion, cost per real portal lead,
+quoted and sold counts, daily charts, campaign/ad group/keyword/search-term tables, wasted-spend negatives (one-click copy),
+policy and Quality Score warnings, and best converting hours.
