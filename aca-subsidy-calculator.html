@@ -443,6 +443,14 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
             </div>
           </div>
           <div class="res-note" id="r-note"></div>
+          <div id="calc-next" style="margin:16px 0 4px;padding:16px;border-radius:12px;background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:left">
+            <div style="font-weight:800;font-size:1.02rem;margin-bottom:4px" id="calc-next-h">Want this price confirmed?</div>
+            <div style="font-size:.9rem;line-height:1.5;opacity:.95;margin-bottom:12px">A licensed advisor will check the real plans in your ZIP code, including which ones your doctors take, in a free 10-minute call.</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+              <a id="calc-next-book" href="/book?from=subsidy-calculator" style="flex:1 1 180px;display:inline-flex;align-items:center;justify-content:center;min-height:46px;border-radius:999px;background:#fff;color:#16447f;font-weight:800;text-decoration:none">Book my free 10-min call &rarr;</a>
+              <a id="calc-next-call" href="tel:+19548251009" style="flex:1 1 140px;display:inline-flex;align-items:center;justify-content:center;min-height:46px;border-radius:999px;border:1.5px solid rgba(255,255,255,.7);color:#fff;font-weight:700;text-decoration:none">Call (954) 825-1009</a>
+            </div>
+          </div>
           <div class="oe-res-cta" style="margin:16px 0 4px;padding:14px 16px;border:1.5px solid #0db5a6;border-radius:12px;background:#f4fbfa;text-align:left">
             <div style="font-weight:800;color:#0b2346;font-size:.95rem;margin-bottom:4px">Lock in this price during Open Enrollment</div>
             <div style="font-size:.88rem;color:#334155;line-height:1.5">2027 open enrollment runs <strong>Nov 1, 2026 &ndash; Jan 15, 2027</strong>. Enroll by <strong>Dec 15</strong> for coverage starting Jan 1. <a href="/blog/aca-open-enrollment-2027-guide" style="font-weight:700;color:#16447f">See every 2027 date and deadline &rarr;</a></div>
@@ -769,6 +777,13 @@ document.addEventListener("DOMContentLoaded",function(){
     lastEstimate={income:income,size:size,age1:age1,age2:(age2&&age2>=18)?age2:"",kids:kids,zip:(document.getElementById("zip").value||""),fplPct:fplPct,bench:bench,subsidy:subsidy,bronze:bronze,silver:silver,gold:gold};
 
     var r=document.getElementById("results");r.classList.add("show");
+    try{
+      var low=Math.min(bronze,silver,gold), h=document.getElementById("calc-next-h");
+      if(h) h.textContent=(isFinite(low)&&low>0?"Plans from about "+money(low)+"/mo for you. ":"")+"Want this price confirmed?";
+      var bk=document.getElementById("calc-next-book");
+      if(bk) bk.href="/book?from=subsidy-calculator&est="+encodeURIComponent(Math.round(low||0));
+      ["calc-next-book","calc-next-call"].forEach(function(id){var el=document.getElementById(id);if(el&&!el.__t){el.__t=1;el.addEventListener("click",function(){try{window.vsTrack&&window.vsTrack("quote_cta",{from_page:location.pathname,cta:id});}catch(e){}});}});
+    }catch(e){}
     r.scrollIntoView({behavior:"smooth",block:"nearest"});
     sendLead(first,last,phone,digits,email);
   }
