@@ -1625,6 +1625,15 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
 .ads-t tr.waste td{background:#fef3f2}.ads-t tr.win td{background:#ecfdf3}
 .ads-key{font-weight:700;padding:0 5px;border-radius:4px}.ads-key.waste{background:#fef3f2;color:#b42318}.ads-key.win{background:#ecfdf3;color:#15803d}
 .ads-copy{margin:0 0 10px}
+.ads-chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.ads-chip{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:#f1f5f9;color:#334155}
+.ads-chip.good,.ads-pill.good{background:#ecfdf3;color:#15803d}.ads-chip.warn,.ads-pill.warn{background:#fffaeb;color:#b45309}
+.ads-chip.bad,.ads-pill.bad{background:#fef3f2;color:#b42318}.ads-chip.off,.ads-pill.off{background:#f1f5f9;color:#5a6b80}
+.ads-pill{display:inline-block;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;white-space:nowrap}
+.ads-why{font-size:11px;color:#5a6b80;margin-top:3px;line-height:1.35}
+.ads-hl{font-weight:600;color:#0d1b2a;line-height:1.4;max-width:420px}.ads-url{font-size:11px;color:#15803d;margin-top:2px;word-break:break-all}
+.ads-adt{min-width:900px}.ads-adt tr.st-off td{opacity:.75}
+html.dark .ads-hl{color:#e6edf6}html.dark .ads-chip,html.dark .ads-pill{filter:brightness(.9)}
 .ads-steps{margin:8px 0 0 18px;line-height:1.7;font-size:14px}.ads-steps code{background:#f1f5f9;padding:1px 5px;border-radius:4px}
 html.dark .ads-tip{background:#1c2d42}html.dark .ads-tip.bad{background:#3a1d1d}html.dark .ads-tip.warn{background:#3a2e14}html.dark .ads-tip.good{background:#143323}
 html.dark .ads-t tr.waste td{background:#3a1d1d}html.dark .ads-t tr.win td{background:#143323}
@@ -6343,10 +6352,50 @@ function renderAdsPerf(){
   var hrs=(S.hours||[]).slice().sort(function(a,b){return b.conv-a.conv;});
   var hTot=hrs.reduce(function(s,h){return s+(+h.conv||0);},0);
   if(hTot>=10){var fmt=function(h){h=+h;return (h%12||12)+(h<12?"am":"pm");};tips.push(["good","Most conversions come at "+hrs.slice(0,3).map(function(h){return fmt(h.h);}).join(", ")+". Consider a bid increase for those hours."]);}
+  var adsAll=S.ads||[], nDis=adsAll.filter(function(a){return a.approval==="DISAPPROVED";}).length;
+  var nRev=adsAll.filter(function(a){return a.status==="ENABLED"&&a.cs==="ENABLED"&&/REVIEW_IN_PROGRESS|UNDER_REVIEW/.test(a.review);}).length;
+  var nLive=adsAll.filter(function(a){return a.status==="ENABLED"&&a.gs==="ENABLED"&&a.cs==="ENABLED"&&/APPROVED/.test(a.approval);}).length;
+  if(adsAll.length&&!nLive&&!nRev)tips.unshift(["warn","No ads are running right now. Enable a campaign in Google Ads to start getting clicks."]);
+  if(nRev)tips.push(["warn",nRev+" ad"+(nRev>1?"s are":" is")+" in an enabled campaign but still under Google review. They start showing once approved, usually within a day."]);
+  if(nDis)tips.unshift(["bad",nDis+" ad"+(nDis>1?"s are":" is")+" disapproved. See the reason in the Your ads table below; health insurance ads may need certification."]);
   if(!tips.length)tips.push(["good","Nothing needs attention right now."]);
   var ins=el("div",{class:"an-section"});ins.appendChild(el("h4",{text:"What to do next"}));
   tips.forEach(function(t){ins.appendChild(el("div",{class:"ads-tip "+t[0],html:'<span class="ads-ico">'+(t[0]==="good"?"&#10003;":t[0]==="bad"?"&#10005;":"!")+"</span><span>"+t[1].replace(/</g,"&lt;")+"</span>"}));});
   mount.appendChild(ins);
+
+  // Your ads: what is live right now and how each one performs
+  function adState(a){
+    var off=a.status!=="ENABLED"||a.gs!=="ENABLED"||a.cs!=="ENABLED";
+    if(a.approval==="DISAPPROVED")return["Disapproved","bad",a.topics];
+    if(off)return["Paused","off",a.cs!=="ENABLED"?"Campaign paused":a.gs!=="ENABLED"?"Ad group paused":"Ad paused"];
+    if(/REVIEW_IN_PROGRESS|UNDER_REVIEW/.test(a.review)||(!a.approval||a.approval==="UNKNOWN"||a.approval==="UNSPECIFIED"))return["Under review","warn","Google is reviewing this ad"];
+    if(a.approval==="APPROVED_LIMITED")return["Running (limited)","warn",a.topics?"Limited: "+a.topics:"Shows in fewer places"];
+    return["Running","good",""];
+  }
+  if(S.ads&&S.ads.length){
+    var ads=S.ads.map(function(a){var st=adState(a);return Object.assign({},a,{st:st});});
+    var order={"Running":0,"Running (limited)":1,"Under review":2,"Disapproved":3,"Paused":4};
+    ads.sort(function(a,b){return (order[a.st[0]]-order[b.st[0]])||(b.cost-a.cost)||(a.c<b.c?-1:1);});
+    var cnt={};ads.forEach(function(a){cnt[a.st[0]]=(cnt[a.st[0]]||0)+1;});
+    var asec=el("div",{class:"an-section"});
+    asec.appendChild(el("h4",{text:"Your ads"}));
+    asec.appendChild(el("p",{class:"sub",text:"Every ad in the account, live status from Google, last 30 days of results. Running ads first."}));
+    var chips=el("div",{class:"ads-chips"});
+    [["Running","good"],["Running (limited)","warn"],["Under review","warn"],["Disapproved","bad"],["Paused","off"]].forEach(function(c){if(cnt[c[0]])chips.appendChild(el("span",{class:"ads-chip "+c[1],text:cnt[c[0]]+" "+c[0].toLowerCase()}));});
+    asec.appendChild(chips);
+    var esc=function(x){return String(x==null?"":x).replace(/&/g,"&amp;").replace(/</g,"&lt;");};
+    var h="<div class='an-tablewrap'><table class='ads-t ads-adt'><thead><tr><th>Status</th><th>Ad</th><th>Campaign / ad group</th><th>Strength</th><th class='r'>Impr.</th><th class='r'>Clicks</th><th class='r'>CTR</th><th class='r'>Spend</th><th class='r'>Conv.</th><th class='r'>Cost / conv.</th></tr></thead><tbody>";
+    ads.forEach(function(a){
+      var path="";try{var u=new URL(a.url);path=u.pathname+(u.search||"");}catch(e){path=a.url||"";}
+      h+="<tr class='st-"+a.st[1]+"'><td><span class='ads-pill "+a.st[1]+"'>"+esc(a.st[0])+"</span>"+(a.st[2]?"<div class='ads-why'>"+esc(/^[A-Z_, :]+$/.test(String(a.st[2]).replace(/^Limited: /,""))?String(a.st[2]).toLowerCase().replace(/_/g," "):a.st[2])+"</div>":"")+"</td>"+
+        "<td><div class='ads-hl'>"+esc((a.h||[]).slice(0,3).join(" | "))+"</div><div class='ads-url'>"+esc(path)+"</div></td>"+
+        "<td>"+esc(a.c)+"<div class='ads-why'>"+esc(a.g)+"</div></td>"+
+        "<td>"+esc(String(a.strength||"").toLowerCase().replace(/_/g," ")||"–")+"</td>"+
+        "<td class='r'>"+(a.imp||0)+"</td><td class='r'>"+(a.clk||0)+"</td><td class='r'>"+adsPct(adsDiv(a.clk,a.imp))+"</td><td class='r'>"+adsMoney(a.cost)+"</td><td class='r'>"+(Math.round((a.conv||0)*10)/10)+"</td><td class='r'>"+(a.conv?adsMoney(a.cost/a.conv):"–")+"</td></tr>";
+    });
+    asec.appendChild(el("div",{html:h+"</tbody></table></div>"}));
+    mount.appendChild(asec);
+  }
 
   // Daily charts (single series each, one scale each; never dual-axis)
   var days=[];for(var t=startMs;t<=endMs;t+=864e5){var dd=new Date(t);days.push({k:dd.getFullYear()+"-"+String(dd.getMonth()+1).padStart(2,"0")+"-"+String(dd.getDate()).padStart(2,"0"),lab:(dd.getMonth()+1)+"/"+dd.getDate(),cost:0,clk:0,conv:0,leads:0});}
@@ -6386,8 +6435,9 @@ function renderAdsPerf(){
   var M=[["Clicks",function(r){return r.clk;},1],["CTR",function(r){return adsPct(adsDiv(r.clk,r.imp));},1],["Spend",function(r){return adsMoney(r.cost);},1],["Conv.",function(r){return Math.round(r.conv*10)/10;},1],["Cost / conv.",function(r){return r.conv?adsMoney(r.cost/r.conv):"–";},1]];
   // Campaign table follows the selected range (built from daily rows)
   var cm={};S.daily.filter(function(r){return inR(r.d);}).forEach(function(r){var o=cm[r.c]||(cm[r.c]={name:r.c,imp:0,clk:0,cost:0,conv:0});o.imp+=+r.imp||0;o.clk+=+r.clk||0;o.cost+=+r.cost||0;o.conv+=+r.conv||0;});
-  var meta={};(S.campaigns||[]).forEach(function(c){meta[c.name]=c;});
-  var camps=Object.keys(cm).map(function(k){return cm[k];}).sort(function(a,b){return b.cost-a.cost;});
+  var meta={};(S.campaigns||[]).forEach(function(c){meta[c.name]=c;});(S.campaignList||[]).forEach(function(c){meta[c.name]=c;});
+  (S.campaignList||[]).forEach(function(c){if(!cm[c.name])cm[c.name]={name:c.name,imp:0,clk:0,cost:0,conv:0};});
+  var camps=Object.keys(cm).map(function(k){return cm[k];}).sort(function(a,b){var ea=(meta[a.name]||{}).status==="ENABLED"?1:0,eb=(meta[b.name]||{}).status==="ENABLED"?1:0;return (eb-ea)||(b.cost-a.cost);});
   mount.appendChild(table("Campaigns","Last "+range+" days.",[["Campaign",function(r){return r.name;}],["Status",function(r){var m=meta[r.name]||{};return String(m.primary||m.status||"").toLowerCase().replace(/_/g," ");}],["Budget/day",function(r){var m=meta[r.name];return m&&m.budget?adsMoney(m.budget):"";},1]].concat(M),camps,"No campaign spend in this range."));
   mount.appendChild(table("Ad groups","Last 30 days.",[["Ad group",function(r){return r.g;}],["Campaign",function(r){return r.c;}]].concat(M),(S.adGroups||[]).filter(function(r){return r.imp>0;}).sort(function(a,b){return b.cost-a.cost;})));
   var termRows=(S.terms||[]).slice(0,40).map(function(t){var o=Object.assign({},t);if(!(+t.conv)&&(+t.cost)>=Math.max(10,2*avgCpc))o.__cls="waste";else if(+t.conv)o.__cls="win";return o;});

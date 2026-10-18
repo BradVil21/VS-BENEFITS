@@ -48,6 +48,11 @@ module.exports = async (req, res) => {
     hours: list(s.hours, 24, function (r) { return { h: num(r.h) }; }),
     devices: list(s.devices, 6, function (r) { return { dev: str(r.dev, 20) }; }),
     policy: { disapproved: num(s.policy && s.policy.disapproved), limited: num(s.policy && s.policy.limited) },
+    ads: list(s.ads, 80, function (r) { return { id: str(r.id, 24), c: str(r.c, 80), cs: str(r.cs, 20), g: str(r.g, 80), gs: str(r.gs, 20),
+      status: str(r.status, 20), strength: str(r.strength, 20), approval: str(r.approval, 30), review: str(r.review, 30), topics: str(r.topics, 200),
+      url: str(r.url, 300), h: (Array.isArray(r.h) ? r.h : []).slice(0, 5).map(function (x) { return str(x, 40); }) }; }),
+    campaignList: (Array.isArray(s.campaignList) ? s.campaignList : []).slice(0, 40).map(function (r) { r = r || {}; return { name: str(r.name, 80),
+      status: str(r.status, 20), primary: str(r.primary, 30), reasons: str(r.reasons, 200), bidding: str(r.bidding, 40), budget: num(r.budget) }; }),
   };
 
   // Read first for the updateTime precondition; retry once if the portal wrote in between.

@@ -68,6 +68,22 @@ function main() {
   var disapproved = q("SELECT ad_group_ad.ad.id FROM ad_group_ad WHERE ad_group_ad.status = 'ENABLED' AND ad_group_ad.policy_summary.approval_status = 'DISAPPROVED'").length;
   var limited = q("SELECT ad_group_ad.ad.id FROM ad_group_ad WHERE ad_group_ad.status = 'ENABLED' AND ad_group_ad.policy_summary.approval_status = 'APPROVED_LIMITED'").length;
 
+  var adMap = {};
+  q("SELECT campaign.name, campaign.status, ad_group.name, ad_group.status, ad_group_ad.ad.id, ad_group_ad.status, ad_group_ad.ad_strength, ad_group_ad.policy_summary.approval_status, ad_group_ad.policy_summary.review_status, ad_group_ad.policy_summary.policy_topic_entries, ad_group_ad.ad.final_urls, ad_group_ad.ad.responsive_search_ad.headlines FROM ad_group_ad WHERE ad_group_ad.status != 'REMOVED' AND ad_group.status != 'REMOVED' AND campaign.status != 'REMOVED'").forEach(function (r) {
+    var a = r.adGroupAd || {}, ad = a.ad || {}, ps = a.policySummary || {}, rsa = ad.responsiveSearchAd || {};
+    adMap[String(ad.id)] = { id: String(ad.id), c: r.campaign.name, cs: r.campaign.status, g: r.adGroup.name, gs: r.adGroup.status, status: a.status, strength: a.adStrength || "",
+      approval: ps.approvalStatus || "", review: ps.reviewStatus || "",
+      topics: (ps.policyTopicEntries || []).map(function (e) { return e.topic; }).join(", "),
+      url: (ad.finalUrls || [])[0] || "", h: (rsa.headlines || []).slice(0, 5).map(function (x) { return x.text; }), imp: 0, clk: 0, cost: 0, conv: 0 };
+  });
+  q("SELECT ad_group_ad.ad.id, " + MET + " FROM ad_group_ad WHERE " + DATE30).forEach(function (r) {
+    var o = adMap[String(r.adGroupAd.ad.id)]; if (!o) return; var v = m(r);
+    o.imp += v.imp; o.clk += v.clk; o.cost += v.cost; o.conv += v.conv; });
+  var ads = Object.keys(adMap).map(function (k) { return adMap[k]; });
+  var campaignList = q("SELECT campaign.name, campaign.status, campaign.primary_status, campaign.primary_status_reasons, campaign.bidding_strategy_type, campaign_budget.amount_micros FROM campaign WHERE campaign.status != 'REMOVED'")
+    .map(function (r) { var c = r.campaign; return { name: c.name, status: c.status, primary: c.primaryStatus || "", reasons: (c.primaryStatusReasons || []).join(", "),
+      bidding: c.biddingStrategyType || "", budget: Math.round(((r.campaignBudget || {}).amountMicros || 0) / 1e4) / 100 }; });
+
   var body = {
     secret: SECRET,
     snapshot: {
@@ -76,7 +92,8 @@ function main() {
       daily: daily, campaigns: campaigns, adGroups: adGroups, keywords: keywords, terms: terms,
       hours: Object.keys(hourMap).map(function (k) { return hourMap[k]; }),
       devices: Object.keys(devMap).map(function (k) { return devMap[k]; }),
-      policy: { disapproved: disapproved, limited: limited }
+      policy: { disapproved: disapproved, limited: limited },
+      ads: ads, campaignList: campaignList
     }
   };
   var res = UrlFetchApp.fetch(ENDPOINT, { method: "post", contentType: "application/json", payload: JSON.stringify(body), muteHttpExceptions: true });
