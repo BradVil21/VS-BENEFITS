@@ -824,6 +824,19 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 .field .qbtn-grid.cols-3{grid-template-columns:repeat(3,1fr)}
 .field .qbtn-grid.cols-3 .qbtn{padding:10px 8px;font-size:.95rem}
 .vs-answered{display:none}
+/* Progress bar: green fill with "NN% Complete" inside, grey track */
+.progress-wrap{background:#f1f3f2;border-bottom:0;box-shadow:none;padding:16px 20px}
+.progress-wrap .progress-meta{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.progress-wrap .progress-bar-bg{height:24px;border-radius:5px;background:#dcdedd;overflow:hidden;position:relative}
+.progress-wrap .progress-bar-fill{height:100%;border-radius:5px 0 0 5px;background:#43c58f;min-width:118px;
+  display:flex;align-items:center;justify-content:flex-end;padding-right:10px;box-sizing:border-box;
+  color:#fff;font:700 .9rem/1 'Roboto',system-ui,sans-serif;white-space:nowrap;transition:width .45s ease}
+.progress-wrap .progress-bar-fill[data-full]{border-radius:5px}
+.progress-wrap .progress-bar-fill::after{display:none}
+#panel-generating .gen-ring{display:none}
+.gen-bar{height:28px;border-radius:5px;background:#dcdedd;overflow:hidden;margin:4px auto 22px;max-width:440px}
+.gen-bar-fill{height:100%;width:0;min-width:118px;background:#43c58f;color:#fff;display:flex;align-items:center;justify-content:flex-end;
+  padding-right:10px;box-sizing:border-box;font:700 .92rem/1 'Roboto',system-ui,sans-serif;white-space:nowrap;border-radius:5px 0 0 5px}
 .qscreen{background:#fff;border-radius:var(--radius,18px);padding:34px 22px 28px}
 .qscreen .q-hint{text-align:center;color:var(--muted,#5a6b80);font-size:.92rem;margin:10px auto 0;max-width:520px}
 </style>
@@ -1594,6 +1607,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 </style>
   <div class="panel" id="panel-generating">
     <div class="gen-card">
+      <div class="gen-bar" aria-hidden="true"><div class="gen-bar-fill" id="genBarFill">0% Complete</div></div>
       <div class="gen-ring">
         <svg viewBox="0 0 108 108"><circle class="gr-track" cx="54" cy="54" r="46"/><circle class="gr-prog" id="genProg" cx="54" cy="54" r="46"/></svg>
         <div class="gen-pct" id="genPct">0%</div>
@@ -1787,6 +1801,8 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   // ---- PROGRESS ----
   function updateProgress(step, total){
     if(currentType === 'business'){ step = step + 1; total = BIZ_STEPS + 1; }
+    var pctNow = Math.round((step / total) * 100), fillEl = document.getElementById('progressFill');
+    if(fillEl){ fillEl.textContent = pctNow + '% Complete'; if(pctNow >= 100) fillEl.setAttribute('data-full',''); else fillEl.removeAttribute('data-full'); }
     var pct = Math.round((step / total) * 100);
     document.getElementById('progressFill').style.width = pct + '%';
     document.getElementById('progressPct').textContent = pct + '%';
@@ -1834,6 +1850,8 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       var t = Math.min(1, (ts - startTs) / DURATION);
       var eased = 1 - Math.pow(1 - t, 1.6);   // ease toward the end
       pctEl.textContent = Math.round(eased * 100) + '%';
+      var gbf = document.getElementById('genBarFill');
+      if(gbf){ gbf.style.width = (eased * 100).toFixed(1) + '%'; gbf.textContent = Math.round(eased * 100) + '% Complete'; }
       ring.style.strokeDashoffset = (C * (1 - eased)).toFixed(1);
       setStepState(eased);
       if(t < 1){ requestAnimationFrame(frame); }
