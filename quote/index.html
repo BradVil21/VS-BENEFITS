@@ -828,7 +828,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 .qscreen .field[style*="display:flex"]{max-width:560px;margin:16px auto 0;text-align:left}
 /* trust line + back */
 .q-safe{display:flex;align-items:center;justify-content:center;gap:8px;margin:22px auto 0;color:#6b7580;font-size:.92rem;flex-wrap:wrap}
-.q-safe-photo{width:40px;height:40px;border-radius:50%;object-fit:cover;flex:none;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.q-safe-photo{width:48px;height:48px;object-position:50% 30%;border-radius:50%;object-fit:cover;flex:none;box-shadow:0 1px 3px rgba(0,0,0,.18)}
 .q-safe-badge{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;font:800 .78rem 'Poppins',sans-serif}
 .q-back{text-align:center;margin-top:10px}
 .q-back-btn{background:none;border:0;color:#6b7580;font:500 .95rem 'Roboto',system-ui,sans-serif;cursor:pointer;padding:8px 12px}
@@ -881,7 +881,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <button type="button" class="qbtn type-card" id="typeBusiness" onclick="selectType('business')">My small business</button>
       </div>
       <button type="button" class="qbtn qbtn-ghost" id="typeDental" onclick="vsStartDental()">Just dental &amp; vision</button>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Answer a few questions &amp; find the best quotes</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Answer a few questions &amp; find the best quotes</div>
       <div class="start-trust">
         <div class="trust-item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
@@ -983,7 +983,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <button type="button" class="qbtn" onclick="vsDentalFor('individual')">Myself and/or my family</button>
         <button type="button" class="qbtn" onclick="vsDentalFor('business')">My employees</button>
       </div>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="backTo(0)">&lsaquo; Back</button></div>
   </div>
@@ -1000,7 +1000,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       </div>
       </div>
       <button type="button" class="qbtn q-continue" onclick="indNext(1)">Continue</button>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="window.vsIsDental()?vsStartDental():backTo(0)">&lsaquo; Back</button></div>
   </div>
@@ -1010,7 +1010,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <p class="q-sub">Most people qualify for savings. Income decides how much.</p>
       <div class="income-grid" id="ind-income"><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'Under $20,000')">Under $20,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$20,000 - $35,000')">$20,000 - $35,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$35,000 - $50,000')">$35,000 - $50,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$50,000 - $75,000')">$50,000 - $75,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$75,000 - $100,000')">$75,000 - $100,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$100,000 - $150,000')">$100,000 - $150,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$150,000+')">$150,000+</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'Prefer not to say')">Prefer not to say</div></div>
       <button type="button" class="qbtn-alt" onclick="indNext(2)">Skip this question</button>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="indNav(1)">&lsaquo; Back</button></div>
   </div>
@@ -1081,7 +1081,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         </label>
       </div>
       <button type="button" class="qbtn q-continue" onclick="indNext(3)">Continue</button>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="indNav(2)">&lsaquo; Back</button></div>
   </div>
@@ -1119,7 +1119,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         </div>
       </div>
       <button type="button" class="qbtn q-continue" onclick="indNext(4)">Continue</button>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Carriers need this to show plans and prices for your area.</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Carriers need this to show plans and prices for your area.</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="indNav(window.vsIsDental()?1:3)">&lsaquo; Back</button></div>
   </div>
@@ -1134,7 +1134,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       </div>
       </div>
       <button type="button" class="qbtn q-continue" onclick="indNext(5)">Continue</button>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your advisor will call or text you. We never sell your information.</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your advisor will call or text you. We never sell your information.</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="indNav(4)">&lsaquo; Back</button></div>
   </div>
@@ -1167,7 +1167,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       </label>
     </div>
       <button type="button" class="qbtn q-continue btn-submit" onclick="submitInd()">Get My Free Quote</button>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="indNav(5)">&lsaquo; Back</button></div>
   </div>
@@ -1182,7 +1182,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <div class="err-msg">Please choose one.</div>
       </div>
       <button type="button" class="qbtn-alt" data-set="biz-employees" data-val="1 (just me)" data-next="biz:2">It's just me, no employees yet</button>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="window.vsIsDental()?vsStartDental():backTo(0)">&lsaquo; Back</button></div>
   </div>
@@ -1194,7 +1194,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <div class="qbtn-grid" role="group"><button type="button" class="qbtn" data-set="biz-insured" data-val="Yes" data-next="biz:3">Yes</button><button type="button" class="qbtn" data-set="biz-insured" data-val="No" data-next="biz:3">No</button></div>
         <div class="err-msg">Please choose one.</div>
       </div>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(1)">&lsaquo; Back</button></div>
   </div>
@@ -1206,7 +1206,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <div class="qbtn-grid cols-3" role="group"><button type="button" class="qbtn" data-set="biz-coverage" data-val="PPO" data-next="biz:4">PPO</button><button type="button" class="qbtn" data-set="biz-coverage" data-val="HMO" data-next="biz:4">HMO</button><button type="button" class="qbtn" data-set="biz-coverage" data-val="Not sure yet" data-next="biz:4">Not sure yet</button></div>
         <div class="err-msg">Please choose one.</div>
       </div>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(2)">&lsaquo; Back</button></div>
   </div>
@@ -1226,7 +1226,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       </div>
       </div>
       <button type="button" class="qbtn q-continue" onclick="bizNext(4)">Continue</button>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(window.vsIsDental()?2:3)">&lsaquo; Back</button></div>
   </div>
@@ -1282,7 +1282,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         </label>
       </div>
       <button type="button" class="qbtn q-continue" onclick="bizNext(5)">Continue</button>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(4)">&lsaquo; Back</button></div>
   </div>
@@ -1321,7 +1321,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       </div>
       <div class="field vs-hidden-field" id="f-biz-phone"><input type="tel" id="biz-phone" autocomplete="off" tabindex="-1" aria-hidden="true" /><div class="err-msg">Please enter a valid business phone number.</div></div>
       <button type="button" class="qbtn q-continue" onclick="bizNext(6)">Continue</button>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Carriers need this to price group plans for your area.</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Carriers need this to price group plans for your area.</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(5)">&lsaquo; Back</button></div>
   </div>
@@ -1336,7 +1336,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       </div>
       </div>
       <button type="button" class="qbtn q-continue" onclick="bizNext(7)">Continue</button>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>A dedicated business advisor will call you. We never sell your information.</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>A dedicated business advisor will call you. We never sell your information.</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(6)">&lsaquo; Back</button></div>
   </div>
@@ -1369,7 +1369,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       </label>
     </div>
       <button type="button" class="qbtn q-continue btn-submit" onclick="submitBiz()">Get My Business Quote</button>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="40" height="40" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
+      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(7)">&lsaquo; Back</button></div>
   </div>
