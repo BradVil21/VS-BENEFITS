@@ -32,7 +32,7 @@
 <link rel="apple-touch-icon" href="/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@600;700;800&family=Roboto:wght@500;700;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
 <style>
 :root{
   --blue-900:#0b2346;
@@ -772,73 +772,64 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 #vs-callbar a{font-size:.86rem!important;padding-left:8px!important;padding-right:8px!important}
 }
 </style>
-<style id="vs-btn-questions-css">
-/* Question + big blue answer buttons (one decision per screen) */
-:root{--qb:#2f9de6;--qb-edge:#1d78bb;--qb-hover:#2389d4;--qb-sel:#14609f;--qb-ink:#212529}
-.step-card h2,.start-card h1,.qscreen h2{
-  font-family:'Roboto','Poppins',system-ui,sans-serif;font-weight:900;color:var(--qb-ink);
-  text-align:center;letter-spacing:-.01em;line-height:1.18;text-wrap:balance;
-  font-size:clamp(1.55rem,4.2vw,2.35rem);margin-bottom:10px}
-.step-card .step-eyebrow{margin-left:auto;margin-right:auto;display:flex;width:max-content}
-.step-card .step-sub,.start-card .sub{text-align:center;max-width:560px;margin-left:auto;margin-right:auto}
-/* the shared button look */
-.qbtn,.income-item,.type-card,.sit-item{
-  -webkit-appearance:none;appearance:none;display:flex;align-items:center;justify-content:center;gap:10px;
-  width:100%;min-height:62px;padding:14px 18px;border:0;border-radius:5px;
-  border-bottom:4px solid var(--qb-edge);background:var(--qb);color:#fff;
-  font-family:'Roboto',system-ui,sans-serif;font-weight:700;font-size:1.12rem;line-height:1.25;text-align:center;
-  cursor:pointer;box-shadow:none;transition:background .15s,transform .08s,border-color .15s}
-.qbtn:hover,.income-item:hover,.type-card:hover,.sit-item:hover{background:var(--qb-hover);border-color:var(--qb-edge);transform:none;box-shadow:none}
-.qbtn:active,.income-item:active,.type-card:active,.sit-item:active{transform:translateY(2px);border-bottom-width:2px;margin-top:2px}
-.qbtn:focus-visible,.income-item:focus-visible,.type-card:focus-visible,.sit-item:focus-within{outline:3px solid #9fd2f6;outline-offset:2px}
-.qbtn.selected,.income-item.selected,.type-card.selected,.sit-item.checked{
-  background:var(--qb-sel);border-color:#0d4677;color:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
-.qbtn.selected::after,.income-item.selected::after,.type-card.selected::after{
-  content:"";width:7px;height:13px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg);margin:-4px 0 0 4px;flex:none}
-.qbtn-grid,.income-grid,.situations-grid,.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 26px;max-width:960px;margin:22px auto 6px}
-@media(max-width:560px){.qbtn-grid,.income-grid,.situations-grid,.type-grid{grid-template-columns:1fr;gap:12px}}
+<style id="vs-quote-steps-css">
+/* One question per screen, big blue answer buttons, green "% Complete" bar */
+:root{--qb:#2f9de6;--qb-edge:#1d78bb;--qb-hover:#2389d4;--qb-sel:#0f5c9c;--qb-ink:#212529;--q-green:#43c58f;--q-track:#dcdedd;--q-band:#f1f3f2}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* progress band */
+.progress-wrap{background:var(--q-band);border-bottom:0;box-shadow:none;padding:16px 20px}
+.progress-wrap .progress-meta{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.progress-wrap .progress-bar-bg{height:24px;border-radius:5px;background:var(--q-track);overflow:hidden;position:relative}
+.progress-wrap .progress-bar-fill{height:100%;border-radius:5px 0 0 5px;background:var(--q-green);min-width:118px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;box-sizing:border-box;color:#fff;font:700 .9rem/1 'Roboto',system-ui,sans-serif;white-space:nowrap;transition:width .45s ease}
+.progress-wrap .progress-bar-fill::after{display:none}
+/* screens */
+.qscreen{background:#fff;border-radius:var(--radius,18px);padding:34px 22px 26px;text-align:center}
+.qscreen h2,.start-card h1{font-family:'Roboto',system-ui,sans-serif;font-weight:900;color:var(--qb-ink);text-align:center;letter-spacing:-.01em;line-height:1.16;text-wrap:balance;font-size:clamp(1.65rem,4.4vw,2.45rem);margin:0 auto 18px;max-width:720px}
+.start-card h1 .h-lite,.start-card h1 span.h-lite{font-weight:300;background:none;-webkit-background-clip:initial;background-clip:initial;-webkit-text-fill-color:currentColor;color:var(--qb-ink)}
+.start-card .q-safe{margin:4px auto 22px}
+.q-sub,.start-card .sub{text-align:center;color:var(--muted,#5a6b80);font-size:.98rem;margin:-6px auto 18px;max-width:540px}
+/* blue buttons */
+.qbtn,.income-item,.sit-item{-webkit-appearance:none;appearance:none;display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:60px;padding:14px 18px;border:0;border-radius:5px;border-bottom:4px solid var(--qb-edge);background:var(--qb);color:#fff;font-family:'Roboto',system-ui,sans-serif;font-weight:700;font-size:1.12rem;line-height:1.25;text-align:center;cursor:pointer;box-shadow:none;transition:background .15s,transform .08s}
+.qbtn:hover,.income-item:hover,.sit-item:hover{background:var(--qb-hover);border-color:var(--qb-edge)}
+.qbtn:active,.income-item:active{transform:translateY(2px)}
+.qbtn:focus-visible,.income-item:focus-visible,.sit-item:focus-within{outline:3px solid #9fd2f6;outline-offset:2px}
+.qbtn.selected,.income-item.selected,.sit-item.checked{background:var(--qb-sel);border-color:#0a426f;color:#fff;box-shadow:none}
+.qbtn-grid,.income-grid,.situations-grid,.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 26px;max-width:720px;margin:0 auto}
 .qbtn-grid.cols-3{grid-template-columns:repeat(3,1fr)}
-@media(max-width:560px){.qbtn-grid.cols-3{grid-template-columns:1fr 1fr}}
-.qbtn-alt{display:block;margin:14px auto 0;background:none;border:0;color:var(--qb-sel);font:600 1rem 'Roboto',system-ui,sans-serif;text-decoration:underline;cursor:pointer;padding:8px}
+@media(max-width:560px){.qbtn-grid,.income-grid,.situations-grid,.type-grid{grid-template-columns:1fr;gap:12px}.qbtn-grid.cols-3{grid-template-columns:1fr}}
+.q-continue{max-width:520px;margin:18px auto 0}
+.qbtn-alt{display:block;margin:14px auto 0;background:none;border:0;color:var(--qb-sel);font:500 1rem 'Roboto',system-ui,sans-serif;text-decoration:underline;cursor:pointer;padding:8px}
 .qbtn-alt.selected{font-weight:900}
-/* income + type tiles as blue buttons */
-.income-item{font-size:1.05rem;color:#fff}
-.type-card{flex-direction:column;padding:20px 16px;min-height:118px;overflow:visible}
+/* start screen */
+.type-grid{margin:6px auto 18px}
+.type-card{min-height:62px;padding:14px 18px;flex-direction:row;overflow:visible;position:static}
 .type-card::before{display:none}
-.type-card .type-icon,.type-card.selected .type-icon{background:rgba(255,255,255,.18);color:#fff;width:46px;height:46px;margin:0 auto 4px;border-radius:50%}
-.type-card h3{color:#fff;font-family:'Roboto',system-ui,sans-serif;font-size:1.2rem;font-weight:900;margin:0}
-.type-card p{color:rgba(255,255,255,.9);font-size:.86rem;margin:0}
-.type-card.selected::after{position:absolute;top:14px;right:16px;margin:0}
-.type-card{position:relative}
-/* multi-select situations: blue buttons with a white tick box */
-.sit-item{justify-content:flex-start;text-align:left;font-size:1rem;min-height:58px}
-.sit-item .sit-text{color:#fff;font-size:1rem;font-weight:700;background:none;border:0;padding:0}
+.type-card:hover{transform:none;box-shadow:none}
+/* multi-select */
+.sit-item{justify-content:flex-start;text-align:left;font-size:1rem;min-height:56px;position:relative}
+.sit-item .sit-text{color:#fff;font-size:1rem;font-weight:700}
 .sit-item .sit-check{border-color:#fff;background:transparent}
 .sit-item input:checked ~ .sit-check{background:#fff;border-color:#fff}
 .sit-item input:checked ~ .sit-check::after{border-color:var(--qb-sel)}
-/* select fields turned into button groups */
+/* text inputs */
+.q-fields{max-width:520px;margin:0 auto;text-align:left;display:grid;gap:4px}
+.q-fields.q-narrow{max-width:360px}
+.q-fields .field{margin-bottom:10px}
+.q-fields label{font-size:.82rem;color:var(--muted,#5a6b80);font-weight:600}
+.q-fields input,.q-fields select{height:54px;font-size:1.08rem;border:1px solid #c9ced3;border-radius:5px;background:#fff;padding:0 14px;width:100%;box-sizing:border-box;box-shadow:inset 0 1px 2px rgba(0,0,0,.05)}
+.q-fields input:focus,.q-fields select:focus{border-color:var(--qb);outline:2px solid #bfe0f8;outline-offset:0}
+.q-fields .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:400px){.q-fields .field-row{grid-template-columns:1fr}}
 .vs-sel-hidden{position:absolute!important;opacity:0;pointer-events:none;width:1px;height:1px}
-.field .qbtn-grid{margin:8px 0 0;gap:10px 14px}
-.field .qbtn{min-height:52px;font-size:1rem}
-.field.has-error .qbtn{box-shadow:0 0 0 2px #e5484d}
-.field .qbtn-grid.cols-3{grid-template-columns:repeat(3,1fr)}
-.field .qbtn-grid.cols-3 .qbtn{padding:10px 8px;font-size:.95rem}
-.vs-answered{display:none}
-/* Progress bar: green fill with "NN% Complete" inside, grey track */
-.progress-wrap{background:#f1f3f2;border-bottom:0;box-shadow:none;padding:16px 20px}
-.progress-wrap .progress-meta{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.progress-wrap .progress-bar-bg{height:24px;border-radius:5px;background:#dcdedd;overflow:hidden;position:relative}
-.progress-wrap .progress-bar-fill{height:100%;border-radius:5px 0 0 5px;background:#43c58f;min-width:118px;
-  display:flex;align-items:center;justify-content:flex-end;padding-right:10px;box-sizing:border-box;
-  color:#fff;font:700 .9rem/1 'Roboto',system-ui,sans-serif;white-space:nowrap;transition:width .45s ease}
-.progress-wrap .progress-bar-fill[data-full]{border-radius:5px}
-.progress-wrap .progress-bar-fill::after{display:none}
-#panel-generating .gen-ring{display:none}
-.gen-bar{height:28px;border-radius:5px;background:#dcdedd;overflow:hidden;margin:4px auto 22px;max-width:440px}
-.gen-bar-fill{height:100%;width:0;min-width:118px;background:#43c58f;color:#fff;display:flex;align-items:center;justify-content:flex-end;
-  padding-right:10px;box-sizing:border-box;font:700 .92rem/1 'Roboto',system-ui,sans-serif;white-space:nowrap;border-radius:5px 0 0 5px}
-.qscreen{background:#fff;border-radius:var(--radius,18px);padding:34px 22px 28px}
-.qscreen .q-hint{text-align:center;color:var(--muted,#5a6b80);font-size:.92rem;margin:10px auto 0;max-width:520px}
+.vs-hidden-field{display:none!important}
+.q-choice .err-msg{text-align:center}
+.qscreen .field[style*="display:flex"]{max-width:560px;margin:16px auto 0;text-align:left}
+/* trust line + back */
+.q-safe{display:flex;align-items:center;justify-content:center;gap:8px;margin:22px auto 0;color:#6b7580;font-size:.92rem;flex-wrap:wrap}
+.q-safe-badge{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;font:800 .78rem 'Poppins',sans-serif}
+.q-back{text-align:center;margin-top:10px}
+.q-back-btn{background:none;border:0;color:#6b7580;font:500 .95rem 'Roboto',system-ui,sans-serif;cursor:pointer;padding:8px 12px}
+.q-back-btn:hover{color:var(--qb-ink);text-decoration:underline}
 </style>
 </head>
 <body>
@@ -858,14 +849,14 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 </header>
 
 <!-- PROGRESS BAR -->
-<div class="progress-wrap" id="progressWrap" style="display:none">
+<div class="progress-wrap" id="progressWrap">
   <div class="progress-inner">
     <div class="progress-meta">
       <span class="progress-label" id="progressStep">Step 1</span>
       <span class="progress-pct" id="progressPct">0%</span>
     </div>
     <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progressFill"></div>
+      <div class="progress-bar-fill" id="progressFill" style="width:20%">20% Complete</div>
     </div>
   </div>
 </div>
@@ -880,21 +871,13 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
         Takes about 2 minutes
       </div>
-      <h1>Get your free health insurance quote</h1>
-      <p class="sub">Answer a few quick questions and a licensed advisor will compare plans from top carriers in your area for you. Takes about 2 minutes. No cost, no obligation.</p>
-
+      <h1><span class="h-lite">Let&rsquo;s get started!</span> Who is this quote for?</h1>
+      <p class="sub">Answer a few quick questions and a licensed advisor will compare plans from top carriers for you. Free, no obligation.</p>
       <div class="type-grid">
-        <div class="type-card" role="button" tabindex="0" id="typeIndividual" onclick="selectType('individual')">
-          <div class="type-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-          <h3>Individual or Family</h3>
-          <p>Coverage for you and your loved ones</p>
-        </div>
-        <div class="type-card" role="button" tabindex="0" id="typeBusiness" onclick="selectType('business')">
-          <div class="type-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg></div>
-          <h3>Small Business</h3>
-          <p>Group plans for your employees</p>
-        </div>
+        <button type="button" class="qbtn type-card" id="typeIndividual" onclick="selectType('individual')">Myself and/or my family</button>
+        <button type="button" class="qbtn type-card" id="typeBusiness" onclick="selectType('business')">My small business</button>
       </div>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Answer a few questions &amp; find the best quotes</div>
       <a id="dv-switch" href="/quote/dental-vision?from=quote" style="display:flex;align-items:center;justify-content:center;gap:8px;margin:-4px auto 18px;padding:11px 16px;max-width:420px;border:1.5px dashed var(--line);border-radius:14px;color:var(--blue-700);font-weight:700;font-size:.88rem;text-decoration:none;background:#fff">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
         Only need dental or vision? Get a dental &amp; vision quote &rarr;
@@ -994,104 +977,36 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
     </div>
   </div>
 
-  <!-- ======================== INDIVIDUAL PANELS ======================== -->
-
-  <!-- INDIVIDUAL: Step 1 - Location + DOB -->
+  <!-- ======================== INDIVIDUAL SCREENS (one question each) ======================== -->
   <div class="panel" id="panel-ind-1">
-    <div class="step-card">
-      <div class="step-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Location
-      </div>
-      <h2>Let's start with where you live</h2>
-      <p class="step-sub">Your ZIP code tells us which plans and carriers are available in your area.</p>
-      <div class="field" id="f-ind-address">
-        <label>Street Address<span class="req">*</span></label>
-        <input type="text" id="ind-address" placeholder="123 Main Street" autocomplete="street-address" />
-        <div class="err-msg">Please enter your street address.</div>
-      </div>
-      <div class="field-row">
-        <div class="field" id="f-ind-zip">
-          <label>ZIP Code<span class="req">*</span></label>
-          <input type="text" id="ind-zip" placeholder="33101" maxlength="5" autocomplete="postal-code" inputmode="numeric" />
-          <div class="err-msg">Please enter a valid 5-digit ZIP code.</div>
-        </div>
-        <div class="field" id="f-ind-state">
-          <label>State<span class="req">*</span></label>
-          <select id="ind-state" autocomplete="address-level1">
-            <option value="">Select state...</option>
-            <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option>
-            <option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option>
-            <option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option>
-            <option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option>
-            <option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option>
-            <option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option>
-            <option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option>
-            <option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option>
-            <option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option>
-            <option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
-          </select>
-          <div class="err-msg">Please select your state.</div>
-        </div>
-      </div>
+    <div class="qscreen">
+      <h2>What is your date of birth?</h2>
+      <div class="q-fields q-narrow">
       <div class="field" id="f-ind-dob">
-        <label>Date of Birth<span class="req">*</span></label>
+        <label><span class="sr-only">Date of birth</span></label>
         <input type="date" id="ind-dob" autocomplete="bday" />
         <div class="err-msg">Please enter a valid date of birth.</div>
       </div>
+      </div>
+      <button type="button" class="qbtn q-continue" onclick="indNext(1)">Continue</button>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="backTo(0)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-      <button class="btn-next" onclick="indNext(1)">
-        Continue
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="backTo(0)">&lsaquo; Back</button></div>
   </div>
-
-  <!-- INDIVIDUAL: Step 2 - Phone -->
   <div class="panel" id="panel-ind-2">
-    <div class="step-card">
-      <div class="step-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-        Contact Info
-      </div>
-      <h2>What is the best number to reach you?</h2>
-      <p class="step-sub">Your advisor will call or text you to go over your quote options. We never share your information.</p>
-      <div class="field" id="f-ind-phone">
-        <label>Phone Number<span class="req">*</span></label>
-        <input type="tel" id="ind-phone" placeholder="(305) 555-0100" autocomplete="tel" inputmode="tel" />
-        <div class="err-msg">Please enter a valid phone number.</div>
-      </div>
-      <div class="field-hint">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Your information is 100% secure and never sold.
-      </div>
+    <div class="qscreen">
+      <h2>What is your household income?</h2>
+      <p class="q-sub">Most people qualify for savings. Income decides how much.</p>
+      <div class="income-grid" id="ind-income"><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'Under $20,000')">Under $20,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$20,000 - $35,000')">$20,000 - $35,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$35,000 - $50,000')">$35,000 - $50,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$50,000 - $75,000')">$50,000 - $75,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$75,000 - $100,000')">$75,000 - $100,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$100,000 - $150,000')">$100,000 - $150,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$150,000+')">$150,000+</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'Prefer not to say')">Prefer not to say</div></div>
+      <button type="button" class="qbtn-alt" onclick="indNext(2)">Skip this question</button>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="indNav(1)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-      <button class="btn-next" onclick="indNext(2)">
-        Continue
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="indNav(1)">&lsaquo; Back</button></div>
   </div>
-
-  <!-- INDIVIDUAL: Step 3 - Situation -->
   <div class="panel" id="panel-ind-3">
-    <div class="step-card">
-      <div class="step-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-        Your Situation
-      </div>
+    <div class="qscreen">
       <h2>What's bringing you here today?</h2>
-      <p class="step-sub">Select all that apply. This helps us find the most relevant plan options for you.</p>
+      <p class="q-sub">Select all that apply.</p>
       <div class="situations-grid" id="ind-situations">
         <label class="sit-item" onclick="toggleSit(this)">
           <input type="checkbox" value="lost_job_coverage">
@@ -1154,233 +1069,160 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
           <span class="sit-text">Something else</span>
         </label>
       </div>
+      <button type="button" class="qbtn q-continue" onclick="indNext(3)">Continue</button>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="indNav(2)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-      <button class="btn-next" onclick="indNext(3)">
-        Continue
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="indNav(2)">&lsaquo; Back</button></div>
   </div>
-
-  <!-- INDIVIDUAL: Step 4 - Income -->
   <div class="panel" id="panel-ind-4">
-    <div class="step-card">
-      <div class="step-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-        Household Income
+    <div class="qscreen">
+      <h2>What is your address?</h2>
+      <div class="q-fields">
+      <div class="field" id="f-ind-address">
+        <label>Street address</label>
+        <input type="text" id="ind-address" placeholder="Street address" autocomplete="street-address" />
+        <div class="err-msg">Please enter the street address.</div>
       </div>
-      <h2>What is your estimated annual household income?</h2>
-      <p class="step-sub">This helps determine if you qualify for subsidies or tax credits that can significantly lower your monthly premium.</p>
-      <div class="income-grid" id="ind-income">
-        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'Under $20,000')">Under $20,000</div>
-        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$20,000 - $35,000')">$20,000 - $35,000</div>
-        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$35,000 - $50,000')">$35,000 - $50,000</div>
-        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$50,000 - $75,000')">$50,000 - $75,000</div>
-        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$75,000 - $100,000')">$75,000 - $100,000</div>
-        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$100,000 - $150,000')">$100,000 - $150,000</div>
-        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$150,000+')">$150,000+</div>
-        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'Prefer not to say')">Prefer not to say</div>
+        <div class="field-row">
+      <div class="field" id="f-ind-zip">
+        <label>ZIP code</label>
+        <input type="text" id="ind-zip" placeholder="ZIP code" maxlength="5" autocomplete="postal-code" inputmode="numeric" />
+        <div class="err-msg">Please enter a valid 5-digit ZIP code.</div>
       </div>
-      <div class="field-hint" style="margin-top:14px">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-        Many people qualify for $0/month plans. Your income helps us find every discount available to you.
+      <div class="field" id="f-ind-state">
+        <label>State</label>
+        <select id="ind-state" autocomplete="address-level1"><option value="">Select state...</option>
+            <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option>
+            <option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option>
+            <option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option>
+            <option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option>
+            <option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option>
+            <option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option>
+            <option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option>
+            <option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option>
+            <option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option>
+            <option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
+          </select>
+        <div class="err-msg">Please select a state.</div>
       </div>
+        </div>
+      </div>
+      <button type="button" class="qbtn q-continue" onclick="indNext(4)">Continue</button>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Carriers need this to show plans and prices for your area.</div>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="indNav(3)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-      <button class="btn-next" onclick="indNext(4)">
-        Continue
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="indNav(3)">&lsaquo; Back</button></div>
   </div>
-
-  <!-- INDIVIDUAL: Step 5 - Name + Email -->
   <div class="panel" id="panel-ind-5">
-    <div class="step-card">
-      <div class="step-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        Almost Done
+    <div class="qscreen">
+      <h2>What is the best number to reach you?</h2>
+      <div class="q-fields q-narrow">
+      <div class="field" id="f-ind-phone">
+        <label><span class="sr-only">Phone number</span></label>
+        <input type="tel" id="ind-phone" placeholder="(305) 555-0100" autocomplete="tel" inputmode="tel" />
+        <div class="err-msg">Please enter a valid phone number.</div>
       </div>
+      </div>
+      <button type="button" class="qbtn q-continue" onclick="indNext(5)">Continue</button>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your advisor will call or text you. We never sell your information.</div>
+    </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="indNav(4)">&lsaquo; Back</button></div>
+  </div>
+  <div class="panel" id="panel-ind-6">
+    <div class="qscreen">
       <h2>Where should we send your quote?</h2>
-      <p class="step-sub">Last step. Your advisor will send your personalized plan options here.</p>
-      <div class="field-row">
-        <div class="field" id="f-ind-firstname">
-          <label>First Name<span class="req">*</span></label>
-          <input type="text" id="ind-firstname" placeholder="Jane" autocomplete="given-name" />
-          <div class="err-msg">Please enter your first name.</div>
-        </div>
-        <div class="field" id="f-ind-lastname">
-          <label>Last Name<span class="req">*</span></label>
-          <input type="text" id="ind-lastname" placeholder="Smith" autocomplete="family-name" />
-          <div class="err-msg">Please enter your last name.</div>
-        </div>
+      <div class="q-fields">
+        <div class="field-row">
+      <div class="field" id="f-ind-firstname">
+        <label>First name</label>
+        <input type="text" id="ind-firstname" placeholder="First name" autocomplete="given-name" />
+        <div class="err-msg">Please enter your first name.</div>
       </div>
+      <div class="field" id="f-ind-lastname">
+        <label>Last name</label>
+        <input type="text" id="ind-lastname" placeholder="Last name" autocomplete="family-name" />
+        <div class="err-msg">Please enter your last name.</div>
+      </div>
+        </div>
       <div class="field" id="f-ind-email">
-        <label>Email Address<span class="req">*</span></label>
-        <input type="email" id="ind-email" placeholder="jane@email.com" autocomplete="email" />
+        <label>Email address</label>
+        <input type="email" id="ind-email" placeholder="Email address" autocomplete="email" inputmode="email" />
         <div class="err-msg">Please enter a valid email address.</div>
       </div>
-      <div class="field-hint">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Your information is 100% secure and never sold.
       </div>
-    </div>
-    <div class="field" style="display:flex;gap:10px;align-items:flex-start;margin-top:14px">
+      <div class="field" style="display:flex;gap:10px;align-items:flex-start;margin-top:14px">
       <input id="ind-sms-opt" type="checkbox" style="width:18px;height:18px;margin-top:3px;flex-shrink:0;cursor:pointer" />
       <label for="ind-sms-opt" style="font-size:.78rem;line-height:1.5;cursor:pointer;font-weight:400">
         I agree to receive SMS text messages and/or phone calls from <strong>VS BENEFITS LLC</strong> (d/b/a VS Health Benefits) at the number provided, including quote information, appointment confirmations and reminders, and policy service updates. Message &amp; data rates may apply. Message frequency varies. Reply <strong>STOP</strong> to opt out at any time or <strong>HELP</strong> for help. Consent is not a condition of purchase. <a href="/privacy#sms" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms#sms-terms" target="_blank" rel="noopener">Terms</a>.
       </label>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="indNav(4)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-      <button class="btn-submit" onclick="submitInd()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-        Get My Free Quote
-      </button>
+      <button type="button" class="qbtn q-continue btn-submit" onclick="submitInd()">Get My Free Quote</button>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="indNav(5)">&lsaquo; Back</button></div>
   </div>
 
-  <!-- ======================== BUSINESS PANELS ======================== -->
-
-  <!-- BUSINESS: Step 0 - Employee count (one question, big buttons) -->
-  <div class="panel" id="panel-biz-0">
+  <!-- ======================== BUSINESS SCREENS (one question each) ======================== -->
+  <div class="panel" id="panel-biz-1">
     <div class="qscreen">
       <h2>How many employees will be covered, including yourself?</h2>
-      <div class="qbtn-grid" role="group" aria-label="Employees covered">
-        <button type="button" class="qbtn" data-emp="2 - 4">2 - 4</button>
-        <button type="button" class="qbtn" data-emp="5 - 9">5 - 9</button>
-        <button type="button" class="qbtn" data-emp="10 - 24">10 - 24</button>
-        <button type="button" class="qbtn" data-emp="25 - 49">25 - 49</button>
-        <button type="button" class="qbtn" data-emp="50 - 99">50 - 99</button>
-        <button type="button" class="qbtn" data-emp="100+">More than 100</button>
+      <div class="field q-choice" id="f-biz-employees">
+        <select id="biz-employees" class="vs-sel-hidden" tabindex="-1" aria-hidden="true"><option value=""></option><option value="2 - 4">2 - 4</option><option value="5 - 9">5 - 9</option><option value="10 - 24">10 - 24</option><option value="25 - 49">25 - 49</option><option value="50 - 99">50 - 99</option><option value="100+">100+</option></select>
+        <div class="qbtn-grid" role="group"><button type="button" class="qbtn" data-set="biz-employees" data-val="2 - 4" data-next="biz:2">2 - 4</button><button type="button" class="qbtn" data-set="biz-employees" data-val="5 - 9" data-next="biz:2">5 - 9</button><button type="button" class="qbtn" data-set="biz-employees" data-val="10 - 24" data-next="biz:2">10 - 24</button><button type="button" class="qbtn" data-set="biz-employees" data-val="25 - 49" data-next="biz:2">25 - 49</button><button type="button" class="qbtn" data-set="biz-employees" data-val="50 - 99" data-next="biz:2">50 - 99</button><button type="button" class="qbtn" data-set="biz-employees" data-val="100+" data-next="biz:2">More than 100</button></div>
+        <div class="err-msg">Please choose one.</div>
       </div>
-      <button type="button" class="qbtn-alt" data-emp="1 (just me)">It's just me, no employees yet</button>
-      <p class="q-hint">Group plans in most states start at 2 enrolled people. Solo owners still get a quote for individual or ICHRA options.</p>
+      <button type="button" class="qbtn-alt" data-set="biz-employees" data-val="1 (just me)" data-next="biz:2">It's just me, no employees yet</button>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="backTo(0)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-    </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="backTo(0)">&lsaquo; Back</button></div>
   </div>
-
-  <!-- BUSINESS: Step 1 - Contact Phone -->
-  <div class="panel" id="panel-biz-1">
-    <div class="step-card">
-      <div class="step-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-        Business Owner
-      </div>
-      <h2>How can we reach you?</h2>
-      <p class="step-sub">We'll assign a dedicated business insurance advisor to your account.</p>
-      <div class="field" id="f-biz-contact-phone">
-        <label>Best Contact Phone Number<span class="req">*</span></label>
-        <input type="tel" id="biz-contact-phone" placeholder="(305) 555-0200" autocomplete="tel" inputmode="tel" />
-        <div class="err-msg">Please enter a valid phone number.</div>
-      </div>
-      <div class="field-hint">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Your information is 100% secure and never sold.
-      </div>
-    </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="bizNav(0)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-      <button class="btn-next" onclick="bizNext(1)">
-        Continue
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-  </div>
-
-  <!-- BUSINESS: Step 2 - Business Details -->
   <div class="panel" id="panel-biz-2">
-    <div class="step-card">
-      <div class="step-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-        Your Business
+    <div class="qscreen">
+      <h2>Does your business currently have a group health plan?</h2>
+      <div class="field q-choice" id="f-biz-insured">
+        <select id="biz-insured" class="vs-sel-hidden" tabindex="-1" aria-hidden="true"><option value=""></option><option value="Yes">Yes</option><option value="No">No</option></select>
+        <div class="qbtn-grid" role="group"><button type="button" class="qbtn" data-set="biz-insured" data-val="Yes" data-next="biz:3">Yes</button><button type="button" class="qbtn" data-set="biz-insured" data-val="No" data-next="biz:3">No</button></div>
+        <div class="err-msg">Please choose one.</div>
       </div>
-      <h2>Tell us about your business</h2>
-      <p class="step-sub">This helps us find group plans sized and priced for your company.</p>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
+    </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(1)">&lsaquo; Back</button></div>
+  </div>
+  <div class="panel" id="panel-biz-3">
+    <div class="qscreen">
+      <h2>What type of plan are you looking for?</h2>
+      <div class="field q-choice" id="f-biz-coverage">
+        <select id="biz-coverage" class="vs-sel-hidden" tabindex="-1" aria-hidden="true"><option value=""></option><option value="PPO">PPO</option><option value="HMO">HMO</option><option value="Not sure yet">Not sure yet</option></select>
+        <div class="qbtn-grid cols-3" role="group"><button type="button" class="qbtn" data-set="biz-coverage" data-val="PPO" data-next="biz:4">PPO</button><button type="button" class="qbtn" data-set="biz-coverage" data-val="HMO" data-next="biz:4">HMO</button><button type="button" class="qbtn" data-set="biz-coverage" data-val="Not sure yet" data-next="biz:4">Not sure yet</button></div>
+        <div class="err-msg">Please choose one.</div>
+      </div>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
+    </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(2)">&lsaquo; Back</button></div>
+  </div>
+  <div class="panel" id="panel-biz-4">
+    <div class="qscreen">
+      <h2>What is the name of your business?</h2>
+      <div class="q-fields q-narrow">
       <div class="field" id="f-biz-name">
-        <label>Business Name<span class="req">*</span></label>
-        <input type="text" id="biz-name" placeholder="Acme LLC" autocomplete="organization" />
+        <label><span class="sr-only">Business name</span></label>
+        <input type="text" id="biz-name" placeholder="Business name" autocomplete="organization" />
         <div class="err-msg">Please enter your business name.</div>
       </div>
-      <div class="field" id="f-biz-employees">
-        <label>Number of Employees (including owners)<span class="req">*</span></label>
-        <select id="biz-employees">
-          <option value="">Select range...</option>
-          <option>1 (just me)</option>
-          <option>2 - 4</option>
-          <option>5 - 9</option>
-          <option>10 - 24</option>
-          <option>25 - 49</option>
-          <option>50 - 99</option>
-          <option>100+</option>
-        </select>
-        <div class="err-msg">Please select employee count.</div>
-      </div>
-      <div class="field" id="f-biz-coverage">
-        <label>Requested Coverage<span class="req">*</span></label>
-        <select id="biz-coverage">
-          <option value="">Select plan type...</option>
-          <option value="PPO">PPO</option>
-          <option value="HMO">HMO</option>
-          <option value="Not sure yet">Not sure yet</option>
-        </select>
-        <div class="err-msg">Please select a coverage type.</div>
-      </div>
-      <div class="field" id="f-biz-insured">
-        <label>Currently Insured?<span class="req">*</span></label>
-        <select id="biz-insured">
-          <option value="">Select...</option>
-          <option value="No">No</option>
-          <option value="Yes">Yes</option>
-        </select>
-        <div class="err-msg">Please select an option.</div>
-      </div>
       <div class="field" id="f-biz-start">
-        <label>Desired Coverage Start Date</label>
+        <label>When would you like coverage to start? (optional)</label>
         <input type="date" id="biz-start" />
+        <div class="err-msg"></div>
       </div>
+      </div>
+      <button type="button" class="qbtn q-continue" onclick="bizNext(4)">Continue</button>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="bizNav(1)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-      <button class="btn-next" onclick="bizNext(2)">
-        Continue
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(3)">&lsaquo; Back</button></div>
   </div>
-
-  <!-- BUSINESS: Step 3 - Situation -->
-  <div class="panel" id="panel-biz-3">
-    <div class="step-card">
-      <div class="step-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-        Your Situation
-      </div>
+  <div class="panel" id="panel-biz-5">
+    <div class="qscreen">
       <h2>What's driving you to look for coverage now?</h2>
-      <p class="step-sub">Select all that apply. This helps us find the most relevant group plans for your team.</p>
+      <p class="q-sub">Select all that apply.</p>
       <div class="situations-grid" id="biz-situations">
         <label class="sit-item" onclick="toggleSit(this)">
           <input type="checkbox" value="no_current_plan">
@@ -1428,43 +1270,29 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
           <span class="sit-text">Something else</span>
         </label>
       </div>
+      <button type="button" class="qbtn q-continue" onclick="bizNext(5)">Continue</button>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="bizNav(2)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-      <button class="btn-next" onclick="bizNext(3)">
-        Continue
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(4)">&lsaquo; Back</button></div>
   </div>
-
-  <!-- BUSINESS: Step 4 - Address + Business Phone -->
-  <div class="panel" id="panel-biz-4">
-    <div class="step-card">
-      <div class="step-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        Business Location
-      </div>
-      <h2>Where is your business located?</h2>
-      <p class="step-sub">Group plan availability and pricing varies by state. We'll find the best options for your location.</p>
+  <div class="panel" id="panel-biz-6">
+    <div class="qscreen">
+      <h2>What is your business address?</h2>
+      <div class="q-fields">
       <div class="field" id="f-biz-address">
-        <label>Business Street Address<span class="req">*</span></label>
-        <input type="text" id="biz-address" placeholder="456 Commerce Blvd" autocomplete="street-address" />
-        <div class="err-msg">Please enter the business address.</div>
+        <label>Street address</label>
+        <input type="text" id="biz-address" placeholder="Street address" autocomplete="street-address" />
+        <div class="err-msg">Please enter the street address.</div>
       </div>
-      <div class="field-row">
-        <div class="field" id="f-biz-zip">
-          <label>ZIP Code<span class="req">*</span></label>
-          <input type="text" id="biz-zip" placeholder="33101" maxlength="5" inputmode="numeric" autocomplete="postal-code" />
-          <div class="err-msg">Please enter a valid ZIP code.</div>
-        </div>
-        <div class="field" id="f-biz-state">
-          <label>State<span class="req">*</span></label>
-          <select id="biz-state" autocomplete="address-level1">
-            <option value="">Select state...</option>
+        <div class="field-row">
+      <div class="field" id="f-biz-zip">
+        <label>ZIP code</label>
+        <input type="text" id="biz-zip" placeholder="ZIP code" maxlength="5" autocomplete="postal-code" inputmode="numeric" />
+        <div class="err-msg">Please enter a valid 5-digit ZIP code.</div>
+      </div>
+      <div class="field" id="f-biz-state">
+        <label>State</label>
+        <select id="biz-state" autocomplete="address-level1"><option value="">Select state...</option>
             <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option>
             <option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option>
             <option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option>
@@ -1476,76 +1304,64 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
             <option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option>
             <option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
           </select>
-          <div class="err-msg">Please select a state.</div>
+        <div class="err-msg">Please select a state.</div>
+      </div>
         </div>
       </div>
-      <div class="field" id="f-biz-phone">
-        <label>Business Phone Number<span class="req">*</span></label>
-        <input type="tel" id="biz-phone" placeholder="(305) 555-0300" autocomplete="tel" inputmode="tel" />
-        <div class="err-msg">Please enter a valid business phone number.</div>
-      </div>
+      <div class="field vs-hidden-field" id="f-biz-phone"><input type="tel" id="biz-phone" autocomplete="off" tabindex="-1" aria-hidden="true" /><div class="err-msg">Please enter a valid business phone number.</div></div>
+      <button type="button" class="qbtn q-continue" onclick="bizNext(6)">Continue</button>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Carriers need this to price group plans for your area.</div>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="bizNav(3)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-      <button class="btn-next" onclick="bizNext(4)">
-        Continue
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(5)">&lsaquo; Back</button></div>
   </div>
-
-  <!-- BUSINESS: Step 5 - Owner Name + Email -->
-  <div class="panel" id="panel-biz-5">
-    <div class="step-card">
-      <div class="step-eyebrow">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        Almost Done
+  <div class="panel" id="panel-biz-7">
+    <div class="qscreen">
+      <h2>What is the best number to reach you?</h2>
+      <div class="q-fields q-narrow">
+      <div class="field" id="f-biz-contact-phone">
+        <label><span class="sr-only">Phone number</span></label>
+        <input type="tel" id="biz-contact-phone" placeholder="(305) 555-0200" autocomplete="tel" inputmode="tel" />
+        <div class="err-msg">Please enter a valid phone number.</div>
       </div>
+      </div>
+      <button type="button" class="qbtn q-continue" onclick="bizNext(7)">Continue</button>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>A dedicated business advisor will call you. We never sell your information.</div>
+    </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(6)">&lsaquo; Back</button></div>
+  </div>
+  <div class="panel" id="panel-biz-8">
+    <div class="qscreen">
       <h2>Where should we send your group quote?</h2>
-      <p class="step-sub">Last step. Your advisor will send your personalized group plan options here.</p>
-      <div class="field-row">
-        <div class="field" id="f-biz-firstname">
-          <label>Owner First Name<span class="req">*</span></label>
-          <input type="text" id="biz-firstname" placeholder="John" autocomplete="given-name" />
-          <div class="err-msg">Please enter the owner's first name.</div>
-        </div>
-        <div class="field" id="f-biz-lastname">
-          <label>Owner Last Name<span class="req">*</span></label>
-          <input type="text" id="biz-lastname" placeholder="Doe" autocomplete="family-name" />
-          <div class="err-msg">Please enter the owner's last name.</div>
-        </div>
+      <div class="q-fields">
+        <div class="field-row">
+      <div class="field" id="f-biz-firstname">
+        <label>Owner first name</label>
+        <input type="text" id="biz-firstname" placeholder="First name" autocomplete="given-name" />
+        <div class="err-msg">Please enter the owner's first name.</div>
       </div>
+      <div class="field" id="f-biz-lastname">
+        <label>Owner last name</label>
+        <input type="text" id="biz-lastname" placeholder="Last name" autocomplete="family-name" />
+        <div class="err-msg">Please enter the owner's last name.</div>
+      </div>
+        </div>
       <div class="field" id="f-biz-email">
-        <label>Business Email<span class="req">*</span></label>
-        <input type="email" id="biz-email" placeholder="owner@company.com" autocomplete="email" inputmode="email" />
+        <label>Business email</label>
+        <input type="email" id="biz-email" placeholder="you@company.com" autocomplete="email" inputmode="email" />
         <div class="err-msg">Please enter a valid business email.</div>
       </div>
-      <div class="field-hint">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Your information is 100% secure and never sold.
       </div>
-    </div>
-    <div class="field" style="display:flex;gap:10px;align-items:flex-start;margin-top:14px">
+      <div class="field" style="display:flex;gap:10px;align-items:flex-start;margin-top:14px">
       <input id="biz-sms-opt" type="checkbox" style="width:18px;height:18px;margin-top:3px;flex-shrink:0;cursor:pointer" />
       <label for="biz-sms-opt" style="font-size:.78rem;line-height:1.5;cursor:pointer;font-weight:400">
         I agree to receive SMS text messages and/or phone calls from <strong>VS BENEFITS LLC</strong> (d/b/a VS Health Benefits) at the number provided, including quote information, appointment confirmations and reminders, and policy service updates. Message &amp; data rates may apply. Message frequency varies. Reply <strong>STOP</strong> to opt out at any time or <strong>HELP</strong> for help. Consent is not a condition of purchase. <a href="/privacy#sms" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms#sms-terms" target="_blank" rel="noopener">Terms</a>.
       </label>
     </div>
-    <div class="nav-btns">
-      <button class="btn-back" onclick="bizNav(4)">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Back
-      </button>
-      <button class="btn-submit" onclick="submitBiz()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-        Get My Business Quote
-      </button>
+      <button type="button" class="qbtn q-continue btn-submit" onclick="submitBiz()">Get My Business Quote</button>
+      <div class="q-safe"><span class="q-safe-badge" aria-hidden="true">VS</span><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(7)">&lsaquo; Back</button></div>
   </div>
-
 
   <!-- SUCCESS SCREEN -->
   <!-- ===== QUOTE-GENERATING LOADER (after submit, before success) ===== -->
@@ -1607,7 +1423,6 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 </style>
   <div class="panel" id="panel-generating">
     <div class="gen-card">
-      <div class="gen-bar" aria-hidden="true"><div class="gen-bar-fill" id="genBarFill">0% Complete</div></div>
       <div class="gen-ring">
         <svg viewBox="0 0 108 108"><circle class="gr-track" cx="54" cy="54" r="46"/><circle class="gr-prog" id="genProg" cx="54" cy="54" r="46"/></svg>
         <div class="gen-pct" id="genPct">0%</div>
@@ -1795,17 +1610,16 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   var selectedIncome = null;
 
   // IND: 5 steps total, BIZ: 5 steps total
-  var IND_STEPS = 5;
-  var BIZ_STEPS = 5;
+  var IND_STEPS = 6;
+  var BIZ_STEPS = 8;
 
   // ---- PROGRESS ----
   function updateProgress(step, total){
-    if(currentType === 'business'){ step = step + 1; total = BIZ_STEPS + 1; }
-    var pctNow = Math.round((step / total) * 100), fillEl = document.getElementById('progressFill');
-    if(fillEl){ fillEl.textContent = pctNow + '% Complete'; if(pctNow >= 100) fillEl.setAttribute('data-full',''); else fillEl.removeAttribute('data-full'); }
-    var pct = Math.round((step / total) * 100);
+    // Starts at 20% on the first question so the bar never looks empty.
+    var pct = step ? Math.round(20 + 75 * (step / total)) : 20;
     document.getElementById('progressFill').style.width = pct + '%';
     document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('progressFill').textContent = pct + '% Complete';
     document.getElementById('progressStep').textContent = 'Step ' + step + ' of ' + total;
   }
 
@@ -1850,8 +1664,6 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       var t = Math.min(1, (ts - startTs) / DURATION);
       var eased = 1 - Math.pow(1 - t, 1.6);   // ease toward the end
       pctEl.textContent = Math.round(eased * 100) + '%';
-      var gbf = document.getElementById('genBarFill');
-      if(gbf){ gbf.style.width = (eased * 100).toFixed(1) + '%'; gbf.textContent = Math.round(eased * 100) + '% Complete'; }
       ring.style.strokeDashoffset = (C * (1 - eased)).toFixed(1);
       setStepState(eased);
       if(t < 1){ requestAnimationFrame(frame); }
@@ -1878,9 +1690,9 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
         updateProgress(1, IND_STEPS);
         showPanel('panel-ind-1');
       } else {
-        bizStep = 0;
-        updateProgress(0, BIZ_STEPS);
-        showPanel('panel-biz-0');
+        bizStep = 1;
+        updateProgress(1, BIZ_STEPS);
+        showPanel('panel-biz-1');
       }
     }, 200);
   };
@@ -1888,7 +1700,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   // ---- BACK TO START ----
   window.backTo = function(step){
     if(step === 0){
-      document.getElementById('progressWrap').style.display = 'none';
+      updateProgress(0, IND_STEPS);
       currentType = null;
       showPanel('panel-0');
     }
@@ -2042,78 +1854,65 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     if(inp) inp.classList[hasErr ? 'add' : 'remove']('error');
   }
 
-  // ---- INDIVIDUAL NEXT ----
+  // ---- INDIVIDUAL NEXT (one question per screen) ----
+  function v(id){ var el=document.getElementById(id); return el ? String(el.value||'').trim() : ''; }
   window.indNext = function(fromStep){
-    var ok = true;
     if(fromStep === 1){
-      var addr = document.getElementById('ind-address').value.trim();
-      var zip = document.getElementById('ind-zip').value.trim();
-      var state = document.getElementById('ind-state').value;
-      var dob = document.getElementById('ind-dob').value;
-      setErr('f-ind-address', !addr);
-      setErr('f-ind-zip', !isValidZip(zip));
-      setErr('f-ind-state', !state);
-      setErr('f-ind-dob', !isValidDate(dob));
-      if(!addr || !isValidZip(zip) || !state || !isValidDate(dob)) ok = false;
-      if(ok){ indNav(2); }
-    } else if(fromStep === 2){
-      var phone = document.getElementById('ind-phone').value.trim();
-      setErr('f-ind-phone', !isValidPhone(phone));
-      if(!isValidPhone(phone)) ok = false;
-      // ZIP and phone are both in hand here, and name/email are still two steps
-      // away. Push the partial lead now so an abandoned quote is still a lead.
-      if(ok){ try{ if(window.vsCaptureDraft) window.vsCaptureDraft('individual', 2); }catch(e){} indNav(3); }
-    } else if(fromStep === 3){
-      indNav(4);            // situation is optional
+      var dobOk = isValidDate(v('ind-dob')); setErr('f-ind-dob', !dobOk); if(!dobOk) return;
+      indNav(2);
+    } else if(fromStep === 2){ indNav(3);            // income is optional
+    } else if(fromStep === 3){ indNav(4);            // situation is optional
     } else if(fromStep === 4){
-      indNav(5);            // income is optional
+      var a=v('ind-address'), z=v('ind-zip'), st=v('ind-state');
+      setErr('f-ind-address', !a); setErr('f-ind-zip', !isValidZip(z)); setErr('f-ind-state', !st);
+      if(!a || !isValidZip(z) || !st) return;
+      indNav(5);
+    } else if(fromStep === 5){
+      var ph=v('ind-phone'); setErr('f-ind-phone', !isValidPhone(ph)); if(!isValidPhone(ph)) return;
+      // ZIP and phone are in hand and name/email are one screen away:
+      // save the partial lead now so an abandoned quote is still a lead.
+      try{ if(window.vsCaptureDraft) window.vsCaptureDraft('individual', 5); }catch(e){}
+      indNav(6);
     }
-    if(ok){ updateProgress(fromStep + 1, IND_STEPS); }
   };
 
-  // ---- BUSINESS NEXT ----
+  // ---- BUSINESS NEXT (one question per screen) ----
   window.bizNext = function(fromStep){
-    var ok = true;
-    if(fromStep === 1){
-      var ph = document.getElementById('biz-contact-phone').value.trim();
-      setErr('f-biz-contact-phone', !isValidPhone(ph));
-      if(!isValidPhone(ph)) ok = false;
-      if(ok){ try{ if(window.vsCaptureDraft) window.vsCaptureDraft('business', 1); }catch(e){} bizNav(2); }
-    } else if(fromStep === 2){
-      var bn = document.getElementById('biz-name').value.trim();
-      var emp = document.getElementById('biz-employees').value;
-      var cov = document.getElementById('biz-coverage').value;
-      var ins = document.getElementById('biz-insured').value;
+    if(fromStep === 1){ var e=v('biz-employees'); setErr('f-biz-employees', !e); if(!e) return; bizNav(2);
+    } else if(fromStep === 2){ var ins=v('biz-insured'); setErr('f-biz-insured', !ins); if(!ins) return; bizNav(3);
+    } else if(fromStep === 3){ var cov=v('biz-coverage'); setErr('f-biz-coverage', !cov); if(!cov) return; bizNav(4);
+    } else if(fromStep === 4){
+      var bn=v('biz-name');
       var bnOk = (typeof window.vsIsTextName === 'function') ? window.vsIsTextName(bn) : !!bn;
       setErr('f-biz-name', !bnOk);
-      setErr('f-biz-employees', !emp);
-      setErr('f-biz-coverage', !cov);
-      setErr('f-biz-insured', !ins);
-      if(!bnOk){
-        var bnWrap = document.getElementById('f-biz-name');
-        var bnMsg = bnWrap ? bnWrap.querySelector('.err-msg') : null;
-        if(bnMsg) bnMsg.textContent = 'Please enter the business name in letters.';
-      }
-      if(!bnOk || !emp || !cov || !ins) ok = false;
-      if(ok){ bizNav(3); }
-    } else if(fromStep === 3){
-      bizNav(4);            // situation is optional
-    } else if(fromStep === 4){
-      var addr = document.getElementById('biz-address').value.trim();
-      var zip = document.getElementById('biz-zip').value.trim();
-      var state = document.getElementById('biz-state').value;
-      var bph = document.getElementById('biz-phone').value.trim();
-      setErr('f-biz-address', !addr);
-      setErr('f-biz-zip', !isValidZip(zip));
-      setErr('f-biz-state', !state);
-      setErr('f-biz-phone', !isValidPhone(bph));
-      if(!addr || !isValidZip(zip) || !state || !isValidPhone(bph)) ok = false;
-      // Business ZIP is only known now, so refresh the partial lead before the
-      // owner name + email step.
-      if(ok){ try{ if(window.vsCaptureDraft) window.vsCaptureDraft('business', 4); }catch(e){} bizNav(5); }
+      if(!bnOk){ var m=document.querySelector('#f-biz-name .err-msg'); if(m) m.textContent = bn ? 'Please enter the business name in letters.' : 'Please enter your business name.'; return; }
+      bizNav(5);
+    } else if(fromStep === 5){ bizNav(6);            // situation is optional
+    } else if(fromStep === 6){
+      var a=v('biz-address'), z=v('biz-zip'), st=v('biz-state');
+      setErr('f-biz-address', !a); setErr('f-biz-zip', !isValidZip(z)); setErr('f-biz-state', !st);
+      if(!a || !isValidZip(z) || !st) return;
+      bizNav(7);
+    } else if(fromStep === 7){
+      var ph=v('biz-contact-phone'); setErr('f-biz-contact-phone', !isValidPhone(ph)); if(!isValidPhone(ph)) return;
+      // One phone question: it also fills the business phone the CRM expects.
+      var bp=document.getElementById('biz-phone'); if(bp && !isValidPhone(bp.value)) bp.value = ph;
+      try{ if(window.vsCaptureDraft) window.vsCaptureDraft('business', 7); }catch(e){}
+      bizNav(8);
     }
-    if(ok){ updateProgress(fromStep + 1, BIZ_STEPS); }
   };
+
+  // Tap-to-answer buttons: set the hidden select, mark the choice, move on.
+  document.addEventListener('click', function(ev){
+    var b = ev.target.closest ? ev.target.closest('[data-set]') : null; if(!b) return;
+    var sel = document.getElementById(b.getAttribute('data-set')); if(!sel) return;
+    sel.value = b.getAttribute('data-val'); sel.dispatchEvent(new Event('change', {bubbles:true}));
+    document.querySelectorAll('[data-set="'+b.getAttribute('data-set')+'"]').forEach(function(x){ x.classList.toggle('selected', x === b); });
+    setErr('f-' + sel.id, false);
+    try{ if(window.vsTrack) window.vsTrack('quote_answer',{ lead_type: currentType, question: sel.id, answer: sel.value }); }catch(e){}
+    var nx = (b.getAttribute('data-next')||'').split(':');
+    if(nx[0] === 'biz') setTimeout(function(){ window.bizNext(parseInt(nx[1],10) - 1); }, 220);
+  });
 
   // ---- SITUATION TOGGLE ----
   window.toggleSit = function(label){
@@ -2129,8 +1928,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     document.querySelectorAll('#ind-income .income-item').forEach(function(i){ i.classList.remove('selected'); });
     el.classList.add('selected');
     selectedIncome = val;
-    // One tap answers the question, so go straight to the next screen.
-    setTimeout(function(){ if(currentType === 'individual' && indStep === 4) window.indNext(4); }, 260);
+    setTimeout(function(){ if(currentType === 'individual' && indStep === 2) window.indNext(2); }, 260);
   };
 
   // ---- COLLECT DATA ----
@@ -2507,12 +2305,12 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     if(!namesOk || !emOk) return;
     // Earlier steps can still be bad if someone jumped back and cleared them.
     var zipv = document.getElementById('ind-zip').value.trim();
-    if(!isValidZip(zipv)){ setErr('f-ind-zip', true); indNav(1); updateProgress(1, IND_STEPS); return; }
+    if(!isValidZip(zipv)){ setErr('f-ind-zip', true); indNav(4); return; }
     var phv = document.getElementById('ind-phone').value.trim();
-    if(!isValidPhone(phv)){ setErr('f-ind-phone', true); indNav(2); updateProgress(2, IND_STEPS); return; }
+    if(!isValidPhone(phv)){ setErr('f-ind-phone', true); indNav(5); return; }
     var data = collectInd();
     data.sms_opt_in = document.getElementById('ind-sms-opt') && document.getElementById('ind-sms-opt').checked ? 'yes' : 'no';
-    var btn = document.querySelector('#panel-ind-5 .btn-submit');
+    var btn = document.querySelector('#panel-ind-6 .btn-submit');
     sendToWebhook(data, btn);
   };
 
@@ -2529,10 +2327,11 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     if(!bnvOk || !empv){
       setErr('f-biz-name', !bnvOk);
       setErr('f-biz-employees', !empv);
-      bizNav(2); updateProgress(2, BIZ_STEPS); return;
+      bizNav(empv ? 4 : 1); return;
     }
     var cphv = document.getElementById('biz-contact-phone').value.trim();
-    if(!isValidPhone(cphv)){ setErr('f-biz-contact-phone', true); bizNav(1); updateProgress(1, BIZ_STEPS); return; }
+    if(!isValidPhone(cphv)){ setErr('f-biz-contact-phone', true); bizNav(7); return; }
+    var bpEl = document.getElementById('biz-phone'); if(bpEl && !isValidPhone(bpEl.value)) bpEl.value = cphv;
     var addr = document.getElementById('biz-address').value.trim();
     var zip = document.getElementById('biz-zip').value.trim();
     var state = document.getElementById('biz-state').value;
@@ -2542,11 +2341,11 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       setErr('f-biz-zip', !isValidZip(zip));
       setErr('f-biz-state', !state);
       setErr('f-biz-phone', !isValidPhone(ph));
-      bizNav(4); updateProgress(4, BIZ_STEPS); return;
+      bizNav(6); return;
     }
     var data = collectBiz();
     data.sms_opt_in = document.getElementById('biz-sms-opt') && document.getElementById('biz-sms-opt').checked ? 'yes' : 'no';
-    var btn = document.querySelector('#panel-biz-5 .btn-submit');
+    var btn = document.querySelector('#panel-biz-8 .btn-submit');
     sendToWebhook(data, btn);
   };
 
@@ -2754,60 +2553,14 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fill); else fill();
 })();
 </script>
-<script id="vs-btn-questions">
-/* Turns short dropdowns into big answer buttons and wires the employee screen.
-   The original <select> stays in the page (hidden) so validation and submit
-   code keep reading .value exactly as before. */
-(function(){
-  function buttonize(selId, cols){
-    var sel = document.getElementById(selId); if(!sel || sel.dataset.btnized) return;
-    sel.dataset.btnized = '1';
-    var grid = document.createElement('div');
-    grid.className = 'qbtn-grid' + (cols === 3 ? ' cols-3' : '');
-    grid.setAttribute('role','group');
-    Array.prototype.forEach.call(sel.options, function(o){
-      if(!o.value) return;
-      var b = document.createElement('button'); b.type = 'button'; b.className = 'qbtn';
-      b.textContent = o.textContent; b.dataset.val = o.value;
-      b.addEventListener('click', function(){
-        sel.value = o.value; sel.dispatchEvent(new Event('change', {bubbles:true}));
-      });
-      grid.appendChild(b);
-    });
-    sel.classList.add('vs-sel-hidden'); sel.setAttribute('tabindex','-1'); sel.setAttribute('aria-hidden','true');
-    sel.parentNode.insertBefore(grid, sel.nextSibling);
-    function sync(){
-      grid.querySelectorAll('.qbtn').forEach(function(b){ b.classList.toggle('selected', b.dataset.val === sel.value); });
-      if(sel.value){ var f = sel.closest('.field'); if(f){ f.classList.remove('has-error'); sel.classList.remove('error'); } }
-    }
-    sel.addEventListener('change', sync); sync();
-    sel._vsSync = sync;
+<script id="vs-q-keys">
+document.addEventListener('keydown', function(e){
+  var t = e.target;
+  if((e.key === 'Enter' || e.key === ' ') && t && t.matches && t.matches('.income-item')){ e.preventDefault(); t.click(); }
+  if(e.key === 'Enter' && t && t.matches && t.matches('.qscreen input:not([type=checkbox])')){
+    var b = t.closest('.qscreen').querySelector('.q-continue'); if(b){ e.preventDefault(); b.click(); }
   }
-  function init(){
-    buttonize('biz-employees', 3);
-    buttonize('biz-coverage', 3);
-    // Headcount is answered on its own screen first, so hide it on the details step once it has a value.
-    var empSel = document.getElementById('biz-employees'), empField = document.getElementById('f-biz-employees');
-    function hideEmp(){ if(empField) empField.classList.toggle('vs-answered', !!(empSel && empSel.value)); }
-    if(empSel){ empSel.addEventListener('change', hideEmp); hideEmp(); }
-    buttonize('biz-insured', 2);
-    var emp = document.getElementById('biz-employees');
-    document.querySelectorAll('#panel-biz-0 [data-emp]').forEach(function(b){
-      b.addEventListener('click', function(){
-        if(emp){ emp.value = b.dataset.emp; emp.dispatchEvent(new Event('change', {bubbles:true})); }
-        document.querySelectorAll('#panel-biz-0 [data-emp]').forEach(function(x){ x.classList.toggle('selected', x === b); });
-        try{ if(window.vsTrack) window.vsTrack('quote_answer',{ lead_type:'business', question:'employees', answer:b.dataset.emp }); }catch(e){}
-        setTimeout(function(){ window.bizNav(1); }, 220);
-      });
-    });
-    // Enter / Space on the div-based answer tiles
-    document.addEventListener('keydown', function(e){
-      var t = e.target;
-      if((e.key === 'Enter' || e.key === ' ') && t && t.matches && t.matches('.income-item,.type-card')){ e.preventDefault(); t.click(); }
-    });
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
-})();
+});
 </script>
 </body>
 </html>
