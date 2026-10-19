@@ -317,16 +317,14 @@
       "permanent": true
     },
     {
-      "source": "/quote",
-      "has": [
-        {
-          "type": "query",
-          "key": "type",
-          "value": "(?:dental|vision|dental-vision|dentalvision|dental-and-vision)"
-        }
-      ],
-      "destination": "/quote/dental-vision",
-      "permanent": false
+      "source": "/quote/dental-vision",
+      "destination": "/quote?type=dental",
+      "permanent": true
+    },
+    {
+      "source": "/quote/dental-vision/:path*",
+      "destination": "/quote?type=dental",
+      "permanent": true
     },
     {
       "source": "/:path*",
