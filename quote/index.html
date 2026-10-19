@@ -32,7 +32,7 @@
 <link rel="apple-touch-icon" href="/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@600;700;800&family=Roboto:wght@500;700;900&display=swap" rel="stylesheet" />
 <style>
 :root{
   --blue-900:#0b2346;
@@ -772,6 +772,61 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 #vs-callbar a{font-size:.86rem!important;padding-left:8px!important;padding-right:8px!important}
 }
 </style>
+<style id="vs-btn-questions-css">
+/* Question + big blue answer buttons (one decision per screen) */
+:root{--qb:#2f9de6;--qb-edge:#1d78bb;--qb-hover:#2389d4;--qb-sel:#14609f;--qb-ink:#212529}
+.step-card h2,.start-card h1,.qscreen h2{
+  font-family:'Roboto','Poppins',system-ui,sans-serif;font-weight:900;color:var(--qb-ink);
+  text-align:center;letter-spacing:-.01em;line-height:1.18;text-wrap:balance;
+  font-size:clamp(1.55rem,4.2vw,2.35rem);margin-bottom:10px}
+.step-card .step-eyebrow{margin-left:auto;margin-right:auto;display:flex;width:max-content}
+.step-card .step-sub,.start-card .sub{text-align:center;max-width:560px;margin-left:auto;margin-right:auto}
+/* the shared button look */
+.qbtn,.income-item,.type-card,.sit-item{
+  -webkit-appearance:none;appearance:none;display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;min-height:62px;padding:14px 18px;border:0;border-radius:5px;
+  border-bottom:4px solid var(--qb-edge);background:var(--qb);color:#fff;
+  font-family:'Roboto',system-ui,sans-serif;font-weight:700;font-size:1.12rem;line-height:1.25;text-align:center;
+  cursor:pointer;box-shadow:none;transition:background .15s,transform .08s,border-color .15s}
+.qbtn:hover,.income-item:hover,.type-card:hover,.sit-item:hover{background:var(--qb-hover);border-color:var(--qb-edge);transform:none;box-shadow:none}
+.qbtn:active,.income-item:active,.type-card:active,.sit-item:active{transform:translateY(2px);border-bottom-width:2px;margin-top:2px}
+.qbtn:focus-visible,.income-item:focus-visible,.type-card:focus-visible,.sit-item:focus-within{outline:3px solid #9fd2f6;outline-offset:2px}
+.qbtn.selected,.income-item.selected,.type-card.selected,.sit-item.checked{
+  background:var(--qb-sel);border-color:#0d4677;color:#fff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+.qbtn.selected::after,.income-item.selected::after,.type-card.selected::after{
+  content:"";width:7px;height:13px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg);margin:-4px 0 0 4px;flex:none}
+.qbtn-grid,.income-grid,.situations-grid,.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 26px;max-width:960px;margin:22px auto 6px}
+@media(max-width:560px){.qbtn-grid,.income-grid,.situations-grid,.type-grid{grid-template-columns:1fr;gap:12px}}
+.qbtn-grid.cols-3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:560px){.qbtn-grid.cols-3{grid-template-columns:1fr 1fr}}
+.qbtn-alt{display:block;margin:14px auto 0;background:none;border:0;color:var(--qb-sel);font:600 1rem 'Roboto',system-ui,sans-serif;text-decoration:underline;cursor:pointer;padding:8px}
+.qbtn-alt.selected{font-weight:900}
+/* income + type tiles as blue buttons */
+.income-item{font-size:1.05rem;color:#fff}
+.type-card{flex-direction:column;padding:20px 16px;min-height:118px;overflow:visible}
+.type-card::before{display:none}
+.type-card .type-icon,.type-card.selected .type-icon{background:rgba(255,255,255,.18);color:#fff;width:46px;height:46px;margin:0 auto 4px;border-radius:50%}
+.type-card h3{color:#fff;font-family:'Roboto',system-ui,sans-serif;font-size:1.2rem;font-weight:900;margin:0}
+.type-card p{color:rgba(255,255,255,.9);font-size:.86rem;margin:0}
+.type-card.selected::after{position:absolute;top:14px;right:16px;margin:0}
+.type-card{position:relative}
+/* multi-select situations: blue buttons with a white tick box */
+.sit-item{justify-content:flex-start;text-align:left;font-size:1rem;min-height:58px}
+.sit-item .sit-text{color:#fff;font-size:1rem;font-weight:700;background:none;border:0;padding:0}
+.sit-item .sit-check{border-color:#fff;background:transparent}
+.sit-item input:checked ~ .sit-check{background:#fff;border-color:#fff}
+.sit-item input:checked ~ .sit-check::after{border-color:var(--qb-sel)}
+/* select fields turned into button groups */
+.vs-sel-hidden{position:absolute!important;opacity:0;pointer-events:none;width:1px;height:1px}
+.field .qbtn-grid{margin:8px 0 0;gap:10px 14px}
+.field .qbtn{min-height:52px;font-size:1rem}
+.field.has-error .qbtn{box-shadow:0 0 0 2px #e5484d}
+.field .qbtn-grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.field .qbtn-grid.cols-3 .qbtn{padding:10px 8px;font-size:.95rem}
+.vs-answered{display:none}
+.qscreen{background:#fff;border-radius:var(--radius,18px);padding:34px 22px 28px}
+.qscreen .q-hint{text-align:center;color:var(--muted,#5a6b80);font-size:.92rem;margin:10px auto 0;max-width:520px}
+</style>
 </head>
 <body>
 
@@ -816,12 +871,12 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <p class="sub">Answer a few quick questions and a licensed advisor will compare plans from top carriers in your area for you. Takes about 2 minutes. No cost, no obligation.</p>
 
       <div class="type-grid">
-        <div class="type-card" id="typeIndividual" onclick="selectType('individual')">
+        <div class="type-card" role="button" tabindex="0" id="typeIndividual" onclick="selectType('individual')">
           <div class="type-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
           <h3>Individual or Family</h3>
           <p>Coverage for you and your loved ones</p>
         </div>
-        <div class="type-card" id="typeBusiness" onclick="selectType('business')">
+        <div class="type-card" role="button" tabindex="0" id="typeBusiness" onclick="selectType('business')">
           <div class="type-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/></svg></div>
           <h3>Small Business</h3>
           <p>Group plans for your employees</p>
@@ -1109,14 +1164,14 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <h2>What is your estimated annual household income?</h2>
       <p class="step-sub">This helps determine if you qualify for subsidies or tax credits that can significantly lower your monthly premium.</p>
       <div class="income-grid" id="ind-income">
-        <div class="income-item" onclick="selectIncome(this,'Under $20,000')">Under $20,000</div>
-        <div class="income-item" onclick="selectIncome(this,'$20,000 - $35,000')">$20,000 - $35,000</div>
-        <div class="income-item" onclick="selectIncome(this,'$35,000 - $50,000')">$35,000 - $50,000</div>
-        <div class="income-item" onclick="selectIncome(this,'$50,000 - $75,000')">$50,000 - $75,000</div>
-        <div class="income-item" onclick="selectIncome(this,'$75,000 - $100,000')">$75,000 - $100,000</div>
-        <div class="income-item" onclick="selectIncome(this,'$100,000 - $150,000')">$100,000 - $150,000</div>
-        <div class="income-item" onclick="selectIncome(this,'$150,000+')">$150,000+</div>
-        <div class="income-item" onclick="selectIncome(this,'Prefer not to say')">Prefer not to say</div>
+        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'Under $20,000')">Under $20,000</div>
+        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$20,000 - $35,000')">$20,000 - $35,000</div>
+        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$35,000 - $50,000')">$35,000 - $50,000</div>
+        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$50,000 - $75,000')">$50,000 - $75,000</div>
+        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$75,000 - $100,000')">$75,000 - $100,000</div>
+        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$100,000 - $150,000')">$100,000 - $150,000</div>
+        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$150,000+')">$150,000+</div>
+        <div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'Prefer not to say')">Prefer not to say</div>
       </div>
       <div class="field-hint" style="margin-top:14px">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--blue-600)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
@@ -1186,6 +1241,29 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 
   <!-- ======================== BUSINESS PANELS ======================== -->
 
+  <!-- BUSINESS: Step 0 - Employee count (one question, big buttons) -->
+  <div class="panel" id="panel-biz-0">
+    <div class="qscreen">
+      <h2>How many employees will be covered, including yourself?</h2>
+      <div class="qbtn-grid" role="group" aria-label="Employees covered">
+        <button type="button" class="qbtn" data-emp="2 - 4">2 - 4</button>
+        <button type="button" class="qbtn" data-emp="5 - 9">5 - 9</button>
+        <button type="button" class="qbtn" data-emp="10 - 24">10 - 24</button>
+        <button type="button" class="qbtn" data-emp="25 - 49">25 - 49</button>
+        <button type="button" class="qbtn" data-emp="50 - 99">50 - 99</button>
+        <button type="button" class="qbtn" data-emp="100+">More than 100</button>
+      </div>
+      <button type="button" class="qbtn-alt" data-emp="1 (just me)">It's just me, no employees yet</button>
+      <p class="q-hint">Group plans in most states start at 2 enrolled people. Solo owners still get a quote for individual or ICHRA options.</p>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="backTo(0)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Back
+      </button>
+    </div>
+  </div>
+
   <!-- BUSINESS: Step 1 - Contact Phone -->
   <div class="panel" id="panel-biz-1">
     <div class="step-card">
@@ -1206,7 +1284,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       </div>
     </div>
     <div class="nav-btns">
-      <button class="btn-back" onclick="backTo(0)">
+      <button class="btn-back" onclick="bizNav(0)">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
         Back
       </button>
@@ -1708,6 +1786,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
 
   // ---- PROGRESS ----
   function updateProgress(step, total){
+    if(currentType === 'business'){ step = step + 1; total = BIZ_STEPS + 1; }
     var pct = Math.round((step / total) * 100);
     document.getElementById('progressFill').style.width = pct + '%';
     document.getElementById('progressPct').textContent = pct + '%';
@@ -1781,9 +1860,9 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
         updateProgress(1, IND_STEPS);
         showPanel('panel-ind-1');
       } else {
-        bizStep = 1;
-        updateProgress(1, BIZ_STEPS);
-        showPanel('panel-biz-1');
+        bizStep = 0;
+        updateProgress(0, BIZ_STEPS);
+        showPanel('panel-biz-0');
       }
     }, 200);
   };
@@ -2032,6 +2111,8 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     document.querySelectorAll('#ind-income .income-item').forEach(function(i){ i.classList.remove('selected'); });
     el.classList.add('selected');
     selectedIncome = val;
+    // One tap answers the question, so go straight to the next screen.
+    setTimeout(function(){ if(currentType === 'individual' && indStep === 4) window.indNext(4); }, 260);
   };
 
   // ---- COLLECT DATA ----
@@ -2653,6 +2734,61 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     }catch(e){}
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fill); else fill();
+})();
+</script>
+<script id="vs-btn-questions">
+/* Turns short dropdowns into big answer buttons and wires the employee screen.
+   The original <select> stays in the page (hidden) so validation and submit
+   code keep reading .value exactly as before. */
+(function(){
+  function buttonize(selId, cols){
+    var sel = document.getElementById(selId); if(!sel || sel.dataset.btnized) return;
+    sel.dataset.btnized = '1';
+    var grid = document.createElement('div');
+    grid.className = 'qbtn-grid' + (cols === 3 ? ' cols-3' : '');
+    grid.setAttribute('role','group');
+    Array.prototype.forEach.call(sel.options, function(o){
+      if(!o.value) return;
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'qbtn';
+      b.textContent = o.textContent; b.dataset.val = o.value;
+      b.addEventListener('click', function(){
+        sel.value = o.value; sel.dispatchEvent(new Event('change', {bubbles:true}));
+      });
+      grid.appendChild(b);
+    });
+    sel.classList.add('vs-sel-hidden'); sel.setAttribute('tabindex','-1'); sel.setAttribute('aria-hidden','true');
+    sel.parentNode.insertBefore(grid, sel.nextSibling);
+    function sync(){
+      grid.querySelectorAll('.qbtn').forEach(function(b){ b.classList.toggle('selected', b.dataset.val === sel.value); });
+      if(sel.value){ var f = sel.closest('.field'); if(f){ f.classList.remove('has-error'); sel.classList.remove('error'); } }
+    }
+    sel.addEventListener('change', sync); sync();
+    sel._vsSync = sync;
+  }
+  function init(){
+    buttonize('biz-employees', 3);
+    buttonize('biz-coverage', 3);
+    // Headcount is answered on its own screen first, so hide it on the details step once it has a value.
+    var empSel = document.getElementById('biz-employees'), empField = document.getElementById('f-biz-employees');
+    function hideEmp(){ if(empField) empField.classList.toggle('vs-answered', !!(empSel && empSel.value)); }
+    if(empSel){ empSel.addEventListener('change', hideEmp); hideEmp(); }
+    buttonize('biz-insured', 2);
+    var emp = document.getElementById('biz-employees');
+    document.querySelectorAll('#panel-biz-0 [data-emp]').forEach(function(b){
+      b.addEventListener('click', function(){
+        if(emp){ emp.value = b.dataset.emp; emp.dispatchEvent(new Event('change', {bubbles:true})); }
+        document.querySelectorAll('#panel-biz-0 [data-emp]').forEach(function(x){ x.classList.toggle('selected', x === b); });
+        try{ if(window.vsTrack) window.vsTrack('quote_answer',{ lead_type:'business', question:'employees', answer:b.dataset.emp }); }catch(e){}
+        setTimeout(function(){ window.bizNav(1); }, 220);
+      });
+    });
+    // Enter / Space on the div-based answer tiles
+    document.addEventListener('keydown', function(e){
+      var t = e.target;
+      if((e.key === 'Enter' || e.key === ' ') && t && t.matches && t.matches('.income-item,.type-card')){ e.preventDefault(); t.click(); }
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>
 </body>
