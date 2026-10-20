@@ -461,7 +461,6 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <a href="/about">About</a>
       <a href="/blog">Blog</a>
       <a href="/contact">Contact</a>
-      <button type="button" class="nav-login" data-open-login>Member Login</button>
       <a class="nav-cta" href="/quote">Get a Quote</a>
     </nav>
   </div>
@@ -688,27 +687,6 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
   </div>
 </section>
 
-<!-- ====================== MEMBERS CTA ====================== -->
-<section class="section bg-soft">
-  <div class="container">
-    <div class="members-cta">
-      <div>
-        <span class="eyebrow">For current clients</span>
-        <h2>Members: manage your coverage online</h2>
-        <p>Already a VS Health Benefits client? Create a free member account to message your advisor, refer friends and family for a thank-you reward, and view your profile.</p>
-        <ul class="check-list">
-          <li>Direct message support with claims, ID card, or coverage questions</li>
-          <li>Refer a friend or family member and earn a flat thank-you reward</li>
-          <li>Keep your contact info and coverage in one place</li>
-        </ul>
-      </div>
-      <div class="members-ctas">
-        <button type="button" class="btn btn-primary" href="/client" data-open-login>Member Login</button>
-        <a class="btn btn-secondary" href="/client">Create Account</a>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ====================== REFERRAL ====================== -->
 <section class="section">
@@ -723,16 +701,16 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <div class="card">
         <div class="card-body">
           <div class="ic">1</div>
-          <h3>Create your client account</h3>
-          <p>All you need is a free member portal account. Sign up or log in to get started.</p>
+          <h3>Email us the details</h3>
+          <p>Send your referral's name, phone number and state to <a href="mailto:info@vshealthbenefits.com?subject=Referral">info@vshealthbenefits.com</a>, plus your own name and phone so we know who to thank.</p>
           <span class="tag">Step one</span>
         </div>
       </div>
       <div class="card">
         <div class="card-body">
           <div class="ic">2</div>
-          <h3>Refer a friend or family</h3>
-          <p>Once logged in, head to your refer tab and insert your friends, family, or colleagues information who may need coverage.</p>
+          <h3>We reach out to them</h3>
+          <p>A licensed advisor contacts the person you referred about coverage, with no pressure and no cost to them.</p>
           <span class="tag">Step two</span>
         </div>
       </div>
@@ -749,12 +727,12 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
     <div style="background:linear-gradient(135deg,var(--blue-50),#fff);border:1px solid var(--blue-100);border-radius:18px;padding:28px 22px;display:grid;grid-template-columns:1fr;gap:20px;align-items:center">
       <div>
         <span class="eyebrow">Eligibility note</span>
-        <h3 style="margin-bottom:8px">Client portal account required</h3>
+        <h3 style="margin-bottom:8px">No account needed</h3>
         <p style="margin-bottom:0">Referral rewards are flat, are paid per qualified referral and never depend on whether anyone buys insurance, as Florida law requires. Want help with your own coverage too? <a href="/quote">Get a quote first</a> then refer away.</p>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px">
-        <a class="btn btn-primary" href="/client">Go to Member Portal</a>
-        <a class="btn btn-secondary" href="/client">Create an Account</a>
+        <a class="btn btn-primary" href="mailto:info@vshealthbenefits.com?subject=Referral">Email Your Referral</a>
+        <a class="btn btn-secondary" href="/refer-and-earn">How Referrals Work</a>
       </div>
     </div>
   </div>
@@ -934,7 +912,6 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
           <li><a href="/refer-and-earn">Refer and Earn</a></li><li><a href="/trucking-partners">Trucking Partners</a></li>
           <li><a href="/privacy">Privacy Policy</a></li>
           <li><a href="/terms">Terms &amp; Conditions</a></li>
-          <li><button type="button" class="linklike" data-open-login>Member Login</button></li>
         </ul>
       </div>
       <div>
@@ -984,18 +961,6 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
   </div>
 </footer>
 
-<!-- ====================== LOGIN MODAL ====================== -->
-<div class="modal-backdrop" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
-  <div class="modal">
-    <button class="close-x" type="button" aria-label="Close" data-close-login>&times;</button>
-    <h2 id="login-modal-title">Sign in</h2>
-    <p class="lede">Sign in to your member portal.</p>
-    <div class="choice-row">
-      <a class="btn btn-primary" href="/client">Client / Member Portal</a>
-    </div>
-    <p class="small">Not a member yet? <a href="/client">Create a client account</a></p>
-  </div>
-</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {

@@ -1308,9 +1308,14 @@
       "permanent": true
     },
     {
+      "source": "/client",
+      "destination": "/",
+      "permanent": false
+    },
+    {
       "source": "/client.html",
-      "destination": "/client",
-      "permanent": true
+      "destination": "/",
+      "permanent": false
     },
     {
       "source": "/coral-springs-health-insurance.html",
