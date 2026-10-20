@@ -32,7 +32,7 @@
 <link rel="apple-touch-icon" href="/favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
 <style>
 :root{
   --blue-900:#0b2346;--blue-800:#0f2e5c;--blue-700:#16447f;--blue-600:#1e5ab0;--blue-500:#2f7de0;
@@ -311,6 +311,50 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 #vs-callbar a{font-size:.86rem!important;padding-left:8px!important;padding-right:8px!important}
 }
 </style>
+<style id="calc-quote-look">
+/* Subsidy calculator styled like /quote: gray progress band with green "% Complete" bar,
+   big Roboto questions, blue answer buttons. Same questions, same order. */
+.calc{--qb:#2f9de6;--qb-edge:#1d78bb;--qb-hover:#2389d4;--qb-sel:#0f5c9c;--qb-ink:#212529;--q-green:#43c58f;--q-track:#dcdedd;--q-band:#f1f3f2;border-radius:12px;border:1px solid #e3e6e8;box-shadow:0 10px 30px rgba(13,27,42,.08)}
+.calc .calc-bar{display:none}
+.calc .calc-body{padding:0 0 22px}
+.calc .cs-progress{background:var(--q-band);padding:16px 20px;margin:0 0 6px}
+.calc .cs-bar{height:24px;border-radius:5px;background:var(--q-track);overflow:hidden}
+.calc .cs-bar span{height:100%;border-radius:5px 0 0 5px;background:var(--q-green);min-width:118px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;box-sizing:border-box;color:#fff;font:700 .9rem/1 'Roboto',system-ui,sans-serif;white-space:nowrap;transition:width .45s ease}
+.calc .cs-meta{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.calc .cs-panel{padding:26px 22px 0;text-align:center}
+.calc .cs-eyebrow{display:none}
+.calc .cs-h{font-family:'Roboto',system-ui,sans-serif;font-weight:900;color:var(--qb-ink);letter-spacing:-.01em;line-height:1.16;text-wrap:balance;font-size:clamp(1.55rem,4.2vw,2.2rem);margin:0 auto 12px;max-width:640px}
+.calc .cs-sub{text-align:center;color:#5a6b80;font-size:.98rem;margin:0 auto 20px;max-width:540px}
+.calc .cs-panel .field,.calc .cs-panel .grid{max-width:520px;margin-left:auto;margin-right:auto;text-align:left}
+.calc .cs-panel>label{text-align:center}
+.calc .field label{font-size:.82rem;color:#5a6b80;font-weight:600}
+.calc .field input,.calc .field select{height:54px;font-size:1.08rem;border:1px solid #c9ced3;border-radius:5px;padding:0 14px;box-shadow:inset 0 1px 2px rgba(0,0,0,.05)}
+.calc .field input:focus{border-color:var(--qb);box-shadow:none;outline:2px solid #bfe0f8;outline-offset:0}
+.calc .inp-money{max-width:520px;margin:0 auto}
+.calc .cs-panel .grid .field{max-width:none;margin:0;width:100%}
+.calc .inp-money input{padding-left:32px}
+.calc .cs-tiles,.calc .cs-tiles.wide{grid-template-columns:1fr 1fr;gap:14px 22px;max-width:640px;margin:0 auto}
+.calc #cs-household{grid-template-columns:repeat(4,1fr);gap:12px}
+.calc .cs-tile{border:0;border-radius:5px;border-bottom:4px solid var(--qb-edge);background:var(--qb);color:#fff;font:700 1.08rem/1.25 'Roboto',system-ui,sans-serif;min-height:58px;padding:12px 14px;box-shadow:none;transition:background .15s,transform .08s}
+.calc .cs-tile:hover{background:var(--qb-hover);border-color:var(--qb-edge)}
+.calc .cs-tile:active{transform:translateY(2px)}
+.calc .cs-tile.sel{background:var(--qb-sel);border-color:#0a426f;color:#fff;box-shadow:none}
+.calc .cs-or{text-align:center;margin:18px auto 8px}
+.calc .cs-secure{max-width:520px;margin:16px auto 0;text-align:left}
+.calc .gate-err{max-width:520px;margin:14px auto 0}
+.calc .cs-nav{flex-direction:column-reverse;align-items:stretch;max-width:520px;margin:20px auto 0;padding:0 22px;gap:4px}
+.calc .calc-btn,.calc .cs-nav .calc-btn{min-height:60px;border:0;border-radius:5px;border-bottom:4px solid var(--qb-edge);background:var(--qb);color:#fff;font:700 1.15rem 'Roboto',system-ui,sans-serif;transition:background .15s,transform .08s}
+.calc .calc-btn:hover{background:var(--qb-hover);filter:none}
+.calc .calc-btn:active{transform:translateY(2px)}
+.calc .cs-back{min-height:0;border:0;background:none;color:#6b7580;font:500 .95rem 'Roboto',system-ui,sans-serif;padding:8px 12px;align-self:center}
+.calc .cs-back:hover{color:var(--qb-ink);text-decoration:underline;border:0}
+.calc .q-safe{display:flex;align-items:center;justify-content:center;gap:8px;margin:18px auto 4px;color:#6b7580;font-size:.92rem;flex-wrap:wrap;padding:0 22px}
+.calc .q-safe-photo{width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:50% 30%;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.calc .gate-fine{padding:0 22px;max-width:640px;margin:12px auto 0;text-align:center}
+.calc .results{margin:24px 22px 0}
+.calc .trust-row{padding:0 22px}
+@media(max-width:560px){.calc .cs-tiles,.calc .cs-tiles.wide{grid-template-columns:1fr;gap:12px}.calc #cs-household{grid-template-columns:1fr 1fr}.calc .cs-panel{padding:22px 16px 0}.calc .cs-nav{padding:0 16px}}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. Enroll by Dec 15 for a January 1 start.</a></span><a href="/quote" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div><script src="/vs-oe-bar.js" defer></script>
@@ -429,6 +473,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
           <button class="calc-btn" id="cs-next" type="button">Continue &rarr;</button>
           <button class="calc-btn" id="calc-btn" type="button" hidden>Calculate My Estimate</button>
         </div>
+        <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="44" height="44" loading="lazy"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Answer a few questions &amp; see your estimate</span></div>
         <p class="gate-fine">By submitting, you agree to our <a href="/privacy">Privacy Policy</a> and that a licensed advisor from VS BENEFITS LLC (d/b/a VS Health Benefits) may call, text or email you at the contact info provided about health coverage, including by automated technology. Consent is not a condition of purchase. Msg &amp; data rates may apply; reply STOP to opt out. We never sell your information.</p>
 
         <div class="results" id="results">
@@ -912,7 +957,7 @@ document.addEventListener("DOMContentLoaded",function(){
       if(p) p.classList.toggle("active", i===csStep);
     }
     var pct=Math.round(csStep/CS_TOTAL*100);
-    document.getElementById("cs-fill").style.width=pct+"%";
+    var csf=document.getElementById("cs-fill"); csf.style.width=pct+"%"; csf.textContent=pct+"% Complete";
     document.getElementById("cs-pct").textContent=pct+"%";
     document.getElementById("cs-step").textContent="Step "+csStep+" of "+CS_TOTAL;
     show("cs-back", csStep>1);
