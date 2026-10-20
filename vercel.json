@@ -317,6 +317,16 @@
       "permanent": true
     },
     {
+      "source": "/truckers/quote",
+      "destination": "/trucking-health-quote",
+      "permanent": false
+    },
+    {
+      "source": "/truckers/quote.html",
+      "destination": "/trucking-health-quote",
+      "permanent": false
+    },
+    {
       "source": "/quote/dental-vision",
       "destination": "/quote?type=dental",
       "permanent": true

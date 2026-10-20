@@ -179,11 +179,29 @@ h1,h2,h3{font-family:'Poppins',system-ui,sans-serif;line-height:1.18;margin:0;co
   var choice = "business";
   function target(zip, type){
     var src = new URLSearchParams(location.search), out = new URLSearchParams();
-    src.forEach(function(v,k){ if(/^(utm_|gclid|gbraid|wbraid|fbclid|msclkid)/i.test(k)) out.set(k,v); });
+    // Keep ad tracking, the article the visitor came from, partner codes and anything they already typed.
+    src.forEach(function(v,k){ if(/^(utm_|gclid|gbraid|wbraid|fbclid|msclkid|from$|ref$|phone$|state$)/i.test(k)) out.set(k,v); });
     out.set('type', type || choice); out.set('niche', BASE.niche);
     if(zip) out.set('zip', zip);
     return '/quote?' + out.toString();
   }
+  // A link can preselect who it is for (?type=business from a trucking-company page).
+  var t0 = (new URLSearchParams(location.search).get('type')||'').toLowerCase();
+  if(t0 === 'business' || t0 === 'individual'){
+    choice = t0;
+    document.querySelectorAll('[data-type-pick]').forEach(function(x){ x.setAttribute('aria-pressed', String(x.getAttribute('data-type-pick') === t0)); });
+  }
+  // Someone who already typed a ZIP into a form on one of our articles goes straight
+  // on to the quote: asking for the same ZIP twice only loses people.
+  (function(){
+    var p = new URLSearchParams(location.search);
+    var z = (p.get('zip')||'').replace(/\D/g,'').slice(0,5);
+    var internal = p.get('from') || p.get('phone') || (document.referrer && document.referrer.indexOf(location.origin) === 0);
+    if(z.length === 5 && internal){
+      document.documentElement.style.visibility = 'hidden';
+      location.replace(target(z));
+    }
+  })();
   document.querySelectorAll('[data-type-pick]').forEach(function(b){
     b.addEventListener('click', function(){
       choice = b.getAttribute('data-type-pick');

@@ -2240,7 +2240,23 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       return ({'trucking':'trucker','trucker':'trucker','small-business':'small-business','smallbusiness':'small-business'})[n] || '';
     }catch(e){ return ''; }
   }
+  // Partner referral code (?ref=). Kept 90 days, same key the old trucker form used,
+  // so a partner still gets credit if their driver comes back later to finish.
+  var VS_PARTNER = (function(){
+    try{
+      var r=(new URLSearchParams(location.search).get('ref')||'').toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40);
+      if(r){ localStorage.setItem('vs_partner', JSON.stringify({ref:r,t:Date.now()})); return r; }
+      var p=JSON.parse(localStorage.getItem('vs_partner')||'null');
+      if(p && Date.now()-p.t < 90*864e5) return p.ref;
+    }catch(e){}
+    return '';
+  })();
+  var VS_FROM = (function(){
+    try{ var f=new URLSearchParams(location.search).get('from'); return f ? ('/'+f.replace(/^\/+/,'')).slice(0,160) : ''; }catch(e){ return ''; }
+  })();
   function sendToWebhook(data, btnEl){
+    if(VS_PARTNER){ data.partner = VS_PARTNER; data.tags = (data.tags || []).concat(['partner-' + VS_PARTNER, 'partner-referral']); }
+    if(VS_FROM){ data.fromPage = VS_FROM; }
     var niche = vsNiche();
     if(niche){
       data.niche = niche;
@@ -2284,6 +2300,9 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       source: window.location.href,
       lead_source: 'vshealthbenefits.com /quote funnel'
     });
+    if(data.tags){ payload.tags = data.tags; }
+    if(data.partner){ payload.referred_by_partner = data.partner; }
+    if(data.fromPage){ payload.came_from_page = data.fromPage; }
     if(data.niche){ payload.lead_source = 'vshealthbenefits.com ' + data.niche + ' landing page -> /quote'; payload.tags = data.tags; }
     if(data.coverageWanted){
       payload.lead_type = 'Dental & Vision' + (isBiz ? ' (group)' : ' (individual/family)');
@@ -2294,11 +2313,11 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     try {
       if (typeof window.vsAdminWrite === 'function') {
         if (data.type === 'business') {
-          var _biz = toBizLead(data); if(data.niche){ _biz.notes = (_biz.notes ? _biz.notes + '\n' : '') + 'Came from: ' + data.niche + ' landing page'; } if(data.tags) _biz.tags = data.tags; if(data.coverageWanted){ _biz.notes = (_biz.notes ? _biz.notes + '\n' : '') + 'Wants: Dental & Vision'; }
+          var _biz = toBizLead(data); if(data.partner || data.fromPage){ _biz.notes = (_biz.notes ? _biz.notes + '\n' : '') + [data.partner ? 'Referred by partner: ' + data.partner : '', data.fromPage ? 'Came from page: ' + data.fromPage : ''].filter(Boolean).join('\n'); } if(data.niche){ _biz.notes = (_biz.notes ? _biz.notes + '\n' : '') + 'Came from: ' + data.niche + ' landing page'; } if(data.tags) _biz.tags = data.tags; if(data.coverageWanted){ _biz.notes = (_biz.notes ? _biz.notes + '\n' : '') + 'Wants: Dental & Vision'; }
           window.vsAdminWrite('biz_leads', _biz);
           if (typeof window.hubspotSyncLead === 'function') window.hubspotSyncLead(_biz);
         } else {
-          var _lead = toAdminLead(data); if(data.niche){ _lead.notes = (_lead.notes ? _lead.notes + '\n' : '') + 'Came from: ' + data.niche + ' landing page'; _lead.tags = data.tags; } if(data.coverageWanted){ _lead.tags = data.tags; _lead.coverage = 'Dental & Vision (individual/family)'; }
+          var _lead = toAdminLead(data); if(data.partner || data.fromPage){ _lead.notes = (_lead.notes ? _lead.notes + '\n' : '') + [data.partner ? 'Referred by partner: ' + data.partner : '', data.fromPage ? 'Came from page: ' + data.fromPage : ''].filter(Boolean).join('\n'); _lead.tags = data.tags; } if(data.niche){ _lead.notes = (_lead.notes ? _lead.notes + '\n' : '') + 'Came from: ' + data.niche + ' landing page'; _lead.tags = data.tags; } if(data.coverageWanted){ _lead.tags = data.tags; _lead.coverage = 'Dental & Vision (individual/family)'; }
           window.vsAdminWrite('leads', _lead);
           if (typeof window.hubspotSyncLead === 'function') window.hubspotSyncLead(_lead);
         }
@@ -2597,7 +2616,17 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       });
     }catch(e){}
   }
+  function fillPhone(){
+    try{
+      var d=(new URLSearchParams(location.search).get('phone')||'').replace(/\D/g,'');
+      if(d.length===11&&d.charAt(0)==='1') d=d.slice(1);
+      if(d.length!==10) return;
+      var f='('+d.slice(0,3)+') '+d.slice(3,6)+'-'+d.slice(6);
+      ['ind-phone','biz-contact-phone'].forEach(function(id){ var el=document.getElementById(id); if(el && !el.value){ el.value=f; el.dispatchEvent(new Event('input',{bubbles:true})); } });
+    }catch(e){}
+  }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fill); else fill();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fillPhone); else fillPhone();
 })();
 </script>
 <script id="vs-q-keys">

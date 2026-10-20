@@ -513,7 +513,7 @@ document.addEventListener("DOMContentLoaded",function(){var toggle=document.quer
     if(!type)return bad('Pick your company type.');
     submitted=true;err.hidden=true;var b=$('tp-submit');b.disabled=true;b.textContent='Creating your link...';
     var code=slug(co)+'-'+Math.random().toString(36).slice(2,5);
-    var link='https://www.vshealthbenefits.com/truckers/quote?ref='+code+'&utm_source=partner&utm_medium=referral&utm_campaign='+code;
+    var link='https://www.vshealthbenefits.com/trucking-health-quote?ref='+code+'&utm_source=partner&utm_medium=referral&utm_campaign='+code;
     var notes='Trucking partner signup\nCompany: '+co+'\nType: '+type+'\nDrivers: '+(drv||'n/a')+'\nPartner code: '+code+'\nDriver link: '+link+'\n(Drivers from this partner are tagged partner-'+code+')';
     var body={firstName:first,lastName:last,phone:d,email:email,company:co,source:'Trucking Partner Signup',pipeline:'business',notes:notes,tags:['trucking-partner','business-lead','partner-code-'+code]};try{if(window.vsAttribution)body.attribution=window.vsAttribution();}catch(x){}
     try{if(window.vsTrack)window.vsTrack('generate_lead',{currency:'USD',value:0,lead_type:'trucking_partner'});}catch(x){}
