@@ -317,6 +317,16 @@
       "permanent": true
     },
     {
+      "source": "/truckers/cotizar",
+      "destination": "/trucking-health-quote",
+      "permanent": false
+    },
+    {
+      "source": "/truckers/cotizar.html",
+      "destination": "/trucking-health-quote",
+      "permanent": false
+    },
+    {
       "source": "/truckers/quote",
       "destination": "/trucking-health-quote",
       "permanent": false

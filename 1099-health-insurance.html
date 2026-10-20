@@ -454,10 +454,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <h2>Find the <span style="color:var(--teal)">Right Coverage</span> for Your Situation</h2>
         <p>Answer a few quick questions and we will match you with the best health insurance options. Takes about 2 minutes.</p>
       </div>
-      <div class="quote-choices" id="quote-choices">
-        <button class="choice-btn" onclick="selectType('individual')" id="btn-individual"><div class="choice-icon">&#x1F9D1;</div><div class="choice-title">Individual or Family</div><div class="choice-sub">Coverage for you and your loved ones</div></button>
-        <button class="choice-btn" onclick="selectType('business')" id="btn-business"><div class="choice-icon">&#x1F3E2;</div><div class="choice-title">Small Business</div><div class="choice-sub">Group plans for your employees</div></button>
-      </div>
+      
       <div class="quote-divider"></div>
       <div class="quote-trust">
         <span><span class="chk">&#10003;</span> Licensed in 40+ States</span>
@@ -465,22 +462,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <span><span class="chk">&#10003;</span> No Spam, Ever</span>
         <span><span class="chk">&#10003;</span> Compare Top Carriers</span>
       </div>
-      <div class="quote-form-fields" id="quote-form">
-        <div class="field-row">
-          <div class="field"><label for="qf-first">First Name</label><input type="text" id="qf-first" placeholder="Jane" autocomplete="given-name" /></div>
-          <div class="field"><label for="qf-last">Last Name</label><input type="text" id="qf-last" placeholder="Doe" autocomplete="family-name" /></div>
-        </div>
-        <div class="field-row">
-          <div class="field"><label for="qf-email">Email</label><input type="email" id="qf-email" placeholder="jane@email.com" autocomplete="email" /></div>
-          <div class="field"><label for="qf-phone">Phone</label><input type="tel" id="qf-phone" placeholder="(555) 000-0000" autocomplete="tel" /></div>
-        </div>
-        <div class="field-row">
-          <div class="field"><label for="qf-state">State</label><select id="qf-state"><option value="">Select state</option><option>Florida</option><option>Texas</option><option>California</option><option>Georgia</option><option>New York</option><option>Illinois</option><option>Pennsylvania</option><option>Ohio</option><option>North Carolina</option><option>Michigan</option><option>Other</option></select></div>
-          <div class="field"><label for="qf-size">Coverage Needed For</label><select id="qf-size"><option value="">Select</option><option>Just me</option><option>Me + spouse</option><option>Me + kids</option><option>Family of 4+</option><option>2-9 employees</option><option>10-25 employees</option></select></div>
-        </div>
-        <button class="btn btn-primary full-w" onclick="submitQuote()" style="margin-top:8px;font-size:1rem">Get My Free Quote</button>
-        <p class="fine-print">By submitting, you agree to our <a href="/privacy">Privacy Policy</a> and that a licensed advisor from VS BENEFITS LLC (d/b/a VS Health Benefits) may call, text or email you at the contact info provided about health coverage, including by automated technology. Consent is not a condition of purchase. Msg &amp; data rates may apply; reply STOP to opt out. We never sell your information.</p>
-      </div>
+      <div class="qf-cta" style="text-align:center;padding:10px 24px 30px"><a href="/quote?from=1099-health-insurance" class="qf-cta-btn" style="display:inline-block;background:#1565d8;color:#fff;font-weight:700;font-size:1.08rem;padding:16px 40px;border-radius:10px;text-decoration:none;box-shadow:0 8px 20px rgba(21,101,216,.28)">Get My Free Quote &rarr;</a><p style="font-size:.85rem;color:#5a6b80;margin:12px 0 0">Free, no obligation.</p></div>
       <div class="quote-disclaimer">VS Health Benefits is an independent insurance advisor licensed in 40+ states.</div>
     </div>
   </div>
