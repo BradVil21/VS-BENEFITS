@@ -328,12 +328,12 @@
     },
     {
       "source": "/quote/dental-vision",
-      "destination": "/quote?type=dental",
+      "destination": "/quote",
       "permanent": true
     },
     {
       "source": "/quote/dental-vision/:path*",
-      "destination": "/quote?type=dental",
+      "destination": "/quote",
       "permanent": true
     },
     {

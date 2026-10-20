@@ -880,7 +880,6 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <button type="button" class="qbtn type-card" id="typeIndividual" onclick="selectType('individual')">Myself and/or my family</button>
         <button type="button" class="qbtn type-card" id="typeBusiness" onclick="selectType('business')">My small business</button>
       </div>
-      <button type="button" class="qbtn qbtn-ghost" id="typeDental" onclick="vsStartDental()">Just dental &amp; vision</button>
       <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Answer a few questions &amp; find the best quotes</div>
       <div class="start-trust">
         <div class="trust-item">
@@ -975,19 +974,6 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
     </div>
   </div>
 
-  <!-- DENTAL & VISION: who is it for (then the shorter individual or business path) -->
-  <div class="panel" id="panel-dv-0">
-    <div class="qscreen">
-      <h2>Who needs dental &amp; vision coverage?</h2>
-      <div class="qbtn-grid" role="group">
-        <button type="button" class="qbtn" onclick="vsDentalFor('individual')">Myself and/or my family</button>
-        <button type="button" class="qbtn" onclick="vsDentalFor('business')">My employees</button>
-      </div>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
-    </div>
-    <div class="q-back"><button type="button" class="q-back-btn" onclick="backTo(0)">&lsaquo; Back</button></div>
-  </div>
-
   <!-- ======================== INDIVIDUAL SCREENS (one question each) ======================== -->
   <div class="panel" id="panel-ind-1">
     <div class="qscreen">
@@ -1002,7 +988,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <button type="button" class="qbtn q-continue" onclick="indNext(1)">Continue</button>
       <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
-    <div class="q-back"><button type="button" class="q-back-btn" onclick="window.vsIsDental()?vsStartDental():backTo(0)">&lsaquo; Back</button></div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="backTo(0)">&lsaquo; Back</button></div>
   </div>
   <div class="panel" id="panel-ind-2">
     <div class="qscreen">
@@ -1184,7 +1170,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <button type="button" class="qbtn-alt" data-set="biz-employees" data-val="1 (just me)" data-next="biz:2">It's just me, no employees yet</button>
       <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
-    <div class="q-back"><button type="button" class="q-back-btn" onclick="window.vsIsDental()?vsStartDental():backTo(0)">&lsaquo; Back</button></div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="backTo(0)">&lsaquo; Back</button></div>
   </div>
   <div class="panel" id="panel-biz-2">
     <div class="qscreen">
@@ -1870,12 +1856,6 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
 
   // ---- DENTAL & VISION ----
   window.vsIsDental = function(){ return dental; };
-  window.vsStartDental = function(){
-    currentType = null; dental = true; updateProgress(0, IND_STEPS);
-    try{ if(window.vsTrack) window.vsTrack('quote_start',{ lead_type:'dental_vision' }); }catch(e){}
-    showPanel('panel-dv-0');
-  };
-  window.vsDentalFor = function(type){ window.__vsDvPick = true; window.selectType(type); };
 
   // ---- INDIVIDUAL NEXT (one question per screen) ----
   function v(id){ var el=document.getElementById(id); return el ? String(el.value||'').trim() : ''; }
@@ -2571,15 +2551,8 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
         var p = new URLSearchParams(window.location.search);
         var t = (p.get('type') || p.get('for') || '').toLowerCase().replace(/[^a-z]/g,'');
         if(!t) return;
-        // Dental / vision has its own funnel. vercel.json redirects these on the
-        // server; this catches any path that slips past it, keeping UTMs/gclid.
-        if(['dental','vision','dentalvision','dentalandvision'].indexOf(t) > -1){
-          var who = (p.get('for') || '').toLowerCase();
-          if(['business','group','employer','employees','company'].indexOf(who) > -1 && window.vsDentalFor) window.vsDentalFor('business');
-          else if(['individual','family','personal','self'].indexOf(who) > -1 && window.vsDentalFor) window.vsDentalFor('individual');
-          else if(window.vsStartDental) window.vsStartDental();
-          return;
-        }
+        // Dental & vision quotes were retired: old dental links just open the start screen.
+        if(['dental','vision','dentalvision','dentalandvision'].indexOf(t) > -1) return;
         var biz = ['business','group','employer','smallbusiness','company'];
         var ind = ['individual','family','personal','self'];
         var pick = biz.indexOf(t) > -1 ? 'business' : (ind.indexOf(t) > -1 ? 'individual' : null);
