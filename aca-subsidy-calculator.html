@@ -403,17 +403,8 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
           <div class="field"><label>ZIP Code</label><input id="zip" type="text" inputmode="numeric" maxlength="5" placeholder="33101" autocomplete="postal-code" /></div>
         </div>
 
-        <!-- STEP 2 - PHONE -->
+        <!-- STEP 2 - HOUSEHOLD -->
         <div class="cs-panel" id="cs-p2">
-          <div class="cs-eyebrow">Contact</div>
-          <h3 class="cs-h">Where should your advisor reach you?</h3>
-          <p class="cs-sub">Your estimate appears on this page either way. The number is so a licensed advisor can confirm the exact plans and prices available to you, at no cost.</p>
-          <div class="field"><label>Phone Number</label><input id="ad-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-5555" /></div>
-        <div class="cs-secure"><span class="chk">&#10003;</span><span>Your information is 100% secure and never sold. A licensed advisor uses it to send you the real plans in your area.</span></div>
-        </div>
-
-        <!-- STEP 3 - HOUSEHOLD -->
-        <div class="cs-panel" id="cs-p3">
           <div class="cs-eyebrow">Household</div>
           <h3 class="cs-h">Who is on the plan?</h3>
           <p class="cs-sub">Household size is everyone on your tax return. Age matters because ACA premiums are age-rated.</p>
@@ -436,6 +427,15 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
           </div>
         </div>
 
+        <!-- STEP 3 - PHONE -->
+        <div class="cs-panel" id="cs-p3">
+          <div class="cs-eyebrow">Contact</div>
+          <h3 class="cs-h">Where should your advisor reach you?</h3>
+          <p class="cs-sub">Your estimate appears on this page either way. The number is so a licensed advisor can confirm the exact plans and prices available to you, at no cost.</p>
+          <div class="field"><label>Phone Number</label><input id="ad-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(555) 555-5555" /></div>
+        <div class="cs-secure"><span class="chk">&#10003;</span><span>Your information is 100% secure and never sold. A licensed advisor uses it to send you the real plans in your area.</span></div>
+        </div>
+
         <!-- STEP 4 - INCOME -->
         <div class="cs-panel" id="cs-p4">
           <div class="cs-eyebrow">Income</div>
@@ -450,8 +450,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
             <div class="cs-tile" data-val="125000">$100,000 &ndash; $150,000</div>
             <div class="cs-tile" data-val="175000">$150,000+</div>
           </div>
-          <p class="cs-or">Pick a range and we use the middle of it. For a sharper estimate, enter the exact figure:</p>
-          <div class="field"><div class="inp-money"><span>$</span><input id="income" type="text" inputmode="numeric" placeholder="55,000" /></div></div>
+          <input type="hidden" id="income" value="" />
         </div>
 
         <!-- STEP 5 - NAME + EMAIL -->
@@ -771,9 +770,9 @@ document.addEventListener("DOMContentLoaded",function(){
     // Each check sends the visitor back to the step that owns the field, so a
     // blank on step 1 does not fail silently five steps later.
     if(!/^\d{5}$/.test(zipVal)){ csGo(1); gateError("Please enter your 5-digit ZIP code so we can estimate plans for your area."); focusOn("zip"); return; }
-    if(digits.length!==10){ csGo(2); gateError("Please enter a 10-digit phone number so an advisor can reach you."); focusOn("ad-phone"); return; }
-    if(!age1){ csGo(3); gateError("Please enter your age."); focusOn("age1"); return; }
-    if(!income){ csGo(4); gateError("Please pick an income range or enter your household income."); focusOn("income"); return; }
+    if(digits.length!==10){ csGo(3); gateError("Please enter a 10-digit phone number so an advisor can reach you."); focusOn("ad-phone"); return; }
+    if(!age1){ csGo(2); gateError("Please enter your age."); focusOn("age1"); return; }
+    if(!income){ csGo(4); gateError("Please pick your household income range."); return; }
     if(!first){ csGo(5); gateError("Please enter your first name."); focusOn("ad-first"); return; }
     if(!last){ csGo(5); gateError("Please enter your last name."); focusOn("ad-last"); return; }
     if(email&&!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)){ csGo(5); gateError("That email does not look right. Leave it blank if you would rather not share it."); focusOn("ad-email"); return; }
@@ -980,17 +979,16 @@ document.addEventListener("DOMContentLoaded",function(){
     if(csStep===1){
       if(!/^\d{5}$/.test(val("zip"))){ gateError("Please enter your 5-digit ZIP code."); focusOn("zip"); return; }
     } else if(csStep===2){
-      if(phoneDigits().length!==10){ gateError("Please enter a 10-digit phone number so an advisor can reach you."); focusOn("ad-phone"); return; }
-      // ZIP and phone are both in hand and the name is still three steps away.
-      // Capture the lead now, so somebody who never presses Calculate is still
-      // a lead you can call rather than a bounce.
-      csCaptureDraft("Step 2 - phone");
-    } else if(csStep===3){
       var a=parseInt(val("age1"),10);
       if(!a){ gateError("Please enter your age."); focusOn("age1"); return; }
       if(a<18||a>64){ gateError("Enter an age between 18 and 64. Under 18 is usually covered as a child, and 65+ is Medicare - an advisor can help with either."); focusOn("age1"); return; }
+    } else if(csStep===3){
+      if(phoneDigits().length!==10){ gateError("Please enter a 10-digit phone number so an advisor can reach you."); focusOn("ad-phone"); return; }
+      // ZIP and phone are both in hand; capture the lead now so somebody who
+      // never presses Calculate is still a lead you can call.
+      csCaptureDraft("Step 3 - phone");
     } else if(csStep===4){
-      if(!parseFloat(val("income").replace(/[^0-9.]/g,""))){ gateError("Pick an income range or enter the exact figure."); focusOn("income"); return; }
+      if(!parseFloat(val("income").replace(/[^0-9.]/g,""))){ gateError("Please pick your household income range."); return; }
       csCaptureDraft("Step 4 - income");
     }
     csGo(csStep+1);
