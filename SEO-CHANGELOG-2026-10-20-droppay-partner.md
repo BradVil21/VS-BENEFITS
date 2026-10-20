@@ -8,3 +8,4 @@ Logo use approved by Express Freight Finance for marketing.
 - Post added to the hub guide list (Owner-operators & cost), top of the blog index, sitemap and llms.txt.
 - Logo: /images/partners/express-freight-finance-logo.png (white wordmark, transparent; always place on a dark background).
 - Outbound application links use rel="noopener sponsored".
+- Homepage: new "Our partners" section (#partners, between Stats and Process) with Express Freight Finance as the first partner card. Add more partners by copying the vp-card block (instructions in an HTML comment).

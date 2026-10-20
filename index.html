@@ -672,6 +672,53 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
   </div>
 </section>
 
+<!-- ====================== PARTNERS ====================== -->
+<style id="vs-partners-css">
+#partners .vp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,340px));justify-content:center;gap:20px;max-width:1120px;margin:0 auto}
+#partners .vp-card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line,#e4e9f2);border-radius:18px;overflow:hidden;box-shadow:0 2px 10px rgba(13,27,42,.05);transition:.2s}
+#partners .vp-card:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(13,27,42,.1)}
+#partners .vp-logo{height:120px;display:flex;align-items:center;justify-content:center;padding:22px 28px;background:#f4f8fe}
+#partners .vp-logo--dark{background:linear-gradient(135deg,#0b2346,#16447f)}
+#partners .vp-logo img{max-width:100%;max-height:64px;width:auto;height:auto;object-fit:contain;display:block}
+#partners .vp-body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:8px;flex:1}
+#partners .vp-tag{font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#098374}
+#partners .vp-body h3{margin:0;font-size:1.12rem;color:var(--blue-900,#0b2346)}
+#partners .vp-body p{margin:0;font-size:.92rem;line-height:1.55;color:var(--muted,#5a6b80)}
+#partners .vp-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto;padding-top:10px}
+#partners .vp-btn{background:#0db5a6;color:#0b2346;font-weight:800;font-size:.88rem;border-radius:999px;padding:9px 16px;text-decoration:none}
+#partners .vp-link{color:var(--blue-700,#16447f);font-weight:700;font-size:.88rem;padding:9px 4px;text-decoration:none}
+</style>
+<section class="section" id="partners">
+  <div class="container">
+    <div class="center" style="margin-bottom:30px">
+      <span class="eyebrow">Our partners</span>
+      <h2>Companies we work with</h2>
+      <p style="max-width:640px;margin:0 auto">Trusted businesses we partner with to take care of drivers, families and small businesses beyond health insurance.</p>
+    </div>
+    <div class="vp-grid">
+
+      <!-- Partner: Express Freight Finance (logo is a white wordmark, so it uses the dark tile) -->
+      <article class="vp-card">
+        <div class="vp-logo vp-logo--dark"><img src="/images/partners/express-freight-finance-logo.png" alt="Express Freight Finance" width="769" height="114" loading="lazy"></div>
+        <div class="vp-body">
+          <span class="vp-tag">Freight factoring</span>
+          <h3>Express Freight Finance</h3>
+          <p>DropPay pays truckers within minutes after dropping off a load, 24/7/365. Mention VS Health for a discounted rate.</p>
+          <div class="vp-links">
+            <a class="vp-btn" href="https://expressfreightfinance.com/droppay-instant-quote/" target="_blank" rel="noopener sponsored">Get a DropPay rate</a>
+            <a class="vp-link" href="/blog/droppay-instant-freight-factoring">Learn more &rarr;</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- To add a partner: copy the <article class="vp-card"> block above and paste it here.
+           Put the logo in /images/partners/. Use class="vp-logo vp-logo--dark" for white logos,
+           or just class="vp-logo" for dark logos (light background). -->
+
+    </div>
+  </div>
+</section>
+
 <!-- ====================== PROCESS ====================== -->
 <section class="section">
   <div class="container">
