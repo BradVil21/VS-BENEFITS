@@ -48,10 +48,19 @@ async function hs(path, key, init) {
     return { status: r.status, body };
   }
 }
+// "Oscar Health Maintenance Organization of Florida, Inc" -> "Oscar"; plan names lose the repeated legal name.
+const ISSUERS = [[/oscar/i, "Oscar"], [/unitedhealth|united healthcare/i, "UnitedHealthcare"], [/avmed/i, "AvMed"],
+  [/florida blue|blue cross|bcbs|health options/i, "Florida Blue"], [/ambetter|celtic|sunshine|centene/i, "Ambetter"],
+  [/aetna|cvs/i, "Aetna CVS Health"], [/cigna/i, "Cigna"], [/molina/i, "Molina"], [/amerihealth/i, "AmeriHealth Caritas"],
+  [/community care|22 health/i, "22 Health"], [/simply/i, "Simply Healthcare"], [/wellcare/i, "Wellcare"], [/humana/i, "Humana"]];
+function niceIssuer(n) { n = String(n || ""); for (const [re, v] of ISSUERS) if (re.test(n)) return v;
+  return n.replace(/,?\s*(Inc\.?|LLC|Company|Corporation|Corp\.?)$/i, "").replace(/\s+of Florida$/i, "").trim(); }
+function nicePlan(name, legal) { let s = String(name || ""); if (legal && s.indexOf(legal) === 0) s = s.slice(legal.length).trim(); return s || String(name || ""); }
 function slimPlan(p) {
   const pr = p.pricing || {}, d = p.details || {}, doc = p.documents || {}, net = p.network || {};
+  const legal = (p.issuer || {}).name || "";
   return {
-    id: p.plan_id, name: p.display_name || p.name, issuer: (p.issuer || {}).name || "",
+    id: p.plan_id, name: nicePlan(p.display_name || p.name, legal), issuer: niceIssuer(legal),
     metal: d.metal_level || "", type: d.plan_type || net.type || "", hsa: !!d.hsa_eligible, standardized: !!d.is_standardized,
     csr: d.csr_level || null,
     net: money(pr.net_premium != null ? pr.net_premium : pr.gross_premium), gross: money(pr.gross_premium),
@@ -104,18 +113,31 @@ module.exports = async (req, res) => {
       context: { product: "aca", exchange: "on_exchange", coverage_family: "medical", coverage_type: "medical", plan_year: year },
       location: { zip_code: zip, fips_code: county.fips, state: county.state },
       household: { applicants, household_size: Math.max(size, applicants.length), annual_income: Math.round(income), effective_date: year + "-01-01" },
-      page: { number: 1, size: 500 }
+      page: { number: 1, size: 50 }
     };
-    const ck = JSON.stringify(body);
+    const ck = JSON.stringify(Object.assign({}, body, { page: null }));
     const hit = cache.get(ck);
     if (hit && Date.now() - hit.at < TTL) return res.status(200).json(hit.body);
 
     // 3. quote
-    const q = await hs("/quotes", key, { method: "POST", headers: { "Content-Type": "application/json" }, body: ck });
-    if (q.status !== 200) return res.status(502).json({ error: "quote failed", upstream: q.status, code: upErr(q.body) });
-    const plans = ((q.body && q.body.plans) || []).map(slimPlan).filter(p => p.net != null)
+    // HealthSherpa returns at most 50 plans per page, so walk the pages (max 8 = 400 plans).
+    let rawPlans = [], seen = new Set();
+    for (let pg = 1; pg <= 8; pg++) {
+      if (pg > 1) await new Promise(ok => setTimeout(ok, 450));   // stay inside the 1 req/s key limit
+      body.page = { number: pg, size: 50 };
+      const q = await hs("/quotes", key, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      if (q.status !== 200) {
+        if (pg === 1) return res.status(502).json({ error: "quote failed", upstream: q.status, code: upErr(q.body) });
+        break;
+      }
+      const batch = (q.body && q.body.plans) || [], fresh = batch.filter(p => p && !seen.has(p.plan_id));
+      fresh.forEach(p => seen.add(p.plan_id)); rawPlans = rawPlans.concat(fresh);
+      const total = q.body && q.body.meta && q.body.meta.total_count;
+      if (batch.length < 50 || !fresh.length || (total && rawPlans.length >= total)) break;
+    }
+    const plans = rawPlans.map(slimPlan).filter(p => p.net != null)
       .sort((x, y) => (x.net - y.net) || ((x.ded ?? 1e9) - (y.ded ?? 1e9)));
-    const aptc = plans.reduce((m, p) => Math.max(m, p.max_aptc || 0), 0);
+    const aptc = plans.reduce((m, p) => Math.max(m, p.max_aptc || 0, p.credit || 0), 0);
     const out = { plans, count: plans.length, aptc, county, plan_year: year, source: "HealthSherpa" };
     cache.set(ck, { at: Date.now(), body: out });
     if (cache.size > 300) cache.delete(cache.keys().next().value);
