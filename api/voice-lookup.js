@@ -131,6 +131,11 @@ module.exports = async (req, res) => {
   if (req.method === "POST" && ((req.query && req.query.op === "ads-sync") || /ads-sync/.test(req.url || ""))) {
     return require("./_ads-sync")(req, res);
   }
+  // POST /api/plans is rewritten here (see vercel.json): real ACA quotes from HealthSherpa ONE for the
+  // subsidy calculator. See api/_healthsherpa-plans.js
+  if ((req.query && req.query.op === "plans") || /\/api\/plans/.test(req.url || "")) {
+    return require("./_healthsherpa-plans")(req, res);
+  }
   // GET /api/google-rating is rewritten here (see vercel.json); see api/_google-rating.js
   if (req.method === "GET" && ((req.query && req.query.op === "google-rating") || /google-rating/.test(req.url || ""))) {
     return require("./_google-rating")(req, res);

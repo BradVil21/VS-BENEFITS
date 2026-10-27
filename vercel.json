@@ -1920,6 +1920,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/plans",
+      "destination": "/api/voice-lookup?op=plans"
+    },
+    {
       "source": "/api/ads-sync",
       "destination": "/api/voice-lookup?op=ads-sync"
     },

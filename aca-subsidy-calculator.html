@@ -497,6 +497,35 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
             </div>
           </div>
           <div class="res-note" id="r-note"></div>
+<style id="hsq-css">
+#hsq{margin:18px 0 6px;text-align:left}
+#hsq[hidden]{display:none}
+#hsq .hsq-h{font-family:Poppins,Inter,sans-serif;font-weight:800;color:#0b2346;font-size:1.08rem;margin:0 0 2px}
+#hsq .hsq-sub{font-size:.86rem;color:#5a6b80;margin:0 0 10px;line-height:1.45}
+#hsq .hsq-credit{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:10px;padding:9px 12px;font-size:.9rem;margin:0 0 10px}
+#hsq .hsq-chips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+#hsq .hsq-chips button{border:1.5px solid #d6e0ee;background:#fff;color:#16447f;border-radius:999px;padding:6px 12px;font:600 .82rem Inter,sans-serif;cursor:pointer;min-height:34px}
+#hsq .hsq-chips button[aria-pressed="true"]{background:#16447f;border-color:#16447f;color:#fff}
+#hsq .hsq-card{border:1px solid #e4e9f2;border-radius:12px;padding:12px 14px;margin:0 0 10px;background:#fff}
+#hsq .hsq-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+#hsq .hsq-name{font-weight:700;color:#0b2346;font-size:.95rem;line-height:1.3}
+#hsq .hsq-iss{font-size:.8rem;color:#5a6b80;margin-top:2px}
+#hsq .hsq-price{text-align:right;white-space:nowrap}
+#hsq .hsq-price b{display:block;font-size:1.25rem;color:#0b2346;font-family:Poppins,Inter,sans-serif}
+#hsq .hsq-price s{font-size:.76rem;color:#94a3b8}
+#hsq .hsq-tags{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}
+#hsq .hsq-tag{font-size:.7rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;border-radius:6px;padding:3px 7px;background:#f1f5f9;color:#334155}
+#hsq .hsq-tag.bronze{background:#f6e7da;color:#7c3f12}#hsq .hsq-tag.silver{background:#eef2f6;color:#334155}#hsq .hsq-tag.gold{background:#fdf3d2;color:#7a5a00}#hsq .hsq-tag.platinum{background:#e8eefc;color:#1e3a8a}#hsq .hsq-tag.hsa{background:#e0f7f4;color:#0f766e}
+#hsq .hsq-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:.82rem;color:#334155}
+#hsq .hsq-grid span{color:#5a6b80}
+#hsq .hsq-act{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+#hsq .hsq-act a.go{background:#16447f;color:#fff;border-radius:999px;padding:8px 14px;font-weight:700;font-size:.84rem;text-decoration:none}
+#hsq .hsq-act a.lk{font-size:.8rem;color:#16447f}
+#hsq .hsq-more{width:100%;border:1.5px dashed #b9c7da;background:#f7faff;color:#16447f;border-radius:10px;padding:10px;font-weight:700;cursor:pointer;min-height:42px}
+#hsq .hsq-load{font-size:.9rem;color:#5a6b80;padding:12px;border:1px dashed #d6e0ee;border-radius:10px}
+#hsq .hsq-fine{font-size:.74rem;color:#64748b;line-height:1.5;margin-top:8px}
+</style>
+<div id="hsq" hidden aria-live="polite"></div>
           <div id="calc-next" style="margin:16px 0 4px;padding:16px;border-radius:12px;background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:left">
             <div style="font-weight:800;font-size:1.02rem;margin-bottom:4px" id="calc-next-h">Want this price confirmed?</div>
             <div style="font-size:.9rem;line-height:1.5;opacity:.95;margin-bottom:12px">A licensed advisor will check the real plans in your ZIP code, including which ones your doctors take, in a free 10-minute call.</div>
@@ -830,6 +859,7 @@ document.addEventListener("DOMContentLoaded",function(){
     }catch(e){}
     r.scrollIntoView({behavior:"smooth",block:"nearest"});
     sendLead(first,last,phone,digits,email);
+    try{ window.vsLoadRealPlans && window.vsLoadRealPlans(lastEstimate); }catch(e){}
   }
 
   function show(id,on){var el=document.getElementById(id); if(el){el.hidden=!on;}}
@@ -1120,6 +1150,68 @@ document.addEventListener("DOMContentLoaded",function(){
     });
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<script id="hsq-js">
+/* Real 2027 plans from HealthSherpa (POST /api/plans -> api/_healthsherpa-plans.js).
+   Loads after the estimate, which is after the lead is captured. Anything other than a
+   plan list (no key yet, outage, no plans loaded) leaves the section hidden, so the
+   calculator behaves exactly as before. */
+(function(){
+  var box, last=null, all=[], metal="all", shown=6;
+  function $(id){return document.getElementById(id);}
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function m(n){if(n==null||!isFinite(n))return "—";return "$"+Math.round(n).toLocaleString();}
+  function cap(s){s=String(s||"");return s.charAt(0).toUpperCase()+s.slice(1).replace(/_/g," ");}
+  function track(n,p){try{window.vsTrack&&window.vsTrack(n,p||{});}catch(e){}}
+  function fine(){return '<p class="hsq-fine">Plan and price data provided by HealthSherpa, a CMS-registered web-broker, for '+esc(String(last&&last.plan_year||2027))+' coverage. Plans are sorted by lowest monthly premium after your estimated tax credit; we never rank plans by carrier or commission. Prices assume no tobacco use'+(last&&last.kids?' and price children at age 10':'')+'. Premium and subsidy amounts vary by individual eligibility and are confirmed at enrollment. VS Health Benefits is a licensed independent broker and is not HealthCare.gov.</p>';}
+  function card(p){
+    var tags='<span class="hsq-tag '+esc(p.metal.replace("expanded_",""))+'">'+esc(cap(p.metal))+'</span>'+(p.type?'<span class="hsq-tag">'+esc(p.type.toUpperCase())+'</span>':'')+(p.hsa?'<span class="hsq-tag hsa">HSA eligible</span>':'');
+    var grid='<div><span>Deductible</span><br><b>'+m(p.ded)+'</b></div><div><span>Out-of-pocket max</span><br><b>'+m(p.moop)+'</b></div>'+
+      (p.pcp?'<div><span>Primary care</span><br>'+esc(p.pcp)+'</div>':'')+(p.rx?'<div><span>Generic drugs</span><br>'+esc(p.rx)+'</div>':'');
+    var href='/book?from=subsidy-calculator-plan&plan='+encodeURIComponent(p.id)+'&est='+Math.round(p.net||0);
+    return '<div class="hsq-card"><div class="hsq-top"><div><div class="hsq-name">'+esc(p.name)+'</div><div class="hsq-iss">'+esc(p.issuer)+'</div></div>'+
+      '<div class="hsq-price"><b>'+m(p.net)+'<small style="font-size:.7rem;font-weight:600">/mo</small></b>'+(p.gross&&p.net!=null&&p.gross-p.net>=1?'<s>'+m(p.gross)+' before credit</s>':'')+'</div></div>'+
+      '<div class="hsq-tags">'+tags+'</div><div class="hsq-grid">'+grid+'</div>'+
+      '<div class="hsq-act"><a class="go" href="'+href+'" data-plan="'+esc(p.id)+'">Enroll with an advisor</a>'+
+      (p.sbc?'<a class="lk" href="'+esc(p.sbc)+'" target="_blank" rel="noopener">Summary of benefits</a>':'')+
+      (p.network_url?'<a class="lk" href="'+esc(p.network_url)+'" target="_blank" rel="noopener">Find doctors</a>':'')+'</div></div>';
+  }
+  function render(){
+    var list=all.filter(function(p){return metal==="all"||p.metal.replace("expanded_","")===metal;});
+    var metals=["all"].concat(["bronze","silver","gold","platinum","catastrophic"].filter(function(t){return all.some(function(p){return p.metal.replace("expanded_","")===t;});}));
+    var c=last.county||{};
+    box.innerHTML='<div class="hsq-h">Real '+esc(String(last.plan_year||2027))+' plans for '+esc(c.name||"your area")+(c.state?', '+esc(c.state):'')+'</div>'+
+      '<p class="hsq-sub">'+all.length+' Marketplace plans priced for your household and income.</p>'+
+      (last.aptc>0?'<div class="hsq-credit">Estimated tax credit: <b>'+m(last.aptc)+'/mo</b>, already taken off the prices below.</div>':'')+
+      '<div class="hsq-chips" role="group" aria-label="Filter by metal level">'+metals.map(function(t){return '<button type="button" data-m="'+t+'" aria-pressed="'+(t===metal)+'">'+(t==="all"?"All":cap(t))+'</button>';}).join("")+'</div>'+
+      list.slice(0,shown).map(card).join("")+
+      (list.length>shown?'<button type="button" class="hsq-more">Show '+Math.min(list.length-shown,10)+' more of '+list.length+'</button>':'')+fine();
+    box.querySelectorAll("[data-m]").forEach(function(b){b.onclick=function(){metal=b.getAttribute("data-m");shown=6;render();track("plan_filter",{metal:metal});};});
+    var more=box.querySelector(".hsq-more"); if(more) more.onclick=function(){shown+=10;render();};
+    box.querySelectorAll("a.go").forEach(function(a){a.onclick=function(){track("quote_cta",{from_page:location.pathname,cta:"hs-plan",plan:a.getAttribute("data-plan")});};});
+  }
+  function counties(list,req){
+    box.innerHTML='<div class="hsq-h">Which county do you live in?</div><p class="hsq-sub">Your ZIP code crosses county lines, and plans differ by county.</p><div class="hsq-chips">'+
+      list.map(function(c){return '<button type="button" data-f="'+esc(c.fips)+'">'+esc(c.name)+'</button>';}).join("")+'</div>';
+    box.querySelectorAll("[data-f]").forEach(function(b){b.onclick=function(){req.fips=b.getAttribute("data-f");load(req);};});
+  }
+  function load(req){
+    box.hidden=false; box.innerHTML='<div class="hsq-load">Pulling real 2027 plans for ZIP '+esc(req.zip)+'&hellip;</div>';
+    fetch("/api/plans",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(req)})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+      .then(function(x){
+        var j=x.j||{};
+        if(x.ok&&j.needCounty&&j.counties&&j.counties.length){counties(j.counties,req);return;}
+        if(!x.ok||!j.plans||!j.plans.length){box.hidden=true;box.innerHTML="";track("hs_plans_unavailable",{status:x.ok?"empty":"error"});return;}
+        last=j; last.kids=req.kids; all=j.plans; metal="all"; shown=6; render(); track("hs_plans_shown",{count:j.count});
+      })
+      .catch(function(){box.hidden=true;box.innerHTML="";});
+  }
+  window.vsLoadRealPlans=function(est){
+    box=$("hsq"); if(!box||!est||!/^\d{5}$/.test(String(est.zip||""))) return;
+    load({zip:String(est.zip),income:est.income,size:est.size,age1:est.age1,age2:est.age2,kids:est.kids||0});
+  };
 })();
 </script>
 </body>
