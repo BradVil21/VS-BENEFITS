@@ -84,9 +84,12 @@ module.exports = async (req, res) => {
     // 1. county (a ZIP can cross county lines; the visitor picks if so)
     let county = null;
     const c = await hs("/reference/counties?zip_code=" + zip, key, { method: "GET" });
-    const counties = ((c.body && c.body.counties) || []).map(x => ({ fips: x.fips_code, name: x.name, state: x.state }));
-    if (c.status === 404 || !counties.length) return res.status(200).json({ plans: [], count: 0, noCounty: true });
-    if (c.status !== 200) return res.status(502).json({ error: "county lookup failed", upstream: c.status });
+    const upErr = x => x && (x.code || x.error || x.message || (x.errors && JSON.stringify(x.errors).slice(0, 200))) || null;
+    if (c.status === 404) return res.status(200).json({ plans: [], count: 0, noCounty: true });
+    if (c.status !== 200) return res.status(502).json({ error: "county lookup failed", upstream: c.status, code: upErr(c.body) });
+    const cb = c.body || {}, raw = cb.counties || (cb.data && (cb.data.counties || cb.data)) || [];
+    const counties = (Array.isArray(raw) ? raw : []).map(x => ({ fips: x.fips_code || x.fips, name: x.name || x.county_name, state: x.state }));
+    if (!counties.length) return res.status(200).json({ plans: [], count: 0, noCounty: true, shape: Object.keys(cb).slice(0, 6) });
     if (b.fips) county = counties.find(x => x.fips === String(b.fips));
     if (!county && counties.length === 1) county = counties[0];
     if (!county) return res.status(200).json({ needCounty: true, counties });
@@ -109,7 +112,7 @@ module.exports = async (req, res) => {
 
     // 3. quote
     const q = await hs("/quotes", key, { method: "POST", headers: { "Content-Type": "application/json" }, body: ck });
-    if (q.status !== 200) return res.status(502).json({ error: "quote failed", upstream: q.status, code: q.body && (q.body.code || q.body.error) || null });
+    if (q.status !== 200) return res.status(502).json({ error: "quote failed", upstream: q.status, code: upErr(q.body) });
     const plans = ((q.body && q.body.plans) || []).map(slimPlan).filter(p => p.net != null)
       .sort((x, y) => (x.net - y.net) || ((x.ded ?? 1e9) - (y.ded ?? 1e9)));
     const aptc = plans.reduce((m, p) => Math.max(m, p.max_aptc || 0), 0);
