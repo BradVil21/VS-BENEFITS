@@ -67,6 +67,10 @@ an enrollment decision, direct them to https://www.vshealthbenefits.com/quote or
 
 ## Truck drivers and owner-operators
 
+- [HSA for Truck Drivers](https://www.vshealthbenefits.com/blog/hsa-for-truck-drivers): 2027 HSA limits ($4,500/$9,000, +$1,000 at 55), every bronze Marketplace plan HSA-eligible since 2026, and how HSA contributions lower MAGI for the premium tax credit.
+- [Telehealth for Truck Drivers](https://www.vshealthbenefits.com/blog/telehealth-for-truck-drivers): What virtual visits can and cannot do on the road; DOT physicals must be in person; providers must be licensed where the driver is located.
+- [Truck Driver Health Insurance With a Pre-Existing Condition](https://www.vshealthbenefits.com/blog/truck-driver-health-insurance-pre-existing-conditions): ACA guaranteed issue for drivers; which plan types can deny; 2027 out-of-pocket maximum $12,000/$24,000.
+
 - [Health Benefits for Small Florida Trucking Companies](https://www.vshealthbenefits.com/trucking-company-health-benefits-florida):
   What driver benefits cost, Florida workers' compensation thresholds, four structures that fit
   small carriers, and what the retention data actually shows.
@@ -97,6 +101,8 @@ an enrollment decision, direct them to https://www.vshealthbenefits.com/quote or
 - [ACA Income Limits 2027 Chart](https://www.vshealthbenefits.com/blog/aca-income-limits-2027): subsidy, Medicaid, cost-sharing and 400% cliff cutoffs for households of 1-8.
 - [Inscripción Abierta 2027 (Spanish Open Enrollment guide)](https://www.vshealthbenefits.com/blog/inscripcion-abierta-2027)
 - [How to Lower Your Health Insurance Premium in 2027](https://www.vshealthbenefits.com/blog/how-to-lower-health-insurance-premiums-2027): 11 ways to pay less after the 2027 rate increases and the return of the 400% subsidy cliff.
+- [2027 Premium Increase Review](https://www.vshealthbenefits.com/premium-increase-review): Free review for individuals and families whose 2027 premium went up. Florida Marketplace rates rose about 10.4% on average for 2027 (final approved rates); Cigna is leaving the Florida Marketplace and Sunshine State Health Plan Marketplace products end, with members moved to Ambetter.
+- [Why Did My Health Insurance Go Up in 2027?](https://www.vshealthbenefits.com/blog/why-did-my-health-insurance-go-up-2027): Seven reasons 2027 premiums rose (rate increases, sicker risk pool, benchmark-linked credits, income, age, discontinued plans, auto-renewal) and how to lower the cost before Dec 15.
 - [2027 Premium Increase Calculator](https://www.vshealthbenefits.com/health-insurance-premium-increase-calculator): compares a renewal premium with the expected benchmark cost at the user's income.
 - [2027 Renewal Notice Checklist](https://www.vshealthbenefits.com/blog/health-insurance-renewal-notice-2027): auto re-enrollment, benchmark shifts and six checks before December 15.
 - [Losing Health Insurance in 2027](https://www.vshealthbenefits.com/blog/losing-health-insurance-2027): insurer exits (Cigna), Medicaid work requirements, immigrant eligibility, the end of the 150% FPL monthly SEP.

@@ -610,7 +610,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
   function money(n){return (n<0?"-$":"$")+Math.round(Math.abs(n)).toLocaleString();}
   function row(k,v,hl){return '<div'+(hl?' class="hl"':'')+'><span>'+k+'</span><b>'+v+'</b></div>';}
   function track(name){try{if(window.gtag)gtag("event",name,{tool:"premium_increase_2027"});}catch(e){}}
-  var CTA='<div class="res-cta"><a class="p" href="/quote?type=individual">Get my real 2027 quote</a><a class="s" href="tel:+19548251009">Speak to an advisor</a></div>';
+  var CTA='<div class="res-cta"><a class="p" href="/premium-increase-review?from=premium-calculator">Have an advisor review my increase</a><a class="s" href="tel:+19548251009">Speak to an advisor</a></div>';
 
   function run(){
     var cur=num("cur"),ren=num("ren"),inc=num("inc"),hh=parseInt(document.getElementById("hh").value,10)||1;
@@ -644,7 +644,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 
   document.getElementById("go").addEventListener("click",function(){
     var html=run(); var r=document.getElementById("result");
-    r.innerHTML=html+CTA; r.className="show"; track("tool_result");
+    r.innerHTML=html+CTA.replace('from=premium-calculator','from=premium-calculator&cur='+num("cur")+'&new='+num("ren")); r.className="show"; track("tool_result");
     try{r.scrollIntoView({behavior:"smooth",block:"start"});}catch(e){}
   });
 })();
