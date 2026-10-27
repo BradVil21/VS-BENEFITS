@@ -1,10 +1,15 @@
 # robots.txt — vshealthbenefits.com
-# Updated 2026-09-21
+# Updated 2026-10-27
+# /api/ holds form endpoints (POST only). They are not pages, so crawlers skip
+# them; the two read-only endpoints pages call on load stay open for rendering.
 # Private pages (/admin, /client, /census) are not blocked here on purpose:
 # they carry noindex, and Google must be able to crawl them to see it.
 
 User-agent: *
 Allow: /
+Disallow: /api/
+Allow: /api/google-rating
+Allow: /api/calendly
 
 # ------------------------------------------------------------------
 # AI assistants and answer engines are explicitly welcome.
@@ -16,89 +21,111 @@ Allow: /
 # OpenAI training + ChatGPT
 User-agent: GPTBot
 Allow: /
+Disallow: /api/
 
 # ChatGPT search index
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /api/
 
 # ChatGPT live browsing
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /api/
 
 # Anthropic / Claude
 User-agent: ClaudeBot
 Allow: /
+Disallow: /api/
 
 # Claude live browsing
 User-agent: Claude-User
 Allow: /
+Disallow: /api/
 
 # Claude search index
 User-agent: Claude-SearchBot
 Allow: /
+Disallow: /api/
 
 # Anthropic legacy
 User-agent: anthropic-ai
 Allow: /
+Disallow: /api/
 
 # Perplexity index
 User-agent: PerplexityBot
 Allow: /
+Disallow: /api/
 
 # Perplexity live browsing
 User-agent: Perplexity-User
 Allow: /
+Disallow: /api/
 
 # Gemini / Vertex AI grounding
 User-agent: Google-Extended
 Allow: /
+Disallow: /api/
 
 # Apple Intelligence
 User-agent: Applebot-Extended
 Allow: /
+Disallow: /api/
 
 # Meta AI
 User-agent: meta-externalagent
 Allow: /
+Disallow: /api/
 
 # Meta AI live fetch
 User-agent: Meta-ExternalFetcher
 Allow: /
+Disallow: /api/
 
 # Alexa / Amazon
 User-agent: Amazonbot
 Allow: /
+Disallow: /api/
 
 # DuckDuckGo AI
 User-agent: DuckAssistBot
 Allow: /
+Disallow: /api/
 
 # Mistral / Le Chat
 User-agent: MistralAI-User
 Allow: /
+Disallow: /api/
 
 # Cohere
 User-agent: cohere-ai
 Allow: /
+Disallow: /api/
 
 # You.com
 User-agent: YouBot
 Allow: /
+Disallow: /api/
 
 # Common Crawl — feeds many AI training sets
 User-agent: CCBot
 Allow: /
+Disallow: /api/
 
 # Diffbot knowledge graph
 User-agent: Diffbot
 Allow: /
+Disallow: /api/
 
 # Timpi
 User-agent: Timpibot
 Allow: /
+Disallow: /api/
 
 # Bing / Copilot
 User-agent: Bingbot
 Allow: /
+Disallow: /api/
 
 Sitemap: https://www.vshealthbenefits.com/sitemap.xml
