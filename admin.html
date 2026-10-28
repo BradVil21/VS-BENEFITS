@@ -7524,6 +7524,28 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
   }catch(err){ if(window.console)console.warn("topnav init failed",err); }
 })();
 
+/* ═══════════════ NAV FIT (2026-10-28): every nav item stays visible at any width ═══════════════ */
+(function(){
+  try{
+    var st=document.createElement("style");st.setAttribute("data-navfit","1");st.textContent=[
+      ".sidebar#sidebar{height:auto!important;min-height:58px!important;padding-top:5px!important;padding-bottom:5px!important;align-items:center!important}",
+      ".sidebar-nav#sidebar-nav{flex-wrap:wrap!important;overflow:visible!important;row-gap:2px!important}",
+      "@media(max-width:1440px){html body .sidebar#sidebar .sidebar-nav-item{padding:7px 8px!important;margin:2px 3px!important;font-size:13.5px!important}html body .sidebar#sidebar .sidebar-nav#sidebar-nav{gap:0!important}}",
+      "@media(max-width:1180px){html body .sidebar#sidebar .sidebar-nav-item{padding:6px 6px!important;margin:2px 1px!important;font-size:13px!important}html body .sidebar#sidebar .sni-badge{margin-left:4px!important}}",
+      "@media(max-width:820px){.sidebar#sidebar{height:auto!important;min-height:54px!important}.sidebar#sidebar .sidebar-nav-item{padding:6px 7px!important;font-size:12.5px!important}}",
+      ".main,.main.sidebar-collapsed{margin-top:var(--vs-navh,58px)!important}",
+      ".vs-acct-menu{top:calc(var(--vs-navh,58px) - 2px)!important}",
+      /* keep the full menu (wrapping) down to phone size; the hamburger only takes over below 600px */
+      "@media(min-width:600px){html body .sidebar#sidebar .sidebar-nav#sidebar-nav{display:flex!important}html body .sidebar#sidebar .vs-burger{display:none!important}html body .sidebar#sidebar .vs-acct{display:inline-flex!important}}",
+      "@media(min-width:600px) and (max-width:820px){html body .sidebar#sidebar{padding:5px 8px!important}html body .sidebar#sidebar .sidebar-brand{margin-right:6px!important}}"
+    ].join("\n");
+    document.head.appendChild(st);
+    function fit(){var sb=document.getElementById("sidebar");if(!sb)return;var h=Math.ceil(sb.getBoundingClientRect().height)||58;document.documentElement.style.setProperty("--vs-navh",h+"px");}
+    fit();window.addEventListener("resize",fit);setTimeout(fit,600);setTimeout(fit,1800);
+    try{var sb=document.getElementById("sidebar");if(sb&&window.ResizeObserver)new ResizeObserver(fit).observe(sb);}catch(e){}
+  }catch(err){if(window.console)console.warn("navfit init failed",err);}
+})();
+
 
 /* ═══════════════ FU-DONE — mark follow-up complete (added) ═══════════════ */
 (function(){
@@ -9673,7 +9695,10 @@ try{(function(){
   ".od-card.open .od-more{background:#16447f;border-color:#16447f;color:#fff}",
   ".od-card .czd-kill{display:inline-flex;align-items:center;gap:4px;margin:10px 0 0 6px;border:1px solid #fecdd3;background:#fff1f2;color:#be123c;border-radius:999px;padding:5px 12px;font-size:11.5px;font-weight:800;line-height:1.25;cursor:pointer;font-family:inherit;transition:background .15s,border-color .15s}",
   ".od-card .czd-kill:hover{background:#ffe4e6;border-color:#be123c}",
-  "@media(max-width:700px){.od-card .od-more,.od-card .czd-kill{padding:7px 13px;font-size:12px}}",
+  ".od-card .czd-sold{display:inline-flex;align-items:center;gap:4px;margin:10px 0 0 6px;border:1px solid #a7f3d0;background:#ecfdf5;color:#047857;border-radius:999px;padding:5px 12px;font-size:11.5px;font-weight:800;line-height:1.25;cursor:pointer;font-family:inherit}",
+  ".od-card .czd-sold:hover{background:#d1fae5;border-color:#047857}",
+  "#bzd-pick .go.sold{background:#047857}#bzd-pick label.prem{display:block;font-size:12.5px;font-weight:800;color:#334155;margin-top:4px}#bzd-pick input.prem{width:100%;box-sizing:border-box;margin-top:6px;border:1px solid #d8e0ee;border-radius:10px;padding:10px;font:inherit;font-size:15px}",
+  "@media(max-width:700px){.od-card .od-more,.od-card .czd-kill,.od-card .czd-sold{padding:7px 13px;font-size:12px}}",
   ".czd-rtag{display:inline-block;margin-top:6px;font-size:10.5px;font-weight:800;background:#ccfbf1;color:#115e59;border-radius:999px;padding:2px 8px}",
   ".czd{background:#fff;border:1px solid #e6ecf5;border-radius:16px;padding:16px 18px}",
   ".czd-hd{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}",
@@ -9808,6 +9833,37 @@ try{(function(){
     go.addEventListener("click",function(){if(!chosen)return;var note=ov.querySelector("textarea").value.trim();close();czMarkDead(id,chosen,note);});
   }
   window.vsCzPickDead=czPickDead;
+  /* Sold button (2026-10-28): confirm, set the monthly premium, then use the normal Sold stage
+     (stamps soldAt, creates the Active Client, tags GoHighLevel). */
+  function czPickSold(id){
+    var c=leadById(id);if(!c)return;
+    var old=$$("bzd-pick");if(old)old.remove();
+    var cur=czVal(c);
+    var ov=document.createElement("div");ov.id="bzd-pick";
+    ov.innerHTML='<div class="bx" role="dialog" aria-modal="true" aria-label="Mark as sold"><h3>Mark as sold</h3><div class="who">'+esc(tcase(czName(c)))+(c.phone?' · '+esc(fmtPhone(c.phone)):'')+'</div>'
+      +'<label class="prem">Monthly premium ($)<input class="prem" type="number" inputmode="decimal" min="0" step="0.01" placeholder="e.g. 475" value="'+(cur>0?esc(String(cur)):'')+'"></label>'
+      +'<textarea placeholder="Optional note, e.g. carrier and plan"></textarea>'
+      +'<div class="tip">Moves this lead to <b>Sold</b> and adds them to <b>Active Clients</b> with a temporary portal password. You can change the stage back any time from Dates &amp; stage.</div>'
+      +'<div class="ft"><button type="button" class="cx">Cancel</button><button type="button" class="go sold">Mark sold</button></div></div>';
+    document.body.appendChild(ov);
+    var inp=ov.querySelector("input.prem");setTimeout(function(){try{inp.focus();inp.select();}catch(e){}},30);
+    function close(){ov.remove();document.removeEventListener("keydown",onKey,true);}
+    function onKey(e){if(e.key==="Escape"){e.stopPropagation();close();}}
+    document.addEventListener("keydown",onKey,true);
+    ov.addEventListener("click",function(e){if(e.target===ov)close();});
+    ov.querySelector(".cx").addEventListener("click",close);
+    ov.querySelector(".go").addEventListener("click",function(){
+      var v=parseFloat(String(inp.value||"").replace(/[^0-9.]/g,""));var note=ov.querySelector("textarea").value.trim();close();
+      var arr=getLeads(),x=null;arr.forEach(function(y){if(y.id===id)x=y;});if(!x)return;
+      if(v>0){x.quoteValue=v;}
+      czStampNote(x,"Marked sold"+(v>0?" at $"+v+"/mo":"")+(note?". "+note:""));
+      saveLeads(arr);
+      try{addLeadActivity(id,"note","Marked sold"+(v>0?" ($"+v+"/mo)":""));}catch(e){}
+      czSetStage(id,"sold");
+      notify("lead","Marked sold",czName(x)+(v>0?" · $"+v+"/mo":""),"pipeline");
+    });
+  }
+  window.vsCzPickSold=czPickSold;
 
   /* picking "Dead Lead" in any stage dropdown asks for the reason first */
   var _czSet=czSetStage;
@@ -9900,6 +9956,8 @@ try{(function(){
       var more=card.querySelector("[data-od-more]");var host=more?more.parentNode:null;
       if(host&&!host.querySelector("[data-czd-kill]")){var k=document.createElement("button");k.type="button";k.className="czd-kill";k.setAttribute("data-czd-kill",c.id);k.textContent="Dead";k.title="Bad lead: wrong number, spam, never answers";host.appendChild(k);
         k.addEventListener("click",function(e){e.stopPropagation();czPickDead(c.id);});}
+      if(host&&!host.querySelector("[data-czd-sold]")){var sb=document.createElement("button");sb.type="button";sb.className="czd-sold";sb.setAttribute("data-czd-sold",c.id);sb.textContent="Sold";sb.title="Closed the sale: move to Sold and add to Active Clients";host.appendChild(sb);
+        sb.addEventListener("click",function(e){e.stopPropagation();czPickSold(c.id);});}
       if(c.reworkedAt&&czCLOSED.indexOf(c.stage)<0&&!card.querySelector(".czd-rtag")){var top=card.querySelector(".cz-ctop");if(top)top.insertAdjacentHTML("afterend",'<span class="czd-rtag">Reworked</span>');}
     });
     box.querySelectorAll("[data-od-group]").forEach(function(col){
