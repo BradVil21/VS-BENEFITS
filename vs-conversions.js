@@ -149,6 +149,7 @@
 
   function build() {
     try {
+      return; // STICKY BAR REMOVED 2026-10-28 (owner request). Delete this line to bring it back.
       if (SKIP.test(location.pathname)) return;
       if (document.getElementById("vs-callbar") || document.getElementById("vs-sticky")) return;
 
