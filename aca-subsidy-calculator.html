@@ -449,7 +449,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <div class="cs-panel" id="cs-p4">
           <div class="cs-eyebrow">Income</div>
           <h3 class="cs-h">What is your household income?</h3>
-          <p class="cs-sub">Yearly, before tax, for everyone on the return. This is the number the subsidy formula runs on &mdash; nothing else moves the estimate as much.</p>
+          <p class="cs-sub">Yearly, before tax, for everyone on the return. This is the number the subsidy formula runs on, and nothing else moves the estimate as much.</p>
           <div class="cs-tiles wide" id="cs-income">
             <div class="cs-tile" data-val="15000">Under $20,000</div>
             <div class="cs-tile" data-val="27500">$20,000 &ndash; $35,000</div>
@@ -466,7 +466,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <div class="cs-panel" id="cs-p5">
           <div class="cs-eyebrow">Almost Done</div>
           <h3 class="cs-h">Who is this estimate for?</h3>
-          <p class="cs-sub">Last step &mdash; then your numbers appear right below.</p>
+          <p class="cs-sub">Last step. Then your numbers appear right below.</p>
           <div class="grid">
             <div class="field"><label>First name</label><input id="ad-first" type="text" autocomplete="given-name" placeholder="First name" /></div>
             <div class="field"><label>Last name</label><input id="ad-last" type="text" autocomplete="family-name" placeholder="Last name" /></div>
@@ -509,6 +509,10 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 #hsq .hsq-card{border:1px solid #e4e9f2;border-radius:12px;padding:12px 14px;margin:0 0 10px;background:#fff}
 #hsq .hsq-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
 #hsq .hsq-name{font-weight:700;color:#0b2346;font-size:.95rem;line-height:1.3}
+#hsq .hsq-id{display:flex;gap:10px;align-items:flex-start;min-width:0}
+#hsq .hsq-logo{flex:0 0 76px;width:76px;height:42px;border:1px solid #e4e9f2;border-radius:10px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:5px 7px;box-sizing:border-box}
+#hsq .hsq-logo img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+#hsq .hsq-logo.mono{flex-basis:42px;width:42px;background:#eef4fb;color:#16447f;font:800 .9rem Poppins,Inter,sans-serif;letter-spacing:.02em}
 #hsq .hsq-iss{font-size:.8rem;color:#5a6b80;margin-top:2px}
 #hsq .hsq-price{text-align:right;white-space:nowrap}
 #hsq .hsq-price b{display:block;font-size:1.25rem;color:#0b2346;font-family:Poppins,Inter,sans-serif}
@@ -575,7 +579,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
     <div class="faq">
       <details><summary>Is this the same as an Obamacare subsidy calculator?</summary><p>Yes. &ldquo;Obamacare&rdquo; is the common name for the Affordable Care Act (ACA), so an Obamacare subsidy calculator, an ACA subsidy calculator and a health care or health insurance subsidy calculator all estimate the same thing: the premium tax credit that lowers your monthly Marketplace premium. This tool uses the 2027 rules, where credits run from 100% to 400% of the federal poverty level.</p></details>
       <details><summary>How accurate is this ACA subsidy calculator?</summary><p>It gives a close estimate for planning using the ACA subsidy formula and household size. Your exact subsidy depends on your zip code and the specific plans sold in your area. For the precise number and real plan prices, a licensed advisor can check it for you at no cost.</p></details>
-      <details><summary>Who qualifies for a health insurance subsidy?</summary><p>Most people who buy their own coverage and do not have affordable insurance through an employer qualify for a premium tax credit based on income. For 2026 and 2027, the enhanced pandemic-era subsidies have expired, so eligibility runs from 100% up to 400% of the federal poverty level — roughly $63,000 for a single person and $128,600 for a family of four — with a hard cutoff above 400% (the subsidy cliff). Very low income households may qualify for Medicaid instead. We check exactly what you qualify for at no cost.</p></details>
+      <details><summary>Who qualifies for a health insurance subsidy?</summary><p>Most people who buy their own coverage and do not have affordable insurance through an employer qualify for a premium tax credit based on income. For 2026 and 2027, the enhanced pandemic-era subsidies have expired, so eligibility runs from 100% up to 400% of the federal poverty level (about $63,840 for a single person and $132,000 for a family of four for 2027 coverage), with a hard cutoff above 400% (the subsidy cliff). Very low income households may qualify for Medicaid instead. We check exactly what you qualify for at no cost.</p></details>
       <details><summary>Why do you ask for my name and phone number?</summary><p>So a licensed advisor can follow up with the real plans and prices in your ZIP code, which a calculator cannot know. Your email is optional. We never sell your information, and there is no cost or obligation for the estimate or the follow-up call.</p></details>
       <details><summary>What is a benchmark or Silver plan?</summary><p>Subsidies are calculated using the second-lowest-cost Silver plan in your area, called the benchmark. You can apply the same subsidy to a cheaper Bronze plan to lower your monthly cost, or a Gold plan for richer coverage.</p></details>
       <details><summary>Can a broker help me for free?</summary><p>Yes. VS Health Benefits is a licensed independent brokerage paid by the insurance carriers, not by you. Comparing plans and enrolling with an advisor costs the same as doing it yourself, so you get expert help at no extra charge.</p></details>
@@ -684,7 +688,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         </ul>
       </div>
     </div>
-    <div class="foot-disc">This calculator provides estimates for educational purposes only and is not an offer of insurance, a quote, or tax advice. Estimates use the 2026 federal poverty guidelines and the 2027 ACA premium tax credit formula (IRS Rev. Proc. 2026-26) that applies after the enhanced credits expired on December 31, 2025, and reflect a hard subsidy cliff above 400% of the federal poverty level. They do not reflect the exact plans or prices in your area. If Congress restores the enhanced credits, subsidy amounts could change — ask us for your exact figure. VS Health Benefits only sends official enrollment materials after direct client confirmation. We do not mail unsolicited insurance packages. VS BENEFITS LLC is a licensed independent insurance agency, not an insurance company, and is not affiliated with or endorsed by HealthCare.gov, the Centers for Medicare &amp; Medicaid Services (CMS) or any government agency. We do not offer every plan available in your area; HealthCare.gov or your state marketplace lists all options. Prices, savings and $0 premiums depend on eligibility and are estimates, not quotes. Content is general information, not tax, legal or medical advice.</div>
+    <div class="foot-disc">This calculator provides estimates for educational purposes only and is not an offer of insurance, a quote, or tax advice. Estimates use the 2026 federal poverty guidelines and the 2027 ACA premium tax credit formula (IRS Rev. Proc. 2026-26) that applies after the enhanced credits expired on December 31, 2025, and reflect a hard subsidy cliff above 400% of the federal poverty level. They do not reflect the exact plans or prices in your area. If Congress restores the enhanced credits, subsidy amounts could change, so ask us for your exact figure. VS Health Benefits only sends official enrollment materials after direct client confirmation. We do not mail unsolicited insurance packages. VS BENEFITS LLC is a licensed independent insurance agency, not an insurance company, and is not affiliated with or endorsed by HealthCare.gov, the Centers for Medicare &amp; Medicaid Services (CMS) or any government agency. We do not offer every plan available in your area; HealthCare.gov or your state marketplace lists all options. Prices, savings and $0 premiums depend on eligibility and are estimates, not quotes. Content is general information, not tax, legal or medical advice.</div>
     
     <div class="vs-foot-priority" style="border-top:1px solid rgba(255,255,255,.18);margin-top:18px;padding-top:16px;margin-bottom:16px">
       <div style="font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.65);margin-bottom:10px">Popular Right Now</div>
@@ -943,7 +947,7 @@ document.addEventListener("DOMContentLoaded",function(){
     var sEl=document.getElementById("advisor-success");
     if(sEl){
       sEl.hidden=false;
-      sEl.textContent="Thanks "+first+" — a licensed VS Health Benefits advisor will reach out shortly with the actual plans available in "+(est.zip||"your area")+", at no cost to you.";
+      sEl.textContent="Thanks! Someone from our team will reach out shortly with the actual plans available in "+(est.zip||"your area")+", at no cost to you.";
     }
 
     window.__csSubmitted = true;     // stop the pre-submit draft capture
@@ -1161,28 +1165,36 @@ document.addEventListener("DOMContentLoaded",function(){
   var box, last=null, all=[], metal="all", shown=6;
   function $(id){return document.getElementById(id);}
   function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
-  function m(n){if(n==null||!isFinite(n))return "—";return "$"+Math.round(n).toLocaleString();}
+  function m(n){if(n==null||!isFinite(n))return "N/A";return "$"+Math.round(n).toLocaleString();}
   function cap(s){s=String(s||"");return s.charAt(0).toUpperCase()+s.slice(1).replace(/_/g," ");}
   function track(n,p){try{window.vsTrack&&window.vsTrack(n,p||{});}catch(e){}}
+  // Carrier logos already in /compressed. Carriers without a file get a monogram tile.
+  var LOGOS={"Oscar":"logo-oscar-trim.png","UnitedHealthcare":"logo-uhc-trim.png","Florida Blue":"logo-floridablue-trim.png",
+    "Ambetter":"logo-ambetter-trim.png","Aetna CVS Health":"Aetna-Logo.png","Cigna":"Cigna-Logo.png","Humana":"Humana-logo.png","Molina":"Molina-Healthcare-Logo-320-002.png"};
+  function mono(n){var w=String(n||"?").replace(/[^A-Za-z0-9 ]/g," ").trim().split(/\s+/);return ((w[0]||"?").charAt(0)+(w[1]?w[1].charAt(0):(w[0]||"").charAt(1)||"")).toUpperCase();}
+  function logo(n){var f=LOGOS[n];
+    if(!f) return '<div class="hsq-logo mono" aria-hidden="true">'+esc(/^\d/.test(n)?String(n).split(" ")[0]:mono(n))+'</div>';
+    return '<div class="hsq-logo"><img src="/compressed/'+f+'" alt="'+esc(n)+' logo" loading="lazy" width="62" height="30" onerror="this.parentNode.className=\'hsq-logo mono\';this.parentNode.textContent=\''+esc(mono(n))+'\'"></div>';}
   function fine(){return '<p class="hsq-fine">Plan and price data provided by HealthSherpa, a CMS-registered web-broker, for '+esc(String(last&&last.plan_year||2027))+' coverage. Plans are sorted by lowest monthly premium after your estimated tax credit; we never rank plans by carrier or commission. Prices assume no tobacco use'+(last&&last.kids?' and price children at age 10':'')+'. Premium and subsidy amounts vary by individual eligibility and are confirmed at enrollment. VS Health Benefits is a licensed independent broker and is not HealthCare.gov.</p>';}
   function card(p){
     var tags='<span class="hsq-tag '+esc(p.metal.replace("expanded_",""))+'">'+esc(cap(p.metal))+'</span>'+(p.type?'<span class="hsq-tag">'+esc(p.type.toUpperCase())+'</span>':'')+(p.hsa?'<span class="hsq-tag hsa">HSA eligible</span>':'');
     var grid='<div><span>Deductible</span><br><b>'+m(p.ded)+'</b></div><div><span>Out-of-pocket max</span><br><b>'+m(p.moop)+'</b></div>'+
       (p.pcp?'<div><span>Primary care</span><br>'+esc(p.pcp)+'</div>':'')+(p.rx?'<div><span>Generic drugs</span><br>'+esc(p.rx)+'</div>':'');
     var href='/book?from=subsidy-calculator-plan&plan='+encodeURIComponent(p.id)+'&est='+Math.round(p.net||0);
-    return '<div class="hsq-card"><div class="hsq-top"><div><div class="hsq-name">'+esc(p.name)+'</div><div class="hsq-iss">'+esc(p.issuer)+'</div></div>'+
+    return '<div class="hsq-card"><div class="hsq-top"><div class="hsq-id">'+logo(p.issuer)+'<div><div class="hsq-name">'+esc(p.name)+'</div><div class="hsq-iss">'+esc(p.issuer)+'</div></div></div>'+
       '<div class="hsq-price"><b>'+m(p.net)+'<small style="font-size:.7rem;font-weight:600">/mo</small></b>'+(p.gross&&p.net!=null&&p.gross-p.net>=1?'<s>'+m(p.gross)+' before credit</s>':'')+'</div></div>'+
       '<div class="hsq-tags">'+tags+'</div><div class="hsq-grid">'+grid+'</div>'+
       '<div class="hsq-act"><a class="go" href="'+href+'" data-plan="'+esc(p.id)+'">Enroll with an advisor</a>'+
       (p.sbc?'<a class="lk" href="'+esc(p.sbc)+'" target="_blank" rel="noopener">Summary of benefits</a>':'')+
       (p.network_url?'<a class="lk" href="'+esc(p.network_url)+'" target="_blank" rel="noopener">Find doctors</a>':'')+'</div></div>';
   }
+  function carriers(){var u=[];all.forEach(function(p){if(p.issuer&&u.indexOf(p.issuer)<0)u.push(p.issuer);});return u.length>1?u.slice(0,-1).join(", ")+" and "+u[u.length-1]:(u[0]||"local insurers");}
   function render(){
     var list=all.filter(function(p){return metal==="all"||p.metal.replace("expanded_","")===metal;});
     var metals=["all"].concat(["bronze","silver","gold","platinum","catastrophic"].filter(function(t){return all.some(function(p){return p.metal.replace("expanded_","")===t;});}));
     var c=last.county||{};
     box.innerHTML='<div class="hsq-h">Real '+esc(String(last.plan_year||2027))+' plans for '+esc(c.name||"your area")+(c.state?', '+esc(c.state):'')+'</div>'+
-      '<p class="hsq-sub">'+all.length+' Marketplace plans priced for your household and income.</p>'+
+      '<p class="hsq-sub">'+all.length+' Marketplace plans priced for your household and income from '+esc(carriers())+'. Not every insurer\'s 2027 plans may be listed here yet; <a href="/book?from=subsidy-calculator-all-carriers" style="color:#16447f;font-weight:600">an advisor can quote every carrier in your area</a>, free.</p>'+
       (last.aptc>0?'<div class="hsq-credit">Estimated tax credit: <b>'+m(last.aptc)+'/mo</b>, already taken off the prices below.</div>':'')+
       '<div class="hsq-chips" role="group" aria-label="Filter by metal level">'+metals.map(function(t){return '<button type="button" data-m="'+t+'" aria-pressed="'+(t===metal)+'">'+(t==="all"?"All":cap(t))+'</button>';}).join("")+'</div>'+
       list.slice(0,shown).map(card).join("")+
