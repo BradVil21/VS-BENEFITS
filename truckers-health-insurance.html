@@ -688,7 +688,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 
       <!-- ===== HERO IMAGE: replace YOUR-IMAGE.jpg with your filename ===== -->
       <div class="article-hero-img">
-        <img src="/images/truckdriveronroad.jpg" alt="Truck driver on the open road" />
+        <img decoding="async" srcset="/images/truckdriveronroad-900.jpg 900w, /images/truckdriveronroad.jpg 1600w" sizes="(max-width: 900px) 100vw, 1200px" src="/images/truckdriveronroad.jpg" alt="Truck driver on the open road" />
       </div>
 
       <!-- ===== ARTICLE PROSE ===== -->
@@ -704,7 +704,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 
         <!-- ===== IMAGE 1: replace YOUR-IMAGE-1.jpg with your filename ===== -->
         <figure class="article-img-block">
-          <img src="/images/truckparked.jpg" alt="Trucked parked" />
+          <img decoding="async" srcset="/images/truckparked-900.jpg 900w, /images/truckparked.jpg 1600w" sizes="(max-width: 900px) 100vw, 1200px" src="/images/truckparked.jpg" alt="Trucked parked" />
         </figure>
 
         <h2 id="why-truckers">Why Health Insurance Is Especially Critical for Truckers</h2>
@@ -787,7 +787,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 
         <!-- ===== IMAGE 2: replace YOUR-IMAGE-2.jpg with your filename ===== -->
         <figure class="article-img-block">
-          <img src="/compressed/truck1.jpg" alt="Add your alt text here" />
+          <img loading="lazy" decoding="async" srcset="/compressed/truck1-900.jpg 900w, /compressed/truck1.jpg 1600w" sizes="(max-width: 900px) 100vw, 1200px" src="/compressed/truck1.jpg" alt="Add your alt text here" />
         </figure>
 
         <h2 id="ppo-vs-hmo">PPO vs. HMO: Why PPO Almost Always Wins for Truckers</h2>
@@ -836,7 +836,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 
         <!-- ===== IMAGE 3: replace YOUR-IMAGE-3.jpg with your filename ===== -->
         <figure class="article-img-block">
-          <img src="YOUR-IMAGE-3.jpg" alt="Add your alt text here" />
+          <img loading="lazy" decoding="async" src="YOUR-IMAGE-3.jpg" alt="Add your alt text here" />
           <figcaption>Add your caption here</figcaption>
         </figure>
 
@@ -974,7 +974,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
     <div class="post-grid">
 
       <a class="post-card" href="/small-business-health-insurance">
-        <div class="cover"><img src="/compressed/smal-business.jpg" alt="Small business group health insurance" loading="lazy" /></div>
+        <div class="cover"><img decoding="async" srcset="/compressed/smal-business-900.jpg 900w, /compressed/smal-business.jpg 1200w" sizes="(max-width: 900px) 100vw, 1200px" src="/compressed/smal-business.jpg" alt="Small business group health insurance" loading="lazy" /></div>
         <div class="body">
           <div class="meta">Group Health | 12 min read</div>
           <h3>Small business group health insurance: a practical guide for 10-99 employees</h3>
@@ -983,7 +983,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       </a>
 
       <a class="post-card" href="/blog/aca-open-enrollment-2027-guide">
-        <div class="cover"><img src="/compressed/ACA.jpg" alt="ACA Open Enrollment guide" loading="lazy" /></div>
+        <div class="cover"><img decoding="async" srcset="/compressed/ACA-900.jpg 900w, /compressed/ACA.jpg 1200w" sizes="(max-width: 900px) 100vw, 1200px" src="/compressed/ACA.jpg" alt="ACA Open Enrollment guide" loading="lazy" /></div>
         <div class="body">
           <div class="meta">ACA / Individual | 9 min read</div>
           <h3>ACA Open Enrollment 2027: your plain-English checklist</h3>
@@ -992,7 +992,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       </a>
 
       <a class="post-card" href="/miami-small-business-health-insurance">
-        <div class="cover"><img src="/compressed/miami.jpg" alt="Miami small business health insurance" loading="lazy" /></div>
+        <div class="cover"><img decoding="async" srcset="/compressed/miami-900.jpg 900w, /compressed/miami.jpg 1200w" sizes="(max-width: 900px) 100vw, 1200px" src="/compressed/miami.jpg" alt="Miami small business health insurance" loading="lazy" /></div>
         <div class="body">
           <div class="meta">Miami / Florida | 8 min read</div>
           <h3>Miami small business health insurance: what is different here</h3>
@@ -1289,11 +1289,11 @@ function copyLink(){
     }
   }catch(e){}})();
   </script>
-  <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6a8339a143b7e14560ca7528" data-source="WEB_USER"></script>
+  <script defer src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6a8339a143b7e14560ca7528" data-source="WEB_USER"></script>
   <script src="/vs-attribution.js" defer></script>
   <script src="/vs-conversions.js" defer></script>
 <!-- GoHighLevel external tracking -->
-<script src="https://link.msgsndr.com/js/external-tracking.js" data-tracking-id="tk_e89392b2cfc34b548ae43b1ea975ae50"></script>
+<script defer src="https://link.msgsndr.com/js/external-tracking.js" data-tracking-id="tk_e89392b2cfc34b548ae43b1ea975ae50"></script>
 
 <script id="vsz-js">
 (function(){

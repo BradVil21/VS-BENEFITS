@@ -481,7 +481,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
           <button class="calc-btn" id="cs-next" type="button">Continue &rarr;</button>
           <button class="calc-btn" id="calc-btn" type="button" hidden>Calculate My Estimate</button>
         </div>
-        <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="44" height="44" loading="lazy"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Answer a few questions &amp; see your estimate</span></div>
+        <div class="q-safe"><img decoding="async" class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="44" height="44" loading="lazy"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Answer a few questions &amp; see your estimate</span></div>
         <div class="calc-g-in"><span class="calc-g-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <strong>5.0</strong> from 51 Google reviews</div>
         <p class="gate-fine">By submitting, you agree to our <a href="/privacy">Privacy Policy</a> and that a licensed advisor from VS BENEFITS LLC (d/b/a VS Health Benefits) may call, text or email you at the contact info provided about health coverage, including by automated technology. Consent is not a condition of purchase. Msg &amp; data rates may apply; reply STOP to opt out. We never sell your information.</p>
 
@@ -1129,11 +1129,11 @@ document.addEventListener("DOMContentLoaded",function(){
     }
   }catch(e){}})();
   </script>
-  <script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6a8339a143b7e14560ca7528" data-source="WEB_USER"></script>
+  <script defer src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/chat-widget/loader.js" data-widget-id="6a8339a143b7e14560ca7528" data-source="WEB_USER"></script>
   <script src="/vs-attribution.js" defer></script>
   <script src="/vs-conversions.js" defer></script>
 <!-- GoHighLevel external tracking -->
-<script src="https://link.msgsndr.com/js/external-tracking.js" data-tracking-id="tk_e89392b2cfc34b548ae43b1ea975ae50"></script>
+<script defer src="https://link.msgsndr.com/js/external-tracking.js" data-tracking-id="tk_e89392b2cfc34b548ae43b1ea975ae50"></script>
 <script id="vcov-js">
 (function(){
   function init(){
@@ -1174,7 +1174,7 @@ document.addEventListener("DOMContentLoaded",function(){
   function mono(n){var w=String(n||"?").replace(/[^A-Za-z0-9 ]/g," ").trim().split(/\s+/);return ((w[0]||"?").charAt(0)+(w[1]?w[1].charAt(0):(w[0]||"").charAt(1)||"")).toUpperCase();}
   function logo(n){var f=LOGOS[n];
     if(!f) return '<div class="hsq-logo mono" aria-hidden="true">'+esc(/^\d/.test(n)?String(n).split(" ")[0]:mono(n))+'</div>';
-    return '<div class="hsq-logo"><img src="/compressed/'+f+'" alt="'+esc(n)+' logo" loading="lazy" width="62" height="30" onerror="this.parentNode.className=\'hsq-logo mono\';this.parentNode.textContent=\''+esc(mono(n))+'\'"></div>';}
+    return '<div class="hsq-logo"><img decoding="async" src="/compressed/'+f+'" alt="'+esc(n)+' logo" loading="lazy" width="62" height="30" onerror="this.parentNode.className=\'hsq-logo mono\';this.parentNode.textContent=\''+esc(mono(n))+'\'"></div>';}
   function fine(){return '<p class="hsq-fine">Plan and price data provided by HealthSherpa, a CMS-registered web-broker, for '+esc(String(last&&last.plan_year||2027))+' coverage. Plans are sorted by lowest monthly premium after your estimated tax credit; we never rank plans by carrier or commission. Prices assume no tobacco use'+(last&&last.kids?' and price children at age 10':'')+'. Premium and subsidy amounts vary by individual eligibility and are confirmed at enrollment. VS Health Benefits is a licensed independent broker and is not HealthCare.gov.</p>';}
   function card(p){
     var tags='<span class="hsq-tag '+esc(p.metal.replace("expanded_",""))+'">'+esc(cap(p.metal))+'</span>'+(p.type?'<span class="hsq-tag">'+esc(p.type.toUpperCase())+'</span>':'')+(p.hsa?'<span class="hsq-tag hsa">HSA eligible</span>':'');
