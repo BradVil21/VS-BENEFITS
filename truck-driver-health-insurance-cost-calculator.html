@@ -39,7 +39,7 @@
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}.stat{text-align:center;padding:22px 12px;background:#fff;border:1px solid var(--line);border-radius:14px}.stat-num{font-family:'Poppins',sans-serif;font-weight:700;font-size:clamp(1.7rem,6vw,2.2rem);color:var(--blue-700);line-height:1.1}.stat-label{font-size:.82rem;color:var(--muted);margin-top:4px}
 .process{display:grid;grid-template-columns:1fr;gap:14px}.step{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px 22px 22px;position:relative}.step .n{position:absolute;top:-14px;left:18px;background:var(--blue-700);color:#fff;font-weight:800;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;box-shadow:var(--shadow-sm)}
 .faq{max-width:820px;margin:0 auto}details.faq-item{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:10px;transition:border-color .2s}details.faq-item[open]{border-color:var(--blue-100)}details.faq-item summary{cursor:pointer;font-weight:700;color:var(--blue-900);list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.98rem}details.faq-item summary::-webkit-details-marker{display:none}details.faq-item summary::after{content:"+";font-size:1.4rem;color:var(--blue-700);font-weight:400;flex-shrink:0}details.faq-item[open] summary::after{content:"-"}details.faq-item > *:not(summary){margin-top:10px;color:var(--ink-2)}
-.check-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}.check-list li{display:flex;gap:10px;align-items:flex-start;color:var(--ink-2);font-size:.96rem}.check-list li::before{content:"";flex-shrink:0;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--blue-600));margin-top:1px}
+.check-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}.check-list li{display:block;position:relative;padding-left:32px;color:var(--ink-2);font-size:.96rem}.check-list li::before{content:"";position:absolute;left:0;top:2px;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--blue-600));}
 .photo-split{display:grid;grid-template-columns:1fr;gap:28px;align-items:center}.photo-split img{width:100%;border-radius:18px;box-shadow:var(--shadow);border:1px solid var(--line);object-fit:cover;aspect-ratio:16/10}
 .cost-table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.95rem;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}.cost-table th{background:var(--blue-700);color:#fff;padding:12px 16px;text-align:left;font-weight:600}.cost-table td{padding:12px 16px;border-bottom:1px solid var(--line);color:var(--ink-2)}.cost-table tr:last-child td{border-bottom:0}.cost-table tr:nth-child(even) td{background:var(--bg-soft)}
 .cta-strip{background:linear-gradient(135deg,var(--blue-700),var(--blue-500));color:#fff;border-radius:20px;padding:36px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}.cta-strip h2{color:#fff}.cta-strip p{color:rgba(255,255,255,.92)}
@@ -245,6 +245,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <strong>net</strong> self-employment income &mdash; not your settlement gross. This calculator estimates what an
       owner-operator or company driver actually pays for 2027 coverage after the premium tax credit, and shows you
       how your Schedule C deductions move that number.</p>
+      <p class="vs-pillar-link" style="font-size:.95rem;color:#334155;margin:12px 0 18px">New to this? Start with our guide to <a href="/truck-driver-health-insurance">health insurance for truck drivers</a>, including where drivers in each state enroll.</p>
       <div class="hero-meta">
         <span><span class="dot"></span>Built on the published 2027 credit formula</span>
         <span><span class="dot"></span>Licensed advisor, 40+ states</span>
@@ -348,8 +349,6 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <table id="tc-levertbl"></table>
       </div>
       <div class="cta-strip" style="margin-top:18px">
-        <p class="vs-pillar-link" style="font-size:.95rem;color:#334155">New to this? Start with our guide to <a href="/truck-driver-health-insurance">health insurance for truck drivers</a>, including where drivers in each state enroll.</p>
-<figure class="vs-fig" style="margin:6px auto 30px;max-width:880px"><picture><source srcset="/compressed/truck-driver-cb-radio.webp" type="image/webp"><img src="/compressed/truck-driver-cb-radio.jpg" alt="Truck driver on the CB radio" width="900" height="394" loading="lazy" decoding="async" style="display:block;width:100%;height:auto;aspect-ratio:16/7;object-fit:cover;border-radius:16px;box-shadow:0 12px 32px rgba(13,27,42,.10)"></picture></figure>
 <h2 style="font-size:1.35rem">Want the real plans, not an estimate?</h2>
         <p>A licensed VS Health Benefits advisor will pull the actual 2027 plans available at your ZIP code, check the
         network against the lanes you run, and send you a side-by-side. Carriers pay our commission, so it costs you nothing.</p>
@@ -363,6 +362,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
   <div class="container" style="max-width:820px">
     <h2>What decides an owner-operator's premium</h2>
     <p>Four things, and only one of them is about the truck.</p>
+    <figure class="vs-fig" style="margin:18px 0 24px"><picture><source srcset="/compressed/truck-driver-cb-radio.webp" type="image/webp"><img src="/compressed/truck-driver-cb-radio.jpg" alt="Truck driver on the CB radio" width="900" height="394" loading="lazy" decoding="async" style="display:block;width:100%;height:auto;aspect-ratio:16/7;object-fit:cover;border-radius:16px;box-shadow:0 12px 32px rgba(13,27,42,.10)"></picture></figure>
     <ul class="check-list">
       <li><strong>Your age.</strong> ACA plans are age-rated on a fixed federal curve. A 60-year-old pays almost exactly three times what a 21-year-old pays for the same plan. Nothing you do changes this one.</li>
       <li><strong>Your ZIP code.</strong> Rates are set per rating area, and neighbouring counties can differ by 20&ndash;30% for the same carrier. Your domicile ZIP is what counts, not where you happen to be parked.</li>
