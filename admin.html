@@ -2251,6 +2251,7 @@ var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,conta
 K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.ushaKpis="vs_usha_kpis";K.ushaOv="vs_usha_overrides";K.ushaIncome="vs_usha_income";K.ushaPlan="vs_usha_plan";K.clientSkip="vs_client_skip";K.msHist="vs_ms_hist";
 LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";LOCAL_TO_REMOTE[K.ushaKpis]="usha_kpis";LOCAL_TO_REMOTE[K.ushaOv]="usha_overrides";LOCAL_TO_REMOTE[K.ushaIncome]="usha_income";LOCAL_TO_REMOTE[K.ushaPlan]="usha_plan";LOCAL_TO_REMOTE[K.clientSkip]="client_skip";LOCAL_TO_REMOTE[K.msHist]="ms_hist";
 REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta","usha_kpis");REMOTE_TO_LOCAL.usha_kpis=K.ushaKpis;REMOTE_KEYS.push("usha_overrides","usha_income","usha_plan");REMOTE_TO_LOCAL.usha_plan=K.ushaPlan;REMOTE_KEYS.push("client_skip","ms_hist");REMOTE_TO_LOCAL.client_skip=K.clientSkip;REMOTE_TO_LOCAL.ms_hist=K.msHist;REMOTE_TO_LOCAL.usha_overrides=K.ushaOv;REMOTE_TO_LOCAL.usha_income=K.ushaIncome;REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
+K.ushaManual="vs_usha_manual";K.ghlSent="vs_ghl_sent";LOCAL_TO_REMOTE[K.ushaManual]="usha_manual";LOCAL_TO_REMOTE[K.ghlSent]="ghl_sent";REMOTE_KEYS.push("usha_manual","ghl_sent");REMOTE_TO_LOCAL.usha_manual=K.ushaManual;REMOTE_TO_LOCAL.ghl_sent=K.ghlSent;
 
 function setSyncPill(state){
   var p=$("sync-pill");if(!p)return;
@@ -10730,12 +10731,14 @@ try{(function(){
   })();
   window.__vsTR=TR;
 
-  K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.clientSkip="vs_client_skip";K.msHist="vs_ms_hist";
+  K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.clientSkip="vs_client_skip";K.msHist="vs_ms_hist";K.ushaManual="vs_usha_manual";K.ghlSent="vs_ghl_sent";
 
   var S={period:"ytd",lperiod:"all",kind:"UW",view:"core",fk:"all",fs:"all",fp:"all",q:""};
   function esc(s){return escapeHtml(s==null?"":String(s));}
   function nkey(n){return String(n||"").toUpperCase().replace(/[^A-Z,]/g,"");}
-  function getRows(){return asArr(K.ushaApps);}
+  function manAll(){return asArr(K.ushaManual);}
+  function manMatch(m,syn){var b=String(m.appId||m.id).slice(0,9),k=nkey(m.name),kd=TR.kind(m.product);return syn.filter(function(r){if(String(r.id).slice(0,9)===b)return true;if(nkey(r.name)!==k||TR.kind(r.product)!==kd)return false;var a=pdob(r.submit),c=pdob(m.submit);return a&&c&&Math.abs(a-c)/864e5<=21;})[0]||null;}
+  function getRows(){var syn=asArr(K.ushaApps),man=manAll().filter(function(m){return m&&m.id&&!manMatch(m,syn);});return man.length?syn.concat(man.map(function(m){return{id:m.id,name:m.name,product:m.product,status:m.status,mode:m.mode||"Monthly",method:"",prem:+m.prem||0,submit:m.submit,eff:m.eff||"",issue:m.issue||"",ptd:m.ptd||m.eff||"",state:m.state||"",manual:true};})):syn;}
   function pdob(v){if(!v)return null;v=String(v).trim();var m=v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return new Date(+m[1],m[2]-1,+m[3]);m=v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);if(m){var y=+m[3];if(y<100)y+=y>30?1900:2000;return new Date(y,m[1]-1,+m[2]);}var x=new Date(v);return isNaN(x)?null:x;}
   function lev2(a,b){var m=[],i,j;for(i=0;i<=a.length;i++)m[i]=[i];for(j=1;j<=b.length;j++)m[0][j]=j;for(i=1;i<=a.length;i++)for(j=1;j<=b.length;j++)m[i][j]=Math.min(m[i-1][j]+1,m[i][j-1]+1,m[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return m[a.length][b.length];}
   function people(){
@@ -10923,13 +10926,20 @@ try{(function(){
     setArr(K.ushaOv,arr,true);if(sv==="paid"){try{syncActiveClients();}catch(e){}}render();try{renderClientTable();}catch(e){}
     try{if($("p-bonus").classList.contains("active"))bonusCalc();if($("p-winback").classList.contains("active"))bonusCalc("wb");}catch(e){}
   }
-  var OPTS=[["pending","Pending - checking if they paid"],["paid","They paid - mark in force"],["nottaken","Not taken"],["hide","Remove from this list"],["","Clear my update"]];
+  var OPTS=[["pending","Pending - checking if they paid"],["paid","They paid - mark in force (Sold, sends to GHL)"],["nottaken","Not taken"],["hide","Remove from this list"],["","Clear my update"]];
   function openOvMenu(btn,app){
     document.querySelectorAll(".ap-ovm").forEach(function(m){m.remove();});
     var m=document.createElement("div");m.className="ap-ovm";
-    m.innerHTML='<div class="ap-ovm-h">Update '+esc(nice(app.name))+'</div>'+OPTS.filter(function(o){return o[0]||app.ov;}).map(function(o){return '<button type="button" data-s="'+o[0]+'"'+(app.ov&&app.ov.s===o[0]?' class="on"':'')+'>'+o[1]+'</button>';}).join("")+'<div class="ap-ovm-f">Your update stays until USHA shows a new payment or status for this policy.</div>';
+    var man=manOf(app),sent=ghlSentMap()[nkey(app.name)],inf=/in force/i.test(app.status),opts;
+    if(man)opts=(inf?[]:[["m:inforce","Issued - mark in force (Sold, sends to GHL)"]]).concat(inf&&!sent?[["g:send","Mark Sold & send to GHL"]]:[]).concat([["m:pending","Pending"],["m:nt","Not taken"],["m:wd","Withdrawn"],["m:dec","Declined"],["m:edit","Edit application"],["m:del","Delete application"]]).filter(function(o){return o[0]!=="m:pending"||!/pend/i.test(app.status);});
+    else opts=OPTS.filter(function(o){return o[0]||app.ov;}).concat(inf&&!sent?[["g:send","Mark Sold & send to GHL"]]:[]);
+    m.innerHTML='<div class="ap-ovm-h">Update '+esc(nice(app.name))+(sent?' <em class="ap-ghl">✓ in GHL</em>':'')+'</div>'+opts.map(function(o){return '<button type="button" data-s="'+o[0]+'"'+(app.ov&&app.ov.s===o[0]?' class="on"':'')+'>'+o[1]+'</button>';}).join("")+'<div class="ap-ovm-f">'+(man?'You added this app. The next USHA sync matches it and replaces it with USHA\'s data.':'Your update stays until USHA shows a new payment or status for this policy.')+'</div>';
     document.body.appendChild(m);var r=btn.getBoundingClientRect();m.style.top=Math.min(window.innerHeight-m.offsetHeight-8,r.bottom+6)+"px";m.style.left=Math.max(8,Math.min(window.innerWidth-m.offsetWidth-8,r.right-m.offsetWidth))+"px";
-    m.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;setOv(app,b.getAttribute("data-s"));m.remove();});
+    m.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var v=b.getAttribute("data-s");m.remove();
+      if(/^m:/.test(v)){manualAct(app,v);return;}
+      if(v==="g:send"){var r=sendSold(app.name,{product:app.product,prem:app.prem,eff:app.eff,state:app.state,id:app.ids[0]});flash(nice(app.name)+(r==="sent"?" marked Sold and sent to GoHighLevel.":" is already in GoHighLevel."));render();return;}
+      setOv(app,v);
+      if(v==="paid"){var r2=sendSold(app.name,{product:app.product,prem:app.prem,eff:app.eff,state:app.state,id:app.ids[0]});if(r2==="sent")flash(nice(app.name)+" is in force, marked Sold and sent to GoHighLevel.");}});
     setTimeout(function(){document.addEventListener("click",function h(e){if(!m.contains(e.target)){m.remove();document.removeEventListener("click",h,true);}},true);},0);
   }
   var APPIDX={};
@@ -10969,8 +10979,10 @@ try{(function(){
         else if(S.fp!=="all"&&a.payState!==S.fp)return false;
         if(S.q&&(a.name+" "+a.ids.join(" ")+" "+a.product).toLowerCase().indexOf(S.q)<0)return false;return true;})
         .sort(/^up/.test(S.fp)?function(a,b){return a.ptd<b.ptd?-1:a.ptd>b.ptd?1:0;}:function(a,b){return a.submit<b.submit?1:a.submit>b.submit?-1:0;});
+      var GS=ghlSentMap();
       var body=L.map(function(a){var ag=M.am[nkey(a.name)];
-        return '<tr><td><b class="ap-nm">'+esc(nice(a.name))+'</b><small>'+esc(a.ids[0])+(a.state?" · "+esc(a.state):"")+'</small></td>'
+        var mn=manOf(a),gs=GS[nkey(a.name)];
+        return '<tr><td><b class="ap-nm">'+esc(nice(a.name))+'</b><small>'+(mn?'<span class="ap-man">Added by you</span>'+(mn.appId?" "+esc(mn.appId):""):esc(a.ids[0]))+(a.state?" · "+esc(a.state):"")+(gs?' · <span class="ap-ghl">✓ GHL</span>':'')+'</small></td>'
           +'<td><span class="ap-k k-'+a.kind+'">'+a.kind+'</span> '+esc(prodName(a.product))+'</td>'
           +'<td>'+statusPill(a.status)+'</td><td>'+TR.fmt(a.submit)+'</td><td>'+TR.fmt(a.eff)+'</td><td>'+TR.fmt(a.ptd)+'</td>'
           +'<td><div class="ap-paycell">'+(a.pay?'<span class="ap-pay p-'+a.payState+'">'+esc(a.pay)+'</span>':'<span class="ap-dash">-</span>')+ovBtn(a)+'</div></td>'
@@ -11503,7 +11515,7 @@ try{(function(){
   function headHtml(title,rows,mt,kp){
     return '<div class="ap-head"><div><h3>'+title+'</h3><p class="lede">'
       +(rows.length?rows.length+' USHA policies'+(mt.at?' · synced '+ago(mt.at):'')+(mt.src?' · '+esc(mt.src):''):'Bring in your USHA sales report to track every application, payment and your taken rate.')
-      +'</p></div><div class="ap-actions"><a class="ap-btn ghost" href="'+esc(SYNC_BM)+'" title="Drag me to your bookmarks bar, then click it while signed in to the USHA agent portal" data-bm onclick="return false">⟳ Sync from USHA</a><button type="button" class="ap-btn" data-ap-import>Import USHA report</button><input type="file" class="ap-file" accept=".xlsx,.xls,.csv,.txt,.json" hidden></div></div>';
+      +'</p></div><div class="ap-actions"><a class="ap-btn ghost" href="'+esc(SYNC_BM)+'" title="Drag me to your bookmarks bar, then click it while signed in to the USHA agent portal" data-bm onclick="return false">⟳ Sync from USHA</a><button type="button" class="ap-btn ghost" data-ap-add>+ Add application</button><button type="button" class="ap-btn" data-ap-import>Import USHA report</button><input type="file" class="ap-file" accept=".xlsx,.xls,.csv,.txt,.json" hidden></div></div>';
   }
   function ago(ts){var m=Math.round((Date.now()-ts)/60000);if(m<1)return "just now";if(m<60)return m+" min ago";var h=Math.round(m/60);if(h<24)return h+" hr ago";return new Date(ts).toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
   function emptyHtml(){return '<div class="ap-card ap-howto"><h4>How to bring your applications in</h4><ol><li><b>One-click sync:</b> drag the <b>⟳ Sync from USHA</b> button above to your bookmarks bar. Sign in to the USHA agent portal and click that bookmark. It pulls your last 12 months of applications and your AV numbers straight into this page.</li><li><b>Or import a file:</b> USHA <b>My Business → Sales Report</b> → Advanced Search → Last 12 Months → Search → Export to Excel, then click <b>Import USHA report</b> here.</li></ol></div>';}
@@ -11562,6 +11574,7 @@ try{(function(){
     mount.querySelectorAll("select[data-f]").forEach(function(se){se.addEventListener("change",function(){S[se.getAttribute("data-f")]=se.value;render();});});
     var q=mount.querySelector(".ap-q");if(q){var tm;q.addEventListener("input",function(){clearTimeout(tm);tm=setTimeout(function(){S.q=q.value.trim().toLowerCase();render();var n=$("applist-mount").querySelector(".ap-q");if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length);}},220);});}
     mount.querySelectorAll(".ap-age").forEach(function(inp){inp.addEventListener("change",function(){saveAge(inp.getAttribute("data-n"),inp.value);});inp.addEventListener("keydown",function(e){if(e.key==="Enter"){inp.blur();}});});
+    var ad=mount.querySelector("[data-ap-add]");if(ad)ad.addEventListener("click",function(){openAppForm(null);});
     var ib=mount.querySelector("[data-ap-import]"),f=mount.querySelector(".ap-file");
     var bm=mount.querySelector("[data-bm]");if(bm)bm.addEventListener("click",function(){flash("Drag the ⟳ Sync from USHA button to your bookmarks bar. Then sign in to the USHA agent portal and click that bookmark to sync.");});
     if(ib&&f){ib.addEventListener("click",function(){f.click();});f.addEventListener("change",function(){if(f.files&&f.files[0])importFile(f.files[0]);});}
@@ -11605,6 +11618,91 @@ try{(function(){
     render();return clean.length;
   }
   window.vsUshaImport=vsUshaImport;
+
+  /* ---- Applications you add yourself (new USHA apps before the next sync) + Sold/In force -> GoHighLevel ---- */
+  var PCODE={"Premier Advantage":"PREMIERADVANTAGE-24","Premier Choice":"PREMIERCHOICE-15","Secure Advantage":"SECURE ADV SICKNESS","HealthAccess":"HEALTHACCESS III"};
+  function planFromCode(p){var u=String(p||"").toUpperCase();return /PREMIERADVANTAGE/.test(u)?"Premier Advantage":/PREMIERCHOICE/.test(u)?"Premier Choice":/SECURE ADV/.test(u)?"Secure Advantage":/HEALTHACCESS/.test(u)?"HealthAccess":"";}
+  function manIds(){var m={},syn=asArr(K.ushaApps);manAll().forEach(function(x){if(x&&x.id&&!manMatch(x,syn))m[x.id]=x;});return m;}
+  function manOf(app){var M=manIds();for(var i=0;i<(app.ids||[]).length;i++){if(M[app.ids[i]])return M[app.ids[i]];}return null;}
+  function saveMan(list){setArr(K.ushaManual,list,true);}
+  function ghlSentMap(){var m={};asArr(K.ghlSent).forEach(function(x){if(x&&x.k)m[x.k]=x;});return m;}
+  function findLead(first,last,email,phone){
+    var L=asArr(K.leads),em=String(email||"").toLowerCase().trim(),ph=String(phone||"").replace(/\D/g,"").slice(-10);
+    return L.filter(function(l){return samePerson(l.lastName||String(l.name||"").split(" ").slice(-1)[0],l.firstName||String(l.name||"").split(" ")[0],last,first);})[0]
+      ||(em?L.filter(function(l){return String(l.email||"").toLowerCase().trim()===em;})[0]:null)
+      ||(ph.length===10?L.filter(function(l){return String(l.phone||"").replace(/\D/g,"").slice(-10)===ph;})[0]:null)||null;
+  }
+  /* Marks the client Sold everywhere and sends them to GoHighLevel once (same webhook as Pipeline > Sold). */
+  function sendSold(name,info){
+    info=info||{};var k=nkey(name);if(ghlSentMap()[k])return "already";
+    try{syncActiveClients();}catch(e){}
+    var nm=splitName(name),accts=getAccounts(),acct=accts.filter(function(a){return samePerson(a.lastName,a.firstName,nm.last,nm.first);})[0]||null;
+    if(acct){var ch=false;["phone","email","dob","state"].forEach(function(f){if(!acct[f]&&info[f]){acct[f]=info[f];ch=true;}});if(acct.pipelineStatus!=="sold"){acct.pipelineStatus="sold";ch=true;}if(ch)setArr(K.accounts,accts,true);}
+    var leads=asArr(K.leads),lead=findLead(nm.first,nm.last,info.email||(acct&&acct.email),info.phone||(acct&&acct.phone));
+    if(lead){lead=leads.filter(function(l){return l.id===lead.id;})[0];if(lead&&lead.status!=="sold"){lead.status="sold";lead.updated=Date.now();lead.soldAt=Date.now();setArr(K.leads,leads,true);}}
+    var who=lead||{id:"usha_"+String(info.id||k).replace(/[^A-Za-z0-9]/g,""),firstName:nm.first,lastName:nm.last,email:info.email||(acct&&acct.email)||"",phone:info.phone||(acct&&acct.phone)||"",dob:info.dob||(acct&&acct.dob)||"",state:info.state||(acct&&acct.state)||"",source:"USHA application",notes:""};
+    var cl=acct||{plan:{carrier:"USHEALTH",planName:planFromCode(info.product),effectiveDate:info.eff||"",renewalDate:renewalFor(info.product,info.eff),monthlyPremium:+info.prem||0}};
+    try{if(typeof ghlNotifySold==="function")ghlNotifySold(who,cl);}catch(e){console.warn("GHL",e);}
+    setArr(K.ghlSent,asArr(K.ghlSent).concat([{k:k,name:name,at:Date.now(),lead:who.id}]),true);
+    try{renderAccounts();}catch(e){}try{renderClientTable();}catch(e){}try{if(typeof renderPipeline==="function")renderPipeline();}catch(e){}
+    return "sent";
+  }
+  window.vsSendSold=sendSold;
+  function manualAct(app,v){
+    var m=manOf(app);if(!m)return;var list=manAll(),rec=list.filter(function(x){return x.id===m.id;})[0];if(!rec)return;
+    if(v==="m:edit"){openAppForm(rec);return;}
+    if(v==="m:del"){if(!confirm("Delete this application from your portal?"))return;saveMan(list.filter(function(x){return x.id!==rec.id;}));render();return;}
+    var st={"m:inforce":"In Force","m:pending":"Pending","m:nt":"Not Taken","m:wd":"Withdrawn","m:dec":"Declined"}[v];
+    if(st){rec.status=st;if(st==="In Force"&&!rec.issue)rec.issue=ymd(new Date());rec.at=Date.now();saveMan(list);}
+    if(v==="m:inforce"){var r=sendSold(rec.name,rec);flash(nice(rec.name)+" is in force and marked Sold."+(r==="sent"?" Sent to GoHighLevel.":" Already in GoHighLevel."));}
+    render();try{renderClientTable();}catch(e){}
+  }
+  function openAppForm(rec){
+    rec=rec||{};var isNew=!rec.id;var nm=splitName(rec.name||"");var plan=planFromCode(rec.product);var td=ymd(new Date());
+    document.querySelectorAll(".acm-ov.apf").forEach(function(x){x.remove();});
+    var ov=document.createElement("div");ov.className="acm-ov apf";
+    function f(lbl,key,type,val,extra){return '<label class="acm-f"><span>'+lbl+'</span><input data-k="'+key+'" type="'+(type||"text")+'" value="'+esc(val==null?"":val)+'"'+(extra||"")+'></label>';}
+    ov.innerHTML='<div class="acm" role="dialog" aria-label="Add application"><button type="button" class="acm-x" aria-label="Close">✕</button>'
+      +'<div class="acm-h"><div class="acm-av">+</div><div><h3>'+(isNew?"Add a USHA application":"Edit application")+'</h3><div class="acm-sub">For an app you just wrote on USHA. The next USHA sync matches it by App ID or name and takes over.</div></div></div>'
+      +(isNew?'<label class="acm-f apf-find"><span>Find a lead or client (fills in their details)</span><input type="search" data-find placeholder="Type a name, phone or email"></label><div class="apf-res"></div>':'')
+      +'<div class="acm-grid">'+f("First name","first","text",nm.first)+f("Last name","last","text",nm.last)+f("Phone","phone","tel",rec.phone)+f("Email","email","email",rec.email)+f("Date of birth","dob","date",rec.dob?(pdob(rec.dob)?ymd(pdob(rec.dob)):""):"")+f("State","state","text",rec.state," maxlength=\"2\" placeholder=\"FL\"")+'</div>'
+      +'<h4>Application <span class="acm-car">USHEALTH</span></h4><div class="acm-grid">'
+      +'<label class="acm-f"><span>Plan</span><select data-k="plan"><option value="">Choose a plan</option>'+USHA_PLANS.filter(function(p){return p.k!=="SUPP";}).map(function(p){return '<option value="'+p.n+'"'+(plan===p.n?" selected":"")+'>'+p.n+' ('+p.k+')</option>';}).join("")+'</select></label>'
+      +'<label class="acm-f"><span>Status</span><select data-k="status">'+[["Pending","Pending (submitted)"],["In Force","Issued / in force (marks Sold, sends to GHL)"]].map(function(o){return '<option value="'+o[0]+'"'+((rec.status||"Pending")===o[0]?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select></label>'
+      +f("App ID (optional)","id","text",isNew?"":(/^M/.test(rec.id)&&rec.manualId?"":rec.appId||"")," placeholder=\"from USHA, e.g. 52Y401234F\"")
+      +f("Monthly premium ($)","prem","number",rec.prem," step=\"0.01\" min=\"0\"")
+      +f("Submitted","submit","date",rec.submit||td)+f("Effective date","eff","date",rec.eff||"")
+      +'<div class="acm-kind apf-kind"></div></div>'
+      +'<div class="acm-acts"><span class="acm-msg"></span><button type="button" class="ap-btn ghost acm-cancel">Cancel</button><button type="button" class="ap-btn acm-save">'+(isNew?"Add application":"Save")+'</button></div></div>';
+    document.body.appendChild(ov);
+    function q(s){return ov.querySelector(s);}function close(){ov.remove();}
+    q(".acm-x").addEventListener("click",close);q(".acm-cancel").addEventListener("click",close);ov.addEventListener("click",function(e){if(e.target===ov)close();});
+    function kindTxt(){var pi=planInfo(q('[data-k="plan"]').value),ef=q('[data-k="eff"]').value;q(".apf-kind").innerHTML=pi?'<span class="ap-k k-'+pi.k+'">'+pi.k+'</span> '+(pi.k==="UW"?"Underwritten":"Guaranteed issue")+(ef?' · renews '+TR.fmt(renewalFor(pi.n,ef)):''):'Pick a plan to set UW / GI';}
+    q('[data-k="plan"]').addEventListener("change",kindTxt);q('[data-k="eff"]').addEventListener("change",kindTxt);kindTxt();
+    var fd=q("[data-find]");if(fd){var res=q(".apf-res");fd.addEventListener("input",function(){var t=fd.value.toLowerCase().trim();res.innerHTML="";if(t.length<2)return;
+      var toks=t.split(/\s+/),seen={},hits=[];[asArr(K.accounts),asArr(K.leads)].forEach(function(arr,ix){arr.forEach(function(x){if(!x||hits.length>=7)return;var hay=[x.firstName,x.lastName,x.name,x.email,x.phone].join(" ").toLowerCase();if(!toks.every(function(w){return hay.indexOf(w)>=0;}))return;var key=(x.firstName+" "+x.lastName).toLowerCase();if(seen[key])return;seen[key]=1;hits.push({x:x,src:ix?"Lead":"Client"});});});
+      hits.forEach(function(h){var x=h.x,b=document.createElement("button");b.type="button";b.className="apf-hit";b.innerHTML='<b>'+esc(((x.firstName||"")+" "+(x.lastName||"")).trim()||x.name||"")+'</b><span>'+esc([h.src,x.phone,x.email].filter(Boolean).join(" · "))+'</span>';
+        b.addEventListener("click",function(){var fn=x.firstName,ln=x.lastName;if(!ln&&x.name){var p=String(x.name).trim().split(/\s+/);fn=p[0];ln=p.slice(1).join(" ");}
+          q('[data-k="first"]').value=nice(fn||"");q('[data-k="last"]').value=nice(ln||"");q('[data-k="phone"]').value=x.phone||"";q('[data-k="email"]').value=String(x.email||"").toLowerCase();var d=pdob(x.dob);q('[data-k="dob"]').value=d?ymd(d):"";q('[data-k="state"]').value=x.state||"";res.innerHTML="";fd.value="";});
+        res.appendChild(b);});});}
+    q(".acm-save").addEventListener("click",function(){
+      function v(k){return String(q('[data-k="'+k+'"]').value||"").trim();}
+      var msg=q(".acm-msg");msg.className="acm-msg";
+      if(!v("first")||!v("last")){msg.textContent="Add the client's first and last name.";msg.className="acm-msg bad";return;}
+      if(!v("plan")){msg.textContent="Pick the plan.";msg.className="acm-msg bad";return;}
+      var aid=v("id").toUpperCase().replace(/\s/g,"");if(aid&&!/^[0-9A-Z]{6,}$/.test(aid)){msg.textContent="That App ID doesn't look right. Leave it blank if you don't have it yet.";msg.className="acm-msg bad";return;}
+      var list=manAll(),id=aid||(rec.id&&!rec.appId?rec.id:("M"+Date.now().toString(36).toUpperCase()+"000000").slice(0,9));
+      if(list.some(function(x){return x.id===id&&x.id!==rec.id;})||(aid&&asArr(K.ushaApps).some(function(r){return String(r.id).slice(0,9)===aid.slice(0,9);}))){msg.textContent="That App ID is already in your portal.";msg.className="acm-msg bad";return;}
+      var st=v("status"),was=rec.status;
+      var o={id:id,appId:aid||"",manual:true,name:(v("last")+", "+v("first")).toUpperCase(),product:PCODE[v("plan")],status:st,mode:"Monthly",method:"",prem:Math.round((+v("prem")||0)*100)/100,submit:v("submit")||td,eff:v("eff"),issue:st==="In Force"?(rec.issue||td):"",ptd:v("eff"),state:v("state").toUpperCase(),phone:v("phone"),email:v("email").toLowerCase(),dob:v("dob"),created:rec.created||Date.now(),at:Date.now()};
+      list=list.filter(function(x){return x.id!==rec.id;});list.push(o);saveMan(list);
+      var r="";if(st==="In Force"&&was!=="In Force")r=sendSold(o.name,o);else{try{syncActiveClients();}catch(e){}}
+      close();S.fp="all";S.q="";render();try{renderClientTable();}catch(e){}
+      flash((isNew?"Added ":"Saved ")+nice(o.name)+" ("+v("plan")+", "+st.toLowerCase()+")."+(r==="sent"?" Marked Sold and sent to GoHighLevel.":r==="already"?" Already in GoHighLevel.":""));
+    });
+    setTimeout(function(){var x=q("[data-find]")||q('[data-k="first"]');if(x)x.focus();},50);
+  }
+  window.vsAddApplication=openAppForm;
   async function importFile(file){
     var mount=$("apps-mount");
     try{
@@ -11618,7 +11716,7 @@ try{(function(){
   }
   function flash(t,bad){var m=($("p-applist")&&$("p-applist").classList.contains("active"))?$("applist-mount"):$("apps-mount");if(!m)return;var d=document.createElement("div");d.className="ap-flash"+(bad?" bad":"");d.textContent=t;m.prepend(d);setTimeout(function(){d.remove();},6000);}
 
-  var lastSig="";function sig(){try{return (localStorage.getItem(K.ushaApps)||"").length+":"+(localStorage.getItem(K.ushaAges)||"")+(localStorage.getItem(K.ushaMeta)||"")+(localStorage.getItem(K.ushaKpis)||"").length+(localStorage.getItem(K.ushaOv)||"")+(localStorage.getItem(K.ushaIncome)||"")+(localStorage.getItem(K.ushaPlan)||"");}catch(e){return "";}}
+  var lastSig="";function sig(){try{return (localStorage.getItem(K.ushaApps)||"").length+":"+(localStorage.getItem(K.ushaAges)||"")+(localStorage.getItem(K.ushaMeta)||"")+(localStorage.getItem(K.ushaKpis)||"").length+(localStorage.getItem(K.ushaOv)||"")+(localStorage.getItem(K.ushaIncome)||"")+(localStorage.getItem(K.ushaPlan)||"")+(localStorage.getItem(K.ushaManual)||"").length+":"+(localStorage.getItem(K.ghlSent)||"").length;}catch(e){return "";}}
   setInterval(function(){var p=$("p-apps"),q=$("p-applist"),bz=$("p-bonus");if(sig()===lastSig)return;if((p&&p.classList.contains("active"))||(q&&q.classList.contains("active")))render();if(bz&&bz.classList.contains("active")){lastSig=sig();bonusCalc();}var wbp=$("p-winback");if(wbp&&wbp.classList.contains("active")){lastSig=sig();bonusCalc("wb");}var msp=$("p-milestones");if(msp&&msp.classList.contains("active")){lastSig=sig();milestones();}},2500);
 
   if(typeof ALL_TABS!=="undefined"){if(ALL_TABS.indexOf("apps")<0)ALL_TABS.push("apps");if(ALL_TABS.indexOf("applist")<0)ALL_TABS.push("applist");if(ALL_TABS.indexOf("bonus")<0)ALL_TABS.push("bonus");if(ALL_TABS.indexOf("milestones")<0)ALL_TABS.push("milestones");}
@@ -11879,6 +11977,9 @@ try{(function(){
   ".acm-acts{display:flex;gap:8px;justify-content:flex-end;align-items:center}.acm-msg{margin-right:auto;color:#0a8f83;font-weight:800;font-size:13px}",
   ".acm .ap-btn{background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;border:0;border-radius:11px;padding:10px 18px;font-weight:800;font-size:14px;cursor:pointer}.acm .ap-btn.ghost{background:#fff;color:#16447f;border:1px solid #dfe6f0}",
   "@media(max-width:640px){.acm-grid{grid-template-columns:1fr}.acm{padding:18px}}",
+  ".apf .acm{width:720px}.apf-find{margin-bottom:6px}.apf-find input{border:1px solid #dfe6f0;border-radius:10px;padding:10px 12px;font-size:14px}.apf-res{display:grid;gap:6px;margin:0 0 14px}.apf-hit{display:flex;justify-content:space-between;gap:10px;text-align:left;border:1px solid #e4e9f2;background:#f7f9fc;border-radius:10px;padding:9px 12px;cursor:pointer;font:inherit;color:#0b2346}.apf-hit span{font-size:12px;color:#6b7c92}.apf-hit:hover{border-color:#0db5a6;background:#effaf8}",
+  ".acm-f select{border:1px solid #dfe6f0;border-radius:10px;padding:9px 11px;font-size:14px;color:#0b2346;font-family:inherit;background:#fff}.acm-msg.bad{color:#c2410c;font-weight:700}",
+  ".ap-man{display:inline-block;background:#eef4fd;color:#16447f;border-radius:999px;padding:0 7px;font-weight:800;font-size:10.5px}.ap-ghl{color:#08776c;font-weight:800;font-style:normal;font-size:11px}",
   "#p-bizleads:not(.bz-boardview) #biz-list,#p-bizleads:not(.bz-boardview) #bz-top .bz-chips{display:none!important}",
   "#p-bizleads .ac-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:4px 0 14px}",
   "#p-bizleads .bz-sort{border:1px solid #dfe6f0;border-radius:10px;padding:8px 12px;font-size:13.5px;background:#fff;color:#0b2346;font-weight:700}",
