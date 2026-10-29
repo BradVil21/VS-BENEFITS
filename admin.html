@@ -11421,8 +11421,8 @@ try{(function(){
   }
   function flash(t,bad){var m=($("p-applist")&&$("p-applist").classList.contains("active"))?$("applist-mount"):$("apps-mount");if(!m)return;var d=document.createElement("div");d.className="ap-flash"+(bad?" bad":"");d.textContent=t;m.prepend(d);setTimeout(function(){d.remove();},6000);}
 
-  var lastSig="";function sig(){try{return (localStorage.getItem(K.ushaApps)||"").length+":"+(localStorage.getItem(K.ushaAges)||"")+(localStorage.getItem(K.ushaMeta)||"")+(localStorage.getItem(K.ushaKpis)||"").length+(localStorage.getItem(K.ushaOv)||"")+(localStorage.getItem(K.ushaIncome)||"");}catch(e){return "";}}
-  setInterval(function(){var p=$("p-apps"),q=$("p-applist");if(((p&&p.classList.contains("active"))||(q&&q.classList.contains("active")))&&sig()!==lastSig)render();},2500);
+  var lastSig="";function sig(){try{return (localStorage.getItem(K.ushaApps)||"").length+":"+(localStorage.getItem(K.ushaAges)||"")+(localStorage.getItem(K.ushaMeta)||"")+(localStorage.getItem(K.ushaKpis)||"").length+(localStorage.getItem(K.ushaOv)||"")+(localStorage.getItem(K.ushaIncome)||"")+(localStorage.getItem(K.ushaPlan)||"");}catch(e){return "";}}
+  setInterval(function(){var p=$("p-apps"),q=$("p-applist"),bz=$("p-bonus");if(sig()===lastSig)return;if((p&&p.classList.contains("active"))||(q&&q.classList.contains("active")))render();if(bz&&bz.classList.contains("active")){lastSig=sig();bonusCalc();}},2500);
 
   if(typeof ALL_TABS!=="undefined"){if(ALL_TABS.indexOf("apps")<0)ALL_TABS.push("apps");if(ALL_TABS.indexOf("applist")<0)ALL_TABS.push("applist");if(ALL_TABS.indexOf("bonus")<0)ALL_TABS.push("bonus");}
   try{TAB_TITLES.apps="Taken Rate";TAB_TITLES.applist="Applications";TAB_TITLES.bonus="Bonus Calculator";}catch(e){}
