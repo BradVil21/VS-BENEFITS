@@ -1693,6 +1693,9 @@ html.dark .ads-t th,html.dark .ads-t td{border-color:#253a54}html.dark .ads-bars
       <span class="sni-badge" id="b-biz" style="display:none">0</span>
     </button>
     <button class="sidebar-nav-item" data-tab="apps" type="button">
+      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 12 20 4"/><path d="M15 2h7v7"/></svg></span><span class="sni-label">Taken Rate</span>
+    </button>
+    <button class="sidebar-nav-item" data-tab="applist" type="button">
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg></span><span class="sni-label">Applications</span>
     </button>
     <button class="sidebar-nav-item" data-tab="ads" type="button">
@@ -1941,6 +1944,9 @@ html.dark .ads-t th,html.dark .ads-t td{border-color:#253a54}html.dark .ads-bars
     <!-- APPLICATIONS + TAKEN RATE (USHA) -->
     <div id="p-apps" class="panel">
       <div id="apps-mount"></div>
+    </div>
+    <div id="p-applist" class="panel">
+      <div id="applist-mount"></div>
     </div>
 
     <div id="p-ads" class="panel">
@@ -2229,9 +2235,9 @@ var presenceMap={};
 var REMOTE_KEYS=["leads","accounts","messages","contact_requests","quick_notes","biz_leads","referrals","appointments","admin_accounts","blocked_ips"];
 var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,contact_requests:K.tickets,quick_notes:K.quickNotes,biz_leads:K.bizLeads,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts,blocked_ips:K.blockedIps};
 /* USHA applications + client ages (2026-10-28) */
-K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";
-LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";
-REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta");REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
+K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.ushaKpis="vs_usha_kpis";
+LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";LOCAL_TO_REMOTE[K.ushaKpis]="usha_kpis";
+REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta","usha_kpis");REMOTE_TO_LOCAL.usha_kpis=K.ushaKpis;REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
 
 function setSyncPill(state){
   var p=$("sync-pill");if(!p)return;
@@ -10666,26 +10672,27 @@ try{(function(){
 
   K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";
 
-  var S={period:"ytd",kind:"UW",view:"core",fk:"all",fs:"all",fp:"all",q:""};
+  var S={period:"ytd",lperiod:"all",kind:"UW",view:"core",fk:"all",fs:"all",fp:"all",q:""};
   function esc(s){return escapeHtml(s==null?"":String(s));}
   function nkey(n){return String(n||"").toUpperCase().replace(/[^A-Z,]/g,"");}
   function getRows(){return asArr(K.ushaApps);}
   function ageMap(){var m={};asArr(K.ushaAges).forEach(function(a){if(a&&a.n)m[a.n]=a.age;});return m;}
   function meta(){var a=asArr(K.ushaMeta);return a[0]||{};}
   function ymd(dt){return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");}
-  function periodRange(){
-    var t=new Date(),y=t.getFullYear();
-    if(S.period==="ytd")return{from:y+"-01-01",to:"9999",label:"YTD "+y};
-    if(S.period==="month")return{from:ymd(new Date(y,t.getMonth(),1)),to:"9999",label:t.toLocaleString("en-US",{month:"long"})};
-    if(S.period==="90")return{from:ymd(new Date(t.getTime()-90*864e5)),to:"9999",label:"Last 90 days"};
-    if(S.period==="lastmonth"){var a=new Date(y,t.getMonth()-1,1),b=new Date(y,t.getMonth(),0);return{from:ymd(a),to:ymd(b),label:a.toLocaleString("en-US",{month:"long"})};}
+  function periodRange(per){
+    per=per||S.period;var t=new Date(),y=t.getFullYear();
+    if(per==="ytd")return{from:y+"-01-01",to:"9999",label:"YTD "+y};
+    if(per==="month")return{from:ymd(new Date(y,t.getMonth(),1)),to:"9999",label:t.toLocaleString("en-US",{month:"long"})};
+    if(per==="90")return{from:ymd(new Date(t.getTime()-90*864e5)),to:"9999",label:"Last 90 days"};
+    if(per==="lastmonth"){var a=new Date(y,t.getMonth()-1,1),b=new Date(y,t.getMonth(),0);return{from:ymd(a),to:ymd(b),label:a.toLocaleString("en-US",{month:"long"})};}
     return{from:"0000",to:"9999",label:"All time"};
   }
   function model(){
     var am=ageMap(),rows=getRows().map(function(r){var o=Object.assign({},r);var ag=am[nkey(r.name)];if(ag!=null&&ag!=="")o.age=ag;return o;});
     var apps=TR.classify(TR.coreApps(rows));
     var pr=periodRange(),inP=function(a){return a.submit>=pr.from&&a.submit<=pr.to;};
-    return{rows:rows,apps:apps,pr:pr,inP:inP,am:am};
+    var lpr=periodRange(S.lperiod),inL=function(a){return a.submit>=lpr.from&&a.submit<=lpr.to;};
+    return{rows:rows,apps:apps,pr:pr,inP:inP,lpr:lpr,inL:inL,am:am};
   }
 
   function pctTxt(r){return r.pct==null?"--":(r.pct%1===0?r.pct.toFixed(0):r.pct.toFixed(1))+"%";}
@@ -10800,13 +10807,13 @@ try{(function(){
       +'<div class="ap-note soft">YTD logic per month (brand-new policies count as taken). Numbers under each month: UW submits · GI submits.</div></div>';
   }
   function payWatch(apps){
-    var t=new Date(),soon=ymd(new Date(t.getTime()+14*864e5));
+    var t=new Date(),soon=ymd(new Date(t.getTime()+14*864e5)),td=ymd(t);
     var bad=apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="bad";}).sort(function(a,b){return a.ptd<b.ptd?-1:1;});
-    var due=apps.filter(function(a){return /in force/i.test(a.status)&&(a.payState==="warn"||(a.payState==="good"&&a.ptd<=soon));}).sort(function(a,b){return a.ptd<b.ptd?-1:1;});
+    var due=apps.filter(function(a){return /in force/i.test(a.status)&&(a.payState==="warn"||(a.payState==="good"&&a.ptd<=soon))&&a.ptd>=td;}).sort(function(a,b){return a.ptd<b.ptd?-1:1;});
     function li(a,cls){return '<div class="ap-pw '+cls+'"><div><b>'+esc(nice(a.name))+'</b><span>'+esc(prodName(a.product))+' · '+a.kind+'</span></div><div class="ap-pw-r"><span class="ap-pay p-'+a.payState+'">'+esc(a.pay)+'</span><em>$'+a.prem.toFixed(2)+'/mo</em></div></div>';}
     return '<div class="ap-card"><div class="ap-card-h"><h4>Payments to watch</h4><span class="ap-count">'+bad.length+' need attention</span></div>'
-      +(bad.length?'<div class="ap-pw-h bad">Missed or past due</div>'+bad.map(function(a){return li(a,"bad");}).join(""):'<div class="ap-empty">No missed payments on active policies.</div>')
-      +(due.length?'<div class="ap-pw-h">Drafting in the next 14 days</div>'+due.slice(0,6).map(function(a){return li(a,"");}).join(""):"")
+      +(bad.length?'<div class="ap-pw-h bad">Missed or past due</div><div class="ap-pwgrid">'+bad.map(function(a){return li(a,"bad");}).join("")+'</div>':'<div class="ap-empty">No missed payments on active policies.</div>')
+      +(due.length?'<div class="ap-pw-h">Drafting in the next 14 days</div><div class="ap-pwgrid">'+due.slice(0,12).map(function(a){return li(a,"");}).join("")+'</div>':"")
       +'</div>';
   }
   function nice(n){return String(n||"").trim().toLowerCase().replace(/(^|[\s,'-])([a-z])/g,function(m,p,c){return p+c.toUpperCase();}).replace(/,\s*/,", ");}
@@ -10820,13 +10827,15 @@ try{(function(){
   function table(M){
     var t=new Date();
     if(S.view==="core"){
-      var L=M.apps.filter(M.inP).filter(function(a){
+      var td=ymd(t);
+      var L=M.apps.filter(M.inL).filter(function(a){
         if(S.fk!=="all"&&a.kind!==S.fk)return false;
         if(S.fs==="taken"&&!a.countTaken)return false;if(S.fs==="nottaken"&&!(a.countSubmit&&!a.countTaken))return false;if(S.fs==="out"&&a.countSubmit)return false;
         if(S.fs==="inforce"&&!/in force/i.test(a.status))return false;
-        if(S.fp!=="all"&&a.payState!==S.fp)return false;
+        if(/^up/.test(S.fp)){var lim=ymd(new Date(t.getTime()+(+S.fp.slice(2))*864e5));if(!(/in force/i.test(a.status)&&a.ptd&&a.ptd>=td&&a.ptd<=lim))return false;}
+        else if(S.fp!=="all"&&a.payState!==S.fp)return false;
         if(S.q&&(a.name+" "+a.ids.join(" ")+" "+a.product).toLowerCase().indexOf(S.q)<0)return false;return true;})
-        .sort(function(a,b){return a.submit<b.submit?1:a.submit>b.submit?-1:0;});
+        .sort(/^up/.test(S.fp)?function(a,b){return a.ptd<b.ptd?-1:a.ptd>b.ptd?1:0;}:function(a,b){return a.submit<b.submit?1:a.submit>b.submit?-1:0;});
       var body=L.map(function(a){var ag=M.am[nkey(a.name)];
         return '<tr><td><b class="ap-nm">'+esc(nice(a.name))+'</b><small>'+esc(a.ids[0])+(a.state?" · "+esc(a.state):"")+'</small></td>'
           +'<td><span class="ap-k k-'+a.kind+'">'+a.kind+'</span> '+esc(prodName(a.product))+'</td>'
@@ -10836,9 +10845,9 @@ try{(function(){
           +'<td><input class="ap-age'+(ag==null||ag===""?" empty":"")+(+ag>=50?" over":"")+'" type="number" min="0" max="110" inputmode="numeric" placeholder="age" data-n="'+esc(nkey(a.name))+'" value="'+(ag==null?"":esc(ag))+'"></td>'
           +'<td class="ap-cc">'+countsPill(a)+'</td></tr>';}).join("");
       return '<div class="ap-tw"><table class="ap-t"><thead><tr><th>Client</th><th>Plan</th><th>Status</th><th>Submitted</th><th>Effective</th><th>Paid to</th><th>Payment</th><th class="num">Monthly</th><th>Age</th><th>Taken rate</th></tr></thead><tbody>'
-        +(body||'<tr><td colspan="10" class="ap-empty">No applications match.</td></tr>')+'</tbody></table></div><div class="ap-foot">'+L.length+' core application'+(L.length===1?"":"s")+' · '+M.pr.label+'</div>';
+        +(body||'<tr><td colspan="10" class="ap-empty">No applications match.</td></tr>')+'</tbody></table></div><div class="ap-foot">'+L.length+' core application'+(L.length===1?"":"s")+' · '+M.lpr.label+'</div>';
     }
-    var R=M.rows.filter(function(r){return r.submit>=M.pr.from&&r.submit<=M.pr.to;}).filter(function(r){var k=TR.kind(r.product);
+    var R=M.rows.filter(function(r){return r.submit>=M.lpr.from&&r.submit<=M.lpr.to;}).filter(function(r){var k=TR.kind(r.product);
       if(S.fk!=="all"&&(S.fk==="SUPP"?k!=="SUPP":k!==S.fk))return false;
       if(S.q&&(r.name+" "+r.id+" "+r.product).toLowerCase().indexOf(S.q)<0)return false;return true;})
       .sort(function(a,b){return a.submit<b.submit?1:a.submit>b.submit?-1:String(a.id)<String(b.id)?-1:1;});
@@ -10849,41 +10858,128 @@ try{(function(){
   }
   function seg(name,opts,cur){return '<div class="ap-seg" data-seg="'+name+'">'+opts.map(function(o){return '<button type="button" data-v="'+o[0]+'"'+(o[0]===cur?' class="on"':'')+'>'+o[1]+'</button>';}).join("")+'</div>';}
 
+  /* ---- USHA AV numbers (from the Sales Dashboard, via the sync bookmark) ---- */
+  K.ushaKpis="vs_usha_kpis";
+  function kpis(){var a=asArr(K.ushaKpis);return a[0]||null;}
+  function money0(n){return n==null||isNaN(n)?"--":"$"+Math.round(n).toLocaleString();}
+  function normKpis(k){
+    var sub=k.salessubmittedav||{},iss=k.salesissuedav||{},pj=k.salesprojectedavleader||{},sw=k.salessubmittedavforeachweek||[],iw=k.salesissuedavforeachweek||[],st=k.kpisalesstreak||null;
+    var weeks={};(Array.isArray(sw)?sw:[]).forEach(function(w){var key=w.wK_DW||w.weekNumber;if(key)(weeks[key]=weeks[key]||{wk:key}).sub=+w.submittedAVThisWeek||0;});
+    (Array.isArray(iw)?iw:[]).forEach(function(w){var key=w.wK_DW;if(key)(weeks[key]=weeks[key]||{wk:key}).iss=+w.issuedAVThisWeek||0;});
+    var streak=null;if(st&&typeof st==="object"){for(var x in st){if(/streak/i.test(x)&&typeof st[x]==="number"){streak=streak||{};streak[x]=st[x];}}}
+    return{at:Date.now(),week:sub.currentWeek||iss.currentWeek||"",
+      sub:{week:+sub.submittedAVThisWeek||0,last:+sub.submittedAVLastWeek||0,ytd:+sub.submittedAVYTD||+pj.submittedAVYTD||0,avg:+sub.averageWeeklyYTD||+pj.currentAverageSubmitted||0},
+      iss:{week:+iss.issuedAVThisWeek||0,last:+iss.issuedAVLastWeek||0,ytd:+iss.issuedAVYTD||+pj.issuedAVYTD||0,avg:+iss.averageWeeklyYTD||+pj.currentAverageIssued||0},
+      proj:{takenRate:pj.takenRate!=null?+pj.takenRate:null,weeksRemaining:pj.weeksRemaining!=null?+pj.weeksRemaining:null,weeksActive:pj.weeksActive!=null?+pj.weeksActive:null,avgSub:+pj.currentAverageSubmitted||0,avgIss:+pj.currentAverageIssued||0},
+      weeks:Object.keys(weeks).sort(function(a,b){return parseFloat(a)-parseFloat(b);}).map(function(k){return weeks[k];}),streak:streak};
+  }
+  function avSection(kp){
+    if(!kp)return '<div class="ap-card av-empty"><div class="ap-card-h"><h4>AV tracking</h4></div><div class="ap-note soft">Click <b>⟳ Sync from USHA</b> (drag it to your bookmarks bar, then click it while signed in to USHA) to bring in your Submitted AV, Issued AV and USHA\'s projection.</div></div>';
+    var wr=kp.proj.weeksRemaining,avgS=kp.proj.avgSub||kp.sub.avg,avgI=kp.proj.avgIss||kp.iss.avg;
+    var projS=wr!=null?kp.sub.ytd+avgS*wr:null,projI=wr!=null?kp.iss.ytd+avgI*wr:null;
+    var conv=kp.sub.ytd?Math.round(kp.iss.ytd/kp.sub.ytd*1000)/10:null;
+    var last8=(kp.weeks||[]).slice(-12),mx=Math.max.apply(null,last8.map(function(w){return Math.max(w.sub||0,w.iss||0);}).concat([1]));
+    var bars=last8.map(function(w){return '<div class="av-wk"><div class="av-bars"><i class="s" style="height:'+Math.round((w.sub||0)/mx*100)+'%" title="Submitted '+money0(w.sub)+'"></i><i class="i" style="height:'+Math.round((w.iss||0)/mx*100)+'%" title="Issued '+money0(w.iss)+'"></i></div><span>'+esc(String(w.wk).replace(/^\d+\./,"Wk "))+'</span></div>';}).join("");
+    function card(t,o,cls){return '<div class="av-c '+(cls||"")+'"><div class="av-t">'+t+'</div><div class="av-big">'+money0(o.week)+'<em>this week</em></div><div class="av-rows"><div><span>Last week</span><b>'+money0(o.last)+'</b></div><div><span>YTD</span><b>'+money0(o.ytd)+'</b></div><div><span>Avg / week</span><b>'+money0(o.avg)+'</b></div></div></div>';}
+    return '<div class="ap-card av"><div class="ap-card-h"><h4>AV tracking'+(kp.week?' <span class="av-wkno">week '+esc(kp.week)+'</span>':'')+'</h4><span class="av-sync">From your USHA Sales Dashboard · synced '+ago(kp.at)+'</span></div>'
+      +'<div class="av-grid">'+card("Submitted AV",kp.sub,"sub")+card("Issued AV",kp.iss,"iss")
+      +'<div class="av-c proj"><div class="av-t">Projected by year end</div>'
+      +'<div class="av-big">'+money0(projI)+'<em>issued AV</em></div>'
+      +'<div class="av-rows"><div><span>Submitted AV</span><b>'+money0(projS)+'</b></div><div><span>Weeks left</span><b>'+(wr==null?"--":wr)+'</b></div><div><span>Issued ÷ submitted</span><b>'+(conv==null?"--":conv+"%")+'</b></div></div>'
+      +'<div class="av-foot">YTD + your weekly average × weeks left (same math as USHA\'s projection)</div></div></div>'
+      +(bars?'<div class="av-chart-h"><span class="s">Submitted</span><span class="i">Issued</span><em>last '+last8.length+' weeks</em></div><div class="av-chart">'+bars+'</div>':'')
+      +'</div>';
+  }
+  /* one-click sync bookmark: runs on agent.ushadvisors.com, rewrites the Sales Report search to the last 12 months,
+     reads the Sales Dashboard AV numbers, and hands both to this page. Nothing leaves your browser except to this portal. */
+  var SYNC_BM="javascript:"+encodeURIComponent("(function(){if(!/ushadvisors\\.com$/.test(location.hostname)){alert('Open and sign in to the USHA agent portal first, then click this bookmark.');return;}if(window.__vsSync){return;}window.__vsSync=1;var P='"+location.origin+"/admin',w=window.open(P,'vsadmin'),D={rows:null,k:{}},sent=0;"
+    +"var ov=document.createElement('div');ov.style.cssText='position:fixed;right:18px;bottom:18px;z-index:2147483647;background:#0b2346;color:#fff;font:600 14px system-ui;padding:14px 18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.3);max-width:320px';ov.textContent='VS portal sync: reading your Sales Dashboard...';document.body.appendChild(ov);"
+    +"function f(d){return String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')+'/'+d.getFullYear();}var from=f(new Date(Date.now()-365*864e5)),to=f(new Date());"
+    +"var o=XMLHttpRequest.prototype.open,s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__vu=String(u);return o.apply(this,arguments);};"
+    +"XMLHttpRequest.prototype.send=function(b){var x=this,u=x.__vu||'';if(/salesreports\\/process/.test(u)&&typeof b=='string'){try{var j=JSON.parse(b);j.BeginDate=from;j.EndDate=to;j.DateType='S';b=JSON.stringify(j);}catch(e){}}"
+    +"x.addEventListener('load',function(){try{var r=JSON.parse(x.responseText);if(/salesreports\\/result/.test(u)){var d=typeof r.data=='string'?JSON.parse(r.data):r.data;if(d&&!Array.isArray(d)){for(var q in d){if(Array.isArray(d[q])){d=d[q];break;}}}if(Array.isArray(d)&&(!D.rows||d.length>=D.rows.length))D.rows=d;}var m=u.match(/salesdashboard\\/(\\w+)/);if(m)D.k[m[1]]=r.data;}catch(e){}});return s.call(this,b);};"
+    +"function go(t){var a=[].slice.call(document.querySelectorAll('a')).filter(function(a){return a.textContent.trim()==t;})[0];if(a)a.click();return !!a;}"
+    +"go('Sales Dashboard');setTimeout(function(){ov.textContent='VS portal sync: pulling 12 months of applications...';go('Sales Report');},9000);"
+    +"var n=0,iv=setInterval(function(){n++;if((D.rows&&n>16)||n>45){clearInterval(iv);if(!D.rows){ov.textContent='VS portal sync: could not read the Sales Report. Open My Business > Sales Report and click the bookmark again.';}post();}},1000);"
+    +"function post(){ov.textContent='VS portal sync: sending '+(D.rows?D.rows.length:0)+' policies to your portal...';var id=Date.now(),tries=0;var t=setInterval(function(){tries++;try{w.postMessage({t:'usha-sync',id:id,rows:D.rows,k:D.k},'"+location.origin+"');}catch(e){}if(tries>40){clearInterval(t);ov.textContent='VS portal sync: the portal tab did not answer. Allow pop-ups for agent.ushadvisors.com and try again.';}},1500);"
+    +"window.addEventListener('message',function(e){if(e.origin!=='"+location.origin+"'||!e.data||e.data.t!=='usha-ack'||e.data.id!==id)return;clearInterval(t);ov.textContent=e.data.err?('VS portal sync failed: '+e.data.err):('VS portal synced: '+(e.data.n||0)+' policies + AV numbers.');setTimeout(function(){ov.remove();window.__vsSync=0;},6000);});}"
+    +"})();");
+  var lastSyncId=0;
+  window.addEventListener("message",function(e){
+    if(e.origin!=="https://agent.ushadvisors.com")return;var d=e.data||{};if(d.t!=="usha-sync")return;
+    if(d.id&&d.id===lastSyncId){try{e.source.postMessage({t:"usha-ack",id:d.id,n:lastSyncN},e.origin);}catch(x){}return;}
+    var n=0,err="";
+    try{if(d.rows&&d.rows.length)n=vsUshaImport(d.rows,"USHA sync");if(d.k&&Object.keys(d.k).length){setArr(K.ushaKpis,[normKpis(d.k)],true);}render();}catch(x){err=x.message||"import failed";}
+    lastSyncId=d.id;lastSyncN=n;
+    try{e.source.postMessage({t:"usha-ack",id:d.id,n:n,err:err},e.origin);}catch(x){}
+    try{if(typeof switchTab==="function"&&!err)switchTab("apps");}catch(x){}
+  });
+  var lastSyncN=0;
+  window.vsUshaKpis=function(k){setArr(K.ushaKpis,[normKpis(k)],true);render();};
+  function headHtml(title,rows,mt,kp){
+    return '<div class="ap-head"><div><h3>'+title+'</h3><p class="lede">'
+      +(rows.length?rows.length+' USHA policies'+(mt.at?' · synced '+ago(mt.at):'')+(mt.src?' · '+esc(mt.src):''):'Bring in your USHA sales report to track every application, payment and your taken rate.')
+      +'</p></div><div class="ap-actions"><a class="ap-btn ghost" href="'+esc(SYNC_BM)+'" title="Drag me to your bookmarks bar, then click it while signed in to the USHA agent portal" data-bm onclick="return false">⟳ Sync from USHA</a><button type="button" class="ap-btn" data-ap-import>Import USHA report</button><input type="file" class="ap-file" accept=".xlsx,.xls,.csv,.txt,.json" hidden></div></div>';
+  }
+  function ago(ts){var m=Math.round((Date.now()-ts)/60000);if(m<1)return "just now";if(m<60)return m+" min ago";var h=Math.round(m/60);if(h<24)return h+" hr ago";return new Date(ts).toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
+  function emptyHtml(){return '<div class="ap-card ap-howto"><h4>How to bring your applications in</h4><ol><li><b>One-click sync:</b> drag the <b>⟳ Sync from USHA</b> button above to your bookmarks bar. Sign in to the USHA agent portal and click that bookmark. It pulls your last 12 months of applications and your AV numbers straight into this page.</li><li><b>Or import a file:</b> USHA <b>My Business → Sales Report</b> → Advanced Search → Last 12 Months → Search → Export to Excel, then click <b>Import USHA report</b> here.</li></ol></div>';}
   function render(){
-    var mount=$("apps-mount");if(!mount)return;
-    var M=model(),rows=M.rows,mt=meta();
+    var m1=$("apps-mount"),m2=$("applist-mount");if(!m1&&!m2)return;
+    var M=model(),rows=M.rows,mt=meta(),kp=kpis();
     lastSig=sig();
-    var head='<div class="ap-head"><div><h3>Applications &amp; Taken Rate</h3><p class="lede">'
-      +(rows.length?rows.length+' USHA policies'+(mt.at?' · updated '+new Date(mt.at).toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}):'')+(mt.src?' · '+esc(mt.src):''):'Bring in your USHA sales report to track every application, payment and your taken rate.')
-      +'</p></div><div class="ap-actions"><button type="button" class="ap-btn" data-ap-import>Import USHA report</button><input type="file" id="ap-file" accept=".xlsx,.xls,.csv,.txt,.json" hidden></div></div>';
-    if(!rows.length){mount.innerHTML=head+'<div class="ap-card ap-howto"><h4>How to bring your applications in</h4><ol><li>In the USHA agent portal open <b>My Business → Sales Report</b>.</li><li>Choose <b>Advanced Search</b>, set the date range to <b>Last 12 Months</b>, and click <b>Search</b>.</li><li>Click the <b>Export to Excel</b> icon above the grid.</li><li>Click <b>Import USHA report</b> here and pick that file. Re-import any time; it replaces the old copy and keeps the ages you typed.</li></ol></div>';wire(mount);return;}
-    var P=M.apps.filter(M.inP),uw=P.filter(function(a){return a.kind==="UW";}),gi=P.filter(function(a){return a.kind==="GI";});
-    var badPay=M.apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="bad";}).length;
-    var activeN=M.apps.filter(function(a){return /in force/i.test(a.status);}).length,mrr=M.apps.filter(function(a){return /in force/i.test(a.status);}).reduce(function(s,a){return s+a.prem;},0);
-    var html=head
-      +'<div class="ap-bar-top">'+seg("period",[["ytd","YTD "+new Date().getFullYear()],["month","This month"],["lastmonth","Last month"],["90","Last 90 days"],["all","All time"]],S.period)+'</div>'
-      +'<div class="ap-kpis">'+kpi("Underwritten","Premier Advantage · Premier Choice · Secure Advantage · under 50 · bonus at 60%",uw,TARGET.UW)+kpi("Guaranteed issue","HealthAccess · all ages · bonus at 65%",gi,TARGET.GI)+kpi("Combined","Underwritten + guaranteed issue",P,0)
-      +'<div class="ap-kpi ap-kpi-side"><div class="ap-mini"><span>Active core policies</span><b>'+activeN+'</b><em>$'+Math.round(mrr).toLocaleString()+'/mo in premium</em></div>'
-      +'<div class="ap-mini '+(badPay?"bad":"")+'"><span>Missed / past-due payments</span><b>'+badPay+'</b><em>'+(badPay?"see Payments to watch":"all active policies current")+'</em></div>'
-      +'<div class="ap-mini"><span>Core apps submitted</span><b>'+P.length+'</b><em>'+M.pr.label+'</em></div></div></div>'
-      +gamePlan(M,uw,gi)
-      +'<div class="ap-two"><div>'+seg("kind",[["UW","Underwritten"],["GI","Guaranteed issue"]],S.kind)+breakdown(S.kind==="UW"?uw:gi,S.kind==="UW"?"Underwritten":"Guaranteed issue")+'</div><div>'+monthly(M.apps.filter(M.inP))+payWatch(M.apps)+'</div></div>'
-      +'<div class="ap-card ap-tcard"><div class="ap-card-h"><h4>Every application</h4>'+seg("view",[["core","Core apps (count toward taken rate)"],["all","All policies incl. supplements"]],S.view)+'</div>'
-      +'<div class="ap-filters"><input type="search" class="ap-q" placeholder="Search name or App ID" value="'+esc(S.q)+'">'
-      +'<select data-f="fk"><option value="all">All plan types</option><option value="UW"'+(S.fk==="UW"?" selected":"")+'>Underwritten</option><option value="GI"'+(S.fk==="GI"?" selected":"")+'>Guaranteed issue</option>'+(S.view==="all"?'<option value="SUPP"'+(S.fk==="SUPP"?" selected":"")+'>Supplements</option>':'')+'</select>'
-      +(S.view==="core"?'<select data-f="fs"><option value="all">Any result</option><option value="taken"'+(S.fs==="taken"?" selected":"")+'>Taken</option><option value="nottaken"'+(S.fs==="nottaken"?" selected":"")+'>Not taken</option><option value="out"'+(S.fs==="out"?" selected":"")+'>Not counted</option><option value="inforce"'+(S.fs==="inforce"?" selected":"")+'>In force</option></select>'
-      +'<select data-f="fp"><option value="all">Any payment</option><option value="bad"'+(S.fp==="bad"?" selected":"")+'>Missed / past due / never paid</option><option value="warn"'+(S.fp==="warn"?" selected":"")+'>First payment due</option><option value="good"'+(S.fp==="good"?" selected":"")+'>Paid and current</option><option value="mid"'+(S.fp==="mid"?" selected":"")+'>Paid, then stopped</option></select>':'')
-      +'</div>'+table(M)+'</div>';
     var y=(document.scrollingElement||document.documentElement).scrollTop;
-    mount.innerHTML=html;wire(mount);
+    /* ---- Taken Rate tab ---- */
+    if(m1){
+      var h1=headHtml("Taken Rate &amp; AV",rows,mt,kp);
+      if(!rows.length&&!kp)m1.innerHTML=h1+emptyHtml();
+      else{
+        var P=M.apps.filter(M.inP),uw=P.filter(function(a){return a.kind==="UW";}),gi=P.filter(function(a){return a.kind==="GI";});
+        var badPay=M.apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="bad";}).length;
+        var activeN=M.apps.filter(function(a){return /in force/i.test(a.status);}).length,mrr=M.apps.filter(function(a){return /in force/i.test(a.status);}).reduce(function(s,a){return s+a.prem;},0);
+        var ushaTR=kp&&kp.proj&&kp.proj.takenRate!=null?kp.proj.takenRate:null;
+        m1.innerHTML=h1
+          +'<div class="ap-bar-top">'+seg("period",[["ytd","YTD "+new Date().getFullYear()],["month","This month"],["lastmonth","Last month"],["90","Last 90 days"],["all","All time"]],S.period)+'</div>'
+          +'<div class="ap-kpis">'+kpi("Underwritten","Premier Advantage · Premier Choice · Secure Advantage · under 50 · bonus at 60%",uw,TARGET.UW)+kpi("Guaranteed issue","HealthAccess · all ages · bonus at 65%",gi,TARGET.GI)+kpi("Combined","Underwritten + guaranteed issue",P,0)
+          +'<div class="ap-kpi ap-kpi-side"><div class="ap-mini usha"><span>USHA official taken rate</span><b>'+(ushaTR==null?"--":ushaTR+"%")+'</b><em>'+(ushaTR==null?"click ⟳ Sync from USHA":"UW YTD · as of "+ago(kp.at))+'</em></div>'
+          +'<div class="ap-mini"><span>Active core policies</span><b>'+activeN+'</b><em>$'+Math.round(mrr).toLocaleString()+'/mo in premium</em></div>'
+          +'<div class="ap-mini '+(badPay?"bad":"")+'"><span>Missed / past-due payments</span><b>'+badPay+'</b><em>'+(badPay?"see the Applications tab":"all active policies current")+'</em></div></div></div>'
+          +avSection(kp)
+          +gamePlan(M,uw,gi)
+          +'<div class="ap-two"><div>'+seg("kind",[["UW","Underwritten"],["GI","Guaranteed issue"]],S.kind)+breakdown(S.kind==="UW"?uw:gi,S.kind==="UW"?"Underwritten":"Guaranteed issue")+'</div><div>'+monthly(M.apps.filter(M.inP))+'</div></div>';
+      }
+      wire(m1);
+    }
+    /* ---- Applications tab ---- */
+    if(m2){
+      var h2=headHtml("Applications",rows,mt,kp);
+      if(!rows.length)m2.innerHTML=h2+emptyHtml();
+      else{
+        var td=ymd(new Date());
+        function cnt(n){var lim=ymd(new Date(Date.now()+n*864e5));return M.apps.filter(function(a){return /in force/i.test(a.status)&&a.ptd&&a.ptd>=td&&a.ptd<=lim;}).length;}
+        var badN=M.apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="bad";}).length;
+        var chips=[["all","All",M.apps.length],["up7","Paying in 7 days",cnt(7)],["up14","Paying in 14 days",cnt(14)],["up30","Paying in 30 days",cnt(30)],["bad","Missed / past due",badN],["warn","First payment due",M.apps.filter(function(a){return a.payState==="warn";}).length]];
+        m2.innerHTML=h2
+          +'<div class="ap-chips">'+chips.map(function(c){return '<button type="button" class="ap-chip'+(S.fp===c[0]?" on":"")+(c[0]==="bad"&&c[2]?" bad":"")+'" data-fp="'+c[0]+'">'+c[1]+'<b>'+c[2]+'</b></button>';}).join("")+'</div>'
+          +'<div class="ap-two ap-two-l"><div>'+payWatch(M.apps)+'</div><div class="ap-card ap-tcard"><div class="ap-card-h"><h4>Every application</h4>'+seg("view",[["core","Core apps"],["all","All policies incl. supplements"]],S.view)+'</div>'
+          +'<div class="ap-filters"><input type="search" class="ap-q" placeholder="Search name or App ID" value="'+esc(S.q)+'">'
+          +'<select data-f="lperiod">'+[["all","All dates"],["ytd","Submitted YTD"],["month","Submitted this month"],["lastmonth","Submitted last month"],["90","Submitted last 90 days"]].map(function(o){return '<option value="'+o[0]+'"'+(S.lperiod===o[0]?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>'
+          +'<select data-f="fk"><option value="all">All plan types</option><option value="UW"'+(S.fk==="UW"?" selected":"")+'>Underwritten</option><option value="GI"'+(S.fk==="GI"?" selected":"")+'>Guaranteed issue</option>'+(S.view==="all"?'<option value="SUPP"'+(S.fk==="SUPP"?" selected":"")+'>Supplements</option>':'')+'</select>'
+          +(S.view==="core"?'<select data-f="fs"><option value="all">Any result</option><option value="taken"'+(S.fs==="taken"?" selected":"")+'>Taken</option><option value="nottaken"'+(S.fs==="nottaken"?" selected":"")+'>Not taken</option><option value="out"'+(S.fs==="out"?" selected":"")+'>Not counted</option><option value="inforce"'+(S.fs==="inforce"?" selected":"")+'>In force</option></select>'
+          +'<select data-f="fp">'+[["all","Any payment"],["up7","Upcoming payment: next 7 days"],["up14","Upcoming payment: next 14 days"],["up30","Upcoming payment: next 30 days"],["bad","Missed / past due / never paid"],["warn","First payment due"],["good","Paid and current"],["mid","Paid, then stopped"]].map(function(o){return '<option value="'+o[0]+'"'+(S.fp===o[0]?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>':'')
+          +'</div>'+table(M)+'</div></div>';
+      }
+      wire(m2);
+      m2.querySelectorAll("[data-fp]").forEach(function(b){b.addEventListener("click",function(){S.fp=b.getAttribute("data-fp");S.view="core";render();});});
+    }
     (document.scrollingElement||document.documentElement).scrollTop=y;
   }
   function wire(mount){
     mount.querySelectorAll(".ap-seg").forEach(function(sg){sg.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var k=sg.getAttribute("data-seg");S[k]=b.getAttribute("data-v");if(k==="view")S.fk="all";render();});});
     mount.querySelectorAll("select[data-f]").forEach(function(se){se.addEventListener("change",function(){S[se.getAttribute("data-f")]=se.value;render();});});
-    var q=mount.querySelector(".ap-q");if(q){var tm;q.addEventListener("input",function(){clearTimeout(tm);tm=setTimeout(function(){S.q=q.value.trim().toLowerCase();render();var n=$("apps-mount").querySelector(".ap-q");if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length);}},220);});}
+    var q=mount.querySelector(".ap-q");if(q){var tm;q.addEventListener("input",function(){clearTimeout(tm);tm=setTimeout(function(){S.q=q.value.trim().toLowerCase();render();var n=$("applist-mount").querySelector(".ap-q");if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length);}},220);});}
     mount.querySelectorAll(".ap-age").forEach(function(inp){inp.addEventListener("change",function(){saveAge(inp.getAttribute("data-n"),inp.value);});inp.addEventListener("keydown",function(e){if(e.key==="Enter"){inp.blur();}});});
-    var ib=mount.querySelector("[data-ap-import]"),f=mount.querySelector("#ap-file");
+    var ib=mount.querySelector("[data-ap-import]"),f=mount.querySelector(".ap-file");
+    var bm=mount.querySelector("[data-bm]");if(bm)bm.addEventListener("click",function(){flash("Drag the ⟳ Sync from USHA button to your bookmarks bar. Then sign in to the USHA agent portal and click that bookmark to sync.");});
     if(ib&&f){ib.addEventListener("click",function(){f.click();});f.addEventListener("change",function(){if(f.files&&f.files[0])importFile(f.files[0]);});}
   }
   function saveAge(n,v){
@@ -10935,19 +11031,19 @@ try{(function(){
       flash("Imported "+n+" policies from "+file.name+".");
     }catch(e){flash(e.message||"That file could not be read.",true);}
   }
-  function flash(t,bad){var m=$("apps-mount");if(!m)return;var d=document.createElement("div");d.className="ap-flash"+(bad?" bad":"");d.textContent=t;m.prepend(d);setTimeout(function(){d.remove();},6000);}
+  function flash(t,bad){var m=($("p-applist")&&$("p-applist").classList.contains("active"))?$("applist-mount"):$("apps-mount");if(!m)return;var d=document.createElement("div");d.className="ap-flash"+(bad?" bad":"");d.textContent=t;m.prepend(d);setTimeout(function(){d.remove();},6000);}
 
-  var lastSig="";function sig(){try{return (localStorage.getItem(K.ushaApps)||"").length+":"+(localStorage.getItem(K.ushaAges)||"")+(localStorage.getItem(K.ushaMeta)||"");}catch(e){return "";}}
-  setInterval(function(){var p=$("p-apps");if(p&&p.classList.contains("active")&&sig()!==lastSig)render();},2500);
+  var lastSig="";function sig(){try{return (localStorage.getItem(K.ushaApps)||"").length+":"+(localStorage.getItem(K.ushaAges)||"")+(localStorage.getItem(K.ushaMeta)||"")+(localStorage.getItem(K.ushaKpis)||"").length;}catch(e){return "";}}
+  setInterval(function(){var p=$("p-apps"),q=$("p-applist");if(((p&&p.classList.contains("active"))||(q&&q.classList.contains("active")))&&sig()!==lastSig)render();},2500);
 
-  if(typeof ALL_TABS!=="undefined"&&ALL_TABS.indexOf("apps")<0)ALL_TABS.push("apps");
-  try{TAB_TITLES.apps="Applications";}catch(e){}
+  if(typeof ALL_TABS!=="undefined"){if(ALL_TABS.indexOf("apps")<0)ALL_TABS.push("apps");if(ALL_TABS.indexOf("applist")<0)ALL_TABS.push("applist");}
+  try{TAB_TITLES.apps="Taken Rate";TAB_TITLES.applist="Applications";}catch(e){}
   var _sw=switchTab;
-  switchTab=function(n){_sw(n);var p=$("p-apps");if(p&&p.classList.contains("active"))render();};
+  switchTab=function(n){_sw(n);var p=$("p-apps"),q=$("p-applist");if((p&&p.classList.contains("active"))||(q&&q.classList.contains("active")))render();};
   window.vsRenderApps=render;
   /* the nav button: works even if an older click handler doesn't know this tab */
-  document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest('[data-tab="apps"]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();switchTab("apps");},true);
-  if($("p-apps")&&$("p-apps").classList.contains("active"))render();
+  document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest('[data-tab="apps"],[data-tab="applist"]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();switchTab(b.getAttribute("data-tab"));},true);
+  if(($("p-apps")&&$("p-apps").classList.contains("active"))||($("p-applist")&&$("p-applist").classList.contains("active")))render();
 }catch(err){if(window.console)console.warn("applications tab failed",err);}})();
 
 /* ═══════════════ SIDE NAV + VISUAL REFRESH (2026-10-28) ═══════════════
@@ -11002,149 +11098,175 @@ try{(function(){
   "html body .panel>h3{font-size:24px!important;font-weight:850!important;letter-spacing:-.01em;color:#0b2346;margin:0 0 4px!important}",
   "html body .panel>.lede{color:#5a6b80;margin:0 0 20px!important}",
   /* applications panel */
-  "#p-apps .ap-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}",
-  "#p-apps .ap-head h3{font-size:24px;font-weight:850;color:#0b2346;margin:0 0 4px;letter-spacing:-.01em}",
-  "#p-apps .ap-head .lede{margin:0;color:#5a6b80;font-size:14px}",
-  "#p-apps .ap-btn{background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;border:0;border-radius:11px;padding:11px 18px;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 8px 20px rgba(22,68,127,.22)}",
-  "#p-apps .ap-btn:hover{filter:brightness(1.06);transform:translateY(-1px)}",
-  "#p-apps .ap-flash{background:#e9f9f3;border:1px solid #bfe9db;color:#0a6b45;padding:11px 14px;border-radius:11px;font-weight:700;margin-bottom:14px}",
-  "#p-apps .ap-flash.bad{background:#fdecec;border-color:#f5c2c2;color:#a3262a}",
-  "#p-apps .ap-bar-top{margin-bottom:16px}",
-  "#p-apps .ap-seg{display:inline-flex;flex-wrap:wrap;gap:3px;background:#e9eef6;border-radius:12px;padding:4px}",
-  "#p-apps .ap-seg button{border:0;background:none;padding:8px 14px;border-radius:9px;font-weight:750;font-size:13px;color:#42566e;cursor:pointer}",
-  "#p-apps .ap-seg button:hover{color:#16447f}",
-  "#p-apps .ap-seg button.on{background:#fff;color:#0b2346;box-shadow:0 1px 4px rgba(13,27,42,.12)}",
-  "#p-apps .ap-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:18px}",
-  "#p-apps .ap-kpi,#p-apps .ap-card{background:#fff;border:1px solid #e4e9f2;border-radius:16px;box-shadow:0 1px 2px rgba(13,27,42,.04),0 8px 24px rgba(13,27,42,.04)}",
-  "#p-apps .ap-kpi{padding:18px}",
-  "#p-apps .ap-kpi-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}",
-  "#p-apps .ap-kpi-t{font-weight:850;font-size:16px;color:#0b2346}",
-  "#p-apps .ap-kpi-s{font-size:12px;color:#6b7c92;margin-top:3px;line-height:1.35}",
-  "#p-apps .ap-ringwrap{position:relative;flex:0 0 auto;width:74px;height:74px}",
-  "#p-apps .ap-ringwrap span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:#0b2346}",
-  "#p-apps .ap-ring .trk{fill:none;stroke:#edf1f7;stroke-width:8}",
-  "#p-apps .ap-ring .val{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dasharray .6s ease}",
-  "#p-apps .ap-ring.t-good .val{stroke:#0db5a6}#p-apps .ap-ring.t-ok .val{stroke:#2f7de1}#p-apps .ap-ring.t-low .val{stroke:#e5864d}#p-apps .ap-ring.t-na .val{stroke:#cbd5e1}",
-  "#p-apps .ap-kpi-rows{margin-top:14px;border-top:1px solid #eef2f7;padding-top:10px;display:grid;gap:6px}",
-  "#p-apps .ap-kr{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:baseline;font-size:13px}",
-  "#p-apps .ap-kr b{color:#33455c;font-weight:750}",
-  "#p-apps .ap-kr .ap-math{color:#6b7c92;font-variant-numeric:tabular-nums}",
-  "#p-apps .ap-kr strong{font-weight:900;color:#0b2346;font-variant-numeric:tabular-nums;min-width:48px;text-align:right}",
-  "#p-apps strong.t-good{color:#0a8f83}#p-apps strong.t-low{color:#c4622b}",
-  "#p-apps .ap-kpi-side{display:grid;gap:10px;padding:14px}",
-  "#p-apps .ap-mini{background:#f6f8fc;border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:0 8px}",
-  "#p-apps .ap-mini span{font-size:12px;font-weight:700;color:#5a6b80}",
-  "#p-apps .ap-mini b{grid-row:span 2;font-size:22px;font-weight:900;color:#0b2346}",
-  "#p-apps .ap-mini em{font-style:normal;font-size:11.5px;color:#8091a7}",
-  "#p-apps .ap-mini.bad{background:#fff1ee}#p-apps .ap-mini.bad b{color:#c8372d}",
-  "#p-apps .ap-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:16px;margin-bottom:18px;align-items:start}",
-  "#p-apps .ap-two>div{display:grid;gap:16px;align-content:start}",
-  "#p-apps .ap-two>div>.ap-seg{justify-self:start}",
-  "#p-apps .ap-card{padding:18px}",
-  "#p-apps .ap-card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}",
-  "#p-apps .ap-card-h h4{margin:0;font-size:15.5px;font-weight:850;color:#0b2346}",
-  "#p-apps .ap-count{font-size:12px;font-weight:800;color:#c8372d;background:#fff1ee;padding:4px 10px;border-radius:999px}",
-  "#p-apps .ap-brs{display:grid;gap:2px}",
-  "#p-apps .ap-br{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:8px;font-size:13.5px;color:#33455c}",
-  "#p-apps .ap-br span em{font-style:normal;color:#8a9ab0;font-size:11.5px;margin-left:8px}",
-  "#p-apps .ap-br b{font-variant-numeric:tabular-nums;font-weight:800;color:#0b2346}",
-  "#p-apps .ap-br b i{font-style:normal;color:#a9b5c6;margin:0 2px}",
-  "#p-apps .ap-br.plus span::before{content:'+';display:inline-block;width:16px;color:#0a8f83;font-weight:900}",
-  "#p-apps .ap-br.minus span::before{content:'+';display:inline-block;width:16px;color:#7c8ba0;font-weight:900}",
-  "#p-apps .ap-br.soft{opacity:.75}",
-  "#p-apps .ap-br.tot{background:#f1f6fd;font-weight:850;color:#0b2346;margin:4px 0}",
-  "#p-apps .ap-br.tot .acc{color:#16447f}",
-  "#p-apps .ap-br.out{color:#8091a7}#p-apps .ap-br.out b{color:#8091a7}",
-  "#p-apps .ap-br-sep{font-size:10.5px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#9aa8bb;padding:12px 10px 4px}",
-  "#p-apps .ap-formula{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}",
-  "#p-apps .ap-formula>div{background:linear-gradient(135deg,#0b2346,#16447f);color:#fff;border-radius:12px;padding:12px 14px}",
-  "#p-apps .ap-formula>div+div{background:#eef3fa;color:#0b2346}",
-  "#p-apps .ap-formula span{display:block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.75;margin-bottom:3px}",
-  "#p-apps .ap-formula b{font-size:17px;font-weight:900;font-variant-numeric:tabular-nums}",
-  "#p-apps .ap-note{margin-top:12px;font-size:12.5px;color:#7a5a12;background:#fff8e6;border:1px solid #f4e2ad;border-radius:10px;padding:9px 12px;line-height:1.45}",
-  "#p-apps .ap-note.soft{color:#6b7c92;background:#f6f8fc;border-color:#e8edf5}",
-  "#p-apps .ap-legend{display:flex;gap:12px;font-size:12px;font-weight:700;color:#5a6b80}",
-  "#p-apps .ap-legend span::before{content:'';display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}",
-  "#p-apps .ap-legend .uw::before{background:#16447f}#p-apps .ap-legend .gi::before{background:#0db5a6}",
-  "#p-apps .ap-chart{position:relative;display:flex;gap:6px;align-items:flex-end;height:190px;padding:8px 0 0 30px}",
-  "#p-apps .ap-grid{position:absolute;left:0;right:0;top:8px;height:140px;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}",
-  "#p-apps .ap-grid span{font-size:10px;color:#a9b5c6;border-top:1px dashed #e8edf5;line-height:0;padding-top:0}",
-  "#p-apps .ap-mo{flex:1 1 0;display:flex;flex-direction:column;align-items:center;min-width:0}",
-  "#p-apps .ap-bars{height:140px;display:flex;gap:4px;align-items:flex-end;width:100%;justify-content:center}",
-  "#p-apps .ap-bar{position:relative;width:min(22px,40%);height:100%;display:flex;align-items:flex-end}",
-  "#p-apps .ap-bar i{display:block;width:100%;border-radius:6px 6px 2px 2px;transition:height .5s ease}",
-  "#p-apps .ap-bar.uw i{background:linear-gradient(180deg,#2a63b3,#16447f)}#p-apps .ap-bar.gi i{background:linear-gradient(180deg,#2fd0c1,#0db5a6)}",
-  "#p-apps .ap-bar span{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 2px);font-size:10px;font-weight:800;color:#42566e}",
-  "#p-apps .ap-bar i[style*='height:3%']+span,#p-apps .ap-bar i[style*='height:0%']+span{}",
-  "#p-apps .ap-bar{flex-direction:column;justify-content:flex-end}",
-  "#p-apps .ap-bar span{position:static;transform:none;order:-1;margin-bottom:2px;text-align:center}",
-  "#p-apps .ap-mo-l{font-size:12px;font-weight:800;color:#33455c;margin-top:6px}",
-  "#p-apps .ap-mo-n{font-size:10.5px;color:#8a9ab0}",
-  "#p-apps .ap-pw-h{font-size:10.5px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#7c8ba0;margin:10px 0 6px}",
-  "#p-apps .ap-pw-h.bad{color:#c8372d}",
-  "#p-apps .ap-pw{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 10px;border-radius:10px;border:1px solid #eef2f7;margin-bottom:6px}",
-  "#p-apps .ap-pw.bad{border-color:#f7d4cf;background:#fffaf9}",
-  "#p-apps .ap-pw b{display:block;font-size:13.5px;color:#0b2346}",
-  "#p-apps .ap-pw span{font-size:12px;color:#6b7c92}",
-  "#p-apps .ap-pw-r{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px}",
-  "#p-apps .ap-pw-r em{font-style:normal;font-size:11.5px;color:#8091a7}",
-  "#p-apps .ap-pay{display:inline-block;font-size:12px!important;font-weight:750;padding:3px 9px;border-radius:999px;white-space:nowrap}",
-  "#p-apps .ap-pay.p-good{background:#e9f9f3;color:#0a6b45}#p-apps .ap-pay.p-warn{background:#fff6dd;color:#8a5a00}#p-apps .ap-pay.p-bad{background:#fdecec;color:#b42a24}#p-apps .ap-pay.p-mid{background:#eef2f8;color:#42566e}",
-  "#p-apps .ap-empty{color:#8091a7;font-size:13px;padding:12px 4px;text-align:center}",
-  "#p-apps .ap-tcard{padding:0;overflow:hidden}",
-  "#p-apps .ap-tcard .ap-card-h{padding:18px 18px 0}",
-  "#p-apps .ap-filters{display:flex;gap:8px;flex-wrap:wrap;padding:0 18px 14px}",
-  "#p-apps .ap-filters input,#p-apps .ap-filters select{border:1px solid #dfe6f0;border-radius:10px;padding:9px 12px;font-size:13.5px;background:#fff;color:#0b2346;min-height:40px}",
-  "#p-apps .ap-filters input{flex:1 1 220px;max-width:340px}",
-  "#p-apps .ap-tw{overflow:auto;max-height:70vh;border-top:1px solid #eef2f7}",
-  "#p-apps .ap-t{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}",
-  "#p-apps .ap-t th{position:sticky;top:0;z-index:1;background:#f7f9fc;text-align:left;font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;color:#6b7c92;padding:10px 12px;border-bottom:1px solid #e8edf5;white-space:nowrap}",
-  "#p-apps .ap-t td{padding:10px 12px;border-bottom:1px solid #f0f3f8;vertical-align:middle;color:#33455c;white-space:nowrap}",
-  "#p-apps .ap-t tr:hover td{background:#fafcff}",
-  "#p-apps .ap-t .num{text-align:right;font-variant-numeric:tabular-nums}",
-  "#p-apps .ap-t small{display:block;font-size:11px;color:#8a9ab0;margin-top:2px;white-space:nowrap}",
-  "#p-apps .ap-nm{color:#0b2346;font-weight:800}",
-  "#p-apps .ap-k{display:inline-block;font-size:10.5px;font-weight:900;letter-spacing:.04em;padding:2px 7px;border-radius:6px;margin-right:4px}",
-  "#p-apps .ap-k.k-UW{background:#e6eefb;color:#16447f}#p-apps .ap-k.k-GI{background:#e0f7f4;color:#08776c}#p-apps .ap-k.k-SUPP{background:#f1f3f7;color:#6b7c92}",
-  "#p-apps .ap-st{display:inline-block;font-size:12px;font-weight:750;padding:3px 9px;border-radius:999px}",
-  "#p-apps .ap-st.s-good{background:#e9f9f3;color:#0a6b45}#p-apps .ap-st.s-bad{background:#fdecec;color:#b42a24}#p-apps .ap-st.s-mute{background:#f1f3f7;color:#5a6b80}#p-apps .ap-st.s-warn{background:#fff6dd;color:#8a5a00}",
-  "#p-apps .ap-cnt{display:inline-block;font-size:11.5px;font-weight:850;padding:2px 8px;border-radius:6px}",
-  "#p-apps .ap-cnt.tk{background:#0db5a6;color:#fff}#p-apps .ap-cnt.nt{background:#ffe6dc;color:#b04a17}#p-apps .ap-cnt.out{background:#eef1f6;color:#7c8ba0}",
-  "#p-apps .ap-cc small{max-width:220px;overflow:hidden;text-overflow:ellipsis}",
-  "#p-apps .ap-age{width:64px;border:1px solid #dfe6f0;border-radius:8px;padding:6px 8px;font-size:13px;font-weight:700;color:#0b2346;background:#fff}",
-  "#p-apps .ap-age.empty{background:#fffbea;border-color:#f1e1a6}",
-  "#p-apps .ap-age.over{background:#f1f3f7;color:#7c8ba0}",
-  "#p-apps .ap-dash{color:#b8c3d2}",
-  "#p-apps .ap-foot{padding:12px 18px;font-size:12px;color:#8091a7;border-top:1px solid #eef2f7}",
-  "#p-apps .ap-goal{margin-top:12px;font-size:12.5px;border-radius:10px;padding:8px 11px;line-height:1.4}",
-  "#p-apps .ap-goal.ok{background:#e6f8f5;color:#08776c}#p-apps .ap-goal.low{background:#fff1ea;color:#a44a17}#p-apps .ap-goal.na{background:#f4f6fa;color:#7c8ba0}",
-  "#p-apps .gp{margin-bottom:18px;border-top:4px solid #0db5a6}",
-  "#p-apps .gp-tg{font-size:12px;font-weight:850;color:#08776c;background:#e0f7f4;padding:4px 10px;border-radius:999px}",
-  "#p-apps .gp-sts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}",
-  "#p-apps .gp-st{border-radius:12px;padding:14px;border:1px solid #f3d6c6;background:#fffaf6}",
-  "#p-apps .gp-st.ok{border-color:#bfe9e2;background:#f3fcfa}",
-  "#p-apps .gp-st-h{font-weight:850;color:#0b2346;font-size:14px}#p-apps .gp-st-h span{font-size:11.5px;color:#7c8ba0;font-weight:700;margin-left:6px}",
-  "#p-apps .gp-st-n{display:flex;align-items:baseline;gap:6px;margin:6px 0}#p-apps .gp-st-n b{font-size:26px;font-weight:900;color:#0b2346}#p-apps .gp-st-n b.sm{font-size:16px;margin-left:10px}#p-apps .gp-st-n em{font-style:normal;font-size:11.5px;color:#7c8ba0;font-weight:700}",
-  "#p-apps .gp-st-m{font-size:12.5px;color:#42566e;line-height:1.45}",
-  "#p-apps .gp-as{display:grid;gap:10px}",
-  "#p-apps .gp-a{display:flex;gap:12px;border:1px solid #eef2f7;border-radius:12px;padding:12px 14px}",
-  "#p-apps .gp-n{flex:0 0 28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}",
-  "#p-apps .gp-b{min-width:0;flex:1}",
-  "#p-apps .gp-t{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}#p-apps .gp-t b{color:#0b2346;font-size:14px}",
-  "#p-apps .gp-i{font-size:11.5px;font-weight:800;color:#16447f;background:#e6eefb;padding:3px 9px;border-radius:999px}",
-  "#p-apps .gp-d{font-size:13px;color:#42566e;line-height:1.5;margin-top:4px}",
-  "#p-apps .gp-l{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}",
-  "#p-apps .gp-c{font-size:12px;font-weight:700;color:#0b2346;background:#f4f6fa;border:1px solid #e6ebf3;border-radius:8px;padding:4px 8px}#p-apps .gp-c i{font-style:normal;color:#7c8ba0;font-weight:600}",
-  "@media(max-width:700px){#p-apps .gp-sts{grid-template-columns:1fr}}",
-  "html.dark #p-apps .gp-a,html.dark #p-apps .gp-st{background:#182b44;border-color:#253a54}html.dark #p-apps .gp-t b,html.dark #p-apps .gp-st-h,html.dark #p-apps .gp-st-n b{color:#e8f0fb}",
-  "#p-apps .ap-howto ol{margin:6px 0 0 18px;padding:0;line-height:1.8;color:#33455c}",
-  "@media(max-width:1280px){#p-apps .ap-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
-  "@media(max-width:1100px){#p-apps .ap-two{grid-template-columns:1fr}}",
-  "@media(max-width:640px){#p-apps .ap-kpis{grid-template-columns:1fr}#p-apps .ap-formula{grid-template-columns:1fr}#p-apps .ap-seg button{padding:7px 10px}}",
-  "html.dark #p-apps .ap-kpi,html.dark #p-apps .ap-card{background:#14243a;border-color:#253a54}",
-  "html.dark #p-apps .ap-head h3,html.dark #p-apps .ap-kpi-t,html.dark #p-apps .ap-card-h h4,html.dark #p-apps .ap-nm,html.dark #p-apps .ap-ringwrap span,html.dark #p-apps .ap-kr strong,html.dark #p-apps .ap-br b,html.dark #p-apps .ap-mini b,html.dark #p-apps .ap-pw b{color:#e8f0fb}",
-  "html.dark #p-apps .ap-t th{background:#182b44;color:#9fb2cc}html.dark #p-apps .ap-t td{border-color:#22364f;color:#c9d6e8}html.dark #p-apps .ap-t tr:hover td{background:#1a2e48}",
-  "html.dark #p-apps .ap-mini,html.dark #p-apps .ap-br.tot,html.dark #p-apps .ap-seg{background:#1a2e48}html.dark #p-apps .ap-seg button.on{background:#25405f;color:#fff}"
+   ":is(#p-apps,#p-applist) .ap-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}",
+   ":is(#p-apps,#p-applist) .ap-head h3{font-size:24px;font-weight:850;color:#0b2346;margin:0 0 4px;letter-spacing:-.01em}",
+   ":is(#p-apps,#p-applist) .ap-head .lede{margin:0;color:#5a6b80;font-size:14px}",
+   ":is(#p-apps,#p-applist) .ap-btn{background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;border:0;border-radius:11px;padding:11px 18px;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 8px 20px rgba(22,68,127,.22)}",
+   ":is(#p-apps,#p-applist) .ap-btn:hover{filter:brightness(1.06);transform:translateY(-1px)}",
+   ":is(#p-apps,#p-applist) .ap-flash{background:#e9f9f3;border:1px solid #bfe9db;color:#0a6b45;padding:11px 14px;border-radius:11px;font-weight:700;margin-bottom:14px}",
+   ":is(#p-apps,#p-applist) .ap-flash.bad{background:#fdecec;border-color:#f5c2c2;color:#a3262a}",
+   ":is(#p-apps,#p-applist) .ap-bar-top{margin-bottom:16px}",
+   ":is(#p-apps,#p-applist) .ap-seg{display:inline-flex;flex-wrap:wrap;gap:3px;background:#e9eef6;border-radius:12px;padding:4px}",
+   ":is(#p-apps,#p-applist) .ap-seg button{border:0;background:none;padding:8px 14px;border-radius:9px;font-weight:750;font-size:13px;color:#42566e;cursor:pointer}",
+   ":is(#p-apps,#p-applist) .ap-seg button:hover{color:#16447f}",
+   ":is(#p-apps,#p-applist) .ap-seg button.on{background:#fff;color:#0b2346;box-shadow:0 1px 4px rgba(13,27,42,.12)}",
+   ":is(#p-apps,#p-applist) .ap-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:18px}",
+   ":is(#p-apps,#p-applist) .ap-kpi,:is(#p-apps,#p-applist) .ap-card{background:#fff;border:1px solid #e4e9f2;border-radius:16px;box-shadow:0 1px 2px rgba(13,27,42,.04),0 8px 24px rgba(13,27,42,.04)}",
+   ":is(#p-apps,#p-applist) .ap-kpi{padding:18px}",
+   ":is(#p-apps,#p-applist) .ap-kpi-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}",
+   ":is(#p-apps,#p-applist) .ap-kpi-t{font-weight:850;font-size:16px;color:#0b2346}",
+   ":is(#p-apps,#p-applist) .ap-kpi-s{font-size:12px;color:#6b7c92;margin-top:3px;line-height:1.35}",
+   ":is(#p-apps,#p-applist) .ap-ringwrap{position:relative;flex:0 0 auto;width:74px;height:74px}",
+   ":is(#p-apps,#p-applist) .ap-ringwrap span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:#0b2346}",
+   ":is(#p-apps,#p-applist) .ap-ring .trk{fill:none;stroke:#edf1f7;stroke-width:8}",
+   ":is(#p-apps,#p-applist) .ap-ring .val{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dasharray .6s ease}",
+   ":is(#p-apps,#p-applist) .ap-ring.t-good .val{stroke:#0db5a6}:is(#p-apps,#p-applist) .ap-ring.t-ok .val{stroke:#2f7de1}:is(#p-apps,#p-applist) .ap-ring.t-low .val{stroke:#e5864d}:is(#p-apps,#p-applist) .ap-ring.t-na .val{stroke:#cbd5e1}",
+   ":is(#p-apps,#p-applist) .ap-kpi-rows{margin-top:14px;border-top:1px solid #eef2f7;padding-top:10px;display:grid;gap:6px}",
+   ":is(#p-apps,#p-applist) .ap-kr{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:baseline;font-size:13px}",
+   ":is(#p-apps,#p-applist) .ap-kr b{color:#33455c;font-weight:750}",
+   ":is(#p-apps,#p-applist) .ap-kr .ap-math{color:#6b7c92;font-variant-numeric:tabular-nums}",
+   ":is(#p-apps,#p-applist) .ap-kr strong{font-weight:900;color:#0b2346;font-variant-numeric:tabular-nums;min-width:48px;text-align:right}",
+   ":is(#p-apps,#p-applist) strong.t-good{color:#0a8f83}:is(#p-apps,#p-applist) strong.t-low{color:#c4622b}",
+   ":is(#p-apps,#p-applist) .ap-kpi-side{display:grid;gap:10px;padding:14px}",
+   ":is(#p-apps,#p-applist) .ap-mini{background:#f6f8fc;border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:0 8px}",
+   ":is(#p-apps,#p-applist) .ap-mini span{font-size:12px;font-weight:700;color:#5a6b80}",
+   ":is(#p-apps,#p-applist) .ap-mini b{grid-row:span 2;font-size:22px;font-weight:900;color:#0b2346}",
+   ":is(#p-apps,#p-applist) .ap-mini em{font-style:normal;font-size:11.5px;color:#8091a7}",
+   ":is(#p-apps,#p-applist) .ap-mini.bad{background:#fff1ee}:is(#p-apps,#p-applist) .ap-mini.bad b{color:#c8372d}",
+   ":is(#p-apps,#p-applist) .ap-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:16px;margin-bottom:18px;align-items:start}",
+   ":is(#p-apps,#p-applist) .ap-two>div{display:grid;gap:16px;align-content:start}",
+   ":is(#p-apps,#p-applist) .ap-two>div>.ap-seg{justify-self:start}",
+   ":is(#p-apps,#p-applist) .ap-card{padding:18px}",
+   ":is(#p-apps,#p-applist) .ap-card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}",
+   ":is(#p-apps,#p-applist) .ap-card-h h4{margin:0;font-size:15.5px;font-weight:850;color:#0b2346}",
+   ":is(#p-apps,#p-applist) .ap-count{font-size:12px;font-weight:800;color:#c8372d;background:#fff1ee;padding:4px 10px;border-radius:999px}",
+   ":is(#p-apps,#p-applist) .ap-brs{display:grid;gap:2px}",
+   ":is(#p-apps,#p-applist) .ap-br{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:8px;font-size:13.5px;color:#33455c}",
+   ":is(#p-apps,#p-applist) .ap-br span em{font-style:normal;color:#8a9ab0;font-size:11.5px;margin-left:8px}",
+   ":is(#p-apps,#p-applist) .ap-br b{font-variant-numeric:tabular-nums;font-weight:800;color:#0b2346}",
+   ":is(#p-apps,#p-applist) .ap-br b i{font-style:normal;color:#a9b5c6;margin:0 2px}",
+   ":is(#p-apps,#p-applist) .ap-br.plus span::before{content:'+';display:inline-block;width:16px;color:#0a8f83;font-weight:900}",
+   ":is(#p-apps,#p-applist) .ap-br.minus span::before{content:'+';display:inline-block;width:16px;color:#7c8ba0;font-weight:900}",
+   ":is(#p-apps,#p-applist) .ap-br.soft{opacity:.75}",
+   ":is(#p-apps,#p-applist) .ap-br.tot{background:#f1f6fd;font-weight:850;color:#0b2346;margin:4px 0}",
+   ":is(#p-apps,#p-applist) .ap-br.tot .acc{color:#16447f}",
+   ":is(#p-apps,#p-applist) .ap-br.out{color:#8091a7}:is(#p-apps,#p-applist) .ap-br.out b{color:#8091a7}",
+   ":is(#p-apps,#p-applist) .ap-br-sep{font-size:10.5px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#9aa8bb;padding:12px 10px 4px}",
+   ":is(#p-apps,#p-applist) .ap-formula{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}",
+   ":is(#p-apps,#p-applist) .ap-formula>div{background:linear-gradient(135deg,#0b2346,#16447f);color:#fff;border-radius:12px;padding:12px 14px}",
+   ":is(#p-apps,#p-applist) .ap-formula>div+div{background:#eef3fa;color:#0b2346}",
+   ":is(#p-apps,#p-applist) .ap-formula span{display:block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.75;margin-bottom:3px}",
+   ":is(#p-apps,#p-applist) .ap-formula b{font-size:17px;font-weight:900;font-variant-numeric:tabular-nums}",
+   ":is(#p-apps,#p-applist) .ap-note{margin-top:12px;font-size:12.5px;color:#7a5a12;background:#fff8e6;border:1px solid #f4e2ad;border-radius:10px;padding:9px 12px;line-height:1.45}",
+   ":is(#p-apps,#p-applist) .ap-note.soft{color:#6b7c92;background:#f6f8fc;border-color:#e8edf5}",
+   ":is(#p-apps,#p-applist) .ap-legend{display:flex;gap:12px;font-size:12px;font-weight:700;color:#5a6b80}",
+   ":is(#p-apps,#p-applist) .ap-legend span::before{content:'';display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}",
+   ":is(#p-apps,#p-applist) .ap-legend .uw::before{background:#16447f}:is(#p-apps,#p-applist) .ap-legend .gi::before{background:#0db5a6}",
+   ":is(#p-apps,#p-applist) .ap-chart{position:relative;display:flex;gap:6px;align-items:flex-end;height:190px;padding:8px 0 0 30px}",
+   ":is(#p-apps,#p-applist) .ap-grid{position:absolute;left:0;right:0;top:8px;height:140px;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}",
+   ":is(#p-apps,#p-applist) .ap-grid span{font-size:10px;color:#a9b5c6;border-top:1px dashed #e8edf5;line-height:0;padding-top:0}",
+   ":is(#p-apps,#p-applist) .ap-mo{flex:1 1 0;display:flex;flex-direction:column;align-items:center;min-width:0}",
+   ":is(#p-apps,#p-applist) .ap-bars{height:140px;display:flex;gap:4px;align-items:flex-end;width:100%;justify-content:center}",
+   ":is(#p-apps,#p-applist) .ap-bar{position:relative;width:min(22px,40%);height:100%;display:flex;align-items:flex-end}",
+   ":is(#p-apps,#p-applist) .ap-bar i{display:block;width:100%;border-radius:6px 6px 2px 2px;transition:height .5s ease}",
+   ":is(#p-apps,#p-applist) .ap-bar.uw i{background:linear-gradient(180deg,#2a63b3,#16447f)}:is(#p-apps,#p-applist) .ap-bar.gi i{background:linear-gradient(180deg,#2fd0c1,#0db5a6)}",
+   ":is(#p-apps,#p-applist) .ap-bar span{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 2px);font-size:10px;font-weight:800;color:#42566e}",
+   ":is(#p-apps,#p-applist) .ap-bar i[style*='height:3%']+span,:is(#p-apps,#p-applist) .ap-bar i[style*='height:0%']+span{}",
+   ":is(#p-apps,#p-applist) .ap-bar{flex-direction:column;justify-content:flex-end}",
+   ":is(#p-apps,#p-applist) .ap-bar span{position:static;transform:none;order:-1;margin-bottom:2px;text-align:center}",
+   ":is(#p-apps,#p-applist) .ap-mo-l{font-size:12px;font-weight:800;color:#33455c;margin-top:6px}",
+   ":is(#p-apps,#p-applist) .ap-mo-n{font-size:10.5px;color:#8a9ab0}",
+   ":is(#p-apps,#p-applist) .ap-pw-h{font-size:10.5px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#7c8ba0;margin:10px 0 6px}",
+   ":is(#p-apps,#p-applist) .ap-pw-h.bad{color:#c8372d}",
+   ":is(#p-apps,#p-applist) .ap-pw{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 10px;border-radius:10px;border:1px solid #eef2f7;margin-bottom:6px}",
+   ":is(#p-apps,#p-applist) .ap-pw.bad{border-color:#f7d4cf;background:#fffaf9}",
+   ":is(#p-apps,#p-applist) .ap-pw b{display:block;font-size:13.5px;color:#0b2346}",
+   ":is(#p-apps,#p-applist) .ap-pw span{font-size:12px;color:#6b7c92}",
+   ":is(#p-apps,#p-applist) .ap-pw-r{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px}",
+   ":is(#p-apps,#p-applist) .ap-pw-r em{font-style:normal;font-size:11.5px;color:#8091a7}",
+   ":is(#p-apps,#p-applist) .ap-pay{display:inline-block;font-size:12px!important;font-weight:750;padding:3px 9px;border-radius:999px;white-space:nowrap}",
+   ":is(#p-apps,#p-applist) .ap-pay.p-good{background:#e9f9f3;color:#0a6b45}:is(#p-apps,#p-applist) .ap-pay.p-warn{background:#fff6dd;color:#8a5a00}:is(#p-apps,#p-applist) .ap-pay.p-bad{background:#fdecec;color:#b42a24}:is(#p-apps,#p-applist) .ap-pay.p-mid{background:#eef2f8;color:#42566e}",
+   ":is(#p-apps,#p-applist) .ap-empty{color:#8091a7;font-size:13px;padding:12px 4px;text-align:center}",
+   ":is(#p-apps,#p-applist) .ap-tcard{padding:0;overflow:hidden}",
+   ":is(#p-apps,#p-applist) .ap-tcard .ap-card-h{padding:18px 18px 0}",
+   ":is(#p-apps,#p-applist) .ap-filters{display:flex;gap:8px;flex-wrap:wrap;padding:0 18px 14px}",
+   ":is(#p-apps,#p-applist) .ap-filters input,:is(#p-apps,#p-applist) .ap-filters select{border:1px solid #dfe6f0;border-radius:10px;padding:9px 12px;font-size:13.5px;background:#fff;color:#0b2346;min-height:40px}",
+   ":is(#p-apps,#p-applist) .ap-filters input{flex:1 1 220px;max-width:340px}",
+   ":is(#p-apps,#p-applist) .ap-tw{overflow:auto;max-height:70vh;border-top:1px solid #eef2f7}",
+   ":is(#p-apps,#p-applist) .ap-t{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}",
+   ":is(#p-apps,#p-applist) .ap-t th{position:sticky;top:0;z-index:1;background:#f7f9fc;text-align:left;font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;color:#6b7c92;padding:10px 12px;border-bottom:1px solid #e8edf5;white-space:nowrap}",
+   ":is(#p-apps,#p-applist) .ap-t td{padding:10px 12px;border-bottom:1px solid #f0f3f8;vertical-align:middle;color:#33455c;white-space:nowrap}",
+   ":is(#p-apps,#p-applist) .ap-t tr:hover td{background:#fafcff}",
+   ":is(#p-apps,#p-applist) .ap-t .num{text-align:right;font-variant-numeric:tabular-nums}",
+   ":is(#p-apps,#p-applist) .ap-t small{display:block;font-size:11px;color:#8a9ab0;margin-top:2px;white-space:nowrap}",
+   ":is(#p-apps,#p-applist) .ap-nm{color:#0b2346;font-weight:800}",
+   ":is(#p-apps,#p-applist) .ap-k{display:inline-block;font-size:10.5px;font-weight:900;letter-spacing:.04em;padding:2px 7px;border-radius:6px;margin-right:4px}",
+   ":is(#p-apps,#p-applist) .ap-k.k-UW{background:#e6eefb;color:#16447f}:is(#p-apps,#p-applist) .ap-k.k-GI{background:#e0f7f4;color:#08776c}:is(#p-apps,#p-applist) .ap-k.k-SUPP{background:#f1f3f7;color:#6b7c92}",
+   ":is(#p-apps,#p-applist) .ap-st{display:inline-block;font-size:12px;font-weight:750;padding:3px 9px;border-radius:999px}",
+   ":is(#p-apps,#p-applist) .ap-st.s-good{background:#e9f9f3;color:#0a6b45}:is(#p-apps,#p-applist) .ap-st.s-bad{background:#fdecec;color:#b42a24}:is(#p-apps,#p-applist) .ap-st.s-mute{background:#f1f3f7;color:#5a6b80}:is(#p-apps,#p-applist) .ap-st.s-warn{background:#fff6dd;color:#8a5a00}",
+   ":is(#p-apps,#p-applist) .ap-cnt{display:inline-block;font-size:11.5px;font-weight:850;padding:2px 8px;border-radius:6px}",
+   ":is(#p-apps,#p-applist) .ap-cnt.tk{background:#0db5a6;color:#fff}:is(#p-apps,#p-applist) .ap-cnt.nt{background:#ffe6dc;color:#b04a17}:is(#p-apps,#p-applist) .ap-cnt.out{background:#eef1f6;color:#7c8ba0}",
+   ":is(#p-apps,#p-applist) .ap-cc small{max-width:220px;overflow:hidden;text-overflow:ellipsis}",
+   ":is(#p-apps,#p-applist) .ap-age{width:64px;border:1px solid #dfe6f0;border-radius:8px;padding:6px 8px;font-size:13px;font-weight:700;color:#0b2346;background:#fff}",
+   ":is(#p-apps,#p-applist) .ap-age.empty{background:#fffbea;border-color:#f1e1a6}",
+   ":is(#p-apps,#p-applist) .ap-age.over{background:#f1f3f7;color:#7c8ba0}",
+   ":is(#p-apps,#p-applist) .ap-dash{color:#b8c3d2}",
+   ":is(#p-apps,#p-applist) .ap-foot{padding:12px 18px;font-size:12px;color:#8091a7;border-top:1px solid #eef2f7}",
+   ":is(#p-apps,#p-applist) .ap-goal{margin-top:12px;font-size:12.5px;border-radius:10px;padding:8px 11px;line-height:1.4}",
+   ":is(#p-apps,#p-applist) .ap-goal.ok{background:#e6f8f5;color:#08776c}:is(#p-apps,#p-applist) .ap-goal.low{background:#fff1ea;color:#a44a17}:is(#p-apps,#p-applist) .ap-goal.na{background:#f4f6fa;color:#7c8ba0}",
+   ":is(#p-apps,#p-applist) .gp{margin-bottom:18px;border-top:4px solid #0db5a6}",
+   ":is(#p-apps,#p-applist) .gp-tg{font-size:12px;font-weight:850;color:#08776c;background:#e0f7f4;padding:4px 10px;border-radius:999px}",
+   ":is(#p-apps,#p-applist) .gp-sts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}",
+   ":is(#p-apps,#p-applist) .gp-st{border-radius:12px;padding:14px;border:1px solid #f3d6c6;background:#fffaf6}",
+   ":is(#p-apps,#p-applist) .gp-st.ok{border-color:#bfe9e2;background:#f3fcfa}",
+   ":is(#p-apps,#p-applist) .gp-st-h{font-weight:850;color:#0b2346;font-size:14px}:is(#p-apps,#p-applist) .gp-st-h span{font-size:11.5px;color:#7c8ba0;font-weight:700;margin-left:6px}",
+   ":is(#p-apps,#p-applist) .gp-st-n{display:flex;align-items:baseline;gap:6px;margin:6px 0}:is(#p-apps,#p-applist) .gp-st-n b{font-size:26px;font-weight:900;color:#0b2346}:is(#p-apps,#p-applist) .gp-st-n b.sm{font-size:16px;margin-left:10px}:is(#p-apps,#p-applist) .gp-st-n em{font-style:normal;font-size:11.5px;color:#7c8ba0;font-weight:700}",
+   ":is(#p-apps,#p-applist) .gp-st-m{font-size:12.5px;color:#42566e;line-height:1.45}",
+   ":is(#p-apps,#p-applist) .gp-as{display:grid;gap:10px}",
+   ":is(#p-apps,#p-applist) .gp-a{display:flex;gap:12px;border:1px solid #eef2f7;border-radius:12px;padding:12px 14px}",
+   ":is(#p-apps,#p-applist) .gp-n{flex:0 0 28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}",
+   ":is(#p-apps,#p-applist) .gp-b{min-width:0;flex:1}",
+   ":is(#p-apps,#p-applist) .gp-t{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}:is(#p-apps,#p-applist) .gp-t b{color:#0b2346;font-size:14px}",
+   ":is(#p-apps,#p-applist) .gp-i{font-size:11.5px;font-weight:800;color:#16447f;background:#e6eefb;padding:3px 9px;border-radius:999px}",
+   ":is(#p-apps,#p-applist) .gp-d{font-size:13px;color:#42566e;line-height:1.5;margin-top:4px}",
+   ":is(#p-apps,#p-applist) .gp-l{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}",
+   ":is(#p-apps,#p-applist) .gp-c{font-size:12px;font-weight:700;color:#0b2346;background:#f4f6fa;border:1px solid #e6ebf3;border-radius:8px;padding:4px 8px}:is(#p-apps,#p-applist) .gp-c i{font-style:normal;color:#7c8ba0;font-weight:600}",
+  "@media(max-width:700px){:is(#p-apps,#p-applist) .gp-sts{grid-template-columns:1fr}}",
+  "html.dark :is(#p-apps,#p-applist) .gp-a,html.dark :is(#p-apps,#p-applist) .gp-st{background:#182b44;border-color:#253a54}html.dark :is(#p-apps,#p-applist) .gp-t b,html.dark :is(#p-apps,#p-applist) .gp-st-h,html.dark :is(#p-apps,#p-applist) .gp-st-n b{color:#e8f0fb}",
+   ":is(#p-apps,#p-applist) .ap-mini.usha{background:linear-gradient(135deg,#0b2346,#16447f)}:is(#p-apps,#p-applist) .ap-mini.usha span,:is(#p-apps,#p-applist) .ap-mini.usha em{color:rgba(255,255,255,.75)}:is(#p-apps,#p-applist) .ap-mini.usha b{color:#fff}",
+   ":is(#p-apps,#p-applist) .ap-btn.ghost,#p-applist .ap-btn.ghost{background:#fff;color:#16447f;border:1.5px dashed #9fc0ec;box-shadow:none;text-decoration:none;cursor:grab;display:inline-flex;align-items:center}",
+   ":is(#p-apps,#p-applist) .ap-actions,#p-applist .ap-actions{display:flex;gap:8px;flex-wrap:wrap}",
+   ":is(#p-apps,#p-applist) .av{margin-bottom:18px}",
+   ":is(#p-apps,#p-applist) .av-wkno{font-size:12px;font-weight:700;color:#7c8ba0;margin-left:6px}",
+   ":is(#p-apps,#p-applist) .av-sync{font-size:12px;color:#7c8ba0}",
+   ":is(#p-apps,#p-applist) .av-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}",
+   ":is(#p-apps,#p-applist) .av-c{border:1px solid #eef2f7;border-radius:14px;padding:14px 16px;background:#fbfcfe}",
+   ":is(#p-apps,#p-applist) .av-c.proj{background:linear-gradient(135deg,#f0fbf9,#eef4fd);border-color:#cfe9e4}",
+   ":is(#p-apps,#p-applist) .av-t{font-size:12px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;color:#6b7c92}",
+   ":is(#p-apps,#p-applist) .av-big{font-size:28px;font-weight:900;color:#0b2346;margin:6px 0 10px;font-variant-numeric:tabular-nums}:is(#p-apps,#p-applist) .av-big em{font-style:normal;font-size:12px;font-weight:700;color:#7c8ba0;margin-left:6px}",
+   ":is(#p-apps,#p-applist) .av-rows{display:grid;gap:4px}:is(#p-apps,#p-applist) .av-rows div{display:flex;justify-content:space-between;font-size:13px;color:#42566e}:is(#p-apps,#p-applist) .av-rows b{color:#0b2346;font-variant-numeric:tabular-nums}",
+   ":is(#p-apps,#p-applist) .av-foot{font-size:11px;color:#8091a7;margin-top:8px}",
+   ":is(#p-apps,#p-applist) .av-chart-h{display:flex;gap:14px;align-items:center;margin:16px 0 6px;font-size:12px;font-weight:700;color:#5a6b80}:is(#p-apps,#p-applist) .av-chart-h em{font-style:normal;color:#9aa8bb;margin-left:auto}",
+   ":is(#p-apps,#p-applist) .av-chart-h span::before{content:'';display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}:is(#p-apps,#p-applist) .av-chart-h .s::before{background:#9fc0ec}:is(#p-apps,#p-applist) .av-chart-h .i::before{background:#16447f}",
+   ":is(#p-apps,#p-applist) .av-chart{display:flex;gap:6px;align-items:flex-end;height:120px}",
+   ":is(#p-apps,#p-applist) .av-wk{flex:1;display:flex;flex-direction:column;align-items:center;min-width:0}:is(#p-apps,#p-applist) .av-wk span{font-size:10px;color:#8a9ab0;margin-top:4px;white-space:nowrap}",
+   ":is(#p-apps,#p-applist) .av-bars{height:100px;width:100%;display:flex;gap:2px;align-items:flex-end;justify-content:center}:is(#p-apps,#p-applist) .av-bars i{display:block;width:min(14px,45%);border-radius:4px 4px 1px 1px;min-height:2px}:is(#p-apps,#p-applist) .av-bars i.s{background:#9fc0ec}:is(#p-apps,#p-applist) .av-bars i.i{background:#16447f}",
+  "@media(max-width:1000px){:is(#p-apps,#p-applist) .av-grid{grid-template-columns:1fr}}",
+  "#p-applist .ap-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}",
+  "#p-applist .ap-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid #dfe6f0;background:#fff;border-radius:999px;padding:8px 14px;font-weight:750;font-size:13px;color:#33455c;cursor:pointer}",
+  "#p-applist .ap-chip b{background:#eef2f8;color:#0b2346;border-radius:999px;padding:1px 8px;font-size:12px}",
+  "#p-applist .ap-chip.on{background:#0b2346;color:#fff;border-color:#0b2346}#p-applist .ap-chip.on b{background:rgba(255,255,255,.18);color:#fff}",
+  "#p-applist .ap-chip.bad b{background:#fdecec;color:#b42a24}",
+  "#p-applist .ap-two-l{grid-template-columns:1fr!important}",
+  "#p-applist .ap-pwgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0 10px}",
+   ":is(#p-apps,#p-applist) .ap-howto ol{margin:6px 0 0 18px;padding:0;line-height:1.8;color:#33455c}",
+  "@media(max-width:1280px){:is(#p-apps,#p-applist) .ap-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
+  "@media(max-width:1100px){:is(#p-apps,#p-applist) .ap-two{grid-template-columns:1fr}}",
+  "@media(max-width:640px){:is(#p-apps,#p-applist) .ap-kpis{grid-template-columns:1fr}:is(#p-apps,#p-applist) .ap-formula{grid-template-columns:1fr}:is(#p-apps,#p-applist) .ap-seg button{padding:7px 10px}}",
+  "html.dark :is(#p-apps,#p-applist) .ap-kpi,html.dark :is(#p-apps,#p-applist) .ap-card{background:#14243a;border-color:#253a54}",
+  "html.dark :is(#p-apps,#p-applist) .ap-head h3,html.dark :is(#p-apps,#p-applist) .ap-kpi-t,html.dark :is(#p-apps,#p-applist) .ap-card-h h4,html.dark :is(#p-apps,#p-applist) .ap-nm,html.dark :is(#p-apps,#p-applist) .ap-ringwrap span,html.dark :is(#p-apps,#p-applist) .ap-kr strong,html.dark :is(#p-apps,#p-applist) .ap-br b,html.dark :is(#p-apps,#p-applist) .ap-mini b,html.dark :is(#p-apps,#p-applist) .ap-pw b{color:#e8f0fb}",
+  "html.dark :is(#p-apps,#p-applist) .ap-t th{background:#182b44;color:#9fb2cc}html.dark :is(#p-apps,#p-applist) .ap-t td{border-color:#22364f;color:#c9d6e8}html.dark :is(#p-apps,#p-applist) .ap-t tr:hover td{background:#1a2e48}",
+  "html.dark :is(#p-apps,#p-applist) .ap-mini,html.dark :is(#p-apps,#p-applist) .ap-br.tot,html.dark :is(#p-apps,#p-applist) .ap-seg{background:#1a2e48}html.dark :is(#p-apps,#p-applist) .ap-seg button.on{background:#25405f;color:#fff}"
   ].join("\n");
   var st=document.createElement("style");st.setAttribute("data-sidenav","1");st.textContent=css;document.head.appendChild(st);
   function acctLabel(){
