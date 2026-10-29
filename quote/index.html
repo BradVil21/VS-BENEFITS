@@ -2200,6 +2200,15 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     if(_leadFired) return; _leadFired = true;         // guard: fire once per submit
     try{
       if(typeof gtag !== 'function') return;
+      // Enhanced conversions: Google matches the lead to the ad click with a hashed email/phone,
+      // which recovers conversions that cookies miss (iPhone Safari, cleared cookies).
+      try{
+        var _em=String((data&&(data.email||data.contactEmail))||'').trim().toLowerCase();
+        var _ph=String((data&&(data.phone||data.contactPhone))||'').replace(/\D/g,'');
+        if(_ph.length===10)_ph='+1'+_ph;else if(_ph.length===11&&_ph.charAt(0)==='1')_ph='+'+_ph;else _ph='';
+        var _ud={};if(_em)_ud.email=_em;if(_ph)_ud.phone_number=_ph;
+        if(_em||_ph)gtag('set','user_data',_ud);
+      }catch(e){}
       var leadType = (data && data.type) || 'individual';
       // GA4 lead event (no label needed) -> shows up as a conversion in GA4.
       // Routed through vsTrack so it carries the attribution channel and so

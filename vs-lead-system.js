@@ -78,6 +78,7 @@
   }
   function applyConsent(c){
     if(!c)return;
+    try{ gtag('consent','update',{analytics_storage:c.analytics?'granted':'denied',ad_storage:c.marketing?'granted':'denied',ad_user_data:c.marketing?'granted':'denied',ad_personalization:'denied'}); }catch(e){}
     if(c.analytics) loadAnalytics(); else killCookies(['_ga','_gid','_gat']);
     if(c.marketing) loadMarketing(); else killCookies(['_gcl_au']);
   }
@@ -92,11 +93,11 @@
     var b=document.createElement('div'); b.id='vs-consent-banner';
     b.innerHTML=''
       +'<div class="vs-cc-wrap">'
-      +'  <div class="vs-cc-text"><strong>We value your privacy.</strong> We use essential cookies to run this site. With your permission we also use analytics and marketing cookies to improve the site and measure our ads. See our <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</div>'
+      +'  <div class="vs-cc-text"><strong>We value your privacy.</strong> '+(OPT_IN?'We use essential cookies to run this site. With your permission we also use analytics and marketing cookies to improve the site and measure our ads.':'We use cookies to run this site, understand how it is used and see which of our ads work. We do not sell your information. You can decline at any time.')+' See our <a href="/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</div>'
       +'  <div class="vs-cc-btns">'
       +'    <button type="button" class="vs-cc-btn" id="vs-cc-customize">Customize</button>'
       +'    <button type="button" class="vs-cc-btn" id="vs-cc-decline">Decline</button>'
-      +'    <button type="button" class="vs-cc-btn teal" id="vs-cc-accept">Accept all</button>'
+      +'    <button type="button" class="vs-cc-btn teal" id="vs-cc-accept">'+(OPT_IN?'Accept all':'OK')+'</button>'
       +'  </div>'
       +'  <div class="vs-cc-prefs" id="vs-cc-prefs">'
       +'    <label class="vs-cc-pref locked"><input type="checkbox" checked disabled><span><b>Essential</b>Required for the site and forms to work. Always on.</span></label>'
@@ -120,7 +121,16 @@
   function hideBanner(){ var b=$('vs-consent-banner'); if(b)b.classList.remove('show'); }
   window.vsOpenCookieSettings=function(){ showBanner(true); return false; };
 
+  /* US opt-out model (Oct 29 2026). Measuring which ads bring leads only worked for visitors who tapped
+     "Accept all", so Google Ads saw almost none of the quote-form leads. US visitors (the site serves Florida)
+     now get analytics + ad measurement by default and can Decline in the banner at any time; ad
+     personalization stays off. Visitors in European time zones keep the old prior-consent behaviour.
+     Google Consent Mode v2 signals are sent in both cases. */
+  var _tz=''; try{_tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'';}catch(e){}
+  var OPT_IN=/^Europe\//.test(_tz);
+  try{ gtag('consent','default',{analytics_storage:OPT_IN?'denied':'granted',ad_storage:OPT_IN?'denied':'granted',ad_user_data:OPT_IN?'denied':'granted',ad_personalization:'denied',wait_for_update:500}); }catch(e){}
   if(consent && typeof consent.analytics!=='undefined'){ applyConsent(consent); }
+  else if(!OPT_IN){ applyConsent({analytics:true,marketing:true}); ready(function(){ showBanner(false); }); }
   else { ready(function(){ showBanner(false); }); }
 
   ready(function(){
