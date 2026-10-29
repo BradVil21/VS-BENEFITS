@@ -2251,7 +2251,7 @@ var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,conta
 K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.ushaKpis="vs_usha_kpis";K.ushaOv="vs_usha_overrides";K.ushaIncome="vs_usha_income";K.ushaPlan="vs_usha_plan";K.clientSkip="vs_client_skip";K.msHist="vs_ms_hist";
 LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";LOCAL_TO_REMOTE[K.ushaKpis]="usha_kpis";LOCAL_TO_REMOTE[K.ushaOv]="usha_overrides";LOCAL_TO_REMOTE[K.ushaIncome]="usha_income";LOCAL_TO_REMOTE[K.ushaPlan]="usha_plan";LOCAL_TO_REMOTE[K.clientSkip]="client_skip";LOCAL_TO_REMOTE[K.msHist]="ms_hist";
 REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta","usha_kpis");REMOTE_TO_LOCAL.usha_kpis=K.ushaKpis;REMOTE_KEYS.push("usha_overrides","usha_income","usha_plan");REMOTE_TO_LOCAL.usha_plan=K.ushaPlan;REMOTE_KEYS.push("client_skip","ms_hist");REMOTE_TO_LOCAL.client_skip=K.clientSkip;REMOTE_TO_LOCAL.ms_hist=K.msHist;REMOTE_TO_LOCAL.usha_overrides=K.ushaOv;REMOTE_TO_LOCAL.usha_income=K.ushaIncome;REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
-K.ushaManual="vs_usha_manual";K.ghlSent="vs_ghl_sent";LOCAL_TO_REMOTE[K.ushaManual]="usha_manual";LOCAL_TO_REMOTE[K.ghlSent]="ghl_sent";REMOTE_KEYS.push("usha_manual","ghl_sent");REMOTE_TO_LOCAL.usha_manual=K.ushaManual;REMOTE_TO_LOCAL.ghl_sent=K.ghlSent;
+K.ushaManual="vs_usha_manual";K.ghlSent="vs_ghl_sent";LOCAL_TO_REMOTE[K.ushaManual]="usha_manual";LOCAL_TO_REMOTE[K.ghlSent]="ghl_sent";REMOTE_KEYS.push("usha_manual","ghl_sent");REMOTE_TO_LOCAL.usha_manual=K.ushaManual;REMOTE_TO_LOCAL.ghl_sent=K.ghlSent;K.bcSnap="vs_bc_snap";K.bcLog="vs_bc_log";LOCAL_TO_REMOTE[K.bcSnap]="bc_snap";LOCAL_TO_REMOTE[K.bcLog]="bc_log";REMOTE_KEYS.push("bc_snap","bc_log");REMOTE_TO_LOCAL.bc_snap=K.bcSnap;REMOTE_TO_LOCAL.bc_log=K.bcLog;
 
 function setSyncPill(state){
   var p=$("sync-pill");if(!p)return;
@@ -10731,7 +10731,7 @@ try{(function(){
   })();
   window.__vsTR=TR;
 
-  K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.clientSkip="vs_client_skip";K.msHist="vs_ms_hist";K.ushaManual="vs_usha_manual";K.ghlSent="vs_ghl_sent";
+  K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.clientSkip="vs_client_skip";K.msHist="vs_ms_hist";K.ushaManual="vs_usha_manual";K.ghlSent="vs_ghl_sent";K.bcSnap="vs_bc_snap";K.bcLog="vs_bc_log";
 
   var S={period:"ytd",lperiod:"all",kind:"UW",view:"core",fk:"all",fs:"all",fp:"all",q:""};
   function esc(s){return escapeHtml(s==null?"":String(s));}
@@ -10913,7 +10913,7 @@ try{(function(){
       a.ov=ov||null;a.hidden=!!(ov&&ov.s==="hide");
       if(ov&&ov.s==="pending"){a.countSubmit=false;a.countTaken=false;a.accSubmit=false;a.accTaken=false;a.maturing=false;a.code="pending";a.why="Pending - waiting to see if they paid";a.pay="Pending - checking payment";a.payState="pend";return;}
       /* "They paid" puts the policy in force: it counts as taken (Accurate judges it after its first month, like any in-force policy) */
-      if(ov&&ov.s==="paid"){a.usha_status=a.status;a.status="In Force";a.isPaid=true;a.countSubmit=true;a.countTaken=true;a.accSubmit=a.mature||!a.eff;a.accTaken=a.accSubmit;a.maturing=!a.accSubmit;a.code="inforce";a.why="In force (you confirmed they paid)";a.pay="In force - paid (you confirmed)";a.payState="good";return;}
+      if(ov&&ov.s==="paid"){a.usha_status=a.status;a.status="In Force";a.isPaid=true;a.countSubmit=true;a.countTaken=true;a.accSubmit=a.mature||!a.eff;a.accTaken=a.accSubmit;a.maturing=!a.accSubmit;a.code="inforce";a.why=/in force/i.test(a.usha_status)?"In force (you confirmed they paid)":"Won back (you marked taken)";a.pay="In force - paid (you confirmed)";a.payState="good";return;}
       if(ov&&ov.s==="nottaken"){if(a.over50){a.countSubmit=false;a.accSubmit=false;a.why="Age 50+ and not taken - does not count toward taken";}else{a.countSubmit=true;a.accSubmit=true;a.why="Not taken (you marked)";}a.countTaken=false;a.accTaken=false;a.maturing=false;a.code="nottaken";a.pay="Not taken (you marked)";a.payState="mid";return;}
       /* paid at least once and more than 30 days past the paid-to date: it's a taken policy, not a payment to chase */
       if(/in force/i.test(a.status)&&a.isPaid&&a.ptd&&a.ptd<d30){a.autoTaken=true;a.pay="Taken - paid to "+TR.fmt(a.ptd);a.payState="taken";}
@@ -10932,7 +10932,7 @@ try{(function(){
     var m=document.createElement("div");m.className="ap-ovm";
     var man=manOf(app),sent=ghlSentMap()[nkey(app.name)],inf=/in force/i.test(app.status),opts;
     if(man)opts=(inf?[]:[["m:inforce","Issued - mark in force (Sold, sends to GHL)"]]).concat(inf&&!sent?[["g:send","Mark Sold & send to GHL"]]:[]).concat([["m:pending","Pending"],["m:nt","Not taken"],["m:wd","Withdrawn"],["m:dec","Declined"],["m:edit","Edit application"],["m:del","Delete application"]]).filter(function(o){return o[0]!=="m:pending"||!/pend/i.test(app.status);});
-    else opts=OPTS.filter(function(o){return o[0]||app.ov;}).concat(inf&&!sent?[["g:send","Mark Sold & send to GHL"]]:[]);
+    else opts=OPTS.filter(function(o){return o[0]||app.ov;}).map(function(o){if(o[0]==="paid"&&!/in force/i.test(app.usha_status||app.status))return["paid","Got them back - mark taken (updates Bonus Calculator)"];if(o[0]==="")return["","Undo my update"];return o;}).concat(inf&&!sent?[["g:send","Mark Sold & send to GHL"]]:[]);
     m.innerHTML='<div class="ap-ovm-h">Update '+esc(nice(app.name))+(sent?' <em class="ap-ghl">✓ in GHL</em>':'')+'</div>'+opts.map(function(o){return '<button type="button" data-s="'+o[0]+'"'+(app.ov&&app.ov.s===o[0]?' class="on"':'')+'>'+o[1]+'</button>';}).join("")+'<div class="ap-ovm-f">'+(man?'You added this app. The next USHA sync matches it and replaces it with USHA\'s data.':'Your update stays until USHA shows a new payment or status for this policy.')+'</div>';
     document.body.appendChild(m);var r=btn.getBoundingClientRect();m.style.top=Math.min(window.innerHeight-m.offsetHeight-8,r.bottom+6)+"px";m.style.left=Math.max(8,Math.min(window.innerWidth-m.offsetWidth-8,r.right-m.offsetWidth))+"px";
     m.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var v=b.getAttribute("data-s");m.remove();
@@ -11417,6 +11417,18 @@ try{(function(){
     M.apps.forEach(function(a){var m=(a.submit||"").slice(0,7),key=a.kind+"|"+m;if(!data[key]||!a.countSubmit)return;data[key].s++;if(a.countTaken)data[key].t++;});
     /* Your numbers are stored as adjustments (+/-) on top of what your Applications show, so the calculator keeps
        syncing: a new app, a payment or a status change moves the totals, and your corrections stay applied. */
+    /* Change log: every time an app flips taken / not taken (USHA sync or your update), note it under the month it counts in */
+    if(!wbOnly){try{
+      var snapNow={};M.apps.forEach(function(a){if(!a.submit||a.submit.slice(0,4)!==String(yr)||(a.kind!=="UW"&&a.kind!=="GI"))return;snapNow[a.key]={t:a.countTaken?1:0,s:a.countSubmit?1:0,m:a.submit.slice(0,7),k:a.kind,n:a.name,w:a.why||""};});
+      var prevS=(asArr(K.bcSnap)[0]||{}).items,chg=[];
+      if(prevS&&M.apps.length){Object.keys(snapNow).forEach(function(key){var a=snapNow[key],b=prevS[key];
+        if(!b){if(a.s)chg.push({at:Date.now(),n:a.n,k:a.k,m:a.m,ds:1,dt:a.t,w:"New application"});return;}
+        if(a.t!==b.t||a.s!==b.s)chg.push({at:Date.now(),n:a.n,k:a.k,m:a.m,ds:a.s-b.s,dt:a.t-b.t,w:a.w});});
+        Object.keys(prevS).forEach(function(key){if(!snapNow[key]&&prevS[key].s&&prevS[key].m.slice(0,4)===String(yr))chg.push({at:Date.now(),n:prevS[key].n,k:prevS[key].k,m:prevS[key].m,ds:-1,dt:-prevS[key].t,w:"No longer in your applications"});});}
+      var oldL=asArr(K.bcLog);chg=chg.filter(function(c){return !oldL.some(function(o){return o&&o.n===c.n&&o.m===c.m&&o.k===c.k&&o.dt===c.dt&&o.ds===c.ds&&Math.abs(o.at-c.at)<2*864e5;});});
+      if(chg.length&&chg.length<=25)setArr(K.bcLog,chg.concat(oldL).slice(0,60),true);
+      if(!prevS||chg.length)setArr(K.bcSnap,[{at:Date.now(),items:snapNow}],true);
+    }catch(e){console.warn("bonus log",e);}}
     var migrated=false;
     Object.keys(pl.cells).forEach(function(key){var o=pl.cells[key],dd=data[key];if(!dd)return;
       if(o.ds==null&&o.s!=null&&o.s!==""){o.ds=(+o.s)-dd.s;migrated=true;}if(o.dt==null&&o.t!=null&&o.t!==""){o.dt=(+o.t)-dd.t;migrated=true;}
@@ -11458,6 +11470,11 @@ try{(function(){
         +'<div class="bc-q"><b>At your recent pace</b> ('+Math.round(rr*100)+'% of recent submits sticking)…<div class="bc-a">'+(proj!=null&&proj>=TARGET[k]?'…you\'re already over the line. Keep new apps at '+TARGET[k]+'%+ to stay there.':subsNeeded!=null?'…you\'d need about <b>'+subsNeeded+'</b> more submits to pull the year up to '+TARGET[k]+'%.':'…new submits alone won\'t get you there, because your recent rate is below '+TARGET[k]+'%. Every new app has to stick better than '+TARGET[k]+'%, or you need to save pending ones first.')+'</div></div>'
         +'</div></div>';
     });
+    var LOG=asArr(K.bcLog).filter(function(x){return x&&String(x.m).slice(0,4)===String(yr);}).slice(0,10);
+    if(LOG.length){var lg='<div class="ap-card bc bc-log"><div class="ap-card-h"><h4>Recent changes</h4><span class="bc-logn">Each one is counted in the month the app was submitted</span></div><div class="bc-logl">'+LOG.map(function(x){
+      var tag=x.dt>0&&x.ds<=0?'<b class="up">+1 taken</b>':x.dt>0?'<b class="up">+1 submit, +1 taken</b>':x.dt<0&&x.ds>=0?'<b class="dn">-1 taken</b>':x.ds>0?'<b class="mid">+1 submit</b>':x.ds<0?'<b class="mid">-1 submit'+(x.dt<0?', -1 taken':'')+'</b>':'';
+      return '<div class="bc-li"><span class="d">'+new Date(x.at).toLocaleDateString("en-US",{month:"short",day:"numeric"})+'</span><span class="nm">'+esc(nice(x.n))+' <i class="ap-k k-'+x.k+'">'+x.k+'</i></span><span class="mo">'+monthLbl(x.m)+'</span>'+tag+'<em>'+esc(x.w)+'</em></div>';}).join("")+'</div></div>';
+      html=html.replace('<div class="ap-card bc">',lg+'<div class="ap-card bc">');}
     var wb=winBackHtml(M,TOT);
     if(wbOnly){mount.innerHTML='<div class="ap-head"><div><h3>Win-Back List</h3><p class="lede">Who to get back, ranked by how much each one moves your bonus. It updates by itself from your Applications.</p></div></div>'+wb;wireWB(mount);return;}
     html+=wb;
@@ -11979,6 +11996,7 @@ try{(function(){
   "@media(max-width:640px){.acm-grid{grid-template-columns:1fr}.acm{padding:18px}}",
   ".apf .acm{width:720px}.apf-find{margin-bottom:6px}.apf-find input{border:1px solid #dfe6f0;border-radius:10px;padding:10px 12px;font-size:14px}.apf-res{display:grid;gap:6px;margin:0 0 14px}.apf-hit{display:flex;justify-content:space-between;gap:10px;text-align:left;border:1px solid #e4e9f2;background:#f7f9fc;border-radius:10px;padding:9px 12px;cursor:pointer;font:inherit;color:#0b2346}.apf-hit span{font-size:12px;color:#6b7c92}.apf-hit:hover{border-color:#0db5a6;background:#effaf8}",
   ".acm-f select{border:1px solid #dfe6f0;border-radius:10px;padding:9px 11px;font-size:14px;color:#0b2346;font-family:inherit;background:#fff}.acm-msg.bad{color:#c2410c;font-weight:700}",
+  "#p-bonus .bc-log .ap-card-h{flex-wrap:wrap;gap:6px}#p-bonus .bc-logn{font-size:12px;color:#7b8aa0}#p-bonus .bc-logl{display:grid;gap:6px}#p-bonus .bc-li{display:grid;grid-template-columns:56px minmax(0,1.3fr) 64px auto minmax(0,1.6fr);gap:10px;align-items:center;font-size:13px;padding:7px 10px;border-radius:10px;background:#f7f9fc}#p-bonus .bc-li .d{color:#8a99ad;font-size:12px}#p-bonus .bc-li .nm{font-weight:800;color:#0b2346}#p-bonus .bc-li .nm i{font-style:normal;margin-left:4px}#p-bonus .bc-li .mo{font-weight:700;color:#33455c}#p-bonus .bc-li b{font-size:12px;border-radius:999px;padding:2px 8px;white-space:nowrap}#p-bonus .bc-li b.up{background:#e6f8f1;color:#047857}#p-bonus .bc-li b.dn{background:#fde8e8;color:#b42318}#p-bonus .bc-li b.mid{background:#eef4fd;color:#16447f}#p-bonus .bc-li em{font-style:normal;color:#6b7c92;font-size:12px}@media(max-width:700px){#p-bonus .bc-li{grid-template-columns:1fr auto;}#p-bonus .bc-li .d,#p-bonus .bc-li em{grid-column:1/-1}}",
   ".ap-man{display:inline-block;background:#eef4fd;color:#16447f;border-radius:999px;padding:0 7px;font-weight:800;font-size:10.5px}.ap-ghl{color:#08776c;font-weight:800;font-style:normal;font-size:11px}",
   "#p-bizleads:not(.bz-boardview) #biz-list,#p-bizleads:not(.bz-boardview) #bz-top .bz-chips{display:none!important}",
   "#p-bizleads .ac-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:4px 0 14px}",
