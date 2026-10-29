@@ -2241,9 +2241,9 @@ var presenceMap={};
 var REMOTE_KEYS=["leads","accounts","messages","contact_requests","quick_notes","biz_leads","referrals","appointments","admin_accounts","blocked_ips"];
 var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,contact_requests:K.tickets,quick_notes:K.quickNotes,biz_leads:K.bizLeads,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts,blocked_ips:K.blockedIps};
 /* USHA applications + client ages (2026-10-28) */
-K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.ushaKpis="vs_usha_kpis";K.ushaOv="vs_usha_overrides";K.ushaIncome="vs_usha_income";K.ushaPlan="vs_usha_plan";
-LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";LOCAL_TO_REMOTE[K.ushaKpis]="usha_kpis";LOCAL_TO_REMOTE[K.ushaOv]="usha_overrides";LOCAL_TO_REMOTE[K.ushaIncome]="usha_income";LOCAL_TO_REMOTE[K.ushaPlan]="usha_plan";
-REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta","usha_kpis");REMOTE_TO_LOCAL.usha_kpis=K.ushaKpis;REMOTE_KEYS.push("usha_overrides","usha_income","usha_plan");REMOTE_TO_LOCAL.usha_plan=K.ushaPlan;REMOTE_TO_LOCAL.usha_overrides=K.ushaOv;REMOTE_TO_LOCAL.usha_income=K.ushaIncome;REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
+K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.ushaKpis="vs_usha_kpis";K.ushaOv="vs_usha_overrides";K.ushaIncome="vs_usha_income";K.ushaPlan="vs_usha_plan";K.clientSkip="vs_client_skip";
+LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";LOCAL_TO_REMOTE[K.ushaKpis]="usha_kpis";LOCAL_TO_REMOTE[K.ushaOv]="usha_overrides";LOCAL_TO_REMOTE[K.ushaIncome]="usha_income";LOCAL_TO_REMOTE[K.ushaPlan]="usha_plan";LOCAL_TO_REMOTE[K.clientSkip]="client_skip";
+REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta","usha_kpis");REMOTE_TO_LOCAL.usha_kpis=K.ushaKpis;REMOTE_KEYS.push("usha_overrides","usha_income","usha_plan");REMOTE_TO_LOCAL.usha_plan=K.ushaPlan;REMOTE_KEYS.push("client_skip");REMOTE_TO_LOCAL.client_skip=K.clientSkip;REMOTE_TO_LOCAL.usha_overrides=K.ushaOv;REMOTE_TO_LOCAL.usha_income=K.ushaIncome;REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
 
 function setSyncPill(state){
   var p=$("sync-pill");if(!p)return;
@@ -10681,7 +10681,7 @@ try{(function(){
   })();
   window.__vsTR=TR;
 
-  K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";
+  K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.clientSkip="vs_client_skip";
 
   var S={period:"ytd",lperiod:"all",kind:"UW",view:"core",fk:"all",fs:"all",fp:"all",q:""};
   function esc(s){return escapeHtml(s==null?"":String(s));}
@@ -11102,7 +11102,8 @@ try{(function(){
     var accts=getAccounts(),P=people(),added=0,updated=0,changed=false;
     function acctKey(a){return(String(a.lastName||"").toUpperCase().replace(/[^A-Z]/g,"")+","+String(a.firstName||"").toUpperCase().replace(/[^A-Z]/g,""));}
     var idx={};accts.forEach(function(a){idx[acctKey(a)]=a;});
-    Object.keys(byName).forEach(function(k){
+    var SKIP={};asArr(K.clientSkip).forEach(function(x){if(x&&x.n)SKIP[x.n]=1;});
+    Object.keys(byName).forEach(function(k){if(SKIP[k.replace(/[^A-Z,]/g,"")])return;
       var rs=byName[k].sort(function(a,b){return TR.kind(a.product)==="SUPP"?1:-1;}),main=rs[0],prem=rs.reduce(function(s,r){return s+(+r.prem||0);},0);
       var ids=rs.map(function(r){return r.id;});
       var planName=prodName(/SECURE ADV/.test(main.product)?"SECURE ADVANTAGE":main.product)+(rs.length>1?" + "+(rs.length-1)+" more":"");
@@ -11113,7 +11114,7 @@ try{(function(){
       if(a){
         var before=JSON.stringify([a.usha&&a.usha.ids,a.usha&&a.usha.ptd,a.plan&&a.plan.monthlyPremium,a.policyNumber]);
         a.usha=ush;if(!a.policyNumber)a.policyNumber=main.id;
-        if(!a.plan||!a.plan.monthlyPremium||a.plan.carrier==="USHEALTH")a.plan={carrier:"USHEALTH",planName:planName,effectiveDate:main.eff,renewalDate:"",monthlyPremium:ush.prem,notes:"From USHA sync"};
+        if(!(a.plan&&a.plan.manual)&&(!a.plan||!a.plan.monthlyPremium||a.plan.carrier==="USHEALTH"))a.plan={carrier:"USHEALTH",planName:planName,effectiveDate:main.eff,renewalDate:"",monthlyPremium:ush.prem,notes:"From USHA sync"};
         if(!a.state&&main.state)a.state=main.state;
         if(before!==JSON.stringify([a.usha.ids,a.usha.ptd,a.plan&&a.plan.monthlyPremium,a.policyNumber])){updated++;changed=true;}
       }else{
@@ -11168,7 +11169,8 @@ try{(function(){
       return String(x.a.lastName||fullName(x.a)).localeCompare(String(y.a.lastName||fullName(y.a)),undefined,{sensitivity:"base"});});
     var chips=[["all","All clients",counts.all],["usha","USHA in force",counts.usha],["up7","Paying in 7 days",counts.up7],["up30","Paying in 30 days",counts.up30],["bad","Missed / past due",counts.bad],["noage","Missing age",counts.noage]];
     var body=L.map(function(x){var a=x.a,c=x.core,m=x.main,k=m?TR.kind(m.product):(c?c.kind:"");
-      var plan=m?prodName(/SECURE ADV/.test(m.product)?"SECURE ADVANTAGE":m.product):((a.plan&&a.plan.planName)||"-");
+      var plan=(a.plan&&a.plan.manual&&a.plan.planName)?a.plan.planName:(m?prodName(/SECURE ADV/.test(m.product)?"SECURE ADVANTAGE":m.product):((a.plan&&a.plan.planName)||"-"));
+      if(a.plan&&a.plan.manual&&a.plan.carrier&&a.plan.carrier!=="USHEALTH")k="";
       var extra=x.inf.length>1?'<small>+ '+(x.inf.length-1)+' more: '+esc(x.inf.filter(function(r){return r!==m;}).map(function(r){return prodName(r.product);}).slice(0,3).join(", "))+'</small>':(a.plan&&a.plan.carrier&&a.plan.carrier!=="USHEALTH"?'<small>'+esc(a.plan.carrier)+'</small>':'');
       var st=m?m.status:(a.status||"active");
       return '<tr data-acct="'+esc(a.id)+'"><td><b class="ap-nm">'+esc(fullName(a))+'</b><small>'+esc(a.policyNumber||(m&&m.id)||a.email||"")+((m&&m.state)||a.state?" · "+esc((m&&m.state)||a.state):"")+'</small></td>'
@@ -11203,17 +11205,30 @@ try{(function(){
       +'<div class="acm-grid">'+f("First name","firstName")+f("Last name","lastName")+f("Phone","phone","tel")+f("Email","email","email")+f("Date of birth","dob","date")+f("State","state")+f("Address","address")+f("ZIP","zipcode")+'</div>'
       +'<h4>USHA policies</h4>'+(rs.length?'<div class="ap-tw acm-tw"><table class="ap-t"><thead><tr><th>App ID</th><th>Product</th><th>Status</th><th>Submitted</th><th>Effective</th><th>Paid to</th><th class="num">Monthly</th></tr></thead><tbody>'
         +rs.map(function(r){var kd=TR.kind(r.product);return '<tr><td>'+esc(r.id)+'</td><td><span class="ap-k k-'+kd+'">'+(kd==="SUPP"?"SUPP":kd)+'</span> '+esc(prodName(r.product))+'</td><td>'+statusPill(r.status)+'</td><td>'+TR.fmt(r.submit)+'</td><td>'+TR.fmt(r.eff)+'</td><td>'+TR.fmt(r.ptd)+'</td><td class="num">'+(r.prem?"$"+(+r.prem).toFixed(2):"-")+'</td></tr>';}).join("")+'</tbody></table></div>':'<div class="ap-empty">No USHA policies matched to this client.</div>')
+      +(function(){var pl=a.plan||{};function pf(lbl,key,type,list){return '<label class="acm-f"><span>'+lbl+'</span><input data-p="'+key+'" type="'+(type||"text")+'"'+(list?' list="'+list+'"':'')+' value="'+esc(pl[key]==null?"":pl[key])+'"></label>';}
+        return '<h4>Plan</h4><div class="acm-grid acm-plan">'+pf("Carrier","carrier","text","acm-carriers")+pf("Plan","planName","text","acm-plans")+pf("Monthly premium ($)","monthlyPremium","number")+pf("Effective date","effectiveDate","date")+pf("Renewal date","renewalDate","date")+'</div>'
+          +'<datalist id="acm-carriers">'+["USHEALTH","Ambetter","Florida Blue","Oscar","Aetna CVS Health","UnitedHealthcare","Cigna","Blue Cross Blue Shield","AmeriHealth","Molina","Other"].map(function(x){return '<option value="'+x+'"></option>';}).join("")+'</datalist>'
+          +'<datalist id="acm-plans">'+["Premier Advantage","Premier Choice","Secure Advantage","HealthAccess","Marketplace Bronze","Marketplace Silver","Marketplace Gold","Marketplace Platinum","Short-term medical","Group health","ICHRA","Dental","Vision","Dental + Vision","Critical illness","Accident","Life"].map(function(x){return '<option value="'+x+'"></option>';}).join("")+'</datalist>';})()
       +'<label class="acm-f acm-notes"><span>Notes</span><textarea data-k="notes" rows="4">'+esc(a.notes||"")+'</textarea></label>'
-      +'<div class="acm-acts"><span class="acm-msg"></span><button type="button" class="ap-btn ghost acm-cancel">Close</button><button type="button" class="ap-btn acm-save">Save</button></div></div>';
+      +'<div class="acm-acts"><button type="button" class="ap-btn ghost acm-del">Remove client</button><span class="acm-msg"></span><button type="button" class="ap-btn ghost acm-cancel">Close</button><button type="button" class="ap-btn acm-save">Save</button></div></div>';
     document.body.appendChild(ov);
     function close(){ov.remove();document.removeEventListener("keydown",esck);}
     function esck(e){if(e.key==="Escape")close();}
     document.addEventListener("keydown",esck);
     ov.addEventListener("click",function(e){if(e.target===ov)close();});
     ov.querySelector(".acm-x").addEventListener("click",close);ov.querySelector(".acm-cancel").addEventListener("click",close);
+    var delB=ov.querySelector(".acm-del");delB.addEventListener("click",function(){
+      if(!delB.classList.contains("arm")){delB.classList.add("arm");delB.textContent="Click again to remove "+fullName(a);setTimeout(function(){delB.classList.remove("arm");delB.textContent="Remove client";},4000);return;}
+      var all=getAccounts().filter(function(x){return x.id!==id;});setArr(K.accounts,all,true);
+      /* remember it so the USHA sync doesn't add them back */
+      var skip=asArr(K.clientSkip);skip.push({n:(String(a.lastName||"").toUpperCase().replace(/[^A-Z]/g,"")+","+String(a.firstName||"").toUpperCase().replace(/[^A-Z]/g,"")),ids:(a.usha&&a.usha.ids)||[],at:Date.now()});setArr(K.clientSkip,skip,true);
+      try{renderAccounts();}catch(e){renderClientTable();}close();});
     ov.querySelector(".acm-save").addEventListener("click",function(){
       var all=getAccounts(),t=all.filter(function(x){return x.id===id;})[0];if(!t)return close();
       ov.querySelectorAll("[data-k]").forEach(function(inp){t[inp.getAttribute("data-k")]=inp.value;});
+      var np={},any=false;ov.querySelectorAll("[data-p]").forEach(function(inp){var k=inp.getAttribute("data-p"),v=inp.value.trim();np[k]=k==="monthlyPremium"?(v===""?"":+v):v;if(v)any=true;});
+      var op=t.plan||{},changed=["carrier","planName","monthlyPremium","effectiveDate","renewalDate"].some(function(k){return String(op[k]==null?"":op[k])!==String(np[k]==null?"":np[k]);});
+      if(changed){t.plan=any?Object.assign({},op,np,{manual:true,notes:"Set by you"}):null;if(t.plan&&t.plan.monthlyPremium){t.quoteValue=t.plan.monthlyPremium;t.value=t.plan.monthlyPremium;}}
       t.name=((t.firstName||"")+" "+(t.lastName||"")).trim();t.updated=Date.now();
       setArr(K.accounts,all,true);autoCache.sig="";try{renderAccounts();}catch(e){renderClientTable();}render();
       ov.querySelector(".acm-msg").textContent="Saved";setTimeout(close,500);
@@ -11817,6 +11832,7 @@ try{(function(){
   "#p-bonus .wb-tw{max-height:320px}#p-bonus .wb-t{font-size:12.5px}#p-bonus .wb-t td,#p-bonus .wb-t th{padding:6px 10px}",
   "#p-bonus .wb-t .wb-tag{font-size:9.5px;padding:3px 6px}#p-bonus .wb-whyc{max-width:260px;overflow:hidden;text-overflow:ellipsis;color:#42566e}#p-bonus .wb-t .wb-g{font-weight:900;color:#0a8f83}",
   "#p-bonus .bz-lnk{color:#16447f;text-decoration:none;font-weight:700}",
+  ".acm-del{margin-right:auto;color:#b42a24!important;border-color:#f5c2c2!important}.acm-del.arm{background:#c8372d!important;color:#fff!important;border-color:#c8372d!important}",
    ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus,#p-winback) .ap-howto ol{margin:6px 0 0 18px;padding:0;line-height:1.8;color:#33455c}",
   "@media(max-width:1280px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus,#p-winback) .ap-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
   "@media(max-width:1100px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus,#p-winback) .ap-two{grid-template-columns:1fr}}",
