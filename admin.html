@@ -10657,12 +10657,16 @@ try{(function(){
         a.maturing=submit&&/in force/i.test(s)&&!a.mature;
         var ptd=d(a.ptd),pay="";
         if(/in force/i.test(s)){
-          if(!a.isPaid)pay=ptd&&ptd<new Date(today.getTime()-864e5)?"Missed first payment ("+fmt(a.ptd)+")":"First payment due "+fmt(a.ptd);
+          if(!a.isPaid){
+            /* issued policies are in force; only call it a missed first payment once 30 days pass with no payment */
+            if(ptd&&ptd<new Date(today.getTime()-30*864e5))pay="Missed first payment ("+fmt(a.ptd)+")";
+            else if(ptd&&ptd<new Date(today.getTime()-864e5))pay="In force - issued "+fmt(a.issue||a.eff)+", first payment posting";
+            else pay="First payment due "+fmt(a.ptd);}
           else if(ptd<new Date(today.getTime()-3*864e5))pay="Past due - paid to "+fmt(a.ptd);
           else pay="Paid - next due "+fmt(a.ptd);
         }else if(/cancel|lapse/i.test(s))pay=a.isPaid?"Paid "+a.monthsPaid+" mo, then stopped":"Never paid";
         else pay="";
-        a.pay=pay;a.payState=/Missed|Past due|Never paid/.test(pay)?"bad":/First payment due/.test(pay)?"warn":/^Paid -/.test(pay)?"good":/then stopped/.test(pay)?"mid":"none";
+        a.pay=pay;a.payState=/Missed|Past due|Never paid/.test(pay)?"bad":/First payment due/.test(pay)?"warn":/^Paid -|^In force - issued/.test(pay)?"good":/then stopped/.test(pay)?"mid":"none";
       });
       return apps;
     }
@@ -10996,6 +11000,25 @@ try{(function(){
 
   /* ---- In-force policies become Active Clients (added or updated after every USHA import/sync) ---- */
   function splitName(n){var p=String(n||"").split(",");return{last:nice(p[0]||"").trim(),first:nice((p[1]||"").trim()).trim()};}
+  function samePerson(aLast,aFirst,bLast,bFirst){
+    aLast=String(aLast||"").toUpperCase().replace(/[^A-Z]/g,"");bLast=String(bLast||"").toUpperCase().replace(/[^A-Z]/g,"");
+    aFirst=String(aFirst||"").toUpperCase().replace(/[^A-Z]/g,"");bFirst=String(bFirst||"").toUpperCase().replace(/[^A-Z]/g,"");
+    if(!aLast||!bLast||!aFirst||!bFirst)return false;
+    if(!(aLast===bLast||(aLast.length>3&&lev2(aLast,bLast)<=1)))return false;
+    return aFirst===bFirst||lev2(aFirst,bFirst)<=2||(aFirst.length>=3&&bFirst.length>=3&&aFirst.slice(0,3)===bFirst.slice(0,3))||aFirst.indexOf(bFirst)===0||bFirst.indexOf(aFirst)===0;
+  }
+  /* a client you already had (typed by hand) wins over the copy the USHA sync made: move the USHA policy onto yours */
+  function mergeDupes(accts){
+    var removed=0,keep=accts.filter(function(a){return a.source!=="USHA";});
+    accts.filter(function(a){return a.source==="USHA";}).forEach(function(u){
+      var m=keep.filter(function(a){return samePerson(a.lastName,a.firstName,u.lastName,u.firstName);})[0];
+      if(!m)return;
+      m.usha=u.usha;if(!m.policyNumber)m.policyNumber=u.policyNumber;if(!m.state)m.state=u.state;if(!m.dob&&u.dob)m.dob=u.dob;
+      if(!m.plan||!m.plan.monthlyPremium||!m.plan.carrier||m.plan.carrier==="USHEALTH")m.plan=u.plan;
+      u.__drop=1;removed++;});
+    if(!removed)return accts;
+    return accts.filter(function(a){return !a.__drop;});
+  }
   function syncActiveClients(){
     var rows=getRows();if(!rows.length)return 0;
     var byName={};rows.forEach(function(r){if(!/in force/i.test(r.status))return;var k=nkey(r.name);(byName[k]=byName[k]||[]).push(r);});
@@ -11007,6 +11030,7 @@ try{(function(){
       var ids=rs.map(function(r){return r.id;});
       var planName=prodName(/SECURE ADV/.test(main.product)?"SECURE ADVANTAGE":main.product)+(rs.length>1?" + "+(rs.length-1)+" more":"");
       var a=idx[k.replace(/[^A-Z,]/g,"")];
+      if(!a){var nmx=splitName(main.name);a=accts.filter(function(x){return x.source!=="USHA"&&samePerson(x.lastName,x.firstName,nmx.last,nmx.first);})[0]||accts.filter(function(x){return samePerson(x.lastName,x.firstName,nmx.last,nmx.first);})[0]||null;}
       if(!a){var c=findPerson(P,k);a=c.filter(function(p){return p.rec&&accts.indexOf(p.rec)>=0;}).map(function(p){return p.rec;})[0]||null;}
       var ush={ids:ids,status:"In Force",eff:main.eff,ptd:main.ptd,submit:main.submit,product:main.product,prem:Math.round(prem*100)/100,state:main.state,at:Date.now()};
       if(a){
@@ -11024,6 +11048,7 @@ try{(function(){
         added++;changed=true;
       }
     });
+    var n0=accts.length;accts=mergeDupes(accts);if(accts.length!==n0)changed=true;
     if(changed){setArr(K.accounts,accts,true);try{renderAccounts();}catch(e){}}
     var mt=meta();if(mt.at){mt.clientsSyncedAt=Date.now();setArr(K.ushaMeta,[mt],true);}
     return added;
@@ -11214,7 +11239,7 @@ try{(function(){
   window.vsRenderApps=render;
   /* the nav button: works even if an older click handler doesn't know this tab */
   document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest('[data-tab="apps"],[data-tab="applist"]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();switchTab(b.getAttribute("data-tab"));},true);
-  setTimeout(function(){try{var mt=meta();if(mt.at&&(!mt.clientsSyncedAt||mt.clientsSyncedAt<mt.at)&&!$("shell").hidden)syncActiveClients();}catch(e){}},4000);
+  setTimeout(function(){try{var mt=meta();if(mt.at&&(!mt.clientsSyncedAt||mt.clientsSyncedAt<mt.at||(mt.clientsVer||0)<2)&&!$("shell").hidden){syncActiveClients();var m2=meta();m2.clientsVer=2;setArr(K.ushaMeta,[m2],true);}}catch(e){}},4000);
   setTimeout(function(){try{if($("p-accounts")&&$("p-accounts").classList.contains("active"))renderClientTable();}catch(e){}},1500);
   if(($("p-apps")&&$("p-apps").classList.contains("active"))||($("p-applist")&&$("p-applist").classList.contains("active")))render();
 }catch(err){if(window.console)console.warn("applications tab failed",err);}})();
