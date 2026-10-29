@@ -1692,6 +1692,9 @@ html.dark .ads-t th,html.dark .ads-t td{border-color:#253a54}html.dark .ads-bars
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><span class="sni-label">Business Leads</span>
       <span class="sni-badge" id="b-biz" style="display:none">0</span>
     </button>
+    <button class="sidebar-nav-item" data-tab="apps" type="button">
+      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg></span><span class="sni-label">Applications</span>
+    </button>
     <button class="sidebar-nav-item" data-tab="ads" type="button">
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></span><span class="sni-label">Marketing</span>
     </button>
@@ -1935,6 +1938,11 @@ html.dark .ads-t th,html.dark .ads-t td{border-color:#253a54}html.dark .ads-bars
     </div>
 
     <!-- MARKETING (Google Ads performance) -->
+    <!-- APPLICATIONS + TAKEN RATE (USHA) -->
+    <div id="p-apps" class="panel">
+      <div id="apps-mount"></div>
+    </div>
+
     <div id="p-ads" class="panel">
       <h3>Marketing</h3>
       <p class="lede">Live from your Google Ads account (synced hourly) next to the leads, quotes and sales those ads produced in this portal.</p>
@@ -2220,6 +2228,10 @@ var cloud={ready:false,suspend:0};
 var presenceMap={};
 var REMOTE_KEYS=["leads","accounts","messages","contact_requests","quick_notes","biz_leads","referrals","appointments","admin_accounts","blocked_ips"];
 var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,contact_requests:K.tickets,quick_notes:K.quickNotes,biz_leads:K.bizLeads,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts,blocked_ips:K.blockedIps};
+/* USHA applications + client ages (2026-10-28) */
+K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";
+LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";
+REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta");REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
 
 function setSyncPill(state){
   var p=$("sync-pill");if(!p)return;
@@ -10581,6 +10593,484 @@ try{(function(){
   bizImportCsv=function(){openImporter("biz");};
   setTimeout(function(){try{if($$("p-pipeline")&&$$("p-pipeline").classList.contains("active"))czPipeline();if($$("p-bizleads")&&$$("p-bizleads").classList.contains("active"))renderBizLeads();}catch(e){}},1600);
 })();}catch(err){if(window.console)console.warn("pipeline dead leads / import failed",err);}
+
+
+/* ═══════════════ APPLICATIONS + TAKEN RATE (2026-10-28) ═══════════════
+   USHA sales report rows live in vs_usha_apps (cloud: usha_apps). Client ages live in vs_usha_ages.
+   Taken Rate = Taken ÷ Submits.
+     Taken   = In Force + Canceled/Lapse after paying (paid-to date past the effective date)
+     Submits = every core app, minus Pending and minus Withdrawn apps replaced by a resubmission
+     UW (PREMIERADVANTAGE-24, PREMIERCHOICE-15, SECURE ADV SICKNESS/ACCIDENT) counts clients under 50 only
+     GI (HEALTHACCESS III) counts all ages, but a 50+ client who cancels is left out
+     Everything else is a supplement and never counts.
+   "Accurate" judges a still-active policy only once it clears effective date + 1 month.
+   "YTD (all months)" counts everything now, including brand-new submits. */
+(function(){try{
+  var TR=(function(){
+    var UW=/^(PREMIERADVANTAGE-24|PREMIERCHOICE-15|SECURE ADV SICKNESS|SECURE ADV ACCIDENT)$/,GI=/^HEALTHACCESS III$/;
+    function kind(p){p=(p||"").trim().toUpperCase();return UW.test(p)?"UW":GI.test(p)?"GI":"SUPP";}
+    function d(s){return s?new Date(s+"T12:00:00"):null;}
+    function addMonth(s){var x=d(s);if(!x)return null;x.setMonth(x.getMonth()+1);return x;}
+    function nm(n){var p=(n||"").toUpperCase().split(","),last=(p[0]||"").replace(/[^A-Z]/g,""),first=(p[1]||"").trim().replace(/[^A-Z ]/g,"");return{last:last,first:first,fi:first.charAt(0)};}
+    function lev(a,b){var m=[],i,j;for(i=0;i<=a.length;i++)m[i]=[i];for(j=1;j<=b.length;j++)m[0][j]=j;for(i=1;i<=a.length;i++)for(j=1;j<=b.length;j++)m[i][j]=Math.min(m[i-1][j]+1,m[i][j-1]+1,m[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return m[a.length][b.length];}
+    function same(a,b){var x=nm(a),y=nm(b);if(x.last===y.last&&x.fi===y.fi)return true;return x.last.length>3&&lev(x.last,y.last)<=2&&lev(x.first.split(" ")[0],y.first.split(" ")[0])<=2;}
+    function paid(a){return !!(a.ptd&&a.eff&&a.ptd>a.eff);}
+    function monthsPaid(a){if(!paid(a))return 0;return Math.max(1,Math.round((d(a.ptd)-d(a.eff))/2629800000));}
+    function pending(s){return /pend|process|approved|submitted|underwrit|received/i.test(s||"");}
+    function fmt(s){if(!s)return "";var p=s.split("-");return p[1]+"/"+p[2]+"/"+p[0].slice(2);}
+    function coreApps(rows){
+      var g={};
+      rows.forEach(function(r){var k=kind(r.product);if(k==="SUPP")return;var key=String(r.id).slice(0,9)+"|"+k;
+        if(!g[key])g[key]={key:key,base:String(r.id).slice(0,9),ids:[],kind:k,product:(r.product||"").trim(),name:(r.name||"").trim(),status:r.status,submit:r.submit,eff:r.eff,issue:r.issue,ptd:r.ptd,prem:0,mode:r.mode,method:r.method,state:r.state,age:r.age};
+        var a=g[key];a.ids.push(r.id);a.prem+=(+r.prem||0);if(r.age!=null&&r.age!=="")a.age=r.age;
+        if(/SECURE ADV/.test(r.product))a.product="SECURE ADVANTAGE";});
+      return Object.keys(g).map(function(k){return g[k];});
+    }
+    function classify(apps,today){
+      today=today||new Date();
+      apps.forEach(function(a){
+        var s=a.status||"",age=(a.age===""||a.age==null)?null:+a.age;
+        a.over50=age!=null&&age>=50;a.ageUnknown=age==null;a.isPaid=paid(a);a.monthsPaid=monthsPaid(a);a.replaced=false;
+        if(/withdrawn/i.test(s))a.replaced=apps.some(function(b){return b!==a&&!/withdrawn/i.test(b.status)&&same(a.name,b.name)&&b.submit>=a.submit&&(d(b.submit)-d(a.submit))/864e5<=45;});
+        a.mature=!!(a.eff&&addMonth(a.eff)<=today);
+        var why="",submit=true,taken=false,code="";
+        if(pending(s)){submit=false;why="Pending - not counted yet";code="pending";}
+        else if(/withdrawn/i.test(s)&&a.replaced){submit=false;why="Withdrawn, resubmitted - not counted";code="replaced";}
+        else if(a.kind==="UW"&&a.over50){submit=false;why="Underwritten, age 50+ - not counted";code="uw50";}
+        else if(/in force/i.test(s)){taken=true;why="In force";code="inforce";}
+        else if(/cancel|lapse/i.test(s)){
+          if(a.over50){submit=false;why="Age 50+ and canceled - not counted";code="cancel50";}
+          else if(a.isPaid){taken=true;why=(/lapse/i.test(s)?"Lapsed":"Canceled")+" after paying "+a.monthsPaid+" mo";code="paidcancel";}
+          else{why=(/lapse/i.test(s)?"Lapsed":"Canceled")+" before paying";code="unpaidcancel";}
+        }else if(/declin/i.test(s)){why="Declined";code="declined";}
+        else if(/withdrawn/i.test(s)){why="Withdrawn";code="withdrawn";}
+        else{why=s||"Not taken";code="nottaken";}
+        a.code=code;a.countSubmit=submit;a.countTaken=submit&&taken;
+        a.accSubmit=submit&&!(/in force/i.test(s)&&!a.mature);a.accTaken=a.accSubmit&&taken;a.why=why;
+        a.maturing=submit&&/in force/i.test(s)&&!a.mature;
+        var ptd=d(a.ptd),pay="";
+        if(/in force/i.test(s)){
+          if(!a.isPaid)pay=ptd&&ptd<new Date(today.getTime()-864e5)?"Missed first payment ("+fmt(a.ptd)+")":"First payment due "+fmt(a.ptd);
+          else if(ptd<new Date(today.getTime()-3*864e5))pay="Past due - paid to "+fmt(a.ptd);
+          else pay="Paid - next due "+fmt(a.ptd);
+        }else if(/cancel|lapse/i.test(s))pay=a.isPaid?"Paid "+a.monthsPaid+" mo, then stopped":"Never paid";
+        else pay="";
+        a.pay=pay;a.payState=/Missed|Past due|Never paid/.test(pay)?"bad":/First payment due/.test(pay)?"warn":/^Paid -/.test(pay)?"good":/then stopped/.test(pay)?"mid":"none";
+      });
+      return apps;
+    }
+    function rate(apps,field){var sub=0,tk=0;apps.forEach(function(a){if(field==="acc"?a.accSubmit:a.countSubmit){sub++;if(field==="acc"?a.accTaken:a.countTaken)tk++;}});return{taken:tk,submits:sub,pct:sub?Math.round(tk/sub*1000)/10:null};}
+    return{kind:kind,coreApps:coreApps,classify:classify,rate:rate,fmt:fmt};
+  })();
+  window.__vsTR=TR;
+
+  K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";
+
+  var S={period:"ytd",kind:"UW",view:"core",fk:"all",fs:"all",fp:"all",q:""};
+  function esc(s){return escapeHtml(s==null?"":String(s));}
+  function nkey(n){return String(n||"").toUpperCase().replace(/[^A-Z,]/g,"");}
+  function getRows(){return asArr(K.ushaApps);}
+  function ageMap(){var m={};asArr(K.ushaAges).forEach(function(a){if(a&&a.n)m[a.n]=a.age;});return m;}
+  function meta(){var a=asArr(K.ushaMeta);return a[0]||{};}
+  function ymd(dt){return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");}
+  function periodRange(){
+    var t=new Date(),y=t.getFullYear();
+    if(S.period==="ytd")return{from:y+"-01-01",to:"9999",label:"YTD "+y};
+    if(S.period==="month")return{from:ymd(new Date(y,t.getMonth(),1)),to:"9999",label:t.toLocaleString("en-US",{month:"long"})};
+    if(S.period==="90")return{from:ymd(new Date(t.getTime()-90*864e5)),to:"9999",label:"Last 90 days"};
+    if(S.period==="lastmonth"){var a=new Date(y,t.getMonth()-1,1),b=new Date(y,t.getMonth(),0);return{from:ymd(a),to:ymd(b),label:a.toLocaleString("en-US",{month:"long"})};}
+    return{from:"0000",to:"9999",label:"All time"};
+  }
+  function model(){
+    var am=ageMap(),rows=getRows().map(function(r){var o=Object.assign({},r);var ag=am[nkey(r.name)];if(ag!=null&&ag!=="")o.age=ag;return o;});
+    var apps=TR.classify(TR.coreApps(rows));
+    var pr=periodRange(),inP=function(a){return a.submit>=pr.from&&a.submit<=pr.to;};
+    return{rows:rows,apps:apps,pr:pr,inP:inP,am:am};
+  }
+
+  function pctTxt(r){return r.pct==null?"--":(r.pct%1===0?r.pct.toFixed(0):r.pct.toFixed(1))+"%";}
+  function tone(p){return p==null?"na":p>=60?"good":p>=45?"ok":"low";}
+  function ring(p,size){var v=p==null?0:Math.max(0,Math.min(100,p)),r=34,c=2*Math.PI*r;
+    return '<svg class="ap-ring t-'+tone(p)+'" viewBox="0 0 80 80" width="'+size+'" height="'+size+'" aria-hidden="true"><circle cx="40" cy="40" r="'+r+'" class="trk"/><circle cx="40" cy="40" r="'+r+'" class="val" stroke-dasharray="'+(c*v/100).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 40 40)"/></svg>';}
+  function kpi(title,sub,list){
+    var acc=TR.rate(list,"acc"),ytd=TR.rate(list,"ytd");
+    return '<div class="ap-kpi"><div class="ap-kpi-top"><div><div class="ap-kpi-t">'+title+'</div><div class="ap-kpi-s">'+sub+'</div></div>'
+      +'<div class="ap-ringwrap">'+ring(acc.pct,74)+'<span>'+pctTxt(acc)+'</span></div></div>'
+      +'<div class="ap-kpi-rows"><div class="ap-kr"><b>Accurate</b><span class="ap-math">'+acc.taken+' ÷ '+acc.submits+'</span><strong class="t-'+tone(acc.pct)+'">'+pctTxt(acc)+'</strong></div>'
+      +'<div class="ap-kr"><b>YTD (all months)</b><span class="ap-math">'+ytd.taken+' ÷ '+ytd.submits+'</span><strong>'+pctTxt(ytd)+'</strong></div></div></div>';
+  }
+  function breakdown(list,kindLabel){
+    function c(f){return list.filter(f).length;}
+    var inforceMature=c(function(a){return a.code==="inforce"&&a.mature;}),inforceNew=c(function(a){return a.code==="inforce"&&!a.mature;}),
+      paidCancel=c(function(a){return a.code==="paidcancel";}),
+      nt=c(function(a){return a.code==="nottaken";}),dec=c(function(a){return a.code==="declined";}),wd=c(function(a){return a.code==="withdrawn";}),uc=c(function(a){return a.code==="unpaidcancel";}),
+      pend=c(function(a){return a.code==="pending";}),rep=c(function(a){return a.code==="replaced";}),u50=c(function(a){return a.code==="uw50";}),c50=c(function(a){return a.code==="cancel50";}),
+      unk=c(function(a){return a.ageUnknown&&a.countSubmit;});
+    var acc=TR.rate(list,"acc"),ytd=TR.rate(list,"ytd");
+    function row(l,n,cls,hint){return '<div class="ap-br '+(cls||"")+'"><span>'+l+(hint?'<em>'+hint+'</em>':'')+'</span><b>'+n+'</b></div>';}
+    return '<div class="ap-card"><div class="ap-card-h"><h4>How the math works · '+kindLabel+'</h4></div>'
+      +'<div class="ap-brs">'
+      +row("In force, past first month",inforceMature,"plus")
+      +row("In force, still in first month",inforceNew,"plus soft","counts in YTD only")
+      +row("Canceled / lapsed after paying",paidCancel,"plus")
+      +row("= Taken",'<span class="acc">'+acc.taken+'</span> <i>/</i> '+ytd.taken,"tot","Accurate / YTD")
+      +row("Not taken",nt,"minus")+row("Declined",dec,"minus")+row("Withdrawn (not resubmitted)",wd,"minus")+row("Canceled before paying",uc,"minus")
+      +row("= Submits",'<span class="acc">'+acc.submits+'</span> <i>/</i> '+ytd.submits,"tot","Accurate / YTD")
+      +'<div class="ap-br-sep">Left out of the rate</div>'
+      +row("Pending",pend,"out")+row("Withdrawn, then resubmitted",rep,"out")
+      +(kindLabel==="Underwritten"?row("Age 50+ (UW counts under 50 only)",u50,"out"):row("Age 50+ and canceled",c50,"out"))
+      +'</div>'
+      +'<div class="ap-formula"><div><span>Accurate</span><b>'+acc.taken+' ÷ '+acc.submits+' = '+pctTxt(acc)+'</b></div><div><span>YTD (all months)</span><b>'+ytd.taken+' ÷ '+ytd.submits+' = '+pctTxt(ytd)+'</b></div></div>'
+      +(unk?'<div class="ap-note">'+unk+' counted app'+(unk===1?" has":"s have")+' no age yet, so '+(unk===1?"it is":"they are")+' treated as under 50. Add ages in the table below to make this exact.</div>':'')
+      +'</div>';
+  }
+  function monthly(apps){
+    var m={};apps.forEach(function(a){if(!a.submit)return;var k=a.submit.slice(0,7);(m[k]=m[k]||[]).push(a);});
+    var keys=Object.keys(m).sort().slice(-8);
+    if(!keys.length)return "";
+    var bars=keys.map(function(k){var L=m[k],uw=TR.rate(L.filter(function(a){return a.kind==="UW";}),"ytd"),gi=TR.rate(L.filter(function(a){return a.kind==="GI";}),"ytd"),acc=TR.rate(L.filter(function(a){return a.kind==="UW";}),"acc");
+      var lab=new Date(k+"-15T12:00:00").toLocaleString("en-US",{month:"short"});
+      function bar(r,cls,t){return '<div class="ap-bar '+cls+'" title="'+t+': '+r.taken+' of '+r.submits+'"><i style="height:'+(r.pct==null?0:Math.max(3,r.pct))+'%"></i><span>'+(r.pct==null?"":Math.round(r.pct))+'</span></div>';}
+      return '<div class="ap-mo"><div class="ap-bars">'+bar(uw,"uw","Underwritten")+bar(gi,"gi","Guaranteed issue")+'</div><div class="ap-mo-l">'+lab+'</div><div class="ap-mo-n">'+uw.submits+' · '+gi.submits+'</div></div>';}).join("");
+    return '<div class="ap-card"><div class="ap-card-h"><h4>Taken rate by month submitted</h4><div class="ap-legend"><span class="uw">Underwritten</span><span class="gi">Guaranteed issue</span></div></div>'
+      +'<div class="ap-chart"><div class="ap-grid"><span>100</span><span>75</span><span>50</span><span>25</span></div>'+bars+'</div>'
+      +'<div class="ap-note soft">YTD logic per month (brand-new policies count as taken). Numbers under each month: UW submits · GI submits.</div></div>';
+  }
+  function payWatch(apps){
+    var t=new Date(),soon=ymd(new Date(t.getTime()+14*864e5));
+    var bad=apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="bad";}).sort(function(a,b){return a.ptd<b.ptd?-1:1;});
+    var due=apps.filter(function(a){return /in force/i.test(a.status)&&(a.payState==="warn"||(a.payState==="good"&&a.ptd<=soon));}).sort(function(a,b){return a.ptd<b.ptd?-1:1;});
+    function li(a,cls){return '<div class="ap-pw '+cls+'"><div><b>'+esc(nice(a.name))+'</b><span>'+esc(prodName(a.product))+' · '+a.kind+'</span></div><div class="ap-pw-r"><span class="ap-pay p-'+a.payState+'">'+esc(a.pay)+'</span><em>$'+a.prem.toFixed(2)+'/mo</em></div></div>';}
+    return '<div class="ap-card"><div class="ap-card-h"><h4>Payments to watch</h4><span class="ap-count">'+bad.length+' need attention</span></div>'
+      +(bad.length?'<div class="ap-pw-h bad">Missed or past due</div>'+bad.map(function(a){return li(a,"bad");}).join(""):'<div class="ap-empty">No missed payments on active policies.</div>')
+      +(due.length?'<div class="ap-pw-h">Drafting in the next 14 days</div>'+due.slice(0,6).map(function(a){return li(a,"");}).join(""):"")
+      +'</div>';
+  }
+  function nice(n){return String(n||"").trim().toLowerCase().replace(/(^|[\s,'-])([a-z])/g,function(m,p,c){return p+c.toUpperCase();}).replace(/,\s*/,", ");}
+  function prodName(p){p=String(p||"").trim();var map={"PREMIERADVANTAGE-24":"Premier Advantage","PREMIERCHOICE-15":"Premier Choice","SECURE ADVANTAGE":"Secure Advantage","HEALTHACCESS III":"HealthAccess"};return map[p.toUpperCase()]||p;}
+  function statusPill(s){var c=/in force/i.test(s)?"good":/cancel|lapse/i.test(s)?"bad":/declin|not taken/i.test(s)?"mute":/withdrawn/i.test(s)?"mute":"warn";return '<span class="ap-st s-'+c+'">'+esc(s)+'</span>';}
+  function countsPill(a){
+    if(!a.countSubmit)return '<span class="ap-cnt out" title="'+esc(a.why)+'">Not counted</span><small>'+esc(a.why.replace(/ - not counted.*/,""))+'</small>';
+    if(a.countTaken)return '<span class="ap-cnt tk">Taken</span><small>'+esc(a.why)+(a.maturing?" · counts in Accurate after "+TR.fmt(ymd(new Date(new Date(a.eff+"T12:00:00").setMonth(new Date(a.eff+"T12:00:00").getMonth()+1))))+"":"")+'</small>';
+    return '<span class="ap-cnt nt">Not taken</span><small>'+esc(a.why)+'</small>';
+  }
+  function table(M){
+    var t=new Date();
+    if(S.view==="core"){
+      var L=M.apps.filter(M.inP).filter(function(a){
+        if(S.fk!=="all"&&a.kind!==S.fk)return false;
+        if(S.fs==="taken"&&!a.countTaken)return false;if(S.fs==="nottaken"&&!(a.countSubmit&&!a.countTaken))return false;if(S.fs==="out"&&a.countSubmit)return false;
+        if(S.fs==="inforce"&&!/in force/i.test(a.status))return false;
+        if(S.fp!=="all"&&a.payState!==S.fp)return false;
+        if(S.q&&(a.name+" "+a.ids.join(" ")+" "+a.product).toLowerCase().indexOf(S.q)<0)return false;return true;})
+        .sort(function(a,b){return a.submit<b.submit?1:a.submit>b.submit?-1:0;});
+      var body=L.map(function(a){var ag=M.am[nkey(a.name)];
+        return '<tr><td><b class="ap-nm">'+esc(nice(a.name))+'</b><small>'+esc(a.ids[0])+(a.state?" · "+esc(a.state):"")+'</small></td>'
+          +'<td><span class="ap-k k-'+a.kind+'">'+a.kind+'</span> '+esc(prodName(a.product))+'</td>'
+          +'<td>'+statusPill(a.status)+'</td><td>'+TR.fmt(a.submit)+'</td><td>'+TR.fmt(a.eff)+'</td><td>'+TR.fmt(a.ptd)+'</td>'
+          +'<td>'+(a.pay?'<span class="ap-pay p-'+a.payState+'">'+esc(a.pay)+'</span>':'<span class="ap-dash">-</span>')+'</td>'
+          +'<td class="num">'+(a.prem?"$"+a.prem.toFixed(2):"-")+'</td>'
+          +'<td><input class="ap-age'+(ag==null||ag===""?" empty":"")+(+ag>=50?" over":"")+'" type="number" min="0" max="110" inputmode="numeric" placeholder="age" data-n="'+esc(nkey(a.name))+'" value="'+(ag==null?"":esc(ag))+'"></td>'
+          +'<td class="ap-cc">'+countsPill(a)+'</td></tr>';}).join("");
+      return '<div class="ap-tw"><table class="ap-t"><thead><tr><th>Client</th><th>Plan</th><th>Status</th><th>Submitted</th><th>Effective</th><th>Paid to</th><th>Payment</th><th class="num">Monthly</th><th>Age</th><th>Taken rate</th></tr></thead><tbody>'
+        +(body||'<tr><td colspan="10" class="ap-empty">No applications match.</td></tr>')+'</tbody></table></div><div class="ap-foot">'+L.length+' core application'+(L.length===1?"":"s")+' · '+M.pr.label+'</div>';
+    }
+    var R=M.rows.filter(function(r){return r.submit>=M.pr.from&&r.submit<=M.pr.to;}).filter(function(r){var k=TR.kind(r.product);
+      if(S.fk!=="all"&&(S.fk==="SUPP"?k!=="SUPP":k!==S.fk))return false;
+      if(S.q&&(r.name+" "+r.id+" "+r.product).toLowerCase().indexOf(S.q)<0)return false;return true;})
+      .sort(function(a,b){return a.submit<b.submit?1:a.submit>b.submit?-1:String(a.id)<String(b.id)?-1:1;});
+    var body2=R.map(function(r){var k=TR.kind(r.product);
+      return '<tr><td><b class="ap-nm">'+esc(nice(r.name))+'</b><small>'+esc(r.id)+'</small></td><td>'+esc(r.product)+'</td><td><span class="ap-k k-'+k+'">'+(k==="SUPP"?"Supplement":k)+'</span></td><td>'+statusPill(r.status)+'</td><td>'+TR.fmt(r.submit)+'</td><td>'+TR.fmt(r.eff)+'</td><td>'+TR.fmt(r.ptd)+'</td><td class="num">'+(r.prem?"$"+(+r.prem).toFixed(2):"-")+'</td></tr>';}).join("");
+    return '<div class="ap-tw"><table class="ap-t"><thead><tr><th>Client</th><th>Product</th><th>Type</th><th>Status</th><th>Submitted</th><th>Effective</th><th>Paid to</th><th class="num">Monthly</th></tr></thead><tbody>'
+      +(body2||'<tr><td colspan="8" class="ap-empty">No policies match.</td></tr>')+'</tbody></table></div><div class="ap-foot">'+R.length+' polic'+(R.length===1?"y":"ies")+' · supplements never count toward taken rate</div>';
+  }
+  function seg(name,opts,cur){return '<div class="ap-seg" data-seg="'+name+'">'+opts.map(function(o){return '<button type="button" data-v="'+o[0]+'"'+(o[0]===cur?' class="on"':'')+'>'+o[1]+'</button>';}).join("")+'</div>';}
+
+  function render(){
+    var mount=$("apps-mount");if(!mount)return;
+    var M=model(),rows=M.rows,mt=meta();
+    lastSig=sig();
+    var head='<div class="ap-head"><div><h3>Applications &amp; Taken Rate</h3><p class="lede">'
+      +(rows.length?rows.length+' USHA policies'+(mt.at?' · updated '+new Date(mt.at).toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}):'')+(mt.src?' · '+esc(mt.src):''):'Bring in your USHA sales report to track every application, payment and your taken rate.')
+      +'</p></div><div class="ap-actions"><button type="button" class="ap-btn" data-ap-import>Import USHA report</button><input type="file" id="ap-file" accept=".xlsx,.xls,.csv,.txt,.json" hidden></div></div>';
+    if(!rows.length){mount.innerHTML=head+'<div class="ap-card ap-howto"><h4>How to bring your applications in</h4><ol><li>In the USHA agent portal open <b>My Business → Sales Report</b>.</li><li>Choose <b>Advanced Search</b>, set the date range to <b>Last 12 Months</b>, and click <b>Search</b>.</li><li>Click the <b>Export to Excel</b> icon above the grid.</li><li>Click <b>Import USHA report</b> here and pick that file. Re-import any time; it replaces the old copy and keeps the ages you typed.</li></ol></div>';wire(mount);return;}
+    var P=M.apps.filter(M.inP),uw=P.filter(function(a){return a.kind==="UW";}),gi=P.filter(function(a){return a.kind==="GI";});
+    var badPay=M.apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="bad";}).length;
+    var activeN=M.apps.filter(function(a){return /in force/i.test(a.status);}).length,mrr=M.apps.filter(function(a){return /in force/i.test(a.status);}).reduce(function(s,a){return s+a.prem;},0);
+    var html=head
+      +'<div class="ap-bar-top">'+seg("period",[["ytd","YTD "+new Date().getFullYear()],["month","This month"],["lastmonth","Last month"],["90","Last 90 days"],["all","All time"]],S.period)+'</div>'
+      +'<div class="ap-kpis">'+kpi("Underwritten","Premier Advantage · Premier Choice · Secure Advantage · under 50",uw)+kpi("Guaranteed issue","HealthAccess · all ages",gi)+kpi("Combined","Underwritten + guaranteed issue",P)
+      +'<div class="ap-kpi ap-kpi-side"><div class="ap-mini"><span>Active core policies</span><b>'+activeN+'</b><em>$'+Math.round(mrr).toLocaleString()+'/mo in premium</em></div>'
+      +'<div class="ap-mini '+(badPay?"bad":"")+'"><span>Missed / past-due payments</span><b>'+badPay+'</b><em>'+(badPay?"see Payments to watch":"all active policies current")+'</em></div>'
+      +'<div class="ap-mini"><span>Core apps submitted</span><b>'+P.length+'</b><em>'+M.pr.label+'</em></div></div></div>'
+      +'<div class="ap-two"><div>'+seg("kind",[["UW","Underwritten"],["GI","Guaranteed issue"]],S.kind)+breakdown(S.kind==="UW"?uw:gi,S.kind==="UW"?"Underwritten":"Guaranteed issue")+'</div><div>'+monthly(M.apps.filter(M.inP))+payWatch(M.apps)+'</div></div>'
+      +'<div class="ap-card ap-tcard"><div class="ap-card-h"><h4>Every application</h4>'+seg("view",[["core","Core apps (count toward taken rate)"],["all","All policies incl. supplements"]],S.view)+'</div>'
+      +'<div class="ap-filters"><input type="search" class="ap-q" placeholder="Search name or App ID" value="'+esc(S.q)+'">'
+      +'<select data-f="fk"><option value="all">All plan types</option><option value="UW"'+(S.fk==="UW"?" selected":"")+'>Underwritten</option><option value="GI"'+(S.fk==="GI"?" selected":"")+'>Guaranteed issue</option>'+(S.view==="all"?'<option value="SUPP"'+(S.fk==="SUPP"?" selected":"")+'>Supplements</option>':'')+'</select>'
+      +(S.view==="core"?'<select data-f="fs"><option value="all">Any result</option><option value="taken"'+(S.fs==="taken"?" selected":"")+'>Taken</option><option value="nottaken"'+(S.fs==="nottaken"?" selected":"")+'>Not taken</option><option value="out"'+(S.fs==="out"?" selected":"")+'>Not counted</option><option value="inforce"'+(S.fs==="inforce"?" selected":"")+'>In force</option></select>'
+      +'<select data-f="fp"><option value="all">Any payment</option><option value="bad"'+(S.fp==="bad"?" selected":"")+'>Missed / past due / never paid</option><option value="warn"'+(S.fp==="warn"?" selected":"")+'>First payment due</option><option value="good"'+(S.fp==="good"?" selected":"")+'>Paid and current</option><option value="mid"'+(S.fp==="mid"?" selected":"")+'>Paid, then stopped</option></select>':'')
+      +'</div>'+table(M)+'</div>';
+    var y=(document.scrollingElement||document.documentElement).scrollTop;
+    mount.innerHTML=html;wire(mount);
+    (document.scrollingElement||document.documentElement).scrollTop=y;
+  }
+  function wire(mount){
+    mount.querySelectorAll(".ap-seg").forEach(function(sg){sg.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;var k=sg.getAttribute("data-seg");S[k]=b.getAttribute("data-v");if(k==="view")S.fk="all";render();});});
+    mount.querySelectorAll("select[data-f]").forEach(function(se){se.addEventListener("change",function(){S[se.getAttribute("data-f")]=se.value;render();});});
+    var q=mount.querySelector(".ap-q");if(q){var tm;q.addEventListener("input",function(){clearTimeout(tm);tm=setTimeout(function(){S.q=q.value.trim().toLowerCase();render();var n=$("apps-mount").querySelector(".ap-q");if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length);}},220);});}
+    mount.querySelectorAll(".ap-age").forEach(function(inp){inp.addEventListener("change",function(){saveAge(inp.getAttribute("data-n"),inp.value);});inp.addEventListener("keydown",function(e){if(e.key==="Enter"){inp.blur();}});});
+    var ib=mount.querySelector("[data-ap-import]"),f=mount.querySelector("#ap-file");
+    if(ib&&f){ib.addEventListener("click",function(){f.click();});f.addEventListener("change",function(){if(f.files&&f.files[0])importFile(f.files[0]);});}
+  }
+  function saveAge(n,v){
+    var arr=asArr(K.ushaAges).filter(function(a){return a&&a.n!==n;});
+    v=String(v).trim();if(v!==""&&!isNaN(+v))arr.push({n:n,age:+v,at:Date.now()});
+    setArr(K.ushaAges,arr,true);render();
+  }
+
+  /* ---- import: USHA Excel/CSV export, or the raw report JSON ---- */
+  function toYmd(v){
+    if(v==null||v==="")return "";v=String(v).trim();
+    var m=v.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return m[1]+"-"+m[2]+"-"+m[3];
+    m=v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);if(m){var y=m[3].length===2?"20"+m[3]:m[3];return y+"-"+m[1].padStart(2,"0")+"-"+m[2].padStart(2,"0");}
+    if(/^\d{5}(\.\d+)?$/.test(v)){var dt=new Date(Math.round((+v-25569)*864e5));return dt.getUTCFullYear()+"-"+String(dt.getUTCMonth()+1).padStart(2,"0")+"-"+String(dt.getUTCDate()).padStart(2,"0");}
+    return "";
+  }
+  function money(v){var n=parseFloat(String(v==null?"":v).replace(/[$,\s]/g,""));return isNaN(n)?0:n;}
+  function fromApi(list){return list.map(function(x){return{id:x.PolicyNo,name:String(x.AppName||"").trim(),product:String(x.Product||"").trim(),status:x.AppStatus||"",mode:x.PayMode||"",method:x.PayMethod||"",prem:+x.ModTotalPremium||0,submit:toYmd(x.SubmitDate),eff:toYmd(x.EffDate),issue:toYmd(x.IssDate),ptd:toYmd(x.PaidToDate),state:x.StateIssue||""};});}
+  function fromTable(rows){
+    var hi=-1;for(var i=0;i<Math.min(rows.length,15);i++){var j=rows[i].join("|").toLowerCase();if(/app ?id|policy/.test(j)&&/status/.test(j)){hi=i;break;}}
+    if(hi<0)throw new Error("Could not find the AppID / Status header row. Export the Sales Report grid from USHA and try again.");
+    var h=rows[hi].map(function(c){return String(c).toLowerCase().replace(/[^a-z]/g,"");});
+    function col(){for(var a=0;a<arguments.length;a++){var k=h.indexOf(arguments[a]);if(k>=0)return k;}return -1;}
+    var c={id:col("appid","policyno","policy","applicationid"),name:col("name","appname","applicantname","applicant"),product:col("product"),status:col("status","appstatus"),submit:col("submitdate","submitted"),eff:col("effectivedate","effdate","effective"),issue:col("issuedate","issdate"),ptd:col("paidtodate","paidto"),state:col("state","stateissue"),mode:col("paymode","mode"),modp:col("modtotalpremium","modalpremium","monthly"),total:col("total","anntotalpremium","annualpremium"),prem:col("premium")};
+    if(c.id<0||c.status<0)throw new Error("This file is missing the AppID or Status column.");
+    var out=[];
+    rows.slice(hi+1).forEach(function(r){var id=String(r[c.id]||"").trim();if(!id||!/^[0-9A-Z]{6,}$/i.test(id))return;
+      var mp=c.modp>=0?money(r[c.modp]):0;if(!mp&&c.total>=0)mp=money(r[c.total])/12;if(!mp&&c.prem>=0)mp=money(r[c.prem])/12;
+      out.push({id:id,name:String(r[c.name]||"").trim(),product:String(r[c.product]||"").trim(),status:String(r[c.status]||"").trim(),mode:c.mode>=0?String(r[c.mode]||""):"Monthly",method:"",prem:Math.round(mp*100)/100,
+        submit:toYmd(r[c.submit]),eff:c.eff>=0?toYmd(r[c.eff]):"",issue:c.issue>=0?toYmd(r[c.issue]):"",ptd:c.ptd>=0?toYmd(r[c.ptd]):"",state:c.state>=0?String(r[c.state]||"").trim():""});});
+    return out;
+  }
+  function vsUshaImport(list,src){
+    if(!Array.isArray(list)||!list.length)throw new Error("No applications found in that file.");
+    if(list[0]&&list[0].PolicyNo!==undefined)list=fromApi(list);
+    var seen={},clean=[];list.forEach(function(r){if(!r||!r.id||seen[r.id])return;seen[r.id]=1;clean.push({id:String(r.id),name:r.name||"",product:r.product||"",status:r.status||"",mode:r.mode||"",method:r.method||"",prem:+r.prem||0,submit:r.submit||"",eff:r.eff||"",issue:r.issue||"",ptd:r.ptd||"",state:r.state||""});});
+    setArr(K.ushaApps,clean,true);setArr(K.ushaMeta,[{at:Date.now(),n:clean.length,src:src||"USHA Sales Report"}],true);
+    render();return clean.length;
+  }
+  window.vsUshaImport=vsUshaImport;
+  async function importFile(file){
+    var mount=$("apps-mount");
+    try{
+      var name=file.name.toLowerCase(),list;
+      if(/\.json$/.test(name))list=JSON.parse(await file.text());
+      else if(/\.xlsx?$/.test(name)){var T=window.__vsImportTest;if(!T||!T.readXlsx)throw new Error("Excel reader not ready - try again in a moment.");list=fromTable(await T.readXlsx(await file.arrayBuffer()));}
+      else{var T2=window.__vsImportTest;list=fromTable(T2.parseDelimited(await file.text()));}
+      var n=vsUshaImport(list,file.name);
+      flash("Imported "+n+" policies from "+file.name+".");
+    }catch(e){flash(e.message||"That file could not be read.",true);}
+  }
+  function flash(t,bad){var m=$("apps-mount");if(!m)return;var d=document.createElement("div");d.className="ap-flash"+(bad?" bad":"");d.textContent=t;m.prepend(d);setTimeout(function(){d.remove();},6000);}
+
+  var lastSig="";function sig(){try{return (localStorage.getItem(K.ushaApps)||"").length+":"+(localStorage.getItem(K.ushaAges)||"")+(localStorage.getItem(K.ushaMeta)||"");}catch(e){return "";}}
+  setInterval(function(){var p=$("p-apps");if(p&&p.classList.contains("active")&&sig()!==lastSig)render();},2500);
+
+  if(typeof ALL_TABS!=="undefined"&&ALL_TABS.indexOf("apps")<0)ALL_TABS.push("apps");
+  try{TAB_TITLES.apps="Applications";}catch(e){}
+  var _sw=switchTab;
+  switchTab=function(n){_sw(n);var p=$("p-apps");if(p&&p.classList.contains("active"))render();};
+  window.vsRenderApps=render;
+  /* the nav button: works even if an older click handler doesn't know this tab */
+  document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest('[data-tab="apps"]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();switchTab("apps");},true);
+  if($("p-apps")&&$("p-apps").classList.contains("active"))render();
+}catch(err){if(window.console)console.warn("applications tab failed",err);}})();
+
+/* ═══════════════ SIDE NAV + VISUAL REFRESH (2026-10-28) ═══════════════
+   Left sidebar on screens 900px and wider; the top bar + menu drawer stays on phones/tablets. */
+(function(){try{
+  var css=[
+  "@media(min-width:900px){",
+  "html body aside.sidebar#sidebar{position:fixed!important;top:0!important;left:0!important;bottom:0!important;right:auto!important;width:244px!important;height:100vh!important;min-height:0!important;",
+  " display:grid!important;grid-template-columns:1fr auto!important;grid-template-rows:auto minmax(0,1fr) auto!important;align-items:center!important;gap:0!important;",
+  " padding:18px 12px 14px!important;background:linear-gradient(180deg,#0b2346 0%,#0e2c55 55%,#0b2346 100%)!important;border:0!important;border-right:1px solid rgba(255,255,255,.06)!important;box-shadow:4px 0 24px rgba(11,35,70,.12)!important;overflow:visible!important;z-index:300!important}",
+  "html body aside.sidebar#sidebar .sidebar-brand{grid-column:1/-1!important;grid-row:1!important;display:flex!important;align-items:center!important;gap:10px!important;margin:0 4px 18px!important;padding:0 0 16px!important;border-bottom:1px solid rgba(255,255,255,.08)!important}",
+  "html body aside.sidebar#sidebar .sidebar-brand .b{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1d5bb0,#0db5a6)!important;color:#fff!important;font-weight:900;font-size:14px;letter-spacing:.02em;box-shadow:0 6px 16px rgba(13,181,166,.25)}",
+  "html body aside.sidebar#sidebar .sidebar-brand .brand-text{display:block!important;color:#fff!important;font-weight:800!important;font-size:15px!important;line-height:1.15!important}",
+  "html body aside.sidebar#sidebar .sidebar-brand .pill{display:inline-block!important;margin-left:auto!important;font-size:10px!important;font-weight:800!important;letter-spacing:.06em!important;text-transform:uppercase!important;color:#7ff0e4!important;background:rgba(13,181,166,.16)!important;border:1px solid rgba(13,181,166,.35)!important;padding:3px 8px!important;border-radius:999px!important}",
+  "html body aside.sidebar#sidebar .sidebar-nav#sidebar-nav{grid-column:1/-1!important;grid-row:2!important;align-self:stretch!important;display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;gap:2px!important;overflow-y:auto!important;overflow-x:hidden!important;padding:0 2px!important;margin:0!important;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent}",
+  "html body aside.sidebar#sidebar .sidebar-nav-item{position:relative!important;display:flex!important;flex-direction:row!important;align-items:center!important;gap:11px!important;width:100%!important;flex:0 0 auto!important;margin:0!important;padding:10px 12px!important;border-radius:10px!important;font-size:14px!important;font-weight:650!important;color:rgba(226,236,250,.78)!important;background:none!important;border:0!important;box-shadow:none!important;text-align:left!important;white-space:nowrap!important;cursor:pointer}",
+  "html body aside.sidebar#sidebar .sidebar-nav-item .sni-icon{display:inline-flex!important;width:20px!important;justify-content:center!important;font-size:17px!important;opacity:.85}",
+  "html body aside.sidebar#sidebar .sidebar-nav-item .sni-label{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}",
+  "html body aside.sidebar#sidebar .sidebar-nav-item:hover{background:rgba(255,255,255,.07)!important;color:#fff!important}",
+  "html body aside.sidebar#sidebar .sidebar-nav-item.active{background:linear-gradient(90deg,rgba(13,181,166,.22),rgba(29,91,176,.18))!important;color:#fff!important}",
+  "html body aside.sidebar#sidebar .sidebar-nav-item.active .sni-icon{opacity:1;color:#5fe3d5}",
+  "html body aside.sidebar#sidebar .sidebar-nav-item.active::after{content:''!important;position:absolute!important;left:-12px!important;right:auto!important;top:9px!important;bottom:9px!important;width:4px!important;height:auto!important;border-radius:0 4px 4px 0!important;background:linear-gradient(180deg,#5fe3d5,#0db5a6)!important;animation:none!important;transform:none!important}",
+  "html body aside.sidebar#sidebar .sni-badge{position:static!important;margin-left:auto!important;transform:none!important;background:#e5484d!important;color:#fff!important;border-radius:999px!important;font-size:11px!important;font-weight:800!important;min-width:20px!important;height:20px!important;padding:0 6px!important;display:inline-flex;align-items:center;justify-content:center}",
+  "html body aside.sidebar#sidebar .sidebar-divider{display:block!important;height:1px!important;background:rgba(255,255,255,.08)!important;margin:10px 8px!important;flex:0 0 auto}",
+  "html body aside.sidebar#sidebar .sidebar-section-label{display:block!important;flex:0 0 auto;padding:4px 12px 6px!important;font-size:10.5px!important;font-weight:800!important;letter-spacing:.09em!important;text-transform:uppercase!important;color:rgba(190,208,232,.5)!important}",
+  "html body aside.sidebar#sidebar .sidebar-nav-item[data-tab=followups]{display:none!important}",
+  "html body aside.sidebar#sidebar .vs-burger,html body aside.sidebar#sidebar .sidebar-bottom,html body aside.sidebar#sidebar #sync-pill{display:none!important}",
+  "html body aside.sidebar#sidebar .vs-acct{grid-column:1!important;grid-row:3!important;display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;margin:12px 0 0!important;padding:8px 10px!important;border-radius:12px!important;background:rgba(255,255,255,.05)!important;border:1px solid rgba(255,255,255,.07)!important;color:#fff!important;text-align:left!important}",
+  "html body aside.sidebar#sidebar .vs-acct:hover,html body aside.sidebar#sidebar .vs-acct.on{background:rgba(255,255,255,.1)!important}",
+  "html body aside.sidebar#sidebar .vs-acct .vs-av{flex:0 0 auto}",
+  "html body aside.sidebar#sidebar .vs-acct .vs-acct-nm{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;line-height:1.2}",
+  "html body aside.sidebar#sidebar .vs-acct .vs-acct-nm b{font-size:13px;font-weight:800;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}",
+  "html body aside.sidebar#sidebar .vs-acct .vs-acct-nm em{font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;color:rgba(200,215,235,.6)}",
+  "html body aside.sidebar#sidebar .vs-acct .cx{color:rgba(200,215,235,.7)!important;display:inline!important}",
+  "html body aside.sidebar#sidebar #bell-btn{grid-column:2!important;grid-row:3!important;margin:12px 0 0 8px!important;width:44px!important;height:44px!important;border-radius:12px!important;background:rgba(255,255,255,.05)!important;border:1px solid rgba(255,255,255,.07)!important;color:#e2ecfa!important}",
+  "html body aside.sidebar#sidebar .sidebar-nav-item,html body aside.sidebar#sidebar .vs-acct,html body aside.sidebar#sidebar *{box-sizing:border-box}",
+  "html body aside.sidebar#sidebar .sidebar-brand .pill{display:none!important}",
+  "html body aside.sidebar#sidebar .vs-acct{min-width:0!important;overflow:hidden!important}",
+  "html body aside.sidebar#sidebar #bell-btn{display:inline-flex!important;align-items:center;justify-content:center}",
+  "html body aside.sidebar#sidebar .vs-acct-menu .sidebar-nav-item,html body aside.sidebar#sidebar .vs-acct-menu #signout-btn{color:#0d1b2a!important;background:none!important;padding:11px 12px!important;font-weight:700!important}",
+  "html body aside.sidebar#sidebar .vs-acct-menu .sidebar-nav-item:hover,html body aside.sidebar#sidebar .vs-acct-menu #signout-btn:hover{background:#f4f8fe!important;color:#16447f!important}",
+  "html body aside.sidebar#sidebar .vs-acct-menu .sidebar-nav-item .sni-icon{color:#5a6b80!important;opacity:1}",
+  "html body aside.sidebar#sidebar .vs-acct-menu .sidebar-nav-item.active::after{display:none!important}",
+  "html body aside.sidebar#sidebar .vs-acct-menu .sidebar-nav-item.active{background:#f4f8fe!important;color:#16447f!important}",
+  "html body .vs-acct-menu{top:auto!important;bottom:76px!important;left:14px!important;right:auto!important;min-width:216px!important}",
+  "html body .main,html body .main.sidebar-collapsed{margin-left:244px!important;margin-top:0!important}",
+  "}",
+  /* page canvas + panels */
+  "html:not(.dark) body .shell{background:#f3f6fb}",
+  "html body .main{min-height:100vh}",
+  "@media(min-width:900px){html body .main{padding:30px 34px 60px!important}}",
+  "html body .panel>h3{font-size:24px!important;font-weight:850!important;letter-spacing:-.01em;color:#0b2346;margin:0 0 4px!important}",
+  "html body .panel>.lede{color:#5a6b80;margin:0 0 20px!important}",
+  /* applications panel */
+  "#p-apps .ap-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}",
+  "#p-apps .ap-head h3{font-size:24px;font-weight:850;color:#0b2346;margin:0 0 4px;letter-spacing:-.01em}",
+  "#p-apps .ap-head .lede{margin:0;color:#5a6b80;font-size:14px}",
+  "#p-apps .ap-btn{background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;border:0;border-radius:11px;padding:11px 18px;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 8px 20px rgba(22,68,127,.22)}",
+  "#p-apps .ap-btn:hover{filter:brightness(1.06);transform:translateY(-1px)}",
+  "#p-apps .ap-flash{background:#e9f9f3;border:1px solid #bfe9db;color:#0a6b45;padding:11px 14px;border-radius:11px;font-weight:700;margin-bottom:14px}",
+  "#p-apps .ap-flash.bad{background:#fdecec;border-color:#f5c2c2;color:#a3262a}",
+  "#p-apps .ap-bar-top{margin-bottom:16px}",
+  "#p-apps .ap-seg{display:inline-flex;flex-wrap:wrap;gap:3px;background:#e9eef6;border-radius:12px;padding:4px}",
+  "#p-apps .ap-seg button{border:0;background:none;padding:8px 14px;border-radius:9px;font-weight:750;font-size:13px;color:#42566e;cursor:pointer}",
+  "#p-apps .ap-seg button:hover{color:#16447f}",
+  "#p-apps .ap-seg button.on{background:#fff;color:#0b2346;box-shadow:0 1px 4px rgba(13,27,42,.12)}",
+  "#p-apps .ap-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:18px}",
+  "#p-apps .ap-kpi,#p-apps .ap-card{background:#fff;border:1px solid #e4e9f2;border-radius:16px;box-shadow:0 1px 2px rgba(13,27,42,.04),0 8px 24px rgba(13,27,42,.04)}",
+  "#p-apps .ap-kpi{padding:18px}",
+  "#p-apps .ap-kpi-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}",
+  "#p-apps .ap-kpi-t{font-weight:850;font-size:16px;color:#0b2346}",
+  "#p-apps .ap-kpi-s{font-size:12px;color:#6b7c92;margin-top:3px;line-height:1.35}",
+  "#p-apps .ap-ringwrap{position:relative;flex:0 0 auto;width:74px;height:74px}",
+  "#p-apps .ap-ringwrap span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:16px;color:#0b2346}",
+  "#p-apps .ap-ring .trk{fill:none;stroke:#edf1f7;stroke-width:8}",
+  "#p-apps .ap-ring .val{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dasharray .6s ease}",
+  "#p-apps .ap-ring.t-good .val{stroke:#0db5a6}#p-apps .ap-ring.t-ok .val{stroke:#2f7de1}#p-apps .ap-ring.t-low .val{stroke:#e5864d}#p-apps .ap-ring.t-na .val{stroke:#cbd5e1}",
+  "#p-apps .ap-kpi-rows{margin-top:14px;border-top:1px solid #eef2f7;padding-top:10px;display:grid;gap:6px}",
+  "#p-apps .ap-kr{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:baseline;font-size:13px}",
+  "#p-apps .ap-kr b{color:#33455c;font-weight:750}",
+  "#p-apps .ap-kr .ap-math{color:#6b7c92;font-variant-numeric:tabular-nums}",
+  "#p-apps .ap-kr strong{font-weight:900;color:#0b2346;font-variant-numeric:tabular-nums;min-width:48px;text-align:right}",
+  "#p-apps strong.t-good{color:#0a8f83}#p-apps strong.t-low{color:#c4622b}",
+  "#p-apps .ap-kpi-side{display:grid;gap:10px;padding:14px}",
+  "#p-apps .ap-mini{background:#f6f8fc;border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:0 8px}",
+  "#p-apps .ap-mini span{font-size:12px;font-weight:700;color:#5a6b80}",
+  "#p-apps .ap-mini b{grid-row:span 2;font-size:22px;font-weight:900;color:#0b2346}",
+  "#p-apps .ap-mini em{font-style:normal;font-size:11.5px;color:#8091a7}",
+  "#p-apps .ap-mini.bad{background:#fff1ee}#p-apps .ap-mini.bad b{color:#c8372d}",
+  "#p-apps .ap-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:16px;margin-bottom:18px;align-items:start}",
+  "#p-apps .ap-two>div{display:grid;gap:16px;align-content:start}",
+  "#p-apps .ap-two>div>.ap-seg{justify-self:start}",
+  "#p-apps .ap-card{padding:18px}",
+  "#p-apps .ap-card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}",
+  "#p-apps .ap-card-h h4{margin:0;font-size:15.5px;font-weight:850;color:#0b2346}",
+  "#p-apps .ap-count{font-size:12px;font-weight:800;color:#c8372d;background:#fff1ee;padding:4px 10px;border-radius:999px}",
+  "#p-apps .ap-brs{display:grid;gap:2px}",
+  "#p-apps .ap-br{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border-radius:8px;font-size:13.5px;color:#33455c}",
+  "#p-apps .ap-br span em{font-style:normal;color:#8a9ab0;font-size:11.5px;margin-left:8px}",
+  "#p-apps .ap-br b{font-variant-numeric:tabular-nums;font-weight:800;color:#0b2346}",
+  "#p-apps .ap-br b i{font-style:normal;color:#a9b5c6;margin:0 2px}",
+  "#p-apps .ap-br.plus span::before{content:'+';display:inline-block;width:16px;color:#0a8f83;font-weight:900}",
+  "#p-apps .ap-br.minus span::before{content:'+';display:inline-block;width:16px;color:#7c8ba0;font-weight:900}",
+  "#p-apps .ap-br.soft{opacity:.75}",
+  "#p-apps .ap-br.tot{background:#f1f6fd;font-weight:850;color:#0b2346;margin:4px 0}",
+  "#p-apps .ap-br.tot .acc{color:#16447f}",
+  "#p-apps .ap-br.out{color:#8091a7}#p-apps .ap-br.out b{color:#8091a7}",
+  "#p-apps .ap-br-sep{font-size:10.5px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#9aa8bb;padding:12px 10px 4px}",
+  "#p-apps .ap-formula{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}",
+  "#p-apps .ap-formula>div{background:linear-gradient(135deg,#0b2346,#16447f);color:#fff;border-radius:12px;padding:12px 14px}",
+  "#p-apps .ap-formula>div+div{background:#eef3fa;color:#0b2346}",
+  "#p-apps .ap-formula span{display:block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;opacity:.75;margin-bottom:3px}",
+  "#p-apps .ap-formula b{font-size:17px;font-weight:900;font-variant-numeric:tabular-nums}",
+  "#p-apps .ap-note{margin-top:12px;font-size:12.5px;color:#7a5a12;background:#fff8e6;border:1px solid #f4e2ad;border-radius:10px;padding:9px 12px;line-height:1.45}",
+  "#p-apps .ap-note.soft{color:#6b7c92;background:#f6f8fc;border-color:#e8edf5}",
+  "#p-apps .ap-legend{display:flex;gap:12px;font-size:12px;font-weight:700;color:#5a6b80}",
+  "#p-apps .ap-legend span::before{content:'';display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}",
+  "#p-apps .ap-legend .uw::before{background:#16447f}#p-apps .ap-legend .gi::before{background:#0db5a6}",
+  "#p-apps .ap-chart{position:relative;display:flex;gap:6px;align-items:flex-end;height:190px;padding:8px 0 0 30px}",
+  "#p-apps .ap-grid{position:absolute;left:0;right:0;top:8px;height:140px;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none}",
+  "#p-apps .ap-grid span{font-size:10px;color:#a9b5c6;border-top:1px dashed #e8edf5;line-height:0;padding-top:0}",
+  "#p-apps .ap-mo{flex:1 1 0;display:flex;flex-direction:column;align-items:center;min-width:0}",
+  "#p-apps .ap-bars{height:140px;display:flex;gap:4px;align-items:flex-end;width:100%;justify-content:center}",
+  "#p-apps .ap-bar{position:relative;width:min(22px,40%);height:100%;display:flex;align-items:flex-end}",
+  "#p-apps .ap-bar i{display:block;width:100%;border-radius:6px 6px 2px 2px;transition:height .5s ease}",
+  "#p-apps .ap-bar.uw i{background:linear-gradient(180deg,#2a63b3,#16447f)}#p-apps .ap-bar.gi i{background:linear-gradient(180deg,#2fd0c1,#0db5a6)}",
+  "#p-apps .ap-bar span{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(100% + 2px);font-size:10px;font-weight:800;color:#42566e}",
+  "#p-apps .ap-bar i[style*='height:3%']+span,#p-apps .ap-bar i[style*='height:0%']+span{}",
+  "#p-apps .ap-bar{flex-direction:column;justify-content:flex-end}",
+  "#p-apps .ap-bar span{position:static;transform:none;order:-1;margin-bottom:2px;text-align:center}",
+  "#p-apps .ap-mo-l{font-size:12px;font-weight:800;color:#33455c;margin-top:6px}",
+  "#p-apps .ap-mo-n{font-size:10.5px;color:#8a9ab0}",
+  "#p-apps .ap-pw-h{font-size:10.5px;font-weight:850;letter-spacing:.08em;text-transform:uppercase;color:#7c8ba0;margin:10px 0 6px}",
+  "#p-apps .ap-pw-h.bad{color:#c8372d}",
+  "#p-apps .ap-pw{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 10px;border-radius:10px;border:1px solid #eef2f7;margin-bottom:6px}",
+  "#p-apps .ap-pw.bad{border-color:#f7d4cf;background:#fffaf9}",
+  "#p-apps .ap-pw b{display:block;font-size:13.5px;color:#0b2346}",
+  "#p-apps .ap-pw span{font-size:12px;color:#6b7c92}",
+  "#p-apps .ap-pw-r{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:3px}",
+  "#p-apps .ap-pw-r em{font-style:normal;font-size:11.5px;color:#8091a7}",
+  "#p-apps .ap-pay{display:inline-block;font-size:12px!important;font-weight:750;padding:3px 9px;border-radius:999px;white-space:nowrap}",
+  "#p-apps .ap-pay.p-good{background:#e9f9f3;color:#0a6b45}#p-apps .ap-pay.p-warn{background:#fff6dd;color:#8a5a00}#p-apps .ap-pay.p-bad{background:#fdecec;color:#b42a24}#p-apps .ap-pay.p-mid{background:#eef2f8;color:#42566e}",
+  "#p-apps .ap-empty{color:#8091a7;font-size:13px;padding:12px 4px;text-align:center}",
+  "#p-apps .ap-tcard{padding:0;overflow:hidden}",
+  "#p-apps .ap-tcard .ap-card-h{padding:18px 18px 0}",
+  "#p-apps .ap-filters{display:flex;gap:8px;flex-wrap:wrap;padding:0 18px 14px}",
+  "#p-apps .ap-filters input,#p-apps .ap-filters select{border:1px solid #dfe6f0;border-radius:10px;padding:9px 12px;font-size:13.5px;background:#fff;color:#0b2346;min-height:40px}",
+  "#p-apps .ap-filters input{flex:1 1 220px;max-width:340px}",
+  "#p-apps .ap-tw{overflow:auto;max-height:70vh;border-top:1px solid #eef2f7}",
+  "#p-apps .ap-t{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}",
+  "#p-apps .ap-t th{position:sticky;top:0;z-index:1;background:#f7f9fc;text-align:left;font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;color:#6b7c92;padding:10px 12px;border-bottom:1px solid #e8edf5;white-space:nowrap}",
+  "#p-apps .ap-t td{padding:10px 12px;border-bottom:1px solid #f0f3f8;vertical-align:middle;color:#33455c;white-space:nowrap}",
+  "#p-apps .ap-t tr:hover td{background:#fafcff}",
+  "#p-apps .ap-t .num{text-align:right;font-variant-numeric:tabular-nums}",
+  "#p-apps .ap-t small{display:block;font-size:11px;color:#8a9ab0;margin-top:2px;white-space:nowrap}",
+  "#p-apps .ap-nm{color:#0b2346;font-weight:800}",
+  "#p-apps .ap-k{display:inline-block;font-size:10.5px;font-weight:900;letter-spacing:.04em;padding:2px 7px;border-radius:6px;margin-right:4px}",
+  "#p-apps .ap-k.k-UW{background:#e6eefb;color:#16447f}#p-apps .ap-k.k-GI{background:#e0f7f4;color:#08776c}#p-apps .ap-k.k-SUPP{background:#f1f3f7;color:#6b7c92}",
+  "#p-apps .ap-st{display:inline-block;font-size:12px;font-weight:750;padding:3px 9px;border-radius:999px}",
+  "#p-apps .ap-st.s-good{background:#e9f9f3;color:#0a6b45}#p-apps .ap-st.s-bad{background:#fdecec;color:#b42a24}#p-apps .ap-st.s-mute{background:#f1f3f7;color:#5a6b80}#p-apps .ap-st.s-warn{background:#fff6dd;color:#8a5a00}",
+  "#p-apps .ap-cnt{display:inline-block;font-size:11.5px;font-weight:850;padding:2px 8px;border-radius:6px}",
+  "#p-apps .ap-cnt.tk{background:#0db5a6;color:#fff}#p-apps .ap-cnt.nt{background:#ffe6dc;color:#b04a17}#p-apps .ap-cnt.out{background:#eef1f6;color:#7c8ba0}",
+  "#p-apps .ap-cc small{max-width:220px;overflow:hidden;text-overflow:ellipsis}",
+  "#p-apps .ap-age{width:64px;border:1px solid #dfe6f0;border-radius:8px;padding:6px 8px;font-size:13px;font-weight:700;color:#0b2346;background:#fff}",
+  "#p-apps .ap-age.empty{background:#fffbea;border-color:#f1e1a6}",
+  "#p-apps .ap-age.over{background:#f1f3f7;color:#7c8ba0}",
+  "#p-apps .ap-dash{color:#b8c3d2}",
+  "#p-apps .ap-foot{padding:12px 18px;font-size:12px;color:#8091a7;border-top:1px solid #eef2f7}",
+  "#p-apps .ap-howto ol{margin:6px 0 0 18px;padding:0;line-height:1.8;color:#33455c}",
+  "@media(max-width:1280px){#p-apps .ap-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
+  "@media(max-width:1100px){#p-apps .ap-two{grid-template-columns:1fr}}",
+  "@media(max-width:640px){#p-apps .ap-kpis{grid-template-columns:1fr}#p-apps .ap-formula{grid-template-columns:1fr}#p-apps .ap-seg button{padding:7px 10px}}",
+  "html.dark #p-apps .ap-kpi,html.dark #p-apps .ap-card{background:#14243a;border-color:#253a54}",
+  "html.dark #p-apps .ap-head h3,html.dark #p-apps .ap-kpi-t,html.dark #p-apps .ap-card-h h4,html.dark #p-apps .ap-nm,html.dark #p-apps .ap-ringwrap span,html.dark #p-apps .ap-kr strong,html.dark #p-apps .ap-br b,html.dark #p-apps .ap-mini b,html.dark #p-apps .ap-pw b{color:#e8f0fb}",
+  "html.dark #p-apps .ap-t th{background:#182b44;color:#9fb2cc}html.dark #p-apps .ap-t td{border-color:#22364f;color:#c9d6e8}html.dark #p-apps .ap-t tr:hover td{background:#1a2e48}",
+  "html.dark #p-apps .ap-mini,html.dark #p-apps .ap-br.tot,html.dark #p-apps .ap-seg{background:#1a2e48}html.dark #p-apps .ap-seg button.on{background:#25405f;color:#fff}"
+  ].join("\n");
+  var st=document.createElement("style");st.setAttribute("data-sidenav","1");st.textContent=css;document.head.appendChild(st);
+  function acctLabel(){
+    var b=document.querySelector("#sidebar .vs-acct");if(!b)return;
+    var nmEl=document.getElementById("admin-name-sidebar"),nm=(nmEl&&nmEl.textContent.trim())||"Admin";
+    var w=b.querySelector(".vs-acct-nm");if(!w){w=document.createElement("span");w.className="vs-acct-nm";var cx=b.querySelector(".cx");b.insertBefore(w,cx||null);}
+    w.innerHTML="<b></b><em>Account &amp; settings</em>";w.querySelector("b").textContent=nm;
+  }
+  function fit(){document.documentElement.style.setProperty("--vs-navh",(window.innerWidth>=900?0:Math.ceil((document.getElementById("sidebar")||{getBoundingClientRect:function(){return{height:58};}}).getBoundingClientRect().height))+"px");}
+  acctLabel();fit();setTimeout(acctLabel,700);setTimeout(acctLabel,2000);setTimeout(fit,700);setTimeout(fit,2000);window.addEventListener("resize",fit);
+}catch(err){if(window.console)console.warn("sidenav init failed",err);}})();
 
 })();
 </script>
