@@ -2235,9 +2235,9 @@ var presenceMap={};
 var REMOTE_KEYS=["leads","accounts","messages","contact_requests","quick_notes","biz_leads","referrals","appointments","admin_accounts","blocked_ips"];
 var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,contact_requests:K.tickets,quick_notes:K.quickNotes,biz_leads:K.bizLeads,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts,blocked_ips:K.blockedIps};
 /* USHA applications + client ages (2026-10-28) */
-K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.ushaKpis="vs_usha_kpis";
-LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";LOCAL_TO_REMOTE[K.ushaKpis]="usha_kpis";
-REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta","usha_kpis");REMOTE_TO_LOCAL.usha_kpis=K.ushaKpis;REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
+K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.ushaKpis="vs_usha_kpis";K.ushaOv="vs_usha_overrides";
+LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";LOCAL_TO_REMOTE[K.ushaKpis]="usha_kpis";LOCAL_TO_REMOTE[K.ushaOv]="usha_overrides";
+REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta","usha_kpis");REMOTE_TO_LOCAL.usha_kpis=K.ushaKpis;REMOTE_KEYS.push("usha_overrides");REMOTE_TO_LOCAL.usha_overrides=K.ushaOv;REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
 
 function setSyncPill(state){
   var p=$("sync-pill");if(!p)return;
@@ -10721,7 +10721,7 @@ try{(function(){
   function model(){
     AUTO=autoAges(getRows());
     var am=ageMap(),rows=getRows().map(function(r){var o=Object.assign({},r);var ag=am[nkey(r.name)];if(ag!=null&&ag!=="")o.age=ag;return o;});
-    var apps=TR.classify(TR.coreApps(rows));
+    var apps=adjust(TR.classify(TR.coreApps(rows)));
     var pr=periodRange(),inP=function(a){return a.submit>=pr.from&&a.submit<=pr.to;};
     var lpr=periodRange(S.lperiod),inL=function(a){return a.submit>=lpr.from&&a.submit<=lpr.to;};
     return{rows:rows,apps:apps,pr:pr,inP:inP,lpr:lpr,inL:inL,am:am};
@@ -10839,13 +10839,51 @@ try{(function(){
       +'<div class="ap-chart"><div class="ap-grid"><span>100</span><span>75</span><span>50</span><span>25</span></div>'+bars+'</div>'
       +'<div class="ap-note soft">YTD logic per month (brand-new policies count as taken). Numbers under each month: UW submits · GI submits.</div></div>';
   }
+  /* ---- your manual status updates + the 30-day auto-taken rule ---- */
+  K.ushaOv="vs_usha_overrides";
+  function ovMap(){var m={};asArr(K.ushaOv).forEach(function(o){if(o&&o.key)m[o.key]=o;});return m;}
+  function adjust(apps){
+    var OV=ovMap(),t=new Date(),d30=ymd(new Date(t.getTime()-30*864e5));
+    apps.forEach(function(a){
+      var ov=OV[a.key];
+      /* an update you made only holds until USHA's data for that policy changes */
+      if(ov&&(ov.ptd!==a.ptd||ov.status!==a.status))ov=null;
+      a.ov=ov||null;a.hidden=!!(ov&&ov.s==="hide");
+      if(ov&&ov.s==="pending"){a.countSubmit=false;a.countTaken=false;a.accSubmit=false;a.accTaken=false;a.maturing=false;a.code="pending";a.why="Pending - waiting to see if they paid";a.pay="Pending - checking payment";a.payState="pend";return;}
+      if(ov&&ov.s==="paid"){a.isPaid=true;if(!/in force/i.test(a.status)&&!(a.kind==="UW"&&a.over50)){a.countSubmit=true;a.accSubmit=true;}if(a.countSubmit){a.countTaken=true;a.accTaken=a.accSubmit;}a.code="paidcancel";a.why="Paid (you confirmed)";a.pay="Paid (you confirmed)";a.payState="good";return;}
+      if(ov&&ov.s==="nottaken"){if(a.over50){a.countSubmit=false;a.accSubmit=false;a.why="Age 50+ and not taken - does not count toward taken";}else{a.countSubmit=true;a.accSubmit=true;a.why="Not taken (you marked)";}a.countTaken=false;a.accTaken=false;a.maturing=false;a.code="nottaken";a.pay="Not taken (you marked)";a.payState="mid";return;}
+      /* paid at least once and more than 30 days past the paid-to date: it's a taken policy, not a payment to chase */
+      if(/in force/i.test(a.status)&&a.isPaid&&a.ptd&&a.ptd<d30){a.autoTaken=true;a.pay="Taken - paid to "+TR.fmt(a.ptd);a.payState="taken";}
+    });
+    return apps;
+  }
+  function setOv(app,sv){
+    var arr=asArr(K.ushaOv).filter(function(o){return o&&o.key!==app.key;});
+    if(sv)arr.push({key:app.key,s:sv,ptd:app.ptd,status:app.status,name:app.name,at:Date.now()});
+    setArr(K.ushaOv,arr,true);render();try{renderClientTable();}catch(e){}
+  }
+  var OPTS=[["pending","Pending - checking if they paid"],["paid","They paid"],["nottaken","Not taken"],["hide","Remove from this list"],["","Clear my update"]];
+  function openOvMenu(btn,app){
+    document.querySelectorAll(".ap-ovm").forEach(function(m){m.remove();});
+    var m=document.createElement("div");m.className="ap-ovm";
+    m.innerHTML='<div class="ap-ovm-h">Update '+esc(nice(app.name))+'</div>'+OPTS.filter(function(o){return o[0]||app.ov;}).map(function(o){return '<button type="button" data-s="'+o[0]+'"'+(app.ov&&app.ov.s===o[0]?' class="on"':'')+'>'+o[1]+'</button>';}).join("")+'<div class="ap-ovm-f">Your update stays until USHA shows a new payment or status for this policy.</div>';
+    document.body.appendChild(m);var r=btn.getBoundingClientRect();m.style.top=Math.min(window.innerHeight-m.offsetHeight-8,r.bottom+6)+"px";m.style.left=Math.max(8,Math.min(window.innerWidth-m.offsetWidth-8,r.right-m.offsetWidth))+"px";
+    m.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;setOv(app,b.getAttribute("data-s"));m.remove();});
+    setTimeout(function(){document.addEventListener("click",function h(e){if(!m.contains(e.target)){m.remove();document.removeEventListener("click",h,true);}},true);},0);
+  }
+  var APPIDX={};
+  window.vsUshaSetStatus=function(name,sv){var M=model(),k=nkey(name),hit=M.apps.filter(function(a){return nkey(a.name)===k&&/in force/i.test(a.status);});hit.forEach(function(a){setOv(a,sv);});return hit.length;};
+  function ovBtn(a){APPIDX[a.key]=a;return '<button type="button" class="ap-ovb'+(a.ov?" on":"")+'" data-ov="'+esc(a.key)+'" title="Update status">'+(a.ov?"Updated":"Update")+' ▾</button>';}
+  document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-ov]");if(!b)return;e.preventDefault();e.stopPropagation();var a=APPIDX[b.getAttribute("data-ov")];if(a)openOvMenu(b,a);},true);
   function payWatch(apps){
     var t=new Date(),soon=ymd(new Date(t.getTime()+14*864e5)),td=ymd(t);
-    var bad=apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="bad";}).sort(function(a,b){return a.ptd<b.ptd?-1:1;});
-    var due=apps.filter(function(a){return /in force/i.test(a.status)&&(a.payState==="warn"||(a.payState==="good"&&a.ptd<=soon))&&a.ptd>=td;}).sort(function(a,b){return a.ptd<b.ptd?-1:1;});
-    function li(a,cls){return '<div class="ap-pw '+cls+'"><div><b>'+esc(nice(a.name))+'</b><span>'+esc(prodName(a.product))+' · '+a.kind+'</span></div><div class="ap-pw-r"><span class="ap-pay p-'+a.payState+'">'+esc(a.pay)+'</span><em>$'+a.prem.toFixed(2)+'/mo</em></div></div>';}
+    var bad=apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="bad"&&!a.hidden;}).sort(function(a,b){return a.ptd<b.ptd?-1:1;});
+    var pend=apps.filter(function(a){return a.payState==="pend"&&!a.hidden;});
+    var due=apps.filter(function(a){return /in force/i.test(a.status)&&!a.hidden&&(a.payState==="warn"||(a.payState==="good"&&a.ptd<=soon))&&a.ptd>=td;}).sort(function(a,b){return a.ptd<b.ptd?-1:1;});
+    function li(a,cls){return '<div class="ap-pw '+cls+'"><div><b>'+esc(nice(a.name))+'</b><span>'+esc(prodName(a.product))+' · '+a.kind+'</span></div><div class="ap-pw-r"><span class="ap-pay p-'+a.payState+'">'+esc(a.pay)+'</span><em>$'+a.prem.toFixed(2)+'/mo</em>'+ovBtn(a)+'</div></div>';}
     return '<div class="ap-card"><div class="ap-card-h"><h4>Payments to watch</h4><span class="ap-count">'+bad.length+' need attention</span></div>'
       +(bad.length?'<div class="ap-pw-h bad">Missed or past due</div><div class="ap-pwgrid">'+bad.map(function(a){return li(a,"bad");}).join("")+'</div>':'<div class="ap-empty">No missed payments on active policies.</div>')
+      +(pend.length?'<div class="ap-pw-h">Pending - checking if they paid</div><div class="ap-pwgrid">'+pend.map(function(a){return li(a,"pend");}).join("")+'</div>':"")
       +(due.length?'<div class="ap-pw-h">Drafting in the next 14 days</div><div class="ap-pwgrid">'+due.slice(0,12).map(function(a){return li(a,"");}).join("")+'</div>':"")
       +'</div>';
   }
@@ -10873,7 +10911,7 @@ try{(function(){
         return '<tr><td><b class="ap-nm">'+esc(nice(a.name))+'</b><small>'+esc(a.ids[0])+(a.state?" · "+esc(a.state):"")+'</small></td>'
           +'<td><span class="ap-k k-'+a.kind+'">'+a.kind+'</span> '+esc(prodName(a.product))+'</td>'
           +'<td>'+statusPill(a.status)+'</td><td>'+TR.fmt(a.submit)+'</td><td>'+TR.fmt(a.eff)+'</td><td>'+TR.fmt(a.ptd)+'</td>'
-          +'<td>'+(a.pay?'<span class="ap-pay p-'+a.payState+'">'+esc(a.pay)+'</span>':'<span class="ap-dash">-</span>')+'</td>'
+          +'<td><div class="ap-paycell">'+(a.pay?'<span class="ap-pay p-'+a.payState+'">'+esc(a.pay)+'</span>':'<span class="ap-dash">-</span>')+ovBtn(a)+'</div></td>'
           +'<td class="num">'+(a.prem?"$"+a.prem.toFixed(2):"-")+'</td>'
           +'<td><input class="ap-age'+(ag==null||ag===""?" empty":"")+(+ag>=50?" over":"")+'" type="number" min="0" max="110" inputmode="numeric" placeholder="age" title="'+(AUTO[nkey(a.name)]&&AUTO[nkey(a.name)].dob?"From DOB "+TR.fmt(AUTO[nkey(a.name)].dob)+" (age when submitted). Type to override.":"Type the client's age")+'" data-n="'+esc(nkey(a.name))+'" value="'+(ag==null?"":esc(ag))+'"></td>'
           +'<td class="ap-cc">'+countsPill(a)+'</td></tr>';}).join("");
@@ -11034,7 +11072,7 @@ try{(function(){
         +'<td>'+(k?'<span class="ap-k k-'+k+'">'+(k==="SUPP"?"SUPP":k)+'</span> ':'')+esc(plan)+extra+'</td>'
         +'<td>'+(m?statusPill(st):'<span class="ap-st s-good">'+esc(st)+'</span>')+'</td>'
         +'<td>'+(m?TR.fmt(m.submit):"")+'</td><td>'+(m?TR.fmt(m.eff):esc(a.plan&&a.plan.effectiveDate||""))+'</td><td>'+(m?TR.fmt(m.ptd):"")+'</td>'
-        +'<td>'+(x.pay?'<span class="ap-pay p-'+x.ps+'">'+esc(x.pay)+'</span>':'<span class="ap-dash">-</span>')+'</td>'
+        +'<td><div class="ap-paycell">'+(x.pay?'<span class="ap-pay p-'+x.ps+'">'+esc(x.pay)+'</span>':'<span class="ap-dash">-</span>')+(c?ovBtn(c):'')+'</div></td>'
         +'<td class="num">'+(x.prem?"$"+x.prem.toFixed(2):"-")+'</td>'
         +'<td><input class="ap-age'+(x.age==null||x.age===""?" empty":"")+(+x.age>=50?" over":"")+'" type="number" min="0" max="110" placeholder="age" data-n="'+esc(x.k)+'" value="'+(x.age==null?"":esc(x.age))+'"></td>'
         +'<td class="ap-cc">'+(c?countsPill(c):'<span class="ap-dash">-</span>')+'</td></tr>';}).join("");
@@ -11066,7 +11104,7 @@ try{(function(){
       if(!rows.length&&!kp)m1.innerHTML=h1+emptyHtml();
       else{
         var P=M.apps.filter(M.inP),uw=P.filter(function(a){return a.kind==="UW";}),gi=P.filter(function(a){return a.kind==="GI";});
-        var badPay=M.apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="bad";}).length;
+        var badPay=M.apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="bad"&&!a.hidden;}).length;
         var activeN=M.apps.filter(function(a){return /in force/i.test(a.status);}).length,mrr=M.apps.filter(function(a){return /in force/i.test(a.status);}).reduce(function(s,a){return s+a.prem;},0);
         var ushaTR=kp&&kp.proj&&kp.proj.takenRate!=null?kp.proj.takenRate:null;
         m1.innerHTML=h1
@@ -11088,7 +11126,7 @@ try{(function(){
       else{
         var td=ymd(new Date());
         function cnt(n){var lim=ymd(new Date(Date.now()+n*864e5));return M.apps.filter(function(a){return /in force/i.test(a.status)&&a.ptd&&a.ptd>=td&&a.ptd<=lim;}).length;}
-        var badN=M.apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="bad";}).length;
+        var badN=M.apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="bad"&&!a.hidden;}).length;
         var chips=[["all","All",M.apps.length],["up7","Paying in 7 days",cnt(7)],["up14","Paying in 14 days",cnt(14)],["up30","Paying in 30 days",cnt(30)],["bad","Missed / past due",badN],["warn","First payment due",M.apps.filter(function(a){return a.payState==="warn";}).length]];
         m2.innerHTML=h2
           +'<div class="ap-chips">'+chips.map(function(c){return '<button type="button" class="ap-chip'+(S.fp===c[0]?" on":"")+(c[0]==="bad"&&c[2]?" bad":"")+'" data-fp="'+c[0]+'">'+c[1]+'<b>'+c[2]+'</b></button>';}).join("")+'</div>'
@@ -11166,7 +11204,7 @@ try{(function(){
   }
   function flash(t,bad){var m=($("p-applist")&&$("p-applist").classList.contains("active"))?$("applist-mount"):$("apps-mount");if(!m)return;var d=document.createElement("div");d.className="ap-flash"+(bad?" bad":"");d.textContent=t;m.prepend(d);setTimeout(function(){d.remove();},6000);}
 
-  var lastSig="";function sig(){try{return (localStorage.getItem(K.ushaApps)||"").length+":"+(localStorage.getItem(K.ushaAges)||"")+(localStorage.getItem(K.ushaMeta)||"")+(localStorage.getItem(K.ushaKpis)||"").length;}catch(e){return "";}}
+  var lastSig="";function sig(){try{return (localStorage.getItem(K.ushaApps)||"").length+":"+(localStorage.getItem(K.ushaAges)||"")+(localStorage.getItem(K.ushaMeta)||"")+(localStorage.getItem(K.ushaKpis)||"").length+(localStorage.getItem(K.ushaOv)||"");}catch(e){return "";}}
   setInterval(function(){var p=$("p-apps"),q=$("p-applist");if(((p&&p.classList.contains("active"))||(q&&q.classList.contains("active")))&&sig()!==lastSig)render();},2500);
 
   if(typeof ALL_TABS!=="undefined"){if(ALL_TABS.indexOf("apps")<0)ALL_TABS.push("apps");if(ALL_TABS.indexOf("applist")<0)ALL_TABS.push("applist");}
@@ -11401,6 +11439,14 @@ try{(function(){
   "#p-accounts tr[data-acct]{cursor:pointer}",
   "#accts-list .ac-flash{box-shadow:0 0 0 3px #0db5a6!important;transition:box-shadow .3s}",
    ":is(#p-apps,#p-applist,#p-accounts) .gp-off{font-size:12px;color:#16447f;background:#eef4fd;border-radius:8px;padding:6px 9px;margin:6px 0}:is(#p-apps,#p-applist,#p-accounts) .gp-off em{display:block;font-style:normal;color:#5a6b80;margin-top:3px}",
+   ":is(#p-apps,#p-applist,#p-accounts) .ap-pay.p-pend{background:#eef1ff;color:#3b3fb0}:is(#p-apps,#p-applist,#p-accounts) .ap-pay.p-taken{background:#e0f7f4;color:#08776c}",
+   ":is(#p-apps,#p-applist,#p-accounts) .ap-pw.pend{border-color:#d9dcff;background:#fafaff}",
+   ":is(#p-apps,#p-applist,#p-accounts) .ap-ovb{border:1px solid #dfe6f0;background:#fff;color:#16447f;font-size:11.5px;font-weight:800;border-radius:8px;padding:3px 8px;cursor:pointer;white-space:nowrap}:is(#p-apps,#p-applist,#p-accounts) .ap-ovb:hover{background:#f4f8fe}:is(#p-apps,#p-applist,#p-accounts) .ap-ovb.on{background:#eef1ff;border-color:#c9cdf7;color:#3b3fb0}",
+   ":is(#p-apps,#p-applist,#p-accounts) .ap-paycell{display:flex;align-items:center;gap:6px}",
+  ".ap-ovm{position:fixed;z-index:2000;background:#fff;border:1px solid #e4e9f2;border-radius:12px;box-shadow:0 18px 40px rgba(13,27,42,.18);padding:6px;width:250px;font-family:inherit}",
+  ".ap-ovm-h{font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;color:#6b7c92;padding:8px 10px 6px}",
+  ".ap-ovm button{display:block;width:100%;text-align:left;border:0;background:none;padding:10px;border-radius:8px;font-size:13.5px;font-weight:700;color:#0b2346;cursor:pointer}.ap-ovm button:hover{background:#f4f8fe}.ap-ovm button.on{background:#eef1ff;color:#3b3fb0}",
+  ".ap-ovm-f{font-size:11px;color:#8091a7;padding:6px 10px 4px;line-height:1.4}",
    ":is(#p-apps,#p-applist,#p-accounts) .ap-howto ol{margin:6px 0 0 18px;padding:0;line-height:1.8;color:#33455c}",
   "@media(max-width:1280px){:is(#p-apps,#p-applist,#p-accounts) .ap-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
   "@media(max-width:1100px){:is(#p-apps,#p-applist,#p-accounts) .ap-two{grid-template-columns:1fr}}",
