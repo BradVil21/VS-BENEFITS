@@ -10636,16 +10636,18 @@ try{(function(){
       today=today||new Date();
       apps.forEach(function(a){
         var s=a.status||"",age=(a.age===""||a.age==null)?null:+a.age;
-        a.over50=age!=null&&age>=50;a.ageUnknown=age==null;a.isPaid=paid(a);a.monthsPaid=monthsPaid(a);a.replaced=false;
+        a.over50=age!=null&&age>=50;a.ageUnknown=age==null;a.isPaid=paid(a);a.monthsPaid=monthsPaid(a);a.keptDays=(a.eff&&a.ptd&&a.ptd>a.eff)?Math.round((d(a.ptd)-d(a.eff))/864e5):0;a.replaced=false;
         if(/withdrawn/i.test(s))a.replaced=apps.some(function(b){return b!==a&&!/withdrawn/i.test(b.status)&&same(a.name,b.name)&&b.submit>=a.submit&&(d(b.submit)-d(a.submit))/864e5<=45;});
         a.mature=!!(a.eff&&addMonth(a.eff)<=today);
         var why="",submit=true,taken=false,code="";
         if(pending(s)){submit=false;why="Pending - not counted yet";code="pending";}
         else if(/withdrawn/i.test(s)&&a.replaced){submit=false;why="Withdrawn, resubmitted - not counted";code="replaced";}
         else if(/in force/i.test(s)){taken=true;why="In force";code="inforce";}
+        /* kept the policy 30+ days (effective date to paid-to date) = taken, even if it was canceled or lapsed later, any age */
+        else if(/cancel|lapse/i.test(s)&&a.keptDays>=30){taken=true;why="Kept "+a.keptDays+" days, then "+(/lapse/i.test(s)?"lapsed":"canceled")+" - still taken";code="paidcancel";}
         else if(a.over50){submit=false;why="Age 50+ and "+(/declin/i.test(s)?"declined":/withdrawn/i.test(s)?"withdrawn":/cancel|lapse/i.test(s)?"canceled":"not taken")+" - does not count toward taken";code="over50";}
         else if(/cancel|lapse/i.test(s)){
-          if(a.isPaid){taken=true;why=(/lapse/i.test(s)?"Lapsed":"Canceled")+" after paying "+a.monthsPaid+" mo";code="paidcancel";}
+          if(a.isPaid){why=(/lapse/i.test(s)?"Lapsed":"Canceled")+" after "+a.keptDays+" days (under 30)";code="unpaidcancel";}
           else{why=(/lapse/i.test(s)?"Lapsed":"Canceled")+" before paying";code="unpaidcancel";}
         }else if(/declin/i.test(s)){why="Declined";code="declined";}
         else if(/withdrawn/i.test(s)){why="Withdrawn";code="withdrawn";}
@@ -10662,9 +10664,9 @@ try{(function(){
             else pay="First payment due "+fmt(a.ptd);}
           else if(ptd<new Date(today.getTime()-3*864e5))pay="Past due - paid to "+fmt(a.ptd);
           else pay="Paid - next due "+fmt(a.ptd);
-        }else if(/cancel|lapse/i.test(s))pay=a.isPaid?"Paid "+a.monthsPaid+" mo, then stopped":"Never paid";
+        }else if(/cancel|lapse/i.test(s))pay=a.keptDays>=30?"Kept "+a.keptDays+" days - taken":a.isPaid?"Kept "+a.keptDays+" days, then stopped":"Never paid";
         else pay="";
-        a.pay=pay;a.payState=/Missed|Past due|Never paid/.test(pay)?"bad":/First payment due/.test(pay)?"warn":/^Paid -|^In force - issued/.test(pay)?"good":/then stopped/.test(pay)?"mid":"none";
+        a.pay=pay;a.payState=/Missed|Past due|Never paid/.test(pay)?"bad":/First payment due/.test(pay)?"warn":/^Paid -|^In force - issued/.test(pay)?"good":/days - taken/.test(pay)?"taken":/then stopped/.test(pay)?"mid":"none";
       });
       return apps;
     }
@@ -10817,9 +10819,9 @@ try{(function(){
       +'<div class="ap-brs">'
       +row("In force, past first month",inforceMature,"plus")
       +row("In force, still in first month",inforceNew,"plus soft","counts in YTD only")
-      +row("Canceled / lapsed after paying",paidCancel,"plus")
+      +row("Canceled / lapsed after keeping it 30+ days",paidCancel,"plus")
       +row("= Taken",'<span class="acc">'+acc.taken+'</span> <i>/</i> '+ytd.taken,"tot","Accurate / YTD")
-      +row("Not taken",nt,"minus")+row("Declined",dec,"minus")+row("Withdrawn (not resubmitted)",wd,"minus")+row("Canceled before paying",uc,"minus")
+      +row("Not taken",nt,"minus")+row("Declined",dec,"minus")+row("Withdrawn (not resubmitted)",wd,"minus")+row("Canceled / lapsed within 30 days",uc,"minus")
       +row("= Submits",'<span class="acc">'+acc.submits+'</span> <i>/</i> '+ytd.submits,"tot","Accurate / YTD")
       +'<div class="ap-br-sep">Left out of the rate</div>'
       +row("Pending",pend,"out")+row("Withdrawn, then resubmitted",rep,"out")
