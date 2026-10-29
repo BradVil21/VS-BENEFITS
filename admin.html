@@ -10759,6 +10759,7 @@ try{(function(){
     function status(list,k){var acc=TR.rate(list,"acc"),ytd=TR.rate(list,"ytd"),T=TARGET[k];
       return '<div class="gp-st '+(acc.pct!=null&&acc.pct>=T?"ok":"low")+'"><div class="gp-st-h">'+(k==="UW"?"Underwritten":"Guaranteed issue")+' <span>target '+T+'%</span></div>'
         +'<div class="gp-st-n"><b>'+pctTxt(acc)+'</b><em>Accurate</em><b class="sm">'+pctTxt(ytd)+'</b><em>YTD</em></div>'
+        +(function(){var kp=kpis(),o=kp&&kp.official?kp.official.filter(function(x){return new RegExp("^"+k+" ","i").test(x.label);}):[];return o.length?'<div class="gp-off">USHA shows: '+o.map(function(x){return esc(x.label)+' <b>'+esc(x.rate)+'</b>';}).join(' · ')+(o.some(function(x){return /fixed/i.test(x.rate);})?' <em>USHA is showing a fixed rate here right now. The numbers below are your actual results.</em>':'')+'</div>':'';})()
         +'<div class="gp-st-m">'+(acc.pct==null?"No counted apps yet":acc.pct>=T?"Above target. You can absorb "+cushion(acc,T)+" not-taken before dropping under "+T+"%.":"Needs <b>"+need(acc,T)+"</b> taken in a row (no not-takens) to reach "+T+"%. Each not-taken now costs about "+pts(rr(acc.taken,acc.submits),rr(acc.taken,acc.submits+1))+" pts.")+'</div></div>';}
     var head='<div class="gp-sts">'+status(uw,"UW")+status(gi,"GI")+'</div>';
     function act(n,title,impact,body,list){cards.push('<div class="gp-a"><div class="gp-n">'+n+'</div><div class="gp-b"><div class="gp-t"><b>'+title+'</b>'+(impact?'<span class="gp-i">'+impact+'</span>':'')+'</div><div class="gp-d">'+body+'</div>'+(list&&list.length?'<div class="gp-l">'+list.join("")+'</div>':'')+'</div></div>');}
@@ -10903,7 +10904,8 @@ try{(function(){
       sub:{week:+sub.submittedAVThisWeek||0,last:+sub.submittedAVLastWeek||0,ytd:+sub.submittedAVYTD||+pj.submittedAVYTD||0,avg:+sub.averageWeeklyYTD||+pj.currentAverageSubmitted||0},
       iss:{week:+iss.issuedAVThisWeek||0,last:+iss.issuedAVLastWeek||0,ytd:+iss.issuedAVYTD||+pj.issuedAVYTD||0,avg:+iss.averageWeeklyYTD||+pj.currentAverageIssued||0},
       proj:{takenRate:pj.takenRate!=null?+pj.takenRate:null,weeksRemaining:pj.weeksRemaining!=null?+pj.weeksRemaining:null,weeksActive:pj.weeksActive!=null?+pj.weeksActive:null,avgSub:+pj.currentAverageSubmitted||0,avgIss:+pj.currentAverageIssued||0},
-      weeks:Object.keys(weeks).sort(function(a,b){return parseFloat(a)-parseFloat(b);}).map(function(k){return weeks[k];}),streak:streak};
+      weeks:Object.keys(weeks).sort(function(a,b){return parseFloat(a)-parseFloat(b);}).map(function(k){return weeks[k];}),streak:streak,
+      official:(Array.isArray(k.portletsalestakenrateall)?k.portletsalestakenrateall:[]).map(function(o){return{label:String(o.takenRateDescription||"").replace(/^\s*Personal\s*/i,"").trim(),rate:String(o.takenRate||"")};})};
   }
   function avSection(kp){
     if(!kp)return '<div class="ap-card av-empty"><div class="ap-card-h"><h4>AV tracking</h4></div><div class="ap-note soft">Click <b>⟳ Sync from USHA</b> (drag it to your bookmarks bar, then click it while signed in to USHA) to bring in your Submitted AV, Issued AV and USHA\'s projection.</div></div>';
@@ -10924,17 +10926,22 @@ try{(function(){
   }
   /* one-click sync bookmark: runs on agent.ushadvisors.com, rewrites the Sales Report search to the last 12 months,
      reads the Sales Dashboard AV numbers, and hands both to this page. Nothing leaves your browser except to this portal. */
-  var SYNC_BM="javascript:"+encodeURIComponent("(function(){if(!/ushadvisors\\.com$/.test(location.hostname)){alert('Open and sign in to the USHA agent portal first, then click this bookmark.');return;}if(window.__vsSync){return;}window.__vsSync=1;var P='"+location.origin+"/admin',w=window.open(P,'vsadmin'),D={rows:null,k:{}},sent=0;"
+  var SYNC_BM="javascript:"+encodeURIComponent("(function(){if(!/ushadvisors\\.com$/.test(location.hostname)){alert('Open and sign in to the USHA agent portal first, then click this bookmark.');return;}if(window.__vsSync){return;}window.__vsSync=1;"
+    +"var O='"+location.origin+"',w=window.open(O+'/admin','vsadmin'),D={rows:null,k:{}},stage='dash',t0=Date.now(),posted=0;"
     +"var ov=document.createElement('div');ov.style.cssText='position:fixed;right:18px;bottom:18px;z-index:2147483647;background:#0b2346;color:#fff;font:600 14px system-ui;padding:14px 18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.3);max-width:320px';ov.textContent='VS portal sync: reading your Sales Dashboard...';document.body.appendChild(ov);"
     +"function f(d){return String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')+'/'+d.getFullYear();}var from=f(new Date(Date.now()-365*864e5)),to=f(new Date());"
+    +"function go(t){var a=[].slice.call(document.querySelectorAll('a')).filter(function(a){return a.textContent.trim()==t;})[0];if(a)a.click();return !!a;}"
+    +"function check(){if(stage==='dash'&&((D.k.salesprojectedavleader&&D.k.salessubmittedav&&D.k.salesissuedav&&D.k.salessubmittedavforeachweek)||Date.now()-t0>30000)){stage='report';ov.textContent='VS portal sync: pulling 12 months of applications...';go('Sales Report');}"
+    +"else if(stage==='report'&&(D.rows||Date.now()-t0>75000)){stage='post';post();}}"
     +"var o=XMLHttpRequest.prototype.open,s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__vu=String(u);return o.apply(this,arguments);};"
     +"XMLHttpRequest.prototype.send=function(b){var x=this,u=x.__vu||'';if(/salesreports\\/process/.test(u)&&typeof b=='string'){try{var j=JSON.parse(b);j.BeginDate=from;j.EndDate=to;j.DateType='S';b=JSON.stringify(j);}catch(e){}}"
-    +"x.addEventListener('load',function(){try{var r=JSON.parse(x.responseText);if(/salesreports\\/result/.test(u)){var d=typeof r.data=='string'?JSON.parse(r.data):r.data;if(d&&!Array.isArray(d)){for(var q in d){if(Array.isArray(d[q])){d=d[q];break;}}}if(Array.isArray(d)&&(!D.rows||d.length>=D.rows.length))D.rows=d;}var m=u.match(/salesdashboard\\/(\\w+)/);if(m)D.k[m[1]]=r.data;}catch(e){}});return s.call(this,b);};"
-    +"function go(t){var a=[].slice.call(document.querySelectorAll('a')).filter(function(a){return a.textContent.trim()==t;})[0];if(a)a.click();return !!a;}"
-    +"go('Sales Dashboard');setTimeout(function(){ov.textContent='VS portal sync: pulling 12 months of applications...';go('Sales Report');},9000);"
-    +"var n=0,iv=setInterval(function(){n++;if((D.rows&&n>16)||n>45){clearInterval(iv);if(!D.rows){ov.textContent='VS portal sync: could not read the Sales Report. Open My Business > Sales Report and click the bookmark again.';}post();}},1000);"
-    +"function post(){ov.textContent='VS portal sync: sending '+(D.rows?D.rows.length:0)+' policies to your portal...';var id=Date.now(),tries=0;var t=setInterval(function(){tries++;try{w.postMessage({t:'usha-sync',id:id,rows:D.rows,k:D.k},'"+location.origin+"');}catch(e){}if(tries>40){clearInterval(t);ov.textContent='VS portal sync: the portal tab did not answer. Allow pop-ups for agent.ushadvisors.com and try again.';}},1500);"
-    +"window.addEventListener('message',function(e){if(e.origin!=='"+location.origin+"'||!e.data||e.data.t!=='usha-ack'||e.data.id!==id)return;clearInterval(t);ov.textContent=e.data.err?('VS portal sync failed: '+e.data.err):('VS portal synced: '+(e.data.n||0)+' policies + AV numbers.');setTimeout(function(){ov.remove();window.__vsSync=0;},6000);});}"
+    +"x.addEventListener('load',function(){try{var r=JSON.parse(x.responseText);if(/salesreports\\/result/.test(u)){var d=typeof r.data=='string'?JSON.parse(r.data):r.data;if(d&&!Array.isArray(d)){for(var q in d){if(Array.isArray(d[q])){d=d[q];break;}}}if(Array.isArray(d)&&(!D.rows||d.length>=D.rows.length))D.rows=d;}var m=u.match(/salesdashboard\\/(\\w+)/);if(m&&r.data)D.k[m[1]]=r.data;}catch(e){}check();});return s.call(this,b);};"
+    +"if(/salesdashboard/i.test(location.pathname)){go('Sales Report');setTimeout(function(){go('Sales Dashboard');},300);}else go('Sales Dashboard');"
+    +"var iv=setInterval(function(){check();if(stage==='post')clearInterval(iv);},2000);"
+    +"function send(id){try{w.postMessage({t:'usha-sync',id:id,rows:D.rows,k:D.k},O);}catch(e){}}"
+    +"function post(){if(posted)return;posted=1;if(!D.rows)ov.textContent='VS portal sync: no Sales Report rows came back, sending AV numbers only...';else ov.textContent='VS portal sync: sending '+D.rows.length+' policies to your portal...';var id=Date.now(),tries=0;"
+    +"window.addEventListener('message',function(e){if(e.origin!==O||!e.data||e.data.t!=='usha-ack'||e.data.id!==id)return;clearInterval(t);ov.textContent=e.data.err?('VS portal sync failed: '+e.data.err):('VS portal synced: '+(e.data.n||0)+' policies + AV numbers. You can close this note.');setTimeout(function(){ov.remove();window.__vsSync=0;},8000);});"
+    +"send(id);var t=setInterval(function(){tries++;send(id);if(tries>40){clearInterval(t);ov.textContent='VS portal sync: the portal tab did not answer. Allow pop-ups for agent.ushadvisors.com and try again.';window.__vsSync=0;}},1500);}"
     +"})();");
   var lastSyncId=0;
   window.addEventListener("message",function(e){
@@ -11065,7 +11072,7 @@ try{(function(){
         m1.innerHTML=h1
           +'<div class="ap-bar-top">'+seg("period",[["ytd","YTD "+new Date().getFullYear()],["month","This month"],["lastmonth","Last month"],["90","Last 90 days"],["all","All time"]],S.period)+'</div>'
           +'<div class="ap-kpis">'+kpi("Underwritten","Premier Advantage · Premier Choice · Secure Advantage · under 50 · bonus at 60%",uw,TARGET.UW)+kpi("Guaranteed issue","HealthAccess · all ages · bonus at 65%",gi,TARGET.GI)+kpi("Combined","Underwritten + guaranteed issue",P,0)
-          +'<div class="ap-kpi ap-kpi-side"><div class="ap-mini usha"><span>USHA official taken rate</span><b>'+(ushaTR==null?"--":ushaTR+"%")+'</b><em>'+(ushaTR==null?"click ⟳ Sync from USHA":"UW YTD · as of "+ago(kp.at))+'</em></div>'
+          +'<div class="ap-kpi ap-kpi-side"><div class="ap-mini usha"><span>USHA official taken rate</span><b>'+(ushaTR==null?"--":ushaTR+"%")+'</b><em>'+(ushaTR==null?"click ⟳ Sync from USHA":(kp.official&&kp.official.length?kp.official.map(function(o){return esc(o.label)+" "+esc(o.rate);}).join(" · "):"UW YTD")+" · synced "+ago(kp.at))+'</em></div>'
           +'<div class="ap-mini"><span>Active core policies</span><b>'+activeN+'</b><em>$'+Math.round(mrr).toLocaleString()+'/mo in premium</em></div>'
           +'<div class="ap-mini '+(badPay?"bad":"")+'"><span>Missed / past-due payments</span><b>'+badPay+'</b><em>'+(badPay?"see the Applications tab":"all active policies current")+'</em></div></div></div>'
           +avSection(kp)
@@ -11393,6 +11400,7 @@ try{(function(){
   "#p-accounts .ac-bar .ap-chips{margin:0}",
   "#p-accounts tr[data-acct]{cursor:pointer}",
   "#accts-list .ac-flash{box-shadow:0 0 0 3px #0db5a6!important;transition:box-shadow .3s}",
+   ":is(#p-apps,#p-applist,#p-accounts) .gp-off{font-size:12px;color:#16447f;background:#eef4fd;border-radius:8px;padding:6px 9px;margin:6px 0}:is(#p-apps,#p-applist,#p-accounts) .gp-off em{display:block;font-style:normal;color:#5a6b80;margin-top:3px}",
    ":is(#p-apps,#p-applist,#p-accounts) .ap-howto ol{margin:6px 0 0 18px;padding:0;line-height:1.8;color:#33455c}",
   "@media(max-width:1280px){:is(#p-apps,#p-applist,#p-accounts) .ap-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
   "@media(max-width:1100px){:is(#p-apps,#p-applist,#p-accounts) .ap-two{grid-template-columns:1fr}}",
