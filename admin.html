@@ -11080,6 +11080,11 @@ try{(function(){
   window.vsUshaKpis=function(k){setArr(K.ushaKpis,[normKpis(k)],true);render();};
 
   /* ---- In-force policies become Active Clients (added or updated after every USHA import/sync) ---- */
+
+  /* USHEALTH plans you write: kind (UW/GI) and rate-guarantee months used to work out the renewal date */
+  var USHA_PLANS=[{n:"Premier Advantage",k:"UW",mo:24},{n:"Premier Choice",k:"UW",mo:15},{n:"Secure Advantage",k:"UW",mo:12},{n:"HealthAccess",k:"GI",mo:12},{n:"Supplements only",k:"SUPP",mo:12}];
+  function planInfo(name){name=String(name||"").toUpperCase();return USHA_PLANS.filter(function(p){return name.indexOf(p.n.toUpperCase())===0||name.replace(/[^A-Z]/g,"").indexOf(p.n.toUpperCase().replace(/[^A-Z]/g,""))===0;})[0]||(/PREMIERADVANTAGE/.test(name.replace(/[^A-Z]/g,""))?USHA_PLANS[0]:/PREMIERCHOICE/.test(name.replace(/[^A-Z]/g,""))?USHA_PLANS[1]:/SECURE ?ADV/.test(name)?USHA_PLANS[2]:/HEALTH ?ACCESS/.test(name)?USHA_PLANS[3]:null);}
+  function renewalFor(planName,eff){var pi=planInfo(planName),d=eff?pdob(eff):null;if(!pi||!d)return "";d.setMonth(d.getMonth()+pi.mo);return ymd(d);}
   function splitName(n){var p=String(n||"").split(",");return{last:nice(p[0]||"").trim(),first:nice((p[1]||"").trim()).trim()};}
   function samePerson(aLast,aFirst,bLast,bFirst){
     aLast=String(aLast||"").toUpperCase().replace(/[^A-Z]/g,"");bLast=String(bLast||"").toUpperCase().replace(/[^A-Z]/g,"");
@@ -11120,14 +11125,14 @@ try{(function(){
       if(a){
         var before=JSON.stringify([a.usha&&a.usha.ids,a.usha&&a.usha.ptd,a.plan&&a.plan.monthlyPremium,a.policyNumber]);
         a.usha=ush;if(!a.policyNumber)a.policyNumber=main.id;
-        if(!(a.plan&&a.plan.manual)&&(!a.plan||!a.plan.monthlyPremium||a.plan.carrier==="USHEALTH"))a.plan={carrier:"USHEALTH",planName:planName,effectiveDate:main.eff,renewalDate:"",monthlyPremium:ush.prem,notes:"From USHA sync"};
+        if(!(a.plan&&a.plan.manual)&&(!a.plan||!a.plan.monthlyPremium||a.plan.carrier==="USHEALTH"))a.plan={carrier:"USHEALTH",planName:planName,effectiveDate:main.eff,renewalDate:renewalFor(main.product,main.eff),monthlyPremium:ush.prem,notes:"From USHA sync"};
         if(!a.state&&main.state)a.state=main.state;
         if(before!==JSON.stringify([a.usha.ids,a.usha.ptd,a.plan&&a.plan.monthlyPremium,a.policyNumber])){updated++;changed=true;}
       }else{
         var nm=splitName(main.name),lead=(findPerson(P,k)[0]||{}).rec||{};
         accts.push({id:uid(),firstName:nm.first,lastName:nm.last,name:(nm.first+" "+nm.last).trim(),email:lead.email||"",phone:lead.phone||"",dob:lead.dob||"",address:lead.address||"",city:lead.city||"",state:main.state||lead.state||"",zipcode:lead.zipcode||lead.zipCode||"",
           passwordHash:"",created:new Date((main.submit||ymd(new Date()))+"T12:00:00").getTime(),lastSignIn:0,status:"active",
-          plan:{carrier:"USHEALTH",planName:planName,effectiveDate:main.eff,renewalDate:"",monthlyPremium:ush.prem,notes:"From USHA sync"},quoteValue:ush.prem,value:ush.prem,
+          plan:{carrier:"USHEALTH",planName:planName,effectiveDate:main.eff,renewalDate:renewalFor(main.product,main.eff),monthlyPremium:ush.prem,notes:"From USHA sync"},quoteValue:ush.prem,value:ush.prem,
           photoDataUrl:"",documents:[],notes:"",pipelineStatus:"sold",policyNumber:main.id,source:"USHA",usha:ush});
         added++;changed=true;
       }
@@ -11176,13 +11181,13 @@ try{(function(){
     var chips=[["all","All clients",counts.all],["usha","USHA in force",counts.usha],["up7","Paying in 7 days",counts.up7],["up30","Paying in 30 days",counts.up30],["bad","Missed / past due",counts.bad],["noage","Missing age",counts.noage]];
     var body=L.map(function(x){var a=x.a,c=x.core,m=x.main,k=m?TR.kind(m.product):(c?c.kind:"");
       var plan=(a.plan&&a.plan.manual&&a.plan.planName)?a.plan.planName:(m?prodName(/SECURE ADV/.test(m.product)?"SECURE ADVANTAGE":m.product):((a.plan&&a.plan.planName)||"-"));
-      if(a.plan&&a.plan.manual&&a.plan.carrier&&a.plan.carrier!=="USHEALTH")k="";
+      if(a.plan&&a.plan.manual){var pim=planInfo(a.plan.planName);if(pim)k=pim.k;}
       var extra=x.inf.length>1?'<small>+ '+(x.inf.length-1)+' more: '+esc(x.inf.filter(function(r){return r!==m;}).map(function(r){return prodName(r.product);}).slice(0,3).join(", "))+'</small>':(a.plan&&a.plan.carrier&&a.plan.carrier!=="USHEALTH"?'<small>'+esc(a.plan.carrier)+'</small>':'');
-      var st=m?m.status:(a.status||"active");
+      var st=(a.plan&&a.plan.manual&&a.plan.status)?a.plan.status:(m?m.status:(a.status||"active"));
       return '<tr data-acct="'+esc(a.id)+'"><td><b class="ap-nm">'+esc(fullName(a))+'</b><small>'+esc(a.policyNumber||(m&&m.id)||a.email||"")+((m&&m.state)||a.state?" · "+esc((m&&m.state)||a.state):"")+'</small></td>'
         +'<td>'+(k?'<span class="ap-k k-'+k+'">'+(k==="SUPP"?"SUPP":k)+'</span> ':'')+esc(plan)+extra+'</td>'
-        +'<td>'+(m?statusPill(st):'<span class="ap-st s-good">'+esc(st)+'</span>')+'</td>'
-        +'<td>'+(m?TR.fmt(m.submit):"")+'</td><td>'+(m?TR.fmt(m.eff):esc(a.plan&&a.plan.effectiveDate||""))+'</td><td>'+(m?TR.fmt(m.ptd):"")+'</td>'
+        +'<td>'+((m||(a.plan&&a.plan.manual&&a.plan.status))?statusPill(st):'<span class="ap-st s-good">'+esc(st)+'</span>')+'</td>'
+        +'<td>'+(m?TR.fmt(m.submit):"")+'</td><td>'+((a.plan&&a.plan.manual&&a.plan.effectiveDate)?TR.fmt(a.plan.effectiveDate):m?TR.fmt(m.eff):TR.fmt(a.plan&&a.plan.effectiveDate||""))+'</td><td>'+(m?TR.fmt(m.ptd):"")+'</td>'
         +'<td><div class="ap-paycell">'+(x.pay?'<span class="ap-pay p-'+x.ps+'">'+esc(x.pay)+'</span>':'<span class="ap-dash">-</span>')+(c?ovBtn(c):'')+'</div></td>'
         +'<td class="num">'+(x.prem?"$"+x.prem.toFixed(2):"-")+'</td>'
         +'<td><input class="ap-age'+(x.age==null||x.age===""?" empty":"")+(+x.age>=50?" over":"")+'" type="number" min="0" max="110" placeholder="age" data-n="'+esc(x.k)+'" value="'+(x.age==null?"":esc(x.age))+'"></td>'
@@ -11211,10 +11216,14 @@ try{(function(){
       +'<div class="acm-grid">'+f("First name","firstName")+f("Last name","lastName")+f("Phone","phone","tel")+f("Email","email","email")+f("Date of birth","dob","date")+f("State","state")+f("Address","address")+f("ZIP","zipcode")+'</div>'
       +'<h4>USHA policies</h4>'+(rs.length?'<div class="ap-tw acm-tw"><table class="ap-t"><thead><tr><th>App ID</th><th>Product</th><th>Status</th><th>Submitted</th><th>Effective</th><th>Paid to</th><th class="num">Monthly</th></tr></thead><tbody>'
         +rs.map(function(r){var kd=TR.kind(r.product);return '<tr><td>'+esc(r.id)+'</td><td><span class="ap-k k-'+kd+'">'+(kd==="SUPP"?"SUPP":kd)+'</span> '+esc(prodName(r.product))+'</td><td>'+statusPill(r.status)+'</td><td>'+TR.fmt(r.submit)+'</td><td>'+TR.fmt(r.eff)+'</td><td>'+TR.fmt(r.ptd)+'</td><td class="num">'+(r.prem?"$"+(+r.prem).toFixed(2):"-")+'</td></tr>';}).join("")+'</tbody></table></div>':'<div class="ap-empty">No USHA policies matched to this client.</div>')
-      +(function(){var pl=a.plan||{};function pf(lbl,key,type,list){return '<label class="acm-f"><span>'+lbl+'</span><input data-p="'+key+'" type="'+(type||"text")+'"'+(list?' list="'+list+'"':'')+' value="'+esc(pl[key]==null?"":pl[key])+'"></label>';}
-        return '<h4>Plan</h4><div class="acm-grid acm-plan">'+pf("Carrier","carrier","text","acm-carriers")+pf("Plan","planName","text","acm-plans")+pf("Monthly premium ($)","monthlyPremium","number")+pf("Effective date","effectiveDate","date")+pf("Renewal date","renewalDate","date")+'</div>'
-          +'<datalist id="acm-carriers">'+["USHEALTH","Ambetter","Florida Blue","Oscar","Aetna CVS Health","UnitedHealthcare","Cigna","Blue Cross Blue Shield","AmeriHealth","Molina","Other"].map(function(x){return '<option value="'+x+'"></option>';}).join("")+'</datalist>'
-          +'<datalist id="acm-plans">'+["Premier Advantage","Premier Choice","Secure Advantage","HealthAccess","Marketplace Bronze","Marketplace Silver","Marketplace Gold","Marketplace Platinum","Short-term medical","Group health","ICHRA","Dental","Vision","Dental + Vision","Critical illness","Accident","Life"].map(function(x){return '<option value="'+x+'"></option>';}).join("")+'</datalist>';})()
+      +(function(){var pl=a.plan||{},pi=planInfo(pl.planName),cur=pi?pi.n:"",stt=pl.status||(rs.some(function(r){return /in force/i.test(r.status);})?"In Force":"In Force");
+        return '<h4>Plan <span class="acm-car">USHEALTH</span></h4><div class="acm-grid acm-plan">'
+          +'<label class="acm-f"><span>Plan</span><select data-p="planName">'+['<option value="">Choose a plan</option>'].concat(USHA_PLANS.map(function(p){return '<option value="'+p.n+'"'+(cur===p.n?" selected":"")+'>'+p.n+' ('+(p.k==="SUPP"?"Supplement":p.k)+')</option>';})).join("")+'</select></label>'
+          +'<label class="acm-f"><span>Status</span><select data-p="status">'+["In Force","Pending","Not Taken","Canceled","Lapsed"].map(function(x){return '<option'+(stt===x?" selected":"")+'>'+x+'</option>';}).join("")+'</select></label>'
+          +'<label class="acm-f"><span>Monthly premium ($)</span><input data-p="monthlyPremium" type="number" step="0.01" value="'+esc(pl.monthlyPremium==null?"":pl.monthlyPremium)+'"></label>'
+          +'<label class="acm-f"><span>Effective date</span><input data-p="effectiveDate" type="date" value="'+esc(pl.effectiveDate||"")+'"></label>'
+          +'<label class="acm-f"><span>Renewal date <em class="acm-auto">auto from plan + effective date</em></span><input data-p="renewalDate" type="date" value="'+esc(pl.renewalDate||renewalFor(pl.planName,pl.effectiveDate))+'"></label>'
+          +'<div class="acm-kind">'+(pi?'<span class="ap-k k-'+pi.k+'">'+(pi.k==="SUPP"?"SUPP":pi.k)+'</span> '+(pi.k==="SUPP"?"Supplement":pi.k==="UW"?"Underwritten":"Guaranteed issue")+' · '+pi.mo+'-month rate guarantee':'Pick a plan to set UW / GI')+'</div></div>';})()
       +'<label class="acm-f acm-notes"><span>Notes</span><textarea data-k="notes" rows="4">'+esc(a.notes||"")+'</textarea></label>'
       +'<div class="acm-acts"><button type="button" class="ap-btn ghost acm-del">Remove client</button><span class="acm-msg"></span><button type="button" class="ap-btn ghost acm-cancel">Close</button><button type="button" class="ap-btn acm-save">Save</button></div></div>';
     document.body.appendChild(ov);
@@ -11223,6 +11232,9 @@ try{(function(){
     document.addEventListener("keydown",esck);
     ov.addEventListener("click",function(e){if(e.target===ov)close();});
     ov.querySelector(".acm-x").addEventListener("click",close);ov.querySelector(".acm-cancel").addEventListener("click",close);
+    (function(){var ps=ov.querySelector('[data-p="planName"]'),ef=ov.querySelector('[data-p="effectiveDate"]'),rn=ov.querySelector('[data-p="renewalDate"]'),kd=ov.querySelector(".acm-kind");
+      function upd(){var pi=planInfo(ps.value);if(ef.value&&ps.value)rn.value=renewalFor(ps.value,ef.value);kd.innerHTML=pi?'<span class="ap-k k-'+pi.k+'">'+(pi.k==="SUPP"?"SUPP":pi.k)+'</span> '+(pi.k==="SUPP"?"Supplement":pi.k==="UW"?"Underwritten":"Guaranteed issue")+' · '+pi.mo+'-month rate guarantee':'Pick a plan to set UW / GI';}
+      if(ps&&ef&&rn){ps.addEventListener("change",upd);ef.addEventListener("change",upd);}})();
     var delB=ov.querySelector(".acm-del");delB.addEventListener("click",function(){
       if(!delB.classList.contains("arm")){delB.classList.add("arm");delB.textContent="Click again to remove "+fullName(a);setTimeout(function(){delB.classList.remove("arm");delB.textContent="Remove client";},4000);return;}
       var all=getAccounts().filter(function(x){return x.id!==id;});setArr(K.accounts,all,true);
@@ -11232,8 +11244,10 @@ try{(function(){
     ov.querySelector(".acm-save").addEventListener("click",function(){
       var all=getAccounts(),t=all.filter(function(x){return x.id===id;})[0];if(!t)return close();
       ov.querySelectorAll("[data-k]").forEach(function(inp){t[inp.getAttribute("data-k")]=inp.value;});
-      var np={},any=false;ov.querySelectorAll("[data-p]").forEach(function(inp){var k=inp.getAttribute("data-p"),v=inp.value.trim();np[k]=k==="monthlyPremium"?(v===""?"":+v):v;if(v)any=true;});
-      var op=t.plan||{},changed=["carrier","planName","monthlyPremium","effectiveDate","renewalDate"].some(function(k){return String(op[k]==null?"":op[k])!==String(np[k]==null?"":np[k]);});
+      var np={},any=false;ov.querySelectorAll("[data-p]").forEach(function(inp){var k=inp.getAttribute("data-p"),v=inp.value.trim();np[k]=k==="monthlyPremium"?(v===""?"":+v):v;if(v&&k!=="status")any=true;});
+      if(!np.renewalDate&&np.planName&&np.effectiveDate)np.renewalDate=renewalFor(np.planName,np.effectiveDate);
+      var pi2=planInfo(np.planName);np.carrier="USHEALTH";np.kind=pi2?pi2.k:"";
+      var op=t.plan||{},changed=["planName","status","monthlyPremium","effectiveDate","renewalDate"].some(function(k){return String(op[k]==null?"":op[k])!==String(np[k]==null?"":np[k]);});
       if(changed){t.plan=any?Object.assign({},op,np,{manual:true,notes:"Set by you"}):null;if(t.plan&&t.plan.monthlyPremium){t.quoteValue=t.plan.monthlyPremium;t.value=t.plan.monthlyPremium;}}
       t.name=((t.firstName||"")+" "+(t.lastName||"")).trim();t.updated=Date.now();
       setArr(K.accounts,all,true);autoCache.sig="";try{renderAccounts();}catch(e){renderClientTable();}render();
@@ -11895,6 +11909,7 @@ try{(function(){
   "#p-milestones .ms-c-e{font-size:12px;color:#6b7c92;line-height:1.5}#p-milestones .ms-c-e .ok{color:#08776c;font-weight:800}#p-milestones .ms-c-e .no{color:#c4622b;font-weight:700}",
   "#p-milestones .ms-c-bar{height:6px;border-radius:999px;background:#edf1f7;overflow:hidden;margin-top:auto}#p-milestones .ms-c-bar i{display:block;height:100%;background:linear-gradient(90deg,#16447f,#0db5a6)}",
   "@media(max-width:1200px){#p-milestones .ms-cards{grid-template-columns:repeat(3,minmax(0,1fr))}#p-milestones .ms-hero{grid-template-columns:1fr}}@media(max-width:640px){#p-milestones .ms-cards{grid-template-columns:repeat(2,minmax(0,1fr))}#p-milestones .ms-tick span{font-size:10px}}",
+  ".acm-car{font-size:11px;font-weight:850;color:#16447f;background:#e6eefb;padding:3px 8px;border-radius:999px;margin-left:6px;vertical-align:2px}.acm-f select{border:1px solid #dfe6f0;border-radius:10px;padding:9px 11px;font-size:14px;color:#0b2346;background:#fff;font-family:inherit}.acm-auto{font-style:normal;text-transform:none;letter-spacing:0;font-weight:600;color:#9aa8bb;margin-left:4px}.acm-kind{align-self:end;font-size:13px;color:#42566e;padding:10px 0}",
    ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus,#p-winback,#p-milestones) .ap-howto ol{margin:6px 0 0 18px;padding:0;line-height:1.8;color:#33455c}",
   "@media(max-width:1280px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus,#p-winback,#p-milestones) .ap-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
   "@media(max-width:1100px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus,#p-winback,#p-milestones) .ap-two{grid-template-columns:1fr}}",
