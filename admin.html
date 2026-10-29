@@ -11055,7 +11055,7 @@ try{(function(){
   }
   window.vsSyncActiveClients=syncActiveClients;
 
-  var ACV={view:"table",fp:"all"};
+  var ACV={view:"table",fp:"all"};/* table only (owner request) */
   function renderClientTable(){
     var host=$("p-accounts");if(!host)return;
     var mount=$("acct-table-mount");
@@ -11101,13 +11101,45 @@ try{(function(){
         +'<td class="num">'+(x.prem?"$"+x.prem.toFixed(2):"-")+'</td>'
         +'<td><input class="ap-age'+(x.age==null||x.age===""?" empty":"")+(+x.age>=50?" over":"")+'" type="number" min="0" max="110" placeholder="age" data-n="'+esc(x.k)+'" value="'+(x.age==null?"":esc(x.age))+'"></td>'
         +'<td class="ap-cc">'+(c?countsPill(c):'<span class="ap-dash">-</span>')+'</td></tr>';}).join("");
-    mount.innerHTML='<div class="ac-bar"><div class="ap-seg" data-acv><button type="button" data-v="table"'+(cardsOn?'':' class="on"')+'>Table</button><button type="button" data-v="cards"'+(cardsOn?' class="on"':'')+'>Cards</button></div>'
+    mount.innerHTML='<div class="ac-bar">'
       +(cardsOn?'':'<div class="ap-chips">'+chips.map(function(c){return '<button type="button" class="ap-chip'+(ACV.fp===c[0]?" on":"")+(c[0]==="bad"&&c[2]?" bad":"")+'" data-acfp="'+c[0]+'">'+c[1]+'<b>'+c[2]+'</b></button>';}).join("")+'</div>')+'</div>'
-      +(cardsOn?'':'<div class="ap-card ap-tcard"><div class="ap-tw"><table class="ap-t"><thead><tr><th>Client</th><th>Plan</th><th>Status</th><th>Submitted</th><th>Effective</th><th>Paid to</th><th>Payment</th><th class="num">Monthly</th><th>Age</th><th>Taken rate</th></tr></thead><tbody>'+(body||'<tr><td colspan="10" class="ap-empty">No clients match.</td></tr>')+'</tbody></table></div><div class="ap-foot">'+L.length+' client'+(L.length===1?"":"s")+' · click a row to open the full client card</div></div>');
+      +(cardsOn?'':'<div class="ap-card ap-tcard"><div class="ap-tw"><table class="ap-t"><thead><tr><th>Client</th><th>Plan</th><th>Status</th><th>Submitted</th><th>Effective</th><th>Paid to</th><th>Payment</th><th class="num">Monthly</th><th>Age</th><th>Taken rate</th></tr></thead><tbody>'+(body||'<tr><td colspan="10" class="ap-empty">No clients match.</td></tr>')+'</tbody></table></div><div class="ap-foot">'+L.length+' client'+(L.length===1?"":"s")+' · click a row to see or edit the client</div></div>');
     mount.querySelectorAll("[data-acv] button").forEach(function(b){b.addEventListener("click",function(){ACV.view=b.getAttribute("data-v");renderClientTable();});});
     mount.querySelectorAll("[data-acfp]").forEach(function(b){b.addEventListener("click",function(){ACV.fp=b.getAttribute("data-acfp");renderClientTable();});});
     mount.querySelectorAll(".ap-age").forEach(function(inp){inp.addEventListener("click",function(e){e.stopPropagation();});inp.addEventListener("change",function(){saveAge(inp.getAttribute("data-n"),inp.value);renderClientTable();});inp.addEventListener("keydown",function(e){if(e.key==="Enter")inp.blur();});});
-    mount.querySelectorAll("tr[data-acct]").forEach(function(tr){tr.addEventListener("click",function(){var id=tr.getAttribute("data-acct");ACV.view="cards";renderClientTable();var s=$("acct-search");setTimeout(function(){var row=document.querySelector('#accts-list [data-acct-id="'+id+'"]');if(row){row.scrollIntoView({behavior:"smooth",block:"center"});row.classList.add("ac-flash");setTimeout(function(){row.classList.remove("ac-flash");},2200);}},80);});});
+    mount.querySelectorAll("tr[data-acct]").forEach(function(tr){tr.addEventListener("click",function(e){if(e.target.closest("button,input,select,a"))return;var id=tr.getAttribute("data-acct");openClient(id);});});
+  }
+
+  /* ---- client detail (table row click): edit contact info + see every USHA policy ---- */
+  function openClient(id){
+    var accts=getAccounts(),a=accts.filter(function(x){return x.id===id;})[0];if(!a)return;
+    var M=model(),k=(String(a.lastName||"").toUpperCase().replace(/[^A-Z]/g,"")+","+String(a.firstName||"").toUpperCase().replace(/[^A-Z]/g,""));
+    var rs=M.rows.filter(function(r){return (a.usha&&a.usha.ids&&a.usha.ids.indexOf(r.id)>=0)||nkey(r.name)===k;});
+    var base={};rs.forEach(function(r){base[String(r.id).slice(0,9)]=1;});rs=M.rows.filter(function(r){return base[String(r.id).slice(0,9)];}).sort(function(x,y){return x.submit<y.submit?1:x.submit>y.submit?-1:TR.kind(x.product)==="SUPP"?1:-1;});
+    var age=M.am[rs.length?nkey(rs[0].name):k];
+    function f(lbl,key,type){return '<label class="acm-f"><span>'+lbl+'</span><input data-k="'+key+'" type="'+(type||"text")+'" value="'+esc(key==="dob"&&a.dob?(pdob(a.dob)?ymd(pdob(a.dob)):""):(a[key]||""))+'"></label>';}
+    var ov=document.createElement("div");ov.className="acm-ov";
+    ov.innerHTML='<div class="acm" role="dialog" aria-label="Client details"><button type="button" class="acm-x" aria-label="Close">✕</button>'
+      +'<div class="acm-h"><div class="acm-av">'+esc(((a.firstName||"?")[0]+(a.lastName||"")[0]||"").toUpperCase())+'</div><div><h3>'+esc(fullName(a))+'</h3><div class="acm-sub">'+esc(a.policyNumber||"")+(age!=null&&age!==""?' · age '+esc(age):'')+(a.plan&&a.plan.monthlyPremium?' · $'+(+a.plan.monthlyPremium).toFixed(2)+'/mo':'')+'</div></div>'
+      +'<select data-k="status" class="acm-st">'+["active","pending","inactive","cancelled"].map(function(v){return '<option value="'+v+'"'+((a.status||"active")===v?" selected":"")+'>'+v.charAt(0).toUpperCase()+v.slice(1)+'</option>';}).join("")+'</select></div>'
+      +'<div class="acm-grid">'+f("First name","firstName")+f("Last name","lastName")+f("Phone","phone","tel")+f("Email","email","email")+f("Date of birth","dob","date")+f("State","state")+f("Address","address")+f("ZIP","zipcode")+'</div>'
+      +'<h4>USHA policies</h4>'+(rs.length?'<div class="ap-tw acm-tw"><table class="ap-t"><thead><tr><th>App ID</th><th>Product</th><th>Status</th><th>Submitted</th><th>Effective</th><th>Paid to</th><th class="num">Monthly</th></tr></thead><tbody>'
+        +rs.map(function(r){var kd=TR.kind(r.product);return '<tr><td>'+esc(r.id)+'</td><td><span class="ap-k k-'+kd+'">'+(kd==="SUPP"?"SUPP":kd)+'</span> '+esc(prodName(r.product))+'</td><td>'+statusPill(r.status)+'</td><td>'+TR.fmt(r.submit)+'</td><td>'+TR.fmt(r.eff)+'</td><td>'+TR.fmt(r.ptd)+'</td><td class="num">'+(r.prem?"$"+(+r.prem).toFixed(2):"-")+'</td></tr>';}).join("")+'</tbody></table></div>':'<div class="ap-empty">No USHA policies matched to this client.</div>')
+      +'<label class="acm-f acm-notes"><span>Notes</span><textarea data-k="notes" rows="4">'+esc(a.notes||"")+'</textarea></label>'
+      +'<div class="acm-acts"><span class="acm-msg"></span><button type="button" class="ap-btn ghost acm-cancel">Close</button><button type="button" class="ap-btn acm-save">Save</button></div></div>';
+    document.body.appendChild(ov);
+    function close(){ov.remove();document.removeEventListener("keydown",esck);}
+    function esck(e){if(e.key==="Escape")close();}
+    document.addEventListener("keydown",esck);
+    ov.addEventListener("click",function(e){if(e.target===ov)close();});
+    ov.querySelector(".acm-x").addEventListener("click",close);ov.querySelector(".acm-cancel").addEventListener("click",close);
+    ov.querySelector(".acm-save").addEventListener("click",function(){
+      var all=getAccounts(),t=all.filter(function(x){return x.id===id;})[0];if(!t)return close();
+      ov.querySelectorAll("[data-k]").forEach(function(inp){t[inp.getAttribute("data-k")]=inp.value;});
+      t.name=((t.firstName||"")+" "+(t.lastName||"")).trim();t.updated=Date.now();
+      setArr(K.accounts,all,true);autoCache.sig="";try{renderAccounts();}catch(e){renderClientTable();}render();
+      ov.querySelector(".acm-msg").textContent="Saved";setTimeout(close,500);
+    });
   }
   try{var _ra=renderAccounts;renderAccounts=function(){var r=_ra.apply(this,arguments);try{renderClientTable();}catch(e){console.warn("client table",e);}return r;};}catch(e){}
   ["acct-search","acct-sort"].forEach(function(id){var e=$(id);if(e)e.addEventListener(id==="acct-search"?"input":"change",function(){try{renderClientTable();}catch(x){}});});
@@ -11472,6 +11504,24 @@ try{(function(){
   ".ap-ovm-h{font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;color:#6b7c92;padding:8px 10px 6px}",
   ".ap-ovm button{display:block;width:100%;text-align:left;border:0;background:none;padding:10px;border-radius:8px;font-size:13.5px;font-weight:700;color:#0b2346;cursor:pointer}.ap-ovm button:hover{background:#f4f8fe}.ap-ovm button.on{background:#eef1ff;color:#3b3fb0}",
   ".ap-ovm-f{font-size:11px;color:#8091a7;padding:6px 10px 4px;line-height:1.4}",
+  ".acm-ov{position:fixed;inset:0;background:rgba(11,35,70,.45);z-index:1500;display:flex;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto}",
+  ".acm{position:relative;background:#fff;border-radius:18px;width:860px;max-width:100%;padding:24px;box-shadow:0 30px 80px rgba(0,0,0,.3);animation:vsPop .2s ease both}",
+  ".acm-x{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;border:1px solid #e4e9f2;background:#fff;cursor:pointer;font-size:14px;color:#0b2346}",
+  ".acm-h{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding-right:44px}.acm-h h3{margin:0;font-size:21px;font-weight:850;color:#0b2346}.acm-sub{font-size:13px;color:#6b7c92;margin-top:2px}",
+  ".acm-av{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;flex:0 0 auto}",
+  ".acm-st{margin-left:auto;border:1px solid #dfe6f0;border-radius:10px;padding:8px 10px;font-weight:700;color:#0b2346;background:#fff}",
+  ".acm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;margin-bottom:18px}",
+  ".acm-f{display:flex;flex-direction:column;gap:4px}.acm-f span{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#6b7c92}",
+  ".acm-f input,.acm-f textarea{border:1px solid #dfe6f0;border-radius:10px;padding:9px 11px;font-size:14px;color:#0b2346;font-family:inherit;background:#fff}",
+  ".acm h4{margin:4px 0 8px;font-size:14px;font-weight:850;color:#0b2346}",
+  ".acm .acm-tw{max-height:260px;border:1px solid #eef2f7;border-radius:12px;margin-bottom:16px}",
+  ".acm .ap-t{width:100%;border-collapse:collapse;font-size:12.5px}.acm .ap-t th{background:#f7f9fc;text-align:left;font-size:10.5px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;color:#6b7c92;padding:8px 10px}.acm .ap-t td{padding:8px 10px;border-top:1px solid #f0f3f8;white-space:nowrap;color:#33455c}.acm .ap-t .num{text-align:right}",
+  ".acm .ap-k{display:inline-block;font-size:10px;font-weight:900;padding:2px 6px;border-radius:6px}.acm .ap-k.k-UW{background:#e6eefb;color:#16447f}.acm .ap-k.k-GI{background:#e0f7f4;color:#08776c}.acm .ap-k.k-SUPP{background:#f1f3f7;color:#6b7c92}",
+  ".acm .ap-st{display:inline-block;font-size:11.5px;font-weight:750;padding:2px 8px;border-radius:999px}.acm .ap-st.s-good{background:#e9f9f3;color:#0a6b45}.acm .ap-st.s-bad{background:#fdecec;color:#b42a24}.acm .ap-st.s-mute{background:#f1f3f7;color:#5a6b80}.acm .ap-st.s-warn{background:#fff6dd;color:#8a5a00}",
+  ".acm-notes{margin-bottom:16px}",
+  ".acm-acts{display:flex;gap:8px;justify-content:flex-end;align-items:center}.acm-msg{margin-right:auto;color:#0a8f83;font-weight:800;font-size:13px}",
+  ".acm .ap-btn{background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;border:0;border-radius:11px;padding:10px 18px;font-weight:800;font-size:14px;cursor:pointer}.acm .ap-btn.ghost{background:#fff;color:#16447f;border:1px solid #dfe6f0}",
+  "@media(max-width:640px){.acm-grid{grid-template-columns:1fr}.acm{padding:18px}}",
    ":is(#p-apps,#p-applist,#p-accounts) .ap-howto ol{margin:6px 0 0 18px;padding:0;line-height:1.8;color:#33455c}",
   "@media(max-width:1280px){:is(#p-apps,#p-applist,#p-accounts) .ap-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
   "@media(max-width:1100px){:is(#p-apps,#p-applist,#p-accounts) .ap-two{grid-template-columns:1fr}}",
