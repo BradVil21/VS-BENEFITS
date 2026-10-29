@@ -11264,16 +11264,18 @@ try{(function(){
     var L=[];
     M.apps.forEach(function(a){
       if(a.hidden)return;var s=a.status||"",why="",kind="",pri=0,act="";
-      if(/in force/i.test(s)&&a.payState==="bad"&&!a.isPaid){kind="save";pri=3;why=a.pay;act="First payment never went through. Call before it turns Not Taken: confirm the account and have USHA redraft.";}
-      else if(a.submit>=d90&&a.countSubmit&&!a.countTaken&&/not taken/i.test(s)){kind="back";pri=2;why="Not taken - effective "+TR.fmt(a.eff)+", never paid";act="Get a payment redrafted (they move money in, USHA reruns it) - like Clay.";}
-      else if(a.submit>=d90&&a.countSubmit&&!a.countTaken&&/cancel|lapse/i.test(s)){kind="back";pri=2;why=a.keptDays?(s+" after "+a.keptDays+" days"):(s+" before paying");act="Ask for reinstatement before it ages out; under 30 days kept counts against you.";}
+      /* 30-day grace: a missed payment can only be won back within 30 days of the date it was due (paid-to date). After that it's dead. */
+      var due=a.ptd||a.eff,left=due?Math.ceil((new Date(due+"T12:00:00").getTime()+30*864e5-t.getTime())/864e5):-1,graceTxt=left>0?left+" day"+(left===1?"":"s")+" left in grace":"";
+      if(/in force/i.test(s)&&!a.isPaid&&due&&due<td&&left>0){kind="save";pri=3;why="First payment didn't go through · "+graceTxt;act="Call now: confirm the account and have USHA redraft before the grace period ends.";}
+      else if(a.countSubmit&&!a.countTaken&&/not taken/i.test(s)&&left>0){kind="back";pri=2;why="Not taken · "+graceTxt;act="Get the payment redrafted (they move money in, USHA reruns it) before grace runs out.";}
+      else if(a.countSubmit&&!a.countTaken&&/cancel|lapse/i.test(s)&&left>0){kind="back";pri=2;why=(a.keptDays?s+" after "+a.keptDays+" days":s+" before paying")+" · "+graceTxt;act="Ask USHA to reinstate with a payment before grace runs out.";}
       else if(a.submit>=d90&&/withdrawn/i.test(s)&&!a.replaced){kind="resub";pri=1;why="Withdrawn - not resubmitted";act="Resubmit within 45 days and it drops out of your submits.";}
-      else if(a.code==="pending"){kind="pending";pri=2;why="Pending - checking payment";act="Confirm the payment posted, then mark They paid.";}
+      else if(a.code==="pending"&&left>0){kind="pending";pri=2;why="Pending - checking payment · "+graceTxt;act="Confirm the payment posted, then mark They paid.";}
       else return;
       var g=gain(a);if(kind==="resub"){var tt=TOT[a.kind]||{S:0,T:0};g=tt.S>1?Math.round((tt.T/(tt.S-1)-tt.T/tt.S)*1000)/10:0;}
-      L.push({a:a,kind:kind,pri:pri,why:why,act:act,g:g,c:phoneOf(a)});});
+      L.push({a:a,kind:kind,pri:pri,why:why,act:act,g:g,c:phoneOf(a),left:left>0?left:999});});
     var counts={all:L.length,UW:L.filter(function(x){return x.a.kind==="UW";}).length,GI:L.filter(function(x){return x.a.kind==="GI";}).length};
-    var V=L.filter(function(x){return WBV.kind==="all"||x.a.kind===WBV.kind;}).sort(function(x,y){return y.pri-x.pri||y.g-x.g||(x.a.submit<y.a.submit?1:-1);});
+    var V=L.filter(function(x){return WBV.kind==="all"||x.a.kind===WBV.kind;}).sort(function(x,y){return y.pri-x.pri||(x.left-y.left)||y.g-x.g;});
     function need(k){var tt=TOT[k]||{S:0,T:0},T0=TARGET[k]/100;if(!tt.S)return null;return Math.max(0,Math.ceil(T0*tt.S-tt.T-1e-9));}
     var goal=["UW","GI"].map(function(k){var n=need(k),tt=TOT[k]||{S:0,T:0},have=L.filter(function(x){return x.a.kind===k&&x.kind!=="resub";}).length;
       return '<div class="wb-goal '+(n?"low":"ok")+'"><b>'+(k==="UW"?"Underwritten":"Guaranteed issue")+'</b>'+(n==null?' no data':n?' get back <strong>'+n+'</strong> to reach '+TARGET[k]+'% <em>('+have+' on this list)</em>':' already at '+TARGET[k]+'%+ - win-backs give you more room')+'</div>';}).join("");
@@ -11283,7 +11285,7 @@ try{(function(){
         +'<td>'+(c.phone?'<a class="bz-lnk" href="tel:'+esc(String(c.phone).replace(/[^0-9+]/g,""))+'">'+esc(c.phone)+'</a>':'<span class="ap-dash">-</span>')+'</td><td>'+ovBtn(a)+'</td></tr>';}).join("");
     var goalTxt=["UW","GI"].map(function(k){var n=need(k);return (k==="UW"?"Underwritten":"GI")+': '+(n==null?'-':n?'<b>get back '+n+'</b> for '+TARGET[k]+'%':'<b class="ok">at '+TARGET[k]+'%+</b>');}).join(' · ');
     return '<div class="ap-card wb"><div class="ap-card-h"><h4>Win-back list <span class="wb-sub">'+goalTxt+'</span></h4><div class="ap-seg" data-wbk>'+[["all","All",counts.all],["UW","UW",counts.UW],["GI","GI",counts.GI]].map(function(o){return '<button type="button" data-v="'+o[0]+'"'+(WBV.kind===o[0]?' class="on"':'')+'>'+o[1]+' '+o[2]+'</button>';}).join("")+'</div></div>'
-      +(rows?'<div class="ap-tw wb-tw"><table class="ap-t wb-t"><thead><tr><th>Action</th><th>Client</th><th>Plan</th><th>Submitted</th><th>What happened</th><th class="num">+ pts</th><th>Phone</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>':'<div class="ap-empty">Nobody to win back right now.</div>')
+      +(rows?'<div class="ap-tw wb-tw"><table class="ap-t wb-t"><thead><tr><th>Action</th><th>Client</th><th>Plan</th><th>Submitted</th><th>What happened</th><th class="num">+ pts</th><th>Phone</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>':'<div class="ap-empty">Nobody to win back right now. Anyone past their 30-day grace period is dead and left off.</div>')
       +'</div>';
   }
   function wireWB(mount){mount.querySelectorAll("[data-wbk] button").forEach(function(b){b.addEventListener("click",function(){WBV.kind=b.getAttribute("data-v");bonusCalc(mount.id==="winback-mount"?"wb":"");});});}
