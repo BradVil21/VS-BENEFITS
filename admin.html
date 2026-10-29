@@ -2247,9 +2247,9 @@ var presenceMap={};
 var REMOTE_KEYS=["leads","accounts","messages","contact_requests","quick_notes","biz_leads","referrals","appointments","admin_accounts","blocked_ips"];
 var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,contact_requests:K.tickets,quick_notes:K.quickNotes,biz_leads:K.bizLeads,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts,blocked_ips:K.blockedIps};
 /* USHA applications + client ages (2026-10-28) */
-K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.ushaKpis="vs_usha_kpis";K.ushaOv="vs_usha_overrides";K.ushaIncome="vs_usha_income";K.ushaPlan="vs_usha_plan";K.clientSkip="vs_client_skip";
-LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";LOCAL_TO_REMOTE[K.ushaKpis]="usha_kpis";LOCAL_TO_REMOTE[K.ushaOv]="usha_overrides";LOCAL_TO_REMOTE[K.ushaIncome]="usha_income";LOCAL_TO_REMOTE[K.ushaPlan]="usha_plan";LOCAL_TO_REMOTE[K.clientSkip]="client_skip";
-REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta","usha_kpis");REMOTE_TO_LOCAL.usha_kpis=K.ushaKpis;REMOTE_KEYS.push("usha_overrides","usha_income","usha_plan");REMOTE_TO_LOCAL.usha_plan=K.ushaPlan;REMOTE_KEYS.push("client_skip");REMOTE_TO_LOCAL.client_skip=K.clientSkip;REMOTE_TO_LOCAL.usha_overrides=K.ushaOv;REMOTE_TO_LOCAL.usha_income=K.ushaIncome;REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
+K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.ushaKpis="vs_usha_kpis";K.ushaOv="vs_usha_overrides";K.ushaIncome="vs_usha_income";K.ushaPlan="vs_usha_plan";K.clientSkip="vs_client_skip";K.msHist="vs_ms_hist";
+LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";LOCAL_TO_REMOTE[K.ushaKpis]="usha_kpis";LOCAL_TO_REMOTE[K.ushaOv]="usha_overrides";LOCAL_TO_REMOTE[K.ushaIncome]="usha_income";LOCAL_TO_REMOTE[K.ushaPlan]="usha_plan";LOCAL_TO_REMOTE[K.clientSkip]="client_skip";LOCAL_TO_REMOTE[K.msHist]="ms_hist";
+REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta","usha_kpis");REMOTE_TO_LOCAL.usha_kpis=K.ushaKpis;REMOTE_KEYS.push("usha_overrides","usha_income","usha_plan");REMOTE_TO_LOCAL.usha_plan=K.ushaPlan;REMOTE_KEYS.push("client_skip","ms_hist");REMOTE_TO_LOCAL.client_skip=K.clientSkip;REMOTE_TO_LOCAL.ms_hist=K.msHist;REMOTE_TO_LOCAL.usha_overrides=K.ushaOv;REMOTE_TO_LOCAL.usha_income=K.ushaIncome;REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
 
 function setSyncPill(state){
   var p=$("sync-pill");if(!p)return;
@@ -10687,7 +10687,7 @@ try{(function(){
   })();
   window.__vsTR=TR;
 
-  K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.clientSkip="vs_client_skip";
+  K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.clientSkip="vs_client_skip";K.msHist="vs_ms_hist";
 
   var S={period:"ytd",lperiod:"all",kind:"UW",view:"core",fk:"all",fs:"all",fp:"all",q:""};
   function esc(s){return escapeHtml(s==null?"":String(s));}
@@ -11424,6 +11424,10 @@ try{(function(){
     function m0(n){return "$"+Math.round(n||0).toLocaleString();}
     function mk(n){return n>=1e6?"$"+(n/1e6)+"M":"$"+(n/1000)+"K";}
     if(!kp){mount.innerHTML='<div class="ap-head"><div><h3>Milestones</h3><p class="lede">Click ⟳ Sync from USHA (Taken Rate tab) to bring in your AV.</p></div></div>';return;}
+    /* milestones reset every January 1: last year's synced numbers don't count toward this year */
+    var YR=new Date().getFullYear(),kpYr=new Date(kp.at).getFullYear(),stale=kpYr<YR;
+    var hist=asArr(K.msHist);if(!stale){var hy=hist.filter(function(h){return h.y===kpYr;})[0];if(!hy){hy={y:kpYr};hist.push(hy);}if(hy.iss!==kp.iss.ytd||hy.sub!==kp.sub.ytd){hy.iss=kp.iss.ytd;hy.sub=kp.sub.ytd;hy.at=kp.at;setArr(K.msHist,hist,true);}}
+    if(stale){kp=Object.assign({},kp,{iss:{ytd:0,avg:0},sub:{ytd:0,avg:0},proj:{avgIss:0,avgSub:0,weeksRemaining:Math.max(0,Math.round((new Date(YR,11,31)-new Date())/6048e5))},weeks:[]});}
     var b=MSV.basis,o=b==="iss"?kp.iss:kp.sub,ytd=o.ytd||0,avg=(b==="iss"?(kp.proj.avgIss||o.avg):(kp.proj.avgSub||o.avg))||0,wr=kp.proj.weeksRemaining!=null?kp.proj.weeksRemaining:0;
     var proj=ytd+avg*wr,now=new Date();
     /* when each milestone was crossed: walk the weekly numbers forward from where YTD started */
@@ -11431,14 +11435,14 @@ try{(function(){
     var sumW=weeks.reduce(function(t,w){return t+w.v;},0),cum=Math.max(0,ytd-sumW),hit={};
     weeks.forEach(function(w){var before=cum;cum+=w.v;MS.forEach(function(m){if(!hit[m]&&before<m&&cum>=m){var p=String(w.wk).split(".");hit[m]=isoWeekStart(2000+(+p[0]),+p[1]);}});});
     var next=MS.filter(function(m){return ytd<m;})[0],prev=MS.filter(function(m){return ytd>=m;}).slice(-1)[0]||0;
-    var left=next?next-ytd:0,wksTo=next&&avg?Math.ceil(left/avg):null,eta=wksTo!=null?new Date(now.getTime()+wksTo*6048e5):null;
+    var left=next?next-ytd:0,wksTo=next&&avg?Math.ceil(left/avg):null,eta=wksTo!=null?new Date(now.getTime()+wksTo*6048e5):null,etaThisYear=eta&&eta.getFullYear()===YR;
     var yearEndHit=MS.filter(function(m){return proj>=m;}).slice(-1)[0];
     var perWeekNeeded=next&&wr?Math.ceil(left/wr):null;
-    var head='<div class="ap-head"><div><h3>Milestones</h3><p class="lede">Your 2026 production on the road to $1M. Synced from your USHA Sales Dashboard '+ago(kp.at)+'.</p></div>'
+    var head='<div class="ap-head"><div><h3>Milestones</h3><p class="lede">Your '+YR+' production on the road to $1M. Resets every January 1. '+(stale?'<b>New year: sync from USHA to start '+YR+'.</b>':'Synced from your USHA Sales Dashboard '+ago(kp.at)+'.')+'</p></div>'
       +'<div class="ap-actions"><div class="ap-seg" data-msb><button type="button" data-v="iss"'+(b==="iss"?' class="on"':'')+'>Issued AV</button><button type="button" data-v="sub"'+(b==="sub"?' class="on"':'')+'>Submitted AV</button></div></div></div>';
-    var hero='<div class="ms-hero"><div class="ms-big"><span>'+(b==="iss"?"Issued":"Submitted")+' AV 2026</span><b>'+m0(ytd)+'</b><em>'+m0(avg)+' / week average · '+wr+' weeks left</em></div>'
+    var hero='<div class="ms-hero"><div class="ms-big"><span>'+(b==="iss"?"Issued":"Submitted")+' AV '+YR+'</span><b>'+m0(ytd)+'</b><em>'+m0(avg)+' / week average · '+wr+' weeks left</em></div>'
       +(next?'<div class="ms-next"><span>Next milestone</span><b>'+mk(next)+'</b><div class="ms-left"><strong>'+m0(left)+'</strong> to go</div>'
-        +'<em>'+(wksTo!=null?'About '+wksTo+' week'+(wksTo===1?"":"s")+' at your pace'+(eta?' (around '+eta.toLocaleDateString("en-US",{month:"short",day:"numeric"})+')':''):'')+(perWeekNeeded!=null?' · '+m0(perWeekNeeded)+'/week to hit it by year end':'')+'</em></div>'
+        +'<em>'+(wksTo!=null?(etaThisYear?'About '+wksTo+' week'+(wksTo===1?"":"s")+' at your pace (around '+eta.toLocaleDateString("en-US",{month:"short",day:"numeric"})+')':'Not before the year resets at your current pace'):'')+(perWeekNeeded!=null?' · '+m0(perWeekNeeded)+'/week to hit it by year end':'')+'</em></div>'
        :'<div class="ms-next done"><span>All milestones hit</span><b>$1M+</b><em>Legendary year.</em></div>')
       +'<div class="ms-proj"><span>Projected year end</span><b>'+m0(proj)+'</b><em>'+(yearEndHit?'lands you at the '+mk(yearEndHit)+' milestone':'below $75K at this pace')+'</em></div></div>';
     var maxV=1000000,pct=Math.min(100,ytd/maxV*100),pp=Math.min(100,proj/maxV*100);
@@ -11447,9 +11451,9 @@ try{(function(){
     var cards='<div class="ms-cards">'+MS.map(function(m){var done=ytd>=m,isNext=m===next,need=Math.max(0,m-ytd),w=avg?Math.ceil(need/avg):null,byYE=proj>=m;
       return '<div class="ms-c'+(done?" done":isNext?" next":"")+'"><div class="ms-c-t">'+mk(m)+'</div>'
         +(done?'<div class="ms-c-s">✓ Reached'+(hit[m]?' week of '+hit[m].toLocaleDateString("en-US",{month:"short",day:"numeric"}):'')+'</div>'
-          :'<div class="ms-c-s"><b>'+m0(need)+'</b> to go</div><div class="ms-c-e">'+(w!=null?w+' wks at your pace':'')+'<br>'+(byYE?'<span class="ok">On track for this year</span>':'<span class="no">Needs '+m0(wr?Math.ceil(need/wr):need)+'/wk to hit this year</span>')+'</div>')
+          :'<div class="ms-c-s"><b>'+m0(need)+'</b> to go</div><div class="ms-c-e">'+(w!=null?(now.getTime()+w*6048e5<new Date(YR,11,31,23,59).getTime()?w+' wks at your pace':'Not this year at your pace'):'')+'<br>'+(byYE?'<span class="ok">On track for this year</span>':'<span class="no">Needs '+m0(wr?Math.ceil(need/wr):need)+'/wk to hit this year</span>')+'</div>')
         +'<div class="ms-c-bar"><i style="width:'+Math.min(100,ytd/m*100).toFixed(1)+'%"></i></div></div>';}).join("")+'</div>';
-    mount.innerHTML=head+'<div class="ap-card ms">'+hero+bar+'</div>'+cards+'<div class="ap-note soft">Milestones count '+(b==="iss"?"issued":"submitted")+' AV for 2026 from USHA. "At your pace" uses your weekly average; "this year" assumes the '+wr+' weeks USHA shows left. Re-sync from USHA to update.</div>';
+    mount.innerHTML=head+'<div class="ap-card ms">'+hero+bar+'</div>'+cards+(function(){var past=asArr(K.msHist).filter(function(h){return h.y<YR;}).sort(function(a,c){return c.y-a.y;});if(!past.length)return '';return '<div class="ms-past"><b>Past years</b>'+past.map(function(h){var v=b==="iss"?h.iss:h.sub,top=MS.filter(function(m){return v>=m;}).slice(-1)[0];return '<span>'+h.y+': '+m0(v)+(top?' · reached '+mk(top):'')+'</span>';}).join('')+'</div>';})()+'<div class="ap-note soft">Milestones reset every January 1 and count '+(b==="iss"?"issued":"submitted")+' AV for 2026 from USHA. "At your pace" uses your weekly average; "this year" assumes the '+wr+' weeks USHA shows left. Re-sync from USHA to update.</div>';
     mount.querySelectorAll("[data-msb] button").forEach(function(x){x.addEventListener("click",function(){MSV.basis=x.getAttribute("data-v");milestones();});});
   }
   window.vsMilestones=milestones;
@@ -11910,6 +11914,7 @@ try{(function(){
   "#p-milestones .ms-c-bar{height:6px;border-radius:999px;background:#edf1f7;overflow:hidden;margin-top:auto}#p-milestones .ms-c-bar i{display:block;height:100%;background:linear-gradient(90deg,#16447f,#0db5a6)}",
   "@media(max-width:1200px){#p-milestones .ms-cards{grid-template-columns:repeat(3,minmax(0,1fr))}#p-milestones .ms-hero{grid-template-columns:1fr}}@media(max-width:640px){#p-milestones .ms-cards{grid-template-columns:repeat(2,minmax(0,1fr))}#p-milestones .ms-tick span{font-size:10px}}",
   ".acm-car{font-size:11px;font-weight:850;color:#16447f;background:#e6eefb;padding:3px 8px;border-radius:999px;margin-left:6px;vertical-align:2px}.acm-f select{border:1px solid #dfe6f0;border-radius:10px;padding:9px 11px;font-size:14px;color:#0b2346;background:#fff;font-family:inherit}.acm-auto{font-style:normal;text-transform:none;letter-spacing:0;font-weight:600;color:#9aa8bb;margin-left:4px}.acm-kind{align-self:end;font-size:13px;color:#42566e;padding:10px 0}",
+  "#p-milestones .ms-past{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px;font-size:13px;color:#42566e}#p-milestones .ms-past span{background:#fff;border:1px solid #e4e9f2;border-radius:999px;padding:6px 12px;font-weight:700}",
    ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus,#p-winback,#p-milestones) .ap-howto ol{margin:6px 0 0 18px;padding:0;line-height:1.8;color:#33455c}",
   "@media(max-width:1280px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus,#p-winback,#p-milestones) .ap-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
   "@media(max-width:1100px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus,#p-winback,#p-milestones) .ap-two{grid-template-columns:1fr}}",
