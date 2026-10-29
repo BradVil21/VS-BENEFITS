@@ -10854,7 +10854,8 @@ try{(function(){
       if(ov&&(ov.ptd!==a.ptd||ov.status!==a.status))ov=null;
       a.ov=ov||null;a.hidden=!!(ov&&ov.s==="hide");
       if(ov&&ov.s==="pending"){a.countSubmit=false;a.countTaken=false;a.accSubmit=false;a.accTaken=false;a.maturing=false;a.code="pending";a.why="Pending - waiting to see if they paid";a.pay="Pending - checking payment";a.payState="pend";return;}
-      if(ov&&ov.s==="paid"){a.isPaid=true;if(!/in force/i.test(a.status)){a.countSubmit=true;a.accSubmit=true;}if(a.countSubmit){a.countTaken=true;a.accTaken=a.accSubmit;}a.code="paidcancel";a.why="Paid (you confirmed)";a.pay="Paid (you confirmed)";a.payState="good";return;}
+      /* "They paid" puts the policy in force: it counts as taken (Accurate judges it after its first month, like any in-force policy) */
+      if(ov&&ov.s==="paid"){a.usha_status=a.status;a.status="In Force";a.isPaid=true;a.countSubmit=true;a.countTaken=true;a.accSubmit=a.mature||!a.eff;a.accTaken=a.accSubmit;a.maturing=!a.accSubmit;a.code="inforce";a.why="In force (you confirmed they paid)";a.pay="In force - paid (you confirmed)";a.payState="good";return;}
       if(ov&&ov.s==="nottaken"){if(a.over50){a.countSubmit=false;a.accSubmit=false;a.why="Age 50+ and not taken - does not count toward taken";}else{a.countSubmit=true;a.accSubmit=true;a.why="Not taken (you marked)";}a.countTaken=false;a.accTaken=false;a.maturing=false;a.code="nottaken";a.pay="Not taken (you marked)";a.payState="mid";return;}
       /* paid at least once and more than 30 days past the paid-to date: it's a taken policy, not a payment to chase */
       if(/in force/i.test(a.status)&&a.isPaid&&a.ptd&&a.ptd<d30){a.autoTaken=true;a.pay="Taken - paid to "+TR.fmt(a.ptd);a.payState="taken";}
@@ -10864,9 +10865,9 @@ try{(function(){
   function setOv(app,sv){
     var arr=asArr(K.ushaOv).filter(function(o){return o&&o.key!==app.key;});
     if(sv)arr.push({key:app.key,s:sv,ptd:app.ptd,status:app.status,name:app.name,at:Date.now()});
-    setArr(K.ushaOv,arr,true);render();try{renderClientTable();}catch(e){}
+    setArr(K.ushaOv,arr,true);if(sv==="paid"){try{syncActiveClients();}catch(e){}}render();try{renderClientTable();}catch(e){}
   }
-  var OPTS=[["pending","Pending - checking if they paid"],["paid","They paid"],["nottaken","Not taken"],["hide","Remove from this list"],["","Clear my update"]];
+  var OPTS=[["pending","Pending - checking if they paid"],["paid","They paid - mark in force"],["nottaken","Not taken"],["hide","Remove from this list"],["","Clear my update"]];
   function openOvMenu(btn,app){
     document.querySelectorAll(".ap-ovm").forEach(function(m){m.remove();});
     var m=document.createElement("div");m.className="ap-ovm";
@@ -11062,6 +11063,8 @@ try{(function(){
   }
   function syncActiveClients(){
     var rows=getRows();if(!rows.length)return 0;
+    var OVP={};asArr(K.ushaOv).forEach(function(o){if(o&&o.s==="paid")OVP[o.key]=o;});
+    rows=rows.map(function(r){var o=OVP[String(r.id).slice(0,9)+"|"+TR.kind(r.product)]||OVP[String(r.id).slice(0,9)+"|UW"]||OVP[String(r.id).slice(0,9)+"|GI"];if(o&&o.status===r.status&&o.ptd===r.ptd&&!/in force/i.test(r.status))return Object.assign({},r,{status:"In Force"});return r;});
     var byName={};rows.forEach(function(r){if(!/in force/i.test(r.status))return;var k=nkey(r.name);(byName[k]=byName[k]||[]).push(r);});
     var accts=getAccounts(),P=people(),added=0,updated=0,changed=false;
     function acctKey(a){return(String(a.lastName||"").toUpperCase().replace(/[^A-Z]/g,"")+","+String(a.firstName||"").toUpperCase().replace(/[^A-Z]/g,""));}
