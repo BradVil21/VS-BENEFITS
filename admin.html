@@ -10606,8 +10606,8 @@ try{(function(){
    Taken Rate = Taken ÷ Submits.
      Taken   = In Force + Canceled/Lapse after paying (paid-to date past the effective date)
      Submits = every core app, minus Pending and minus Withdrawn apps replaced by a resubmission
-     UW (PREMIERADVANTAGE-24, PREMIERCHOICE-15, SECURE ADV SICKNESS/ACCIDENT) and GI (HEALTHACCESS III): clients under 50 only (age today)
-     Supplements never count. Anyone 50 or older today never counts.
+     UW (PREMIERADVANTAGE-24, PREMIERCHOICE-15, SECURE ADV SICKNESS/ACCIDENT) and GI (HEALTHACCESS III) are the only plans that count
+     Supplements never count. Clients 50+ (age today) count when taken; if not taken, declined, canceled or withdrawn they are left out.
      Everything else is a supplement and never counts.
    "Accurate" judges a still-active policy only once it clears effective date + 1 month.
    "YTD (all months)" counts everything now, including brand-new submits. */
@@ -10642,8 +10642,8 @@ try{(function(){
         var why="",submit=true,taken=false,code="";
         if(pending(s)){submit=false;why="Pending - not counted yet";code="pending";}
         else if(/withdrawn/i.test(s)&&a.replaced){submit=false;why="Withdrawn, resubmitted - not counted";code="replaced";}
-        else if(a.over50){submit=false;why="Age 50+ - does not count toward taken";code="over50";}
         else if(/in force/i.test(s)){taken=true;why="In force";code="inforce";}
+        else if(a.over50){submit=false;why="Age 50+ and "+(/declin/i.test(s)?"declined":/withdrawn/i.test(s)?"withdrawn":/cancel|lapse/i.test(s)?"canceled":"not taken")+" - does not count toward taken";code="over50";}
         else if(/cancel|lapse/i.test(s)){
           if(a.isPaid){taken=true;why=(/lapse/i.test(s)?"Lapsed":"Canceled")+" after paying "+a.monthsPaid+" mo";code="paidcancel";}
           else{why=(/lapse/i.test(s)?"Lapsed":"Canceled")+" before paying";code="unpaidcancel";}
@@ -10798,7 +10798,7 @@ try{(function(){
     /* 6. ages */
     var unk=M.apps.filter(function(a){return a.ageUnknown&&(a.kind==="UW"||/cancel|lapse/i.test(a.status))&&M.inP(a);});
     if(unk.length)act(++n,"Add ages for "+unk.length+" client"+(unk.length===1?"":"s"),"could only help",
-      "Clients who are 50 or older don't count toward your taken rate at all, underwritten or guaranteed issue. Right now every client without an age is treated as under 50, so any 50+ client you mark can only lift the rate. Type the age in the table below.",[]);
+      "Clients 50 or older count when they're taken, but if they end up not taken, declined, canceled or withdrawn they drop out of the rate completely. Right now every client without an age is treated as under 50, so any 50+ client you mark can only lift the rate. Type the age in the table below.",[]);
     /* 7. habits */
     act(++n,"Habits that keep the rate up","",
       "Collect the first payment by card or confirmed bank draft on the call, not later. Read back the monthly total and draft date before you submit. Don't submit a client who says “let me think about it”: an unsubmitted app costs nothing, a Not Taken costs points. Check this page every Monday and work the list from the top.",[]);
@@ -10823,7 +10823,7 @@ try{(function(){
       +row("= Submits",'<span class="acc">'+acc.submits+'</span> <i>/</i> '+ytd.submits,"tot","Accurate / YTD")
       +'<div class="ap-br-sep">Left out of the rate</div>'
       +row("Pending",pend,"out")+row("Withdrawn, then resubmitted",rep,"out")
-      +row("Age 50+ (never counts)",u50,"out")
+      +row("Age 50+ and not taken / declined / canceled / withdrawn",u50,"out")
       +'</div>'
       +'<div class="ap-formula"><div><span>Accurate</span><b>'+acc.taken+' ÷ '+acc.submits+' = '+pctTxt(acc)+'</b></div><div><span>YTD (all months)</span><b>'+ytd.taken+' ÷ '+ytd.submits+' = '+pctTxt(ytd)+'</b></div></div>'
       +(unk?'<div class="ap-note">'+unk+' counted app'+(unk===1?" has":"s have")+' no age yet, so '+(unk===1?"it is":"they are")+' treated as under 50. Add ages in the table below to make this exact.</div>':'')
@@ -10852,8 +10852,8 @@ try{(function(){
       if(ov&&(ov.ptd!==a.ptd||ov.status!==a.status))ov=null;
       a.ov=ov||null;a.hidden=!!(ov&&ov.s==="hide");
       if(ov&&ov.s==="pending"){a.countSubmit=false;a.countTaken=false;a.accSubmit=false;a.accTaken=false;a.maturing=false;a.code="pending";a.why="Pending - waiting to see if they paid";a.pay="Pending - checking payment";a.payState="pend";return;}
-      if(ov&&ov.s==="paid"){a.isPaid=true;if(!/in force/i.test(a.status)&&!a.over50){a.countSubmit=true;a.accSubmit=true;}if(a.countSubmit){a.countTaken=true;a.accTaken=a.accSubmit;}a.code="paidcancel";a.why="Paid (you confirmed)";a.pay="Paid (you confirmed)";a.payState="good";return;}
-      if(ov&&ov.s==="nottaken"){if(a.over50){a.countSubmit=false;a.accSubmit=false;a.why="Age 50+ - does not count toward taken";}else{a.countSubmit=true;a.accSubmit=true;a.why="Not taken (you marked)";}a.countTaken=false;a.accTaken=false;a.maturing=false;a.code="nottaken";a.pay="Not taken (you marked)";a.payState="mid";return;}
+      if(ov&&ov.s==="paid"){a.isPaid=true;if(!/in force/i.test(a.status)){a.countSubmit=true;a.accSubmit=true;}if(a.countSubmit){a.countTaken=true;a.accTaken=a.accSubmit;}a.code="paidcancel";a.why="Paid (you confirmed)";a.pay="Paid (you confirmed)";a.payState="good";return;}
+      if(ov&&ov.s==="nottaken"){if(a.over50){a.countSubmit=false;a.accSubmit=false;a.why="Age 50+ and not taken - does not count toward taken";}else{a.countSubmit=true;a.accSubmit=true;a.why="Not taken (you marked)";}a.countTaken=false;a.accTaken=false;a.maturing=false;a.code="nottaken";a.pay="Not taken (you marked)";a.payState="mid";return;}
       /* paid at least once and more than 30 days past the paid-to date: it's a taken policy, not a payment to chase */
       if(/in force/i.test(a.status)&&a.isPaid&&a.ptd&&a.ptd<d30){a.autoTaken=true;a.pay="Taken - paid to "+TR.fmt(a.ptd);a.payState="taken";}
     });
@@ -11164,7 +11164,7 @@ try{(function(){
         var ushaTR=kp&&kp.proj&&kp.proj.takenRate!=null?kp.proj.takenRate:null;
         m1.innerHTML=h1
           +'<div class="ap-bar-top">'+seg("period",[["ytd","YTD "+new Date().getFullYear()],["month","This month"],["lastmonth","Last month"],["90","Last 90 days"],["all","All time"]],S.period)+'</div>'
-          +'<div class="ap-kpis">'+kpi("Underwritten","Premier Advantage · Premier Choice · Secure Advantage · under 50 · bonus at 60%",uw,TARGET.UW)+kpi("Guaranteed issue","HealthAccess · under 50 · bonus at 65%",gi,TARGET.GI)+kpi("Combined","Underwritten + guaranteed issue",P,0)
+          +'<div class="ap-kpis">'+kpi("Underwritten","Premier Advantage · Premier Choice · Secure Advantage · bonus at 60%",uw,TARGET.UW)+kpi("Guaranteed issue","HealthAccess · bonus at 65%",gi,TARGET.GI)+kpi("Combined","Underwritten + guaranteed issue",P,0)
           +'<div class="ap-kpi ap-kpi-side"><div class="ap-mini usha"><span>USHA official taken rate</span><b>'+(ushaTR==null?"--":ushaTR+"%")+'</b><em>'+(ushaTR==null?"click ⟳ Sync from USHA":(kp.official&&kp.official.length?kp.official.map(function(o){return esc(o.label)+" "+esc(o.rate);}).join(" · "):"UW YTD")+" · synced "+ago(kp.at))+'</em></div>'
           +'<div class="ap-mini"><span>Active core policies</span><b>'+activeN+'</b><em>$'+Math.round(mrr).toLocaleString()+'/mo in premium</em></div>'
           +'<div class="ap-mini '+(badPay?"bad":"")+'"><span>Missed / past-due payments</span><b>'+badPay+'</b><em>'+(badPay?"see the Applications tab":"all active policies current")+'</em></div></div></div>'
