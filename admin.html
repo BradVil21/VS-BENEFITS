@@ -10689,15 +10689,78 @@ try{(function(){
   }
 
   function pctTxt(r){return r.pct==null?"--":(r.pct%1===0?r.pct.toFixed(0):r.pct.toFixed(1))+"%";}
-  function tone(p){return p==null?"na":p>=60?"good":p>=45?"ok":"low";}
-  function ring(p,size){var v=p==null?0:Math.max(0,Math.min(100,p)),r=34,c=2*Math.PI*r;
-    return '<svg class="ap-ring t-'+tone(p)+'" viewBox="0 0 80 80" width="'+size+'" height="'+size+'" aria-hidden="true"><circle cx="40" cy="40" r="'+r+'" class="trk"/><circle cx="40" cy="40" r="'+r+'" class="val" stroke-dasharray="'+(c*v/100).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 40 40)"/></svg>';}
-  function kpi(title,sub,list){
+  /* Bonus targets: UW 60%+, GI 65%+ */
+  var TARGET={UW:60,GI:65};
+  function tone(p,t){t=t||60;return p==null?"na":p>=t?"good":p>=t-10?"ok":"low";}
+  function need(r,t){t=t/100;if(!r.submits)return 0;var x=Math.ceil((t*r.submits-r.taken)/(1-t)-1e-9);return Math.max(0,x);}
+  function cushion(r,t){t=t/100;if(!r.submits)return 0;return Math.max(0,Math.floor(r.taken/t-r.submits+1e-9));}
+  function pts(a,b){return Math.round((a-b)*10)/10;}
+  function rr(t,s){return s?t/s*100:0;}
+  function goalLine(r,t,label){
+    if(r.pct==null)return '<div class="ap-goal na">Bonus target '+t+'%</div>';
+    if(r.pct>=t){var c=cushion(r,t);return '<div class="ap-goal ok"><b>On target</b> '+label+' '+pctTxt(r)+' vs '+t+'% · room for '+c+' more not-taken</div>';}
+    var n=need(r,t);return '<div class="ap-goal low"><b>'+pts(t,r.pct)+' pts below '+t+'%</b> '+label+' · needs '+n+' taken in a row</div>';
+  }
+  function ring(p,size,t){var v=p==null?0:Math.max(0,Math.min(100,p)),r=34,c=2*Math.PI*r;
+    return '<svg class="ap-ring t-'+tone(p,t)+'" viewBox="0 0 80 80" width="'+size+'" height="'+size+'" aria-hidden="true"><circle cx="40" cy="40" r="'+r+'" class="trk"/><circle cx="40" cy="40" r="'+r+'" class="val" stroke-dasharray="'+(c*v/100).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 40 40)"/></svg>';}
+  function kpi(title,sub,list,t){
     var acc=TR.rate(list,"acc"),ytd=TR.rate(list,"ytd");
     return '<div class="ap-kpi"><div class="ap-kpi-top"><div><div class="ap-kpi-t">'+title+'</div><div class="ap-kpi-s">'+sub+'</div></div>'
-      +'<div class="ap-ringwrap">'+ring(acc.pct,74)+'<span>'+pctTxt(acc)+'</span></div></div>'
-      +'<div class="ap-kpi-rows"><div class="ap-kr"><b>Accurate</b><span class="ap-math">'+acc.taken+' ÷ '+acc.submits+'</span><strong class="t-'+tone(acc.pct)+'">'+pctTxt(acc)+'</strong></div>'
-      +'<div class="ap-kr"><b>YTD (all months)</b><span class="ap-math">'+ytd.taken+' ÷ '+ytd.submits+'</span><strong>'+pctTxt(ytd)+'</strong></div></div></div>';
+      +'<div class="ap-ringwrap">'+ring(acc.pct,74,t)+'<span>'+pctTxt(acc)+'</span></div></div>'
+      +'<div class="ap-kpi-rows"><div class="ap-kr"><b>Accurate</b><span class="ap-math">'+acc.taken+' ÷ '+acc.submits+'</span><strong class="t-'+tone(acc.pct,t)+'">'+pctTxt(acc)+'</strong></div>'
+      +'<div class="ap-kr"><b>YTD (all months)</b><span class="ap-math">'+ytd.taken+' ÷ '+ytd.submits+'</span><strong class="t-'+tone(ytd.pct,t)+'">'+pctTxt(ytd)+'</strong></div></div>'
+      +(t?goalLine(acc,t,'Accurate'):'<div class="ap-goal na">No bonus target on the combined rate</div>')+'</div>';
+  }
+
+  /* ---- Game plan: built from your own numbers ---- */
+  function bucket(a){if(!a.eff)return null;var g=(new Date(a.eff+"T12:00:00")-new Date(a.submit+"T12:00:00"))/864e5;return g<=3?0:g<=10?1:g<=20?2:3;}
+  var BK=["0-3 days","4-10 days","11-20 days","21+ days"];
+  function gamePlan(M,uw,gi){
+    var t=new Date(),cards=[],ymd45=ymd(new Date(t.getTime()-45*864e5));
+    function status(list,k){var acc=TR.rate(list,"acc"),ytd=TR.rate(list,"ytd"),T=TARGET[k];
+      return '<div class="gp-st '+(acc.pct!=null&&acc.pct>=T?"ok":"low")+'"><div class="gp-st-h">'+(k==="UW"?"Underwritten":"Guaranteed issue")+' <span>target '+T+'%</span></div>'
+        +'<div class="gp-st-n"><b>'+pctTxt(acc)+'</b><em>Accurate</em><b class="sm">'+pctTxt(ytd)+'</b><em>YTD</em></div>'
+        +'<div class="gp-st-m">'+(acc.pct==null?"No counted apps yet":acc.pct>=T?"Above target. You can absorb "+cushion(acc,T)+" not-taken before dropping under "+T+"%.":"Needs <b>"+need(acc,T)+"</b> taken in a row (no not-takens) to reach "+T+"%. Each not-taken now costs about "+pts(rr(acc.taken,acc.submits),rr(acc.taken,acc.submits+1))+" pts.")+'</div></div>';}
+    var head='<div class="gp-sts">'+status(uw,"UW")+status(gi,"GI")+'</div>';
+    function act(n,title,impact,body,list){cards.push('<div class="gp-a"><div class="gp-n">'+n+'</div><div class="gp-b"><div class="gp-t"><b>'+title+'</b>'+(impact?'<span class="gp-i">'+impact+'</span>':'')+'</div><div class="gp-d">'+body+'</div>'+(list&&list.length?'<div class="gp-l">'+list.join("")+'</div>':'')+'</div></div>');}
+    function chip(a,extra){return '<span class="gp-c">'+esc(nice(a.name))+' <i>'+a.kind+(extra?' · '+esc(extra):'')+'</i></span>';}
+    var n=0;
+    /* 1. rescue missed / past-due */
+    var bad=M.apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="bad";});
+    if(bad.length){var bu=bad.filter(function(a){return a.kind==="UW";}).length,bg=bad.length-bu,ru=TR.rate(uw,"acc"),rg=TR.rate(gi,"acc");
+      act(++n,"Call today: "+bad.length+" active polic"+(bad.length===1?"y has":"ies have")+" a missed or past-due payment","at risk: "+(bu?"UW −"+pts(rr(ru.taken,ru.submits),rr(ru.taken-bu,ru.submits))+" pts ":"")+(bg?"GI −"+pts(rr(rg.taken,rg.submits),rr(rg.taken-bg,rg.submits))+" pts":""),
+        "A missed first draft turns into Not Taken. Call, confirm the bank account or card, and have USHA re-run the draft. Past-due ones that lapse after paying still count as taken, but keep them on the books for your persistency.",bad.map(function(a){return chip(a,a.pay);}));}
+    /* 2. protect upcoming first drafts */
+    var soon=ymd(new Date(t.getTime()+10*864e5)),first=M.apps.filter(function(a){return /in force/i.test(a.status)&&a.payState==="warn";}).sort(function(a,b){return a.ptd<b.ptd?-1:1;});
+    act(++n,"Protect every first draft"+(first.length?": "+first.length+" coming up":""),"biggest lever",
+      "Most of your not-takens are clients who never paid the first draft. Text 3 days before and call the day before the draft: confirm the account has money, the effective date, and what they bought. Send the welcome text the day the policy issues.",first.map(function(a){return chip(a,"drafts "+TR.fmt(a.ptd));}));
+    /* 3. effective date lead time (data-driven) */
+    ["GI","UW"].forEach(function(k){
+      var L=M.apps.filter(function(a){return a.kind===k&&a.countSubmit&&M.inP(a)&&a.eff;}),b=[0,1,2,3].map(function(){return[0,0];});
+      L.forEach(function(a){var i=bucket(a);if(i==null)return;b[i][1]++;if(a.countTaken)b[i][0]++;});
+      if(!b[0][1]||!(b[3][1]+b[2][1]))return;
+      var fast=rr(b[0][0],b[0][1]),late=b[2][1]+b[3][1],lateT=b[2][0]+b[3][0],lateR=rr(lateT,late);
+      if(fast-lateR<8)return;
+      var gain=Math.round(late*(fast-lateR)/100),r=TR.rate(k==="UW"?uw:gi,"ytd");
+      act(++n,(k==="UW"?"Underwritten":"Guaranteed issue")+": set the effective date within 3 days","+"+pts(rr(r.taken+gain,r.submits),rr(r.taken,r.submits))+" pts if late-start apps held like fast ones",
+        "Your own numbers: "+b.map(function(x,i){return x[1]?BK[i]+" from submit to effective: <b>"+Math.round(rr(x[0],x[1]))+"%</b> taken ("+x[0]+"/"+x[1]+")":"";}).filter(Boolean).join(" · ")+". The longer a client waits for coverage to start, the more often they shop around or forget and the first draft bounces. Default to the soonest date; if they need a later date, book the pre-draft call now.");});
+    /* 4. declines on UW */
+    var dec=uw.filter(function(a){return a.code==="declined";});
+    if(dec.length){var r=TR.rate(uw,"ytd");
+      act(++n,"Pre-screen underwriting: "+dec.length+" underwritten app"+(dec.length===1?" was":"s were")+" declined","+"+pts(rr(r.taken,r.submits-dec.length),rr(r.taken,r.submits))+" pts without them",
+        "Each decline counts as a submit that can never be taken. Go through the health questions before you quote underwritten. If anything is borderline (recent treatment, meds you're unsure about, height/weight), write HealthAccess (guaranteed issue) instead of risking a decline.",dec.slice(0,12).map(function(a){return chip(a,TR.fmt(a.submit));}));}
+    /* 5. withdrawn not resubmitted, still in the 45-day window */
+    var wd=M.apps.filter(function(a){return a.code==="withdrawn"&&a.submit>=ymd45;});
+    if(wd.length)act(++n,"Resubmit "+wd.length+" withdrawn app"+(wd.length===1?"":"s"),"removes them from submits",
+      "A withdrawn app replaced by a resubmission doesn't count against you. If the client still wants coverage, resubmit the corrected app now.",wd.map(function(a){return chip(a,"withdrawn "+TR.fmt(a.submit));}));
+    /* 6. ages */
+    var unk=M.apps.filter(function(a){return a.ageUnknown&&(a.kind==="UW"||/cancel|lapse/i.test(a.status))&&M.inP(a);});
+    if(unk.length)act(++n,"Add ages for "+unk.length+" client"+(unk.length===1?"":"s"),"could only help",
+      "Underwritten clients 50+ and guaranteed-issue clients 50+ who cancel don't count. Right now every client without an age is treated as under 50, so any 50+ client you mark can only lift the rate. Type the age in the table below.",[]);
+    /* 7. habits */
+    act(++n,"Habits that keep the rate up","",
+      "Collect the first payment by card or confirmed bank draft on the call, not later. Read back the monthly total and draft date before you submit. Don't submit a client who says “let me think about it”: an unsubmitted app costs nothing, a Not Taken costs points. Check this page every Monday and work the list from the top.",[]);
+    return '<div class="ap-card gp"><div class="ap-card-h"><h4>Bonus game plan</h4><span class="gp-tg">UW 60%+ · GI 65%+</span></div>'+head+'<div class="gp-as">'+cards.join("")+'</div></div>';
   }
   function breakdown(list,kindLabel){
     function c(f){return list.filter(f).length;}
@@ -10799,10 +10862,11 @@ try{(function(){
     var activeN=M.apps.filter(function(a){return /in force/i.test(a.status);}).length,mrr=M.apps.filter(function(a){return /in force/i.test(a.status);}).reduce(function(s,a){return s+a.prem;},0);
     var html=head
       +'<div class="ap-bar-top">'+seg("period",[["ytd","YTD "+new Date().getFullYear()],["month","This month"],["lastmonth","Last month"],["90","Last 90 days"],["all","All time"]],S.period)+'</div>'
-      +'<div class="ap-kpis">'+kpi("Underwritten","Premier Advantage · Premier Choice · Secure Advantage · under 50",uw)+kpi("Guaranteed issue","HealthAccess · all ages",gi)+kpi("Combined","Underwritten + guaranteed issue",P)
+      +'<div class="ap-kpis">'+kpi("Underwritten","Premier Advantage · Premier Choice · Secure Advantage · under 50 · bonus at 60%",uw,TARGET.UW)+kpi("Guaranteed issue","HealthAccess · all ages · bonus at 65%",gi,TARGET.GI)+kpi("Combined","Underwritten + guaranteed issue",P,0)
       +'<div class="ap-kpi ap-kpi-side"><div class="ap-mini"><span>Active core policies</span><b>'+activeN+'</b><em>$'+Math.round(mrr).toLocaleString()+'/mo in premium</em></div>'
       +'<div class="ap-mini '+(badPay?"bad":"")+'"><span>Missed / past-due payments</span><b>'+badPay+'</b><em>'+(badPay?"see Payments to watch":"all active policies current")+'</em></div>'
       +'<div class="ap-mini"><span>Core apps submitted</span><b>'+P.length+'</b><em>'+M.pr.label+'</em></div></div></div>'
+      +gamePlan(M,uw,gi)
       +'<div class="ap-two"><div>'+seg("kind",[["UW","Underwritten"],["GI","Guaranteed issue"]],S.kind)+breakdown(S.kind==="UW"?uw:gi,S.kind==="UW"?"Underwritten":"Guaranteed issue")+'</div><div>'+monthly(M.apps.filter(M.inP))+payWatch(M.apps)+'</div></div>'
       +'<div class="ap-card ap-tcard"><div class="ap-card-h"><h4>Every application</h4>'+seg("view",[["core","Core apps (count toward taken rate)"],["all","All policies incl. supplements"]],S.view)+'</div>'
       +'<div class="ap-filters"><input type="search" class="ap-q" placeholder="Search name or App ID" value="'+esc(S.q)+'">'
@@ -11052,6 +11116,27 @@ try{(function(){
   "#p-apps .ap-age.over{background:#f1f3f7;color:#7c8ba0}",
   "#p-apps .ap-dash{color:#b8c3d2}",
   "#p-apps .ap-foot{padding:12px 18px;font-size:12px;color:#8091a7;border-top:1px solid #eef2f7}",
+  "#p-apps .ap-goal{margin-top:12px;font-size:12.5px;border-radius:10px;padding:8px 11px;line-height:1.4}",
+  "#p-apps .ap-goal.ok{background:#e6f8f5;color:#08776c}#p-apps .ap-goal.low{background:#fff1ea;color:#a44a17}#p-apps .ap-goal.na{background:#f4f6fa;color:#7c8ba0}",
+  "#p-apps .gp{margin-bottom:18px;border-top:4px solid #0db5a6}",
+  "#p-apps .gp-tg{font-size:12px;font-weight:850;color:#08776c;background:#e0f7f4;padding:4px 10px;border-radius:999px}",
+  "#p-apps .gp-sts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}",
+  "#p-apps .gp-st{border-radius:12px;padding:14px;border:1px solid #f3d6c6;background:#fffaf6}",
+  "#p-apps .gp-st.ok{border-color:#bfe9e2;background:#f3fcfa}",
+  "#p-apps .gp-st-h{font-weight:850;color:#0b2346;font-size:14px}#p-apps .gp-st-h span{font-size:11.5px;color:#7c8ba0;font-weight:700;margin-left:6px}",
+  "#p-apps .gp-st-n{display:flex;align-items:baseline;gap:6px;margin:6px 0}#p-apps .gp-st-n b{font-size:26px;font-weight:900;color:#0b2346}#p-apps .gp-st-n b.sm{font-size:16px;margin-left:10px}#p-apps .gp-st-n em{font-style:normal;font-size:11.5px;color:#7c8ba0;font-weight:700}",
+  "#p-apps .gp-st-m{font-size:12.5px;color:#42566e;line-height:1.45}",
+  "#p-apps .gp-as{display:grid;gap:10px}",
+  "#p-apps .gp-a{display:flex;gap:12px;border:1px solid #eef2f7;border-radius:12px;padding:12px 14px}",
+  "#p-apps .gp-n{flex:0 0 28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;font-weight:900;font-size:13px;display:flex;align-items:center;justify-content:center}",
+  "#p-apps .gp-b{min-width:0;flex:1}",
+  "#p-apps .gp-t{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}#p-apps .gp-t b{color:#0b2346;font-size:14px}",
+  "#p-apps .gp-i{font-size:11.5px;font-weight:800;color:#16447f;background:#e6eefb;padding:3px 9px;border-radius:999px}",
+  "#p-apps .gp-d{font-size:13px;color:#42566e;line-height:1.5;margin-top:4px}",
+  "#p-apps .gp-l{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}",
+  "#p-apps .gp-c{font-size:12px;font-weight:700;color:#0b2346;background:#f4f6fa;border:1px solid #e6ebf3;border-radius:8px;padding:4px 8px}#p-apps .gp-c i{font-style:normal;color:#7c8ba0;font-weight:600}",
+  "@media(max-width:700px){#p-apps .gp-sts{grid-template-columns:1fr}}",
+  "html.dark #p-apps .gp-a,html.dark #p-apps .gp-st{background:#182b44;border-color:#253a54}html.dark #p-apps .gp-t b,html.dark #p-apps .gp-st-h,html.dark #p-apps .gp-st-n b{color:#e8f0fb}",
   "#p-apps .ap-howto ol{margin:6px 0 0 18px;padding:0;line-height:1.8;color:#33455c}",
   "@media(max-width:1280px){#p-apps .ap-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
   "@media(max-width:1100px){#p-apps .ap-two{grid-template-columns:1fr}}",
