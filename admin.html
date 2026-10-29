@@ -10985,7 +10985,7 @@ try{(function(){
     var thruLbl=new Date(thruEnd).toLocaleString("en-US",{month:"short",year:"numeric"});
     return '<div class="ap-card inc"><div class="ap-card-h"><h4>Projected 2026 income</h4><button type="button" class="ap-ovb inc-edit">Edit numbers ▾</button></div>'
       +'<div class="inc-grid">'
-      +'<div class="inc-c"><span>Paid to you so far</span><b>'+m0(paid)+'</b><em>Advances '+m0(I.advYtd)+' + bonuses '+m0(I.otherYtd)+' + as-earned '+m0(I.asEarnedYtd)+' · statements through '+thruLbl+'</em></div>'
+      +'<div class="inc-c"><span>Paid to you so far</span><b>'+m0(paid)+'</b><em>Advances '+m0(I.advYtd)+' + bonuses '+m0(I.otherYtd)+' + as-earned '+m0(I.asEarnedYtd)+' · statements through '+thruLbl+(asArr(K.ushaIncome)[0]&&asArr(K.ushaIncome)[0].src==="USHA sync"?' (synced from USHA)':'')+'</em></div>'
       +'<div class="inc-c"><span>Issued since that statement</span><b>'+m0(sinceStmt)+'</b><em>'+m0(issAfter)+' issued AV × '+(rate*100).toFixed(1)+'% advance rate · coming on your next statements</em></div>'
       +'<div class="inc-c"><span>Rest of the year</span><b>'+m0(restYear+extras)+'</b><em>'+wr+' weeks × '+m0(avgI)+' issued AV/week × '+(rate*100).toFixed(1)+'%'+(extras?' + '+m0(extras)+' as-earned at your monthly average (bonuses not assumed)':'')+'</em></div>'
       +'<div class="inc-c tot"><span>Projected 2026 total</span><b>'+m0(total)+'</b><em>if you keep your current pace</em></div></div>'
@@ -11024,23 +11024,48 @@ try{(function(){
     +"function f(d){return String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0')+'/'+d.getFullYear();}var from=f(new Date(Date.now()-365*864e5)),to=f(new Date());"
     +"function go(t){var a=[].slice.call(document.querySelectorAll('a')).filter(function(a){return a.textContent.trim()==t;})[0];if(a)a.click();return !!a;}"
     +"function check(){if(stage==='dash'&&((D.k.salesprojectedavleader&&D.k.salessubmittedav&&D.k.salesissuedav&&D.k.salessubmittedavforeachweek)||Date.now()-t0>30000)){stage='report';ov.textContent='VS portal sync: pulling 12 months of applications...';go('Sales Report');}"
-    +"else if(stage==='report'&&(D.rows||Date.now()-t0>75000)){stage='post';post();}}"
+    +"else if(stage==='report'&&(D.rows||Date.now()-t0>75000)){stage='stmt';ov.textContent='VS portal sync: reading your statements (Account YTD + Tax Worksheet)...';stmts();}}"
+    /* statements: open Account YTD and Tax Worksheet, press Search, read the grid rows (label -> monthly values + Total) */
+    +"function mv(t){t=String(t||'').trim();var neg=/^\\(.*\\)$/.test(t);var n=parseFloat(t.replace(/[^0-9.]/g,''));return isNaN(n)?0:(neg?-n:n);}"
+    +"function grid(){var o={};[].slice.call(document.querySelectorAll('tr')).forEach(function(tr){var c=[].slice.call(tr.children).map(function(td){return td.innerText.trim();});while(c.length&&!c[0])c.shift();if(c.length>=13&&/^[A-Za-z&]/.test(c[0])&&/\\$/.test(c.join(''))){o[c[0]]=c.slice(1).map(mv);}});return o;}"
+    +"function menu(t){var el=[].slice.call(document.querySelectorAll('.menu-title')).filter(function(x){return x.textContent.trim()==t;})[0];if(!el)return false;(el.closest('a')||el.closest('.menu-link')||el).click();return true;}"
+    +"function readPage(t,key,need,cb){menu(t);var tries=0,clicked=0;var iv2=setInterval(function(){tries++;var g=grid();if(g[need]){clearInterval(iv2);D[key]=g;cb();return;}if(tries%5===2){var b=[].slice.call(document.querySelectorAll('button')).filter(function(x){return x.textContent.trim()=='Search';})[0];if(b){b.click();clicked++;}}if(tries>25){clearInterval(iv2);cb();}},1000);}"
+    +"function stmts(){readPage('Account YTD','acct','Advances',function(){readPage('Tax Worksheet','tax','Total Earnings',function(){stage='post';post();});});}"
     +"var o=XMLHttpRequest.prototype.open,s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__vu=String(u);return o.apply(this,arguments);};"
     +"XMLHttpRequest.prototype.send=function(b){var x=this,u=x.__vu||'';if(/salesreports\\/process/.test(u)&&typeof b=='string'){try{var j=JSON.parse(b);j.BeginDate=from;j.EndDate=to;j.DateType='S';b=JSON.stringify(j);}catch(e){}}"
     +"x.addEventListener('load',function(){try{var r=JSON.parse(x.responseText);if(/salesreports\\/result/.test(u)){var d=typeof r.data=='string'?JSON.parse(r.data):r.data;if(d&&!Array.isArray(d)){for(var q in d){if(Array.isArray(d[q])){d=d[q];break;}}}if(Array.isArray(d)&&(!D.rows||d.length>=D.rows.length))D.rows=d;}var m=u.match(/salesdashboard\\/(\\w+)/);if(m&&r.data){var sm=function(a){return Array.isArray(a)?a.reduce(function(t,w){return t+(+w.issuedAVThisWeek||+w.submittedAVThisWeek||0);},0):1;};if(!D.k[m[1]]||sm(r.data)>=sm(D.k[m[1]]))D.k[m[1]]=r.data;}}catch(e){}check();});return s.call(this,b);};"
     +"if(/salesdashboard/i.test(location.pathname)){go('Sales Report');setTimeout(function(){go('Sales Dashboard');},300);}else go('Sales Dashboard');"
     +"var iv=setInterval(function(){check();if(stage==='post')clearInterval(iv);},2000);"
-    +"function send(id){try{w.postMessage({t:'usha-sync',id:id,rows:D.rows,k:D.k},O);}catch(e){}}"
+    +"function send(id){try{w.postMessage({t:'usha-sync',id:id,rows:D.rows,k:D.k,acct:D.acct||null,tax:D.tax||null},O);}catch(e){}}"
     +"function post(){if(posted)return;posted=1;if(!D.rows)ov.textContent='VS portal sync: no Sales Report rows came back, sending AV numbers only...';else ov.textContent='VS portal sync: sending '+D.rows.length+' policies to your portal...';var id=Date.now(),tries=0;"
     +"window.addEventListener('message',function(e){if(e.origin!==O||!e.data||e.data.t!=='usha-ack'||e.data.id!==id)return;clearInterval(t);ov.textContent=e.data.err?('VS portal sync failed: '+e.data.err):('VS portal synced: '+(e.data.n||0)+' policies + AV numbers. You can close this note.');setTimeout(function(){ov.remove();window.__vsSync=0;},8000);});"
     +"send(id);var t=setInterval(function(){tries++;send(id);if(tries>40){clearInterval(t);ov.textContent='VS portal sync: the portal tab did not answer. Allow pop-ups for agent.ushadvisors.com and try again.';window.__vsSync=0;}},1500);}"
     +"})();");
+
+  /* statements from the sync bookmark -> Projected income numbers (keeps your advance-rate override) */
+  function incomeFromStatements(acct,tax){
+    if(!acct&&!tax)return;
+    var cur=asArr(K.ushaIncome)[0]||{},o=Object.assign({},cur),yr=new Date().getFullYear();
+    function tot(g,k){var r=g&&g[k];return r?r[r.length-1]:null;}
+    function months(g,k){var r=g&&g[k];return r?r.slice(0,12):null;}
+    if(acct){
+      var adv=months(acct,"Advances"),ea=months(acct,"Earned Advance"),endB=months(acct,"End Balance");
+      if(adv){o.advYtd=Math.round(Math.abs(tot(acct,"Advances"))*100)/100;}
+      var last=-1,first=-1;(adv||[]).forEach(function(v,i){if(v||(ea&&ea[i])){last=i;if(first<0)first=i;}});
+      if(last>=0){o.thru=yr+"-"+String(last+1).padStart(2,"0");if(first>=0)o.firstMonth=yr+"-"+String(first+1).padStart(2,"0");if(endB)o.debt=Math.round(endB[last]*100)/100;}
+    }
+    if(tax){
+      var te=tot(tax,"Total Earnings"),oe=tot(tax,"Other Earnings"),ae=tot(tax,"As Earned");
+      if(te!=null)o.earnedYtd=Math.round(te*100)/100;if(oe!=null)o.otherYtd=Math.round(oe*100)/100;if(ae!=null)o.asEarnedYtd=Math.round(Math.abs(ae)*100)/100;
+    }else if(acct&&tot(acct,"As Earned")!=null){o.asEarnedYtd=Math.round(Math.abs(tot(acct,"As Earned"))*100)/100;}
+    o.at=Date.now();o.src="USHA sync";setArr(K.ushaIncome,[o],true);
+  }
   var lastSyncId=0;
   window.addEventListener("message",function(e){
     if(e.origin!=="https://agent.ushadvisors.com")return;var d=e.data||{};if(d.t!=="usha-sync")return;
     if(d.id&&d.id===lastSyncId){try{e.source.postMessage({t:"usha-ack",id:d.id,n:lastSyncN},e.origin);}catch(x){}return;}
     var n=0,err="";
-    try{if(d.rows&&d.rows.length)n=vsUshaImport(d.rows,"USHA sync");if(d.k&&Object.keys(d.k).length){setArr(K.ushaKpis,[normKpis(d.k)],true);}render();}catch(x){err=x.message||"import failed";}
+    try{if(d.rows&&d.rows.length)n=vsUshaImport(d.rows,"USHA sync");if(d.k&&Object.keys(d.k).length){setArr(K.ushaKpis,[normKpis(d.k)],true);}try{incomeFromStatements(d.acct,d.tax);}catch(x2){console.warn("statements",x2);}render();}catch(x){err=x.message||"import failed";}
     lastSyncId=d.id;lastSyncN=n;
     try{e.source.postMessage({t:"usha-ack",id:d.id,n:n,err:err},e.origin);}catch(x){}
     try{if(typeof switchTab==="function"&&!err)switchTab("apps");}catch(x){}
