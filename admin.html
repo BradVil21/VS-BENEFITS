@@ -11261,11 +11261,18 @@ try{(function(){
     var months=[];for(var d=new Date(+first.slice(0,4),+first.slice(5,7)-1,1);d.getFullYear()===yr;d.setMonth(d.getMonth()+1))months.push(monthKey(d));
     var data={};["UW","GI"].forEach(function(k){months.forEach(function(m){data[k+"|"+m]={s:0,t:0};});});
     M.apps.forEach(function(a){var m=(a.submit||"").slice(0,7),key=a.kind+"|"+m;if(!data[key]||!a.countSubmit)return;data[key].s++;if(a.countTaken)data[key].t++;});
-    function cell(k,m){var o=pl.cells[k+"|"+m]||{},dd=data[k+"|"+m];var s=o.s!=null&&o.s!==""?+o.s:dd.s,t=o.t!=null&&o.t!==""?+o.t:dd.t;return{s:s,t:t,edited:(o.s!=null&&o.s!=="")||(o.t!=null&&o.t!=="")};}
+    /* Your numbers are stored as adjustments (+/-) on top of what your Applications show, so the calculator keeps
+       syncing: a new app, a payment or a status change moves the totals, and your corrections stay applied. */
+    var migrated=false;
+    Object.keys(pl.cells).forEach(function(key){var o=pl.cells[key],dd=data[key];if(!dd)return;
+      if(o.ds==null&&o.s!=null&&o.s!==""){o.ds=(+o.s)-dd.s;migrated=true;}if(o.dt==null&&o.t!=null&&o.t!==""){o.dt=(+o.t)-dd.t;migrated=true;}
+      if(migrated){delete o.s;delete o.t;}});
+    if(migrated)savePlan(pl);
+    function cell(k,m){var o=pl.cells[k+"|"+m]||{},dd=data[k+"|"+m],ds=+o.ds||0,dt=+o.dt||0;return{s:Math.max(0,dd.s+ds),t:Math.max(0,dd.t+dt),ds:ds,dt:dt,as:dd.s,at:dd.t,edited:!!(ds||dt)};}
     function phase(m){return m<=cutoff?"official":m<cur?"pending":m===cur?"estimate":"plan";}
     var PH={official:"In USHA YTD",pending:"Not in calculation yet",estimate:"Estimated",plan:"Plan"};
     var html='<div class="ap-head"><div><h3>Bonus Calculator</h3><p class="lede">Your taken rate month by month, the way USHA\'s bonus sheet adds it up, and exactly what you need to hit 60% underwritten and 65% guaranteed issue.</p></div>'
-      +'<div class="ap-actions"><label class="bc-cut">USHA YTD counts through <select data-bc-cut>'+months.map(function(m){return '<option value="'+m+'"'+(m===cutoff?" selected":"")+'>'+monthLbl(m)+'</option>';}).join("")+'</select></label></div></div>';
+      +'<div class="ap-actions"><button type="button" class="ap-ovb" data-bc-reset title="Remove every adjustment and use only what your Applications show">Clear my adjustments</button><label class="bc-cut">USHA YTD counts through <select data-bc-cut>'+months.map(function(m){return '<option value="'+m+'"'+(m===cutoff?" selected":"")+'>'+monthLbl(m)+'</option>';}).join("")+'</select></label></div></div>';
     ["UW","GI"].forEach(function(k){
       var T=TARGET[k]/100,lab=k==="UW"?"Underwritten":"Guaranteed issue";
       var sumO={s:0,t:0},sumAll={s:0,t:0},sumOpen={s:0,t:0},openMonths=[];
@@ -11273,7 +11280,7 @@ try{(function(){
       function pct(t,s){return s?Math.round(t/s*1000)/10:null;}
       var ytd=pct(sumO.t,sumO.s),proj=pct(sumAll.t,sumAll.s);
       var head='<tr><th></th>'+months.map(function(m){var ph=phase(m);return '<th class="ph-'+ph+'"><span>'+PH[ph]+'</span>'+monthLbl(m)+'</th>';}).join("")+'<th class="tot">USHA YTD</th><th class="tot proj">Projected</th></tr>';
-      function inp(m,f,v,ed){return '<input class="bc-in'+(ed?" ed":"")+'" type="number" min="0" data-bc="'+k+'|'+m+'|'+f+'" value="'+v+'">';}
+      function inp(m,f,v,ed){var c=cell(k,m),d=f==="s"?c.ds:c.dt,base=f==="s"?c.as:c.at;return '<input class="bc-in'+(d?" ed":"")+'" type="number" min="0" data-bc="'+k+'|'+m+'|'+f+'" value="'+v+'" title="Applications show '+base+(d?" · your adjustment "+(d>0?"+":"")+d:"")+'">'+(d?'<i class="bc-adj">'+(d>0?"+":"")+d+'</i>':'');}
       var rS='<tr><th>Submitted</th>'+months.map(function(m){var c=cell(k,m);return '<td class="ph-'+phase(m)+'">'+inp(m,"s",c.s,c.edited)+'</td>';}).join("")+'<td class="tot">'+sumO.s+'</td><td class="tot proj">'+sumAll.s+'</td></tr>';
       var rT='<tr><th>Taken</th>'+months.map(function(m){var c=cell(k,m);return '<td class="ph-'+phase(m)+'">'+inp(m,"t",c.t,c.edited)+'</td>';}).join("")+'<td class="tot">'+sumO.t+'</td><td class="tot proj">'+sumAll.t+'</td></tr>';
       var rR='<tr><th>Taken rate</th>'+months.map(function(m){var c=cell(k,m),r=pct(c.t,c.s);return '<td class="ph-'+phase(m)+' rt '+(r==null?"":r>=TARGET[k]?"good":"low")+'">'+(r==null?"-":r+"%")+'</td>';}).join("")+'<td class="tot rt '+(ytd!=null&&ytd>=TARGET[k]?"good":"low")+'">'+(ytd==null?"-":ytd+"%")+'</td><td class="tot proj rt '+(proj!=null&&proj>=TARGET[k]?"good":"low")+'">'+(proj==null?"-":proj+"%")+'</td></tr>';
@@ -11289,7 +11296,7 @@ try{(function(){
         :'<div class="bc-st low">Projected '+(proj==null?"-":proj+"%")+' vs '+TARGET[k]+'% target. You need <b>'+needT+'</b> more taken polic'+(needT===1?"y":"ies")+' in a row (new submits that all stick) to get there.</div>';
       html+='<div class="ap-card bc"><div class="ap-card-h"><h4>'+lab+' <span class="bc-tg">'+TARGET[k]+'% taken rate</span></h4></div>'
         +'<div class="bc-tw"><table class="bc-t">'+head+rS+rT+rR+'</table></div>'
-        +'<div class="bc-legend"><span class="ph-official">In USHA YTD</span><span class="ph-pending">Not in calculation yet (still maturing)</span><span class="ph-estimate">This month, estimated</span><span class="ph-plan">Your plan for the rest of the year</span><em>Type over any number to match USHA\'s sheet or plan ahead. Blue numbers are ones you changed.</em></div>'
+        +'<div class="bc-legend"><span class="ph-official">In USHA YTD</span><span class="ph-pending">Not in calculation yet (still maturing)</span><span class="ph-estimate">This month, estimated</span><span class="ph-plan">Your plan for the rest of the year</span><em>Synced with your Applications: new apps, payments and status changes update these by themselves. Type over a number to match USHA\'s sheet; your +/- adjustment stays applied as things change.</em></div>'
         +status
         +'<div class="bc-solve">'
         +'<div class="bc-q"><b>If I submit</b> <input type="number" min="0" class="bc-add" data-bcadd="'+k+'" value="'+add+'"> <b>more '+lab.toLowerCase()+' apps this year…</b><div class="bc-a">…<b>'+Math.min(needOfAdd,add)+'</b> of them need to stick'+(needOfAdd>add?' and that still isn\'t enough. You\'d need '+(needOfAdd-add)+' more beyond that.':' ('+(add?Math.round(Math.min(needOfAdd,add)/add*100):0)+'% of the '+add+') to finish at '+TARGET[k]+'%.')+'</div></div>'
@@ -11298,7 +11305,10 @@ try{(function(){
     });
     mount.innerHTML=html;
     var cs=mount.querySelector("[data-bc-cut]");if(cs)cs.addEventListener("change",function(){var p=planData();p.cutoff=cs.value;savePlan(p);bonusCalc();});
-    mount.querySelectorAll("[data-bc]").forEach(function(inp){inp.addEventListener("change",function(){var p=planData(),a=inp.getAttribute("data-bc").split("|"),key=a[0]+"|"+a[1];p.cells[key]=p.cells[key]||{};var cur2=cell(a[0],a[1]);p.cells[key].s=a[2]==="s"?inp.value:(p.cells[key].s!=null?p.cells[key].s:cur2.s);p.cells[key].t=a[2]==="t"?inp.value:(p.cells[key].t!=null?p.cells[key].t:cur2.t);savePlan(p);bonusCalc();});});
+    mount.querySelectorAll("[data-bc]").forEach(function(inp){inp.addEventListener("change",function(){var p=planData(),a=inp.getAttribute("data-bc").split("|"),key=a[0]+"|"+a[1],dd=data[key];p.cells[key]=p.cells[key]||{};var v=inp.value===""?null:+inp.value;
+      if(a[2]==="s")p.cells[key].ds=v==null?0:v-dd.s;else p.cells[key].dt=v==null?0:v-dd.t;
+      if(!p.cells[key].ds&&!p.cells[key].dt)delete p.cells[key];savePlan(p);bonusCalc();});});
+    var rs2=mount.querySelector("[data-bc-reset]");if(rs2)rs2.addEventListener("click",function(){var p=planData();p.cells={};savePlan(p);bonusCalc();});
     mount.querySelectorAll("[data-bcadd]").forEach(function(inp){inp.addEventListener("input",function(){var k=inp.getAttribute("data-bcadd");(BC[k]=BC[k]||{}).add=inp.value;clearTimeout(inp.__t);inp.__t=setTimeout(function(){bonusCalc();var n=$("bonus-mount").querySelector('[data-bcadd="'+k+'"]');if(n){n.focus();n.setSelectionRange&&n.setSelectionRange(n.value.length,n.value.length);}},350);});});
     var rs=mount.querySelector(".bc-reset");if(rs)rs.addEventListener("click",function(){var p=planData();p.cells={};savePlan(p);bonusCalc();});
   }
@@ -11722,6 +11732,7 @@ try{(function(){
   "#p-bonus .bc-a{margin-top:8px;font-size:14px;color:#0b2346;line-height:1.5}#p-bonus .bc-a b{font-size:18px;color:#16447f}",
   "@media(max-width:900px){#p-bonus .bc-solve{grid-template-columns:1fr}}",
   "#p-applist .ap-chip.warnc b,#p-accounts .ap-chip.warnc b{background:#fff3c4;color:#8a5a00}",
+  "#p-bonus .bc-t td{position:relative}#p-bonus .bc-adj{position:absolute;top:1px;right:4px;font-style:normal;font-size:9.5px;font-weight:900;color:#1d5bd8}",
    ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus) .ap-howto ol{margin:6px 0 0 18px;padding:0;line-height:1.8;color:#33455c}",
   "@media(max-width:1280px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus) .ap-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
   "@media(max-width:1100px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus) .ap-two{grid-template-columns:1fr}}",
