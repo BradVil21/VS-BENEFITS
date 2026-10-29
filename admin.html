@@ -1640,6 +1640,7 @@ html.dark .ads-t tr.waste td{background:#3a1d1d}html.dark .ads-t tr.win td{backg
 html.dark .ads-t th,html.dark .ads-t td{border-color:#253a54}html.dark .ads-bars{border-color:#253a54}html.dark .ads-bar{background:#5b9cf0}
 @media(max-width:1100px){.ads-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}.ads-two{grid-template-columns:1fr}}
 </style>
+<style>html body [data-tab="referrals"].sidebar-nav-item,html body [data-tab="users"].sidebar-nav-item,html body aside.sidebar#sidebar .sidebar-nav-item[data-tab="referrals"],html body aside.sidebar#sidebar .sidebar-nav-item[data-tab="users"],html body #sidebar .vs-acct-menu [data-tab="users"],html body #sidebar .vs-acct-menu [data-tab="referrals"]{display:none!important}</style>
 </head>
 <body>
 
@@ -7054,7 +7055,22 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
      "#p-assist .ax-flagbtn{background:#0b2346;color:#fff;border:0;border-radius:10px;padding:9px 14px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit}",
      "#p-assist .ax-flag{background:#fff;border:1px solid #e4e9f2;border-radius:14px;padding:12px 14px;margin:-4px 0 14px;box-shadow:0 8px 24px rgba(11,35,70,.08)}",
      "#p-assist .ax-flag .asst-search{width:100%;box-sizing:border-box}",
-     "#p-assist #asst-list.ax-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}",
+"#p-assist #asst-list.ax-tblwrap{display:block!important;grid-template-columns:none}#p-assist .ax-detrow .ax-top,#p-assist .ax-detrow .ax-last{display:none}#p-assist .ax-detrow .ax-card{border-left-width:4px;box-shadow:none}",
+     "#p-assist .ax-tblwrap{background:#fff;border:1px solid #e4e9f2;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(11,35,70,.05)}",
+     "#p-assist .ax-tw{overflow:auto}#p-assist .ax-t{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}",
+     "#p-assist .ax-t th{background:#f7f9fc;text-align:left;font-size:11px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;color:#6b7c92;padding:10px 12px;border-bottom:1px solid #e8edf5;white-space:nowrap}",
+     "#p-assist .ax-t td{padding:10px 12px;border-bottom:1px solid #f0f3f8;vertical-align:middle;color:#33455c}#p-assist .ax-t .num{text-align:right}",
+     "#p-assist .ax-tr{cursor:pointer}#p-assist .ax-tr:hover td{background:#fafcff}#p-assist .ax-tr td:first-child{border-left:4px solid #94a3b8}#p-assist .ax-tr.s-open td:first-child{border-left-color:#2563eb}#p-assist .ax-tr.s-in-progress td:first-child{border-left-color:#d97706}#p-assist .ax-tr.s-resolved td:first-child{border-left-color:#10b981}#p-assist .ax-tr.s-resolved td{opacity:.75}",
+     "#p-assist .ax-tr .ax-nm{font-weight:800;color:#0b2346;white-space:nowrap}#p-assist .ax-tr .ax-sub{font-size:12px;color:#7b8aa0;white-space:nowrap}#p-assist .ax-tr .ax-tag{display:inline-block;margin:1px 4px 1px 0;white-space:nowrap}",
+     "#p-assist .ax-lastc{max-width:260px;min-width:160px;font-size:12.5px}#p-assist .ax-w{font-size:11px;color:#8a99ad;margin-top:2px}#p-assist .ax-dim{color:#a3b0c2}#p-assist .ax-stl{font-size:11px;color:#c2410c;font-weight:700;white-space:nowrap}",
+     "#p-assist .ax-actc{white-space:nowrap;text-align:right}#p-assist .ax-actc .ax-b{margin-left:4px}",
+     "#p-assist .ax-stsel{font:inherit;font-size:12px;font-weight:800;border-radius:999px;padding:4px 8px;border:1px solid #d6deea;background:#fff;color:#0b2346}#p-assist .ax-stsel.s-open{background:#eaf1fe;color:#1d4ed8;border-color:#c7d8fb}#p-assist .ax-stsel.s-in-progress{background:#fff4e0;color:#b45309;border-color:#f6dcae}#p-assist .ax-stsel.s-resolved{background:#e6f8f1;color:#047857;border-color:#bde9d6}",
+     "#p-assist .ax-detrow td{background:#f7f9fc;padding:10px 12px 14px;border-bottom:1px solid #e8edf5}#p-assist .ax-detrow .ax-card{margin:0}#p-assist .ax-detrow [data-ax-det]{display:none}",
+     "#p-assist .ax-sep td{background:#f3f6fb;font-size:11px;font-weight:850;letter-spacing:.06em;text-transform:uppercase;color:#047857;padding:8px 12px}#p-assist .ax-sep span{background:#e6f8f1;border-radius:999px;padding:1px 8px;margin-left:4px}",
+     "#p-assist .ax-empty0{text-align:center;color:#7b8aa0;padding:26px 12px!important}#p-assist .ax-foot{padding:10px 14px;font-size:12px;color:#8a99ad;border-top:1px solid #f0f3f8}#p-assist .ax-tblwrap .ax-more{margin:0 14px 14px}",
+     "@media(max-width:700px){#p-assist .ax-t thead{display:none}#p-assist .ax-t,#p-assist .ax-t tbody{display:block}#p-assist .ax-tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;padding:12px 14px;border-bottom:1px solid #eef2f7;border-left:4px solid #94a3b8}#p-assist .ax-tr.s-open{border-left-color:#2563eb}#p-assist .ax-tr.s-in-progress{border-left-color:#d97706}#p-assist .ax-tr.s-resolved{border-left-color:#10b981}#p-assist .ax-tr td{display:block;padding:0;border:0!important;background:none!important;min-width:0;max-width:none;text-align:left!important}#p-assist .ax-tr td::before{content:attr(data-l);display:block;font-size:10px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;color:#8a99ad;margin-bottom:2px}#p-assist .ax-tr td[data-l='']::before,#p-assist .ax-tr td[data-l=Client]::before{display:none}#p-assist .ax-tr td[data-l=Client],#p-assist .ax-tr td[data-l='Last update'],#p-assist .ax-tr td.ax-actc{grid-column:1/-1}#p-assist .ax-tr .ax-nm,#p-assist .ax-tr .ax-sub{white-space:normal}#p-assist .ax-actc .ax-b{margin:0 6px 0 0}#p-assist .ax-detrow,#p-assist .ax-sep{display:block}#p-assist .ax-detrow td,#p-assist .ax-sep td{display:block}}",
+     "html.dark #p-assist .ax-tblwrap{background:#14243a;border-color:#253a54}html.dark #p-assist .ax-t th{background:#182b44;color:#9fb2cc}html.dark #p-assist .ax-t td{border-color:#22364f;color:#c9d6e8}html.dark #p-assist .ax-tr .ax-nm{color:#fff}html.dark #p-assist .ax-detrow td,html.dark #p-assist .ax-sep td{background:#132030}",
+          "#p-assist #asst-list.ax-board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}",
      "@media(max-width:1100px){#p-assist #asst-list.ax-board{grid-template-columns:1fr}}",
      "#p-assist .ax-col{background:#f3f6fb;border-radius:16px;padding:10px;min-height:120px}",
      "#p-assist .ax-colhd{display:flex;align-items:center;gap:8px;padding:4px 6px 10px;font-weight:800;color:#0b2346;font-size:14px}",
@@ -7169,7 +7185,7 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
 
       panel.innerHTML="";
       panel.appendChild(el("h3",{text:"Needs Help"}));
-      panel.appendChild(el("p",{class:"lede",text:"Clients with a missed payment or a support issue. Reach out, add a note, and move each case across the board until it is resolved."}));
+      panel.appendChild(el("p",{class:"lede",text:"Clients with a missed payment or a support issue. Reach out, add a note, and update each case’s stage until it is resolved."}));
 
       var k=el("div",{class:"ax-kpis"});
       function kpi(cls,n,l,fr){var b=el("button",{type:"button",class:"ax-kpi "+cls+(fr&&fReason===fr?" on":"")});b.innerHTML='<div class="n">'+n+'</div><div class="l">'+l+'</div>';b.addEventListener("click",function(){fReason=(fr&&fReason!==fr)?fr:"all";renderAssist();});k.appendChild(b);}
@@ -7219,20 +7235,47 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
       function passesQuery(a){var q=fQuery.toLowerCase().trim();if(!q)return true;
         return [a.firstName,a.lastName,a.name,a.email,a.phone,(a.assist&&a.assist.note),(a.assist&&a.assist.noteLog?a.assist.noteLog.map(function(n){return n.text;}).join(" "):"")].join(" ").toLowerCase().indexOf(q)>=0;}
       function renderList(){
-        board.innerHTML="";
+        board.innerHTML="";board.className="ax-tblwrap";
         var rows=pipeline.filter(passesReason).filter(passesQuery);
-        [["open","Open","#2563eb","Not contacted yet"],["in-progress","In progress","#d97706","Working on it"],["resolved","Resolved","#10b981","Fixed"]].forEach(function(colDef){
-          var list=rows.filter(function(a){return stageOf(a)===colDef[0];});
-          if(colDef[0]==="resolved")list.sort(function(x,y){return ((y.assist&&y.assist.updated)||0)-((x.assist&&x.assist.updated)||0);});
-          else list.sort(function(x,y){var dx=axDeadline(x),dy=axDeadline(y);if(dx!=null||dy!=null){if(dx==null)return 1;if(dy==null)return -1;if(dx!==dy)return dx-dy;}return axLastTouch(x)-axLastTouch(y);});
-          var col=el("div",{class:"ax-col"});
-          col.innerHTML='<div class="ax-colhd"><span class="dot" style="background:'+colDef[2]+'"></span>'+colDef[1]+'<span class="c">'+list.length+'</span><span class="h">'+colDef[3]+'</span></div>';
-          var shown=colDef[0]==="resolved"?list.slice(0,AX_SHOW_RESOLVED):list;
-          if(!list.length)col.appendChild(el("div",{class:"ax-empty",text:colDef[0]==="open"?"No new cases. Use + Flag a client when someone misses a payment or needs help.":colDef[0]==="in-progress"?"Nothing in progress.":"No resolved cases yet."}));
-          shown.forEach(function(a){col.appendChild(card(a));});
-          if(list.length>shown.length){var more=el("button",{type:"button",class:"ax-more",text:"Show "+(list.length-shown.length)+" more resolved"});more.addEventListener("click",function(){AX_SHOW_RESOLVED+=20;renderList();});col.appendChild(more);}
-          board.appendChild(col);
-        });
+        var ORD={"open":0,"in-progress":1,"resolved":2};
+        function urg(x){var d=axDeadline(x);return d==null?1e6:d;}
+        var act2=rows.filter(function(a){return stageOf(a)!=="resolved";}).sort(function(x,y){var o=ORD[stageOf(x)]-ORD[stageOf(y)];if(o)return o;var d=urg(x)-urg(y);if(d)return d;return axLastTouch(x)-axLastTouch(y);});
+        var res=rows.filter(function(a){return stageOf(a)==="resolved";}).sort(function(x,y){return ((y.assist&&y.assist.updated)||0)-((x.assist&&x.assist.updated)||0);});
+        var shownRes=res.slice(0,AX_SHOW_RESOLVED);
+        var tbl=el("table",{class:"ax-t"});
+        tbl.innerHTML='<thead><tr><th>Client</th><th>Reason</th><th>Stage</th><th>Deadline</th><th>Open</th><th>Last update</th><th class="num">Monthly</th><th></th></tr></thead>';
+        var tb=document.createElement("tbody");tbl.appendChild(tb);
+        function row(a){
+          var r=reasons(a),st=stageOf(a),done=st==="resolved",prem=(a.plan&&a.plan.monthlyPremium)?Number(a.plan.monthlyPremium):0;
+          var lg=axLog(a),last=lg.length?lg.reduce(function(x,y){return (y.ts||0)>(x.ts||0)?y:x;}):null;
+          var age=axDays(axOpened(a)),idle=axDays(axLastTouch(a)),dl=axDeadline(a);
+          var tags='';
+          if(r.funds)tags+='<span class="ax-tag funds">Insufficient funds</span>';
+          if(r.support)tags+='<span class="ax-tag support">'+(r.supportAuto?(r.msgCount?(r.msgCount+" new message"+(r.msgCount>1?"s":"")):(r.tixCount+" open ticket"+(r.tixCount>1?"s":""))):"Needs support")+'</span>';
+          var dlt=done||dl==null?'<span class="ax-dim">-</span>':'<span class="ax-tag '+(dl<0?"late":dl<=7?"due":"age")+'">'+(dl<0?"Passed":dl===0?"Today":dl+(dl===1?" day":" days"))+'</span>';
+          var opn=done?'<span class="ax-dim">Resolved</span>':(age<1?"Today":age+(age===1?" day":" days"))+(idle>=3?'<div class="ax-stl">No update in '+idle+' days</div>':'');
+          var tel=a.phone?String(a.phone).replace(/[^0-9+]/g,""):"";
+          var tr=document.createElement("tr");tr.className="ax-tr s-"+st+(r.funds?" r-funds":"")+(AX_OPEN[a.id]?" open":"");
+          tr.innerHTML='<td data-l="Client"><div class="ax-nm">'+axEsc(axName(a))+'</div><div class="ax-sub">'+axEsc([a.phone,String(a.email||"").toLowerCase()].filter(Boolean).join(" · "))+'</div></td>'
+            +'<td data-l="Reason">'+(tags||'<span class="ax-dim">-</span>')+'</td>'
+            +'<td data-l="Stage"><select class="ax-stsel s-'+st+'" data-ax-st><option value="open"'+(st==="open"?" selected":"")+'>Open</option><option value="in-progress"'+(st==="in-progress"?" selected":"")+'>In progress</option><option value="resolved"'+(done?" selected":"")+'>Resolved</option></select></td>'
+            +'<td data-l="Deadline">'+dlt+'</td>'
+            +'<td data-l="Open">'+opn+'</td>'
+            +'<td data-l="Last update" class="ax-lastc">'+(last?axEsc(last.text)+'<div class="ax-w">'+axWhen(last.ts)+(lg.length>1?" · "+lg.length+" updates":"")+'</div>':'<span class="ax-dim">No updates yet</span>')+'</td>'
+            +'<td data-l="Monthly" class="num">'+(prem>0?'$'+(prem%1===0?prem:prem.toFixed(2)):'<span class="ax-dim">-</span>')+'</td>'
+            +'<td data-l="" class="ax-actc">'+(tel?'<a class="ax-b" href="tel:'+axEsc(tel)+'">Call</a><a class="ax-b" href="sms:'+axEsc(tel)+'">Text</a>':'')+'<button class="ax-b" type="button" data-ax-open>'+(AX_OPEN[a.id]?"Close":"Notes")+'</button></td>';
+          tr.querySelector("[data-ax-st]").addEventListener("change",function(){assistSet(a.id,{stage:this.value});});
+          tr.querySelector("[data-ax-open]").addEventListener("click",function(e){e.stopPropagation();AX_OPEN[a.id]=!AX_OPEN[a.id];renderList();});
+          tr.addEventListener("click",function(e){if(e.target.closest("a,button,select,input"))return;AX_OPEN[a.id]=!AX_OPEN[a.id];renderList();});
+          tb.appendChild(tr);
+          if(AX_OPEN[a.id]){var dr=document.createElement("tr");dr.className="ax-detrow";var td=document.createElement("td");td.colSpan=8;td.appendChild(card(a));dr.appendChild(td);tb.appendChild(dr);}
+        }
+        act2.forEach(row);
+        if(shownRes.length){var sep=document.createElement("tr");sep.className="ax-sep";sep.innerHTML='<td colspan="8">Resolved <span>'+res.length+'</span></td>';tb.appendChild(sep);shownRes.forEach(row);}
+        if(!act2.length&&!shownRes.length){var em0=document.createElement("tr");em0.innerHTML='<td colspan="8" class="ax-empty0">No clients need help right now. Use + Flag a client when someone misses a payment or needs help.</td>';tb.appendChild(em0);}
+        var wrap=el("div",{class:"ax-tw"});wrap.appendChild(tbl);board.appendChild(wrap);
+        var foot=el("div",{class:"ax-foot"});foot.textContent=act2.length+" active case"+(act2.length===1?"":"s")+" · click a row for notes, reason and deadline";board.appendChild(foot);
+        if(res.length>shownRes.length){var more=el("button",{type:"button",class:"ax-more",text:"Show "+(res.length-shownRes.length)+" more resolved"});more.addEventListener("click",function(){AX_SHOW_RESOLVED+=20;renderList();});board.appendChild(more);}
       }
       window.__asstRenderList=renderList;
       renderList();
@@ -11581,7 +11624,7 @@ try{(function(){
   if(typeof ALL_TABS!=="undefined"){if(ALL_TABS.indexOf("apps")<0)ALL_TABS.push("apps");if(ALL_TABS.indexOf("applist")<0)ALL_TABS.push("applist");if(ALL_TABS.indexOf("bonus")<0)ALL_TABS.push("bonus");if(ALL_TABS.indexOf("milestones")<0)ALL_TABS.push("milestones");}
   try{TAB_TITLES.apps="Taken Rate";TAB_TITLES.applist="Applications";TAB_TITLES.bonus="Bonus Calculator";TAB_TITLES.milestones="Milestones";TAB_TITLES.winback="Win-Back List";}catch(e){}
   var _sw=switchTab;
-  switchTab=function(n){_sw(n);var p=$("p-apps"),q=$("p-applist");if((p&&p.classList.contains("active"))||(q&&q.classList.contains("active")))render();var bz=$("p-bonus");if(bz&&bz.classList.contains("active"))bonusCalc();var wbp=$("p-winback");if(wbp&&wbp.classList.contains("active"))bonusCalc("wb");var msp=$("p-milestones");if(msp&&msp.classList.contains("active"))milestones();};
+  switchTab=function(n){if(n==="referrals"||n==="users")n="dashboard";_sw(n);var p=$("p-apps"),q=$("p-applist");if((p&&p.classList.contains("active"))||(q&&q.classList.contains("active")))render();var bz=$("p-bonus");if(bz&&bz.classList.contains("active"))bonusCalc();var wbp=$("p-winback");if(wbp&&wbp.classList.contains("active"))bonusCalc("wb");var msp=$("p-milestones");if(msp&&msp.classList.contains("active"))milestones();};
   window.vsRenderApps=render;
   /* the nav button: works even if an older click handler doesn't know this tab */
   document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest('[data-tab="apps"],[data-tab="applist"],[data-tab="bonus"],[data-tab="winback"],[data-tab="milestones"]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();switchTab(b.getAttribute("data-tab"));},true);
