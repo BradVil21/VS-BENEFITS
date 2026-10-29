@@ -2235,9 +2235,9 @@ var presenceMap={};
 var REMOTE_KEYS=["leads","accounts","messages","contact_requests","quick_notes","biz_leads","referrals","appointments","admin_accounts","blocked_ips"];
 var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,contact_requests:K.tickets,quick_notes:K.quickNotes,biz_leads:K.bizLeads,referrals:K.referrals,appointments:K.appointments,admin_accounts:K.adminAccts,blocked_ips:K.blockedIps};
 /* USHA applications + client ages (2026-10-28) */
-K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.ushaKpis="vs_usha_kpis";K.ushaOv="vs_usha_overrides";
-LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";LOCAL_TO_REMOTE[K.ushaKpis]="usha_kpis";LOCAL_TO_REMOTE[K.ushaOv]="usha_overrides";
-REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta","usha_kpis");REMOTE_TO_LOCAL.usha_kpis=K.ushaKpis;REMOTE_KEYS.push("usha_overrides");REMOTE_TO_LOCAL.usha_overrides=K.ushaOv;REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
+K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.ushaKpis="vs_usha_kpis";K.ushaOv="vs_usha_overrides";K.ushaIncome="vs_usha_income";
+LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";LOCAL_TO_REMOTE[K.ushaKpis]="usha_kpis";LOCAL_TO_REMOTE[K.ushaOv]="usha_overrides";LOCAL_TO_REMOTE[K.ushaIncome]="usha_income";
+REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta","usha_kpis");REMOTE_TO_LOCAL.usha_kpis=K.ushaKpis;REMOTE_KEYS.push("usha_overrides","usha_income");REMOTE_TO_LOCAL.usha_overrides=K.ushaOv;REMOTE_TO_LOCAL.usha_income=K.ushaIncome;REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
 
 function setSyncPill(state){
   var p=$("sync-pill");if(!p)return;
@@ -10949,6 +10949,47 @@ try{(function(){
       weeks:Object.keys(weeks).sort(function(a,b){return parseFloat(a)-parseFloat(b);}).map(function(k){return weeks[k];}),streak:streak,
       official:(Array.isArray(k.portletsalestakenrateall)?k.portletsalestakenrateall:[]).map(function(o){return{label:String(o.takenRateDescription||"").replace(/^\s*Personal\s*/i,"").trim(),rate:String(o.takenRate||"")};})};
   }
+
+  /* ---- Projected 2026 income (USHA statements + issued AV pace) ---- */
+  K.ushaIncome="vs_usha_income";
+  var INC_DEF={advYtd:44735.40,otherYtd:4750,asEarnedYtd:1856.84,earnedYtd:15832.39,debt:35215.22,thru:"2026-09",firstMonth:"2026-05"};
+  function incData(){var a=asArr(K.ushaIncome)[0]||{};var o={};Object.keys(INC_DEF).forEach(function(k){o[k]=a[k]!=null&&a[k]!==""?a[k]:INC_DEF[k];});o.rate=a.rate;return o;}
+  function isoWeekStart(y,w){var j4=new Date(y,0,4),day=(j4.getDay()+6)%7,mon=new Date(y,0,4-day);mon.setDate(mon.getDate()+(w-1)*7);return mon;}
+  function incomeSection(kp){
+    var I=incData();
+    var thruEnd=(function(){var p=String(I.thru).split("-");return new Date(+p[0],+p[1],0,23,59);})();
+    var weeks=(kp&&kp.weeks)||[],hasIss=weeks.some(function(w){return w.iss>0;});
+    var issThru=0,issAfter=0;
+    weeks.forEach(function(w){var p=String(w.wk).split("."),y=2000+(+p[0]),wn=+p[1];var st=isoWeekStart(y,wn);if(st<=thruEnd)issThru+=w.iss||0;else issAfter+=w.iss||0;});
+    var avgI=kp?(kp.proj.avgIss||kp.iss.avg||0):0,wr=kp&&kp.proj.weeksRemaining!=null?kp.proj.weeksRemaining:0;
+    if(!hasIss&&kp){var wksSince=Math.max(0,Math.round((Date.now()-thruEnd)/6048e5));issAfter=avgI*wksSince;issThru=Math.max(0,(kp.iss.ytd||0)-issAfter);}
+    var rate=I.rate?(+I.rate/100):(issThru?(+I.advYtd)/issThru:0.108);
+    var months=Math.max(1,(thruEnd.getFullYear()-2026)*12+thruEnd.getMonth()-(+String(I.firstMonth).split("-")[1]-1)+1);
+    var monthsLeft=Math.max(0,11-thruEnd.getMonth());
+    var aeMo=(+I.asEarnedYtd)/months,otherMo=(+I.otherYtd)/months;
+    var paid=(+I.advYtd)+(+I.otherYtd)+(+I.asEarnedYtd);
+    var sinceStmt=issAfter*rate;                 /* issued after the last statement, not paid yet */
+    var restYear=avgI*wr*rate;                   /* still to be issued this year at your weekly pace */
+    var extras=aeMo*monthsLeft;          /* bonuses are not assumed to repeat */
+    var total=paid+sinceStmt+restYear+extras;
+    function m0(n){return "$"+Math.round(n||0).toLocaleString();}
+    var thruLbl=new Date(thruEnd).toLocaleString("en-US",{month:"short",year:"numeric"});
+    return '<div class="ap-card inc"><div class="ap-card-h"><h4>Projected 2026 income</h4><button type="button" class="ap-ovb inc-edit">Edit numbers ▾</button></div>'
+      +'<div class="inc-grid">'
+      +'<div class="inc-c"><span>Paid to you so far</span><b>'+m0(paid)+'</b><em>Advances '+m0(I.advYtd)+' + bonuses '+m0(I.otherYtd)+' + as-earned '+m0(I.asEarnedYtd)+' · statements through '+thruLbl+'</em></div>'
+      +'<div class="inc-c"><span>Issued since that statement</span><b>'+m0(sinceStmt)+'</b><em>'+m0(issAfter)+' issued AV × '+(rate*100).toFixed(1)+'% advance rate · coming on your next statements</em></div>'
+      +'<div class="inc-c"><span>Rest of the year</span><b>'+m0(restYear+extras)+'</b><em>'+wr+' weeks × '+m0(avgI)+' issued AV/week × '+(rate*100).toFixed(1)+'%'+(extras?' + '+m0(extras)+' as-earned at your monthly average (bonuses not assumed)':'')+'</em></div>'
+      +'<div class="inc-c tot"><span>Projected 2026 total</span><b>'+m0(total)+'</b><em>if you keep your current pace</em></div></div>'
+      +'<div class="ap-note">Advances are paid up front and earned as clients keep paying. USHA showed '+m0(I.debt)+' still unearned at the end of '+thruLbl+'. Every policy that cancels in its first months can be charged back, so a higher taken rate protects this number. Earned so far (tax worksheet): '+m0(I.earnedYtd)+'.</div>'
+      +'<div class="inc-form" hidden><div class="inc-fg">'
+      +[["advYtd","Advances paid YTD"],["otherYtd","Bonuses / other earnings YTD"],["asEarnedYtd","As-earned YTD"],["earnedYtd","Earned YTD (tax worksheet)"],["debt","Unearned advance balance"],["thru","Statements through (YYYY-MM)"],["rate","Advance rate % (blank = auto)"]].map(function(f){return '<label><span>'+f[1]+'</span><input data-inc="'+f[0]+'" value="'+esc(I[f[0]]==null?"":I[f[0]])+'"></label>';}).join("")
+      +'</div><div class="inc-acts"><button type="button" class="ap-btn inc-save">Save</button></div><div class="ap-note soft">Get these from USHA: Statements → Account YTD (Advances, Payout) and Statements → Tax Worksheet (Total Earnings, Other Earnings, As Earned). Update them after each monthly statement.</div></div>'
+      +'</div>';
+  }
+  document.addEventListener("click",function(e){
+    var ed=e.target.closest&&e.target.closest(".inc-edit");if(ed){var f=ed.closest(".inc").querySelector(".inc-form");f.hidden=!f.hidden;return;}
+    var sv=e.target.closest&&e.target.closest(".inc-save");if(sv){var box=sv.closest(".inc"),o={};box.querySelectorAll("[data-inc]").forEach(function(i){var k=i.getAttribute("data-inc"),v=i.value.trim();o[k]=(k==="thru")?v:(v===""?"":+v.replace(/[$,]/g,""));});o.at=Date.now();setArr(K.ushaIncome,[o],true);render();}
+  });
   function avSection(kp){
     if(!kp)return '<div class="ap-card av-empty"><div class="ap-card-h"><h4>AV tracking</h4></div><div class="ap-note soft">Click <b>⟳ Sync from USHA</b> (drag it to your bookmarks bar, then click it while signed in to USHA) to bring in your Submitted AV, Issued AV and USHA\'s projection.</div></div>';
     var wr=kp.proj.weeksRemaining,avgS=kp.proj.avgSub||kp.sub.avg,avgI=kp.proj.avgIss||kp.iss.avg;
@@ -10977,7 +11018,7 @@ try{(function(){
     +"else if(stage==='report'&&(D.rows||Date.now()-t0>75000)){stage='post';post();}}"
     +"var o=XMLHttpRequest.prototype.open,s=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.open=function(m,u){this.__vu=String(u);return o.apply(this,arguments);};"
     +"XMLHttpRequest.prototype.send=function(b){var x=this,u=x.__vu||'';if(/salesreports\\/process/.test(u)&&typeof b=='string'){try{var j=JSON.parse(b);j.BeginDate=from;j.EndDate=to;j.DateType='S';b=JSON.stringify(j);}catch(e){}}"
-    +"x.addEventListener('load',function(){try{var r=JSON.parse(x.responseText);if(/salesreports\\/result/.test(u)){var d=typeof r.data=='string'?JSON.parse(r.data):r.data;if(d&&!Array.isArray(d)){for(var q in d){if(Array.isArray(d[q])){d=d[q];break;}}}if(Array.isArray(d)&&(!D.rows||d.length>=D.rows.length))D.rows=d;}var m=u.match(/salesdashboard\\/(\\w+)/);if(m&&r.data)D.k[m[1]]=r.data;}catch(e){}check();});return s.call(this,b);};"
+    +"x.addEventListener('load',function(){try{var r=JSON.parse(x.responseText);if(/salesreports\\/result/.test(u)){var d=typeof r.data=='string'?JSON.parse(r.data):r.data;if(d&&!Array.isArray(d)){for(var q in d){if(Array.isArray(d[q])){d=d[q];break;}}}if(Array.isArray(d)&&(!D.rows||d.length>=D.rows.length))D.rows=d;}var m=u.match(/salesdashboard\\/(\\w+)/);if(m&&r.data){var sm=function(a){return Array.isArray(a)?a.reduce(function(t,w){return t+(+w.issuedAVThisWeek||+w.submittedAVThisWeek||0);},0):1;};if(!D.k[m[1]]||sm(r.data)>=sm(D.k[m[1]]))D.k[m[1]]=r.data;}}catch(e){}check();});return s.call(this,b);};"
     +"if(/salesdashboard/i.test(location.pathname)){go('Sales Report');setTimeout(function(){go('Sales Dashboard');},300);}else go('Sales Dashboard');"
     +"var iv=setInterval(function(){check();if(stage==='post')clearInterval(iv);},2000);"
     +"function send(id){try{w.postMessage({t:'usha-sync',id:id,rows:D.rows,k:D.k},O);}catch(e){}}"
@@ -11218,7 +11259,7 @@ try{(function(){
           +'<div class="ap-kpi ap-kpi-side"><div class="ap-mini usha"><span>USHA official taken rate</span><b>'+(ushaTR==null?"--":ushaTR+"%")+'</b><em>'+(ushaTR==null?"click ⟳ Sync from USHA":(kp.official&&kp.official.length?kp.official.map(function(o){return esc(o.label)+" "+esc(o.rate);}).join(" · "):"UW YTD")+" · synced "+ago(kp.at))+'</em></div>'
           +'<div class="ap-mini"><span>Active core policies</span><b>'+activeN+'</b><em>$'+Math.round(mrr).toLocaleString()+'/mo in premium</em></div>'
           +'<div class="ap-mini '+(badPay?"bad":"")+'"><span>Missed / past-due payments</span><b>'+badPay+'</b><em>'+(badPay?"see the Applications tab":"all active policies current")+'</em></div></div></div>'
-          +avSection(kp)
+          +avSection(kp)+incomeSection(kp)
           +gamePlan(M,uw,gi)
           +'<div class="ap-two"><div>'+seg("kind",[["UW","Underwritten"],["GI","Guaranteed issue"]],S.kind)+breakdown(S.kind==="UW"?uw:gi,S.kind==="UW"?"Underwritten":"Guaranteed issue")+'</div><div>'+monthly(M.apps.filter(M.inP))+'</div></div>';
       }
@@ -11309,7 +11350,7 @@ try{(function(){
   }
   function flash(t,bad){var m=($("p-applist")&&$("p-applist").classList.contains("active"))?$("applist-mount"):$("apps-mount");if(!m)return;var d=document.createElement("div");d.className="ap-flash"+(bad?" bad":"");d.textContent=t;m.prepend(d);setTimeout(function(){d.remove();},6000);}
 
-  var lastSig="";function sig(){try{return (localStorage.getItem(K.ushaApps)||"").length+":"+(localStorage.getItem(K.ushaAges)||"")+(localStorage.getItem(K.ushaMeta)||"")+(localStorage.getItem(K.ushaKpis)||"").length+(localStorage.getItem(K.ushaOv)||"");}catch(e){return "";}}
+  var lastSig="";function sig(){try{return (localStorage.getItem(K.ushaApps)||"").length+":"+(localStorage.getItem(K.ushaAges)||"")+(localStorage.getItem(K.ushaMeta)||"")+(localStorage.getItem(K.ushaKpis)||"").length+(localStorage.getItem(K.ushaOv)||"")+(localStorage.getItem(K.ushaIncome)||"");}catch(e){return "";}}
   setInterval(function(){var p=$("p-apps"),q=$("p-applist");if(((p&&p.classList.contains("active"))||(q&&q.classList.contains("active")))&&sig()!==lastSig)render();},2500);
 
   if(typeof ALL_TABS!=="undefined"){if(ALL_TABS.indexOf("apps")<0)ALL_TABS.push("apps");if(ALL_TABS.indexOf("applist")<0)ALL_TABS.push("applist");}
@@ -11577,6 +11618,17 @@ try{(function(){
   "#p-bizleads tr[data-biz]{cursor:pointer}",
   "#p-bizleads .bz-st{border:1.5px solid;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:800;background:#fff;cursor:pointer}",
   "#p-bizleads .bz-lnk{color:#16447f;text-decoration:none;font-weight:700}#p-bizleads .bz-lnk:hover{text-decoration:underline}",
+   ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc{margin-bottom:18px;border-top:4px solid #16447f}",
+   ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}",
+   ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-c{border:1px solid #eef2f7;border-radius:14px;padding:14px 16px;background:#fbfcfe;display:flex;flex-direction:column;gap:4px}",
+   ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-c span{font-size:12px;font-weight:850;letter-spacing:.05em;text-transform:uppercase;color:#6b7c92}",
+   ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-c b{font-size:26px;font-weight:900;color:#0b2346;font-variant-numeric:tabular-nums}",
+   ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-c em{font-style:normal;font-size:12px;color:#7c8ba0;line-height:1.4}",
+   ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-c.tot{background:linear-gradient(135deg,#0b2346,#16447f);border-color:#0b2346}:is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-c.tot span,:is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-c.tot em{color:rgba(255,255,255,.75)}:is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-c.tot b{color:#fff}",
+   ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-form{margin-top:14px}:is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-fg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}",
+   ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-fg label{display:flex;flex-direction:column;gap:4px}:is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-fg span{font-size:11px;font-weight:800;color:#6b7c92;text-transform:uppercase;letter-spacing:.04em}:is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-fg input{border:1px solid #dfe6f0;border-radius:10px;padding:9px 11px;font-size:14px;color:#0b2346}",
+   ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-acts{margin:10px 0}",
+  "@media(max-width:1100px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:640px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .inc-grid{grid-template-columns:1fr}}",
    ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .ap-howto ol{margin:6px 0 0 18px;padding:0;line-height:1.8;color:#33455c}",
   "@media(max-width:1280px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .ap-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
   "@media(max-width:1100px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads) .ap-two{grid-template-columns:1fr}}",
