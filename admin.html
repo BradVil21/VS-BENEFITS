@@ -1698,9 +1698,6 @@ html.dark .ads-t th,html.dark .ads-t td{border-color:#253a54}html.dark .ads-bars
     <button class="sidebar-nav-item" data-tab="bonus" type="button">
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h2M14 10h2M8 14h2M14 14h2M8 18h2M14 18h2"/></svg></span><span class="sni-label">Bonus Calculator</span>
     </button>
-    <button class="sidebar-nav-item" data-tab="winback" type="button">
-      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg></span><span class="sni-label">Win-Back List</span>
-    </button>
     <button class="sidebar-nav-item" data-tab="applist" type="button">
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg></span><span class="sni-label">Applications</span>
     </button>
@@ -1956,9 +1953,6 @@ html.dark .ads-t th,html.dark .ads-t td{border-color:#253a54}html.dark .ads-bars
     </div>
     <div id="p-bonus" class="panel">
       <div id="bonus-mount"></div>
-    </div>
-    <div id="p-winback" class="panel">
-      <div id="winback-mount"></div>
     </div>
 
     <div id="p-ads" class="panel">
@@ -11285,14 +11279,12 @@ try{(function(){
       return '<div class="wb-goal '+(n?"low":"ok")+'"><b>'+(k==="UW"?"Underwritten":"Guaranteed issue")+'</b>'+(n==null?' no data':n?' get back <strong>'+n+'</strong> to reach '+TARGET[k]+'% <em>('+have+' on this list)</em>':' already at '+TARGET[k]+'%+ - win-backs give you more room')+'</div>';}).join("");
     var LBL={save:"Save now",back:"Get back",pending:"Confirm",resub:"Resubmit"};
     var rows=V.map(function(x){var a=x.a,c=x.c;
-      return '<div class="wb-r k-'+x.kind+'"><div class="wb-l"><span class="wb-tag t-'+x.kind+'">'+LBL[x.kind]+'</span><div><b>'+esc(nice(a.name))+'</b> <span class="ap-k k-'+a.kind+'">'+a.kind+'</span> <span class="wb-p">'+esc(prodName(a.product))+' · submitted '+TR.fmt(a.submit)+'</span><div class="wb-why">'+esc(x.why)+'</div><div class="wb-act">'+esc(x.act)+'</div></div></div>'
-        +'<div class="wb-rt"><div class="wb-g">'+(x.g>0?'+'+x.g+' pts':'')+'</div>'
-        +(c.phone?'<a class="wb-call" href="tel:'+esc(String(c.phone).replace(/[^0-9+]/g,""))+'">Call '+esc(c.phone)+'</a>':'<span class="wb-nop">no phone on file</span>')
-        +'<div class="wb-btns">'+ovBtn(a)+'</div></div></div>';}).join("");
-    return '<div class="ap-card wb"><div class="ap-card-h"><h4>Who to get back</h4><div class="ap-seg" data-wbk>'+[["all","All",counts.all],["UW","Underwritten",counts.UW],["GI","Guaranteed issue",counts.GI]].map(function(o){return '<button type="button" data-v="'+o[0]+'"'+(WBV.kind===o[0]?' class="on"':'')+'>'+o[1]+' '+o[2]+'</button>';}).join("")+'</div></div>'
-      +'<div class="wb-goals">'+goal+'</div>'
-      +(rows||'<div class="ap-empty">Nobody to win back right now. Every recent app is in force or already counted.</div>')
-      +'<div class="ap-note soft">Ranked: missed payments on active policies first (save them before they go Not Taken), then recent Not Taken / early cancels you can get redrafted, then withdrawn apps to resubmit. "+ pts" is how much that one person moves your projected rate. When someone pays, tap <b>Update ▾ → They paid – mark in force</b> and the Bonus Calculator updates.</div></div>';
+      return '<tr><td><span class="wb-tag t-'+x.kind+'">'+LBL[x.kind]+'</span></td><td><b class="ap-nm">'+esc(nice(a.name))+'</b></td><td><span class="ap-k k-'+a.kind+'">'+a.kind+'</span> '+esc(prodName(a.product))+'</td><td>'+TR.fmt(a.submit)+'</td><td class="wb-whyc" title="'+esc(x.act)+'">'+esc(x.why)+'</td><td class="num wb-g">'+(x.g>0?'+'+x.g:'')+'</td>'
+        +'<td>'+(c.phone?'<a class="bz-lnk" href="tel:'+esc(String(c.phone).replace(/[^0-9+]/g,""))+'">'+esc(c.phone)+'</a>':'<span class="ap-dash">-</span>')+'</td><td>'+ovBtn(a)+'</td></tr>';}).join("");
+    var goalTxt=["UW","GI"].map(function(k){var n=need(k);return (k==="UW"?"Underwritten":"GI")+': '+(n==null?'-':n?'<b>get back '+n+'</b> for '+TARGET[k]+'%':'<b class="ok">at '+TARGET[k]+'%+</b>');}).join(' · ');
+    return '<div class="ap-card wb"><div class="ap-card-h"><h4>Win-back list <span class="wb-sub">'+goalTxt+'</span></h4><div class="ap-seg" data-wbk>'+[["all","All",counts.all],["UW","UW",counts.UW],["GI","GI",counts.GI]].map(function(o){return '<button type="button" data-v="'+o[0]+'"'+(WBV.kind===o[0]?' class="on"':'')+'>'+o[1]+' '+o[2]+'</button>';}).join("")+'</div></div>'
+      +(rows?'<div class="ap-tw wb-tw"><table class="ap-t wb-t"><thead><tr><th>Action</th><th>Client</th><th>Plan</th><th>Submitted</th><th>What happened</th><th class="num">+ pts</th><th>Phone</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>':'<div class="ap-empty">Nobody to win back right now.</div>')
+      +'</div>';
   }
   function wireWB(mount){mount.querySelectorAll("[data-wbk] button").forEach(function(b){b.addEventListener("click",function(){WBV.kind=b.getAttribute("data-v");bonusCalc(mount.id==="winback-mount"?"wb":"");});});}
   function bonusCalc(mode){
@@ -11317,7 +11309,7 @@ try{(function(){
     function phase(m){return m<=cutoff?"official":m<cur?"pending":m===cur?"estimate":"plan";}
     var PH={official:"In USHA YTD",pending:"Not in calculation yet",estimate:"Estimated",plan:"Plan"};
     var html='<div class="ap-head"><div><h3>Bonus Calculator</h3><p class="lede">Your taken rate month by month, the way USHA\'s bonus sheet adds it up, and exactly what you need to hit 60% underwritten and 65% guaranteed issue.</p></div>'
-      +'<div class="ap-actions"><button type="button" class="ap-ovb" data-bc-reset title="Remove every adjustment and use only what your Applications show">Clear my adjustments</button><label class="bc-cut">USHA YTD counts through <select data-bc-cut>'+months.map(function(m){return '<option value="'+m+'"'+(m===cutoff?" selected":"")+'>'+monthLbl(m)+'</option>';}).join("")+'</select></label></div></div><!--WB-->';
+      +'<div class="ap-actions"><button type="button" class="ap-ovb" data-bc-reset title="Remove every adjustment and use only what your Applications show">Clear my adjustments</button><label class="bc-cut">USHA YTD counts through <select data-bc-cut>'+months.map(function(m){return '<option value="'+m+'"'+(m===cutoff?" selected":"")+'>'+monthLbl(m)+'</option>';}).join("")+'</select></label></div></div>';
     ["UW","GI"].forEach(function(k){
       var T=TARGET[k]/100,lab=k==="UW"?"Underwritten":"Guaranteed issue";
       var sumO={s:0,t:0},sumAll={s:0,t:0},sumOpen={s:0,t:0},openMonths=[];
@@ -11351,7 +11343,7 @@ try{(function(){
     });
     var wb=winBackHtml(M,TOT);
     if(wbOnly){mount.innerHTML='<div class="ap-head"><div><h3>Win-Back List</h3><p class="lede">Who to get back, ranked by how much each one moves your bonus. It updates by itself from your Applications.</p></div></div>'+wb;wireWB(mount);return;}
-    html=html.replace('<!--WB-->',wb);
+    html+=wb;
     mount.innerHTML=html;wireWB(mount);
     var cs=mount.querySelector("[data-bc-cut]");if(cs)cs.addEventListener("change",function(){var p=planData();p.cutoff=cs.value;savePlan(p);bonusCalc();});
     mount.querySelectorAll("[data-bc]").forEach(function(inp){inp.addEventListener("change",function(){var p=planData(),a=inp.getAttribute("data-bc").split("|"),key=a[0]+"|"+a[1],dd=data[key];p.cells[key]=p.cells[key]||{};var v=inp.value===""?null:+inp.value;
@@ -11483,7 +11475,7 @@ try{(function(){
   var lastSig="";function sig(){try{return (localStorage.getItem(K.ushaApps)||"").length+":"+(localStorage.getItem(K.ushaAges)||"")+(localStorage.getItem(K.ushaMeta)||"")+(localStorage.getItem(K.ushaKpis)||"").length+(localStorage.getItem(K.ushaOv)||"")+(localStorage.getItem(K.ushaIncome)||"")+(localStorage.getItem(K.ushaPlan)||"");}catch(e){return "";}}
   setInterval(function(){var p=$("p-apps"),q=$("p-applist"),bz=$("p-bonus");if(sig()===lastSig)return;if((p&&p.classList.contains("active"))||(q&&q.classList.contains("active")))render();if(bz&&bz.classList.contains("active")){lastSig=sig();bonusCalc();}var wbp=$("p-winback");if(wbp&&wbp.classList.contains("active")){lastSig=sig();bonusCalc("wb");}},2500);
 
-  if(typeof ALL_TABS!=="undefined"){if(ALL_TABS.indexOf("apps")<0)ALL_TABS.push("apps");if(ALL_TABS.indexOf("applist")<0)ALL_TABS.push("applist");if(ALL_TABS.indexOf("bonus")<0)ALL_TABS.push("bonus");if(ALL_TABS.indexOf("winback")<0)ALL_TABS.push("winback");}
+  if(typeof ALL_TABS!=="undefined"){if(ALL_TABS.indexOf("apps")<0)ALL_TABS.push("apps");if(ALL_TABS.indexOf("applist")<0)ALL_TABS.push("applist");if(ALL_TABS.indexOf("bonus")<0)ALL_TABS.push("bonus");}
   try{TAB_TITLES.apps="Taken Rate";TAB_TITLES.applist="Applications";TAB_TITLES.bonus="Bonus Calculator";TAB_TITLES.winback="Win-Back List";}catch(e){}
   var _sw=switchTab;
   switchTab=function(n){_sw(n);var p=$("p-apps"),q=$("p-applist");if((p&&p.classList.contains("active"))||(q&&q.classList.contains("active")))render();var bz=$("p-bonus");if(bz&&bz.classList.contains("active"))bonusCalc();var wbp=$("p-winback");if(wbp&&wbp.classList.contains("active"))bonusCalc("wb");};
@@ -11793,6 +11785,11 @@ try{(function(){
   ".wb-rt{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:0 0 auto}.wb-g{font-weight:900;color:#0a8f83;font-size:15px}",
   ".wb-call{background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-decoration:none;font-weight:800;font-size:12.5px;padding:7px 12px;border-radius:9px;white-space:nowrap}.wb-nop{font-size:11.5px;color:#9aa8bb}",
   "@media(max-width:700px){#p-bonus .wb-goals,#p-winback .wb-goals{grid-template-columns:1fr}.wb-r{flex-direction:column}.wb-rt{align-items:flex-start}}",
+  "#p-bonus .wb{border-top:3px solid #e5864d;padding:14px 16px}#p-bonus .wb .ap-card-h{margin-bottom:8px}#p-bonus .wb h4{font-size:14px}",
+  "#p-bonus .wb-sub{font-size:12px;font-weight:600;color:#6b7c92;margin-left:8px}#p-bonus .wb-sub b{color:#a44a17}#p-bonus .wb-sub b.ok{color:#08776c}",
+  "#p-bonus .wb-tw{max-height:320px}#p-bonus .wb-t{font-size:12.5px}#p-bonus .wb-t td,#p-bonus .wb-t th{padding:6px 10px}",
+  "#p-bonus .wb-t .wb-tag{font-size:9.5px;padding:3px 6px}#p-bonus .wb-whyc{max-width:260px;overflow:hidden;text-overflow:ellipsis;color:#42566e}#p-bonus .wb-t .wb-g{font-weight:900;color:#0a8f83}",
+  "#p-bonus .bz-lnk{color:#16447f;text-decoration:none;font-weight:700}",
    ":is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus,#p-winback) .ap-howto ol{margin:6px 0 0 18px;padding:0;line-height:1.8;color:#33455c}",
   "@media(max-width:1280px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus,#p-winback) .ap-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
   "@media(max-width:1100px){:is(#p-apps,#p-applist,#p-accounts,#p-bizleads,#p-bonus,#p-winback) .ap-two{grid-template-columns:1fr}}",
