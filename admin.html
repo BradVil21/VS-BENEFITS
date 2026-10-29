@@ -10952,7 +10952,9 @@ try{(function(){
     var pend=apps.filter(function(a){return a.payState==="pend"&&!a.hidden;});
     var due=apps.filter(function(a){return /in force/i.test(a.status)&&!a.hidden&&(a.payState==="warn"||(a.payState==="good"&&a.ptd<=soon))&&a.ptd>=td;}).sort(function(a,b){return a.ptd<b.ptd?-1:1;});
     function li(a,cls){return '<div class="ap-pw '+cls+'"><div><b>'+esc(nice(a.name))+'</b><span>'+esc(prodName(a.product))+' · '+a.kind+'</span></div><div class="ap-pw-r"><span class="ap-pay p-'+a.payState+'">'+esc(a.pay)+'</span><em>$'+a.prem.toFixed(2)+'/mo</em>'+ovBtn(a)+'</div></div>';}
-    return '<div class="ap-card"><div class="ap-card-h"><h4>Payments to watch</h4><span class="ap-count">'+bad.length+' need attention</span></div>'
+    var pc=meta().payCheck;
+    var pcHtml=pc?'<div class="ap-pchk">Checked against USHA '+ago(pc.at)+': '+(pc.back.length?'<b class="ok">'+pc.back.length+' back in force</b> ('+pc.back.map(function(x){return esc(nice(x.n))+', paid to '+TR.fmt(x.ptd);}).join("; ")+')':'nobody caught up yet')+(pc.gone.length?' · <b class="bad">'+pc.gone.length+' changed status</b> ('+pc.gone.map(function(x){return esc(nice(x.n))+': '+esc(x.why);}).join("; ")+')':'')+(pc.still.length?' · '+pc.still.length+' still past due':'')+'. Click ⟳ Sync from USHA to check again.</div>':'<div class="ap-pchk">Click ⟳ Sync from USHA: it rechecks everyone below and moves anyone who paid back to in force.</div>';
+    return '<div class="ap-card"><div class="ap-card-h"><h4>Payments to watch</h4><span class="ap-count">'+bad.length+' need attention</span></div>'+pcHtml
       +(bad.length?'<div class="ap-pw-h bad">Missed or past due</div><div class="ap-pwgrid">'+bad.map(function(a){return li(a,"bad");}).join("")+'</div>':'<div class="ap-empty">No missed payments on active policies.</div>')
       +(pend.length?'<div class="ap-pw-h">Pending - checking if they paid</div><div class="ap-pwgrid">'+pend.map(function(a){return li(a,"pend");}).join("")+'</div>':"")
       +(due.length?'<div class="ap-pw-h">Drafting in the next 14 days</div><div class="ap-pwgrid">'+due.slice(0,12).map(function(a){return li(a,"");}).join("")+'</div>':"")
@@ -11630,7 +11632,21 @@ try{(function(){
     if(!Array.isArray(list)||!list.length)throw new Error("No applications found in that file.");
     if(list[0]&&list[0].PolicyNo!==undefined)list=fromApi(list);
     var seen={},clean=[];list.forEach(function(r){if(!r||!r.id||seen[r.id])return;seen[r.id]=1;clean.push({id:String(r.id),name:r.name||"",product:r.product||"",status:r.status||"",mode:r.mode||"",method:r.method||"",prem:+r.prem||0,submit:r.submit||"",eff:r.eff||"",issue:r.issue||"",ptd:r.ptd||"",state:r.state||""});});
-    setArr(K.ushaApps,clean,true);setArr(K.ushaMeta,[{at:Date.now(),n:clean.length,src:src||"USHA Sales Report"}],true);
+    /* recheck everyone who was missed / past due against what USHA shows now */
+    var before={};try{model().apps.forEach(function(a){if(/in force/i.test(a.status)&&a.payState==="bad")before[a.key]={n:a.name,ptd:a.ptd,k:a.kind};});}catch(e){}
+    setArr(K.ushaApps,clean,true);
+    var back=[],still=[],gone=[];try{var after={};model().apps.forEach(function(a){after[a.key]=a;});
+      Object.keys(before).forEach(function(key){var b=before[key],a=after[key];
+        if(!a){gone.push({n:b.n,k:b.k,why:"no longer on the USHA report"});return;}
+        if(/in force/i.test(a.status)&&a.payState!=="bad")back.push({n:a.name,k:a.kind,ptd:a.ptd,was:b.ptd});
+        else if(/in force/i.test(a.status))still.push({n:a.name,k:a.kind,ptd:a.ptd});
+        else gone.push({n:a.name,k:a.kind,why:a.status});});
+      /* clear any old "they paid" / "remove" update on people who are now really back */
+      if(back.length){var bk={};back.forEach(function(x){bk[nkey(x.n)]=1;});var ovs=asArr(K.ushaOv),keep=ovs.filter(function(o){return !(o&&bk[nkey(o.name)]&&(o.s==="paid"||o.s==="pending"));});if(keep.length!==ovs.length)setArr(K.ushaOv,keep,true);}
+    }catch(e){console.warn("pay recheck",e);}
+    var pc=Object.keys(before).length?{at:Date.now(),back:back,still:still,gone:gone}:((meta().payCheck)||null);
+    setArr(K.ushaMeta,[{at:Date.now(),n:clean.length,src:src||"USHA Sales Report",payCheck:pc}],true);
+    if(back.length||gone.length)setTimeout(function(){flash((back.length?"Back in force: "+back.map(function(x){return nice(x.n)+" (paid to "+TR.fmt(x.ptd)+")";}).join(", ")+". ":"")+(gone.length?"Changed status: "+gone.map(function(x){return nice(x.n)+" ("+x.why+")";}).join(", ")+". ":"")+(still.length?still.length+" still past due.":""));},300);
     try{syncActiveClients();}catch(e){console.warn("active clients sync",e);}
     render();return clean.length;
   }
@@ -11997,6 +12013,7 @@ try{(function(){
   ".apf .acm{width:720px}.apf-find{margin-bottom:6px}.apf-find input{border:1px solid #dfe6f0;border-radius:10px;padding:10px 12px;font-size:14px}.apf-res{display:grid;gap:6px;margin:0 0 14px}.apf-hit{display:flex;justify-content:space-between;gap:10px;text-align:left;border:1px solid #e4e9f2;background:#f7f9fc;border-radius:10px;padding:9px 12px;cursor:pointer;font:inherit;color:#0b2346}.apf-hit span{font-size:12px;color:#6b7c92}.apf-hit:hover{border-color:#0db5a6;background:#effaf8}",
   ".acm-f select{border:1px solid #dfe6f0;border-radius:10px;padding:9px 11px;font-size:14px;color:#0b2346;font-family:inherit;background:#fff}.acm-msg.bad{color:#c2410c;font-weight:700}",
   "#p-bonus .bc-log .ap-card-h{flex-wrap:wrap;gap:6px}#p-bonus .bc-logn{font-size:12px;color:#7b8aa0}#p-bonus .bc-logl{display:grid;gap:6px}#p-bonus .bc-li{display:grid;grid-template-columns:56px minmax(0,1.3fr) 64px auto minmax(0,1.6fr);gap:10px;align-items:center;font-size:13px;padding:7px 10px;border-radius:10px;background:#f7f9fc}#p-bonus .bc-li .d{color:#8a99ad;font-size:12px}#p-bonus .bc-li .nm{font-weight:800;color:#0b2346}#p-bonus .bc-li .nm i{font-style:normal;margin-left:4px}#p-bonus .bc-li .mo{font-weight:700;color:#33455c}#p-bonus .bc-li b{font-size:12px;border-radius:999px;padding:2px 8px;white-space:nowrap}#p-bonus .bc-li b.up{background:#e6f8f1;color:#047857}#p-bonus .bc-li b.dn{background:#fde8e8;color:#b42318}#p-bonus .bc-li b.mid{background:#eef4fd;color:#16447f}#p-bonus .bc-li em{font-style:normal;color:#6b7c92;font-size:12px}@media(max-width:700px){#p-bonus .bc-li{grid-template-columns:1fr auto;}#p-bonus .bc-li .d,#p-bonus .bc-li em{grid-column:1/-1}}",
+  ".ap-pchk{font-size:12.5px;color:#42566e;background:#f3f6fb;border-radius:10px;padding:8px 12px;margin:0 0 12px;line-height:1.5}.ap-pchk b.ok{color:#047857}.ap-pchk b.bad{color:#b42318}",
   ".ap-man{display:inline-block;background:#eef4fd;color:#16447f;border-radius:999px;padding:0 7px;font-weight:800;font-size:10.5px}.ap-ghl{color:#08776c;font-weight:800;font-style:normal;font-size:11px}",
   "#p-bizleads:not(.bz-boardview) #biz-list,#p-bizleads:not(.bz-boardview) #bz-top .bz-chips{display:none!important}",
   "#p-bizleads .ac-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:4px 0 14px}",
