@@ -1916,6 +1916,106 @@
       "source": "/meet-the-team.html",
       "destination": "/meet-the-team",
       "permanent": true
+    },
+    {
+      "source": "/group-health-insurance-for-refrigerated-trucking-companies",
+      "destination": "/health-insurance-for-trucking-companies",
+      "permanent": true
+    },
+    {
+      "source": "/group-health-insurance-for-refrigerated-trucking-companies.html",
+      "destination": "/health-insurance-for-trucking-companies",
+      "permanent": true
+    },
+    {
+      "source": "/group-health-insurance-for-heavy-haul-trucking-companies",
+      "destination": "/health-insurance-for-trucking-companies",
+      "permanent": true
+    },
+    {
+      "source": "/group-health-insurance-for-heavy-haul-trucking-companies.html",
+      "destination": "/health-insurance-for-trucking-companies",
+      "permanent": true
+    },
+    {
+      "source": "/group-health-insurance-for-oilfield-trucking-companies",
+      "destination": "/health-insurance-for-trucking-companies",
+      "permanent": true
+    },
+    {
+      "source": "/group-health-insurance-for-oilfield-trucking-companies.html",
+      "destination": "/health-insurance-for-trucking-companies",
+      "permanent": true
+    },
+    {
+      "source": "/group-health-insurance-for-dump-truck-fleets",
+      "destination": "/health-insurance-for-trucking-companies",
+      "permanent": true
+    },
+    {
+      "source": "/group-health-insurance-for-dump-truck-fleets.html",
+      "destination": "/health-insurance-for-trucking-companies",
+      "permanent": true
+    },
+    {
+      "source": "/group-health-insurance-for-delivery-fleets",
+      "destination": "/health-insurance-for-trucking-companies",
+      "permanent": true
+    },
+    {
+      "source": "/group-health-insurance-for-delivery-fleets.html",
+      "destination": "/health-insurance-for-trucking-companies",
+      "permanent": true
+    },
+    {
+      "source": "/group-health-insurance-for-freight-brokers",
+      "destination": "/health-insurance-for-trucking-companies",
+      "permanent": true
+    },
+    {
+      "source": "/group-health-insurance-for-freight-brokers.html",
+      "destination": "/health-insurance-for-trucking-companies",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-atlanta-ga",
+      "destination": "/truck-driver-health-insurance?state=GA",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-atlanta-ga.html",
+      "destination": "/truck-driver-health-insurance?state=GA",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-memphis-tn",
+      "destination": "/truck-driver-health-insurance?state=TN",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-memphis-tn.html",
+      "destination": "/truck-driver-health-insurance?state=TN",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-indianapolis-in",
+      "destination": "/truck-driver-health-insurance?state=IN",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-indianapolis-in.html",
+      "destination": "/truck-driver-health-insurance?state=IN",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-dallas-tx",
+      "destination": "/truck-driver-health-insurance-texas",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-dallas-tx.html",
+      "destination": "/truck-driver-health-insurance-texas",
+      "permanent": true
     }
   ],
   "rewrites": [
@@ -1939,11 +2039,21 @@
   "headers": [
     {
       "source": "/compressed/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
+      ]
     },
     {
       "source": "/images/(.*)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }]
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
+      ]
     },
     {
       "source": "/admin",
