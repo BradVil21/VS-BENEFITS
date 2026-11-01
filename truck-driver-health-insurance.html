@@ -528,7 +528,7 @@ footer a:hover{color:#fff}
 .nav-links .vsa-grid a{padding:7px 12px!important;font-size:.88rem!important;font-weight:600}
 .vcov.vcov-col .vsa-menu{min-width:0}
 .vcov.vcov-col .vsa-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media (min-width:960px) and (max-width:1239px){.nav-links>a[href="/blog"]{display:none!important}}
+@media (min-width:960px) and (max-width:1239px){.nav-links{gap:10px!important}.nav-links>a,.nav-links>button,.nav-links .vcov-btn{font-size:.84rem!important}}
 </style>
 <style id="tds-css">
 .tds-pick{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:14px 0 12px}
@@ -670,6 +670,26 @@ details.faq-more>.faq-item,details.faq-more>details{text-align:left}
 @media(max-width:980px){.trk-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.trk-grid{grid-template-columns:1fr}.trk-hero::before{background:linear-gradient(180deg,rgba(7,22,45,.92),rgba(11,35,70,.88))}.trk-stats{margin-top:-40px}}
 </style>
+<style id="trk-mobile">
+/* Phone layout for the hub hero: less text, form first (2026-11-01) */
+.hero-sub-m{display:none}
+@media(max-width:700px){
+ .trk-hero{padding-top:28px!important;padding-bottom:64px!important}
+ .trk-hero .hero-grid>div:first-child{display:flex;flex-direction:column}
+ .trk-hero .eyebrow,.trk-hero .hero-sub,.trk-hero .vs-quote-link,.trk-hero .hero-meta,.trk-hero .hero-links{display:none!important}
+ .trk-hero h1{font-size:2.05rem;line-height:1.1;margin-bottom:10px}
+ .hero-sub-m{display:block;font-size:1.05rem;line-height:1.5;color:rgba(255,255,255,.9);margin:0 0 4px}
+ .trk-hero .vsz{order:2;margin:14px 0 6px}
+ .trk-hero .vsz-label{margin:12px 0 8px}
+ .trk-hero .hero-ctas{order:3;margin-top:6px}
+ .trk-hero .hero-ctas .btn-primary{display:none}
+ .trk-hero .vs-byline{order:4;font-size:.78rem!important;margin-top:12px!important}
+ .trk-hero .hero-photo{aspect-ratio:16/9}
+ .trk-grid{grid-template-columns:1fr 1fr!important;gap:10px}
+ .trk-stat{flex-direction:column;gap:8px;padding:12px}.trk-ic{width:34px;height:34px}
+ .trk-stat b{font-size:.86rem}.trk-stat span:not(.trk-ic){display:none!important}
+}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment is now open. You have until January 15 to get better coverage. Enroll by Dec 15 for a January 1 start.</a></span><a href="/trucking-health-quote?from=trucker-oe-bar" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div><script src="/vs-oe-bar.js" defer></script>
@@ -704,6 +724,7 @@ details.faq-more>.faq-item,details.faq-more>details{text-align:left}
       <div>
         <span class="eyebrow">Trucking Health Insurance for Drivers &amp; Owner-Operators</span>
         <h1>Health Insurance <span>for Truck Drivers</span></h1>
+        <p class="hero-sub-m">Company plan, Marketplace or a nationwide PPO. We compare all three for your ZIP, free.</p>
         <p class="hero-sub">Truck drivers get health insurance three ways: a group plan through their carrier, a Marketplace plan with tax credits based on net income, or a private PPO whose network crosses state lines. We compare all three for your home ZIP, for company drivers, owner-operators and OTR drivers. Free to use, always.</p>
 <p class="vs-quote-link" style="font-size:.98rem;margin:10px 0 0">Ready for real numbers? Get free <a href="/trucking-health-quote">health insurance quotes for truck drivers</a> from a licensed advisor.</p>
         <div class="hero-ctas">
