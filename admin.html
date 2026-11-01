@@ -5360,11 +5360,11 @@ function czClients(){
   var mount=$("cz-clients");if(!mount)return;
   czEnsure();czBadges();
   if(getLeads().length===0){
-    mount.innerHTML='<h3 class="cz-h">Leads</h3><p class="cz-lede">Your leads and clients.</p><div class="cz-panel cz-empty"><div style="font-size:40px;margin-bottom:6px"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><p class="cz-eh">No clients yet</p><p class="cz-es">Add your first lead, or load sample data to explore.</p><div style="display:flex;gap:8px;justify-content:center"><button class="cz-btn-go" data-cz-add="1">+ Add client</button><button class="cz-btn-soft" data-cz-sample="1">Load sample data</button></div></div>';
+    mount.innerHTML='<h3 class="cz-h">Leads</h3><p class="cz-lede">Your leads and clients.</p><div class="cz-panel cz-empty"><div style="font-size:40px;margin-bottom:6px"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><p class="cz-eh">No clients yet</p><p class="cz-es">Add your first lead, or load sample data to explore.</p><div style="display:flex;gap:8px;justify-content:center"><button class="cz-btn-go" data-cz-add="1">+ Add new lead</button><button class="cz-btn-soft" data-cz-sample="1">Load sample data</button></div></div>';
     czBind(mount);return;
   }
   mount.innerHTML='<h3 class="cz-h">Leads</h3><p class="cz-lede">Your leads and clients.</p>'
-    +'<div class="cz-toolbar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search name, email, phone, zip…" value="'+escapeHtml(czQuery)+'"/></div><select data-cz-sort class="sortsel" aria-label="Sort leads">'+czSortOptions(czSort)+'</select><button class="cz-btn-soft" data-cz-export="1" title="Download these leads as a CSV">&#11015; Download CSV</button><button class="cz-btn-soft" data-cz-import="1" title="Import leads from a CSV file">&#11014; Import CSV</button><button class="cz-btn-go" data-cz-add="1">+ Add client</button></div>'
+    +'<div class="cz-toolbar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search name, email, phone, zip…" value="'+escapeHtml(czQuery)+'"/></div><select data-cz-sort class="sortsel" aria-label="Sort leads">'+czSortOptions(czSort)+'</select><button class="cz-btn-soft" data-cz-export="1" title="Download these leads as a CSV">&#11015; Download CSV</button><button class="cz-btn-soft" data-cz-import="1" title="Import leads from a CSV file">&#11014; Import CSV</button><button class="cz-btn-go" data-cz-add="1">+ Add new lead</button></div>'
     +'<div id="cz-clients-results"></div>';
   var sb=mount.querySelector("[data-cz-search]");if(sb)sb.addEventListener("input",function(){czQuery=sb.value;czClientResults();});
   var so=mount.querySelector("[data-cz-sort]");if(so)so.addEventListener("change",function(){czSort=so.value;czClientResults();});
@@ -5698,7 +5698,7 @@ function czOpenModal(client){
     +'<button type="button" class="cz-resetbtn" id="cz-disp-reset" title="Log contact \u2014 restart 14-day clock">\u21bb Reset</button>'
     +'<button type="button" class="cz-resetbtn" id="cz-disp-remove" style="color:#be123c;border-color:#fecdd3" title="Take this person off the follow-up list">\u2715 Remove</button>'
     +'</div></div>'):'';
-  var html='<h2 style="margin:0 0 4px;font-size:16px;font-weight:600;letter-spacing:-.01em">'+(isNew?"Add client":escapeHtml(czName(c)))+'</h2>'+fuBadge+callBar+dispBlock
+  var html='<h2 style="margin:0 0 4px;font-size:16px;font-weight:600;letter-spacing:-.01em">'+(isNew?"Add new lead":escapeHtml(czName(c)))+'</h2>'+fuBadge+callBar+dispBlock
     +'<div class="cz-fgrid" style="margin-top:16px">'
     +czF("First name","cz_firstName",c.firstName,"Jane")
     +czF("Last name","cz_lastName",c.lastName,"Doe")
@@ -5719,7 +5719,7 @@ function czOpenModal(client){
     +'<div class="cz-err" id="cz-mErr" style="display:none">Add at least a first or last name so you can find this lead later.</div>'
     +(typeof czIpBlock==="function"?czIpBlock(c):"")
     +metaBlock
-    +'<div class="cz-mfoot">'+delBlock+'<button class="cz-btn-ghost" data-close>Cancel</button><button class="cz-btn-go" id="cz-mSave">✓ '+(isNew?"Add client":"Save changes")+'</button></div>';
+    +'<div class="cz-mfoot">'+delBlock+'<button class="cz-btn-ghost" data-close>Cancel</button><button class="cz-btn-go" id="cz-mSave">✓ '+(isNew?"Add new lead":"Save changes")+'</button></div>';
   openModal(html);
   /* Ban / unban from the Submission origin panel. Re-opens the card afterwards
      so the panel repaints into its other state. */
