@@ -56,6 +56,13 @@ h1,h2,h3{font-family:'Poppins',system-ui,sans-serif;line-height:1.18;margin:0;co
 .lp-go{flex:1 1 220px;height:60px;border:0;border-radius:999px;background:var(--red);color:#fff;font:800 1.15rem 'Poppins',sans-serif;letter-spacing:.01em;cursor:pointer;box-shadow:0 4px 0 var(--red-d);display:flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase}
 .lp-go:hover{background:#d61c22}.lp-go:active{transform:translateY(2px);box-shadow:0 2px 0 var(--red-d)}
 .lp-go:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.lp-go-full{flex-basis:100%!important}
+.lp-ph input{letter-spacing:.02em}
+.lp-consent{flex-basis:100%;margin:4px 0 0;color:rgba(255,255,255,.82);font-size:.72rem;line-height:1.45;text-align:center}
+.lp-consent a{color:#fff;text-decoration:underline}
+.lp-oe{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:6px 14px;margin:2px 0 14px;font-weight:700;font-size:.9rem;color:#fff}
+.lp-oe[hidden]{display:none}
+.lp-oe-dot{width:9px;height:9px;border-radius:50%;background:#34d399;box-shadow:0 0 0 3px rgba(52,211,153,.3)}
 .lp-err{flex-basis:100%;margin:2px 0 0;color:#fff;font-weight:700;font-size:.92rem}
 .lp-err:empty{display:none}
 .lp-seg{display:inline-flex;background:rgba(255,255,255,.18);border-radius:999px;padding:4px;gap:4px;margin:0 auto 14px;flex-wrap:wrap;justify-content:center}
@@ -251,11 +258,14 @@ h1,h2,h3{font-family:'Poppins',system-ui,sans-serif;line-height:1.18;margin:0;co
   <div class="lp-panel">
     <h1 id="lp-h1">Health Insurance Quotes for Truck Drivers</h1>
     <p>For owner-operators, company drivers and trucking companies. Compare plans that work on the road.</p>
+    <p class="lp-oe" id="lp-oe" hidden><span class="lp-oe-dot"></span><span id="lp-oe-t">Open Enrollment is open · enroll by Dec 15 for Jan 1</span></p>
     <div class="lp-seg" role="group" aria-label="Who is this for"><button type="button" data-type-pick="individual" aria-pressed="true">I’m a driver / owner-operator</button><button type="button" data-type-pick="business" aria-pressed="false">I own a trucking company</button></div>
     <form class="lp-form" id="lp-form" novalidate>
       <label class="lp-zip" for="lp-zip-in"><span class="sr-only">ZIP code</span><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M24 4a10 10 0 0 0-10 10c0 7.5 10 18 10 18s10-10.5 10-18A10 10 0 0 0 24 4z"/><circle cx="24" cy="14" r="3.5"/><rect x="6" y="34" width="36" height="10" rx="2"/><path d="M11 39h14"/></svg><input id="lp-zip-in" name="zip" inputmode="numeric" autocomplete="postal-code" maxlength="5" placeholder="Enter ZIP" /></label>
-      <button class="lp-go" type="submit">Get quotes now <span aria-hidden="true">&rsaquo;</span></button>
+      <label class="lp-zip lp-ph" for="lp-ph-in"><span class="sr-only">Mobile number</span><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="4" width="20" height="40" rx="4"/><path d="M21 38h6"/></svg><input id="lp-ph-in" name="phone" type="tel" inputmode="tel" autocomplete="tel-national" maxlength="14" placeholder="Mobile number" /></label>
+      <button class="lp-go lp-go-full" type="submit">Get my free quotes <span aria-hidden="true">&rsaquo;</span></button>
       <p class="lp-err" id="lp-err" role="alert"></p>
+      <p class="lp-consent">We text your options so you can compare from the cab. By tapping the button you agree that VS BENEFITS LLC (d/b/a VS Health Benefits) may call or text you at this number about health coverage, including by automated technology. Consent is not a condition of purchase. Msg &amp; data rates may apply; reply STOP to opt out. <a href="/privacy#sms">Privacy</a></p>
     </form>
     <a class="lp-alt" href="tel:+19548251009">Prefer to talk? Call (954) 825-1009</a>
   </div>
@@ -363,13 +373,39 @@ h1,h2,h3{font-family:'Poppins',system-ui,sans-serif;line-height:1.18;margin:0;co
   var f = document.getElementById('lp-form'), zi = document.getElementById('lp-zip-in'), er = document.getElementById('lp-err');
   try{ var z0 = (new URLSearchParams(location.search).get('zip')||'').replace(/\D/g,'').slice(0,5); if(z0.length===5) zi.value = z0; }catch(e){}
   zi.addEventListener('input', function(){ zi.value = zi.value.replace(/\D/g,'').slice(0,5); er.textContent=''; });
+  var pi = document.getElementById('lp-ph-in');
+  function phDigits(){ var d=(pi.value||'').replace(/\D/g,''); if(d.length===11&&d.charAt(0)==='1') d=d.slice(1); return d; }
+  function okPhone(d){ return /^\d{10}$/.test(d) && !/^[01]/.test(d.slice(0,3)) && !/^[01]/.test(d.slice(3,6)) && !/^(\d)\1{9}$/.test(d); }
+  pi.addEventListener('input', function(){ var d=phDigits().slice(0,10); pi.value = d.length>6 ? '('+d.slice(0,3)+') '+d.slice(3,6)+'-'+d.slice(6) : d.length>3 ? '('+d.slice(0,3)+') '+d.slice(3) : d; er.textContent=''; });
+  try{ var p0=(new URLSearchParams(location.search).get('phone')||''); if(p0){ pi.value=p0; pi.dispatchEvent(new Event('input')); } }catch(e){}
   f.addEventListener('submit', function(e){
     e.preventDefault();
-    var z = zi.value.trim();
+    var z = zi.value.trim(), d = phDigits();
     if(!/^\d{5}$/.test(z)){ er.textContent = 'Please enter a 5-digit ZIP code.'; zi.focus(); return; }
-    try{ if(window.gtag) gtag('event','lp_zip_submit',{ niche: BASE.niche, lead_type: choice }); }catch(e){}
-    location.href = target(z);
+    if(!okPhone(d)){ er.textContent = 'Please enter a valid 10-digit mobile number so we can text your quotes.'; pi.focus(); return; }
+    // The lead exists the moment we have a ZIP and a phone: capture it (card + CRM contact), so a driver who
+    // closes the tab on the next screen is still someone Bradley can call. Same endpoint the funnel autosaves to.
+    try{
+      var attr = (window.vsAttribution && window.vsAttribution()) || null;
+      fetch('/api/lead-draft',{method:'POST',headers:{'Content-Type':'application/json'},keepalive:true,
+        body:JSON.stringify({ type: choice, phone: d, zip: z, step: 'landing page', source: 'Trucker quote page' + (attr && attr.source ? ' - ' + attr.source : ''),
+          tags: ['trucker','lp-capture'], notes: (choice==='business'?'Trucking company':'Driver / owner-operator') + ', from /trucking-health-quote', attribution: attr })}).catch(function(){});
+    }catch(err){}
+    // Google Ads "Quote Form Lead". transaction_id = the phone, so set the conversion action to Count: One in
+    // Google Ads and the funnel's own lead event for the same person is not counted twice.
+    try{
+      if(window.gtag){
+        gtag('event','lp_lead_capture',{ niche: BASE.niche, lead_type: choice });
+        var A = window.VS_ADS; if(A && A.labels && A.labels.lead) gtag('event','conversion',{ send_to: A.id + '/' + A.labels.lead, value: 0, currency: 'USD', transaction_id: 'ph' + d });
+      }
+    }catch(err){}
+    var url = target(z); url += (url.indexOf('?')<0?'?':'&') + 'phone=' + d;
+    setTimeout(function(){ location.href = url; }, 250);
   });
+  // Open Enrollment line: on Nov 1 - Dec 15 "pick by Dec 15", Dec 16 - Jan 15 "closes Jan 15", hidden after.
+  (function(){ var el=document.getElementById('lp-oe'), t=document.getElementById('lp-oe-t'); if(!el) return; var n=Date.now();
+    var O=new Date('2026-11-01T00:00:00-04:00').getTime(), D=new Date('2026-12-15T23:59:59-05:00').getTime(), E=new Date('2027-01-15T23:59:59-05:00').getTime();
+    if(n<O||n>E) return; if(n>D) t.textContent='Last chance · Open Enrollment closes Jan 15'; el.hidden=false; })();
   document.querySelectorAll('[data-lp-quote]').forEach(function(a){
     a.addEventListener('click', function(e){ e.preventDefault(); location.href = target(zi.value.trim().length===5 ? zi.value.trim() : '', a.getAttribute('data-type')); });
   });
