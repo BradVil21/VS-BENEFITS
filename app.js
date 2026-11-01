@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
   /* ---------- ACA Open Enrollment countdown ---------- */
   // 2026-27 Open Enrollment Period (federal marketplace): Nov 1, 2026 - Jan 15, 2027.
   // Update these anchors annually.
-  var START = new Date("2026-11-01T00:00:00-05:00").getTime();
+  var START = new Date("2026-11-01T00:00:00-04:00").getTime();
   var END   = new Date("2027-01-15T23:59:59-05:00").getTime();
 
   var elDays = document.getElementById("cd-days");
@@ -83,9 +83,9 @@ document.addEventListener("DOMContentLoaded", function () {
       if (elWrap) elWrap.classList.remove("closed");
     } else if (now <= END) {
       paint(END,
-            "Time left to enroll in 2027 ACA coverage",
-            "Open Enrollment closes Jan 15, 2027. After that you will need a Special Enrollment event to switch plans.");
-      if (elWrap) elWrap.classList.add("closed");
+            "Open Enrollment is now open. Time left to enroll:",
+            "You have until January 15, 2027 to get better coverage. Enroll by Dec 15 for coverage that starts January 1.");
+      if (elWrap) elWrap.classList.remove("closed");
     } else {
       paint(Date.now(),
             "Open Enrollment is closed for 2027",

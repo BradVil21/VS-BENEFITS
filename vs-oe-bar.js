@@ -8,7 +8,7 @@
                 business (small business, group, fleet pages) -> /small-business-renewal-review
                 everyone else                                 -> /quote
      phase      pre      before Nov 1 2026: 2027 rates are up, check early
-                oe       Nov 1 - Dec 15: countdown to the Jan 1 deadline
+                oe       Nov 1 - Dec 15: OE is open, enroll by Jan 15 (Dec 15 for Jan 1)
                 late     Dec 16 - Jan 15: last chance, Feb 1 start
                 after    after Jan 15: special enrollment checker
 
@@ -46,7 +46,7 @@
       pre: { trucker: ["Las primas de 2027 suben. La inscripción abierta empieza el 1 de noviembre; vea su precio antes.", "Cotizar gratis"],
              business: ["¿Su renovación de plan grupal 2027 subió? Le hacemos una revisión gratis antes de firmar.", "Revisar mi renovación"],
              general: ["Las primas de 2027 suben. La inscripción abierta empieza el 1 de noviembre.", "Cotizar gratis"] },
-      oe:  { any: ["Quedan " + dLeft + (dLeft === 1 ? " día" : " días") + " para inscribirse con cobertura desde el 1 de enero (fecha límite: 15 de dic).", "Cotizar ahora"] },
+      oe:  { any: ["La inscripción abierta ya comenzó. Tiene hasta el 15 de enero para conseguir una mejor cobertura (inscríbase antes del 15 de dic. para el 1 de enero).", "Cotizar ahora"] },
       late:{ any: ["Última oportunidad: la inscripción abierta cierra el 15 de enero. Cobertura desde el 1 de febrero.", "Cotizar ahora"] },
       after:{ any: ["¿Se le pasó la inscripción abierta? Vea si califica para un período especial.", "Verificar"] }
     };
@@ -55,8 +55,8 @@
       pre: { trucker: ["2027 premiums are going up. Open enrollment starts Nov 1. See your new price before it hits.", "Check my 2027 rate"],
              business: ["2027 group renewals are up 8–15%+. Get a free renewal review before you sign.", "Review my renewal"],
              general: ["2027 premiums are going up. Open enrollment starts Nov 1. See your new price early.", "Get a Free Quote"] },
-      oe:  { trucker: [dLeft + (dLeft === 1 ? " day" : " days") + " left to lock in January 1 coverage. Drivers: quote from the cab in 60 seconds.", "Get my quote"],
-             general: [dLeft + (dLeft === 1 ? " day" : " days") + " left to enroll for January 1 coverage (deadline Dec 15).", "Get a Free Quote"] },
+      oe:  { trucker: ["Open Enrollment is now open, drivers. You have until January 15 to get better coverage. Quote from the cab in 60 seconds.", "Get my quote"],
+             general: ["Open Enrollment is now open. You have until January 15 to get better coverage. Enroll by Dec 15 for a January 1 start.", "Get a Free Quote"] },
       late:{ trucker: ["Last chance: open enrollment closes Jan 15 (" + dClose + (dClose === 1 ? " day" : " days") + " left). Coverage starts Feb 1.", "Get my quote"],
              general: ["Last chance: open enrollment closes Jan 15 (" + dClose + (dClose === 1 ? " day" : " days") + " left). Coverage starts Feb 1.", "Get a Free Quote"] },
       after:{ trucker: ["Missed open enrollment? A job change, move or lost coverage may still let you enroll.", "Check if I qualify"],
