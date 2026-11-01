@@ -398,6 +398,28 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         </div>
         <span class="calc-chip"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Free &amp; no obligation</span>
       </div>
+      <div class="calc-oe" id="calc-oe" hidden>
+        <div class="calc-oe-t"><span class="calc-oe-dot"></span><span id="calc-oe-title">Open Enrollment is open. Time left to enroll:</span></div>
+        <div class="calc-oe-cd" aria-live="off"><span><b id="coe-d">0</b>days</span><span><b id="coe-h">0</b>hrs</span><span><b id="coe-m">0</b>min</span><span><b id="coe-s">0</b>sec</span></div>
+        <div class="calc-oe-n" id="calc-oe-note">You have until January 15 to get better coverage. Pick a plan by Dec 15 for a January 1 start.</div>
+      </div>
+<style>.calc-oe{background:linear-gradient(135deg,#0b2346,#16447f 60%,#0f6f86);color:#fff;padding:14px 18px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 18px}
+.calc-oe[hidden]{display:none}.calc-oe-t{font-weight:700;font-size:.95rem;display:flex;align-items:center;gap:8px}
+.calc-oe-dot{width:9px;height:9px;border-radius:50%;background:#34d399;box-shadow:0 0 0 0 rgba(52,211,153,.7);animation:coePulse 1.6s infinite}
+@keyframes coePulse{70%{box-shadow:0 0 0 8px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+.calc-oe-cd{display:flex;gap:6px}.calc-oe-cd span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:9px;padding:5px 9px;text-align:center;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:#c9d9ee;min-width:52px}
+.calc-oe-cd b{display:block;font-family:Poppins,sans-serif;font-size:1.15rem;color:#fff;letter-spacing:0;line-height:1.2}
+.calc-oe-n{flex-basis:100%;font-size:.84rem;color:#d6e3f5}
+.calc-oe.urgent{background:linear-gradient(135deg,#b42318,#16447f)}
+@media(max-width:560px){.calc-oe{justify-content:center;text-align:center}.calc-oe-t{justify-content:center;flex-basis:100%}}</style>
+<script>(function(){var el=document.getElementById("calc-oe");if(!el)return;
+var OPEN=new Date("2026-11-01T00:00:00-04:00").getTime(),DEC15=new Date("2026-12-15T23:59:59-05:00").getTime(),END=new Date("2027-01-15T23:59:59-05:00").getTime();
+var D=document.getElementById("coe-d"),H=document.getElementById("coe-h"),M=document.getElementById("coe-m"),S=document.getElementById("coe-s"),T=document.getElementById("calc-oe-title"),N=document.getElementById("calc-oe-note");
+function tick(){var now=Date.now();if(now<OPEN||now>END){el.hidden=true;return;}el.hidden=false;var x=END-now;
+D.textContent=Math.floor(x/864e5);H.textContent=Math.floor(x%864e5/36e5);M.textContent=Math.floor(x%36e5/6e4);S.textContent=Math.floor(x%6e4/1e3);
+if(now>DEC15){T.textContent="Last chance: Open Enrollment closes January 15.";N.textContent="Plans picked now start February 1. After January 15 you need a qualifying life event to enroll.";el.classList.add("urgent");}
+else if(DEC15-now<7*864e5){N.textContent="Only days left to pick a plan for a January 1 start (deadline Dec 15). Open Enrollment closes January 15.";el.classList.add("urgent");}}
+tick();setInterval(tick,1000);})();</script>
       <div class="calc-body">
         <div class="cs-progress" id="cs-progress">
           <div class="cs-bar"><span id="cs-fill"></span></div>
