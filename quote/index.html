@@ -834,6 +834,25 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 .q-back-btn{background:none;border:0;color:#6b7580;font:500 .95rem 'Roboto',system-ui,sans-serif;cursor:pointer;padding:8px 12px}
 .q-back-btn:hover{color:var(--qb-ink);text-decoration:underline}
 </style>
+<style id="trk-quote-css">
+.trk-only,.sit-trk{display:none}
+html.trk .trk-only{display:block}
+html.trk .sit-item.sit-trk{display:flex}
+html.trk .trk-hide{display:none!important}
+.trk-hint{margin-top:-6px;font-size:.92rem;background:#fff8ec;border:1px solid #f5d9a8;border-radius:10px;padding:8px 12px;color:#5b4a2a;max-width:560px;margin-left:auto;margin-right:auto}
+.trk-pref{margin:14px auto 0;max-width:420px;text-align:center}
+.trk-pref-l{display:block;font-size:.88rem;color:#5a6b80;margin-bottom:8px}
+.trk-pref-b{display:flex;gap:8px;justify-content:center}
+.trk-pref-b button{flex:1;min-height:42px;border:1.5px solid #cfd9e6;background:#fff;border-radius:999px;font-weight:700;font-size:.92rem;color:#16447f;cursor:pointer}
+.trk-pref-b button[aria-pressed="true"]{background:#16447f;border-color:#16447f;color:#fff}
+.trk-next{margin:22px 0 6px;padding:18px;border-radius:14px;background:#0a0a0a;color:#fff;text-align:center}
+.trk-next .trk-next-h{font-weight:800;font-size:1.05rem;margin:0 0 12px;color:#fff!important;opacity:1}
+.trk-next-b{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.trk-next-b a{flex:1 1 200px;display:inline-flex;align-items:center;justify-content:center;min-height:50px;border-radius:999px;font-weight:800;text-decoration:none}
+.trk-book{background:#1f6fe5;color:#fff}.trk-call{border:2px solid rgba(255,255,255,.75);color:#fff}
+.trk-next .trk-dp{margin:12px 0 0;font-size:.85rem;color:rgba(255,255,255,.8)!important}.trk-dp a{color:#7cc4ff}
+</style>
+<script>(function(){document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".trk-pref-b button");if(!b)return;b.parentNode.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});window.__vsContactPref=b.getAttribute("data-pref")==="either"?"":b.getAttribute("data-pref");});})();</script>
 </head>
 <body>
 
@@ -994,6 +1013,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
     <div class="qscreen">
       <h2>What is your household income?</h2>
       <p class="q-sub">Most people qualify for savings. Income decides how much.</p>
+      <p class="q-sub trk-only trk-hint"><strong>Owner-operators:</strong> use net profit after truck expenses, not gross. That is what your tax credit is based on.</p>
       <div class="income-grid" id="ind-income"><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'Under $20,000')">Under $20,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$20,000 - $35,000')">$20,000 - $35,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$35,000 - $50,000')">$35,000 - $50,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$50,000 - $75,000')">$50,000 - $75,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$75,000 - $100,000')">$75,000 - $100,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$100,000 - $150,000')">$100,000 - $150,000</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'$150,000+')">$150,000+</div><div class="income-item" role="button" tabindex="0" onclick="selectIncome(this,'Prefer not to say')">Prefer not to say</div></div>
       <button type="button" class="qbtn-alt" onclick="indNext(2)">Skip this question</button>
       <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
@@ -1005,12 +1025,37 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <h2>What's bringing you here today?</h2>
       <p class="q-sub">Select all that apply.</p>
       <div class="situations-grid" id="ind-situations">
+        <label class="sit-item sit-trk" onclick="toggleSit(this)">
+          <input type="checkbox" value="owner_operator_1099">
+          <span class="sit-check"></span>
+          <span class="sit-text">I&rsquo;m an owner-operator or 1099 driver</span>
+        </label>
+        <label class="sit-item sit-trk" onclick="toggleSit(this)">
+          <input type="checkbox" value="carrier_no_benefits">
+          <span class="sit-check"></span>
+          <span class="sit-text">My carrier doesn&rsquo;t offer health benefits</span>
+        </label>
+        <label class="sit-item sit-trk" onclick="toggleSit(this)">
+          <input type="checkbox" value="switching_carriers_wait">
+          <span class="sit-check"></span>
+          <span class="sit-text">I&rsquo;m switching carriers or in a waiting period</span>
+        </label>
+        <label class="sit-item sit-trk" onclick="toggleSit(this)">
+          <input type="checkbox" value="premium_up_2027">
+          <span class="sit-check"></span>
+          <span class="sit-text">My premium went up for 2027</span>
+        </label>
+        <label class="sit-item sit-trk" onclick="toggleSit(this)">
+          <input type="checkbox" value="dot_physical_flag">
+          <span class="sit-check"></span>
+          <span class="sit-text">My DOT physical flagged a condition</span>
+        </label>
         <label class="sit-item" onclick="toggleSit(this)">
           <input type="checkbox" value="lost_job_coverage">
           <span class="sit-check"></span>
           <span class="sit-text">I recently lost coverage through a job</span>
         </label>
-        <label class="sit-item" onclick="toggleSit(this)">
+        <label class="sit-item trk-hide" onclick="toggleSit(this)">
           <input type="checkbox" value="self_employed">
           <span class="sit-check"></span>
           <span class="sit-text">I am self-employed or a freelancer</span>
@@ -1030,27 +1075,27 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
           <span class="sit-check"></span>
           <span class="sit-text">My current plan's premium is too expensive</span>
         </label>
-        <label class="sit-item" onclick="toggleSit(this)">
+        <label class="sit-item trk-hide" onclick="toggleSit(this)">
           <input type="checkbox" value="new_family">
           <span class="sit-check"></span>
           <span class="sit-text">I had a new baby or added a dependent</span>
         </label>
-        <label class="sit-item" onclick="toggleSit(this)">
+        <label class="sit-item trk-hide" onclick="toggleSit(this)">
           <input type="checkbox" value="moved">
           <span class="sit-check"></span>
           <span class="sit-text">I recently moved to a new state or area</span>
         </label>
-        <label class="sit-item" onclick="toggleSit(this)">
+        <label class="sit-item trk-hide" onclick="toggleSit(this)">
           <input type="checkbox" value="spouse_coverage">
           <span class="sit-check"></span>
           <span class="sit-text">I lost coverage through a spouse or partner</span>
         </label>
-        <label class="sit-item" onclick="toggleSit(this)">
+        <label class="sit-item trk-hide" onclick="toggleSit(this)">
           <input type="checkbox" value="turned_26">
           <span class="sit-check"></span>
           <span class="sit-text">I turned 26 and aged off a parent's plan</span>
         </label>
-        <label class="sit-item" onclick="toggleSit(this)">
+        <label class="sit-item trk-hide" onclick="toggleSit(this)">
           <input type="checkbox" value="medicare_bridge">
           <span class="sit-check"></span>
           <span class="sit-text">I need coverage until I qualify for Medicare</span>
@@ -1075,7 +1120,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
     <div class="qscreen">
       <h2>What is your address?</h2>
       <div class="q-fields">
-      <div class="field" id="f-ind-address">
+      <div class="field trk-hide" id="f-ind-address">
         <label>Street address</label>
         <input type="text" id="ind-address" placeholder="Street address" autocomplete="street-address" />
         <div class="err-msg">Please enter the street address.</div>
@@ -1118,11 +1163,15 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <input type="tel" id="ind-phone" placeholder="(305) 555-0100" autocomplete="tel" inputmode="tel" />
         <div class="err-msg">Please enter a valid phone number.</div>
       </div>
+      <div class="trk-only trk-pref" role="group" aria-label="How should we reach you?">
+        <span class="trk-pref-l">Driving? Tell us how to reach you:</span>
+        <div class="trk-pref-b"><button type="button" data-pref="text">Text me</button><button type="button" data-pref="call">Call me</button><button type="button" data-pref="either" aria-pressed="true">Either</button></div>
+      </div>
       </div>
       <button type="button" class="qbtn q-continue" onclick="indNext(5)">Continue</button>
       <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your advisor will call or text you. We never sell your information.</div>
     </div>
-    <div class="q-back"><button type="button" class="q-back-btn" onclick="indNav(4)">&lsaquo; Back</button></div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="indNav(window.__vsTrkSkip?3:4)">&lsaquo; Back</button></div>
   </div>
   <div class="panel" id="panel-ind-6">
     <div class="qscreen">
@@ -1457,7 +1506,12 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
           <p><strong>Compare and choose.</strong> Review your options side by side with no pressure and no cost.</p>
         </div>
       </div>
-      <a href="/" class="success-cta">
+      <div class="trk-only trk-next">
+        <p class="trk-next-h">Skip the wait: pick a time that works from the road</p>
+        <div class="trk-next-b"><a class="trk-book" href="/book?from=trucker-quote">Book my free 10-min call &rarr;</a><a class="trk-call" href="tel:+19548251009">Call now: (954) 825-1009</a></div>
+        <p class="trk-dp">While you wait: our partner <a href="/blog/droppay-instant-freight-factoring">DropPay</a> gets you paid minutes after you drop your load.</p>
+      </div>
+      <a href="/" class="success-cta trk-hide">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         Return to VS Health Benefits
       </a>
@@ -1605,6 +1659,10 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   var bizStep = 0;            // 1-5
   var selectedIncome = null;
   var dental = false;         // true when the visitor only wants dental & vision
+  // Trucker flow (?niche=trucking from the trucking pages): no street address, trucker reasons, text-or-call (2026-11-01)
+  var TRK = /^(trucking|trucker)$/i.test(new URLSearchParams(location.search).get('niche')||'');
+  window.__vsTrk = TRK; if(TRK) document.documentElement.classList.add('trk');
+  window.__vsTrkSkip = TRK && /^\d{5}$/.test((new URLSearchParams(location.search).get('zip')||'').trim());
 
   // IND: 5 steps total, BIZ: 5 steps total
   var IND_STEPS = 6;
@@ -1613,6 +1671,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   // ---- PROGRESS ----
   function updateProgress(step, total){
     // Starts at 20% on the first question so the bar never looks empty.
+    if(TRK && total === IND_STEPS && window.__vsTrkSkip){ total = total - 1; if(step > 4) step = step - 1; }
     var pct = step ? Math.round(20 + 75 * (step / total)) : 20;
     document.getElementById('progressFill').style.width = pct + '%';
     document.getElementById('progressPct').textContent = pct + '%';
@@ -1862,17 +1921,22 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       var dobOk = isValidDate(v('ind-dob')); setErr('f-ind-dob', !dobOk); if(!dobOk) return;
       indNav(dental ? 4 : 2);   // dental & vision skips income + situation
     } else if(fromStep === 2){ indNav(3);            // income is optional
-    } else if(fromStep === 3){ indNav(4);            // situation is optional
+    } else if(fromStep === 3){                        // situation is optional
+      window.__vsTrkSkip = !!(TRK && isValidZip(v('ind-zip')) && v('ind-state'));
+      indNav(window.__vsTrkSkip ? 5 : 4);              // truckers: ZIP + state already known, skip the address screen
     } else if(fromStep === 4){
       var a=v('ind-address'), z=v('ind-zip'), st=v('ind-state');
-      setErr('f-ind-address', !a); setErr('f-ind-zip', !isValidZip(z)); setErr('f-ind-state', !st);
-      if(!a || !isValidZip(z) || !st) return;
+      var aOk = TRK || !!a;
+      setErr('f-ind-address', !aOk); setErr('f-ind-zip', !isValidZip(z)); setErr('f-ind-state', !st);
+      if(!aOk || !isValidZip(z) || !st) return;
       indNav(5);
     } else if(fromStep === 5){
       var ph=v('ind-phone'); setErr('f-ind-phone', !isValidPhone(ph)); if(!isValidPhone(ph)) return;
       // ZIP and phone are in hand and name/email are one screen away:
       // save the partial lead now so an abandoned quote is still a lead.
       try{ if(window.vsCaptureDraft) window.vsCaptureDraft('individual', 5); }catch(e){}
+      // Trucker ads: count the lead once the driver leaves a number (Quote Form Lead counts One per click).
+      if(TRK && !window.__vsTrkConv){ window.__vsTrkConv = 1; try{ if(window.vsTrack) window.vsTrack('trucker_quote_partial',{ lead_type:'trucker' }); }catch(e){} }
       indNav(6);
     }
   };
@@ -1937,6 +2001,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   function collectInd(){
     var sits = [];
     document.querySelectorAll('#ind-situations input:checked').forEach(function(cb){ sits.push(cb.value); });
+    if(window.__vsContactPref) sits.push('prefers_' + window.__vsContactPref);
     return {
       type: 'individual',
       firstName: document.getElementById('ind-firstname').value.trim(),
