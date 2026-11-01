@@ -8753,6 +8753,123 @@ try{(function(){
   }
   window.__od2Dash=od2Dash;
 
+  /* ═══ dash-upgrade v1 (2026-11-01) ═══════════════════════════════════════
+     Visual refresh of the dashboard, layered on top of od/od2 output:
+     a "today" summary strip, icon + status pill on every KPI tile, and a
+     Money list with initials avatars, coloured priority edges, formatted
+     phone numbers and a phone icon on Call. Pure decoration: the numbers,
+     links and handlers come from od/od2 untouched. try/catch'd. */
+  (function(){
+   try{
+    var st=document.createElement("style");
+    st.textContent=[
+     /* KPI tiles */
+     ".od-tiles{gap:14px!important}",
+     ".od-tile{position:relative;border-radius:18px!important;padding:16px 16px 14px!important;border:1px solid #e2e9f4!important;box-shadow:0 1px 2px rgba(11,35,70,.04),0 8px 24px -14px rgba(11,35,70,.25)!important;transition:transform .15s,box-shadow .15s,border-color .15s;overflow:hidden}",
+     ".od-tile::before{content:'';position:absolute;left:0;top:0;right:0;height:3px;background:linear-gradient(90deg,#16447f,#0db5a6)}",
+     ".od-tile.warn::before{background:linear-gradient(90deg,#f97316,#dc2626)}.od-tile.good::before{background:linear-gradient(90deg,#10b981,#0db5a6)}",
+     ".od-tile.click:hover{transform:translateY(-2px);box-shadow:0 2px 4px rgba(11,35,70,.06),0 16px 32px -16px rgba(11,35,70,.35)!important;border-color:#b9cce6!important}",
+     ".dx-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}",
+     ".dx-ic{width:34px;height:34px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e8f0fb,#e6f8f5);color:#16447f;flex-shrink:0}",
+     ".od-tile.warn .dx-ic{background:linear-gradient(135deg,#fff1e6,#fde4e2);color:#c2410c}.od-tile.good .dx-ic{background:linear-gradient(135deg,#dcfce7,#d6f5f1);color:#047857}",
+     ".dx-pill{font-size:10.5px;font-weight:800;border-radius:999px;padding:3px 9px;white-space:nowrap;letter-spacing:.02em}",
+     ".dx-pill.ok{background:#dcfce7;color:#047857}.dx-pill.mid{background:#e8f0fb;color:#1d5fb8}.dx-pill.low{background:#fff1e6;color:#c2410c}",
+     ".od-tile .v{font-size:30px!important}",
+     ".od-tile .bar{height:7px!important}",
+     /* today strip */
+     ".dx-today{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;background:linear-gradient(120deg,#0b2346 0%,#16447f 58%,#0f6f86 100%);color:#fff;border-radius:18px;padding:16px 20px;margin:4px 0 18px;box-shadow:0 14px 30px -18px rgba(11,35,70,.6)}",
+     ".dx-today .dx-hi{flex:1 1 260px;min-width:0}.dx-today .dx-hi b{display:block;font-size:18px;font-weight:800;letter-spacing:-.01em}",
+     ".dx-today .dx-hi span{font-size:12.5px;color:#c9d9ee}",
+     ".dx-today .dx-chips{display:flex;flex-wrap:wrap;gap:8px}",
+     ".dx-today button{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);color:#fff;border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit}",
+     ".dx-today button:hover{background:rgba(255,255,255,.18)}.dx-today button b{font-size:14px}",
+     ".dx-today button.hot{background:#dc2626;border-color:#dc2626}",
+     /* money list */
+     "#od2-money{border-radius:18px!important;padding:18px 20px!important;box-shadow:0 1px 2px rgba(11,35,70,.04),0 10px 28px -16px rgba(11,35,70,.28)!important}",
+     "#od2-money .od2-h{font-size:19px!important}",
+     "#od2-money .od2-row{position:relative;border-top:0!important;background:#f8fafd;border:1px solid #edf1f7;border-radius:14px;padding:10px 12px 10px 14px!important;margin-top:8px;transition:background .15s,border-color .15s}",
+     "#od2-money .od2-row:hover{background:#fff;border-color:#d6e1f0}",
+     "#od2-money .od2-row::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:4px;border-radius:0 4px 4px 0;background:#2f7de0}",
+     "#od2-money .od2-row.dx-appt::before{background:#10b981}#od2-money .od2-row.dx-cold::before{background:#f97316}",
+     ".dx-av{width:38px;height:38px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0;background:linear-gradient(135deg,#2f7de0,#16447f)}",
+     ".od2-row.dx-appt .dx-av{background:linear-gradient(135deg,#10b981,#0d8f84)}.od2-row.dx-cold .dx-av{background:linear-gradient(135deg,#fb923c,#dc2626)}",
+     "#od2-money .od2-call{padding:8px 15px!important;box-shadow:0 6px 14px -8px rgba(22,68,127,.8)}",
+     "#od2-money .od2-call svg{margin-right:2px}",
+     "@media(max-width:640px){.dx-today{padding:14px 16px}.dx-av{width:32px;height:32px;font-size:12px}.od-tile .v{font-size:26px!important}}",
+     /* dark */
+     "html.dark .od-tile{border-color:#253a54!important;box-shadow:none!important}html.dark .dx-ic{background:#24395a;color:#9cc3ff}",
+     "html.dark #od2-money .od2-row{background:#1c2d42;border-color:#253a54}html.dark #od2-money .od2-row:hover{background:#22364f}"
+    ].join("");
+    document.head.appendChild(st);
+
+    function I(p){return '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';}
+    var IC={
+      sales:I('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>'),
+      close:I('<path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/>'),
+      newl:I('<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/>'),
+      overdue:I('<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M5 3L2 6M22 6l-3-3"/>'),
+      clients:I('<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>'),
+      tag:I('<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><circle cx="7" cy="7" r="1.5"/>'),
+      phone:'<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>'
+    };
+    function pickIcon(k){k=k.toLowerCase();if(/sales from/.test(k))return IC.sales;if(/close rate/.test(k))return IC.close;if(/new own/.test(k))return IC.newl;if(/overdue/.test(k))return IC.overdue;if(/no source/.test(k))return IC.tag;return IC.clients;}
+    function fmtPh(t){var d=String(t||"").replace(/\D/g,"");if(d.length===11&&d[0]==="1")d=d.slice(1);return d.length===10?"("+d.slice(0,3)+") "+d.slice(3,6)+"-"+d.slice(6):t;}
+    function initials(n){var p=String(n||"").trim().split(/\s+/).filter(Boolean);return ((p[0]||"?")[0]+(p.length>1?p[p.length-1][0]:"")).toUpperCase();}
+
+    function tiles(w){
+      w.querySelectorAll(".od-tile").forEach(function(t){
+        if(t.querySelector(".dx-top"))return;
+        var k=t.querySelector(".k");if(!k)return;
+        var top=document.createElement("div");top.className="dx-top";
+        top.innerHTML='<span class="dx-ic">'+pickIcon(k.textContent)+'</span>';
+        var bar=t.querySelector(".bar span");
+        if(bar){var pct=parseFloat(bar.style.width)||0;var pill=document.createElement("span");
+          pill.className="dx-pill "+(pct>=100?"ok":pct>=50?"mid":"low");pill.textContent=pct>=100?"Goal hit":pct>=50?"On pace":"Behind";top.appendChild(pill);}
+        else if(t.classList.contains("warn")){var p2=document.createElement("span");p2.className="dx-pill low";p2.textContent="Act now";top.appendChild(p2);}
+        else if(t.classList.contains("good")){var p3=document.createElement("span");p3.className="dx-pill ok";p3.textContent="All clear";top.appendChild(p3);}
+        t.insertBefore(top,t.firstChild);
+      });
+    }
+    function today(w){
+      var old=w.querySelector("#dx-today");if(old)old.remove();
+      var tilesEl=w.querySelector(".od-tiles");if(!tilesEl)return;
+      var L=[];try{L=getLeads();}catch(e){}
+      var over=0,due=0,appt=0,t0=new Date();t0.setHours(0,0,0,0);var t1=t0.getTime()+864e5;
+      L.forEach(function(c){try{var k=czFU(c).key;if(k==="overdue")over++;else if(k==="today")due++;}catch(e){}
+        var a=c.apptDate?new Date(c.apptDate).getTime():0;if(a>=t0.getTime()&&a<t1)appt++;});
+      var money=w.querySelectorAll("#od2-money .od2-row").length;
+      var h=new Date().getHours(),hi=h<12?"Good morning":h<17?"Good afternoon":"Good evening";
+      var date=new Date().toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"});
+      var div=document.createElement("div");div.id="dx-today";div.className="dx-today";
+      div.innerHTML='<div class="dx-hi"><b>'+hi+'</b><span>'+date+' · here is your day at a glance</span></div><div class="dx-chips">'
+        +'<button type="button" data-dx="money">'+IC.phone+'<b>'+money+'</b> to call first</button>'
+        +'<button type="button" data-cz-go="pipeline">'+'<b>'+appt+'</b> appointment'+(appt===1?'':'s')+' today</button>'
+        +'<button type="button" data-cz-go="pipeline">'+'<b>'+due+'</b> follow-up'+(due===1?'':'s')+' due</button>'
+        +'<button type="button" data-cz-go="pipeline" class="'+(over?"hot":"")+'"><b>'+over+'</b> overdue</button></div>';
+      tilesEl.parentNode.insertBefore(div,tilesEl);
+      div.querySelectorAll("[data-cz-go]").forEach(function(b){b.addEventListener("click",function(){try{switchTab(b.getAttribute("data-cz-go"));}catch(e){}});});
+      var m=div.querySelector('[data-dx="money"]');if(m)m.addEventListener("click",function(){var c=document.getElementById("od2-money");if(c)c.scrollIntoView({behavior:"smooth",block:"start"});});
+    }
+    function money(w){
+      w.querySelectorAll("#od2-money .od2-row").forEach(function(r){
+        if(r.querySelector(".dx-av"))return;
+        var nm=r.querySelector(".od2-nm");var chip=r.querySelector(".od2-chip");
+        if(chip){if(chip.classList.contains("appt"))r.classList.add("dx-appt");else if(chip.classList.contains("cold"))r.classList.add("dx-cold");}
+        var av=document.createElement("span");av.className="dx-av";av.textContent=initials(nm?nm.textContent:"");
+        r.insertBefore(av,r.firstChild);
+        var meta=r.querySelector(".od2-meta span:last-child");if(meta)meta.textContent=fmtPh(meta.textContent);
+        var call=r.querySelector(".od2-call");if(call&&!call.querySelector("svg"))call.insertAdjacentHTML("afterbegin",IC.phone);
+      });
+    }
+    var base=window.__od2Dash;
+    window.__od2Dash=function(w){var o;try{o=base.apply(this,arguments);}catch(e){console.warn("od2",e);}
+      try{tiles(w);}catch(e){console.warn("dx tiles",e);}
+      try{money(w);}catch(e){console.warn("dx money",e);}
+      try{today(w);}catch(e){console.warn("dx today",e);}
+      return o;};
+   }catch(err){if(window.console)console.warn("dash-upgrade init failed",err);}
+  })();
+
   /* ---------- 3. Leads quick filters ---------- */
   var od2Filter="all",od2InLeads=false;
   var OD2_F=[["all","All"],["own","Own"],["agency","Agency"],["none","No source"],["new7","New this week"],["overdue","Overdue"],["quoted","Quoted"],["sold","Sold"]];
