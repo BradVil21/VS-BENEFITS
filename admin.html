@@ -10270,6 +10270,59 @@ try{(function(){
  }catch(err){if(window.console)console.warn("pipe-sections init failed",err);}
 })();
 
+/* ═══ pipe-keep-place v1 (2026-11-01) ═════════════════════════════════════
+   Changing a card's stage (or any save / sync) re-draws the pipeline board.
+   This keeps you exactly where you were: page scroll, the board's sideways
+   scroll, each column's scroll and any open "Dates & stage" panels.
+   ════════════════════════════════════════════════════════════════════════ */
+(function(){
+ try{
+  var depth=0;
+  function scrollers(el){var out=[];while(el&&el!==document.body&&el!==document.documentElement){var cs=getComputedStyle(el);if(/(auto|scroll)/.test(cs.overflowY+cs.overflowX)&&(el.scrollHeight>el.clientHeight||el.scrollWidth>el.clientWidth))out.push(el);el=el.parentElement;}return out;}
+  function snap(){
+    var box=document.getElementById("cz-pipe-results");if(!box)return null;
+    var st={win:window.scrollY,anc:[],board:0,cols:{},open:[]};
+    scrollers(box.parentElement).forEach(function(el){st.anc.push([el,el.scrollTop,el.scrollLeft]);});
+    var b=document.getElementById("cz-board");if(b)st.board=b.scrollLeft;
+    box.querySelectorAll(".cz-col[id]").forEach(function(c){var bd=c.querySelector(".cz-col-body");if(bd)st.cols[c.id]=bd.scrollTop;});
+    box.querySelectorAll(".od-card.open[data-cz-card]").forEach(function(c){st.open.push(c.getAttribute("data-cz-card"));});
+    /* hold the page height so the browser cannot clamp the scroll while the board is empty */
+    st.minH=box.style.minHeight;box.style.minHeight=box.offsetHeight+"px";st.box=box;
+    return st;
+  }
+  function restore(st){
+    if(!st)return;
+    var box=document.getElementById("cz-pipe-results");
+    if(box){
+      var b=document.getElementById("cz-board");if(b)b.scrollLeft=st.board;
+      Object.keys(st.cols).forEach(function(id){var c=document.getElementById(id);var bd=c&&c.querySelector(".cz-col-body");if(bd)bd.scrollTop=st.cols[id];});
+      st.open.forEach(function(id){var c=box.querySelector('.od-card[data-cz-card="'+id+'"]');if(c&&!c.classList.contains("open")){c.classList.add("open");var m=c.querySelector("[data-od-more]");if(m)m.innerHTML="Hide ▴";}});
+    }
+    st.anc.forEach(function(a){a[0].scrollTop=a[1];a[0].scrollLeft=a[2];});
+    if(Math.abs(window.scrollY-st.win)>1)window.scrollTo(window.scrollX,st.win);
+  }
+  function release(st){if(st&&st.box)st.box.style.minHeight=st.minH||"";}
+  function keep(fn){
+    if(typeof fn!=="function"||fn.__keepPlace)return fn;
+    var w=function(){
+      if(depth>0)return fn.apply(this,arguments);
+      depth++;var st=null,r;
+      try{st=snap();}catch(e){}
+      try{r=fn.apply(this,arguments);}finally{depth--;}
+      try{restore(st);}catch(e){}
+      requestAnimationFrame(function(){try{restore(st);}catch(e){}requestAnimationFrame(function(){try{restore(st);}catch(e){}release(st);});});
+      return r;
+    };
+    w.__keepPlace=true;return w;
+  }
+  czPipeResults=keep(czPipeResults);
+  if(typeof czPipeline==="function")czPipeline=keep(czPipeline);
+  if(typeof czCurrentRender==="function")czCurrentRender=keep(czCurrentRender);
+  /* a stage change no longer steals focus/scroll to the top of the board */
+  document.addEventListener("change",function(e){var t=e.target;if(t&&t.matches&&t.matches("#cz-pipe-results select[data-cz-stage]")){try{t.blur();}catch(_){}}},true);
+ }catch(err){if(window.console)console.warn("pipe-keep-place init failed",err);}
+})();
+
   /* ════════ 2. EXPORT ════════ */
   function csvOut(rows){return "﻿"+rows.map(function(r){return r.map(csvEscape).join(",");}).join("\r\n");}
   function slug(s){return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"all";}
