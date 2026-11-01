@@ -523,13 +523,19 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
    reason a driver has any reason to use this page over the generic one. */
 (function(){
   "use strict";
-  var FPL_BASE=15960, FPL_ADD=5680, BASE21=375, DEFAULT_EXPENSE_RATIO=0.65;
+  /* 2027 benchmark (second-lowest silver) for a 40-year-old, by state. KFF, checked Nov 1 2026.
+     Estimate base = state benchmark / 1.278 (age 40 on the federal age curve); $704 national without a ZIP. */
+  var VS_B40={AK:1284,AL:712,AR:757,AZ:609,CA:655,CO:615,CT:1005,DC:678,DE:876,FL:738,GA:733,HI:592,IA:528,ID:553,IL:707,IN:537,KS:748,KY:667,LA:730,MA:551,MD:491,ME:804,MI:595,MN:525,MO:675,MS:814,MT:889,NC:660,ND:610,NE:780,NH:486,NJ:665,NM:725,NV:565,NY:1041,OH:603,OK:686,OR:519,PA:648,RI:629,SC:702,SD:704,TN:796,TX:737,UT:716,VA:549,VT:1313,WA:768,WI:720,WV:1185,WY:1190};
+  var VS_ZIP3=[[10,27,"MA"],[28,29,"RI"],[30,38,"NH"],[39,49,"ME"],[50,54,"VT"],[55,55,"MA"],[56,59,"VT"],[60,69,"CT"],[70,89,"NJ"],[100,149,"NY"],[150,196,"PA"],[197,199,"DE"],[200,200,"DC"],[201,201,"VA"],[202,205,"DC"],[206,219,"MD"],[220,246,"VA"],[247,268,"WV"],[270,289,"NC"],[290,299,"SC"],[300,319,"GA"],[320,349,"FL"],[350,369,"AL"],[370,385,"TN"],[386,397,"MS"],[398,399,"GA"],[400,427,"KY"],[430,459,"OH"],[460,479,"IN"],[480,499,"MI"],[500,528,"IA"],[530,549,"WI"],[550,567,"MN"],[570,577,"SD"],[580,588,"ND"],[590,599,"MT"],[600,629,"IL"],[630,658,"MO"],[660,679,"KS"],[680,693,"NE"],[700,714,"LA"],[716,729,"AR"],[730,749,"OK"],[750,799,"TX"],[800,816,"CO"],[820,831,"WY"],[832,838,"ID"],[840,847,"UT"],[850,865,"AZ"],[870,884,"NM"],[885,885,"TX"],[889,898,"NV"],[900,961,"CA"],[967,968,"HI"],[970,979,"OR"],[980,994,"WA"],[995,999,"AK"]];
+  function vsState(z){z=String(z||"").replace(/\D/g,"");if(z.length<3)return "";var p=parseInt(z.slice(0,3),10);for(var i=0;i<VS_ZIP3.length;i++){if(p>=VS_ZIP3[i][0]&&p<=VS_ZIP3[i][1])return VS_ZIP3[i][2];}return "";}
+  function vsBase21(){var el=document.getElementById("zip")||document.getElementById("tc-zip");var st=vsState(el&&el.value);return (VS_B40[st]||704)/1.278;}
+  var FPL_BASE=15960, FPL_ADD=5680, DEFAULT_EXPENSE_RATIO=0.65;
   function fpl(n){return FPL_BASE+(n-1)*FPL_ADD;}
   function lerp(x,x0,x1,y0,y1){return y0+(y1-y0)*(x-x0)/(x1-x0);}
   /* IRS Rev. Proc. 2025-25 sliding scale. null above 400% FPL = the cliff. */
   function applicablePct(p){if(p<133)return 2.15;if(p<150)return lerp(p,133,150,3.23,4.30);if(p<200)return lerp(p,150,200,4.30,6.78);if(p<250)return lerp(p,200,250,6.78,8.66);if(p<300)return lerp(p,250,300,8.66,10.22);if(p<=400)return 10.22;return null;}
   function ageFactor(a){if(a<21)return 0.765;if(a>=64)return 3.0;var p=[[21,1.0],[25,1.004],[30,1.135],[35,1.222],[40,1.278],[45,1.444],[50,1.786],[55,2.230],[60,2.714],[64,3.0]];for(var i=0;i<p.length-1;i++){if(a>=p[i][0]&&a<p[i+1][0])return lerp(a,p[i][0],p[i+1][0],p[i][1],p[i+1][1]);}return 1.0;}
-  function prem(a){return BASE21*ageFactor(a);}
+  function prem(a){return vsBase21()*ageFactor(a);}
   function money(n){return "$"+Math.round(n).toLocaleString();}
   function $(id){return document.getElementById(id);}
   function val(id){var e=$(id);return e?(e.value||"").trim():"";}
@@ -566,7 +572,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
     var a1=Math.min(Math.max(parseInt(val("tc-age"),10)||40,18),64);
     var a2=parseInt(val("tc-age2"),10);
     var kids=Math.min(parseInt(val("tc-kids"),10)||0,3);
-    return prem(a1)+((a2>=18)?prem(Math.min(Math.max(a2,18),64)):0)+kids*(BASE21*0.765);
+    return prem(a1)+((a2>=18)?prem(Math.min(Math.max(a2,18),64)):0)+kids*(vsBase21()*0.765);
   }
   /* Net cost of the benchmark silver at a given MAGI. Used for both the result
      and every row of the lever table, so they cannot drift apart. */
