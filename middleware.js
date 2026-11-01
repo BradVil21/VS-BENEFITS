@@ -11,8 +11,8 @@
 //   { ip: "2603:9001:8400:2851::/64", label: "2603:9001:...:83df",
 //     reason: "spam", note: "", by: "bradley@…", leadId: "ghl_x", created: 176… }
 //
-// The admin portal (Blocked IPs tab, and the Block button on a lead card) is the
-// only thing that writes it. Nothing here writes - this is read-only.
+// The admin portal (Blocked IPs tab, and the Block button on a lead card) and the
+// junk-lead filter in api/_lib.js (auto entries, with `expires`) write it. Nothing here writes - this is read-only.
 //
 // ── Why IPv6 is stored as a /64 ────────────────────────────────────────────
 // A home IPv6 address rotates its last 64 bits (RFC 4941 privacy extensions),
@@ -175,6 +175,10 @@ async function loadKeys() {
     // An entry is live unless it has been explicitly unbanned. Unbanning
     // removes the row outright, so this is only a guard against a stale shape.
     if (f.active && f.active.booleanValue === false) continue;
+    // Auto-blocks from the junk-lead filter carry an expiry (api/_lib.js,
+    // AUTO_BLOCK_DAYS) so a shared or recycled address frees itself up.
+    const exp = f.expires && (f.expires.integerValue || f.expires.doubleValue);
+    if (exp && Number(exp) < Date.now()) continue;
     const raw = (f.ip && f.ip.stringValue) || "";
     // Stored values are already normalised, but run them through ipKey anyway so
     // a hand-typed entry ("2603:9001:8400:2851:cc8c:e95a:293c:83df") still

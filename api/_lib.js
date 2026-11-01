@@ -340,8 +340,122 @@ function visitorMeta(req, d) {
   return meta.ip || meta.ipCity || meta.device ? meta : null;
 }
 
+
+// ── Junk-lead filter + auto-block (2026-10-31) ─────────────────────────────
+// Website forms get "Test Test / test@test.com / (101) 111-1111" style junk.
+// junkSignals() scores a submission on three independent checks: the name, the
+// email and the phone. ONE signal is not enough to drop anything - a real
+// person can be called "Test" or fat-finger a number - so that lead goes through
+// tagged "suspect-lead". TWO or more signals is junk: no CRM contact, no board
+// card, no alert, and the visitor's IP is put on the site block list for
+// AUTO_BLOCK_DAYS. The edge middleware already enforces vs_state/blocked_ips;
+// auto entries carry `expires` so a shared or recycled address frees itself up.
+// Unblock any time from the portal's Blocked IPs tab.
+//
+// Never applied to the admin portal's own saves or to GHL -> portal syncs.
+// LEAD_FILTER_DISABLED=1 turns the whole thing off without a deploy.
+const JUNK_WORDS = ["test","tester","testing","asdf","asdfg","asdfgh","qwerty","fake","none","na","n/a","abc","abcd","xxx","xx","x","aaa","aa","a","blah","sample","demo","dummy","nobody","noname","no name","anonymous","foo","bar","lol","hello","hi","sdf","jkl","zzz"];
+const JUNK_DOMAINS = ["test.com","example.com","example.org","example.net","test.test","fake.com","asdf.com","abc.com","mailinator.com","guerrillamail.com","10minutemail.com","tempmail.com","temp-mail.org","yopmail.com","sharklasers.com","trashmail.com","getnada.com","dispostable.com","maildrop.cc","throwawaymail.com"];
+const ALLOW_EMAIL_DOMAINS = ["vshealthbenefits.com"];
+
+function junkName(first, last) {
+  const f = String(first || "").trim().toLowerCase(), l = String(last || "").trim().toLowerCase();
+  const full = (f + " " + l).trim();
+  if (!full) return "";
+  if (/\d/.test(full)) return "name has digits";
+  const parts = full.split(/\s+/);
+  if (parts.every(function (p) { return JUNK_WORDS.indexOf(p) >= 0; })) return "placeholder name";
+  if (parts.some(function (p) { return /^(.)\1{2,}$/.test(p); })) return "repeated letters";
+  if (/^[^aeiouy\s]{5,}$/.test(full.replace(/\s/g, ""))) return "keyboard mash";
+  return "";
+}
+function junkEmail(email) {
+  const e = String(email || "").trim().toLowerCase();
+  if (!e) return "";
+  const at = e.lastIndexOf("@");
+  if (at < 1) return "invalid email";
+  const local = e.slice(0, at), dom = e.slice(at + 1);
+  if (ALLOW_EMAIL_DOMAINS.indexOf(dom) >= 0) return "";
+  if (JUNK_DOMAINS.indexOf(dom) >= 0) return "test/disposable domain";
+  if (JUNK_WORDS.indexOf(local.replace(/[\d._-]+$/, "")) >= 0 && /^(test|example|asdf|fake|abc)\b/.test(dom)) return "placeholder email";
+  if (/^(test|asdf|qwerty|fake|noreply|no-reply)\d*$/.test(local) && /^(test|asdf|fake|example)/.test(dom)) return "placeholder email";
+  return "";
+}
+function junkPhone(phone) {
+  let d = String(phone || "").replace(/\D/g, "");
+  if (!d) return "";
+  if (d.length === 11 && d.charAt(0) === "1") d = d.slice(1);
+  if (d.length !== 10) return "wrong length";
+  const area = d.slice(0, 3), exch = d.slice(3, 6);
+  if (/^(\d)\1{9}$/.test(d)) return "all same digit";
+  if (area.charAt(0) === "0" || area.charAt(0) === "1") return "invalid area code";
+  if (exch.charAt(0) === "0" || exch.charAt(0) === "1") return "invalid exchange";
+  if (area.slice(1) === "99" || area === "555" || exch === "555") return "reserved number";
+  if (d === "1234567890" || d === "0123456789" || d === "9876543210") return "sequential";
+  const counts = {}; for (const c of d) counts[c] = (counts[c] || 0) + 1;
+  if (Math.max.apply(null, Object.values(counts)) >= 8) return "mostly one digit";
+  return "";
+}
+// Returns { signals: [..reasons], junk: bool, suspect: bool }.
+function junkSignals(d) {
+  if (process.env.LEAD_FILTER_DISABLED === "1") return { signals: [], junk: false, suspect: false };
+  d = d || {};
+  const first = d.firstName || d.first_name || d.firstname || d.ownerFirstName || "";
+  const last = d.lastName || d.last_name || d.lastname || d.ownerLastName || "";
+  let nm = junkName(first, last);
+  if (!first && !last && d.name) nm = junkName(d.name, "");
+  const em = junkEmail(d.email || d.contactEmail);
+  const ph = junkPhone(d.phone || d.contactPhone || d.businessPhone);
+  const signals = [];
+  if (nm) signals.push("name: " + nm);
+  if (em) signals.push("email: " + em);
+  if (ph) signals.push("phone: " + ph);
+  return { signals: signals, junk: signals.length >= 2, suspect: signals.length === 1 };
+}
+
+// Same normalisation as ipKey() in middleware.js / admin.html (IPv4 exact, IPv6 /64).
+function ipKeyCjs(raw) {
+  let ip = String(raw == null ? "" : raw).trim().toLowerCase();
+  if (!ip) return "";
+  if (ip.charAt(0) === "[") { const c = ip.indexOf("]"); ip = c > 0 ? ip.slice(1, c) : ip.slice(1); }
+  const z = ip.indexOf("%"); if (z > 0) ip = ip.slice(0, z);
+  const v4 = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?::\d+)?$/.exec(ip); if (v4) return v4[1];
+  const mapped = /^::ffff:(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/.exec(ip); if (mapped) return mapped[1];
+  if (ip.indexOf(":") < 0) return "";
+  let parts;
+  if (ip.indexOf("::") >= 0) {
+    const h = ip.split("::"), head = h[0] ? h[0].split(":") : [], tail = h[1] ? h[1].split(":") : [];
+    parts = head.concat(new Array(Math.max(0, 8 - head.length - tail.length)).fill("0"), tail);
+  } else parts = ip.split(":");
+  parts = parts.slice(0, 4).map(function (x) { return (x || "0").replace(/^0+(?=.)/, ""); });
+  while (parts.length < 4) parts.push("0");
+  if (!/^[0-9a-f]{1,4}$/.test(parts[0])) return "";
+  return parts.join(":") + "::/64";
+}
+
+const AUTO_BLOCK_DAYS = Number(process.env.AUTO_BLOCK_DAYS || 30);
+// Puts the visitor on vs_state/blocked_ips. Never throws; returns what happened.
+async function autoBlockVisitor(meta, reasons, sample) {
+  try {
+    if (process.env.AUTO_BLOCK_DISABLED === "1") return { ok: false, skipped: "disabled" };
+    const ip = meta && meta.ip; const key = ipKeyCjs(ip);
+    if (!key) return { ok: false, skipped: "no_ip" };
+    const FS = require("./_fs");
+    const now = Date.now();
+    const rec = {
+      id: "auto_" + now.toString(36), ip: key, label: String(ip).slice(0, 60),
+      reason: "auto: junk lead", note: (reasons || []).join("; ").slice(0, 200) + (sample ? " | " + String(sample).slice(0, 120) : ""),
+      by: "auto-filter", city: [meta.ipCity, meta.ipRegion].filter(Boolean).join(", ").slice(0, 80),
+      org: String(meta.ipOrg || "").slice(0, 120), created: now, expires: now + AUTO_BLOCK_DAYS * 86400000, auto: true,
+    };
+    const r = await FS.appendRecord("blocked_ips", rec, function (x) { return x && x.ip === key; }, function () { return false; });
+    return { ok: !!r.ok, action: r.action, ip: key };
+  } catch (e) { return { ok: false, skipped: "exception" }; }
+}
+
 module.exports = {
   CFG, esc, ghl, clientIp, geoHeader, visitorMeta, upsertContact, addNoteToContact, addTagsToContact, uploadFile, sendEmail,
   shell, btn, businessLeadEmail, bizAlertEmail,
   BUSINESS_TAGS, normTags, isBusinessLead,
+  junkSignals, junkPhone, autoBlockVisitor, ipKeyCjs,
 };

@@ -825,7 +825,7 @@ document.addEventListener("DOMContentLoaded",function(){
     // Each check sends the visitor back to the step that owns the field, so a
     // blank on step 1 does not fail silently five steps later.
     if(!/^\d{5}$/.test(zipVal)){ csGo(1); gateError("Please enter your 5-digit ZIP code so we can estimate plans for your area."); focusOn("zip"); return; }
-    if(digits.length!==10){ csGo(3); gateError("Please enter a 10-digit phone number so an advisor can reach you."); focusOn("ad-phone"); return; }
+    if(!okPhone(digits)){ csGo(3); gateError("Please enter a valid 10-digit US phone number so an advisor can reach you."); focusOn("ad-phone"); return; }
     if(!age1){ csGo(2); gateError("Please enter your age."); focusOn("age1"); return; }
     if(!income){ csGo(4); gateError("Please pick your household income range."); return; }
     if(!first){ csGo(5); gateError("Please enter your first name."); focusOn("ad-first"); return; }
@@ -1028,6 +1028,15 @@ document.addEventListener("DOMContentLoaded",function(){
     if(d.length===11&&d.charAt(0)==="1") d=d.slice(1);
     return d;
   }
+  // A real US number: 10 digits, area code and exchange not starting 0/1,
+  // not all one digit. Fake numbers are dropped by the server anyway, so tell
+  // a real visitor about a typo here instead of losing them silently.
+  function okPhone(d){
+    if(!/^\d{10}$/.test(d)) return false;
+    if(/^[01]/.test(d.slice(0,3))||/^[01]/.test(d.slice(3,6))) return false;
+    if(/^(\d)\1{9}$/.test(d)||d==="1234567890") return false;
+    return true;
+  }
 
   // Advance only when the step's own answer is usable. Anything optional
   // (spouse age, kids, email) is never a blocker.
@@ -1039,7 +1048,7 @@ document.addEventListener("DOMContentLoaded",function(){
       if(!a){ gateError("Please enter your age."); focusOn("age1"); return; }
       if(a<18||a>64){ gateError("Enter an age between 18 and 64. Under 18 is usually covered as a child, and 65+ is Medicare - an advisor can help with either."); focusOn("age1"); return; }
     } else if(csStep===3){
-      if(phoneDigits().length!==10){ gateError("Please enter a 10-digit phone number so an advisor can reach you."); focusOn("ad-phone"); return; }
+      if(!okPhone(phoneDigits())){ gateError("Please enter a valid 10-digit US phone number so an advisor can reach you."); focusOn("ad-phone"); return; }
       // ZIP and phone are both in hand; capture the lead now so somebody who
       // never presses Calculate is still a lead you can call.
       csCaptureDraft("Step 3 - phone");

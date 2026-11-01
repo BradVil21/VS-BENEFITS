@@ -138,6 +138,10 @@ function tenDigits(v) {
   if (d.length !== 10) return "";
   if (/^(\d)\1{9}$/.test(d)) return "";
   if (d.slice(0, 3) === "555" || d.slice(3, 6) === "555") return "";
+  // North American numbering: area code and exchange cannot start with 0 or 1.
+  // (101) 111-1111 was getting through and landing on a card as a callable number.
+  if (/^[01]/.test(d.slice(0, 3)) || /^[01]/.test(d.slice(3, 6))) return "";
+  if (d === "1234567890" || d === "9876543210") return "";
   return d;
 }
 
@@ -891,6 +895,22 @@ module.exports = async (req, res) => {
   if (!inbound && !fromPortal) {
     const m = L.visitorMeta(req, d);
     if (m) d.meta = m;
+  }
+
+  // Junk filter (see junkSignals in api/_lib.js). Two or more bad signals: drop
+  // the lead silently and block the visitor. One: let it through, flagged.
+  if (!inbound && !fromPortal) {
+    const j = L.junkSignals(d);
+    if (j.junk) {
+      const b = await L.autoBlockVisitor(d.meta, j.signals,
+        [d.firstName, d.lastName, d.email, d.phone].filter(Boolean).join(" / "));
+      res.status(200).json({ ok: true, skipped: "junk", blocked: !!b.ok });
+      return;
+    }
+    if (j.suspect) {
+      d.tags = (Array.isArray(d.tags) ? d.tags.slice(0, 7) : (d.tag ? [d.tag] : [])).concat(["suspect-lead"]);
+      d.notes = (d.notes ? String(d.notes) + "\n" : "") + "Flagged by junk filter: " + j.signals.join("; ");
+    }
   }
 
   try {

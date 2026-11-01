@@ -100,6 +100,18 @@ module.exports = async (req, res) => {
   //    anymore; a valid email (checked below) is the only hard requirement.
   const optIn = d.optIn === true || d.optIn === "true";
 
+  // Junk filter (api/_lib.js): two or more bad signals drops the draft and
+  // blocks the visitor, same as a full submission.
+  {
+    const j = L.junkSignals(d);
+    if (j.junk) {
+      const b = await L.autoBlockVisitor(L.visitorMeta(req, d), j.signals,
+        [d.firstName, d.lastName, d.email, d.phone].filter(Boolean).join(" / "));
+      res.status(200).json({ ok: true, skipped: "junk", blocked: !!b.ok });
+      return;
+    }
+  }
+
   // 2) Validate the dedup key. Either a real phone or a real email will do.
   const email = validEmail(d.email || d.contactEmail);
   const phone = validPhone(d.phone || d.contactPhone || d.businessPhone);
