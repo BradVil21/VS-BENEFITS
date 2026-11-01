@@ -35,7 +35,7 @@
   function done(card,first){
     card.innerHTML='<div class="vg-done"><h3>Your guide is ready'+(first?', '+first.replace(/[<>&"]/g,''):'')+'</h3>'
       +'<a class="vg-btn" href="'+PDF+'" target="_blank" rel="noopener" data-vs-cta="guide-download">Download the free guide (PDF)</a>'
-      +'<p>Want real numbers for your ZIP? <a href="/truckers/quote?from=guide" style="font-weight:700;color:#16447f">Get a 60-second driver quote &rarr;</a></p></div>';
+      +'<p>Want real numbers for your ZIP? <a href="/trucking-health-quote?from=guide" style="font-weight:700;color:#16447f">Get a 60-second driver quote &rarr;</a></p></div>';
   }
   function mount(el){
     if(el._vg)return;el._vg=1;

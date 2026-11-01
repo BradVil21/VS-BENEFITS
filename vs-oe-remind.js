@@ -25,7 +25,7 @@
       consent: 'I agree to receive SMS text messages from <strong>VS BENEFITS LLC</strong> (d/b/a VS Health Benefits) at this number about open enrollment and my health insurance quote. Message &amp; data rates may apply. Message frequency varies. Reply <strong>STOP</strong> to opt out or <strong>HELP</strong> for help. Consent is not a condition of purchase. <a href="/privacy#sms" target="_blank" rel="noopener">Privacy Policy</a> &amp; <a href="/terms#sms-terms" target="_blank" rel="noopener">Terms</a>.',
       errPhone: "Please enter a valid 10-digit mobile number.", errConsent: "Please check the box so we're allowed to text you.",
       sending: "Saving...", okH: "You're on the list.", okP: "We'll text you on November 1 when 2027 plans open. Want your numbers sooner?",
-      okLink: "Get a quote now &rarr;", quote: "/truckers/quote"
+      okLink: "Get a quote now &rarr;", quote: "/trucking-health-quote"
     },
     es: {
       eyebrow: "La inscripci&oacute;n abierta empieza el 1 de noviembre",
@@ -35,7 +35,7 @@
       consent: 'Acepto recibir mensajes de texto SMS de <strong>VS BENEFITS LLC</strong> (d/b/a VS Health Benefits) a este n&uacute;mero sobre la inscripci&oacute;n abierta y mi cotizaci&oacute;n de seguro m&eacute;dico. Pueden aplicarse tarifas de mensajes y datos. La frecuencia de los mensajes var&iacute;a. Responda <strong>STOP</strong> para cancelar o <strong>HELP</strong> para recibir ayuda. El consentimiento no es una condici&oacute;n de compra. <a href="/privacy#sms" target="_blank" rel="noopener">Pol&iacute;tica de privacidad</a> y <a href="/terms#sms-terms" target="_blank" rel="noopener">T&eacute;rminos</a>.',
       errPhone: "Escriba un número de celular válido de 10 dígitos.", errConsent: "Marque la casilla para que podamos enviarle textos.",
       sending: "Guardando...", okH: "&iexcl;Listo, ya est&aacute; en la lista!", okP: "Le enviaremos un texto el 1 de noviembre cuando abran los planes 2027. &iquest;Quiere sus n&uacute;meros antes?",
-      okLink: "Cotizar ahora &rarr;", quote: "/truckers/cotizar"
+      okLink: "Cotizar ahora &rarr;", quote: "/trucking-health-quote"
     }
   };
 

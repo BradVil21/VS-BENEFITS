@@ -4,7 +4,7 @@
    253 pages carry a static #oe-annc-bar with one message for everyone.
    This rewrites it in place, by date and by who is reading:
 
-     audience   trucker  (driver, owner-operator, CDL pages)  -> /truckers/quote
+     audience   trucker  (driver, owner-operator, CDL pages)  -> /trucking-health-quote
                 business (small business, group, fleet pages) -> /small-business-renewal-review
                 everyone else                                 -> /quote
      phase      pre      before Nov 1 2026: 2027 rates are up, check early
@@ -39,7 +39,7 @@
   var daysTo = function (d) { return Math.max(0, Math.ceil((d - now) / 86400000)); };
   var dLeft = daysTo(JAN1_DEADLINE), dClose = daysTo(CLOSES);
 
-  var Q = { trucker: es ? "/truckers/cotizar" : "/truckers/quote", business: "/small-business-renewal-review", general: "/quote" };
+  var Q = { trucker: "/trucking-health-quote", business: "/small-business-renewal-review", general: "/quote" };
   var T;
   if (es) {
     T = {
