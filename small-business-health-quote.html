@@ -56,6 +56,7 @@ h1,h2,h3{font-family:'Poppins',system-ui,sans-serif;line-height:1.18;margin:0;co
 .lp-go{flex:1 1 220px;height:60px;border:0;border-radius:999px;background:var(--red);color:#fff;font:800 1.15rem 'Poppins',sans-serif;letter-spacing:.01em;cursor:pointer;box-shadow:0 4px 0 var(--red-d);display:flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase}
 .lp-go:hover{background:#d61c22}.lp-go:active{transform:translateY(2px);box-shadow:0 2px 0 var(--red-d)}
 .lp-go:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.lp-safe{display:flex;align-items:center;justify-content:center;gap:8px;margin:16px auto 0;color:#fff;font-weight:600;font-size:.98rem}.lp-safe-photo{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.75)}.lp-trust{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px;margin:12px auto 0;padding-top:12px;border-top:1px solid rgba(255,255,255,.22);max-width:560px}.lp-trust span{display:inline-flex;align-items:center;gap:6px;color:#fff;font-weight:600;font-size:.86rem}
 .lp-err{flex-basis:100%;margin:2px 0 0;color:#fff;font-weight:700;font-size:.92rem}
 .lp-err:empty{display:none}
 .lp-seg{display:inline-flex;background:rgba(255,255,255,.18);border-radius:999px;padding:4px;gap:4px;margin:0 auto 14px;flex-wrap:wrap;justify-content:center}
@@ -257,6 +258,8 @@ h1,h2,h3{font-family:'Poppins',system-ui,sans-serif;line-height:1.18;margin:0;co
       <button class="lp-go" type="submit">Get quotes now <span aria-hidden="true">&rsaquo;</span></button>
       <p class="lp-err" id="lp-err" role="alert"></p>
     </form>
+    <div class="lp-safe"><img class="lp-safe-photo" src="/images/quote-advisor.jpg" alt="" width="44" height="44" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#fff"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#2f9de6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Answer a few questions &amp; find the best quotes</div>
+    <div class="lp-trust"><span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5eead4" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Licensed in 40+ States</span><span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5eead4" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>100% Free Service</span><span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5eead4" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>No Spam, Ever</span><span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5eead4" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Compare Top Carriers</span></div>
     
   </div>
 </div></section>
