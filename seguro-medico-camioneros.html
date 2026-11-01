@@ -578,6 +578,16 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
  .trk-hero .hero-photo{width:100vw!important;max-width:none!important;align-self:center;margin:4px 0!important;border:0!important;border-radius:0!important;box-shadow:none!important;aspect-ratio:auto!important;overflow:visible;background:none}
  .trk-hero .hero-photo img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:55% 60%;border-radius:0!important;display:block}
 }
+/* v5 mobile: photo fills the whole hero (2026-11-01) */
+@media(max-width:700px){
+ .trk-hero{background:#000 url(/compressed/trucker-red-semi-cab-900.webp) 60% 120px/auto 470px no-repeat!important;min-height:0;display:flex!important;flex-direction:column;padding-top:28px!important;padding-bottom:70px!important}
+ .trk-hero::before{display:block!important;content:"";position:absolute;inset:0!important;height:auto!important;aspect-ratio:auto!important;max-width:none!important;-webkit-mask-image:none!important;mask-image:none!important;background:linear-gradient(180deg,#000 0%,#000 125px,rgba(0,0,0,.55) 200px,rgba(0,0,0,.15) 270px,rgba(0,0,0,0) 320px,rgba(0,0,0,0) 500px,rgba(0,0,0,.8) 565px,#000 588px)!important}
+ .trk-hero .container{flex:1;display:flex}
+ .trk-hero .hero-grid{flex:1}
+ .trk-hero .hero-photo{display:none!important}
+ .trk-hero .hero-sub-m{text-shadow:0 1px 6px rgba(0,0,0,.6)}
+ .trk-hero .hero-ctas{margin-top:auto!important;padding-top:330px}
+}
 </style>
 </head>
 <body>
