@@ -495,6 +495,90 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 }
 </style>
 <style id="vs-nav-center">@media (min-width:960px){header nav.nav-links{flex:1 1 auto;margin-left:28px}header nav.nav-links::before{content:"";margin-left:auto}header nav.nav-links>a.nav-cta{margin-left:auto;width:auto;flex:0 0 auto}}@media (min-width:1200px){header nav.nav-links>:nth-last-child(2){margin-right:98px}}</style>
+<style id="trk-look">
+.trk-more{margin:4px 0 18px}.trk-more>summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#1565d8;font-size:.95rem;padding:6px 0}.trk-more>summary::-webkit-details-marker{display:none}.trk-more>summary::after{content:"\25BE";font-size:.8rem}.trk-more[open]>summary{margin-bottom:6px}.trk-more[open]>summary::after{content:"\25B4"}
+.trk-band{padding:26px 0}.trk-band-in{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:#0d0d0d url(/images/lp-trucking-hero.jpg) center/cover;position:relative;border-radius:18px;padding:26px 28px;overflow:hidden;box-shadow:0 18px 40px -20px rgba(0,0,0,.6)}.trk-band-in::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.9),rgba(0,0,0,.7))}.trk-band-in>*{position:relative}.trk-band b{display:block;color:#fff;font-size:1.3rem;line-height:1.3}.trk-band span{display:block;color:rgba(255,255,255,.8);font-size:.92rem;margin-top:4px}.trk-band-btns{display:flex;gap:10px;flex-wrap:wrap}.trk-band-call{background:transparent;color:#fff!important;border:2px solid rgba(255,255,255,.75)}.trk-band-call:hover{background:#fff;color:#000!important}
+@media(max-width:700px){.trk-band-in{padding:20px}.trk-band b{font-size:1.1rem}.trk-band-btns{width:100%}.trk-band-btns .btn{flex:1;text-align:center}}
+
+.trk-fig{margin:22px 0 26px}.trk-fig picture,.trk-fig img{display:block;width:100%}.trk-fig img{aspect-ratio:16/7;height:auto;object-fit:cover;border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.22)}.trk-fig figcaption{font-size:.86rem;color:#5b6b80;margin-top:8px;padding-left:12px;border-left:3px solid #e8a33d}.trk-fig--wide{max-width:900px;margin:0 auto 26px}@media (max-width:700px){.trk-fig{margin:16px 0 20px}.trk-fig img{aspect-ratio:16/9;border-radius:12px}.trk-fig figcaption{font-size:.8rem}}
+
+/* Truck driver look for the hub hero (2026-11-01). Remove this block + the trk- classes to undo. */
+.trk-hero{position:relative;background:#0a0a0a url(/images/lp-trucking-hero.jpg) center 68%/cover no-repeat!important;color:#fff;padding-bottom:84px!important;overflow:hidden}
+.trk-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.78) 48%,rgba(0,0,0,.35) 100%)}
+.trk-hero .container{position:relative}
+.trk-hero h1{color:#fff}
+.trk-hero h1 span{background-image:linear-gradient(90deg,#7cc4ff,#5eead4)!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important}
+.trk-hero .eyebrow{background:rgba(255,255,255,.12);color:#cfe6ff;border:1px solid rgba(255,255,255,.22)}
+.trk-hero .hero-sub,.trk-hero .vs-quote-link,.trk-hero .hero-links,.trk-hero .vs-byline{color:rgba(255,255,255,.86)!important}
+.trk-hero .hero-meta{color:rgba(255,255,255,.85)}
+.trk-hero .hero-meta .dot{background:#5eead4}
+.trk-hero a:not(.btn):not(.vsz-rating){color:#9fd2ff}
+.trk-hero .btn-secondary{background:transparent;color:#fff;border-color:rgba(255,255,255,.75)}
+.trk-hero .btn-secondary:hover{background:#fff;color:#0b2346}
+.trk-hero .hero-photo{border:3px solid rgba(255,255,255,.18);box-shadow:0 24px 50px -20px rgba(0,0,0,.7)}
+.trk-stats{position:relative;margin-top:-56px;z-index:2;padding-bottom:10px}
+.trk-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.trk-stat{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid #e2e9f4;border-radius:16px;padding:16px;box-shadow:0 14px 30px -18px rgba(0,0,0,.45)}
+.trk-ic{width:42px;height:42px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;background:linear-gradient(135deg,#e8f0fb,#e6f8f5);color:#16447f}
+.trk-stat b{display:block;font-size:.95rem;color:#0b2346;line-height:1.3}
+.trk-stat span:not(.trk-ic){display:block;font-size:.83rem;color:#5a6b80;margin-top:2px;line-height:1.35}
+@media(max-width:980px){.trk-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.trk-grid{grid-template-columns:1fr}.trk-hero::before{background:linear-gradient(180deg,rgba(0,0,0,.86),rgba(0,0,0,.8))}.trk-stats{margin-top:-40px}}
+</style>
+<style id="trk-mobile">
+/* Phone layout for the hub hero: less text, form first (2026-11-01) */
+.hero-sub-m{display:block;font-size:1.15rem;line-height:1.55;color:rgba(255,255,255,.9);margin:14px 0 20px;max-width:520px}
+@media(max-width:700px){
+ .trk-hero{padding-top:28px!important;padding-bottom:64px!important}
+ .trk-hero .hero-grid{display:flex!important;flex-direction:column;gap:14px}
+ .trk-hero .hero-grid>div:first-child{display:contents}
+ .trk-hero h1{order:1}.hero-sub-m{order:2}.trk-hero .hero-photo{order:3}
+ .trk-hero .eyebrow,.trk-hero .hero-sub,.trk-hero .vs-quote-link,.trk-hero .hero-meta,.trk-hero .hero-links{display:none!important}
+ .trk-hero h1{font-size:2.05rem;line-height:1.1;margin-bottom:10px}
+ .hero-sub-m{display:block;font-size:1.05rem;line-height:1.5;color:rgba(255,255,255,.9);margin:0 0 4px}
+ .trk-hero .vsz{order:4;margin:4px 0 0}
+ .trk-hero .vsz-label{margin:12px 0 8px}
+ .trk-hero .hero-ctas{order:5;margin-top:0}
+ .trk-hero .hero-ctas .btn-primary{display:none}
+ .trk-hero .vs-byline{display:none!important}
+ .trk-hero .hero-photo{aspect-ratio:16/9}
+ .trk-grid{grid-template-columns:1fr 1fr!important;gap:10px}
+ .trk-stat{flex-direction:column;gap:8px;padding:12px}.trk-ic{width:34px;height:34px}
+ .trk-stat b{font-size:.86rem}.trk-stat span:not(.trk-ic){display:none!important}
+}
+/* v3 hero: one picture, two choices (2026-11-01) */
+.trk-hero{background:#000!important;min-height:580px;display:flex;align-items:center;padding-top:56px!important;padding-bottom:110px!important}
+.trk-hero .container{width:100%}
+.trk-hero::before{inset:0 0 0 auto!important;height:100%;aspect-ratio:1600/997;max-width:100%;background:url(/compressed/trucker-red-semi-cab.webp) center/cover no-repeat!important;-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 22%,#000 50%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 22%,#000 50%)}
+.trk-hero .hero-grid{grid-template-columns:1fr!important}
+.trk-hero .hero-grid>div:first-child{max-width:600px}
+.trk-hero .hero-photo{display:none!important}
+.trk-hero .hero-photo-badge{display:none!important}
+.trk-hero h1{font-size:3.4rem;line-height:1.05}
+.trk-hero .hero-ctas{gap:12px;margin-top:6px}
+.trk-hero .hero-ctas .btn{padding:16px 26px;font-size:1.08rem;display:inline-flex;align-items:center;gap:8px}
+.trk-cta-q{background:#1f6fe5!important;border-color:#1f6fe5!important;box-shadow:0 10px 24px -8px rgba(31,111,229,.7)}
+.trk-cta-q:hover{background:#1559c2!important}
+.trk-rating{display:inline-block;margin-top:18px;font-size:.92rem;color:rgba(255,255,255,.85)!important;text-decoration:none}
+.trk-rating span{color:#fbbf24;letter-spacing:1px}
+.trk-stat b{font-size:1rem}
+.trk-ic{background:#111!important;color:#fbbf24!important}
+@media(max-width:700px){
+ .trk-hero{background:#000!important;min-height:0;display:block;padding-top:26px!important;padding-bottom:60px!important}
+ .trk-hero::before{display:none}
+ .trk-hero .hero-photo{display:block!important;order:3}
+ .trk-hero h1{font-size:2.1rem}
+ .trk-hero .hero-ctas{order:4;display:flex;flex-direction:column;align-items:stretch;gap:10px;width:100%}
+ .trk-hero .hero-ctas .btn,.trk-hero .hero-ctas .btn-primary{display:flex!important;justify-content:center;width:100%}
+ .trk-rating{order:5;display:block;width:100%;margin-top:4px;text-align:center;font-size:.85rem;white-space:normal}
+}
+.trk-rating{display:inline-flex!important;align-items:center;gap:8px;flex-wrap:wrap}.trk-rt{font-weight:400}.trk-free{font-style:normal}.trk-g{background:#fff;border-radius:50%;padding:3px;width:24px;height:24px;flex-shrink:0}
+@media(max-width:700px){
+ .trk-rating{justify-content:center;flex-wrap:nowrap!important}.trk-free{display:none}
+ .trk-hero .hero-photo{width:100vw!important;max-width:none!important;align-self:center;margin:4px 0!important;border:0!important;border-radius:0!important;box-shadow:none!important;aspect-ratio:auto!important;overflow:visible;background:none}
+ .trk-hero .hero-photo img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:55% 60%;border-radius:0!important;display:block}
+}
+</style>
 </head>
 <body>
 <div id="oe-annc-bar" style="background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;text-align:center;padding:9px 16px;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.9rem;font-weight:600;line-height:1.35"><span style="display:inline-flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap"><span><a href="/blog/aca-open-enrollment-2027-guide" style="color:#fff;text-decoration:underline;text-underline-offset:3px">Open Enrollment is now open. You have until January 15 to get better coverage. Enroll by Dec 15 for a January 1 start.</a></span><a href="/trucking-health-quote?from=seguro-medico-camioneros" style="background:#fff;color:#16447f;border-radius:999px;padding:3px 12px;font-weight:800;white-space:nowrap;text-decoration:none">Get a Free Quote &rarr;</a></span></div><script src="/vs-oe-bar.js" defer></script>
@@ -523,39 +607,26 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <div data-lang-switch style="background:var(--blue-50);border-bottom:1px solid var(--blue-100);text-align:center;padding:8px 16px;font-size:.9rem"><a href="/truck-driver-health-insurance" hreflang="en" style="color:var(--blue-700);font-weight:700">Read this page in English &rarr;</a></div>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero trk-hero">
   <div class="container">
     <div class="hero-grid">
       <div>
-        <span class="eyebrow">Seguro Médico para Camioneros y Owner-Operators</span>
-        <h1>Seguro Médico para Camioneros, <span>Desde $0/mes Después de los Créditos Fiscales</span></h1>
-        <p class="hero-sub">Los conductores CDL por cuenta propia y los owner-operators obtienen planes PPO de salud con redes nacionales, cobertura que te acompaña a través de cada línea estatal. La mayoría de los clientes ven sus opciones en 2 minutos. Sin ningún costo por usarnos, nunca. ¿Manejas larga distancia?</p>
-<p class="hero-sub">Consulta nuestra <a href="/truck-driver-health-insurance">guía de cobertura para conductores OTR</a>. ¿Estás en un lease? Comienza con el <a href="/best-health-insurance-owner-operators">seguro médico para lease operators</a>. ¿Cubres a toda la familia? Nuestra <a href="/truck-driver-health-insurance">página de planes familiares para conductores</a> se encarga del hogar y de la carretera.</p>
+        <h1>Seguro Médico <span>para Camioneros</span></h1>
+        <p class="hero-sub-m">Plan de la compañía, el Mercado o un PPO nacional. Comparamos los tres para tu código postal, gratis. Desde $0/mes con créditos fiscales.</p>
         <div class="hero-ctas">
-          <a class="btn btn-primary" href="/trucking-health-quote?from=seguro-medico-camioneros">Ver Mis Planes y Precios →</a>
-          <a href="tel:+19548251009" class="btn btn-secondary">Llamar a un Asesor</a>
+          <a class="btn btn-primary trk-cta-q" href="/trucking-health-quote?from=seguro-medico-camioneros">Cotización Gratis &rarr;</a>
+          <a href="tel:+19548251009" class="btn btn-secondary trk-cta-c"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>Llamar a un Asesor</a>
         </div>
-        <div class="hero-meta">
-          <span><span class="dot"></span>Gratis, Sin Costo Nunca</span>
-          <span><span class="dot"></span>Con Licencia en más de 40 Estados</span>
-          <span><span class="dot"></span>Planes PPO y ACA</span>
-          <span><span class="dot"></span>Resultados en 2 Minutos</span>
-        </div>
-<form class="vsz" action="/quote" method="get" novalidate data-type="individual" data-from="seguro-medico-camioneros_zip">
-  <a class="vsz-rating" href="/#reviews-anchor" aria-label="Calificaci&oacute;n 5.0 de 5 en 51 rese&ntilde;as de Google"><span class="vsz-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><strong>5.0</strong><span class="vsz-rc">de 51 rese&ntilde;as en Google</span></a>
-  <label class="vsz-label" for="vsz-in-seguro-medico-camioneros">Cotizaci&oacute;n gratis. Empiece con su c&oacute;digo postal:</label>
-  <div class="vsz-row"><input id="vsz-in-seguro-medico-camioneros" name="zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="C&oacute;digo postal" autocomplete="postal-code" required /><button type="submit" class="vsz-btn">Ver Mi Cotizaci&oacute;n <span aria-hidden="true">&rarr;</span></button></div>
-  <p class="vsz-err" role="alert" hidden>Ingrese un c&oacute;digo postal v&aacute;lido de 5 d&iacute;gitos.</p>
-</form>
-
+  <a class="trk-rating" href="/#reviews-anchor"><svg class="trk-g" width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> <b class="trk-rt">5.0 en 51 reseñas de Google<i class="trk-free"> &middot; Gratis, sin compromiso</i></b></a>
       </div>
       <div class="hero-photo">
-        <img decoding="async" srcset="/compressed/truck1-900.jpg 900w, /compressed/truck1.jpg 1600w" sizes="(max-width: 900px) 100vw, 1200px" src="/compressed/truck1.jpg" alt="Seguro médico para camioneros owner-operator" loading="eager" />
-        <div class="hero-photo-badge"><span>$0</span>Costo de consulta</div>
+        <img decoding="async" srcset="/compressed/trucker-red-semi-cab-900.webp 900w, /compressed/trucker-red-semi-cab.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" src="/compressed/trucker-red-semi-cab-900.jpg" alt="Camionero junto a su camión rojo" loading="eager" />
       </div>
     </div>
   </div>
 </section>
+<section class="trk-stats" aria-label="Problemas comunes de seguro médico que resolvemos para camioneros"><div class="container"><div class="trk-grid"><div class="trk-stat"><span class="trk-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2h6v4H9zM16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11v6M9 14h6"/></svg></span><div><b>¿Se acerca tu examen DOT?</b><span>¿Presión, azúcar o apnea del sueño? Todo plan cubre condiciones preexistentes.</span></div></div><div class="trk-stat"><span class="trk-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3-6-3zM9 3v15M15 6v15"/></svg></span><div><b>¿Enfermo a 900 millas de casa?</b><span>Redes PPO nacionales para ver a un médico en la carretera.</span></div></div><div class="trk-stat"><span class="trk-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><div><b>¿La prima se come tus pagos?</b><span>Los créditos fiscales se basan en lo que te queda después de gastos del camión.</span></div></div><div class="trk-stat"><span class="trk-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><b>¿Cambiando de compañía?</b><span>Evita la espera de 90 días. La cobertura puede empezar el 1 del próximo mes.</span></div></div></div></div></section>
+
 
 <!-- TRUST BAR -->
 <div class="trust-bar">
@@ -609,15 +680,17 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <span class="eyebrow">Por Qué Importa</span>
         <h2>Por Qué los Camioneros Necesitan una Cobertura de Salud Especializada</h2>
         <p>Los planes estándar de empleador no están disponibles para los owner-operators ni para los camioneros 1099. Trabajas por cuenta propia, a menudo cruzando líneas estatales todos los días, y necesitas un seguro médico que funcione dondequiera que te lleve la carga, no solo en tu estado de residencia.</p><p>Sin el plan adecuado, una sola lesión o estadía en el hospital puede dejar fuera de juego tu carrera de camionero desde el punto de vista financiero. Esto es lo que diferencia al seguro médico para camioneros de un plan individual estándar:</p>
+        <p style="font-size:.95rem">Consulta nuestra <a href="/truck-driver-health-insurance">guía de cobertura para conductores OTR</a>. ¿Estás en un lease? Comienza con el <a href="/best-health-insurance-owner-operators">seguro médico para lease operators</a>. ¿Cubres a toda la familia? Nuestra <a href="/truck-driver-health-insurance">página de planes familiares para conductores</a> se encarga del hogar y de la carretera.</p>
         <ul class="check-list" style="margin-bottom:24px">
           <li>Las rutas de larga distancia requieren redes de proveedores nacionales o de varios estados</li>
           <li>No hay empleador que comparta las primas, por lo que la estrategia de deducción importa</li>
           <li>Las condiciones preexistentes por años de trabajo físico necesitan una cobertura real</li>
-          <li>Una lesión, enfermedad o tiempo sin trabajar sin cobertura puede acabar con una carrera de camionero</li>
+          </ul>
+        <details class="trk-more"><summary>Leer más</summary><ul class="check-list" style="margin-bottom:24px"><li>Una lesión, enfermedad o tiempo sin trabajar sin cobertura puede acabar con una carrera de camionero</li>
           <li>Los subsidios de ACA pueden reducir drásticamente tu prima mensual</li>
           <li>Los planes PPO te permiten ver a cualquier médico en cualquier lugar sin referido ni autorización previa</li>
           <li>Los planes suplementarios pagan beneficios en efectivo que reemplazan los ingresos perdidos mientras estás fuera de la carretera</li>
-        </ul>
+        </ul></details>
         <a class="btn btn-primary" href="/trucking-health-quote?from=seguro-medico-camioneros">Encontrar Mi Plan</a>
       </div>
       <img decoding="async" srcset="/compressed/truck2-900.jpg 900w, /compressed/truck2.jpg 1200w" sizes="(max-width: 900px) 100vw, 1200px" src="/compressed/truck2.jpg" alt="Camionero por cuenta propia revisando opciones de seguro médico" loading="lazy" />
@@ -719,26 +792,10 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       </table>
     </div>
     <p style="text-align:center;font-size:.82rem;color:var(--muted);margin-top:14px;">Solo estimaciones. Las primas reales dependen de tu situación específica. Calculamos cotizaciones exactas gratis, sin compromiso.</p>
-    <div style="text-align:center;margin-top:20px">
-      <a class="btn btn-primary" href="/trucking-health-quote?from=seguro-medico-camioneros">Obtener Mi Cotización Exacta</a>
-    </div>
   </div>
 </section>
 
-<!-- STATS -->
-<section class="section bg-soft">
-  <div class="container">
-    <div class="center" style="margin-bottom:24px">
-      <h2>Por Qué los Owner-Operators y Camioneros Eligen VS Health Benefits</h2>
-    </div>
-    <div class="stats">
-      <div class="stat"><div class="stat-num">40+</div><div class="stat-label">Estados con licencia</div></div>
-      <div class="stat"><div class="stat-num">$0</div><div class="stat-label">Costo de consulta</div></div>
-      <div class="stat"><div class="stat-num">10+</div><div class="stat-label">Aseguradoras principales comparadas</div></div>
-      <div class="stat"><div class="stat-num">24h</div><div class="stat-label">Tiempo típico de respuesta</div></div>
-    </div>
-  </div>
-</section>
+<section class="trk-band"><div class="container"><div class="trk-band-in"><div><b>Ve tu precio real en 2 minutos</b><span>Cotizaciones gratis de un asesor con licencia. Sin spam, sin compromiso.</span></div><div class="trk-band-btns"><a class="btn btn-primary" href="/trucking-health-quote?from=seguro-medico-camioneros_band1">Cotización Gratis &rarr;</a><a class="btn trk-band-call" href="tel:+19548251009">Llamar (954) 825-1009</a></div></div></div></section>
 
 <!-- PROCESS -->
 <section class="section bg-soft">
