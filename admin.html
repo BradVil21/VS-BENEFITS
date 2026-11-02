@@ -1664,7 +1664,7 @@ html.dark .ads-t th,html.dark .ads-t td{border-color:#253a54}html.dark .ads-bars
       <span class="sni-badge" id="b-leads" style="display:none">0</span>
     </button>
     <button class="sidebar-nav-item" data-tab="followups" type="button">
-      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span class="sni-label">Follow-ups</span>
+      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M12 7v5l3 2"/></svg></span><span class="sni-label">Follow-ups</span>
       <span class="sni-badge" id="b-followups" style="display:none">0</span>
     </button>
     <div class="sidebar-divider"></div>
@@ -5166,7 +5166,7 @@ function czFuComplete(id){
 /* Bulk: clear every follow-up in a section with one click */
 function czFuClearAll(key){
   var cs=czFiltered();var ids=[];
-  cs.forEach(function(c){var fu=czFU(c);if(fu.key!=="none"&&(key==="all"||fu.key===key))ids.push(c.id);});
+  cs.forEach(function(c){var fu=czFU(c);if(fu.key!=="none"&&(key==="all"||fu.key===key)&&(!czFuStage||c.stage===czFuStage))ids.push(c.id);});
   if(!ids.length)return;
   var what=key==="all"?("all "+ids.length+" follow-ups"):(ids.length+" "+key+" follow-up"+(ids.length>1?"s":""));
   if(!confirm("Mark "+what+" as completed? This clears them from the list. They will not come back until a new follow-up date is set."))return;
@@ -5394,12 +5394,17 @@ function czClientResults(){
 function czFollowups(){
   var mount=$("cz-followups");if(!mount)return;
   czEnsure();czBadges();
-  mount.innerHTML='<h3 class="cz-h">Follow-ups</h3><p class="cz-lede">Stay on top of every active lead.</p>'
-    +'<div class="cz-toolbar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search…" value="'+escapeHtml(czQuery)+'"/></div></div>'
+  mount.innerHTML='<div class="fu2-head"><div><h3 class="cz-h" style="margin:0">Follow-ups</h3><p class="cz-lede" style="margin:4px 0 0">Everyone you owe a call, sorted by how late they are.</p></div>'
+    +'<details class="fu2-how"><summary>How it works</summary><div><b style="color:#0a7a4f">✓ Done</b> clears it once you reach them. <b style="color:#b45309">☎ No answer</b> brings them back in 2 days. <b style="color:#16447f">⏱ Snooze</b> pushes them 30, 60 or 90 days. <b style="color:#0284c7">↻ Reset</b> restarts the 14-day clock. Everyone comes back up on their own when they’re due.</div></details></div>'
+    +'<div id="fu2-tiles" class="fu2-tiles"></div>'
+    +'<div class="cz-toolbar fu2-bar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search name, phone, email…" value="'+escapeHtml(czQuery)+'"/></div>'
+    +'<select id="fu2-stage" class="fu2-sel" aria-label="Filter by stage"></select></div>'
     +'<div id="cz-fu-results"></div>';
   var sb=mount.querySelector("[data-cz-search]");if(sb)sb.addEventListener("input",function(){czQuery=sb.value;czFuResults();});
+  var ss=$("fu2-stage");if(ss)ss.addEventListener("change",function(){czFuStage=ss.value;czFuResults();});
   czFuResults();
 }
+var czFuView="all",czFuStage="",czFuMoreUp=false;
 /* ── Follow-ups list: Call / Text right on the row, then disposition inline (Oct 2026) ── */
 var czFuDispOpen="";
 var FUQ_PHONE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>';
@@ -5466,27 +5471,111 @@ function czFuBindQuick(box){
   document.head.appendChild(st);}catch(e){}})();
 function czFuResults(){
   var box=$("cz-fu-results");if(!box)return;
-  var cs=czFiltered();
+  var all=[];
+  czFiltered().forEach(function(c){var fu=czFU(c);if(fu.key!=="none")all.push({c:c,fu:fu});});
+  /* stage dropdown: only stages that actually have follow-ups */
+  var ss=$("fu2-stage");
+  if(ss){
+    var cnt={};all.forEach(function(o){cnt[o.c.stage]=(cnt[o.c.stage]||0)+1;});
+    if(czFuStage&&!cnt[czFuStage])czFuStage="";
+    ss.innerHTML='<option value="">All stages ('+all.length+')</option>'+Object.keys(cnt).sort(function(a,b){return cnt[b]-cnt[a];}).map(function(k){return '<option value="'+escapeHtml(k)+'"'+(k===czFuStage?' selected':'')+'>'+escapeHtml(czMETA[k]?czMETA[k].label:k)+' ('+cnt[k]+')</option>';}).join("");
+  }
+  var list=czFuStage?all.filter(function(o){return o.c.stage===czFuStage;}):all;
   var g={overdue:[],today:[],upcoming:[]};
-  cs.forEach(function(c){var fu=czFU(c);if(g[fu.key])g[fu.key].push({c:c,fu:fu});});
-  g.overdue.sort(function(a,b){return b.fu.days-a.fu.days;});
+  list.forEach(function(o){g[o.fu.key].push(o);});
+  g.overdue.sort(function(a,b){return a.fu.days-b.fu.days;});   /* freshest misses first: easiest to save */
+  g.today.sort(function(a,b){return czName(a.c).localeCompare(czName(b.c));});
   g.upcoming.sort(function(a,b){return a.fu.days-b.fu.days;});
-  var total=g.overdue.length+g.today.length+g.upcoming.length;
-  var intro='<div class="cz-panel cz-fu-intro"><div class="cz-ico">↻</div><div class="cz-t"><b style="color:#334155">How the follow-up system works.</b> After you follow up: hit <b style="color:#0a7a4f">✓ Completed</b> if you reached them (clears it), or <b style="color:#b45309">☎ No answer</b> to have them come back in 2 days. Use <b style="color:#16447f">⏱ Snooze</b> to push them 30, 60, or 90 days out, or <b style="color:#0284c7">Reset ↻</b> for the 14-day clock. Either way they come <b style="color:#f43f5e">back up</b> automatically when the follow-up is due, nobody slips through.</div></div>';
-  if(total===0){box.innerHTML=intro+'<div class="cz-panel" style="padding:40px;text-align:center;color:#94a3b8;font-size:14px">No active follow-ups. Sold and "no longer interested" leads don\'t carry tasks.</div>';czBind(box);return;}
-  var secs=[{key:"overdue",title:"Overdue",ico:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z'/><path d='M12 9v4M12 17h.01'/></svg>️",accent:"#e11d48"},{key:"today",title:"Due today",ico:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><circle cx='12' cy='13' r='8'/><path d='M12 9v4l2.5 1.5M5 3 2.5 5.5M19 3l2.5 2.5'/></svg>",accent:"#d97706"},{key:"upcoming",title:"Upcoming",ico:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='3' y='4' width='18' height='18' rx='2'/><path d='M16 2v4M8 2v4M3 10h18'/></svg>",accent:"#64748b"}];
-  var blocks=secs.map(function(sec){
-    var list=g[sec.key];if(!list.length)return"";
-    var items=list.map(function(o){var c=o.c,fu=o.fu;
-      return '<div class="cz-listitem" data-cz-open="'+c.id+'" style="cursor:pointer"><div style="min-width:0;flex:1"><div class="cz-row" style="gap:8px"><span class="cz-nm">'+escapeHtml(czName(c))+'</span><span class="cz-chip" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></div><div class="cz-sub" style="margin-top:2px">'+escapeHtml(c.phone||c.email||"no contact info")+' \u00b7 last contact '+(c.lastContact?czPretty(c.lastContact):"\u2014")+'</div></div><span class="cz-pill" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span>'+czFuQuick(c)+'<span class="fuq-open">Open \u2192</span>'+czFuDispRow(c)+'</div>';
-    }).join("");
-    return '<div class="cz-panel" style="overflow:hidden;margin-bottom:20px"><div class="cz-sec-head"><h2><span style="color:'+sec.accent+'">'+sec.ico+'</span> '+sec.title+' <span class="cz-faint" style="font-size:12px;font-weight:400">'+list.length+'</span></h2><button class="cz-resetbtn vsfu-done" data-cz-clearall="'+sec.key+'" title="Mark every follow-up in this section as completed">\u2713 Clear all '+list.length+'</button></div>'+items+'</div>';
-  }).join("");
-  box.innerHTML=intro+blocks;
+  var wk=g.upcoming.filter(function(o){return o.fu.days<=7;}).length;
+  /* summary tiles double as filters */
+  var tiles=$("fu2-tiles");
+  if(tiles){
+    var T=[["all","All open",list.length,"#16447f",""],["overdue","Overdue",g.overdue.length,"#e11d48",g.overdue.length?"oldest "+g.overdue[g.overdue.length-1].fu.days+"d":"nothing late"],["today","Due today",g.today.length,"#b45309",g.today.length?"call these today":"all clear"],["upcoming","Coming up",g.upcoming.length,"#0284c7",wk+" in the next 7 days"]];
+    tiles.innerHTML=T.map(function(t){return '<button type="button" class="fu2-tile'+(czFuView===t[0]?' on':'')+'" data-fu2-view="'+t[0]+'" style="--fc:'+t[3]+'"><span class="fu2-tl">'+t[1]+'</span><span class="fu2-tn">'+t[2]+'</span><span class="fu2-ts">'+t[4]+'</span></button>';}).join("");
+    tiles.querySelectorAll("[data-fu2-view]").forEach(function(b){b.addEventListener("click",function(){czFuView=b.getAttribute("data-fu2-view");czFuResults();});});
+  }
+  if(!list.length){box.innerHTML='<div class="cz-panel fu2-empty">'+(all.length?'No follow-ups match this filter.':'No open follow-ups. Sold and “no longer interested” leads don’t carry follow-ups.')+'</div>';czBind(box);return;}
+  function row(o){var c=o.c,fu=o.fu;
+    var ph=c.phone?escapeHtml(c.phone):'<span class="cz-faint">no phone</span>';
+    return '<div class="cz-listitem fu2-row" data-cz-open="'+c.id+'">'
+      +'<div class="fu2-who"><span class="cz-nm">'+escapeHtml(czName(c))+'</span><span class="cz-chip" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span></div>'
+      +'<div class="fu2-ph">'+ph+'</div>'
+      +'<div class="fu2-last"><span class="fu2-k">Last contact</span>'+(c.lastContact?czPretty(c.lastContact):"never")+'</div>'
+      +'<div class="fu2-due"><span class="cz-pill" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span></div>'
+      +'<div class="fu2-acts">'+czFuQuick(c)+'<button type="button" class="fu2-done" data-fu2-done="'+c.id+'" title="Reached them: clear this follow-up">✓ Done</button></div>'
+      +czFuDispRow(c)+'</div>';
+  }
+  function section(key,title,ico,accent,rows,extra){
+    if(!rows.length)return "";
+    return '<div class="cz-panel fu2-sec" style="--fc:'+accent+'"><div class="cz-sec-head"><h2><span style="color:'+accent+'">'+ico+'</span> '+title+' <span class="fu2-count">'+rows.length+'</span></h2>'
+      +(key!=="upcoming"?'<button class="cz-resetbtn vsfu-done" data-cz-clearall="'+key+'" title="Mark every follow-up in this section as completed">✓ Clear all '+rows.length+'</button>':'')+'</div>'
+      +'<div class="fu2-cols"><span>Lead</span><span>Phone</span><span>Last contact</span><span>Due</span><span></span></div>'
+      +(extra||rows.map(row).join(""))+'</div>';
+  }
+  var I_WARN="<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z'/><path d='M12 9v4M12 17h.01'/></svg>";
+  var I_CLOCK="<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><circle cx='12' cy='12' r='9'/><path d='M12 7v5l3 2'/></svg>";
+  var I_CAL="<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><rect x='3' y='4' width='18' height='18' rx='2'/><path d='M16 2v4M8 2v4M3 10h18'/></svg>";
+  /* overdue split into age buckets so 70+ rows stay readable */
+  var B=[["1–3 days late",1,3],["4–14 days late",4,14],["15+ days late",15,1e9]];
+  var odHtml=B.map(function(b){var r=g.overdue.filter(function(o){return o.fu.days>=b[1]&&o.fu.days<=b[2];});if(!r.length)return "";return '<div class="fu2-sub"><span>'+b[0]+'</span><em>'+r.length+'</em></div>'+r.map(row).join("");}).join("");
+  var up=g.upcoming,upShown=czFuMoreUp?up:up.filter(function(o){return o.fu.days<=14;});
+  var upHtml=upShown.map(row).join("")+(up.length>upShown.length?'<button type="button" class="fu2-more" data-fu2-more="1">Show '+(up.length-upShown.length)+' more (15+ days out)</button>':'')+(czFuMoreUp&&up.some(function(o){return o.fu.days>14;})?'<button type="button" class="fu2-more" data-fu2-more="0">Show less</button>':'');
+  var html="";
+  if(czFuView==="all"||czFuView==="today")html+=section("today","Due today",I_CLOCK,"#b45309",g.today);
+  if(czFuView==="all"||czFuView==="overdue")html+=section("overdue","Overdue",I_WARN,"#e11d48",g.overdue,odHtml);
+  if(czFuView==="all"||czFuView==="upcoming")html+=section("upcoming","Coming up",I_CAL,"#0284c7",up,upHtml||'<div class="fu2-sub"><span>Nothing in the next 14 days</span></div>');
+  box.innerHTML=html||'<div class="cz-panel fu2-empty">Nothing here right now.</div>';
   czFuBindQuick(box);
   czBind(box);
   box.querySelectorAll("[data-cz-clearall]").forEach(function(b){b.addEventListener("click",function(e){e.stopPropagation();czFuClearAll(b.getAttribute("data-cz-clearall"));});});
+  box.querySelectorAll("[data-fu2-done]").forEach(function(b){b.addEventListener("click",function(e){e.stopPropagation();czFuComplete(b.getAttribute("data-fu2-done"));});});
+  box.querySelectorAll("[data-fu2-more]").forEach(function(b){b.addEventListener("click",function(e){e.stopPropagation();czFuMoreUp=b.getAttribute("data-fu2-more")==="1";czFuResults();});});
 }
+(function(){try{var st=document.createElement("style");st.setAttribute("data-fu2","1");st.textContent=[
+  ".fu2-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px}",
+  ".fu2-how{font-size:13px;color:#475569;max-width:460px}",
+  ".fu2-how summary{cursor:pointer;font-weight:700;color:#16447f;list-style:none;padding:6px 12px;border:1px solid #d8e0ee;border-radius:999px;background:#fff;display:inline-block}",
+  ".fu2-how summary::-webkit-details-marker{display:none}",
+  ".fu2-how[open] summary{margin-bottom:8px}",
+  ".fu2-how div{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px 12px;line-height:1.55}",
+  ".fu2-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}",
+  ".fu2-tile{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;background:#fff;border:1px solid #e2e8f0;border-top:4px solid var(--fc);border-radius:14px;padding:12px 14px;cursor:pointer;font:inherit;transition:box-shadow .15s,transform .15s}",
+  ".fu2-tile:hover{box-shadow:0 6px 18px rgba(13,27,42,.08);transform:translateY(-1px)}",
+  ".fu2-tile.on{background:color-mix(in srgb,var(--fc) 7%,#fff);border-color:var(--fc);box-shadow:0 0 0 1px var(--fc) inset}",
+  ".fu2-tl{font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em}",
+  ".fu2-tn{font-size:28px;font-weight:800;color:var(--fc);line-height:1.1;font-variant-numeric:tabular-nums}",
+  ".fu2-ts{font-size:12px;color:#94a3b8}",
+  ".fu2-bar{display:flex;gap:10px;align-items:center;margin-bottom:16px}",
+  ".fu2-bar .cz-search{flex:1 1 auto}",
+  ".fu2-sel{border:1px solid #d8e0ee;border-radius:10px;padding:8px 12px;min-height:40px;background:#fff;font:inherit;font-size:13.5px;color:#0f172a;max-width:260px}",
+  ".fu2-sec{overflow:hidden;margin-bottom:20px;border-left:4px solid var(--fc)!important}",
+  ".fu2-count{display:inline-block;min-width:24px;text-align:center;font-size:12px;font-weight:800;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--fc) 12%,#fff);color:var(--fc);margin-left:4px}",
+  ".fu2-cols,#cz-fu-results .fu2-row{display:grid!important;grid-template-columns:minmax(200px,2.2fr) minmax(120px,1fr) minmax(110px,1fr) 110px minmax(200px,auto);align-items:center;gap:12px}",
+  ".fu2-cols{padding:8px 20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;background:#f8fafc;border-bottom:1px solid #f1f5f9}",
+  "#cz-fu-results .fu2-row{padding:10px 20px;cursor:pointer}",
+  "#cz-fu-results .fu2-row:hover{background:#f8fbff}",
+  ".fu2-who{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}",
+  ".fu2-who .cz-nm{font-weight:700;color:#0f172a}",
+  ".fu2-ph{font-size:13px;color:#334155;font-variant-numeric:tabular-nums;white-space:nowrap}",
+  ".fu2-last{font-size:13px;color:#64748b;white-space:nowrap}",
+  ".fu2-k{display:none}",
+  ".fu2-acts{display:flex;gap:6px;justify-content:flex-end;align-items:center;flex-wrap:wrap}",
+  ".fu2-done{font:inherit;font-size:12.5px;font-weight:700;white-space:nowrap;border-radius:999px;padding:6px 12px;border:1px solid #bbe5cf;background:#ecfdf3;color:#0a7a4f;cursor:pointer}",
+  ".fu2-done:hover{background:#d7f5e5}",
+  "#cz-fu-results .fu2-row .fuq-disp{grid-column:1/-1}",
+  ".fu2-sub{display:flex;align-items:center;gap:8px;padding:8px 20px;font-size:12px;font-weight:800;color:#475569;background:#fbfcfe;border-top:1px solid #f1f5f9;text-transform:uppercase;letter-spacing:.04em}",
+  ".fu2-sub em{font-style:normal;font-weight:700;color:#94a3b8}",
+  ".fu2-more{display:block;width:100%;border:0;border-top:1px solid #f1f5f9;background:#fbfcfe;color:#16447f;font:inherit;font-size:13px;font-weight:700;padding:11px;cursor:pointer}",
+  ".fu2-more:hover{background:#eef4fd}",
+  ".fu2-empty{padding:40px;text-align:center;color:#94a3b8;font-size:14px}",
+  "html.dark .fu2-tile,html.dark .fu2-sel,html.dark .fu2-how summary{background:#111d2b;border-color:#253a54;color:#e6edf6}",
+  "html.dark .fu2-tile.on{background:#16263a}",
+  "html.dark .fu2-cols,html.dark .fu2-sub,html.dark .fu2-more,html.dark .fu2-how div{background:#0f1a27;border-color:#1e3048}",
+  "html.dark .fu2-who .cz-nm{color:#f0f4fa}html.dark .fu2-ph{color:#c9d6e6}",
+  "html.dark #cz-fu-results .fu2-row:hover{background:#13202f}",
+  "@media(max-width:1100px){.fu2-cols{display:none!important}#cz-fu-results .fu2-row{grid-template-columns:1fr auto!important;row-gap:6px}.fu2-ph,.fu2-last{grid-column:1}.fu2-due{grid-column:2;grid-row:1;justify-self:end}.fu2-acts{grid-column:1/-1;justify-content:flex-start}.fu2-k{display:inline;margin-right:4px;color:#94a3b8}}",
+  "@media(max-width:760px){.fu2-tiles{grid-template-columns:1fr 1fr}.fu2-bar{flex-wrap:wrap}.fu2-sel{max-width:none;width:100%}.fu2-tn{font-size:24px}}"
+].join("");document.head.appendChild(st);}catch(e){}})();
 function czF(label,id,val,ph){return '<label class="cz-fld"><span>'+label+'</span><input class="cz-inp" id="'+id+'" value="'+escapeHtml(val||"")+'" placeholder="'+ph+'"/></label>';}
 
 /* ── Free address autocomplete (OpenStreetMap / Photon, no API key) ── */
@@ -7557,7 +7646,7 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
 (function(){
   try{
     var st=document.createElement("style"); st.setAttribute("data-topnav","1"); st.textContent="\n/* \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 TOPNAV \u2014 nav + account dropdown (added) \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550 */\n.sidebar#sidebar{\n  position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:auto!important;\n  width:auto!important;height:58px!important;\n  display:flex!important;flex-direction:row!important;align-items:center!important;gap:2px!important;\n  padding:0 16px!important;border-right:0!important;border-bottom:1px solid var(--w-line,#e4e9f2)!important;\n  overflow:visible!important;z-index:300!important;transform:none!important;visibility:visible!important;\n}\n.sidebar#sidebar .sidebar-brand{margin:0 12px 0 0!important;padding:0!important;border:0!important;flex:0 0 auto!important;display:flex!important;align-items:center!important;gap:8px!important}\n.sidebar#sidebar .sidebar-brand .brand-text,.sidebar#sidebar .sidebar-brand .pill{display:none!important}\n.sidebar#sidebar .sidebar-divider,.sidebar#sidebar .sidebar-section-label{display:none!important}\n.sidebar-nav#sidebar-nav{display:flex!important;flex-direction:row!important;flex:1 1 auto!important;min-width:0!important;overflow-x:auto!important;overflow-y:hidden!important;gap:1px!important;padding:0!important;margin:0!important;align-items:center!important;scrollbar-width:none;-ms-overflow-style:none}\n.sidebar-nav#sidebar-nav::-webkit-scrollbar{display:none}\n.sidebar#sidebar .sidebar-nav-item{\n  position:relative;background:none!important;border:0!important;box-shadow:none!important;\n  flex-direction:row!important;width:auto!important;white-space:nowrap!important;flex:0 0 auto!important;\n  padding:8px 11px!important;border-radius:8px!important;font-weight:700!important;font-size:14px!important;color:#33455c!important;gap:0!important;\n}\n.sidebar#sidebar .sidebar-nav-item .sni-icon{display:none!important}\n.sidebar#sidebar .sidebar-nav-item:hover{background:#f4f8fe!important;color:#16447f!important}\n.sidebar#sidebar .sidebar-nav-item.active{background:none!important;color:#16447f!important;box-shadow:none!important}\n.sidebar#sidebar .sidebar-nav-item.active::after{content:\"\";position:absolute;left:11px;right:11px;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:linear-gradient(90deg,#16447f,#0db5a6);transform-origin:left;animation:vsUnderline .3s ease both}\n.sidebar#sidebar .sni-badge{position:static!important;margin-left:6px!important;transform:none!important}\n.sidebar#sidebar #bell-btn{flex:0 0 auto!important;margin:0 0 0 6px!important}\n.sidebar#sidebar #sync-pill{display:none!important}\n.sidebar#sidebar .sidebar-bottom{display:none!important}\n/* account dropdown (avatar + caret) */\n.vs-acct{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;background:none;border:0;cursor:pointer;padding:4px 6px 4px 4px;border-radius:999px;margin-left:6px}\n.vs-acct:hover,.vs-acct.on{background:#f4f8fe}\n.vs-acct .vs-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#16447f,#0db5a6);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px}\n.vs-acct .cx{font-size:10px;color:#5a6b80}\n.vs-acct-menu{position:fixed;top:56px;right:14px;min-width:210px;background:#fff;border:1px solid #e4e9f2;border-radius:12px;box-shadow:0 16px 38px rgba(13,27,42,.16);padding:6px;display:none;z-index:500}\n.vs-acct-menu.open{display:block;animation:vsPop .2s ease both}\n.vs-acct-menu .vs-acct-hd{padding:8px 12px 6px;font-size:11px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#5a6b80}\n.vs-acct-menu .sidebar-nav-item,.vs-acct-menu #signout-btn{display:flex!important;width:100%!important;justify-content:flex-start!important;align-items:center!important;padding:11px 12px!important;border-radius:8px!important;font-weight:700!important;font-size:14px!important;color:#0d1b2a!important;background:none!important;border:0!important;box-shadow:none!important;gap:10px!important;white-space:nowrap}\n.vs-acct-menu .sidebar-nav-item .sni-icon{display:none!important}\n.vs-acct-menu .sidebar-nav-item:hover,.vs-acct-menu #signout-btn:hover{background:#f4f8fe!important;color:#16447f!important}\n.vs-acct-menu .sidebar-nav-item.active{color:#16447f!important;background:#f4f8fe!important}\n.vs-acct-menu .sidebar-nav-item.active::after{display:none!important}\n.vs-acct-div{height:1px;background:#e4e9f2;margin:6px 4px}\n/* remove old title bar + hamburger + follow-ups */\n#topbar{display:none!important}\n#sidebar-toggle{display:none!important}\n.main{margin-left:0!important;margin-top:58px!important}\n.main.sidebar-collapsed{margin-left:0!important}\n.sidebar-overlay{display:none!important}\n.sidebar-nav-item[data-tab=\"followups\"]{display:none!important}\n#p-followups{display:none!important}\n\n/* \u2550\u2550\u2550 transitions + page animations \u2550\u2550\u2550 */\n.panel.active{animation:vsPageIn .42s cubic-bezier(.2,.7,.2,1) both}\n@keyframes vsPageIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}\n@keyframes vsUnderline{from{transform:scaleX(0)}to{transform:scaleX(1)}}\n@keyframes vsRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}\n@keyframes vsPop{from{opacity:0;transform:translateY(10px) scale(.98)}to{opacity:1;transform:none}}\n.sidebar-nav-item,.btn,.cz-btn-go,.cz-btn-ghost,.cz-btn-soft,.cz-iconbtn,.cz-resetbtn,.status-pill,.cz-pill,.card,.tbl .row,.cz-card,.cz-stat,.cz-stagecard,.d3-meet,.d3-li,.d3-stage,.card-3d,.asst-card,.search,.sortsel,.cz-inp,.cz-search input,input,select,textarea,.abtn,.d3-cal-btn,.seg button,.vs-acct{transition:background .2s ease,color .2s ease,border-color .2s ease,box-shadow .25s ease,transform .2s ease!important}\n#p-dashboard .d3-grid .card-3d{animation:vsRise .5s cubic-bezier(.2,.7,.2,1) both}\n#p-dashboard .d3-grid .card-3d:nth-child(2){animation-delay:.06s}\n#p-dashboard .d3-grid .card-3d:nth-child(3){animation-delay:.12s}\n#p-dashboard .d3-grid .card-3d:nth-child(4){animation-delay:.18s}\n#p-dashboard .d3-two>*{animation:vsRise .5s cubic-bezier(.2,.7,.2,1) .12s both}\n.tbl .row,.cz-card{animation:vsRise .4s cubic-bezier(.2,.7,.2,1) both}\n.modal-box{animation:vsPop .25s ease both}\n@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important}}\n\n@media(max-width:820px){\n  .sidebar#sidebar{position:fixed!important;top:0!important;left:0!important;right:0!important;width:auto!important;height:54px!important;transform:none!important;flex-direction:row!important;padding:0 8px!important;gap:0!important}\n  .main{margin-top:54px!important}\n  .sidebar#sidebar .sidebar-nav-item{padding:7px 9px!important;font-size:13.5px!important}\n  .vs-acct .cx{display:none}\n  .vs-acct-menu{top:52px;right:8px}\n  .sidebar#sidebar .sidebar-brand{margin-right:8px!important}\n}\n"; document.head.appendChild(st);
-    if(typeof ALL_TABS!=="undefined"){var i=ALL_TABS.indexOf("followups"); if(i>=0)ALL_TABS.splice(i,1);}
+    /* Follow-ups is a real nav tab again (Nov 2) */
 
     var ACCOUNT=["settings","users"]; // account/admin items -> avatar dropdown
     var acctBtn=null, menu=null;
@@ -7591,8 +7680,6 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
         if(!menu.querySelector(".vs-acct-div")){var dv=document.createElement("div");dv.className="vs-acct-div";menu.appendChild(dv);}
         menu.appendChild(signout);
       }
-      var fp=document.getElementById("p-followups");
-      if(fp&&fp.classList.contains("active")&&typeof switchTab==="function")switchTab("dashboard");
     }
     build(); setTimeout(build,500); setTimeout(build,1600);
   }catch(err){ if(window.console)console.warn("topnav init failed",err); }
@@ -7690,20 +7777,7 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
   /* ───────── FIX 1: "View all" opens the Follow-ups panel ───────── */
   if(typeof ALL_TABS!=="undefined" && ALL_TABS.indexOf("followups")<0)ALL_TABS.push("followups");
   function showFollowups(){
-    try{
-      Array.prototype.forEach.call(document.querySelectorAll(".panel"),function(p){p.classList.remove("active");});
-      var fp=document.getElementById("p-followups"); if(!fp)return;
-      fp.classList.add("active");
-      Array.prototype.forEach.call(document.querySelectorAll(".sidebar-nav-item"),function(b){b.classList.remove("active");});
-      if(typeof czFollowups==="function")czFollowups();
-      var host=document.getElementById("cz-followups");
-      if(host && !host.querySelector(".vs-fu-back")){
-        var back=document.createElement("button"); back.type="button"; back.className="vs-fu-back"; back.innerHTML="← Back to dashboard";
-        back.addEventListener("click",function(){ if(typeof switchTab==="function")switchTab("dashboard"); });
-        host.insertBefore(back,host.firstChild);
-      }
-      window.scrollTo(0,0);
-    }catch(e){ if(window.console)console.warn(e); }
+    try{ if(typeof switchTab==="function")switchTab("followups"); window.scrollTo(0,0); }catch(e){ if(window.console)console.warn(e); }
   }
   window.vsShowFollowups=showFollowups;
   document.addEventListener("click",function(e){
@@ -7725,7 +7799,7 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
     buildDrawer(); drawer.innerHTML="";
     var cur=currentActiveTab(), seen={};
     Array.prototype.forEach.call(document.querySelectorAll('.sidebar-nav-item[data-tab]'),function(it){
-      var tab=it.getAttribute("data-tab"); if(!tab||tab==="followups"||seen[tab])return; seen[tab]=1;
+      var tab=it.getAttribute("data-tab"); if(!tab||seen[tab])return; seen[tab]=1;
       var lab=it.querySelector(".sni-label"); var label=(lab&&lab.textContent)||tab;
       var b=document.createElement("button"); b.type="button"; if(tab===cur)b.className="active";
       var sp=document.createElement("span"); sp.textContent=label; b.appendChild(sp);
@@ -8472,7 +8546,10 @@ try{(function(){
     var nav=document.getElementById("sidebar-nav");if(!nav)return;
     function btn(t){return nav.querySelector('.sidebar-nav-item[data-tab="'+t+'"]');}
     var leads=btn("leads"),biz=btn("bizleads"),dash=btn("dashboard"),mt=btn("mytasks");
-    if(leads&&biz&&leads.nextElementSibling!==biz)leads.insertAdjacentElement("afterend",biz);
+    var fu=btn("followups");
+    if(leads&&fu&&leads.nextElementSibling!==fu)leads.insertAdjacentElement("afterend",fu);
+    var anchor=fu||leads;
+    if(anchor&&biz&&anchor.nextElementSibling!==biz)anchor.insertAdjacentElement("afterend",biz);
     if(dash&&mt&&dash.nextElementSibling!==mt)dash.insertAdjacentElement("afterend",mt);
     var menu=document.querySelector(".vs-acct-menu"),blocked=document.querySelector('.sidebar-nav-item[data-tab="blocked"]');
     if(menu&&blocked&&blocked.parentNode!==menu){var dv=menu.querySelector(".vs-acct-div");if(dv)menu.insertBefore(blocked,dv);else menu.appendChild(blocked);}
@@ -12136,7 +12213,6 @@ try{(function(){
   "html body aside.sidebar#sidebar .sni-badge{position:static!important;margin-left:auto!important;transform:none!important;background:#e5484d!important;color:#fff!important;border-radius:999px!important;font-size:11px!important;font-weight:800!important;min-width:20px!important;height:20px!important;padding:0 6px!important;display:inline-flex;align-items:center;justify-content:center}",
   "html body aside.sidebar#sidebar .sidebar-divider{display:block!important;height:1px!important;background:rgba(255,255,255,.08)!important;margin:10px 8px!important;flex:0 0 auto}",
   "html body aside.sidebar#sidebar .sidebar-section-label{display:block!important;flex:0 0 auto;padding:4px 12px 6px!important;font-size:10.5px!important;font-weight:800!important;letter-spacing:.09em!important;text-transform:uppercase!important;color:rgba(190,208,232,.5)!important}",
-  "html body aside.sidebar#sidebar .sidebar-nav-item[data-tab=followups]{display:none!important}",
   "html body aside.sidebar#sidebar .vs-burger,html body aside.sidebar#sidebar .sidebar-bottom,html body aside.sidebar#sidebar #sync-pill{display:none!important}",
   "html body aside.sidebar#sidebar .vs-acct{grid-column:1!important;grid-row:3!important;display:flex!important;align-items:center!important;gap:10px!important;width:100%!important;margin:12px 0 0!important;padding:8px 10px!important;border-radius:12px!important;background:rgba(255,255,255,.05)!important;border:1px solid rgba(255,255,255,.07)!important;color:#fff!important;text-align:left!important}",
   "html body aside.sidebar#sidebar .vs-acct:hover,html body aside.sidebar#sidebar .vs-acct.on{background:rgba(255,255,255,.1)!important}",
