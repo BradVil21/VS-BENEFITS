@@ -2190,9 +2190,11 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       // Must be one of the pipeline column ids in admin.html. Without it the
       // card is written to the portal and rendered in no column at all.
       stage:     'new_lead',
-      notes:     extras.join('\n'),
+      notes:     (data.niche === 'trucker' ? ['Trucker lead (trucking quote page)'] : []).concat(extras).join('\n'),
       source:    vsChannel('index-funnel'),
-      sourceDetail: 'index-funnel',
+      sourceDetail: data.niche ? ('index-funnel-' + data.niche) : 'index-funnel',
+      niche:     data.niche || '',
+      tags:      data.tags || [],
       attribution: vsAttr(),
       type:      data.type,
       created:   Date.now(),

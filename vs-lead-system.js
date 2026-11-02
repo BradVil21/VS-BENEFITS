@@ -184,6 +184,8 @@
     // through `fields`. Fold them into the note instead - a lead that says "lost
     // job coverage, $35-50k" is worth more on the phone than a bare number.
     var extras=[];
+    var trk=!!window.__vsTrk;                       // came from the trucking quote page (?niche=trucking)
+    if(trk) extras.push('Trucker lead (trucking quote page)');
     var sits=((d.sits&&d.sits.ind)||[]).concat((d.sits&&d.sits.biz)||[]);
     if(sits.length) extras.push('Situation: '+sits.join(', '));
     if(d.income) extras.push('Household income: '+d.income);
@@ -198,6 +200,7 @@
       address:f['ind-address']||f['biz-address']||'',
       zip:f['ind-zip']||f['biz-zip']||'',state:f['ind-state']||f['biz-state']||'',
       company:f['biz-name']||'',
+      tags:trk?['trucker','lp-trucker']:[],
       notes:extras.join('; ')};
   }
   /* Only pass an email the funnel itself is happy with: a half-typed or mistyped

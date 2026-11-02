@@ -10323,6 +10323,84 @@ try{(function(){
  }catch(err){if(window.console)console.warn("pipe-keep-place init failed",err);}
 })();
 
+/* ═══ pipe-source-icons v1 (2026-11-01) ════════════════════════════════════
+   Every pipeline card shows small icons for where the lead came from:
+   a truck for trucker leads (trucking quote form, trucker tags/notes),
+   then the source (Google Ads, Facebook, website, phone, referral, agency...).
+   Hover an icon to see the source name.
+   ════════════════════════════════════════════════════════════════════════ */
+(function(){
+ try{
+  var P='<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+  var I={
+   truck:P+'<path d="M1 6h13v10H1zM14 9h4.5l3.5 3.5V16h-8"/><circle cx="5.5" cy="18" r="2"/><circle cx="17.5" cy="18" r="2"/></svg>',
+   google:'<svg viewBox="0 0 48 48" width="14" height="14" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>',
+   facebook:P+'<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>',
+   web:P+'<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>',
+   phone:P+'<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>',
+   referral:P+'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>',
+   agency:P+'<path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1M14 9h1M9 13h1M14 13h1M9 17h6"/></svg>',
+   walkin:P+'<path d="M13 4a2 2 0 1 0 0-.01"/><path d="M9 20l3-8 3 3v5M7 12l3-3 4 1 3 3"/></svg>',
+   repeat:P+'<path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>',
+   network:P+'<circle cx="12" cy="5" r="3"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><path d="M12 8v4M7 17l4-4M17 17l-4-4"/></svg>',
+   other:P+'<circle cx="12" cy="12" r="3"/></svg>'
+  };
+  var TRUCK_RE=/truck|trucker|cdl|owner.?operator|lease.?operator|camioner|\botr\b|carrier_no_benefits|switching_carriers|dot_physical_flag/i;
+  function hay(c){try{return [c.source,c.sourceDetail,c.notes,c.leadSource,c.lead_source,c.niche,(c.tags||[]).join(" ")].join(" ");}catch(e){return "";}}
+  function srcKind(c){
+    var s=String(c.source||"")+" "+String(c.sourceDetail||"")+" "+String(c.leadSource||c.lead_source||"");
+    if(/google ads|adwords|\bcpc\b|gclid|ppc/i.test(s))return ["google","Google Ads"];
+    if(/facebook|instagram|\bmeta\b|\bfb\b|\big\b/i.test(s))return ["facebook","Facebook / Instagram"];
+    if(/agency|bought|purchased|vendor/i.test(s))return ["agency","Agency / bought lead"];
+    if(/referr|partner/i.test(s))return ["referral","Referral"];
+    if(/phone|call/i.test(s))return ["phone","Phone call"];
+    if(/walk/i.test(s))return ["walkin","Walk-in"];
+    if(/repeat|existing client/i.test(s))return ["repeat","Repeat client"];
+    if(/network|event/i.test(s))return ["network","Networking"];
+    if(/organic|search|seo|website|web|vshealthbenefits|landing|form|chat/i.test(s))return ["web","Website / organic search"];
+    if(String(c.source||"").trim())return ["other",String(c.source).trim()];
+    return null;
+  }
+  function icons(c){
+    var out="";
+    if(TRUCK_RE.test(hay(c)))out+='<span class="psi psi-truck" title="Trucker lead">'+I.truck+'</span>';
+    var k=srcKind(c);
+    if(k)out+='<span class="psi psi-'+k[0]+'" title="Source: '+String(k[1]).replace(/"/g,"&quot;")+'">'+I[k[0]]+'</span>';
+    return out;
+  }
+  function decorate(){
+    var box=document.getElementById("cz-pipe-results");if(!box)return;
+    var map={};try{getLeads().forEach(function(c){map[c.id]=c;});}catch(e){return;}
+    box.querySelectorAll("[data-cz-card]").forEach(function(card){
+      if(card.querySelector(".psi-wrap"))return;
+      var c=map[card.getAttribute("data-cz-card")];if(!c)return;
+      var h=icons(c);if(!h)return;
+      var nm=card.querySelector(".cz-nm");if(!nm)return;
+      var w=document.createElement("span");w.className="psi-wrap";w.innerHTML=h;nm.insertBefore(w,nm.firstChild);
+      if(/psi-truck/.test(h))card.classList.add("psi-is-trucker");
+    });
+  }
+  var st=document.createElement("style");st.textContent=
+   ".psi-wrap{display:inline-flex;gap:4px;vertical-align:-3px;margin-right:6px}"+
+   ".psi{width:22px;height:22px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;cursor:default}"+
+   ".psi-truck{background:#111;color:#fbbf24}"+
+   ".psi-google{background:#fff;border:1px solid #e2e8f0}"+
+   ".psi-facebook{background:#e7f0ff;color:#1877f2}"+
+   ".psi-web{background:#e6f8f5;color:#0d9488}"+
+   ".psi-phone{background:#eef2ff;color:#4f46e5}"+
+   ".psi-referral{background:#fdf2f8;color:#db2777}"+
+   ".psi-agency{background:#f1f5f9;color:#64748b}"+
+   ".psi-walkin,.psi-repeat,.psi-network,.psi-other{background:#f5f3ff;color:#7c3aed}"+
+   ".cz-card.psi-is-trucker{border-left:3px solid #fbbf24}";
+  document.head.appendChild(st);
+  var _p=czPipeResults;
+  czPipeResults=function(){var o=_p.apply(this,arguments);try{decorate();}catch(e){console.warn("pipe-source-icons",e);}return o;};
+  czPipeResults.__keepPlace=true;
+  window.vsLeadSourceIcons=icons;
+  if(document.getElementById("cz-pipe-results")){try{decorate();}catch(e){}}
+ }catch(err){if(window.console)console.warn("pipe-source-icons init failed",err);}
+})();
+
   /* ════════ 2. EXPORT ════════ */
   function csvOut(rows){return "﻿"+rows.map(function(r){return r.map(csvEscape).join(",");}).join("\r\n");}
   function slug(s){return String(s||"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"all";}
