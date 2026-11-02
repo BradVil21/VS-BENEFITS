@@ -12642,7 +12642,8 @@ html.dark .vsd-pill select option{background:#111d2b}
   function save(p){p.v=2;try{localStorage.setItem(KEY,JSON.stringify(p));}catch(e){}try{syncPill();}catch(e){}}
   var isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
 
-  var NAMES={vsconnect:"VS Connect",ringcentral:"RingCentral",native:"this device's phone app"};
+  var NAMES={vsconnect:"VS Connect",ringcentral:"RingCentral",ringy:"Ringy",native:"this device's phone app"};
+  var RINGY_URL="https://app.ringy.com/home/dashboard", ringyWin=null;
 
   /* Phone number → digits in the chosen format (US default country code 1) */
   function digits(raw){
@@ -12683,7 +12684,25 @@ html.dark .vsd-pill select option{background:#111d2b}
     t.textContent=msg;t.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove("show");},2600);
   }
 
+  function copyText(t){
+    try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).catch(function(){fallbackCopy(t);});return;}}catch(e){}
+    fallbackCopy(t);
+  }
+  function fallbackCopy(t){try{var x=document.createElement("textarea");x.value=t;x.style.position="fixed";x.style.opacity="0";document.body.appendChild(x);x.select();document.execCommand("copy");x.remove();}catch(e){}}
+  /* Ringy has no dial link, so: copy the 10-digit number and bring up the Ringy tab, ready to paste in its dialer */
+  function launchRingy(d){
+    var ten=(d.length===11&&d.charAt(0)==="1")?d.slice(1):d;
+    copyText(ten);
+    try{window.__vsLastDial={provider:"ringy",url:RINGY_URL,at:Date.now()};}catch(e){}
+    var w=null;
+    try{if(ringyWin&&!ringyWin.closed){ringyWin.focus();w=ringyWin;}}catch(e){}
+    if(!w){w=window.open(RINGY_URL,"vs_ringy");ringyWin=w;}
+    if(!w)location.href=RINGY_URL;
+    toast(pretty(d)+" copied. In Ringy, open the phone icon and paste it (\u2318V).");
+  }
+
   function launch(provider,d,p){
+    if(provider==="ringy"){launchRingy(d);return;}
     var url=buildUrl(provider,d,p);
     try{window.__vsLastDial={provider:provider,url:url,at:Date.now()};}catch(e){}
     if(/^https?:/i.test(url)){
@@ -12702,6 +12721,7 @@ html.dark .vsd-pill select option{background:#111d2b}
     ov.innerHTML='<div class="vsd-box" role="dialog" aria-label="Call with"><h3>Call with…</h3><p class="vsd-num">'+pretty(d)+'</p>'+
       '<button type="button" class="vsd-go" data-p="vsconnect">VS Connect<small>VanillaSoft dialer</small></button>'+
       '<button type="button" class="vsd-go" data-p="ringcentral">RingCentral<small>'+(p.rcMode==="web"?"Web app in a new tab":"RingCentral app")+'</small></button>'+
+      '<button type="button" class="vsd-go" data-p="ringy">Ringy<small>Copies the number and opens Ringy</small></button>'+
       '<button type="button" class="vsd-go" data-p="native">Phone app<small>Whatever this device opens for phone links</small></button>'+
       '<label class="vsd-rem"><input type="checkbox" id="vsd-rem"> Always use this, don’t ask again</label>'+
       '<button type="button" class="vsd-x">Cancel</button></div>';
@@ -12749,7 +12769,8 @@ html.dark .vsd-pill select option{background:#111d2b}
       '<div class="vsd-opts">'+
         opt("vsd-prov","vsconnect","VS Connect","VanillaSoft dialer app")+
         opt("vsd-prov","ringcentral","RingCentral","RingCentral app or web")+
-        opt("vsd-prov","ask","Ask me each time","Pick VS Connect or RingCentral per call")+
+        opt("vsd-prov","ringy","Ringy","Copies the number, opens Ringy")+
+        opt("vsd-prov","ask","Ask me each time","Pick VS Connect, RingCentral or Ringy per call")+
         opt("vsd-prov","native","Computer default","Whatever opens phone links now")+
       '</div>'+
       '<div class="vsd-sub" id="vsd-sub-vs"><div class="field"><label for="vsd-vs">VS Connect link type</label>'+
@@ -12761,6 +12782,7 @@ html.dark .vsd-pill select option{background:#111d2b}
         '<div class="field"><label for="vsd-rcact">When I click Call</label>'+
         '<select id="vsd-rcact"><option value="call">Start the call right away</option><option value="dialer">Open the dial pad with the number filled in (lets me pick caller ID)</option></select></div>'+
         '<div class="vsd-hint">The first time, your browser asks to open RingCentral. Tick <em>Always allow</em>. Calls use your default RingCentral caller ID unless you choose the dial-pad option.</div></div>'+
+      '<div class="vsd-sub" id="vsd-sub-ringy"><div class="vsd-hint"><strong>How Ringy calls work:</strong> clicking Call copies the lead’s number and switches to your Ringy tab (opens one if it’s closed). Click the phone icon at the top right of Ringy, click in <em>Phone number</em> and paste (⌘V), then hit Call. Ringy picks the Smart local caller ID like normal. Ringy doesn’t offer a direct dial link, so the paste step can’t be skipped.</div></div>'+
       '<div class="vsd-sub"><div class="field"><label for="vsd-fmt">Number format sent</label>'+
         '<select id="vsd-fmt"><option value="1">15551234567 (with country code)</option><option value="plus">+15551234567</option><option value="10">5551234567 (10 digits)</option></select></div>'+
         '<div class="field"><label for="vsd-mob">On a phone or tablet</label>'+
@@ -12782,6 +12804,7 @@ html.dark .vsd-pill select option{background:#111d2b}
     c.querySelector("#vsd-mob").value=p.mobile;
     c.querySelector("#vsd-sub-vs").style.display=(p.provider==="vsconnect"||p.provider==="ask")?"":"none";
     c.querySelector("#vsd-sub-rc").style.display=(p.provider==="ringcentral"||p.provider==="ask")?"":"none";
+    c.querySelector("#vsd-sub-ringy").style.display=(p.provider==="ringy")?"":"none";
   }
   function mount(){
     var panel=document.getElementById("p-settings");if(!panel||document.getElementById("vs-dialer-card"))return;
@@ -12818,7 +12841,7 @@ html.dark .vsd-pill select option{background:#111d2b}
     var bar=document.querySelector("#topbar .topbar-right");if(!bar)return;
     var w=document.createElement("label");w.id="vsd-pill";w.className="vsd-pill";w.title="Where Call buttons send the number";
     w.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'+
-      '<select id="vsd-pill-sel" aria-label="Call with"><option value="vsconnect">VS Connect</option><option value="ringcentral">RingCentral</option><option value="ask">Ask each call</option><option value="native">Default app</option></select>';
+      '<select id="vsd-pill-sel" aria-label="Call with"><option value="vsconnect">VS Connect</option><option value="ringcentral">RingCentral</option><option value="ringy">Ringy</option><option value="ask">Ask each call</option><option value="native">Default app</option></select>';
     bar.insertBefore(w,bar.firstChild);
     w.querySelector("select").addEventListener("change",function(){var p=load();p.provider=this.value;save(p);syncCard();toast("Call buttons now use "+(p.provider==="ask"?"a “Call with…” picker":p.provider==="native"?"your default phone app":NAMES[p.provider]));});
     syncPill();
