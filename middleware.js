@@ -170,8 +170,19 @@ async function loadKeys() {
     (doc && doc.fields && doc.fields.items && doc.fields.items.arrayValue &&
      doc.fields.items.arrayValue.values) || [];
   const keys = new Set();
+  // Trusted devices (added 2026-11-02): rows with kind "trusted-device" carry a
+  // random token instead of an IP. A browser holding that token in its
+  // vs_trust cookie gets through even when its network address is banned, so
+  // Bradley can block a spammer on a shared network without blocking himself.
+  const trusted = new Set();
+  keys.trusted = trusted;
   for (const v of values) {
     const f = (v && v.mapValue && v.mapValue.fields) || {};
+    if (f.kind && f.kind.stringValue === "trusted-device") {
+      const tk = (f.token && f.token.stringValue) || "";
+      if (tk.length >= 24) trusted.add(tk);
+      continue;
+    }
     // An entry is live unless it has been explicitly unbanned. Unbanning
     // removes the row outright, so this is only a guard against a stale shape.
     if (f.active && f.active.booleanValue === false) continue;
@@ -305,6 +316,17 @@ function blockedPage(ip) {
 </body></html>`;
 }
 
+// The vs_trust cookie set by the admin portal's "Trust this computer" button.
+function trustToken(req) {
+  const c = req.headers.get("cookie") || "";
+  const m = /(?:^|;\s*)vs_trust=([A-Za-z0-9_-]{24,128})/.exec(c);
+  return m ? m[1] : "";
+}
+function isTrusted(req, keys) {
+  const t = trustToken(req);
+  return !!(t && keys && keys.trusted && keys.trusted.has(t));
+}
+
 // ── entry point ────────────────────────────────────────────────────────────
 export default async function middleware(request, event) {
   const disabled = process.env.IP_BLOCK_DISABLED === "1";
@@ -322,7 +344,9 @@ export default async function middleware(request, event) {
     const body = {
       ip: raw,
       key: key,
-      blocked: !!(keys && key && keys.has(key)),
+      blocked: !!(keys && key && keys.has(key)) && !isTrusted(request, keys),
+      addressOnBlockList: !!(keys && key && keys.has(key)),
+      trustedDevice: isTrusted(request, keys),
       enforcing: !disabled && !!keys,
       listSize: keys ? keys.size : null,
       listAgeSeconds: age === null ? null : Math.round(age / 1000),
@@ -346,6 +370,7 @@ export default async function middleware(request, event) {
   let keys;
   try { keys = await blockedKeys(event); } catch (e) { return; }
   if (!keys || !keys.size || !keys.has(key)) return;
+  if (isTrusted(request, keys)) return;   // a trusted device on a banned network
 
   return new Response(blockedPage(raw), {
     status: 404,

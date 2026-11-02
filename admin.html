@@ -1984,6 +1984,19 @@ html.dark .ads-t th,html.dark .ads-t td{border-color:#253a54}html.dark .ads-bars
         <div id="blk-msg" style="margin-top:8px"></div>
       </div>
 
+
+      <div class="card" id="trust-card">
+        <h4 style="margin:0 0 6px;font-size:15px">Trusted devices</h4>
+        <p class="lede">Blocked a spammer on the same network as you? Trust this computer and the website lets <strong>this browser</strong> through, while everyone else on that address stays blocked. Do it once on each computer and browser you use.</p>
+        <div id="trust-status" style="margin:4px 0 10px"></div>
+        <div class="toolbar" style="margin:0">
+          <input id="trust-label" class="search" type="text" placeholder="Name for this device (optional), e.g. Office Mac" autocomplete="off" />
+          <button id="trust-add" class="btn btn-primary btn-sm" type="button">Trust this computer</button>
+        </div>
+        <div id="trust-msg" style="margin-top:8px"></div>
+        <div id="trust-list" style="margin-top:10px"></div>
+      </div>
+
       <div class="card">
         <h4 style="margin:0 0 10px;font-size:15px">Currently blocked <span id="blk-count" style="font-weight:500;color:var(--muted)"></span></h4>
         <div id="blocked-mount"></div>
@@ -6705,8 +6718,9 @@ function blkMsg(kind,text){
 }
 
 function renderBlocked(){
+  try{renderTrusted();}catch(e){}
   var mount=$("blocked-mount");if(!mount)return;
-  var list=getBlockedIps().slice().sort(function(a,b){return (b.created||0)-(a.created||0);});
+  var list=getBlockedIps().filter(function(b){return b&&b.ip&&b.kind!=="trusted-device";}).sort(function(a,b){return (b.created||0)-(a.created||0);});
 
   var bdg=$("b-blocked");
   if(bdg){bdg.textContent=list.length;bdg.style.display=list.length?"":"none";}
@@ -6757,6 +6771,70 @@ function renderBlocked(){
     });
   }
 }
+
+
+/* ═══════════════ TRUSTED DEVICES (2026-11-02) ═══════════════
+   A trusted device is a row in vs_state/blocked_ips with kind "trusted-device"
+   and a random token (no ip). This browser keeps the token in the vs_trust
+   cookie; middleware.js lets that cookie through even when the address is
+   banned. Removing the row revokes it everywhere within about a minute. */
+function trustCookieGet(){var m=/(?:^|;\s*)vs_trust=([A-Za-z0-9_-]+)/.exec(document.cookie||"");return m?m[1]:"";}
+function trustCookieSet(t){
+  var dom=/(^|\.)vshealthbenefits\.com$/i.test(location.hostname)?"; domain=.vshealthbenefits.com":"";
+  var sec=location.protocol==="https:"?"; secure":"";
+  document.cookie="vs_trust="+(t||"")+"; path=/; max-age="+(t?(5*365*86400):0)+"; samesite=lax"+sec+dom;
+}
+function trustedRows(){return getBlockedIps().filter(function(b){return b&&b.kind==="trusted-device";});}
+function trustMsg(kind,text){var e=$("trust-msg");if(!e)return;e.innerHTML="";if(text)e.appendChild(el("div",{class:"notice notice-"+kind,text:text}));}
+function deviceGuess(){
+  var ua=navigator.userAgent||"";
+  var os=/(Windows|Mac OS X|iPhone|iPad|Android|Linux)/.exec(ua),br=/(Edg|OPR|Firefox|Chrome|Safari)/.exec(ua);
+  return [os?os[1].replace("Mac OS X","Mac"):"Computer",br?br[1].replace("Edg","Edge").replace("OPR","Opera"):""].filter(Boolean).join(" \u00b7 ");
+}
+function renderTrusted(){
+  var st=$("trust-status"),lst=$("trust-list");if(!st||!lst)return;
+  var mine=trustCookieGet(),rows=trustedRows();
+  var meRow=rows.filter(function(r){return r.token===mine;})[0];
+  st.innerHTML=meRow
+    ?'<div class="notice notice-ok">\u2713 This browser is trusted ('+escapeHtml(meRow.label||"this device")+'). It can reach the website even if its network is blocked.</div>'
+    :'<div class="notice notice-err">This browser is not trusted yet. If your network address is blocked, the website shows you the blocked page too.</div>';
+  var add=$("trust-add");if(add)add.style.display=meRow?"none":"";
+  var lab=$("trust-label");if(lab)lab.style.display=meRow?"none":"";
+  if(!rows.length){lst.innerHTML="";return;}
+  lst.innerHTML='<div class="blk-list">'+rows.map(function(r){
+    return '<div class="blk-row"><div class="blk-main"><div class="blk-ip" style="font-family:inherit">'+escapeHtml(r.label||"Device")+(r.token===mine?' <span class="blk-tag">this browser</span>':'')+'</div><div class="blk-sub blk-when">Trusted '+fmtDateTime(r.created)+(r.by?(" by "+escapeHtml(r.by)):"")+'</div></div><button type="button" class="btn btn-ghost btn-sm" data-untrust="'+escapeHtml(r.id)+'">Remove</button></div>';
+  }).join("")+'</div>';
+  lst.querySelectorAll("[data-untrust]").forEach(function(b){b.addEventListener("click",function(){
+    var id=b.getAttribute("data-untrust");var row=trustedRows().filter(function(r){return r.id===id;})[0];if(!row)return;
+    if(!confirm("Stop trusting \""+(row.label||"this device")+"\"?\n\nIf its network is blocked, it will see the blocked page again."))return;
+    if(row.token===trustCookieGet())trustCookieSet("");
+    saveBlockedIps(getBlockedIps().filter(function(x){return x.id!==id;})).then(function(ok){trustMsg(ok?"ok":"err",ok?"Removed. Takes effect within about a minute.":"Removed here, but the sync connection is offline, so the website did not get the change.");renderTrusted();});
+    renderTrusted();
+  });});
+}
+(function wireTrust(){
+  function boot(){
+    var add=$("trust-add");if(!add||add._wired)return;add._wired=1;
+    add.addEventListener("click",function(){
+      var a=new Uint8Array(24);(window.crypto||window.msCrypto).getRandomValues(a);
+      var tok=Array.prototype.map.call(a,function(x){return ("0"+x.toString(16)).slice(-2);}).join("");
+      var lab=(($("trust-label")||{}).value||"").trim()||deviceGuess();
+      var row={id:"trust_"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),kind:"trusted-device",token:tok,label:lab.slice(0,60),
+        by:(function(){try{return (currentAdmin()||{}).email||"";}catch(e){return "";}})(),created:Date.now()};
+      var list=getBlockedIps();list.push(row);
+      trustCookieSet(tok);
+      trustMsg("ok","Trusting this browser\u2026");
+      saveBlockedIps(list).then(function(ok){
+        if(ok)trustMsg("ok","Done. Within about a minute this browser can open the website again. To check, open vshealthbenefits.com/__blockcheck: it should say trustedDevice: true.");
+        else trustMsg("err","Saved in this browser only \u2014 the sync connection is offline, so the website does not know about this device yet. Reload the portal while online and try again.");
+        renderTrusted();
+      });
+      renderTrusted();
+    });
+    renderTrusted();
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
+})();
 
 /* Manual entry. Paste anything the "Submission origin" panel or a server log
    shows and it is normalised the same way the edge will normalise the visitor
