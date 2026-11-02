@@ -2290,7 +2290,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   function vsNiche(){
     try{
       var n = (new URLSearchParams(location.search).get('niche')||'').toLowerCase();
-      return ({'trucking':'trucker','trucker':'trucker','small-business':'small-business','smallbusiness':'small-business'})[n] || '';
+      return ({'trucking':'trucker','trucker':'trucker','small-business':'small-business','smallbusiness':'small-business','self-employed':'self-employed','selfemployed':'self-employed','1099':'self-employed'})[n] || '';
     }catch(e){ return ''; }
   }
   // Partner referral code (?ref=). Kept 90 days, same key the old trucker form used,
