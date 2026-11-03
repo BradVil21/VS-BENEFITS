@@ -136,6 +136,14 @@ module.exports = async (req, res) => {
   if ((req.query && req.query.op === "plans") || /\/api\/plans/.test(req.url || "")) {
     return require("./_healthsherpa-plans")(req, res);
   }
+  // POST /api/ads-sold: sold leads with a gclid, for the Google Ads offline upload. See api/_ads-sold.js
+  if (req.method === "POST" && ((req.query && req.query.op === "ads-sold") || /ads-sold/.test(req.url || ""))) {
+    return require("./_ads-sold")(req, res);
+  }
+  // POST /api/gads-lead: Google Ads lead form webhook. See api/_gads-lead.js
+  if (req.method === "POST" && ((req.query && req.query.op === "gads-lead") || /gads-lead/.test(req.url || ""))) {
+    return require("./_gads-lead")(req, res);
+  }
   // GET /api/google-rating is rewritten here (see vercel.json); see api/_google-rating.js
   if (req.method === "GET" && ((req.query && req.query.op === "google-rating") || /google-rating/.test(req.url || ""))) {
     return require("./_google-rating")(req, res);

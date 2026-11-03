@@ -2032,6 +2032,14 @@
       "destination": "/api/voice-lookup?op=google-rating"
     },
     {
+      "source": "/api/ads-sold",
+      "destination": "/api/voice-lookup?op=ads-sold"
+    },
+    {
+      "source": "/api/gads-lead",
+      "destination": "/api/voice-lookup?op=gads-lead"
+    },
+    {
       "source": "/",
       "destination": "/index.html"
     }

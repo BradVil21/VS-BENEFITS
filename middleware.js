@@ -372,11 +372,28 @@ async function handleTrust(request, event) {
 }
 
 // ── entry point ────────────────────────────────────────────────────────────
+const LP_ROUTE = /^(\/lp\/(?:truckers|self-employed|es\/camioneros|es\/independientes))\/?$/;
+const LP_STATES = { FL: "florida", GA: "georgia", TX: "texas", IL: "illinois", OH: "ohio", KY: "kentucky", MO: "missouri", MD: "maryland" };
+
 export default async function middleware(request, event) {
   const disabled = process.env.IP_BLOCK_DISABLED === "1";
 
   let path = "/";
   try { path = new URL(request.url).pathname; } catch (e) { return; }
+
+  // Ad landing pages (2026-11-03): /lp/truckers etc. send the visitor to the
+  // page for the state they are in, using Vercel's IP geo header. Anyone
+  // outside the 8 states (or with no geo) stays on the general page.
+  const lp = LP_ROUTE.exec(path);
+  if (lp) {
+    const st = LP_STATES[String(request.headers.get("x-vercel-ip-country-region") || "").toUpperCase()];
+    const inUS = String(request.headers.get("x-vercel-ip-country") || "US").toUpperCase() === "US";
+    if (st && inUS) {
+      const u = new URL(request.url);
+      u.pathname = lp[1].replace(/\/$/, "") + "/" + st;
+      return Response.redirect(u.toString(), 302);
+    }
+  }
 
   // Approval links answer before blocking, so they work from a blocked network.
   if (TRUST_PATH.test(path)) return handleTrust(request, event);
