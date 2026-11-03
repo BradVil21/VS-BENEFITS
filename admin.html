@@ -12077,6 +12077,8 @@ try{(function(){
     var cutoff=pl.cutoff||defCut;
     var first=M.apps.filter(function(a){return a.submit&&a.submit.slice(0,4)===String(yr);}).map(function(a){return a.submit.slice(0,7);}).sort()[0]||(yr+"-01");
     var months=[];for(var d=new Date(+first.slice(0,4),+first.slice(5,7)-1,1);d.getFullYear()===yr;d.setMonth(d.getMonth()+1))months.push(monthKey(d));
+    /* bonus period: USHA counts apps submitted through Oct 31 (period ends Nov 1). Later apps count toward next period. */
+    var allMonths=months.slice(),lastM=pl.lastMonth||(yr+"-10");months=months.filter(function(m){return m<=lastM;});if(!months.length)months=[lastM];var closed=cur>lastM;
     var data={};["UW","GI"].forEach(function(k){months.forEach(function(m){data[k+"|"+m]={s:0,t:0};});});
     M.apps.forEach(function(a){var m=(a.submit||"").slice(0,7),key=a.kind+"|"+m;if(!data[key]||!a.countSubmit)return;data[key].s++;if(a.countTaken)data[key].t++;});
     /* Your numbers are stored as adjustments (+/-) on top of what your Applications show, so the calculator keeps
@@ -12102,7 +12104,7 @@ try{(function(){
     function phase(m){return m<=cutoff?"official":m<cur?"pending":m===cur?"estimate":"plan";}
     var PH={official:"In USHA YTD",pending:"Not in calculation yet",estimate:"Estimated",plan:"Plan"};
     var html='<div class="ap-head"><div><h3>Bonus Calculator</h3><p class="lede">Your taken rate month by month, the way USHA\'s bonus sheet adds it up, and exactly what you need to hit 60% underwritten and 65% guaranteed issue.</p></div>'
-      +'<div class="ap-actions"><button type="button" class="ap-ovb" data-bc-reset title="Remove every adjustment and use only what your Applications show">Clear my adjustments</button><label class="bc-cut">USHA YTD counts through <select data-bc-cut>'+months.map(function(m){return '<option value="'+m+'"'+(m===cutoff?" selected":"")+'>'+monthLbl(m)+'</option>';}).join("")+'</select></label></div></div>';
+      +'<div class="ap-actions"><button type="button" class="ap-ovb" data-bc-reset title="Remove every adjustment and use only what your Applications show">Clear my adjustments</button><label class="bc-cut">USHA YTD counts through <select data-bc-cut>'+months.map(function(m){return '<option value="'+m+'"'+(m===cutoff?" selected":"")+'>'+monthLbl(m)+'</option>';}).join("")+'</select></label><label class="bc-cut">Bonus period counts apps submitted through <select data-bc-last>'+allMonths.concat([yr+"-11",yr+"-12"]).filter(function(m,i,a){return a.indexOf(m)===i;}).map(function(m){return '<option value="'+m+'"'+(m===lastM?" selected":"")+'>'+monthLbl(m)+'</option>';}).join("")+'</select></label></div></div>'+(closed?'<div class="bc-st ok" style="margin:0 0 14px">The bonus period closed at the end of '+monthLbl(lastM)+'. Apps submitted after that do not count here; they go toward the next period. Apps already submitted can still move your rate if they get paid (see the win-back list).</div>':'');
     ["UW","GI"].forEach(function(k){
       var T=TARGET[k]/100,lab=k==="UW"?"Underwritten":"Guaranteed issue";
       var sumO={s:0,t:0},sumAll={s:0,t:0},sumOpen={s:0,t:0},openMonths=[];
@@ -12124,15 +12126,15 @@ try{(function(){
       var subsNeeded=rr>T?Math.max(0,Math.ceil((T*S-Tk)/(rr-T)-1e-9)):null;
       var cushion=Math.max(0,Math.floor(Tk/T-S+1e-9));
       var status=proj!=null&&proj>=TARGET[k]?'<div class="bc-st ok">On track: projected '+proj+'% vs '+TARGET[k]+'% target. You can absorb <b>'+cushion+'</b> more not-taken submit'+(cushion===1?"":"s")+' and still qualify.</div>'
-        :'<div class="bc-st low">Projected '+(proj==null?"-":proj+"%")+' vs '+TARGET[k]+'% target. You need <b>'+needT+'</b> more taken polic'+(needT===1?"y":"ies")+' in a row (new submits that all stick) to get there.</div>';
+        :closed?'<div class="bc-st low">Period total '+(proj==null?"-":proj+"%")+' vs '+TARGET[k]+'% target. New apps no longer count, so the only way up is getting <b>'+Math.max(0,Math.ceil(T*S-Tk-1e-9))+'</b> more already-submitted polic'+(Math.max(0,Math.ceil(T*S-Tk-1e-9))===1?"y":"ies")+' paid (win-backs below).</div>':'<div class="bc-st low">Projected '+(proj==null?"-":proj+"%")+' vs '+TARGET[k]+'% target. You need <b>'+needT+'</b> more taken polic'+(needT===1?"y":"ies")+' in a row (new submits that all stick) to get there.</div>';
       html+='<div class="ap-card bc"><div class="ap-card-h"><h4>'+lab+' <span class="bc-tg">'+TARGET[k]+'% taken rate</span></h4></div>'
         +'<div class="bc-tw"><table class="bc-t">'+head+rS+rT+rR+'</table></div>'
         +'<div class="bc-legend"><span class="ph-official">In USHA YTD</span><span class="ph-pending">Not in calculation yet (still maturing)</span><span class="ph-estimate">This month, estimated</span><span class="ph-plan">Your plan for the rest of the year</span><em>Synced with your Applications: new apps, payments and status changes update these by themselves. Type over a number to match USHA\'s sheet; your +/- adjustment stays applied as things change.</em></div>'
         +status
-        +'<div class="bc-solve">'
+        +(closed?'':'<div class="bc-solve">'
         +'<div class="bc-q"><b>If I submit</b> <input type="number" min="0" class="bc-add" data-bcadd="'+k+'" value="'+add+'"> <b>more '+lab.toLowerCase()+' apps this year…</b><div class="bc-a">…<b>'+Math.min(needOfAdd,add)+'</b> of them need to stick'+(needOfAdd>add?' and that still isn\'t enough. You\'d need '+(needOfAdd-add)+' more beyond that.':' ('+(add?Math.round(Math.min(needOfAdd,add)/add*100):0)+'% of the '+add+') to finish at '+TARGET[k]+'%.')+'</div></div>'
         +'<div class="bc-q"><b>At your recent pace</b> ('+Math.round(rr*100)+'% of recent submits sticking)…<div class="bc-a">'+(proj!=null&&proj>=TARGET[k]?'…you\'re already over the line. Keep new apps at '+TARGET[k]+'%+ to stay there.':subsNeeded!=null?'…you\'d need about <b>'+subsNeeded+'</b> more submits to pull the year up to '+TARGET[k]+'%.':'…new submits alone won\'t get you there, because your recent rate is below '+TARGET[k]+'%. Every new app has to stick better than '+TARGET[k]+'%, or you need to save pending ones first.')+'</div></div>'
-        +'</div></div>';
+        +'</div>')+'</div>';
     });
     var LOG=asArr(K.bcLog).filter(function(x){return x&&String(x.m).slice(0,4)===String(yr);}).slice(0,10);
     if(LOG.length){var lg='<div class="ap-card bc bc-log"><div class="ap-card-h"><h4>Recent changes</h4><span class="bc-logn">Each one is counted in the month the app was submitted</span></div><div class="bc-logl">'+LOG.map(function(x){
@@ -12144,6 +12146,7 @@ try{(function(){
     html+=wb;
     mount.innerHTML=html;wireWB(mount);
     var cs=mount.querySelector("[data-bc-cut]");if(cs)cs.addEventListener("change",function(){var p=planData();p.cutoff=cs.value;savePlan(p);bonusCalc();});
+    var cl=mount.querySelector("[data-bc-last]");if(cl)cl.addEventListener("change",function(){var p=planData();p.lastMonth=cl.value;savePlan(p);bonusCalc();});
     mount.querySelectorAll("[data-bc]").forEach(function(inp){inp.addEventListener("change",function(){var p=planData(),a=inp.getAttribute("data-bc").split("|"),key=a[0]+"|"+a[1],dd=data[key];p.cells[key]=p.cells[key]||{};var v=inp.value===""?null:+inp.value;
       if(a[2]==="s")p.cells[key].ds=v==null?0:v-dd.s;else p.cells[key].dt=v==null?0:v-dd.t;
       if(!p.cells[key].ds&&!p.cells[key].dt)delete p.cells[key];savePlan(p);bonusCalc();});});
