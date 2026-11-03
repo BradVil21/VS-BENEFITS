@@ -63,7 +63,7 @@
   }
   function loadMarketing(){ if(_mOn)return; _mOn=true;
     inject('https://www.googletagmanager.com/gtag/js?id='+ADS_ID);
-    gtag('config',ADS_ID);
+    gtag('config',ADS_ID,{allow_enhanced_conversions:true});
   }
   function killCookies(names){
     var domains=['','.'+location.hostname,location.hostname,'.vshealthbenefits.com'];

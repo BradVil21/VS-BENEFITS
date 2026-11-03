@@ -1935,7 +1935,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       // save the partial lead now so an abandoned quote is still a lead.
       try{ if(window.vsCaptureDraft) window.vsCaptureDraft('individual', 5); }catch(e){}
       // Trucker ads: count the lead once the driver leaves a number (Quote Form Lead counts One per click).
-      if(TRK && !window.__vsTrkConv){ window.__vsTrkConv = 1; try{ if(window.vsTrack) window.vsTrack('trucker_quote_partial',{ lead_type:'trucker' }); }catch(e){} }
+      if(TRK && !window.__vsTrkConv){ window.__vsTrkConv = 1; try{ var _tp=String(ph).replace(/\D/g,''); if(_tp.length===11&&_tp.charAt(0)==='1')_tp=_tp.slice(1); if(_tp.length===10&&typeof gtag==='function')gtag('set','user_data',{phone_number:'+1'+_tp}); if(window.vsTrack) window.vsTrack('trucker_quote_partial',{ lead_type:'trucker' }); }catch(e){} }
       indNav(6);
     }
   };
