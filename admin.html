@@ -6510,7 +6510,7 @@ function renderAdsPerf(){
   (S.campaigns||[]).forEach(function(c){if(c.status==="ENABLED"&&/LIMITED|NOT_ELIGIBLE/.test(c.primary||""))tips.push(["warn","Campaign \u201c"+c.name+"\u201d is "+String(c.primary).toLowerCase().replace(/_/g," ")+(c.reasons?" ("+String(c.reasons).toLowerCase().replace(/_/g," ")+")":"")+"."]);});
   var avgCpc=adsDiv(cur.cost,cur.clk)||5;
   var waste=(S.terms||[]).filter(function(t){return !(+t.conv)&&(+t.cost)>=Math.max(10,2*avgCpc);}).sort(function(a,b){return b.cost-a.cost;});
-  if(waste.length){var w=waste.reduce(function(s,t){return s+(+t.cost);},0);tips.push(["bad",adsMoney(w)+" spent in 30 days on "+waste.length+" search term"+(waste.length>1?"s":"")+" with no conversions. Review them below and add the irrelevant ones as negatives."]);}
+  if(waste.length){var w=waste.reduce(function(s,t){return s+(+t.cost);},0);tips.push(["bad",adsMoney(w)+" spent in 30 days on "+waste.length+" search term"+(waste.length>1?"s":"")+" with no conversions. Review them on the Keywords & searches tab and add the irrelevant ones as negatives."]);}
   var ag=(S.adGroups||[]).filter(function(g){return g.conv>=1;}).map(function(g){g.cpa=g.cost/g.conv;return g;}).sort(function(a,b){return a.cpa-b.cpa;});
   if(ag.length>=2&&ag[ag.length-1].cpa>ag[0].cpa*1.5)tips.push(["good","\u201c"+ag[0].g+"\u201d converts at "+adsMoney(ag[0].cpa)+" vs "+adsMoney(ag[ag.length-1].cpa)+" for \u201c"+ag[ag.length-1].g+"\u201d. Shift budget toward the cheaper ad group."]);
   if(cur.conv>=3&&pl.length<cur.conv*0.5)tips.push(["warn","Google counts "+Math.round(cur.conv)+" conversions but only "+pl.length+" Google Ads leads reached the portal. Calls are counted by Google but not as portal leads; if this gap is mostly forms, check the lead tracking."]);
@@ -6524,7 +6524,7 @@ function renderAdsPerf(){
   var nLive=adsAll.filter(function(a){return a.status==="ENABLED"&&a.gs==="ENABLED"&&a.cs==="ENABLED"&&/APPROVED/.test(a.approval);}).length;
   if(adsAll.length&&!nLive&&!nRev)tips.unshift(["warn","No ads are running right now. Enable a campaign in Google Ads to start getting clicks."]);
   if(nRev)tips.push(["warn",nRev+" ad"+(nRev>1?"s are":" is")+" in an enabled campaign but still under Google review. They start showing once approved, usually within a day."]);
-  if(nDis)tips.unshift(["bad",nDis+" ad"+(nDis>1?"s are":" is")+" disapproved. See the reason in the Your ads table below; health insurance ads may need certification."]);
+  if(nDis)tips.unshift(["bad",nDis+" ad"+(nDis>1?"s are":" is")+" disapproved. See the reason on the Ads & assets tab; health insurance ads may need certification."]);
   if(nDis&&!(S.policy&&S.policy.limited))tips=tips.filter(function(t){return !/Open Policy manager/.test(t[1]);});
   var tipRank={bad:0,warn:1,good:2};tips.sort(function(a,b){return tipRank[a[0]]-tipRank[b[0]];});
   if(!tips.length)tips.push(["good","Nothing needs attention right now."]);
