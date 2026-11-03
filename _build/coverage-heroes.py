@@ -8,7 +8,7 @@ m = re.search(r'/\* Small business page refresh.*?\n(.*?)/\* industry photo tile
 BASE_CSS = m.group(1)
 CSS = ('<style id="cvh-css">\n/* Coverage hero, same look as the small business hero (2026-11-03) */\n' + BASE_CSS +
        '.cvh .sb-img img{aspect-ratio:auto!important;object-fit:contain}\n'
-       '@media(min-width:900px){.cvh .sb-img{width:min(460px,100%)}}\n'
+       '@media(min-width:900px){.cvh .sb-img{width:min(460px,100%)}.cvh .sb-img.wide{width:min(600px,100%)}.cvh .sb-img.wide .sb-ribbon{left:2%;width:104%;top:-58%}.cvh .sb-img.wide .sb-chip.c2{top:-14%;right:2%}.cvh .sb-img.wide .sb-chip.c1{top:auto;bottom:10%;left:-9%}}\n'
        '@media(max-width:899px){.cvh .sb-hero .sb-img,.cvh.sb-hero .sb-img{width:min(320px,84%)}}\n'
        '</style>\n')
 
@@ -44,7 +44,7 @@ PAGES = {
    eyebrow='Short-Term Coverage',
    h1='Short-Term Health Insurance <span>for the Gap Between Plans</span>',
    sub='Between jobs or waiting on new coverage? A short-term plan can start within days and cover unexpected illness and injury.',
-   label='Enter your ZIP code', img='short-term-cutout', w=810, h=642, alt='Smiling father carrying his baby on his shoulders',
+   label='Enter your ZIP code', img='short-term-kids-cutout', w=900, h=529, alt='Three kids laughing together', wide=True,
    chips=[chip('c1', 'clock', 'Starts', 'in days'), chip('c2', 'shield', 'Licensed', 'advisor')],
    quote='type=individual&amp;niche=short-term'),
 }
@@ -63,8 +63,8 @@ for f, c in PAGES.items():
       '          <div class="sbz-row"><input id="cvh-zip" name="zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="ZIP code" autocomplete="postal-code" required /><button type="submit">Find Affordable Plans</button></div>\n'
       '          <p class="sbz-err" role="alert" hidden>Please enter a valid 5-digit ZIP code.</p>\n'
       '        </form>\n        ' + STARS + '\n      </div>\n'
-      '      <div class="sb-img">\n        ' + RIB.replace('sbg1', 'cvg1') + '\n'
-      '        <img decoding="async" fetchpriority="high" srcset="/compressed/' + c['img'] + '-480.webp 480w, /compressed/' + c['img'] + '.webp ' + str(c['w']) + 'w" sizes="(max-width: 900px) 320px, 460px" '
+      '      <div class="sb-img' + (' wide' if c.get('wide') else '') + '">\n        ' + RIB.replace('sbg1', 'cvg1') + '\n'
+      '        <img decoding="async" fetchpriority="high" srcset="/compressed/' + c['img'] + '-480.webp 480w, /compressed/' + c['img'] + '.webp ' + str(c['w']) + 'w" sizes="(max-width: 900px) 320px, ' + ('600px' if c.get('wide') else '460px') + '" '
       'src="/compressed/' + c['img'] + '.webp" width="' + str(c['w']) + '" height="' + str(c['h']) + '" alt="' + c['alt'] + '" loading="eager" />\n'
       '        ' + '\n        '.join(c['chips']) + '\n      </div>\n    </div>\n  </div>\n</section>')
     m = re.search(r'<section class="hero(?: sb-hero cvh)?"[^>]*>', s)
