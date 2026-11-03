@@ -46,24 +46,24 @@ var TC_D = ["Group health for trucking companies. We compare carriers, level-fun
 var B1099_H = ["Have 1099 Workers?", "Health Options for Contractors", "Benefits for Your Crew", "Group Plans for 2-50 Staff",
   "ICHRA & Group Health Options", "Licensed FL Health Broker", "No Fee to Your Business", "Compare Top Carriers Free",
   "Keep Good Workers Longer", "Plans Start the 1st of Month", "Free Quote, No Obligation", "Talk to a Licensed Advisor",
-  "W-2 and 1099 Team Options", "Small Business Health Plans", "Se Habla Español"];
+  "W-2 and 1099 Team Options", "Small Business Health Plans"];
 var B1099_D = ["Mix of W-2 staff and 1099 workers? We show what you can legally and affordably offer.",
   "Group health, ICHRA and individual options compared side by side. No fee to your business.",
   "Contractors, trades and crews: get real numbers for your team before you commit.",
-  "Licensed Florida broker. Quote in minutes, census later. English y Español."];
+  "Licensed Florida broker. Quote in minutes, census later."];
 var B250_H = ["Small Business Health Plans", "Group Health for 2-50 Staff", "Free Group Health Quotes", "Licensed FL Health Broker",
   "Compare Top Carriers Free", "Level-Funded & ICHRA Options", "Cover Your Employees", "Plans Can Start Any Month",
   "No Fee to Your Business", "Keep Your Team's Doctors", "Quotes for Small Employers", "Florida Group Health Plans",
-  "Talk to a Licensed Advisor", "Renewal Up? Get a 2nd Opinion", "Se Habla Español"];
+  "Talk to a Licensed Advisor", "Renewal Up? Get a 2nd Opinion"];
 var B250_D = ["Group health for 2-50 employees. We compare carriers, level-funded and ICHRA, free.",
   "Get real numbers for your headcount before you commit. Licensed advisor, no fee to you.",
-  "Plans can start the 1st of any month. Quote in minutes, census later. English y Español.",
+  "Plans can start the 1st of any month. Quote in minutes, census later.",
   "Already have a plan? Send your 2027 renewal and we'll shop it before you sign."];
 
 var OV_H = ["Paying Too Much for Coverage?", "Lower Your Full-Price Premium", "No Subsidy? Compare Plans", "Over the Subsidy Cliff?",
   "Private & Marketplace Plans", "Self-Employed, High Income?", "Licensed FL Health Broker", "Compare Every Carrier Free",
   "HSA Plans for Self-Employed", "Free Quote, No Obligation", "Talk to a Licensed Advisor", "Plans for Ages 50-64",
-  "Open Enrollment Starts Nov 1", "Same Price as Buying Direct", "Se Habla Español"];
+  "Open Enrollment Starts Nov 1", "Same Price as Buying Direct"];
 var OV_D = ["Earn too much for a subsidy? We find your lowest full-price plan, free.",
   "Self-employed? HSA plans and the premium deduction can lower what you really pay.",
   "Licensed Florida broker. Carriers pay us, not you. Same price as buying direct.",
