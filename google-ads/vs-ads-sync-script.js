@@ -100,7 +100,7 @@ function main() {
   var targets = locRows.map(function (r) { var cc = r.campaignCriterion || {}, g = (cc.location || {}).geoTargetConstant;
     return { c: r.campaign.name, loc: geoName[g] || g || "", neg: !!cc.negative }; });
   var geo = geoRows.map(function (r) { var g = (r.segments || {})[geoKey]; return put({ c: r.campaign.name, st: geoName[g] || g || "" }, r); });
-  var assets = q("SELECT campaign.name, campaign_asset.field_type, asset.sitelink_asset.link_text, asset.callout_asset.callout_text, asset.structured_snippet_asset.header, asset.structured_snippet_asset.values, asset.call_asset.phone_number, asset.final_urls FROM campaign_asset WHERE campaign.status = 'ENABLED' AND campaign_asset.status = 'ENABLED'")
+  var assets = q("SELECT campaign.name, campaign.status, campaign_asset.field_type, asset.sitelink_asset.link_text, asset.callout_asset.callout_text, asset.structured_snippet_asset.header, asset.structured_snippet_asset.values, asset.call_asset.phone_number, asset.final_urls FROM campaign_asset WHERE campaign.status = 'ENABLED' AND campaign_asset.status = 'ENABLED'")
     .map(function (r) { var a = r.asset || {}, ft = (r.campaignAsset || {}).fieldType || "", t = "";
       if (ft === "SITELINK") t = (a.sitelinkAsset || {}).linkText || "";
       else if (ft === "CALLOUT") t = (a.calloutAsset || {}).calloutText || "";
