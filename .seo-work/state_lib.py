@@ -104,6 +104,7 @@ def build(out, url, title, desc, region, placename, body, faq, schema_extra):
            'flex-wrap:wrap"><span>Open Enrollment for 2027 coverage runs Nov 1 &ndash; Jan 15. '
            'Get ahead of the deadline.</span><span style="background:#fff;color:#16447f;border-radius:999px;'
            'padding:3px 12px;font-weight:800;white-space:nowrap">Get a Free Quote &rarr;</span></a></div>')
+    BAR = ''  # OE banner retired 2026-11-03
     out_html = (h + STYLE + '\n' + schema_html + '</head>\n<body>\n' + BAR
                 + '\n\n<div id="vs-scroll-bar"></div>\n\n' + hdr + '\n' + body + tail)
     open(out, 'w', encoding='utf-8').write(out_html)

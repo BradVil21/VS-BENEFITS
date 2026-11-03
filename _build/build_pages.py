@@ -75,7 +75,7 @@ def build_post(p):
     rel = ('<section class="vs-related-guides" data-block="%s">\n  <div class="vs-rg-inner">\n    <h2>%s</h2>\n    <p class="vs-rg-sub">%s</p>\n    <div class="vs-rg-grid">%s\n    </div>\n  </div>\n</section>') % (slug, e(p["related_h"]), p["related_sub"], cards)
     s = sub1(s, r'<section class="vs-related-guides".*?</section>', rel)
     if p["audience"] != "trucker":
-        s = sub1(s, r'<div id="oe-annc-bar".*?</div>', GENERAL_BAR)
+        s = re.sub(r'<div id="oe-annc-bar".*?</div>\n?', '', s, count=1, flags=re.S)  # OE banner retired 2026-11-03
         s = s.replace("/trucking-health-quote?from=blog-" + OS, p["quote_path"] + "?from=blog-" + slug)
     s = s.replace(OS, slug)
     for bad in [OS, "Owner-Operator Health Insurance Going Up", "8 Ways to Cut"]:

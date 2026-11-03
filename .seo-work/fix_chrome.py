@@ -35,7 +35,7 @@ for f in FILES:
     if m:
         ins = m.end()
         # C. missing announcement bar
-        if f not in SKIP_BANNER and 'id="oe-annc-bar"' not in s:
+        if False:  # OE banner retired 2026-11-03: never re-add it
             s = s[:ins] + '\n' + BAR + s[ins:]
             c += 1
             m = re.search(r'<body[^>]*>', s)

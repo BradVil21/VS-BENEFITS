@@ -219,7 +219,7 @@ s = "\n".join(lines)
 s = sub1(s, r'<nav class="breadcrumb" aria-label="Breadcrumb">.*?</nav>', '<nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span class="sep">›</span><a href="/open-enrollment">Open Enrollment 2027</a><span class="sep">›</span><span>Premium Increase Review</span></nav>')
 s = sub1(s, r'<main class="container" id="main">.*?</main>', MAIN)
 s = sub1(s, r'<script id="rr-js">.*?</script>', JS)
-s = sub1(s, r'<div id="oe-annc-bar".*?</div>', GENERAL_BAR)
+s = re.sub(r'<div id="oe-annc-bar".*?</div>\n?', '', s, count=1, flags=re.S)  # OE banner retired 2026-11-03
 for bad in ["small-business-renewal-review\"", "Group Health Renewal Went Up", "business-quote", "ICHRA options before you sign"]:
     if bad in s and bad != "small-business-renewal-review\"": raise SystemExit("leftover " + bad)
 out = os.path.join(ROOT, SLUG + ".html")

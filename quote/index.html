@@ -2684,5 +2684,33 @@ document.addEventListener('keydown', function(e){
   }
 });
 </script>
+<!-- Open enrollment status line under "Your information is safe & secure" (added 2026-11-03). Hides itself after Jan 15. -->
+<style>
+.q-oe{display:block;margin:10px auto 0;font-size:.9rem;font-weight:700;color:#15803d;text-align:center;line-height:1.45}
+.q-oe-dot{position:relative;display:inline-block;vertical-align:1px;width:10px;height:10px;margin-right:8px;border-radius:50%;background:#22c55e}
+.q-oe-dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:#22c55e;animation:qoePulse 1.8s ease-out infinite}
+@keyframes qoePulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.6);opacity:0}}
+@media(prefers-reduced-motion:reduce){.q-oe-dot::after{animation:none}}
+.start-card .q-safe+.q-oe{margin:-12px auto 22px}
+</style>
+<script>
+(function(){
+  var now=new Date(), y=2026;
+  var t1=new Date(y,11,16), t2=new Date(y+1,0,16); // Dec 16, Jan 16 (local time)
+  if(now>=t2) return;
+  var msg = now<t1 ? "Open enrollment is now active &middot; Enroll by Dec 15 for Jan 1 coverage"
+                   : "Open enrollment closes Jan 15 &middot; Enroll now for Feb 1 coverage";
+  function add(){
+    var list=document.querySelectorAll(".q-safe");
+    for(var i=0;i<list.length;i++){
+      var s=list[i]; if(s.nextElementSibling&&s.nextElementSibling.className==="q-oe") continue;
+      var d=document.createElement("div"); d.className="q-oe"; d.setAttribute("role","status");
+      d.innerHTML='<span class="q-oe-dot" aria-hidden="true"></span><span>'+msg+'</span>';
+      s.parentNode.insertBefore(d,s.nextSibling);
+    }
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",add);else add();
+})();
+</script>
 </body>
 </html>
