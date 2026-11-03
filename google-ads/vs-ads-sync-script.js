@@ -84,6 +84,32 @@ function main() {
     .map(function (r) { var c = r.campaign; return { name: c.name, status: c.status, primary: c.primaryStatus || "", reasons: (c.primaryStatusReasons || []).join(", "),
       bidding: c.biddingStrategyType || "", budget: Math.round(((r.campaignBudget || {}).amountMicros || 0) / 1e4) / 100 }; });
 
+  // Where ads show: targeted locations per enabled campaign, results by state, and live assets.
+  var locRows = q("SELECT campaign.name, campaign_criterion.location.geo_target_constant, campaign_criterion.negative FROM campaign_criterion WHERE campaign_criterion.type = 'LOCATION' AND campaign.status = 'ENABLED' AND campaign_criterion.status != 'REMOVED'");
+  var geoRows = q("SELECT campaign.name, segments.geo_target_state, " + MET + " FROM geographic_view WHERE " + DATE30 + " AND geographic_view.location_type = 'LOCATION_OF_PRESENCE' AND metrics.impressions > 0");
+  var geoKey = "geoTargetState";
+  if (!geoRows.length) { geoRows = q("SELECT campaign.name, segments.geo_target_region, " + MET + " FROM geographic_view WHERE " + DATE30 + " AND geographic_view.location_type = 'LOCATION_OF_PRESENCE' AND metrics.impressions > 0"); geoKey = "geoTargetRegion"; }
+  var geoIds = {};
+  locRows.forEach(function (r) { var g = ((r.campaignCriterion || {}).location || {}).geoTargetConstant; if (g) geoIds[g] = 1; });
+  geoRows.forEach(function (r) { var g = (r.segments || {})[geoKey]; if (g) geoIds[g] = 1; });
+  var geoName = {}, ids = Object.keys(geoIds);
+  for (var gi = 0; gi < ids.length; gi += 100) {
+    q("SELECT geo_target_constant.resource_name, geo_target_constant.name FROM geo_target_constant WHERE geo_target_constant.resource_name IN ('" + ids.slice(gi, gi + 100).join("','") + "')")
+      .forEach(function (r) { geoName[r.geoTargetConstant.resourceName] = r.geoTargetConstant.name; });
+  }
+  var targets = locRows.map(function (r) { var cc = r.campaignCriterion || {}, g = (cc.location || {}).geoTargetConstant;
+    return { c: r.campaign.name, loc: geoName[g] || g || "", neg: !!cc.negative }; });
+  var geo = geoRows.map(function (r) { var g = (r.segments || {})[geoKey]; return put({ c: r.campaign.name, st: geoName[g] || g || "" }, r); });
+  var assets = q("SELECT campaign.name, campaign_asset.field_type, asset.sitelink_asset.link_text, asset.callout_asset.callout_text, asset.structured_snippet_asset.header, asset.structured_snippet_asset.values, asset.call_asset.phone_number, asset.final_urls FROM campaign_asset WHERE campaign.status = 'ENABLED' AND campaign_asset.status = 'ENABLED'")
+    .map(function (r) { var a = r.asset || {}, ft = (r.campaignAsset || {}).fieldType || "", t = "";
+      if (ft === "SITELINK") t = (a.sitelinkAsset || {}).linkText || "";
+      else if (ft === "CALLOUT") t = (a.calloutAsset || {}).calloutText || "";
+      else if (ft === "STRUCTURED_SNIPPET") t = ((a.structuredSnippetAsset || {}).header || "") + ": " + ((a.structuredSnippetAsset || {}).values || []).join(", ");
+      else if (ft === "CALL") t = (a.callAsset || {}).phoneNumber || "";
+      else return null;
+      return { c: r.campaign.name, type: ft, text: t, url: (a.finalUrls || [])[0] || "" }; })
+    .filter(function (x) { return x; });
+
   var body = {
     secret: SECRET,
     snapshot: {
@@ -93,10 +119,11 @@ function main() {
       hours: Object.keys(hourMap).map(function (k) { return hourMap[k]; }),
       devices: Object.keys(devMap).map(function (k) { return devMap[k]; }),
       policy: { disapproved: disapproved, limited: limited },
-      ads: ads, campaignList: campaignList
+      ads: ads, campaignList: campaignList,
+      targets: targets, geo: geo, assets: assets
     }
   };
   var res = UrlFetchApp.fetch(ENDPOINT, { method: "post", contentType: "application/json", payload: JSON.stringify(body), muteHttpExceptions: true });
   Logger.log("Sync " + res.getResponseCode() + ": " + res.getContentText().slice(0, 300) +
-             " | " + daily.length + " daily rows, " + campaigns.length + " campaigns, " + terms.length + " search terms");
+             " | " + daily.length + " daily rows, " + campaigns.length + " campaigns, " + terms.length + " search terms, " + targets.length + " locations, " + geo.length + " state rows, " + assets.length + " assets");
 }

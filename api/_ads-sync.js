@@ -53,6 +53,11 @@ module.exports = async (req, res) => {
       url: str(r.url, 300), h: (Array.isArray(r.h) ? r.h : []).slice(0, 5).map(function (x) { return str(x, 40); }) }; }),
     campaignList: (Array.isArray(s.campaignList) ? s.campaignList : []).slice(0, 40).map(function (r) { r = r || {}; return { name: str(r.name, 80),
       status: str(r.status, 20), primary: str(r.primary, 30), reasons: str(r.reasons, 200), bidding: str(r.bidding, 40), budget: num(r.budget) }; }),
+    // Where ads show (added 2026-11-03): targeted locations, results by state, live sitelinks/callouts/snippets.
+    targets: (Array.isArray(s.targets) ? s.targets : []).slice(0, 300).map(function (r) { r = r || {}; return { c: str(r.c, 80), loc: str(r.loc, 80), neg: !!r.neg }; }),
+    geo: list(s.geo, 400, function (r) { return { c: str(r.c, 80), st: str(r.st, 80) }; }),
+    assets: (Array.isArray(s.assets) ? s.assets : []).slice(0, 150).map(function (r) { r = r || {}; return { c: str(r.c, 80), type: str(r.type, 30),
+      text: str(r.text, 200), url: str(r.url, 300) }; }),
   };
 
   // Read first for the updateTime precondition; retry once if the portal wrote in between.

@@ -1626,6 +1626,7 @@ html.dark .cz-callbtn.cz-soft{background:#22344c;color:#e6eefb;border-color:#2b3
 .ads-key{font-weight:700;padding:0 5px;border-radius:4px}.ads-key.waste{background:#fef3f2;color:#b42318}.ads-key.win{background:#ecfdf3;color:#15803d}
 .ads-copy{margin:0 0 10px}
 .ads-chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.ads-geo-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:6px 0 12px}.ads-geo-c{font-weight:700;font-size:13px}
 .ads-chip{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:#f1f5f9;color:#334155}
 .ads-chip.good,.ads-pill.good{background:#ecfdf3;color:#15803d}.ads-chip.warn,.ads-pill.warn{background:#fffaeb;color:#b45309}
 .ads-chip.bad,.ads-pill.bad{background:#fef3f2;color:#b42318}.ads-chip.off,.ads-pill.off{background:#f1f5f9;color:#5a6b80}
@@ -6496,6 +6497,62 @@ function renderAdsPerf(){
   var ins=el("div",{class:"an-section"});ins.appendChild(el("h4",{text:"What to do next"}));
   tips.forEach(function(t){ins.appendChild(el("div",{class:"ads-tip "+t[0],html:'<span class="ads-ico">'+(t[0]==="good"?"&#10003;":t[0]==="bad"?"&#10005;":"!")+"</span><span>"+t[1].replace(/</g,"&lt;")+"</span>"}));});
   mount.appendChild(ins);
+
+  // Where your ads show (added 2026-11-03): targeted states, results by state, live sitelinks/callouts.
+  try{(function(){
+    var ST={"Alabama":"AL","Alaska":"AK","Arizona":"AZ","Arkansas":"AR","California":"CA","Colorado":"CO","Connecticut":"CT","Delaware":"DE","District of Columbia":"DC","Florida":"FL","Georgia":"GA","Hawaii":"HI","Idaho":"ID","Illinois":"IL","Indiana":"IN","Iowa":"IA","Kansas":"KS","Kentucky":"KY","Louisiana":"LA","Maine":"ME","Maryland":"MD","Massachusetts":"MA","Michigan":"MI","Minnesota":"MN","Mississippi":"MS","Missouri":"MO","Montana":"MT","Nebraska":"NE","Nevada":"NV","New Hampshire":"NH","New Jersey":"NJ","New Mexico":"NM","New York":"NY","North Carolina":"NC","North Dakota":"ND","Ohio":"OH","Oklahoma":"OK","Oregon":"OR","Pennsylvania":"PA","Rhode Island":"RI","South Carolina":"SC","South Dakota":"SD","Tennessee":"TN","Texas":"TX","Utah":"UT","Vermont":"VT","Virginia":"VA","Washington":"WA","West Virginia":"WV","Wisconsin":"WI","Wyoming":"WY"};
+    var CODE={};Object.keys(ST).forEach(function(n){CODE[ST[n]]=n;});
+    // ZIP prefix -> state for the states we advertise in (lead cards often have a ZIP but no state).
+    var ZR=[["FL",320,349],["GA",300,319],["GA",398,399],["IL",600,629],["KY",400,427],["MD",206,219],["MO",630,658],["OH",430,459],["TX",750,799],["TX",885,885]];
+    function leadState(x){var z=parseInt(String(x.zip||"").replace(/\D/g,"").slice(0,3),10);
+      if(isFinite(z))for(var i=0;i<ZR.length;i++)if(z>=ZR[i][1]&&z<=ZR[i][2])return ZR[i][0];
+      var s=String(x.state||"").trim();if(!s)return "";if(s.length===2)return s.toUpperCase();return ST[s.replace(/\b\w/g,function(c){return c.toUpperCase();})]||"";}
+    var tg=(S.targets||[]).filter(function(t){return !t.neg;}), geo=S.geo||[], as=S.assets||[];
+    if(!tg.length&&!geo.length&&!as.length)return;
+    var esc=function(x){return String(x==null?"":x).replace(/&/g,"&amp;").replace(/</g,"&lt;");};
+    var sec=el("div",{class:"an-section"});
+    sec.appendChild(el("h4",{text:"Where your ads show"}));
+    sec.appendChild(el("p",{class:"sub",text:"Locations each running campaign targets, then the last 30 days by state: Google's numbers for people located in that state, next to the Google Ads leads that reached this portal (matched by ZIP)."}));
+    var byC={};tg.forEach(function(t){(byC[t.c]=byC[t.c]||[]).push(t.loc);});
+    var targeted={};
+    Object.keys(byC).forEach(function(c){
+      var row=el("div",{class:"ads-geo-row"});row.appendChild(el("div",{class:"ads-geo-c",text:c+" ("+byC[c].length+")"}));
+      var ch=el("div",{class:"ads-chips"});
+      byC[c].slice().sort().forEach(function(n){var code=ST[n];if(code)targeted[code]=1;ch.appendChild(el("span",{class:"ads-chip good",text:code||n,title:n}));});
+      row.appendChild(ch);sec.appendChild(row);
+    });
+    // Google results by state (all campaigns)
+    var rows={};function R(code){return rows[code]||(rows[code]={code:code,name:CODE[code]||code,imp:0,clk:0,cost:0,conv:0,pl:0,q:0,s:0});}
+    geo.forEach(function(g){var code=ST[g.st]||g.st;if(!code)return;var o=R(code);o.imp+=+g.imp||0;o.clk+=+g.clk||0;o.cost+=+g.cost||0;o.conv+=+g.conv||0;});
+    Object.keys(targeted).forEach(R);
+    var since=endMs+864e5-30*864e5;
+    var src=(typeof getLeads==="function"?getLeads():[]).filter(adsIsGoogle).map(function(l){return {t:l.created||0,zip:l.zipcode||l.zipCode||l.zip||"",state:l.state||"",q:/quoted|sold|enrolled|appointment/.test(l.status||""),s:/sold|enrolled/.test(l.status||"")};})
+      .concat((typeof getBizLeads==="function"?getBizLeads():[]).filter(adsIsGoogle).map(function(b){return {t:b.created||0,zip:b.zip||b.zipcode||"",state:b.state||"",q:/meeting|proposal|won/.test(b.stage||""),s:b.stage==="won"};}));
+    var unk=0;src.filter(function(x){return x.t>=since;}).forEach(function(x){var c=leadState(x);if(!c){unk++;return;}var o=R(c);o.pl++;if(x.q)o.q++;if(x.s)o.s++;});
+    var list=Object.keys(rows).map(function(k){return rows[k];}).sort(function(a,b){return (b.cost-a.cost)||(b.pl-a.pl)||(a.code<b.code?-1:1);});
+    if(list.length){
+      var h="<div class='an-tablewrap'><table class='ads-t'><thead><tr><th>State</th><th>Targeted</th><th class='r'>Impr.</th><th class='r'>Clicks</th><th class='r'>CTR</th><th class='r'>Spend</th><th class='r'>Conv.</th><th class='r'>Cost / conv.</th><th class='r'>Portal leads</th><th class='r'>Quoted</th><th class='r'>Sold</th></tr></thead><tbody>";
+      list.forEach(function(r){var waste=r.cost>=Math.max(30,3*avgCpc)&&!r.conv&&!r.pl, win=r.conv>0||r.pl>0;
+        h+="<tr"+(waste?" class='waste'":win?" class='win'":"")+"><td>"+esc(r.name)+"</td><td>"+(targeted[r.code]?"Yes":"<span class='ads-why'>No</span>")+"</td><td class='r'>"+r.imp+"</td><td class='r'>"+r.clk+"</td><td class='r'>"+adsPct(adsDiv(r.clk,r.imp))+"</td><td class='r'>"+adsMoney(r.cost)+"</td><td class='r'>"+(Math.round(r.conv*10)/10)+"</td><td class='r'>"+(r.conv?adsMoney(r.cost/r.conv):"–")+"</td><td class='r'>"+r.pl+"</td><td class='r'>"+r.q+"</td><td class='r'>"+r.s+"</td></tr>";});
+      sec.appendChild(el("div",{html:h+"</tbody></table></div>"}));
+      if(unk)sec.appendChild(el("p",{class:"ads-fine",text:unk+" Google Ads lead"+(unk>1?"s":"")+" in the last 30 days had no ZIP or state, so "+(unk>1?"they are":"it is")+" not counted by state."}));
+      var wasteSt=list.filter(function(r){return r.cost>=Math.max(30,3*avgCpc)&&!r.conv&&!r.pl;});
+      if(wasteSt.length)ins.appendChild(el("div",{class:"ads-tip warn",html:'<span class="ads-ico">!</span><span>'+esc(wasteSt.map(function(r){return r.name+" ("+adsMoney(r.cost)+")";}).join(", "))+" spent in 30 days with no conversions or portal leads. Check the search terms from there, or lower the bid for that state.</span>"}));
+      var conv=list.filter(function(r){return r.conv>=1;}).sort(function(a,b){return a.cost/a.conv-b.cost/b.conv;});
+      if(conv.length>=2&&conv[conv.length-1].cost/conv[conv.length-1].conv>1.5*conv[0].cost/conv[0].conv)ins.appendChild(el("div",{class:"ads-tip good",html:'<span class="ads-ico">&#10003;</span><span>'+esc(conv[0].name+" converts at "+adsMoney(conv[0].cost/conv[0].conv)+" per conversion vs "+adsMoney(conv[conv.length-1].cost/conv[conv.length-1].conv)+" in "+conv[conv.length-1].name+". Consider a +15% location bid for "+conv[0].name+".")+"</span>"}));
+    }
+    if(as.length){
+      var TL={SITELINK:"Sitelink",CALLOUT:"Callout",STRUCTURED_SNIPPET:"Snippet",CALL:"Call"};
+      var cnt={};as.forEach(function(a){cnt[a.type]=(cnt[a.type]||0)+1;});
+      sec.appendChild(el("p",{class:"sub",html:"<b>Live assets</b> &middot; "+Object.keys(cnt).map(function(k){return cnt[k]+" "+(TL[k]||k).toLowerCase()+(cnt[k]>1?"s":"");}).join(", ")}));
+      var ah="<div class='an-tablewrap'><table class='ads-t'><thead><tr><th>Type</th><th>Text</th><th>Links to</th><th>Campaign</th></tr></thead><tbody>";
+      var ord={SITELINK:1,CALLOUT:2,STRUCTURED_SNIPPET:3,CALL:4};
+      as.slice().sort(function(a,b){return ((ord[a.type]||9)-(ord[b.type]||9))||(a.c<b.c?-1:1);}).forEach(function(a){var path="";try{path=a.url?new URL(a.url).pathname:"";}catch(e){path=a.url||"";}
+        ah+="<tr><td>"+esc(TL[a.type]||a.type)+"</td><td>"+esc(a.text)+"</td><td><span class='ads-url'>"+esc(path)+"</span></td><td>"+esc(a.c)+"</td></tr>";});
+      sec.appendChild(el("div",{html:ah+"</tbody></table></div>"}));
+    }
+    mount.appendChild(sec);
+  })();}catch(e){try{console.warn("ads geo section",e);}catch(_){}}
 
   // Your ads: what is live right now and how each one performs
   function adState(a){
