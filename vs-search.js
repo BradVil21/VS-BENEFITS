@@ -72,8 +72,6 @@
     sb.type = 'button'; sb.className = 'vss-d vss-bar vss-sbtn'; sb.setAttribute('aria-label', 'Search the site'); sb.innerHTML = ICON_S + '<span class="vss-ph">Search</span><kbd>/</kbd>';
     if (cta) { nav.insertBefore(sb, cta); cta.classList.add('vss-has'); }
     else { nav.appendChild(sb); }
-    var ms = document.createElement('button'); ms.type = 'button'; ms.className = 'vss-mrow vss-sbtn'; ms.innerHTML = ICON_S + 'Search the site';
-    nav.insertBefore(ms, sb);
   }
   var m = document.createElement('div'); m.className = 'vss-m';
   m.innerHTML = '<button type="button" class="vss-mpill vss-sbtn" aria-label="Search the site">' + ICON_S + '<span>Search</span></button>';
