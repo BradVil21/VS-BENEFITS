@@ -70,7 +70,7 @@
   var cta = nav && nav.querySelector('a.nav-cta');
   if (nav) {
     var sb = document.createElement('button');
-    sb.type = 'button'; sb.className = 'vss-d vss-bar vss-sbtn'; sb.setAttribute('aria-label', 'Search the site'); sb.innerHTML = ICON_S + '<span class="vss-ph">Search the site</span><kbd>/</kbd>';
+    sb.type = 'button'; sb.className = 'vss-d vss-bar vss-sbtn'; sb.setAttribute('aria-label', 'Search the site'); sb.innerHTML = ICON_S + '<span class="vss-ph">Search</span><kbd>/</kbd>';
     var cl = document.createElement('a');
     cl.className = 'vss-d vss-call'; cl.href = PHONE; cl.setAttribute('aria-label', 'Call an advisor at ' + PHONE_TXT);
     cl.innerHTML = ICON_P + '<span>Call an Advisor</span>';
