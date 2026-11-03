@@ -203,6 +203,8 @@
   var ST = {AL:'Alabama',AZ:'Arizona',AR:'Arkansas',CO:'Colorado',FL:'Florida',GA:'Georgia',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',MD:'Maryland',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VA:'Virginia',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming'};
   var BYNAME = {}; for (var k in ST) BYNAME[ST[k].toLowerCase()] = k;
   var TRUCK = {};
+  /* each state's own page, the same one the Service Areas links point to on every page */
+  function famUrl(c) { return c === 'MD' ? '/lp/self-employed/maryland' : '/health-insurance-' + ST[c].toLowerCase().replace(/ /g, '-'); }
   var BIZ = {FL:'/florida-small-business-health-insurance', TX:'/texas-small-business-health-insurance', KY:'/kentucky-small-business-health-insurance', MD:'/maryland-small-business-health-insurance'};
   var IC = {
     fam: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M3 21v-1a6 6 0 0 1 12 0v1"/><circle cx="17.5" cy="9.5" r="2.5"/><path d="M16 21v-.5a4.5 4.5 0 0 1 6-4.2"/></svg>',
@@ -248,7 +250,7 @@
     var tdef = ES ? '/seguro-medico-camioneros' : '/truck-driver-health-insurance';
     sov.innerHTML = '<div class="vst-pn"><button type="button" class="vst-x" aria-label="' + TX.x + '">&times;</button>'
       + '<p class="vst-k">' + esc(name) + '</p><h2 class="vst-h">' + TX.h + esc(name) + '</h2><p class="vst-q">' + TX.q + '</p>'
-      + '<a class="vst-o" data-st="' + code + '" data-a="family" href="/quote?type=individual&amp;state=' + code + '&amp;from=' + f + '"><span class="vst-i">' + IC.fam + '</span><span><b>' + TX.f + '</b><small>' + TX.fs + '</small></span></a>'
+      + '<a class="vst-o" data-st="' + code + '" data-a="family" href="' + famUrl(code) + '"><span class="vst-i">' + IC.fam + '</span><span><b>' + TX.f + '</b><small>' + TX.fs + '</small></span></a>'
       + '<a class="vst-o" data-st="' + code + '" data-a="trucker" href="' + (TRUCK[code] || tdef) + '"><span class="vst-i">' + IC.trk + '</span><span><b>' + TX.t + '</b><small>' + TX.ts + '</small></span></a>'
       + '<a class="vst-o" data-st="' + code + '" data-a="business" href="' + (BIZ[code] || '/small-business-health-insurance?state=' + code) + '"><span class="vst-i">' + IC.biz + '</span><span><b>' + TX.b + '</b><small>' + TX.bs + '</small></span></a>'
       + '</div>';
