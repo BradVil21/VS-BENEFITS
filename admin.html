@@ -2014,6 +2014,16 @@ html.dark .ads-kg{background:#1c2d42;border-color:#253a54}html.dark .ads-k .n{co
           <button id="trust-add" class="btn btn-primary btn-sm" type="button">Trust this computer</button>
         </div>
         <div id="trust-msg" style="margin-top:8px"></div>
+        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line,#e4e9f2)">
+          <h4 style="margin:0 0 6px;font-size:14px">Approve someone else's device</h4>
+          <p class="lede">For a client or partner whose network is blocked. Make a link and text or email it to them. The phone or computer that opens it can use the website; everyone else on that network stays blocked. Anyone they forward it to can use it too, until it expires or you remove it below.</p>
+          <div class="toolbar" style="margin:0">
+            <input id="inv-label" class="search" type="text" placeholder="Who is it for? e.g. Maria Lopez" autocomplete="off" />
+            <select id="inv-days" class="sortsel" aria-label="Link expires after"><option value="1">Expires in 1 day</option><option value="7" selected>Expires in 7 days</option><option value="30">Expires in 30 days</option><option value="0">Never expires</option></select>
+            <button id="inv-add" class="btn btn-primary btn-sm" type="button">Create approval link</button>
+          </div>
+          <div id="inv-out" style="margin-top:8px"></div>
+        </div>
         <div id="trust-list" style="margin-top:10px"></div>
       </div>
 
@@ -6907,8 +6917,13 @@ function renderTrusted(){
   var lab=$("trust-label");if(lab)lab.style.display=meRow?"none":"";
   if(!rows.length){lst.innerHTML="";return;}
   lst.innerHTML='<div class="blk-list">'+rows.map(function(r){
-    return '<div class="blk-row"><div class="blk-main"><div class="blk-ip" style="font-family:inherit">'+escapeHtml(r.label||"Device")+(r.token===mine?' <span class="blk-tag">this browser</span>':'')+'</div><div class="blk-sub blk-when">Trusted '+fmtDateTime(r.created)+(r.by?(" by "+escapeHtml(r.by)):"")+'</div></div><button type="button" class="btn btn-ghost btn-sm" data-untrust="'+escapeHtml(r.id)+'">Remove</button></div>';
+    var expd=r.expires&&r.expires<Date.now();
+    var sub=r.invite?("Approval link &middot; made "+fmtDateTime(r.created)+" &middot; "+(r.expires?(expd?"<b style='color:#b42318'>expired "+fmtDateTime(r.expires)+"</b>":"expires "+fmtDateTime(r.expires)):"never expires")):("Trusted "+fmtDateTime(r.created)+(r.by?(" by "+escapeHtml(r.by)):""));
+    return '<div class="blk-row"><div class="blk-main"><div class="blk-ip" style="font-family:inherit">'+escapeHtml(r.label||"Device")+(r.token===mine?' <span class="blk-tag">this browser</span>':'')+(r.invite?' <span class="blk-tag">guest</span>':'')+'</div><div class="blk-sub blk-when">'+sub+'</div></div>'+(r.invite&&!expd?'<button type="button" class="btn btn-ghost btn-sm" data-copyinv="'+escapeHtml(r.token)+'">Copy link</button>':'')+'<button type="button" class="btn btn-ghost btn-sm" data-untrust="'+escapeHtml(r.id)+'">Remove</button></div>';
   }).join("")+'</div>';
+  lst.querySelectorAll("[data-copyinv]").forEach(function(b){b.addEventListener("click",function(){
+    invCopy(invUrl(b.getAttribute("data-copyinv")),b);
+  });});
   lst.querySelectorAll("[data-untrust]").forEach(function(b){b.addEventListener("click",function(){
     var id=b.getAttribute("data-untrust");var row=trustedRows().filter(function(r){return r.id===id;})[0];if(!row)return;
     if(!confirm("Stop trusting \""+(row.label||"this device")+"\"?\n\nIf its network is blocked, it will see the blocked page again."))return;
@@ -6937,6 +6952,44 @@ function renderTrusted(){
       renderTrusted();
     });
     renderTrusted();
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
+})();
+
+/* Approval links for someone else's device (2026-11-03). Same trusted-device
+   row plus invite:true and an optional expiry; middleware.js /__trust?t=token
+   sets the vs_trust cookie in whichever browser opens it. */
+function invUrl(tok){return "https://www.vshealthbenefits.com/__trust?t="+tok;}
+function invCopy(url,btn){
+  function done(ok){if(btn){var o=btn.textContent;btn.textContent=ok?"Copied":"Copy failed";setTimeout(function(){btn.textContent=o;},1800);}}
+  try{navigator.clipboard.writeText(url).then(function(){done(true);},function(){done(false);});}catch(e){done(false);}
+}
+(function wireInvite(){
+  function boot(){
+    var add=$("inv-add");if(!add||add._wired)return;add._wired=1;
+    add.addEventListener("click",function(){
+      var who=(($("inv-label")||{}).value||"").trim();
+      var out=$("inv-out");
+      if(!who){if(out)out.innerHTML='<div class="notice notice-err">Add who the link is for, so you can find and remove it later.</div>';($("inv-label")||{}).focus&&$("inv-label").focus();return;}
+      var days=+(($("inv-days")||{}).value||7);
+      var a=new Uint8Array(24);(window.crypto||window.msCrypto).getRandomValues(a);
+      var tok=Array.prototype.map.call(a,function(x){return ("0"+x.toString(16)).slice(-2);}).join("");
+      var row={id:"trust_"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),kind:"trusted-device",invite:true,token:tok,label:who.slice(0,60),
+        by:(function(){try{return (currentAdmin()||{}).email||"";}catch(e){return "";}})(),created:Date.now()};
+      if(days>0)row.expires=Date.now()+days*864e5;
+      var list=getBlockedIps();list.push(row);
+      var url=invUrl(tok);
+      saveBlockedIps(list).then(function(ok){
+        if(!out)return;
+        if(!ok){out.innerHTML='<div class="notice notice-err">The sync connection is offline, so the website does not know about this link yet. Reload the portal while online and try again.</div>';renderTrusted();return;}
+        out.innerHTML='<div class="notice notice-ok" style="display:block">Link for '+escapeHtml(who)+(days>0?" (works for "+days+" day"+(days>1?"s":"")+")":"")+'. Send it by text or email:'+
+          '<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap"><input type="text" readonly value="'+escapeHtml(url)+'" style="flex:1 1 260px;min-width:0;font-size:13px" onclick="this.select()"><button type="button" class="btn btn-primary btn-sm" id="inv-copy">Copy link</button></div></div>';
+        var cb=$("inv-copy");if(cb)cb.addEventListener("click",function(){invCopy(url,cb);});
+        invCopy(url,cb);
+        var li=$("inv-label");if(li)li.value="";
+        renderTrusted();
+      });
+    });
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
 })();

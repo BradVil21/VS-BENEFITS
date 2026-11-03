@@ -64,6 +64,10 @@ const TOKEN_MS = 40 * 60 * 1000;   // anonymous id tokens are good for an hour
 
 // The block-status probe. Exempt from blocking and from caching.
 const CHECK_PATH = /^\/__blockcheck\/?$/i;
+// Device approval links (added 2026-11-03): /__trust?t=<token> made in the admin
+// portal's Trusted devices card. Opening it stores the token in this browser's
+// vs_trust cookie, so this one device gets through a blocked network.
+const TRUST_PATH = /^\/__trust\/?$/i;
 
 // Paths that are never blocked. The portal has to stay reachable to undo a ban,
 // and a paying client should not lose their account page over a bad entry.
@@ -174,13 +178,15 @@ async function loadKeys() {
   // random token instead of an IP. A browser holding that token in its
   // vs_trust cookie gets through even when its network address is banned, so
   // Bradley can block a spammer on a shared network without blocking himself.
-  const trusted = new Set();
+  // token -> expiry ms (0 = never). Approval links made for someone else carry an expiry.
+  const trusted = new Map();
   keys.trusted = trusted;
   for (const v of values) {
     const f = (v && v.mapValue && v.mapValue.fields) || {};
     if (f.kind && f.kind.stringValue === "trusted-device") {
       const tk = (f.token && f.token.stringValue) || "";
-      if (tk.length >= 24) trusted.add(tk);
+      const tx = Number((f.expires && (f.expires.integerValue || f.expires.doubleValue)) || 0);
+      if (tk.length >= 24 && !(tx && tx < Date.now())) trusted.set(tk, tx);
       continue;
     }
     // An entry is live unless it has been explicitly unbanned. Unbanning
@@ -327,12 +333,53 @@ function isTrusted(req, keys) {
   return !!(t && keys && keys.trusted && keys.trusted.has(t));
 }
 
+function trustPage(ok, host) {
+  const title = ok ? "This device is approved" : "This link is not valid";
+  const text = ok
+    ? "You can now use vshealthbenefits.com on this phone or computer. If you still see a blocked page, wait one minute and refresh."
+    : "This approval link has expired or was removed. Ask VS Health Benefits for a new one: (954) 825-1009.";
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>${title}</title>
+<style>body{margin:0;font-family:Inter,system-ui,-apple-system,sans-serif;background:#f6f9fc;color:#0d1b2a;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:16px}
+.c{max-width:440px;background:#fff;border:1px solid #e4e9f2;border-radius:16px;padding:28px 24px;text-align:center;box-shadow:0 6px 20px rgba(13,27,42,.07)}
+.i{width:48px;height:48px;border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#fff;background:${ok ? "#15803d" : "#b42318"}}
+h1{font-size:20px;margin:0 0 8px}p{color:#475569;line-height:1.55;margin:0 0 18px}a.b{display:inline-block;background:#16447f;color:#fff;text-decoration:none;font-weight:700;padding:11px 20px;border-radius:10px}</style></head>
+<body><div class="c"><div class="i">${ok ? "&#10003;" : "!"}</div><h1>${title}</h1><p>${text}</p>${ok ? '<a class="b" href="/">Go to the website</a>' : ""}</div></body></html>`;
+}
+
+async function handleTrust(request, event) {
+  let t = "", host = "";
+  try { const u = new URL(request.url); t = (u.searchParams.get("t") || "").trim(); host = u.hostname; } catch (e) {}
+  let exp = null;
+  if (/^[A-Za-z0-9_-]{24,128}$/.test(t)) {
+    let keys = null;
+    try { keys = await blockedKeys(event); } catch (e) { keys = null; }
+    // A link made seconds ago may not be in this isolate's copy yet: read once more.
+    if (!(keys && keys.trusted && keys.trusted.has(t))) {
+      try {
+        keys = await Promise.race([refresh(), new Promise(function (r) { setTimeout(function () { r(null); }, 2500); })]) || keys;
+      } catch (e) {}
+    }
+    if (keys && keys.trusted && keys.trusted.has(t)) exp = keys.trusted.get(t) || 0;
+  }
+  const ok = exp !== null;
+  const headers = Object.assign({ "Content-Type": "text/html; charset=utf-8", "X-Robots-Tag": "noindex, nofollow" }, NO_STORE);
+  if (ok) {
+    const maxAge = exp ? Math.max(60, Math.floor((exp - Date.now()) / 1000)) : 5 * 365 * 86400;
+    const dom = /(^|\.)vshealthbenefits\.com$/i.test(host) ? "; Domain=.vshealthbenefits.com" : "";
+    headers["Set-Cookie"] = "vs_trust=" + t + "; Path=/; Max-Age=" + maxAge + "; Secure; SameSite=Lax" + dom;
+  }
+  return new Response(trustPage(ok, host), { status: ok ? 200 : 410, headers: headers });
+}
+
 // ── entry point ────────────────────────────────────────────────────────────
 export default async function middleware(request, event) {
   const disabled = process.env.IP_BLOCK_DISABLED === "1";
 
   let path = "/";
   try { path = new URL(request.url).pathname; } catch (e) { return; }
+
+  // Approval links answer before blocking, so they work from a blocked network.
+  if (TRUST_PATH.test(path)) return handleTrust(request, event);
 
   // The probe answers before anything else, so it works even while blocked.
   if (CHECK_PATH.test(path)) {
