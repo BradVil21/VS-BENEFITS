@@ -28,11 +28,18 @@
   + '.vss-mrow{display:none!important}'
   + '@media(min-width:960px){.vss-m{display:none}.vss-d{display:inline-flex!important}'
   +   '.site-header .brand{flex-shrink:0;white-space:nowrap}.nav-links>a[href="/"]{display:none!important}'
-  +   '.nav-links .vss-sbtn{margin-left:auto!important;width:38px!important;height:38px;padding:0!important;justify-content:center}'
-  +   '.nav-links>a.vss-call{padding:8px 14px!important;font-size:.86rem!important}'
-  +   'html body header nav.nav-links>a.nav-cta.vss-has{margin-left:4px!important}html body header nav.nav-links>a.vss-call{margin-right:0!important}}'
+  +   'html body header nav.nav-links>a.nav-cta{display:none!important}'
+  +   '.nav-links>a.vss-call{padding:8px 14px!important;font-size:.86rem!important;margin-left:auto!important}'
+  +   'html body header nav.nav-links>a.vss-call{margin-right:0!important}'
+  +   '.nav-links button.vss-bar{display:inline-flex!important;align-items:center;gap:8px;width:230px;height:40px;margin:0 0 0 10px!important;padding:0 10px 0 14px!important;border:1.5px solid #d7dfeb!important;border-radius:999px!important;background:#f6f8fb!important;color:#64748b!important;font:inherit;font-size:.9rem!important;font-weight:500!important;cursor:text;text-align:left;white-space:nowrap;transition:border-color .15s,background .15s,box-shadow .15s}'
+  +   '.nav-links button.vss-bar:hover{border-color:#16447f!important;background:#fff!important;box-shadow:0 4px 14px -6px rgba(11,35,70,.25)}'
+  +   '.nav-links button.vss-bar svg{color:#16447f;flex-shrink:0}'
+  +   '.vss-bar .vss-ph{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}'
+  +   '.vss-bar kbd{font:inherit;font-size:.72rem;font-weight:700;color:#64748b;border:1px solid #d7dfeb;background:#fff;border-radius:6px;padding:1px 7px;line-height:1.5}}'
   + '@media(min-width:1280px){.site-header .nav-wrap{max-width:1360px}}'
-  + '@media(min-width:960px) and (max-width:1399px){.nav-links>a.vss-call span{display:none}.nav-links>a.vss-call{width:38px;height:38px;padding:0!important;justify-content:center}}'
+  + '@media(min-width:960px) and (max-width:1279px){.nav-links button.vss-bar{width:170px}.vss-bar kbd{display:none}}'
+  + '@media(min-width:960px) and (max-width:1099px){.nav-links button.vss-bar{width:136px;margin-left:8px!important}}'
+  + '@media(min-width:960px) and (max-width:1279px){.nav-links>a.vss-call span{display:none}.nav-links>a.vss-call{width:38px;height:38px;padding:0!important;justify-content:center}}'
   + '.vss-ov{position:fixed;inset:0;z-index:10000;background:rgba(11,35,70,.45);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;padding:9vh 14px 14px}'
   + '.vss-ov.open{display:flex}.vss-body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}.vss-res{overflow:visible!important}'
   + '.vss-pn{width:100%;max-width:680px;max-height:80vh;display:flex;flex-direction:column;background:#fff;border-radius:18px;box-shadow:0 30px 80px -20px rgba(11,35,70,.5);overflow:hidden;font-family:Inter,system-ui,-apple-system,sans-serif}'
@@ -63,15 +70,15 @@
   var cta = nav && nav.querySelector('a.nav-cta');
   if (nav) {
     var sb = document.createElement('button');
-    sb.type = 'button'; sb.className = 'vss-d vss-ib vss-sbtn'; sb.setAttribute('aria-label', 'Search the site'); sb.innerHTML = ICON_S;
+    sb.type = 'button'; sb.className = 'vss-d vss-bar vss-sbtn'; sb.setAttribute('aria-label', 'Search the site'); sb.innerHTML = ICON_S + '<span class="vss-ph">Search the site</span><kbd>/</kbd>';
     var cl = document.createElement('a');
     cl.className = 'vss-d vss-call'; cl.href = PHONE; cl.setAttribute('aria-label', 'Call an advisor at ' + PHONE_TXT);
     cl.innerHTML = ICON_P + '<span>Call an Advisor</span>';
-    if (cta) { nav.insertBefore(sb, cta); nav.insertBefore(cl, cta); cta.classList.add('vss-has'); }
-    else { nav.appendChild(sb); nav.appendChild(cl); }
+    if (cta) { nav.insertBefore(cl, cta); nav.insertBefore(sb, cta); cta.classList.add('vss-has'); }
+    else { nav.appendChild(cl); nav.appendChild(sb); }
     var ms = document.createElement('button'); ms.type = 'button'; ms.className = 'vss-mrow vss-sbtn'; ms.innerHTML = ICON_S + 'Search the site';
     var mc = document.createElement('a'); mc.className = 'vss-mrow vss-mcall'; mc.href = PHONE; mc.innerHTML = ICON_P + 'Call an Advisor &middot; ' + PHONE_TXT;
-    nav.insertBefore(ms, sb); if (cta) nav.insertBefore(mc, cta); else nav.appendChild(mc);
+    nav.insertBefore(ms, cl); if (cta) nav.insertBefore(mc, cta); else nav.appendChild(mc);
   }
   var m = document.createElement('div'); m.className = 'vss-m';
   m.innerHTML = '<button type="button" class="vss-ib vss-sbtn" aria-label="Search the site">' + ICON_S + '</button>'
