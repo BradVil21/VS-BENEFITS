@@ -18,19 +18,18 @@
   + '.vss-call:hover{background:#0b2346!important;color:#fff!important}'
   + '.vss-m .vss-call{height:40px;padding:0 14px;font-size:.9rem}'
   + '@media(max-width:959px){.site-header .nav-wrap{gap:0}.site-header .brand{white-space:nowrap;min-width:0;flex-shrink:1;gap:8px}.site-header .brand span:last-child{font-size:1rem}'
-  +   '.vss-m{margin-right:6px;gap:6px}.vss-m .vss-ib,.vss-m .vss-call{height:38px}.vss-m .vss-ib{width:38px}.vss-m .vss-call{padding:0 12px;font-size:.88rem}'
+  +   '.vss-m{margin-right:8px}.vss-mpill{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px 0 11px;border:1.5px solid #d7dfeb;border-radius:999px;background:#f6f8fb;color:#64748b;font:inherit;font-size:.9rem;font-weight:500;cursor:pointer;white-space:nowrap}.vss-mpill svg{color:#16447f;flex-shrink:0}'
   +   '.nav-links .vss-mrow{display:flex!important;align-items:center;gap:10px}'
   +   '.nav-links .vss-d{display:none!important}'
   +   '.nav-links button.vss-mrow{width:100%;background:none;border:0;border-bottom:1px solid var(--line,#e4e9f2);padding:14px 20px;font:inherit;font-weight:600;font-size:1rem;color:var(--ink,#0b2346);cursor:pointer;text-align:left;min-height:48px}'
   +   '.nav-links a.vss-mcall{justify-content:center;margin:10px 16px 0!important;width:calc(100% - 32px)!important;align-self:center;border:1.5px solid #0b2346!important;border-radius:10px!important;color:#0b2346!important;font-weight:700!important;padding:13px 16px!important}}'
-  + '@media(max-width:419px){.vss-m .vss-call span{display:none}.vss-m .vss-call{width:38px;padding:0;justify-content:center}}'
+  + '@media(max-width:389px){.vss-mpill span{display:none}.vss-mpill{width:38px;padding:0;justify-content:center}}'
   + '@media(max-width:350px){.site-header .brand span:last-child{font-size:.9rem}}'
   + '.vss-mrow{display:none!important}'
   + '@media(min-width:960px){.vss-m{display:none}.vss-d{display:inline-flex!important}'
   +   '.site-header .brand{flex-shrink:0;white-space:nowrap}.nav-links>a[href="/"]{display:none!important}'
   +   'html body header nav.nav-links>a.nav-cta{display:none!important}'
-  +   '.nav-links>a.vss-call{padding:8px 14px!important;font-size:.86rem!important;margin-left:auto!important}'
-  +   'html body header nav.nav-links>a.vss-call{margin-right:0!important}'
+  +   'html body header nav.nav-links>.vss-bar{margin-left:auto!important;margin-right:0!important}'
   +   '.nav-links button.vss-bar{display:inline-flex!important;align-items:center;gap:8px;width:230px;height:40px;margin:0 0 0 10px!important;padding:0 10px 0 14px!important;border:1.5px solid #d7dfeb!important;border-radius:999px!important;background:#f6f8fb!important;color:#64748b!important;font:inherit;font-size:.9rem!important;font-weight:500!important;cursor:text;text-align:left;white-space:nowrap;transition:border-color .15s,background .15s,box-shadow .15s}'
   +   '.nav-links button.vss-bar:hover{border-color:#16447f!important;background:#fff!important;box-shadow:0 4px 14px -6px rgba(11,35,70,.25)}'
   +   '.nav-links button.vss-bar svg{color:#16447f;flex-shrink:0}'
@@ -39,7 +38,7 @@
   + '@media(min-width:1280px){.site-header .nav-wrap{max-width:1360px}}'
   + '@media(min-width:960px) and (max-width:1279px){.nav-links button.vss-bar{width:170px}.vss-bar kbd{display:none}}'
   + '@media(min-width:960px) and (max-width:1099px){.nav-links button.vss-bar{width:136px;margin-left:8px!important}}'
-  + '@media(min-width:960px) and (max-width:1279px){.nav-links>a.vss-call span{display:none}.nav-links>a.vss-call{width:38px;height:38px;padding:0!important;justify-content:center}}'
+
   + '.vss-ov{position:fixed;inset:0;z-index:10000;background:rgba(11,35,70,.45);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;padding:9vh 14px 14px}'
   + '.vss-ov.open{display:flex}.vss-body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}.vss-res{overflow:visible!important}'
   + '.vss-pn{width:100%;max-width:680px;max-height:80vh;display:flex;flex-direction:column;background:#fff;border-radius:18px;box-shadow:0 30px 80px -20px rgba(11,35,70,.5);overflow:hidden;font-family:Inter,system-ui,-apple-system,sans-serif}'
@@ -71,18 +70,13 @@
   if (nav) {
     var sb = document.createElement('button');
     sb.type = 'button'; sb.className = 'vss-d vss-bar vss-sbtn'; sb.setAttribute('aria-label', 'Search the site'); sb.innerHTML = ICON_S + '<span class="vss-ph">Search</span><kbd>/</kbd>';
-    var cl = document.createElement('a');
-    cl.className = 'vss-d vss-call'; cl.href = PHONE; cl.setAttribute('aria-label', 'Call an advisor at ' + PHONE_TXT);
-    cl.innerHTML = ICON_P + '<span>Call an Advisor</span>';
-    if (cta) { nav.insertBefore(cl, cta); nav.insertBefore(sb, cta); cta.classList.add('vss-has'); }
-    else { nav.appendChild(cl); nav.appendChild(sb); }
+    if (cta) { nav.insertBefore(sb, cta); cta.classList.add('vss-has'); }
+    else { nav.appendChild(sb); }
     var ms = document.createElement('button'); ms.type = 'button'; ms.className = 'vss-mrow vss-sbtn'; ms.innerHTML = ICON_S + 'Search the site';
-    var mc = document.createElement('a'); mc.className = 'vss-mrow vss-mcall'; mc.href = PHONE; mc.innerHTML = ICON_P + 'Call an Advisor &middot; ' + PHONE_TXT;
-    nav.insertBefore(ms, cl); if (cta) nav.insertBefore(mc, cta); else nav.appendChild(mc);
+    nav.insertBefore(ms, sb);
   }
   var m = document.createElement('div'); m.className = 'vss-m';
-  m.innerHTML = '<button type="button" class="vss-ib vss-sbtn" aria-label="Search the site">' + ICON_S + '</button>'
-    + '<a class="vss-call" href="' + PHONE + '" aria-label="Call an advisor at ' + PHONE_TXT + '">' + ICON_P + '<span>Call</span></a>';
+  m.innerHTML = '<button type="button" class="vss-mpill vss-sbtn" aria-label="Search the site">' + ICON_S + '<span>Search</span></button>';
   var tog = wrap.querySelector('.menu-toggle');
   if (tog) wrap.insertBefore(m, tog); else wrap.appendChild(m);
 
