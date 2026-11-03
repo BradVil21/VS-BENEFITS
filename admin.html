@@ -11436,7 +11436,7 @@ try{(function(){
   function ymd(dt){return dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");}
   function periodRange(per){
     per=per||S.period;var t=new Date(),y=t.getFullYear();
-    if(per==="ytd")return{from:y+"-01-01",to:"9999",label:"YTD "+y};
+    if(per==="ytd"){/* bonus period: apps submitted through Oct 31 only (Nov apps count toward next period) */var lm=null;try{lm=planData().lastMonth;}catch(e){}lm=lm||(y+"-10");return{from:y+"-01-01",to:lm+"-31",label:"Bonus period "+y};}
     if(per==="month")return{from:ymd(new Date(y,t.getMonth(),1)),to:"9999",label:t.toLocaleString("en-US",{month:"long"})};
     if(per==="90")return{from:ymd(new Date(t.getTime()-90*864e5)),to:"9999",label:"Last 90 days"};
     if(per==="lastmonth"){var a=new Date(y,t.getMonth()-1,1),b=new Date(y,t.getMonth(),0);return{from:ymd(a),to:ymd(b),label:a.toLocaleString("en-US",{month:"long"})};}
@@ -12218,7 +12218,7 @@ try{(function(){
         var activeN=M.apps.filter(function(a){return /in force/i.test(a.status);}).length,mrr=M.apps.filter(function(a){return /in force/i.test(a.status);}).reduce(function(s,a){return s+a.prem;},0);
         var ushaTR=kp&&kp.proj&&kp.proj.takenRate!=null?kp.proj.takenRate:null;
         m1.innerHTML=h1
-          +'<div class="ap-bar-top">'+seg("period",[["ytd","YTD "+new Date().getFullYear()],["month","This month"],["lastmonth","Last month"],["90","Last 90 days"],["all","All time"]],S.period)+'</div>'
+          +'<div class="ap-bar-top">'+seg("period",[["ytd","Bonus period (Jan-Oct)"],["month","This month"],["lastmonth","Last month"],["90","Last 90 days"],["all","All time"]],S.period)+'</div>'
           +'<div class="ap-kpis">'+kpi("Underwritten","Premier Advantage · Premier Choice · Secure Advantage · bonus at 60%",uw,TARGET.UW)+kpi("Guaranteed issue","HealthAccess · bonus at 65%",gi,TARGET.GI)+kpi("Combined","Underwritten + guaranteed issue",P,0)
           +'<div class="ap-kpi ap-kpi-side"><div class="ap-mini usha"><span>USHA official taken rate</span><b>'+(ushaTR==null?"--":ushaTR+"%")+'</b><em>'+(ushaTR==null?"click ⟳ Sync from USHA":(kp.official&&kp.official.length?kp.official.map(function(o){return esc(o.label)+" "+esc(o.rate);}).join(" · "):"UW YTD")+" · synced "+ago(kp.at))+'</em></div>'
           +'<div class="ap-mini"><span>Active core policies</span><b>'+activeN+'</b><em>$'+Math.round(mrr).toLocaleString()+'/mo in premium</em></div>'
