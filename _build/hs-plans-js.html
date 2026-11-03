@@ -1,0 +1,62 @@
+<script id="hsq-js">
+/* Real 2027 plans from HealthSherpa (POST /api/plans -> api/_healthsherpa-plans.js).
+   Loads after the estimate, which is after the lead is captured. Anything other than a
+   plan list (no key yet, outage, no plans loaded) leaves the section hidden, so the
+   calculator behaves exactly as before. */
+(function(){
+  var box, last=null, all=[], metal="all", shown=6;
+  function $(id){return document.getElementById(id);}
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function m(n){if(n==null||!isFinite(n))return "—";return "$"+Math.round(n).toLocaleString();}
+  function cap(s){s=String(s||"");return s.charAt(0).toUpperCase()+s.slice(1).replace(/_/g," ");}
+  function track(n,p){try{window.vsTrack&&window.vsTrack(n,p||{});}catch(e){}}
+  function fine(){return '<p class="hsq-fine">Plan and price data provided by HealthSherpa, a CMS-registered web-broker, for '+esc(String(last&&last.plan_year||2027))+' coverage. Plans are sorted by lowest monthly premium after your estimated tax credit; we never rank plans by carrier or commission. Prices assume no tobacco use'+(last&&last.kids?' and price children at age 10':'')+'. Premium and subsidy amounts vary by individual eligibility and are confirmed at enrollment. VS Health Benefits is a licensed independent broker and is not HealthCare.gov.</p>';}
+  function card(p){
+    var tags='<span class="hsq-tag '+esc(p.metal.replace("expanded_",""))+'">'+esc(cap(p.metal))+'</span>'+(p.type?'<span class="hsq-tag">'+esc(p.type.toUpperCase())+'</span>':'')+(p.hsa?'<span class="hsq-tag hsa">HSA eligible</span>':'');
+    var grid='<div><span>Deductible</span><br><b>'+m(p.ded)+'</b></div><div><span>Out-of-pocket max</span><br><b>'+m(p.moop)+'</b></div>'+
+      (p.pcp?'<div><span>Primary care</span><br>'+esc(p.pcp)+'</div>':'')+(p.rx?'<div><span>Generic drugs</span><br>'+esc(p.rx)+'</div>':'');
+    var href='/book?from=subsidy-calculator-plan&plan='+encodeURIComponent(p.id)+'&est='+Math.round(p.net||0);
+    return '<div class="hsq-card"><div class="hsq-top"><div><div class="hsq-name">'+esc(p.name)+'</div><div class="hsq-iss">'+esc(p.issuer)+'</div></div>'+
+      '<div class="hsq-price"><b>'+m(p.net)+'<small style="font-size:.7rem;font-weight:600">/mo</small></b>'+(p.gross&&p.net!=null&&p.gross-p.net>=1?'<s>'+m(p.gross)+' before credit</s>':'')+'</div></div>'+
+      '<div class="hsq-tags">'+tags+'</div><div class="hsq-grid">'+grid+'</div>'+
+      '<div class="hsq-act"><a class="go" href="'+href+'" data-plan="'+esc(p.id)+'">Enroll with an advisor</a>'+
+      (p.sbc?'<a class="lk" href="'+esc(p.sbc)+'" target="_blank" rel="noopener">Summary of benefits</a>':'')+
+      (p.network_url?'<a class="lk" href="'+esc(p.network_url)+'" target="_blank" rel="noopener">Find doctors</a>':'')+'</div></div>';
+  }
+  function render(){
+    var list=all.filter(function(p){return metal==="all"||p.metal.replace("expanded_","")===metal;});
+    var metals=["all"].concat(["bronze","silver","gold","platinum","catastrophic"].filter(function(t){return all.some(function(p){return p.metal.replace("expanded_","")===t;});}));
+    var c=last.county||{};
+    box.innerHTML='<div class="hsq-h">Real '+esc(String(last.plan_year||2027))+' plans for '+esc(c.name||"your area")+(c.state?', '+esc(c.state):'')+'</div>'+
+      '<p class="hsq-sub">'+all.length+' Marketplace plans priced for your household and income.</p>'+
+      (last.aptc>0?'<div class="hsq-credit">Estimated tax credit: <b>'+m(last.aptc)+'/mo</b>, already taken off the prices below.</div>':'')+
+      '<div class="hsq-chips" role="group" aria-label="Filter by metal level">'+metals.map(function(t){return '<button type="button" data-m="'+t+'" aria-pressed="'+(t===metal)+'">'+(t==="all"?"All":cap(t))+'</button>';}).join("")+'</div>'+
+      list.slice(0,shown).map(card).join("")+
+      (list.length>shown?'<button type="button" class="hsq-more">Show '+Math.min(list.length-shown,10)+' more of '+list.length+'</button>':'')+fine();
+    box.querySelectorAll("[data-m]").forEach(function(b){b.onclick=function(){metal=b.getAttribute("data-m");shown=6;render();track("plan_filter",{metal:metal});};});
+    var more=box.querySelector(".hsq-more"); if(more) more.onclick=function(){shown+=10;render();};
+    box.querySelectorAll("a.go").forEach(function(a){a.onclick=function(){track("quote_cta",{from_page:location.pathname,cta:"hs-plan",plan:a.getAttribute("data-plan")});};});
+  }
+  function counties(list,req){
+    box.innerHTML='<div class="hsq-h">Which county do you live in?</div><p class="hsq-sub">Your ZIP code crosses county lines, and plans differ by county.</p><div class="hsq-chips">'+
+      list.map(function(c){return '<button type="button" data-f="'+esc(c.fips)+'">'+esc(c.name)+'</button>';}).join("")+'</div>';
+    box.querySelectorAll("[data-f]").forEach(function(b){b.onclick=function(){req.fips=b.getAttribute("data-f");load(req);};});
+  }
+  function load(req){
+    box.hidden=false; box.innerHTML='<div class="hsq-load">Pulling real 2027 plans for ZIP '+esc(req.zip)+'&hellip;</div>';
+    fetch("/api/plans",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(req)})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j};});})
+      .then(function(x){
+        var j=x.j||{};
+        if(x.ok&&j.needCounty&&j.counties&&j.counties.length){counties(j.counties,req);return;}
+        if(!x.ok||!j.plans||!j.plans.length){box.hidden=true;box.innerHTML="";track("hs_plans_unavailable",{status:x.ok?"empty":"error"});return;}
+        last=j; last.kids=req.kids; all=j.plans; metal="all"; shown=6; render(); track("hs_plans_shown",{count:j.count});
+      })
+      .catch(function(){box.hidden=true;box.innerHTML="";});
+  }
+  window.vsLoadRealPlans=function(est){
+    box=$("hsq"); if(!box||!est||!/^\d{5}$/.test(String(est.zip||""))) return;
+    load({zip:String(est.zip),income:est.income,size:est.size,age1:est.age1,age2:est.age2,kids:est.kids||0});
+  };
+})();
+</script>
