@@ -444,56 +444,40 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 </style>
 <style id="vs-nav-center">@media (min-width:960px){header nav.nav-links{flex:1 1 auto;margin-left:28px}header nav.nav-links::before{content:"";margin-left:auto}header nav.nav-links>a.nav-cta{margin-left:auto;width:auto;flex:0 0 auto}}@media (min-width:1200px){header nav.nav-links>:nth-last-child(2){margin-right:98px}}</style>
 <style id="vs-home-hero-fullbleed">
-/* Full-bleed photo hero, same look as the truck driver hub (2026-11-02). Remove this block + "home-hero" class to undo. */
-.home-hero{background:#000!important;color:#fff;isolation:isolate}
-.home-hero .container{position:relative;z-index:2}
-.home-hero h1{color:#fff}
-.home-hero h1 span{background-image:linear-gradient(90deg,#7cc4ff,#5eead4)!important;-webkit-background-clip:text;background-clip:text;color:transparent}
-.home-hero .eyebrow{background:rgba(255,255,255,.12)!important;color:#cfe6ff!important;border:1px solid rgba(255,255,255,.22)!important}
-.home-hero .hero-sub{color:rgba(255,255,255,.86)}
-.home-hero .hero-meta{color:rgba(255,255,255,.85)}
-.home-hero .hero-meta .dot{background:#5eead4}
-.home-hero .vs-hero-links a{color:#9fd2ff!important}
-.home-hero .vs-hero-links span{color:rgba(255,255,255,.4)!important}
-.home-hero .btn-primary{background:#1f6fe5;border-color:#1f6fe5;box-shadow:0 10px 24px -8px rgba(31,111,229,.7)}
-.home-hero .btn-primary:hover{background:#1559c2;border-color:#1559c2}
-.home-hero .btn-secondary{background:transparent;color:#fff;border-color:rgba(255,255,255,.75)}
-.home-hero .btn-secondary:hover{background:#fff;color:#0b2346}
-.home-hero .vs-rating{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.22);color:#fff;box-shadow:none}
-.home-hero .vs-rating span:last-child{color:rgba(255,255,255,.75)}
-.home-hero .vs-pick-label{color:#fff}
-.home-hero .vs-zip-err{color:#fca5a5}
-.home-hero .hero-image{border:0;border-radius:0;box-shadow:none;background:#000}
-.home-hero .hero-image img{object-position:50% 30%}
-@media(min-width:900px){
- .home-hero{min-height:640px;display:flex;align-items:center}
- .home-hero .container{width:100%;position:static}
- .home-hero .hero-grid>div:first-child{position:relative;z-index:2}
- .home-hero .hero-sub{text-shadow:0 1px 8px rgba(0,0,0,.6)}
- .home-hero .hero-grid{grid-template-columns:1fr!important}
- .home-hero .hero-grid>div:first-child{max-width:600px}
- .home-hero .hero-image{position:absolute!important;top:0;right:0;bottom:0;width:58%;height:100%;aspect-ratio:auto;z-index:1;transform:none!important;opacity:1!important;-webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 12%,rgba(0,0,0,.85) 24%,#000 32%);mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.35) 12%,rgba(0,0,0,.85) 24%,#000 32%)}
-}
-@media(max-width:899px){
- .home-hero{padding-top:0!important}
- .home-hero .hero-grid{display:flex;flex-direction:column;gap:0}
- .home-hero .hero-image{order:-1;width:auto;margin:0 -18px;aspect-ratio:4/3;position:relative;transform:none!important;opacity:1!important}
- .home-hero .hero-image::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,#000 100%)}
- .home-hero .hero-grid>div:first-child{margin-top:-28px;position:relative;z-index:1}
-}
-@media(min-width:640px) and (max-width:899px){.home-hero .hero-image{margin:0 -24px;aspect-ratio:16/9}}
-.home-hero h1{font-size:clamp(2.2rem,5vw,3.4rem);line-height:1.05}
-.home-hero .hero-sub{font-size:1.15rem;max-width:520px}
+/* Light hero with cut-out photo + ribbon (2026-11-03). Remove this block + "home-hero" class to undo. */
+.home-hero{background:#faf8f5!important;color:var(--ink);isolation:isolate;padding-bottom:0!important;overflow:hidden}
+.home-hero h1{color:#0b2346;font-size:clamp(2.2rem,4.6vw,3.25rem);line-height:1.06}
+.home-hero h1 span{background-image:linear-gradient(90deg,#16447f,#0db5a6)!important;-webkit-background-clip:text;background-clip:text;color:transparent}
+.home-hero .hero-sub{font-size:1.15rem;max-width:520px;color:#334155}
 .home-hero .hero-ctas{gap:12px;margin-top:6px}
 .home-hero .hero-ctas .btn{padding:16px 26px;font-size:1.08rem;display:inline-flex;align-items:center;justify-content:center;gap:8px}
-.hh-rating{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:.92rem;color:rgba(255,255,255,.85)!important;text-decoration:none}
-.hh-stars{color:#fbbf24;letter-spacing:1px}
+.home-hero .btn-primary{background:#1f6fe5;border-color:#1f6fe5;box-shadow:0 10px 24px -10px rgba(31,111,229,.65)}
+.home-hero .btn-primary:hover{background:#1559c2;border-color:#1559c2}
+.home-hero .btn-secondary{background:#fff;color:#0b2346;border-color:#0b2346}
+.home-hero .btn-secondary:hover{background:#0b2346;color:#fff}
+.hh-rating{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:.92rem;color:#475569!important;text-decoration:none}
+.hh-stars{color:#f5a400;letter-spacing:1px}
 .hh-free{font-style:normal}
-.hh-g{background:#fff;border-radius:50%;padding:3px;width:24px;height:24px;flex-shrink:0}
-@media(min-width:900px){.home-hero{min-height:580px}}
+.hh-g{background:#fff;border-radius:50%;padding:3px;width:24px;height:24px;flex-shrink:0;box-shadow:0 1px 4px rgba(13,27,42,.15)}
+.hh-zip{margin:4px 0 18px}.hh-zip .vs-pick-label{margin:6px 0 8px;color:#0b2346}.hh-zip .vs-zip-row .btn{padding:12px 20px;font-size:1rem}
+.home-hero .hero-image{position:relative;border:0;border-radius:0;box-shadow:none;background:none;aspect-ratio:auto;overflow:visible;transform:none!important;opacity:1!important;align-self:end}
+.home-hero .hero-image img{position:relative;z-index:1;display:block;width:100%;height:auto;object-fit:contain}
+.hh-ribbon{position:absolute;z-index:0;pointer-events:none;left:4%;top:-14%;width:104%;height:auto;overflow:visible}
+.hh-ribbon-front{position:absolute;z-index:2;pointer-events:none;left:-6%;top:-14%;width:112%;height:auto;overflow:visible}
+@media(min-width:900px){
+ .home-hero{padding-top:56px!important}
+ .home-hero .hero-grid{grid-template-columns:1.05fr 1fr!important;gap:16px;align-items:center}
+ .home-hero .hero-grid>div:first-child{padding-bottom:64px}
+ .home-hero .hero-image{width:118%;margin-left:-6%;margin-right:-12%;margin-top:40px}
+}
+@media(max-width:899px){
+ .home-hero{padding-top:28px!important}
+ .home-hero .hero-grid{display:flex;flex-direction:column;gap:8px}
+ .home-hero .hero-image{width:min(460px,100%);margin:10px auto 0;padding-top:28px;overflow:hidden}
+ .hh-ribbon{top:-4%;left:2%;width:100%}
+ .hh-zip{display:none!important}
+}
 @media(max-width:639px){.hh-rating{display:flex;justify-content:center;flex-wrap:nowrap;font-size:.85rem}.hh-free{display:none}}
-.hh-zip{margin:4px 0 18px}.hh-zip .vs-pick-label{margin:6px 0 8px}.hh-zip .vs-zip-row .btn{padding:12px 20px;font-size:1rem}
-@media(max-width:899px){.hh-zip{display:none!important}}
 .vs-intro{padding:48px 0 8px}.vs-intro p{max-width:760px;margin:0 auto;text-align:center;font-size:1.12rem;line-height:1.7;color:var(--ink-2)}.vs-intro strong{color:var(--blue-900,#0d1b2a)}
 @media(min-width:960px){.vs-intro{padding:64px 0 8px}.vs-intro p{font-size:1.2rem}}
 </style>
@@ -542,7 +526,8 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <a class="hh-rating" href="#reviews-anchor" aria-label="Rated 5.0 out of 5 from 51 Google reviews"><svg class="hh-g" width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span class="hh-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 5.0 from 51 Google reviews<i class="hh-free"> &middot; Free, no obligation</i></a>
       </div>
       <div class="hero-image">
-        <img decoding="async" srcset="/compressed/family-picture-900.jpg 900w, /compressed/family-picture.jpg 1200w" sizes="(max-width: 900px) 100vw, 1200px" src="/compressed/family-picture.jpg" alt="VS Health Benefits independent health insurance advisor" loading="eager" />
+        <svg class="hh-ribbon" viewBox="0 0 600 560" aria-hidden="true" focusable="false"><defs><linearGradient id="hhg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16447f"/><stop offset=".55" stop-color="#1f6fe5"/><stop offset="1" stop-color="#0db5a6"/></linearGradient></defs><path d="M170 -340 C 40 -80, 30 210, 250 262 C 430 304, 620 330, 575 700" fill="none" stroke="url(#hhg1)" stroke-width="78" stroke-linecap="round"/><path d="M95 -340 C -30 -40, -10 290, 215 335" fill="none" stroke="#0db5a6" stroke-opacity=".35" stroke-width="14" stroke-linecap="round"/></svg>
+        <img decoding="async" fetchpriority="high" srcset="/compressed/family-cutout-720.webp 720w, /compressed/family-cutout.webp 1219w" sizes="(max-width: 900px) 460px, 640px" src="/compressed/family-cutout.webp" width="1219" height="965" alt="Smiling dad carrying his baby son on his shoulders" loading="eager" />
       </div>
     </div>
   </div>
