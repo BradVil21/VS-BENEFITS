@@ -1233,5 +1233,6 @@ var c=document.getElementById("rc-copy");if(c)c.addEventListener("click",functio
 function done(m){o.textContent=m;setTimeout(function(){o.textContent="";},2000);}
 if(navigator.clipboard)navigator.clipboard.writeText(ta.value).then(function(){done("Copied");},function(){ta.select();done("Press Ctrl+C to copy");});else{ta.select();done("Press Ctrl+C to copy");}});
 })();</script>
+<script src="/vs-search.js" defer></script>
 </body>
 </html>
