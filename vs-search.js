@@ -205,7 +205,11 @@
   var TRUCK = {};
   /* each state's own page, the same one the Service Areas links point to on every page */
   function famUrl(c) { return c === 'MD' ? '/lp/self-employed/maryland' : '/health-insurance-' + ST[c].toLowerCase().replace(/ /g, '-'); }
-  var BIZ = {FL:'/florida-small-business-health-insurance', TX:'/texas-small-business-health-insurance', KY:'/kentucky-small-business-health-insurance', MD:'/maryland-small-business-health-insurance'};
+  /* every state has its own small business page: /<state>-small-business-health-insurance (built by _build/build-sb-states.py) */
+  function bizUrl(c) { return '/' + ST[c].toLowerCase().replace(/ /g, '-') + '-small-business-health-insurance'; }
+  var BIZ = {}; for (var bk in ST) BIZ[bk] = bizUrl(bk);
+  /* on small business pages, picking a state goes straight to that state's small business page */
+  var ON_BIZ = /small-business|group-health|ichra|level-funded|employer/i.test(location.pathname);
   var IC = {
     fam: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M3 21v-1a6 6 0 0 1 12 0v1"/><circle cx="17.5" cy="9.5" r="2.5"/><path d="M16 21v-.5a4.5 4.5 0 0 1 6-4.2"/></svg>',
     trk: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 6h13v10H1zM14 10h4l4 4v2h-8"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>',
@@ -252,7 +256,7 @@
       + '<p class="vst-k">' + esc(name) + '</p><h2 class="vst-h">' + TX.h + esc(name) + '</h2><p class="vst-q">' + TX.q + '</p>'
       + '<a class="vst-o" data-st="' + code + '" data-a="family" href="' + famUrl(code) + '"><span class="vst-i">' + IC.fam + '</span><span><b>' + TX.f + '</b><small>' + TX.fs + '</small></span></a>'
       + '<a class="vst-o" data-st="' + code + '" data-a="trucker" href="' + (TRUCK[code] || tdef) + '"><span class="vst-i">' + IC.trk + '</span><span><b>' + TX.t + '</b><small>' + TX.ts + '</small></span></a>'
-      + '<a class="vst-o" data-st="' + code + '" data-a="business" href="' + (BIZ[code] || '/small-business-health-insurance?state=' + code) + '"><span class="vst-i">' + IC.biz + '</span><span><b>' + TX.b + '</b><small>' + TX.bs + '</small></span></a>'
+      + '<a class="vst-o" data-st="' + code + '" data-a="business" href="' + BIZ[code] + '"><span class="vst-i">' + IC.biz + '</span><span><b>' + TX.b + '</b><small>' + TX.bs + '</small></span></a>'
       + '</div>';
     sLast = document.activeElement;
     sov.classList.add('open'); document.body.classList.add('vss-lock');
@@ -267,6 +271,7 @@
     if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button > 0) return;
     var code = stateOf(a); if (!code) return;
     e.preventDefault();
+    if (ON_BIZ) { location.href = BIZ[code]; return; }
     var nl = document.getElementById('nav-links'); if (nl && nl.classList.contains('open') && tog) tog.click();
     pick(code);
   });
