@@ -418,12 +418,12 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <style id="vs-nav-center">@media (min-width:960px){header nav.nav-links{flex:1 1 auto;margin-left:28px}header nav.nav-links::before{content:"";margin-left:auto}header nav.nav-links>a.nav-cta{margin-left:auto;width:auto;flex:0 0 auto}}@media (min-width:1200px){header nav.nav-links>:nth-last-child(2){margin-right:98px}}</style>
 <style id="sb-refresh-css">
 /* Small business page refresh (2026-11-03). Remove this block + the sb- markup to undo. */
-.sb-hero{background:#faf8f5;padding:52px 0 0;overflow:hidden;position:relative}
+.sb-hero{background:#faf8f5;padding:32px 0 0;overflow:hidden;position:relative}
 .sb-hero .hero-grid{display:grid;grid-template-columns:1fr;gap:12px;align-items:center}
-.sb-hero h1{color:#0b2346;font-size:clamp(2.1rem,4.6vw,3.2rem);line-height:1.06;margin-bottom:14px}
+.sb-hero h1{color:#0b2346;font-size:clamp(2rem,4vw,2.75rem);line-height:1.08;margin-bottom:12px}
 .sb-hero h1 span{background:linear-gradient(90deg,#16447f,#0db5a6);-webkit-background-clip:text;background-clip:text;color:transparent}
 .sb-hero .eyebrow{background:#fff;border:1px solid #dbe7f7}
-.sb-sub{font-size:1.15rem;line-height:1.6;color:#334155;max-width:520px;margin:0 0 20px}
+.sb-sub{font-size:1.08rem;line-height:1.55;color:#334155;max-width:500px;margin:0 0 16px}
 .sbz{max-width:470px;margin:0 0 16px}
 .sbz label{display:block;font-weight:700;font-size:.92rem;color:#0b2346;margin:0 0 8px}
 .sbz-row{display:flex;gap:8px;background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;padding:6px;box-shadow:0 10px 28px rgba(13,27,42,.08);transition:border-color .2s,box-shadow .2s}
@@ -435,21 +435,21 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 .sb-rating{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.92rem;color:#475569;text-decoration:none}
 .sb-rating .st{color:#f5a400;letter-spacing:1px}
 .sb-rating svg{background:#fff;border-radius:50%;padding:3px;width:24px;height:24px;flex-shrink:0;box-shadow:0 1px 4px rgba(13,27,42,.15)}
-.sb-img{position:relative;width:min(420px,100%);margin:20px auto 0;align-self:end}
-.sb-img img{position:relative;z-index:1;display:block;width:100%;height:auto}
+.sb-img{position:relative;width:min(300px,78%);margin:14px auto 0;align-self:end}
+.sb-img img{position:relative;z-index:1;display:block;width:100%;height:auto;aspect-ratio:522/600;object-fit:cover;object-position:top}
 .sb-ribbon{position:absolute;z-index:0;left:-38%;top:-4%;width:176%;height:auto;pointer-events:none;overflow:visible}
 .sb-chip{position:absolute;z-index:2;background:#fff;border-radius:14px;padding:10px 14px;box-shadow:0 14px 30px -12px rgba(11,35,70,.35);font-size:.82rem;font-weight:700;color:#0b2346;line-height:1.25;display:flex;align-items:center;gap:10px}
 .sb-chip b{display:block;font-size:1.1rem;color:#0b7f74}
 .sb-chip i{font-style:normal;width:34px;height:34px;border-radius:10px;background:#e6f7f5;color:#0b7f74;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .sb-chip.c1{left:-8%;top:38%}.sb-chip.c2{right:-6%;top:12%}
 @media(min-width:900px){
- .sb-hero{padding-top:64px}
+ .sb-hero{padding-top:40px}
  .sb-hero .hero-grid{grid-template-columns:1.1fr .9fr;gap:24px}
- .sb-hero .hero-grid>div:first-child{padding-bottom:72px}
- .sb-img{width:min(440px,100%);margin:0 auto}
+ .sb-hero .hero-grid>div:first-child{padding-bottom:44px}
+ .sb-img{width:min(380px,100%);margin:0 auto}
  .sb-ribbon{left:-6%;width:140%;top:-8%}
 }
-@media(max-width:899px){.sb-img{overflow:hidden;padding-top:10px}.sb-ribbon{left:-30%;width:160%;top:0}.sb-chip.c1{left:2%}.sb-chip.c2{right:2%}}
+@media(max-width:899px){.sb-hero .hero-grid>div:first-child{position:relative;z-index:3}.sb-img{padding-top:10px}.sb-hero .sb-img{width:min(230px,62%);margin-top:6px}.sb-hero .sb-img img{aspect-ratio:522/500}.sb-chip{display:none}.sb-ribbon{left:-50%;width:200%;top:2%;overflow:hidden}.sb-chip.c1{left:2%}.sb-chip.c2{right:2%}}
 @media(max-width:480px){.sbz-row button{padding:12px 14px;font-size:.95rem}.sb-rating{display:flex;justify-content:center;font-size:.85rem}.sb-rating .fr{display:none}.sb-chip{font-size:.74rem;padding:8px 10px}.sb-chip b{font-size:.98rem}.sb-chip i{width:28px;height:28px}}
 /* industry photo tiles */
 .sb-ind{display:grid;grid-template-columns:1fr;gap:18px}
