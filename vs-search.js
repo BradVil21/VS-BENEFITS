@@ -198,4 +198,77 @@
     }
   });
   window.vsOpenSearch = open;
+
+  /* ---- Service Areas: pick a state, then who the coverage is for (2026-11-03) ---- */
+  var ST = {AL:'Alabama',AZ:'Arizona',AR:'Arkansas',CO:'Colorado',FL:'Florida',GA:'Georgia',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',MD:'Maryland',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VA:'Virginia',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming'};
+  var BYNAME = {}; for (var k in ST) BYNAME[ST[k].toLowerCase()] = k;
+  var TRUCK = {FL:'/truck-driver-health-insurance-florida', TX:'/truck-driver-health-insurance-texas'};
+  var BIZ = {FL:'/florida-small-business-health-insurance', TX:'/texas-small-business-health-insurance', KY:'/kentucky-small-business-health-insurance', MD:'/maryland-small-business-health-insurance'};
+  var IC = {
+    fam: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M3 21v-1a6 6 0 0 1 12 0v1"/><circle cx="17.5" cy="9.5" r="2.5"/><path d="M16 21v-.5a4.5 4.5 0 0 1 6-4.2"/></svg>',
+    trk: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 6h13v10H1zM14 10h4l4 4v2h-8"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>',
+    biz: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></svg>'
+  };
+  var stCss = ''
+  + '.vst-ov{position:fixed;inset:0;z-index:10001;background:rgba(11,35,70,.45);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:16px}'
+  + '.vst-ov.open{display:flex}'
+  + '.vst-pn{position:relative;width:100%;max-width:460px;background:#fff;border-radius:18px;box-shadow:0 30px 80px -20px rgba(11,35,70,.5);padding:26px 22px 20px;font-family:Inter,system-ui,-apple-system,sans-serif}'
+  + '.vst-x{position:absolute;top:12px;right:12px;width:36px;height:36px;border:0;border-radius:999px;background:#f1f5f9;color:#475569;font-size:1.3rem;line-height:1;cursor:pointer}'
+  + '.vst-k{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0b7f74;margin:0 0 4px}'
+  + '.vst-h{font-family:Poppins,Inter,system-ui,sans-serif;font-size:1.35rem;line-height:1.25;color:#0b2346;margin:0 40px 4px 0}'
+  + '.vst-q{color:#475569;font-size:.95rem;margin:0 0 16px}'
+  + '.vst-o{display:flex;align-items:center;gap:14px;padding:14px;border:1.5px solid #e2e8f0;border-radius:14px;text-decoration:none;color:#0b2346;margin-bottom:10px;transition:border-color .15s,background .15s,transform .15s}'
+  + '.vst-o:hover,.vst-o:focus-visible{border-color:#0db5a6;background:#f3fbfa;transform:translateY(-1px);outline:none}'
+  + '.vst-i{flex-shrink:0;width:44px;height:44px;border-radius:12px;background:#eaf2fd;color:#16447f;display:flex;align-items:center;justify-content:center}'
+  + '.vst-o b{display:block;font-size:1rem}.vst-o small{display:block;color:#64748b;font-size:.85rem;margin-top:2px}'
+  + '.vst-o:after{content:"\\203A";margin-left:auto;font-size:1.5rem;color:#94a3b8}'
+  + '@media(max-width:480px){.vst-ov{align-items:flex-end;padding:0}.vst-pn{max-width:none;border-radius:20px 20px 0 0;padding:24px 18px calc(18px + env(safe-area-inset-bottom))}}';
+  var st2 = document.createElement('style'); st2.textContent = stCss; document.head.appendChild(st2);
+  var sov = null, sLast = null, ES = (document.documentElement.lang || '').slice(0, 2) === 'es';
+  var TX = ES ? { h: 'Seguro m\u00e9dico en ', q: '\u00bfPara qui\u00e9n es la cobertura?', f: 'Personas y familias', fs: 'Planes PPO privados para usted y su familia', t: 'Camioneros y owner-operators', ts: 'Cobertura nacional que funciona en la carretera', b: 'Peque\u00f1as empresas', bs: 'Planes grupales para equipos de 1 a 50', x: 'Cerrar' }
+             : { h: 'Health insurance in ', q: 'Who is the coverage for?', f: 'Individuals &amp; families', fs: 'Private PPO plans for you and your household', t: 'Truck drivers &amp; owner-operators', ts: 'Nationwide coverage that works on the road', b: 'Small business', bs: 'Group plans for teams of 1 to 50', x: 'Close' };
+  if (ES) TRUCK = { FL: '/seguro-medico-camioneros-florida' };
+  function stateOf(a) {
+    var c = null;
+    try { c = (new URL(a.href, location.href).searchParams.get('state') || '').toUpperCase(); } catch (e) {}
+    if (c && ST[c]) return c;
+    return BYNAME[(a.textContent || '').trim().toLowerCase()] || null;
+  }
+  function pick(code) {
+    var name = ST[code], f = 'nav-state-' + code.toLowerCase();
+    if (!sov) {
+      sov = document.createElement('div'); sov.className = 'vst-ov'; sov.setAttribute('role', 'dialog'); sov.setAttribute('aria-modal', 'true');
+      document.body.appendChild(sov);
+      sov.addEventListener('click', function (e) { if (e.target === sov || e.target.closest('.vst-x')) closeSt(); });
+      sov.addEventListener('click', function (e) {
+        var o = e.target.closest('.vst-o'); if (!o) return;
+        try { if (window.gtag) gtag('event', 'state_picker', { state: o.getAttribute('data-st'), audience: o.getAttribute('data-a') }); } catch (er) {}
+      });
+    }
+    sov.setAttribute('aria-label', (ES ? 'Seguro m\u00e9dico en ' : 'Health insurance in ') + name);
+    var tdef = ES ? '/seguro-medico-camioneros' : '/truck-driver-health-insurance?state=' + code;
+    sov.innerHTML = '<div class="vst-pn"><button type="button" class="vst-x" aria-label="' + TX.x + '">&times;</button>'
+      + '<p class="vst-k">' + esc(name) + '</p><h2 class="vst-h">' + TX.h + esc(name) + '</h2><p class="vst-q">' + TX.q + '</p>'
+      + '<a class="vst-o" data-st="' + code + '" data-a="family" href="/quote?type=individual&amp;state=' + code + '&amp;from=' + f + '"><span class="vst-i">' + IC.fam + '</span><span><b>' + TX.f + '</b><small>' + TX.fs + '</small></span></a>'
+      + '<a class="vst-o" data-st="' + code + '" data-a="trucker" href="' + (TRUCK[code] || tdef) + '"><span class="vst-i">' + IC.trk + '</span><span><b>' + TX.t + '</b><small>' + TX.ts + '</small></span></a>'
+      + '<a class="vst-o" data-st="' + code + '" data-a="business" href="' + (BIZ[code] || '/small-business-health-insurance?state=' + code) + '"><span class="vst-i">' + IC.biz + '</span><span><b>' + TX.b + '</b><small>' + TX.bs + '</small></span></a>'
+      + '</div>';
+    sLast = document.activeElement;
+    sov.classList.add('open'); document.body.classList.add('vss-lock');
+    setTimeout(function () { var a = sov.querySelector('.vst-o'); if (a) a.focus(); }, 30);
+  }
+  function closeSt() {
+    if (!sov) return; sov.classList.remove('open'); document.body.classList.remove('vss-lock');
+    if (sLast && sLast.focus) sLast.focus();
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('.vsa-menu .vsa-grid a');
+    if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button > 0) return;
+    var code = stateOf(a); if (!code) return;
+    e.preventDefault();
+    var nl = document.getElementById('nav-links'); if (nl && nl.classList.contains('open') && tog) tog.click();
+    pick(code);
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && sov && sov.classList.contains('open')) closeSt(); });
+  [].forEach.call(document.querySelectorAll('.vsa-menu .vsa-h'), function (h) { if (/truck driver/i.test(h.textContent)) h.textContent = 'Choose your state'; else if (/camioneros/i.test(h.textContent)) h.textContent = 'Elija su estado'; });
 })();
