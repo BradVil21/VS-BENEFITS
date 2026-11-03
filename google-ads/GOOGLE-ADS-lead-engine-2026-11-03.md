@@ -55,10 +55,15 @@ Automation > Workflows > Create workflow > Start from scratch.
 Primary: ad calls of **60 seconds or longer**, Quote Form Lead, lead form submits, Sold Policy.
 Everything else (phone link clicks, GA4 events) is set to observe-only.
 
-## Landing pages (noindex, ads only)
+## State pages (SEO + ads)
 `/lp/truckers`, `/lp/self-employed`, `/lp/es/camioneros`, `/lp/es/independientes` send each visitor to
 their state page by IP (e.g. `/lp/truckers/texas`); anyone else sees the general page.
-Call button on top, 4-field form (name, phone, ZIP, who needs coverage) into the same lead pipeline as /quote.
+- Indexable, in the sitemap, with state routes/hubs/cities, a "what to compare" section, FAQ + breadcrumb +
+  agency schema, English/Spanish hreflang, guide links and links to every other state.
+- FL and TX trucker pages and the FL camionero page point their canonical at the older pages that already
+  rank (/truck-driver-health-insurance-florida, -texas, /seguro-medico-camioneros-florida).
+- Quote buttons and the ZIP box: truckers/camioneros -> /trucking-health-quote; self-employed/independientes -> /quote.
+  ZIP, state, source and Google click ID carry over. Call button in the header and a sticky Call/Quote bar on phones.
 Rebuild after edits: `python3 _build/build-lp.py`
 
 ## Trucker SEO quick wins
