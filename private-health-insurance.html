@@ -226,6 +226,12 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 @media(min-width:700px){.phi-facts{grid-template-columns:repeat(3,minmax(0,1fr))}.phi-why{grid-template-columns:repeat(2,minmax(0,1fr))}.phi-fit{grid-template-columns:repeat(2,minmax(0,1fr))}.phi-case-save{grid-column:auto}.phi-case-nums{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) minmax(0,1fr)}.phi-cmp-row>*{padding:16px 22px}}
 @media(min-width:900px){.phi-video-grid{grid-template-columns:330px minmax(0,1fr);gap:56px}.phi-facts{grid-template-columns:minmax(0,1fr)}}
 @media(min-width:1080px){.phi-why{grid-template-columns:repeat(4,minmax(0,1fr))}.phi-facts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.phi-watch-wrap{min-width:0}
+.phi-watch{display:flex;align-items:flex-start;justify-content:center;gap:2px;margin:0 auto 4px;padding-right:40px;animation:phiNudge 1.6s ease-in-out infinite}
+.phi-watch span{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.7rem;color:#0d0d0d;letter-spacing:-.01em;transform:rotate(-5deg);margin-top:2px}
+.phi-watch svg{flex:none;margin-top:12px}
+@keyframes phiNudge{0%,100%{translate:0 0}50%{translate:0 7px}}
+@media (prefers-reduced-motion:reduce){.phi-watch{animation:none}}
 </style>
 </head>
 <body>
@@ -270,12 +276,15 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <section class="section phi-video-sec" id="full-price-video" aria-labelledby="phi-video-h">
   <div class="container">
     <div class="phi-video-grid">
+      <div class="phi-watch-wrap">
+      <div class="phi-watch" aria-hidden="true"><span>Watch this</span><svg viewBox="0 0 80 70" width="64" height="56" fill="none" stroke="#0d0d0d" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12 C 42 4, 66 22, 60 58"/><path d="M47 47 L60 60 L71 45"/></svg></div>
       <figure class="phi-phone">
         <video controls playsinline preload="none" poster="/compressed/marketplace-full-price-premiums-poster.jpg" width="720" height="1280" aria-describedby="phi-video-cap">
           <source src="/videos/marketplace-full-price-premiums.mp4" type="video/mp4" />
           Your browser can't play this video. <a href="/videos/marketplace-full-price-premiums.mp4">Download it here</a>.
         </video>
       </figure>
+      </div>
       <div>
         <span class="phi-kicker">Watch: real Marketplace prices</span>
         <h2 id="phi-video-h">This is what full price looks like on the Marketplace</h2>
