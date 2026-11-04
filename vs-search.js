@@ -204,7 +204,9 @@
   var BYNAME = {}; for (var k in ST) BYNAME[ST[k].toLowerCase()] = k;
   var TRUCK = {};
   /* each state's own page, the same one the Service Areas links point to on every page */
-  function famUrl(c) { return c === 'MD' ? '/lp/self-employed/maryland' : '/health-insurance-' + ST[c].toLowerCase().replace(/ /g, '-'); }
+  /* "Individuals & families" in the state chooser opens the quote form on the individual
+     form with the state already picked (2026-11-04). */
+  function famUrl(c) { return '/quote?type=individual&state=' + c; }
   /* every state has its own small business page: /<state>-small-business-health-insurance (built by _build/build-sb-states.py) */
   function bizUrl(c) { return '/' + ST[c].toLowerCase().replace(/ /g, '-') + '-small-business-health-insurance'; }
   var BIZ = {}; for (var bk in ST) BIZ[bk] = bizUrl(bk);

@@ -2571,8 +2571,20 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       ['ind-phone','biz-contact-phone'].forEach(function(id){ var el=document.getElementById(id); if(el && !el.value){ el.value=f; el.dispatchEvent(new Event('input',{bubbles:true})); } });
     }catch(e){}
   }
+  /* /quote?state=KY picks the State (set by the Service Areas chooser, 2026-11-04). */
+  function fillState(){
+    try{
+      var st=(new URLSearchParams(location.search).get('state')||'').toUpperCase().replace(/[^A-Z]/g,'').slice(0,2);
+      if(st.length!==2) return;
+      ['ind-state','biz-state'].forEach(function(id){
+        var si=document.getElementById(id);
+        if(si && !si.value && [].some.call(si.options,function(o){return (o.value||o.text)===st;})){ si.value=st; si.dispatchEvent(new Event('change',{bubbles:true})); }
+      });
+    }catch(e){}
+  }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fill); else fill();
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fillPhone); else fillPhone();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fillState); else fillState();
 })();
 </script>
 <script id="vs-q-keys">
