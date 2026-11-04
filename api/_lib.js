@@ -333,6 +333,9 @@ function visitorMeta(req, d) {
     device: s(sent.device || (req && req.headers && req.headers["user-agent"]), 300),
     tz: s(sent.tz, 60),
     referrer: s(sent.referrer, 300),
+    // Device id from the vs_vid cookie (vs-attribution.js). Lets "Block this
+    // person" follow them to another network. Empty for older browsers/leads.
+    vid: deviceId(req, d),
     at: Date.now(),
   };
   // Do not store an all-empty block - an empty panel on a card is worse than no
@@ -453,9 +456,178 @@ async function autoBlockVisitor(meta, reasons, sample) {
   } catch (e) { return { ok: false, skipped: "exception" }; }
 }
 
+// ── Person-level bans (2026-11-04) ──────────────────────────────────────────
+// The edge middleware blocks by IP, but an IP ban alone was not enough: the
+// middleware fails OPEN when it cannot read the list quickly (by design, so the
+// site never goes down), and a blocked person can switch to a VPN or phone data.
+// So every public lead endpoint now checks the list itself, server-side, before
+// anything is saved, and a block row can name the PERSON, not just the address:
+//
+//   { id, ip,                 the address they were blocked on (edge matches it)
+//     ips:    [...],          further addresses learned since (edge matches these too)
+//     vids:   [...],          device ids (vs_vid cookie set by vs-attribution.js)
+//     emails: [...],          lower-cased
+//     phones: [...],          last 10 digits
+//     person: true, ... }
+//
+// A banned submission is answered 200 { ok: true } so the sender learns nothing,
+// it is never saved, and the browser is given a vs_blk cookie naming the row so
+// the edge keeps blocking that browser on any network. When a banned person is
+// recognised by device, email, phone or cookie from an address that is not on
+// the row yet, that address is added to row.ips ("learned"), so the VPN exit
+// they used gets the 404 page too. Unblocking deletes the row, which disarms
+// every one of those at once - nothing here can outlive an unblock.
+//
+// BAN_CHECK_DISABLED=1 turns the API-side check off without a deploy.
+const BAN_FRESH_MS = 15 * 1000;
+const MAX_LEARNED_IPS = 40, MAX_VIDS = 20;
+let banCache = { rows: null, at: 0 };
+
+function normEmail(v) {
+  const e = String(v == null ? "" : v).trim().toLowerCase();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) ? e : "";
+}
+function normPhone(v) {
+  let d = String(v == null ? "" : v).replace(/\D/g, "");
+  if (d.length === 11 && d.charAt(0) === "1") d = d.slice(1);
+  return d.length === 10 ? d : "";
+}
+function cookieVal(req, name) {
+  const h = (req && req.headers) || {};
+  const c = String(h.cookie || h.Cookie || "");
+  const m = new RegExp("(?:^|;\\s*)" + name + "=([A-Za-z0-9_-]{6,128})").exec(c);
+  return m ? m[1] : "";
+}
+function deviceId(req, d) {
+  const sent = (d && typeof d.meta === "object" && d.meta && d.meta.vid) ||
+               (d && d.attribution && d.attribution.vid) || "";
+  const v = cookieVal(req, "vs_vid") || String(sent || "");
+  return /^[A-Za-z0-9_-]{12,64}$/.test(v) ? v : "";
+}
+function liveBanRows(items) {
+  const now = Date.now();
+  return (items || []).filter(function (r) {
+    if (!r || r.kind === "trusted-device") return false;
+    if (r.active === false) return false;
+    if (r.expires && Number(r.expires) < now) return false;
+    return true;
+  });
+}
+function trustedTokens(items) {
+  const now = Date.now(), out = {};
+  (items || []).forEach(function (r) {
+    if (r && r.kind === "trusted-device" && r.token && !(r.expires && Number(r.expires) < now)) out[r.token] = true;
+  });
+  return out;
+}
+async function banItems() {
+  if (banCache.rows && Date.now() - banCache.at < BAN_FRESH_MS) return banCache.rows;
+  const FS = require("./_fs");
+  const r = await FS.readStore("blocked_ips");
+  if (!r.ok) return banCache.rows;              // keep the last good copy; null = fail open
+  banCache = { rows: r.items || [], at: Date.now() };
+  return banCache.rows;
+}
+
+// Pure matcher, exported for tests. `who` = { ipKey, vid, blk, emails[], phones[], trust }
+function matchBan(items, who) {
+  if (who.trust && trustedTokens(items)[who.trust]) return null;
+  const rows = liveBanRows(items);
+  for (const r of rows) {
+    const ipk = r.ip ? (String(r.ip).indexOf("::/64") > 0 ? String(r.ip).toLowerCase() : ipKeyCjs(r.ip)) : "";
+    if (who.blk && r.id === who.blk) return { row: r, via: "ban cookie" };
+    if (who.ipKey && (ipk === who.ipKey || (r.ips || []).indexOf(who.ipKey) >= 0)) return { row: r, via: "ip" };
+    if (who.vid && (r.vids || []).indexOf(who.vid) >= 0) return { row: r, via: "device" };
+    for (const e of who.emails || []) if (e && (r.emails || []).indexOf(e) >= 0) return { row: r, via: "email" };
+    for (const p of who.phones || []) if (p && (r.phones || []).indexOf(p) >= 0) return { row: r, via: "phone" };
+  }
+  return null;
+}
+
+function whoFrom(req, d, opts) {
+  d = d || {};
+  const o = opts || {};
+  const emails = [d.email, d.contactEmail, d.ownerEmail, d.referral_email].map(normEmail).filter(Boolean);
+  const phones = [d.phone, d.contactPhone, d.businessPhone, d.mobile].map(normPhone).filter(Boolean);
+  if (o.contactOnly) return { emails: emails, phones: phones };
+  return {
+    ipKey: ipKeyCjs(clientIp(req)),
+    vid: deviceId(req, d),
+    blk: cookieVal(req, "vs_blk"),
+    trust: cookieVal(req, "vs_trust"),
+    emails: emails, phones: phones,
+  };
+}
+
+// Adds whatever we just learned about a banned person to their row.
+async function banLearn(rowId, who) {
+  try {
+    const FS = require("./_fs");
+    const t = await FS.fsToken();
+    if (!t) return false;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const read = await FS.readStore("blocked_ips", t);
+      if (!read.ok) return false;
+      const items = read.items.slice();
+      const i = items.findIndex(function (x) { return x && x.id === rowId; });
+      if (i < 0) return false;                       // unblocked meanwhile - learn nothing
+      const r = Object.assign({}, items[i]);
+      let changed = false;
+      const add = function (field, v, cap) {
+        if (!v) return;
+        const arr = Array.isArray(r[field]) ? r[field].slice() : [];
+        if (arr.indexOf(v) >= 0) return;
+        arr.push(v); r[field] = arr.slice(-cap); changed = true;
+      };
+      const base = r.ip ? (String(r.ip).indexOf("::/64") > 0 ? String(r.ip).toLowerCase() : ipKeyCjs(r.ip)) : "";
+      if (who.ipKey && who.ipKey !== base) add("ips", who.ipKey, MAX_LEARNED_IPS);
+      add("vids", who.vid, MAX_VIDS);
+      (who.emails || []).forEach(function (e) { add("emails", e, 30); });
+      (who.phones || []).forEach(function (p) { add("phones", p, 30); });
+      if (!changed) return true;
+      r.lastSeen = Date.now();
+      r.hits = Number(r.hits || 0) + 1;
+      items[i] = r;
+      const w = await FS.writeStore("blocked_ips", items, t, read.updateTime, read.exists);
+      if (w.ok) { banCache.at = 0; return true; }
+      if (!w.conflict) return false;
+      await new Promise(function (res) { setTimeout(res, 150 * (attempt + 1)); });
+    }
+  } catch (e) { /* never break a request over this */ }
+  return false;
+}
+
+// Call at the top of a public lead endpoint, right after the body is parsed.
+// Returns true when the request was from a banned person and has been answered.
+async function guardBanned(req, res, d, opts) {
+  try {
+    if (process.env.BAN_CHECK_DISABLED === "1") return false;
+    const items = await banItems();
+    if (!items || !items.length) return false;
+    const who = whoFrom(req, d, opts);
+    const hit = matchBan(items, who);
+    if (!hit) return false;
+    // Only learn from requests that came from a real browser, never from a
+    // server-to-server webhook (contactOnly), whose IP is the CRM's.
+    if (!(opts && opts.contactOnly)) {
+      await Promise.race([banLearn(hit.row.id, who), new Promise(function (r) { setTimeout(r, 2500); })]);
+      try {
+        res.setHeader("Set-Cookie", "vs_blk=" + hit.row.id.replace(/[^A-Za-z0-9_-]/g, "") +
+          "; Path=/; Max-Age=" + (365 * 86400) + "; Secure; SameSite=Lax; HttpOnly");
+      } catch (e) { /* headers already sent */ }
+    }
+    try { console.log("[ban] dropped submission from blocked person", hit.row.id, "via", hit.via); } catch (e) {}
+    res.status(200).json({ ok: true });
+    return true;
+  } catch (e) {
+    return false;   // fail open: a broken check must never lose a real lead
+  }
+}
+
 module.exports = {
   CFG, esc, ghl, clientIp, geoHeader, visitorMeta, upsertContact, addNoteToContact, addTagsToContact, uploadFile, sendEmail,
   shell, btn, businessLeadEmail, bizAlertEmail,
   BUSINESS_TAGS, normTags, isBusinessLead,
   junkSignals, junkPhone, autoBlockVisitor, ipKeyCjs,
+  guardBanned, matchBan, whoFrom, deviceId, normEmail, normPhone,
 };

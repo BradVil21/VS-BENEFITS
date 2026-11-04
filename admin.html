@@ -1994,12 +1994,12 @@ html.dark .ads-kg{background:#1c2d42;border-color:#253a54}html.dark .ads-k .n{co
       <p class="lede">Anyone on this list gets a 404 &ldquo;you have been blocked&rdquo; page instead of the website. This portal and the client area are never blocked, so you cannot lock yourself out of the screen you would need to undo it.</p>
 
       <div class="card">
-        <h4 style="margin:0 0 6px;font-size:15px">Block an address</h4>
-        <p class="lede">Paste an IP, or use the <strong>Block</strong> button on a lead card &mdash; that one fills the address in for you.</p>
+        <h4 style="margin:0 0 6px;font-size:15px">Block an address, email or phone</h4>
+        <p class="lede">Paste an IP, email or phone number &mdash; or better, use <strong>Block this person</strong> on a lead card. That blocks their IP, their browser on any network (so a VPN does not get them back in), and their email and phone on every form, all at once. If they show up from a new address, it gets added automatically.</p>
         <div class="toolbar" style="margin:0">
-          <input id="blk-ip" class="search" type="text" placeholder="73.12.4.9  or  2603:9001:8400:2851:cc8c:e95a:293c:83df" autocomplete="off" spellcheck="false" />
+          <input id="blk-ip" class="search" type="text" placeholder="IP, email or phone  e.g. 73.12.4.9 · spam@mail.com · (305) 555-0100" autocomplete="off" spellcheck="false" />
           <input id="blk-note" class="search" type="text" placeholder="Reason (optional): spam, abusive, competitor…" autocomplete="off" />
-          <button id="blk-add" class="btn btn-primary btn-sm" type="button">&#128683; Block address</button>
+          <button id="blk-add" class="btn btn-primary btn-sm" type="button">&#128683; Block</button>
         </div>
         <div id="blk-msg" style="margin-top:8px"></div>
       </div>
@@ -5766,33 +5766,112 @@ function ipBlockRemove(raw){
   return saveBlockedIps(next);   /* promise<boolean> - truthy either way, but awaitable */
 }
 
+/* ═══════════════ PERSON BLOCK (2026-11-04) ═══════════════
+   An IP ban alone did not hold: someone blocked on 12.247.0.158 kept sending
+   dummy quotes. So "Block" on a lead card now blocks the PERSON. One row in
+   vs_state/blocked_ips carries:
+     ip      the address on this lead (the edge 404s it, as before)
+     vids    their browser's device id (vs_vid cookie) - the edge 404s that
+             browser on ANY network, VPN and phone data included
+     emails / phones   every form on the site silently drops a submission using
+             them (api/_lib.js guardBanned), whatever network it comes from
+     ips     addresses they are later seen on - added by the server on its own
+   Details are gathered from this lead AND every other lead from the same IP.
+   Unblock deletes the row, which lifts every part of it at once. */
+var PB_NEVER_PHONES=["9548251009"];   /* never block our own number by accident */
+function pbEmail(v){v=String(v==null?"":v).trim().toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))return "";if(/@vshealthbenefits\.com$/.test(v))return "";return v;}
+function pbPhone(v){var d=String(v==null?"":v).replace(/\D/g,"");if(d.length===11&&d.charAt(0)==="1")d=d.slice(1);if(d.length!==10||PB_NEVER_PHONES.indexOf(d)>=0)return "";return d;}
+function pbFmtPhone(d){return d&&d.length===10?"("+d.slice(0,3)+") "+d.slice(3,6)+"-"+d.slice(6):d;}
+function pbFacts(l){
+  var m=(l&&l.meta)||{};
+  var vid=String(m.vid||"");if(!/^[A-Za-z0-9_-]{12,64}$/.test(vid))vid="";
+  return {ipKey:ipKey(m.ip||(l&&l.ip)||""),vid:vid,
+    email:pbEmail(l&&(l.email||l.contactEmail)),phone:pbPhone(l&&(l.phone||l.contactPhone||l.businessPhone))};
+}
+function pbPerson(c){
+  var f=pbFacts(c),m=(c&&c.meta)||{};
+  var P={ipKey:f.ipKey,ipRaw:m.ip||c.ip||"",vids:[],emails:[],phones:[],leads:0,names:[]};
+  function add(a,v){if(v&&a.indexOf(v)<0)a.push(v);}
+  var all=[c];
+  if(f.ipKey){try{getLeads().concat(getBizLeads()).forEach(function(x){if(x&&x!==c&&!(c.id&&x.id===c.id)&&pbFacts(x).ipKey===f.ipKey)all.push(x);});}catch(e){}}
+  all.forEach(function(x){var g=pbFacts(x);add(P.vids,g.vid);add(P.emails,g.email);add(P.phones,g.phone);add(P.names,czName(x)||"");});
+  P.leads=all.length;return P;
+}
+function pbRowMatches(b,f){
+  if(!b||b.kind==="trusted-device")return false;
+  if(f.ipKey&&(b.ip===f.ipKey||(b.ips||[]).indexOf(f.ipKey)>=0))return true;
+  if(f.vid&&(b.vids||[]).indexOf(f.vid)>=0)return true;
+  if(f.email&&(b.emails||[]).indexOf(f.email)>=0)return true;
+  if(f.phone&&(b.phones||[]).indexOf(f.phone)>=0)return true;
+  return false;
+}
+function pbRowFor(c){var f=pbFacts(c);return getBlockedIps().filter(function(b){return pbRowMatches(b,f);})[0]||null;}
+function pbCovers(b,P){
+  if(!b)return false;
+  if(P.ipKey&&!(b.ip===P.ipKey||(b.ips||[]).indexOf(P.ipKey)>=0))return false;
+  function all(src,dst){return src.every(function(v){return (dst||[]).indexOf(v)>=0;});}
+  return all(P.vids,b.vids)&&all(P.emails,b.emails)&&all(P.phones,b.phones);
+}
+function pbBlock(c,note){
+  var P=pbPerson(c),f=pbFacts(c),m=(c&&c.meta)||{};
+  var list=getBlockedIps();
+  var i=list.findIndex(function(b){return pbRowMatches(b,f);});
+  function merge(a,src){a=Array.isArray(a)?a.slice():[];src.forEach(function(v){if(v&&a.indexOf(v)<0)a.push(v);});return a;}
+  var row;
+  if(i>=0){
+    row=Object.assign({},list[i]);
+    if(!row.ip&&P.ipKey)row.ip=P.ipKey;
+    else if(P.ipKey&&row.ip!==P.ipKey)row.ips=merge(row.ips,[P.ipKey]);
+    delete row.expires;delete row.auto;   /* a block you chose by hand does not lapse */
+    list[i]=row;
+  } else {
+    row={id:"blk_"+Date.now().toString(36)+Math.random().toString(36).slice(2,7),
+      ip:P.ipKey||"",label:String(P.ipRaw||"").trim(),note:String(note||"").slice(0,200),
+      leadId:c.id||"",leadName:czName(c)||"",
+      city:[m.ipCity,m.ipRegion,m.ipCountry].filter(Boolean).join(", "),org:m.ipOrg||"",
+      by:(function(){try{return (currentAdmin()||{}).email||"";}catch(e){return "";}})(),
+      created:Date.now(),ips:[]};
+    list.unshift(row);
+  }
+  row.person=true;
+  row.vids=merge(row.vids,P.vids);row.emails=merge(row.emails,P.emails);row.phones=merge(row.phones,P.phones);
+  if(!row.leadName)row.leadName=czName(c)||"";
+  return saveBlockedIps(list);
+}
+function pbUnblock(id){return saveBlockedIps(getBlockedIps().filter(function(x){return !(x&&x.id===id);}));}
+
 function czIpBlock(c){
   if(!c)return "";
   var m=c.meta||{};
   var ip=m.ip||c.ip||"";
   if(!ip && !m.ipCity && !m.device)return "";
+  window.__czBanLead=c;
   var loc=[m.ipCity,m.ipRegion,m.ipCountry].filter(Boolean).join(", ");
   var same=0;
   try{ getLeads().forEach(function(x){ var xm=(x&&x.meta)||{}; var xip=xm.ip||x.ip||""; if(ip && xip===ip && x.id!==c.id)same++; }); }catch(e){}
   var dup=same>0?'<span class="cz-ipdup">⚠ '+same+' other lead'+(same>1?'s':'')+' from this IP</span>':'';
   var dev=m.device?'<div class="cz-ipline"><b>Device:</b> '+escapeHtml(czShortUA(m.device))+'</div>':'';
   var link=ip?' <a class="cz-iplink" href="https://ipinfo.io/'+encodeURIComponent(ip)+'" target="_blank" rel="noopener">look up ↗</a>':'';
-  /* Ban / unban, right where you are looking at the address. The button only
-     appears when there is an address to act on - there is nothing to ban on a
-     lead that arrived by phone. */
-  var banned=ip?ipIsBlocked(ip):false;
-  var key=ip?ipKey(ip):"";
+  var P=pbPerson(c),row=pbRowFor(c);
   var banRow="";
-  if(ip&&key){
-    banRow=banned
-      ? '<div class="cz-ipban-row cz-ipban-on">'
-          +'<span class="cz-ipban-flag">&#128683; Blocked from the website</span>'
-          +'<button type="button" class="cz-ipban-btn cz-ipban-undo" data-ipunban="'+escapeHtml(key)+'">Unblock</button>'
-        +'</div>'
-      : '<div class="cz-ipban-row">'
-          +'<button type="button" class="cz-ipban-btn" data-ipban="'+escapeHtml(ip)+'">&#128683; Block this visitor</button>'
-          +'<span class="cz-ipban-hint">'+(key.indexOf("::/64")>0?'Blocks '+escapeHtml(key)+', their whole home connection':'They will see a 404 blocked page')+'</span>'
-        +'</div>';
+  if(row){
+    var full=pbCovers(row,P);
+    var parts=[];
+    if(row.ip||(row.ips||[]).length)parts.push((1+(row.ips||[]).length)>1?(1+(row.ips||[]).length)+" IPs":"IP");
+    if((row.vids||[]).length)parts.push((row.vids.length>1?row.vids.length+" devices":"device"));
+    if((row.emails||[]).length)parts.push(row.emails.length>1?row.emails.length+" emails":"email");
+    if((row.phones||[]).length)parts.push(row.phones.length>1?row.phones.length+" phones":"phone");
+    banRow='<div class="cz-ipban-row cz-ipban-on">'
+      +'<span class="cz-ipban-flag">&#128683; '+(full&&row.person?'Blocked: '+escapeHtml(parts.join(" · ")):'Blocked by IP only')+'</span>'
+      +(!(full&&row.person)?'<button type="button" class="cz-ipban-btn" data-pban="1">Block this person everywhere</button>':'')
+      +'<button type="button" class="cz-ipban-btn cz-ipban-undo" data-punban="'+escapeHtml(row.id)+'">Unblock</button>'
+      +(!(full&&row.person)?'<span class="cz-ipban-hint">IP-only blocks can be dodged with a VPN. Blocking the person adds their device, email and phone.</span>':'')
+    +'</div>';
+  } else if(P.ipKey||P.vids.length||P.emails.length||P.phones.length){
+    banRow='<div class="cz-ipban-row">'
+      +'<button type="button" class="cz-ipban-btn" data-pban="1">&#128683; Block this person</button>'
+      +'<span class="cz-ipban-hint">Blocks their IP, their browser on any network (VPN included), and their email &amp; phone on every form.</span>'
+    +'</div>';
   }
   return '<div class="cz-ipbox"><div class="cz-iphd"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Submission origin '+dup+'</div>'
     +'<div class="cz-ipline"><b>IP:</b> '+escapeHtml(ip||"—")+link+'</div>'
@@ -5802,6 +5881,37 @@ function czIpBlock(c){
     +banRow
     +'</div>';
 }
+/* One handler for the panel in both the individual and the business lead
+   drawers. Repaints the panel in place afterwards. */
+(function(){
+  document.addEventListener("click",function(e){
+    var t=e.target&&e.target.closest&&e.target.closest("[data-pban],[data-punban]");
+    if(!t)return;
+    var c=window.__czBanLead;if(!c)return;
+    e.preventDefault();e.stopPropagation();
+    var box=t.closest(".cz-ipbox");
+    var who=czName(c)||"this visitor";
+    function repaint(){
+      try{if(box){var tmp=document.createElement("div");tmp.innerHTML=czIpBlock(c);var n=tmp.firstElementChild;if(n)box.replaceWith(n);}}catch(err){}
+      if(typeof renderBlocked==="function")renderBlocked();
+    }
+    function warn(p){Promise.resolve(p).then(function(ok){if(ok===false)alert("Saved in this browser only — the change did not reach the website (you appear to be offline). Reload the portal while online and try again.");});}
+    if(t.hasAttribute("data-pban")){
+      var P=pbPerson(c),L=[];
+      if(P.ipKey)L.push("• IP "+P.ipKey);
+      L.push(P.vids.length?"• Their browser"+(P.vids.length>1?"s ("+P.vids.length+")":"")+" — stays blocked on a VPN or phone data":"• (No device id on these leads yet — any browser they use from now on is caught via the ban cookie)");
+      if(P.emails.length)L.push("• Email: "+P.emails.join(", "));
+      if(P.phones.length)L.push("• Phone: "+P.phones.map(pbFmtPhone).join(", "));
+      if(P.leads>1)L.push("\nGathered from all "+P.leads+" leads from this IP: "+P.names.filter(Boolean).slice(0,6).join(", ")+(P.names.length>6?"…":""));
+      if(!confirm("Block "+who+" everywhere?\n\n"+L.join("\n")+"\n\nThey get a 404 page on the website, and anything they submit through a form is silently thrown away. If they turn up on a new address, that address gets blocked too.\n\nUndo any time with Unblock."))return;
+      warn(pbBlock(c,"Blocked from lead card"));repaint();
+    } else {
+      var id=t.getAttribute("data-punban");
+      if(!confirm("Unblock "+who+"?\n\nThis lifts the whole block — IP, device, email and phone. They can use the website again within about a minute."))return;
+      warn(pbUnblock(id));repaint();
+    }
+  },true);
+})();
 function czOpenModal(client){
   czEnsureSourceList();
   var isNew=!client;
@@ -5853,37 +5963,7 @@ function czOpenModal(client){
     +metaBlock
     +'<div class="cz-mfoot">'+delBlock+'<button class="cz-btn-ghost" data-close>Cancel</button><button class="cz-btn-go" id="cz-mSave">✓ '+(isNew?"Add new lead":"Save changes")+'</button></div>';
   openModal(html);
-  /* Ban / unban from the Submission origin panel. Re-opens the card afterwards
-     so the panel repaints into its other state. */
-  (function(){
-    var box=$("modal-content");if(!box)return;
-    var ban=box.querySelector("[data-ipban]"),un=box.querySelector("[data-ipunban]");
-    if(ban)ban.addEventListener("click",function(){
-      var raw=ban.getAttribute("data-ipban");
-      var k=ipKey(raw);
-      var who=czName(c)||"this visitor";
-      if(!confirm("Block "+k+"?\n\n"+who+" will get a 404 \u201cyou have been blocked\u201d page on every page of the website. Your admin portal and the client area stay reachable.\n\nYou can undo this any time from Blocked IPs."))return;
-      var mm=(c&&c.meta)||{};
-      ipBlockAdd(raw,"Blocked from lead card",{
-        leadId:c.id||"",leadName:who,
-        city:[mm.ipCity,mm.ipRegion,mm.ipCountry].filter(Boolean).join(", "),
-        org:mm.ipOrg||""
-      });
-      if(typeof renderBlocked==="function")renderBlocked();
-      closeModal();czOpenModal(c);
-    });
-    if(un)un.addEventListener("click",function(){
-      var p=ipBlockRemove(un.getAttribute("data-ipunban"));
-      if(typeof renderBlocked==="function")renderBlocked();
-      closeModal();czOpenModal(c);
-      /* Local removal is instant; the website only stops turning them away once
-         the cloud copy is updated. Say so rather than letting a failed write
-         look like a successful unblock. */
-      Promise.resolve(p).then(function(ok){
-        if(ok===false)alert("Removed from this browser, but the change did not reach the website (you appear to be offline). Reload the portal while online and unblock again, or the block will come back.");
-      });
-    });
-  })();
+  /* Ban / unban is handled by the delegated listener under czIpBlock(). */
   czAddrAutocomplete();
   (function(){
     var db=$("cz-dispbtn"),da=$("cz-dispacts");
@@ -6835,31 +6915,36 @@ function blkMsg(kind,text){
 function renderBlocked(){
   try{renderTrusted();}catch(e){}
   var mount=$("blocked-mount");if(!mount)return;
-  var list=getBlockedIps().filter(function(b){return b&&b.ip&&b.kind!=="trusted-device";}).sort(function(a,b){return (b.created||0)-(a.created||0);});
+  var list=getBlockedIps().filter(function(b){return b&&(b.ip||b.person)&&b.kind!=="trusted-device";}).sort(function(a,b){return (b.created||0)-(a.created||0);});
 
   var bdg=$("b-blocked");
   if(bdg){bdg.textContent=list.length;bdg.style.display=list.length?"":"none";}
   var cnt=$("blk-count");
-  if(cnt)cnt.textContent=list.length?("· "+list.length+" address"+(list.length>1?"es":"")):"";
+  if(cnt)cnt.textContent=list.length?("· "+list.length+" block"+(list.length>1?"s":"")):"";
 
   if(!list.length){
-    mount.innerHTML='<p class="lede" style="margin:0">Nobody is blocked. Open a lead, look at <strong>Submission origin</strong>, and use <strong>Block this visitor</strong>, or paste an address above.</p>';
+    mount.innerHTML='<p class="lede" style="margin:0">Nobody is blocked. Open a lead, look at <strong>Submission origin</strong>, and use <strong>Block this person</strong>, or paste an address above.</p>';
   } else {
     /* Which leads did this address ever submit from? It is the difference
        between "some numbers" and "the four junk leads from Tuesday". */
     var leads=getLeads();
     mount.innerHTML='<div class="blk-list">'+list.map(function(b){
-      var hits=leads.filter(function(l){
-        var m=(l&&l.meta)||{};
-        return ipKey(m.ip||l.ip||"")===b.ip;
-      });
+      var hits=leads.filter(function(l){return pbRowMatches(b,pbFacts(l));});
+      var bip=b.ip||"";
+      var also=[];
+      if((b.emails||[]).length)also.push("Email: "+b.emails.join(", "));
+      if((b.phones||[]).length)also.push("Phone: "+b.phones.map(pbFmtPhone).join(", "));
+      if((b.vids||[]).length)also.push(b.vids.length+" device"+(b.vids.length>1?"s":"")+" (blocked on any network)");
+      var learned=(b.ips||[]);
       var names=hits.slice(0,4).map(function(l){return czName(l)||"(no name)";});
       var extra=hits.length>4?(" +"+(hits.length-4)+" more"):"";
       var meta=[b.city,b.org].filter(Boolean).join(" · ");
       return '<div class="blk-row">'
         +'<div class="blk-main">'
-          +'<div class="blk-ip">'+escapeHtml(b.ip)+(b.ip.indexOf("::/64")>0?'<span class="blk-tag">IPv6 range</span>':'')+'</div>'
-          +(b.label&&b.label.toLowerCase()!==b.ip?'<div class="blk-sub">Submitted from '+escapeHtml(b.label)+'</div>':'')
+          +'<div class="blk-ip">'+(b.person&&b.leadName?escapeHtml(b.leadName)+' <span class="blk-tag">Person</span> ':'')+escapeHtml(bip||"")+(bip.indexOf("::/64")>0?'<span class="blk-tag">IPv6 range</span>':'')+'</div>'
+          +(b.label&&b.label.toLowerCase()!==bip?'<div class="blk-sub">Submitted from '+escapeHtml(b.label)+'</div>':'')
+          +(also.length?'<div class="blk-sub"><b>Also blocks:</b> '+escapeHtml(also.join(" · "))+'</div>':'')
+          +(learned.length?'<div class="blk-sub"><b>Followed to '+learned.length+' new address'+(learned.length>1?'es':'')+':</b> '+escapeHtml(learned.slice(-5).join(", "))+(b.lastSeen?' &middot; last tried '+fmtDateTime(b.lastSeen):'')+'</div>':'')
           +(meta?'<div class="blk-sub">'+escapeHtml(meta)+'</div>':'')
           +(b.note?'<div class="blk-sub"><b>Reason:</b> '+escapeHtml(b.note)+'</div>':'')
           +(names.length?'<div class="blk-sub"><b>Leads from this address:</b> '+escapeHtml(names.join(", ")+extra)+'</div>':'')
@@ -6874,10 +6959,11 @@ function renderBlocked(){
         var id=btn.getAttribute("data-unblock");
         var row=getBlockedIps().filter(function(x){return x.id===id;})[0];
         if(!row)return;
-        if(!confirm("Unblock "+row.ip+"?\n\nThey will be able to reach the website again within about a minute."))return;
-        blkMsg("ok","Unblocking "+row.ip+"\u2026");
+        var rname=row.leadName||row.ip||"this entry";
+        if(!confirm("Unblock "+rname+"?\n\nThey will be able to reach the website again within about a minute."))return;
+        blkMsg("ok","Unblocking "+rname+"\u2026");
         saveBlockedIps(getBlockedIps().filter(function(x){return x.id!==id;})).then(function(ok){
-          if(ok)blkMsg("ok","Unblocked "+row.ip+". The website lets them through again within about a minute. To confirm, have them open vshealthbenefits.com/__blockcheck \u2014 it should say blocked: false.");
+          if(ok)blkMsg("ok","Unblocked "+rname+". The website lets them through again within about a minute. To confirm, have them open vshealthbenefits.com/__blockcheck \u2014 it should say blocked: false.");
           else blkMsg("err","Removed from this browser, but the change did not reach the website \u2014 the sync connection is offline. Reload this portal while online and unblock again, otherwise the block stays live.");
           renderBlocked();
         });
@@ -7003,7 +7089,23 @@ function invCopy(url,btn){
     if(!addBtn||!ipIn)return;
     function submit(){
       var raw=ipIn.value.trim();
-      if(!raw){blkMsg("err","Enter an IP address first.");ipIn.focus();return;}
+      if(!raw){blkMsg("err","Enter an IP address, email or phone number first.");ipIn.focus();return;}
+      /* An email or phone number: every form on the site drops their submissions. */
+      var em=pbEmail(raw),ph=(!em&&!ipKey(raw))?pbPhone(raw):"";
+      if(em||ph){
+        var f0={email:em,phone:ph};
+        if(getBlockedIps().some(function(b){return pbRowMatches(b,f0);})){blkMsg("err",raw+" is already blocked.");return;}
+        var lst=getBlockedIps();
+        lst.unshift({id:"blk_"+Date.now().toString(36)+Math.random().toString(36).slice(2,7),ip:"",label:raw,
+          note:noteIn?String(noteIn.value||"").slice(0,200):"",leadName:em||pbFmtPhone(ph),person:true,
+          emails:em?[em]:[],phones:ph?[ph]:[],vids:[],ips:[],
+          by:(function(){try{return (currentAdmin()||{}).email||"";}catch(e){return "";}})(),created:Date.now()});
+        var sv=saveBlockedIps(lst);
+        ipIn.value="";if(noteIn)noteIn.value="";
+        blkMsg("ok","Blocked "+(em||pbFmtPhone(ph))+". Any form submitted with it is thrown away, and the browser that sends it gets blocked from the website.");
+        Promise.resolve(sv).then(function(ok){if(ok===false)blkMsg("err","Saved in this browser only \u2014 the change did not reach the website (sync is offline).");});
+        renderBlocked();return;
+      }
       var k=ipKey(raw);
       if(!k){blkMsg("err",'"'+raw+'" is not an IP address. It should look like 73.12.4.9 or 2603:9001:8400:2851:cc8c:e95a:293c:83df.');ipIn.focus();return;}
       /* Refuse to ban the machine you are sitting at. The portal is exempt from

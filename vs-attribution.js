@@ -123,6 +123,32 @@
   var state = null;
   try { state = current(); } catch (e) { state = null; }
 
+  // ---- device id (added 2026-11-04) ----
+  // A random id for this browser, kept in a first-party cookie (sent to our own
+  // /api automatically) with a localStorage copy that restores the cookie if it
+  // is cleared. It identifies nothing about the person; it exists so the admin
+  // portal's "Block this person" can keep blocking a spammer who switches to a
+  // VPN or phone data (middleware.js / api/_lib.js guardBanned). Fraud
+  // prevention, so it is not gated on analytics consent.
+  var VID_RE = /^[A-Za-z0-9_-]{12,64}$/;
+  var vid = "";
+  try {
+    var cm = /(?:^|;\s*)vs_vid=([A-Za-z0-9_-]{12,64})/.exec(document.cookie || "");
+    var ls = ""; try { ls = localStorage.getItem("vs_vid") || ""; } catch (e) { /* private mode */ }
+    vid = (cm && cm[1]) || (VID_RE.test(ls) ? ls : "");
+    if (!vid) {
+      var b = new Uint8Array(16);
+      (window.crypto || window.msCrypto).getRandomValues(b);
+      vid = btoa(String.fromCharCode.apply(null, b)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    }
+    if (!cm || cm[1] !== vid) {
+      var dom = /(^|\.)vshealthbenefits\.com$/i.test(location.hostname) ? "; Domain=.vshealthbenefits.com" : "";
+      document.cookie = "vs_vid=" + vid + "; Path=/; Max-Age=" + (2 * 365 * 86400) + "; SameSite=Lax" +
+        (location.protocol === "https:" ? "; Secure" : "") + dom;
+    }
+    if (ls !== vid) { try { localStorage.setItem("vs_vid", vid); } catch (e) { /* ignore */ } }
+  } catch (e) { vid = ""; }
+
   // What gets attached to a lead. Flat and short on purpose - it is going
   // onto a CRM record, not into an analytics warehouse.
   function payload() {
@@ -138,6 +164,7 @@
         visits: s.visits || 1,
         firstSeen: new Date(f.at || Date.now()).toISOString().slice(0, 10),
       };
+      if (vid) out.vid = vid;
       ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
        "gclid", "fbclid", "msclkid", "ref"].forEach(function (k) { if (f[k]) out[k] = f[k]; });
       if (!f.ref && l.ref) { out.ref = l.ref; out.source = l.label; }

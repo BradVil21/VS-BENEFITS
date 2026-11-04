@@ -27,6 +27,10 @@ module.exports = async (req, res) => {
   if (typeof d === "string") { try { d = JSON.parse(d); } catch (e) { d = {}; } }
   d = d || {};
 
+  // Blocked people (api/_lib.js guardBanned): checked here on the server, so a
+  // ban holds even when the edge lets a request through or they change network.
+  if (await L.guardBanned(req, res, d)) return;
+
   const email = String(d.email || "").trim();
   const businessName = String(d.businessName || "").trim();
   const zip = String(d.businessZip || d.zip || "").trim();

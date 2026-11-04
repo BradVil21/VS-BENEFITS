@@ -123,6 +123,10 @@ module.exports = async (req, res) => {
   if (typeof d === "string") { try { d = JSON.parse(d); } catch (e) { d = {}; } }
   d = d || {};
 
+  // Blocked people: this call comes from the CRM's servers, so only the email
+  // and phone mean anything here - never the IP.
+  if (await L.guardBanned(req, res, d, { contactOnly: true })) return;
+
   // GHL field names vary by how the workflow is mapped, so accept common aliases.
   const firstName = clean(d.firstName || d.first_name || d.firstname, 60);
   const lastName  = clean(d.lastName  || d.last_name  || d.lastname,  60);

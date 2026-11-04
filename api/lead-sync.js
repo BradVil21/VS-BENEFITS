@@ -892,6 +892,12 @@ module.exports = async (req, res) => {
     /^admin portal/i.test(String(d.source || d.leadSource || "")) ||
     (Array.isArray(d.tags) && d.tags.indexOf("admin-lead") >= 0);
 
+  // Blocked people (api/_lib.js guardBanned): checked server-side before
+  // anything is saved. Not on portal saves or CRM->portal syncs.
+  if (!inbound && !fromPortal) {
+    if (await L.guardBanned(req, res, d)) return;
+  }
+
   if (!inbound && !fromPortal) {
     const m = L.visitorMeta(req, d);
     if (m) d.meta = m;

@@ -181,6 +181,18 @@ async function loadKeys() {
   // token -> expiry ms (0 = never). Approval links made for someone else carry an expiry.
   const trusted = new Map();
   keys.trusted = trusted;
+  // Person-level bans (2026-11-04, see guardBanned in api/_lib.js): a row can
+  // also carry learned addresses (ips), device ids (vids, the vs_vid cookie),
+  // and its own id, which a blocked browser holds in its vs_blk cookie. All
+  // three follow the person across networks; deleting the row disarms them.
+  const vids = new Map();   // device id -> row id
+  const ids = new Set();    // live row ids (for the vs_blk cookie)
+  const owner = new Map();  // ip key -> row id
+  keys.vids = vids; keys.ids = ids; keys.owner = owner;
+  const strs = function (fv) {
+    const a = (fv && fv.arrayValue && fv.arrayValue.values) || [];
+    return a.map(function (x) { return (x && x.stringValue) || ""; }).filter(Boolean);
+  };
   for (const v of values) {
     const f = (v && v.mapValue && v.mapValue.fields) || {};
     if (f.kind && f.kind.stringValue === "trusted-device") {
@@ -201,7 +213,14 @@ async function loadKeys() {
     // a hand-typed entry ("2603:9001:8400:2851:cc8c:e95a:293c:83df") still
     // matches the /64 it belongs to.
     const k = raw.indexOf("::/64") > 0 ? raw.toLowerCase() : ipKey(raw);
-    if (k) keys.add(k);
+    const rid = (f.id && f.id.stringValue) || "";
+    if (k) { keys.add(k); if (rid) owner.set(k, rid); }
+    if (rid) ids.add(rid);
+    for (const extra of strs(f.ips)) {
+      const ek = extra.indexOf("::/64") > 0 ? extra.toLowerCase() : ipKey(extra);
+      if (ek) { keys.add(ek); if (rid) owner.set(ek, rid); }
+    }
+    for (const v of strs(f.vids)) if (/^[A-Za-z0-9_-]{12,64}$/.test(v)) vids.set(v, rid);
   }
   return keys;
 }
@@ -328,6 +347,23 @@ function trustToken(req) {
   const m = /(?:^|;\s*)vs_trust=([A-Za-z0-9_-]{24,128})/.exec(c);
   return m ? m[1] : "";
 }
+function cookie(req, name) {
+  const c = req.headers.get("cookie") || "";
+  const m = new RegExp("(?:^|;\\s*)" + name + "=([A-Za-z0-9_-]{6,128})").exec(c);
+  return m ? m[1] : "";
+}
+// Which block-list row, if any, this request belongs to: by address, by the
+// device id cookie, or by the vs_blk cookie a blocked browser was given.
+// Returns { rowId, via } or null.
+function banHit(req, keys, key) {
+  if (!keys) return null;
+  if (key && keys.has(key)) return { rowId: (keys.owner && keys.owner.get(key)) || "", via: "ip" };
+  const vid = cookie(req, "vs_vid");
+  if (vid && keys.vids && keys.vids.has(vid)) return { rowId: keys.vids.get(vid) || "", via: "device" };
+  const blk = cookie(req, "vs_blk");
+  if (blk && keys.ids && keys.ids.has(blk)) return { rowId: blk, via: "ban cookie" };
+  return null;
+}
 function isTrusted(req, keys) {
   const t = trustToken(req);
   return !!(t && keys && keys.trusted && keys.trusted.has(t));
@@ -408,8 +444,9 @@ export default async function middleware(request, event) {
     const body = {
       ip: raw,
       key: key,
-      blocked: !!(keys && key && keys.has(key)) && !isTrusted(request, keys),
+      blocked: !!banHit(request, keys, key) && !isTrusted(request, keys),
       addressOnBlockList: !!(keys && key && keys.has(key)),
+      blockedBy: (function () { const h = banHit(request, keys, key); return h ? h.via : null; })(),
       trustedDevice: isTrusted(request, keys),
       enforcing: !disabled && !!keys,
       listSize: keys ? keys.size : null,
@@ -429,18 +466,29 @@ export default async function middleware(request, event) {
 
   const raw = clientIp(request);
   const key = ipKey(raw);
-  if (!key) return;
+  // No usable address is no longer an automatic pass: the device and ban
+  // cookies can still identify a blocked person.
+  if (!key && !/vs_(vid|blk)=/.test(request.headers.get("cookie") || "")) return;
 
   let keys;
   try { keys = await blockedKeys(event); } catch (e) { return; }
-  if (!keys || !keys.size || !keys.has(key)) return;
+  if (!keys) return;
+  const hit = banHit(request, keys, key);
+  if (!hit) return;
   if (isTrusted(request, keys)) return;   // a trusted device on a banned network
 
-  return new Response(blockedPage(raw), {
-    status: 404,
-    headers: Object.assign({ "Content-Type": "text/html; charset=utf-8",
-                             "X-Robots-Tag": "noindex, nofollow" }, NO_STORE),
-  });
+  const headers = Object.assign({ "Content-Type": "text/html; charset=utf-8",
+                                  "X-Robots-Tag": "noindex, nofollow" }, NO_STORE);
+  // Mark this browser, so switching to a VPN or phone data does not get them
+  // back in. The cookie only names the row; once the row is deleted (Unblock)
+  // it matches nothing and they are let straight back in.
+  if (hit.rowId && /^[A-Za-z0-9_-]{6,128}$/.test(hit.rowId)) {
+    let host = ""; try { host = new URL(request.url).hostname; } catch (e) {}
+    const dom = /(^|\.)vshealthbenefits\.com$/i.test(host) ? "; Domain=.vshealthbenefits.com" : "";
+    headers["Set-Cookie"] = "vs_blk=" + hit.rowId + "; Path=/; Max-Age=" + (365 * 86400) +
+      "; Secure; SameSite=Lax; HttpOnly" + dom;
+  }
+  return new Response(blockedPage(raw || "device"), { status: 404, headers: headers });
 }
 
 // Only HTML pages and API routes reach the middleware. Everything with a file
