@@ -208,8 +208,8 @@
   /* every state has its own small business page: /<state>-small-business-health-insurance (built by _build/build-sb-states.py) */
   function bizUrl(c) { return '/' + ST[c].toLowerCase().replace(/ /g, '-') + '-small-business-health-insurance'; }
   var BIZ = {}; for (var bk in ST) BIZ[bk] = bizUrl(bk);
-  /* on small business pages, picking a state goes straight to that state's small business page */
-  var ON_BIZ = /small-business|group-health|ichra|level-funded|employer/i.test(location.pathname);
+  /* Service Areas always asks "Who is the coverage for?", on every page including
+     the small business pages (2026-11-04: the small-business shortcut was removed). */
   var IC = {
     fam: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M3 21v-1a6 6 0 0 1 12 0v1"/><circle cx="17.5" cy="9.5" r="2.5"/><path d="M16 21v-.5a4.5 4.5 0 0 1 6-4.2"/></svg>',
     trk: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 6h13v10H1zM14 10h4l4 4v2h-8"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>',
@@ -271,7 +271,6 @@
     if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button > 0) return;
     var code = stateOf(a); if (!code) return;
     e.preventDefault();
-    if (ON_BIZ) { location.href = BIZ[code]; return; }
     var nl = document.getElementById('nav-links'); if (nl && nl.classList.contains('open') && tog) tog.click();
     pick(code);
   });
