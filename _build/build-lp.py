@@ -411,6 +411,7 @@ def page(nk, st):
 <link rel="preload" as="image" href="{n['img']}" />
 <style>{CSS}</style>
 {''.join('<script type="application/ld+json">' + json.dumps(x, ensure_ascii=False) + '</script>' for x in ld)}
+<style id="vs-float-anim">/* Hero info boxes gently float up and down (2026-11-04). Uses the `translate` property so it never fights a box's own transform; turned off for visitors who ask for less motion. */@keyframes vsFloat{{0%,100%{{translate:0 0}}50%{{translate:0 -9px}}}}.sb-chip,.chip.c1,.chip.c2,.tqx-chip,.tp-float{{animation:vsFloat 4.8s ease-in-out infinite}}.sb-chip.c2,.chip.c2,.tqx-chip.c2,.tp-float-b{{animation-delay:-2.4s;animation-duration:5.4s}}@media (prefers-reduced-motion:reduce){{.sb-chip,.chip.c1,.chip.c2,.tqx-chip,.tp-float{{animation:none}}}}</style>
 </head>
 <body>
 <div class="topbar"><div class="wrap"><span class="l">{I['shield']}{e(t['lic'])}</span><span class="r"><a href="{TEL}">{I['phone']}{PHONE}</a><a class="mail" href="mailto:info@vshealthbenefits.com">info@vshealthbenefits.com</a></span></div></div>
