@@ -1,5 +1,7 @@
 # Private PPO campaign: full-price payers (Nov 4 2026)
 
+All ads and sitelinks send people to https://www.vshealthbenefits.com/private-health-insurance (no video ads).
+
 Who: self-employed people, owner-operators and families who make too much for a subsidy.
 Landing page: /private-health-insurance (live after the push).
 Script: `google-ads/vs-private-ppo-build-2026-11-04.js`
@@ -13,6 +15,7 @@ Script: `google-ads/vs-private-ppo-build-2026-11-04.js`
 
 Both campaigns: Google Search only, "people located in", English, phrase + exact match, Maximize clicks with a $15 max CPC.
 Total ad spend goes from $50/day to $70/day while the ZIP campaign runs.
+Every ad's final URL: https://www.vshealthbenefits.com/private-health-insurance
 
 **Ad groups (44 keywords):**
 - Private Health Insurance
@@ -36,13 +39,13 @@ I left out the exact keywords your Self-Employed campaign already uses (for exam
 - ZIP codes: the highest median household income ZIPs in each state, limited to ZIPs with 8,000+ people (FL 30, TX 30, GA/IL/OH/MD 20, MO/KY 15). The full list is in `private-ppo-zips-2026-11-04.txt`. The figures come from Census ACS data via the uszipcode dataset, which is a few years old, so treat it as a ranking, not current incomes.
 
 **Extras:**
-- Sitelinks: Free Quote, Watch the Price Video (jumps to the video on the page), How PPO Plans Work, Self-Employed Plans.
+- Sitelinks, all on the landing page: Why Private PPO Plans, Your Plan vs. Private, How It Works, Common Questions.
 - Callouts.
 - Your existing call asset (staffed hours) and English lead form are reused from "Self-Employed 1099 - 8 States".
 
 ## Do this (about 10 minutes)
 
-1. Push the website first, so the landing page and video are live.
+1. Push the website first, so the landing page is live.
 2. In Google Ads, go to Tools > Bulk actions > Scripts and click **+ New script**. Name it **VS Private PPO - Build**.
 3. Paste in all of `vs-private-ppo-build-2026-11-04.js`, click Authorize, then click **Preview**.
 4. The log should say "ZIP targets found: 1xx of 170" and end with `DONE. No errors.` Then click **Run**.
@@ -54,32 +57,6 @@ I left out the exact keywords your Self-Employed campaign already uses (for exam
                     "Self-Employed 1099 - 8 States", "Spanish - Camioneros e Independientes",
                     "Private PPO - High-Income ZIPs", "Private PPO - 8 States (Rest)"];
    ```
-
-## The video: YouTube ads to the same people (optional, about 15 minutes)
-
-Search ads can't show video, so the video runs as a small separate **Demand Gen** campaign on YouTube Shorts and in-stream. Your clip is vertical and 45 seconds long, which suits Shorts.
-
-1. **Check the audio.** If there's music in the background that you don't own, mute it or swap it out. YouTube can block ads that use copyrighted music.
-2. **Upload to YouTube** on the VS Health Benefits channel. Use the original .mov from your phone (better quality). Unlisted is fine.
-   Title: "What full-price health insurance costs on the Marketplace (no subsidy)".
-3. **Link the channel** if it isn't already: Google Ads > Tools > Data manager > YouTube > Link.
-4. **Create the campaign:** New campaign > Leads > **Demand Gen**, name it "Private PPO - Video".
-   - Budget: $10/day.
-   - Bidding: Maximize conversions on Quote Form Lead. If Google requires a minimum, start with Maximize clicks.
-   - Locations: Advanced search > Bulk > paste the ZIPs from `private-ppo-zips-2026-11-04.txt`, using "people in" only.
-   - Channels: YouTube only (turn off Gmail, Discover and Display).
-   - Demographics > Household income: Top 10%, 11-20% and 21-30% only.
-   - Audience: create a custom segment of "people who searched for" the keywords from the Search campaign: private health insurance, ppo health insurance, health insurance for high income, health insurance too expensive, lower my health insurance premium, self employed health insurance.
-5. **Create the ad (video ad):**
-
-   | Field | Text |
-   |---|---|
-   | Video | The YouTube link |
-   | Headline | Paying Full Price for Health Insurance? |
-   | Long headline | No subsidy? Compare private PPO plans with nationwide networks. |
-   | Description | Free side-by-side comparison from a licensed advisor. Health questions apply. |
-   | Call to action | Get quote |
-   | Final URL | https://www.vshealthbenefits.com/private-health-insurance?utm_source=youtube&utm_medium=video&utm_campaign=private-ppo-video |
 
 ## Check on Nov 11
 

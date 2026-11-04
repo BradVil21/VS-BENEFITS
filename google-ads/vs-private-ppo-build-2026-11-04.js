@@ -75,10 +75,10 @@ var GROUPS = [
 var CAMPAIGN_NEGATIVES = ["cheap", "cheapest", "free", "low cost", "income limit", "income limits", "eligibility",
   "qualify", "employer", "employees", "group health", "small business", "short term", "student", "covered california",
   "medi cal", "what is", "meaning", "definition", "vs hmo", "hmo vs"];
-var SITELINKS = [["Get My Free Quote", "/quote?type=individual&niche=private&from=gads_private_sitelink", "Free, no obligation", "A licensed advisor follows up"],
-  ["Watch the Price Video", LANDING + "#full-price-video", "Real Marketplace prices", "No subsidy applied"],
-  ["How PPO Plans Work", "/ppo-health-insurance", "Networks that travel with you", "See doctors in other states"],
-  ["Self-Employed Plans", "/self-employed-health-insurance", "PPO plans for your own work", "Compare carriers free"]];
+var SITELINKS = [["Why Private PPO Plans", LANDING + "#why-private", "Nationwide networks", "Pick your own doctors"],
+  ["Your Plan vs. Private", LANDING + "#compare", "Network, deductible, doctors", "Side by side, no pressure"],
+  ["How It Works", LANDING + "#how-it-works", "Free licensed comparison", "Nothing changes until you say"],
+  ["Common Questions", LANDING + "#faq", "Switching mid-year", "Pre-existing conditions"]];
 var CALLOUTS = ["No Fee to You", "Licensed Advisors", "Nationwide PPO Options", "Pick Your Own Doctors", "Apply Year-Round", "Family Plans Available"];
 
 // ---------------------------------------------------------------- helpers
