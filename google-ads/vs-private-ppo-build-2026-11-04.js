@@ -8,14 +8,14 @@
    5 ad groups (Private Health Insurance / PPO / High Income / Lower My Premium / Self-Employed & 1099 Price),
    household income: top 30% + unknown only (lower 70% excluded), the shared list "VS Leads - Negatives (Nov 3)"
    (aca, obamacare, marketplace, subsidy, medicaid...) plus extra campaign negatives (cheap, free, income limit...),
-   sitelinks + callouts, and the existing call asset + English lead form reused from "Self-Employed 1099 - 8 States".
+   sitelinks + callouts, a call asset (reused if one exists), and the shared negative list (created if missing).
    ZIP list: highest median household income per state (uszipcode / Census ACS data, ZIPs with 8,000+ people). */
 
 var SITE = "https://www.vshealthbenefits.com";
 var LANDING = "/private-health-insurance";
 var MAX_CPC = 15;
 var NEG_LIST = "VS Leads - Negatives (Nov 3)";
-var REUSE_FROM = "Self-Employed 1099 - 8 States";   // borrow its call asset + lead form
+var REUSE_FROM = "Self-Employed FL - 2027";   // borrow its call asset + lead form
 var EN = "languageConstants/1000";
 var ALL8 = ["Florida", "Georgia", "Texas", "Illinois", "Ohio", "Kentucky", "Missouri", "Maryland"];
 var ZIP_CAMPAIGN  = { name: "Private PPO - High-Income ZIPs", budget: 20, status: "ENABLED", slug: "private-ppo-zips" };
@@ -58,13 +58,12 @@ var GROUPS = [
     h: ["Health Plans for High Earners", "For High-Earning Families", "Full Price? Compare Private"],
     k: ["health insurance for high income", "health insurance for high earners", "health insurance for high income earners",
         "best health insurance for high income", "health insurance high income family",
-        "health insurance if you make too much money", "health insurance for high income self employed"] },
+        "health insurance for high income self employed"] },
   { name: "Lower My Premium", p: ["lower-premium", "compare"],
     h: ["Premium Went Up Again?", "Lower Your Premium? Let's See", "Alternatives to High Premiums"],
-    k: ["lower my health insurance premium", "how to lower health insurance premium", "lower health insurance premiums",
-        "reduce health insurance premium", "health insurance too expensive", "health insurance premiums too high",
+    k: ["lower my health insurance premium", "health insurance too expensive", "health insurance premiums too high",
         "paying too much for health insurance", "alternative to expensive health insurance",
-        "alternatives to expensive health insurance", "my health insurance went up"] },
+        "alternatives to expensive health insurance"] },
   { name: "Self-Employed & 1099 - Price", p: ["self-employed", "private-ppo"],
     h: ["Self-Employed? Skip Full Price", "1099 PPO Health Plans", "Private Plans for 1099 Workers"],
     k: ["self employed health insurance too expensive", "1099 health insurance too expensive",
@@ -72,9 +71,16 @@ var GROUPS = [
         "self employed ppo health insurance", "1099 ppo health insurance", "private health insurance for 1099",
         "private health insurance for self employed family", "self employed family ppo"] }
 ];
+var NEGATIVES = ["aca", "obamacare", "obama care", "affordable care act", "marketplace", "healthcare gov", "healthcare.gov",
+  "subsidy", "subsidies", "tax credit", "premium tax credit", "medicaid", "medicare", "chip", "calculator",
+  "jobs", "job", "hiring", "careers", "salary", "truck insurance", "commercial truck insurance", "auto insurance", "car insurance",
+  "dental", "vision", "life insurance", "workers comp", "pet insurance", "travel insurance", "free health insurance",
+  "free clinic", "low income", "login", "claims"];
+var HOURS = [["MONDAY", 8, 18], ["TUESDAY", 8, 18], ["WEDNESDAY", 8, 18], ["THURSDAY", 8, 18], ["FRIDAY", 8, 18], ["SATURDAY", 8, 13], ["SUNDAY", 8, 13]];
+var PHONE = "(954) 825-1009";
 var CAMPAIGN_NEGATIVES = ["cheap", "cheapest", "free", "low cost", "income limit", "income limits", "eligibility",
   "qualify", "employer", "employees", "group health", "small business", "short term", "student", "covered california",
-  "medi cal", "what is", "meaning", "definition", "vs hmo", "hmo vs"];
+  "medi cal", "what is", "meaning", "definition", "vs hmo", "hmo vs", "how to", "why is", "why are", "reddit", "news", "statistics", "average cost", "lawsuit", "complaint"];
 var SITELINKS = [["Why Private PPO Plans", LANDING + "#why-private", "Nationwide networks", "Pick your own doctors"],
   ["Your Plan vs. Private", LANDING + "#compare", "Network, deductible, doctors", "Side by side, no pressure"],
   ["How It Works", LANDING + "#how-it-works", "Free licensed comparison", "Nothing changes until you say"],
@@ -128,73 +134,157 @@ function main() {
   var negRn = null;
   q("SELECT shared_set.resource_name, shared_set.name FROM shared_set WHERE shared_set.type = 'NEGATIVE_KEYWORDS' AND shared_set.status = 'ENABLED'")
     .forEach(function (r) { if (r.sharedSet.name === NEG_LIST) negRn = r.sharedSet.resourceName; });
-  if (!negRn) bad("Shared negative list '" + NEG_LIST + "' not found. Run the Nov 3 Lead Engine build first.");
+  say("Shared negative list '" + NEG_LIST + "': " + (negRn ? "found, will attach" : "not found, will create it (" + NEGATIVES.length + " words)"));
   var callAsset = null, leadForm = null;
   q("SELECT campaign.name, campaign_asset.asset, campaign_asset.field_type FROM campaign_asset WHERE campaign_asset.status = 'ENABLED' AND campaign.name = '" + REUSE_FROM + "'")
     .forEach(function (r) { var f = r.campaignAsset.fieldType;
       if (f === "CALL" && !callAsset) callAsset = r.campaignAsset.asset;
       if (f === "LEAD_FORM" && !leadForm) leadForm = r.campaignAsset.asset; });
-  say("Reusing from '" + REUSE_FROM + "': call asset " + (callAsset ? "yes" : "NOT FOUND") + ", lead form " + (leadForm ? "yes" : "NOT FOUND"));
+  say("From '" + REUSE_FROM + "': call asset " + (callAsset ? "reused" : "not found, will create one") + ", lead form " + (leadForm ? "reused" : "none (skipped)"));
   if (problems.length) { say("STOPPED: nothing was changed."); return; }
 
-  var todo = [ZIP_CAMPAIGN, REST_CAMPAIGN].filter(function (c) { if (existing[c.name]) { say("Already exists, skipped: " + c.name); return false; } return true; });
-  if (!todo.length) { addIncome(); say("DONE. Nothing new to build."); return; }
+  try { build(existing, states, zips, zipRn, negRn, callAsset); }
+  catch (e) { bad("Script error: " + e.message + (e.stack ? " | " + String(e.stack).split("\n").slice(0, 3).join(" / ") : "")); }
+  say(problems.length ? "DONE WITH " + problems.length + " WARNING(S) - see lines starting with !!" : "DONE. No errors.");
+}
 
-  // ---- 2. build in ONE all-or-nothing batch
-  var ops = [], sl = [], co = [];
-  SITELINKS.forEach(function (s) { var rn = T("assets"); sl.push(rn);
-    ops.push({ assetOperation: { create: { resourceName: rn, finalUrls: [SITE + s[1]], sitelinkAsset: { linkText: s[0], description1: s[2], description2: s[3] } } } }); });
-  CALLOUTS.forEach(function (s) { var rn = T("assets"); co.push(rn); ops.push({ assetOperation: { create: { resourceName: rn, calloutAsset: { calloutText: s } } } }); });
+function countBy(gaql, field) { var m = {}; q(gaql).forEach(function (r) { var k = field(r); m[k] = (m[k] || 0) + 1; }); return m; }
 
-  todo.forEach(function (c) {
-    var bRn = T("campaignBudgets"), cRn = T("campaigns");
-    ops.push({ campaignBudgetOperation: { create: { resourceName: bRn, name: c.name + " budget", amountMicros: Math.round(c.budget * 1e6), deliveryMethod: "STANDARD", explicitlyShared: false } } });
-    ops.push({ campaignOperation: { create: {
-      resourceName: cRn, name: c.name, status: c.status, advertisingChannelType: "SEARCH", campaignBudget: bRn,
-      networkSettings: { targetGoogleSearch: true, targetSearchNetwork: false, targetContentNetwork: false, targetPartnerSearchNetwork: false },
-      geoTargetTypeSetting: { positiveGeoTargetType: "PRESENCE", negativeGeoTargetType: "PRESENCE" },
-      targetSpend: { cpcBidCeilingMicros: MAX_CPC * 1e6 },
-      finalUrlSuffix: "utm_source=google&utm_medium=cpc&utm_campaign=" + c.slug,
-      containsEuPoliticalAdvertising: "DOES_NOT_CONTAIN_EU_POLITICAL_ADVERTISING"
-    } } });
-    if (c === ZIP_CAMPAIGN) {
-      zips.forEach(function (z) { ops.push({ campaignCriterionOperation: { create: { campaign: cRn, location: { geoTargetConstant: zipRn[z] } } } }); });
-    } else {
-      ALL8.forEach(function (s) { ops.push({ campaignCriterionOperation: { create: { campaign: cRn, location: { geoTargetConstant: states[s] } } } }); });
-      zips.forEach(function (z) { ops.push({ campaignCriterionOperation: { create: { campaign: cRn, negative: true, location: { geoTargetConstant: zipRn[z] } } } }); });
-    }
-    ops.push({ campaignCriterionOperation: { create: { campaign: cRn, language: { languageConstant: EN } } } });
-    CAMPAIGN_NEGATIVES.forEach(function (n) { ops.push({ campaignCriterionOperation: { create: { campaign: cRn, negative: true, keyword: { text: n, matchType: "PHRASE" } } } }); });
-    ops.push({ campaignSharedSetOperation: { create: { campaign: cRn, sharedSet: negRn } } });
-    if (callAsset) ops.push({ campaignAssetOperation: { create: { campaign: cRn, asset: callAsset, fieldType: "CALL" } } });
-    sl.forEach(function (a) { ops.push({ campaignAssetOperation: { create: { campaign: cRn, asset: a, fieldType: "SITELINK" } } }); });
-    co.forEach(function (a) { ops.push({ campaignAssetOperation: { create: { campaign: cRn, asset: a, fieldType: "CALLOUT" } } }); });
+function build(existing, states, zips, zipRn, negRn, callAsset) {
+  var all = [ZIP_CAMPAIGN, REST_CAMPAIGN];
+  var names = quoteList(all.map(function (c) { return c.name; }));
+  var camp = {};
+  all.forEach(function (c) { if (existing[c.name]) camp[c.name] = existing[c.name]; });
+  var sl = null, co = null;
 
+  // Step A: create whatever campaigns are missing (PAUSED), plus negative list + assets
+  var missingCamps = all.filter(function (c) { return !camp[c.name]; });
+  if (missingCamps.length) {
+    var opsA = [], idx = {};
+    var addA = function (key, op) { idx[key] = opsA.length; opsA.push(op); };
+    if (!negRn) addA("neg", { sharedSetOperation: { create: { resourceName: T("sharedSets"), name: NEG_LIST, type: "NEGATIVE_KEYWORDS" } } });
+    if (!callAsset) addA("call", { assetOperation: { create: { resourceName: T("assets"), callAsset: { countryCode: "US", phoneNumber: PHONE,
+      callConversionReportingState: "USE_ACCOUNT_LEVEL_CALL_CONVERSION_ACTION",
+      adScheduleTargets: HOURS.map(function (h) { return { dayOfWeek: h[0], startHour: h[1], startMinute: "ZERO", endHour: h[2], endMinute: "ZERO" }; }) } } } });
+    missingCamps.forEach(function (c) {
+      var bRn = T("campaignBudgets");
+      opsA.push({ campaignBudgetOperation: { create: { resourceName: bRn, name: c.name + " budget", amountMicros: Math.round(c.budget * 1e6), deliveryMethod: "STANDARD", explicitlyShared: false } } });
+      addA("camp:" + c.name, { campaignOperation: { create: {
+        resourceName: T("campaigns"), name: c.name, status: "PAUSED", advertisingChannelType: "SEARCH", campaignBudget: bRn,
+        networkSettings: { targetGoogleSearch: true, targetSearchNetwork: false, targetContentNetwork: false, targetPartnerSearchNetwork: false },
+        geoTargetTypeSetting: { positiveGeoTargetType: "PRESENCE", negativeGeoTargetType: "PRESENCE" },
+        targetSpend: { cpcBidCeilingMicros: MAX_CPC * 1e6 },
+        finalUrlSuffix: "utm_source=google&utm_medium=cpc&utm_campaign=" + c.slug,
+        containsEuPoliticalAdvertising: "DOES_NOT_CONTAIN_EU_POLITICAL_ADVERTISING" } } });
+    });
+    say("Step A: creating " + missingCamps.map(function (c) { return c.name; }).join(", ") + " (" + opsA.length + " changes)...");
+    var resA = AdsApp.mutateAll(opsA, { partialFailure: false });
+    var failA = resA.filter(function (r) { return !r.isSuccessful(); });
+    if (failA.length) { failA.slice(0, 5).forEach(function (r) { bad("Step A error: " + errs(r)); }); return; }
+    if (PREVIEW) { say("Preview: step A accepted. The later steps are checked once the campaigns exist (Run, then Preview again)."); return; }
+    if (idx.neg !== undefined) { negRn = resA[idx.neg].getResourceName(); addNegWords(negRn); }
+    if (idx.call !== undefined) callAsset = resA[idx.call].getResourceName();
+    missingCamps.forEach(function (c) { camp[c.name] = resA[idx["camp:" + c.name]].getResourceName(); });
+  } else {
+    say("Both campaigns already exist - checking what is still missing.");
+  }
+
+  // What does each campaign already have?
+  var locs = countBy("SELECT campaign.name FROM campaign_criterion WHERE campaign_criterion.type = 'LOCATION' AND campaign.name IN " + names, function (r) { return r.campaign.name; });
+  var groups = {}; q("SELECT campaign.name, ad_group.name, ad_group.resource_name FROM ad_group WHERE ad_group.status != 'REMOVED' AND campaign.name IN " + names)
+    .forEach(function (r) { (groups[r.campaign.name] = groups[r.campaign.name] || {})[r.adGroup.name] = r.adGroup.resourceName; });
+  var kws = countBy("SELECT campaign.name FROM ad_group_criterion WHERE ad_group_criterion.type = 'KEYWORD' AND ad_group_criterion.status != 'REMOVED' AND campaign.name IN " + names, function (r) { return r.campaign.name; });
+  var ads = countBy("SELECT campaign.name FROM ad_group_ad WHERE ad_group_ad.status != 'REMOVED' AND campaign.name IN " + names, function (r) { return r.campaign.name; });
+  all.forEach(function (c) { say("  " + c.name + ": " + (locs[c.name] || 0) + " locations, " + Object.keys(groups[c.name] || {}).length + " ad groups, " + (kws[c.name] || 0) + " keywords, " + (ads[c.name] || 0) + " ads"); });
+  if (negRn) { var nw = q("SELECT shared_criterion.resource_name FROM shared_criterion WHERE shared_set.resource_name = '" + negRn + "'").length;
+    say("  Negative list words: " + nw); if (!nw) addNegWords(negRn); }
+
+  // Step B: targeting, negatives, shared list link, assets, ad groups (only for campaigns with no locations yet)
+  var needB = all.filter(function (c) { return !locs[c.name]; });
+  if (needB.length) {
+    sl = []; co = [];
+    var opsS = [];
+    SITELINKS.forEach(function (s) { opsS.push({ assetOperation: { create: { resourceName: T("assets"), finalUrls: [SITE + s[1]], sitelinkAsset: { linkText: s[0], description1: s[2], description2: s[3] } } } }); });
+    CALLOUTS.forEach(function (s) { opsS.push({ assetOperation: { create: { resourceName: T("assets"), calloutAsset: { calloutText: s } } } }); });
+    var resS = AdsApp.mutateAll(opsS, { partialFailure: false });
+    if (resS.some(function (r) { return !r.isSuccessful(); })) { resS.filter(function (r) { return !r.isSuccessful(); }).slice(0, 3).forEach(function (r) { bad("Assets error: " + errs(r)); }); return; }
+    resS.forEach(function (r, i) { (i < SITELINKS.length ? sl : co).push(PREVIEW ? null : r.getResourceName()); });
+    var opsB = [];
+    needB.forEach(function (c) {
+      var cRn = camp[c.name];
+      if (c === ZIP_CAMPAIGN) zips.forEach(function (z) { opsB.push({ campaignCriterionOperation: { create: { campaign: cRn, location: { geoTargetConstant: zipRn[z] } } } }); });
+      else {
+        ALL8.forEach(function (st) { opsB.push({ campaignCriterionOperation: { create: { campaign: cRn, location: { geoTargetConstant: states[st] } } } }); });
+        zips.forEach(function (z) { opsB.push({ campaignCriterionOperation: { create: { campaign: cRn, negative: true, location: { geoTargetConstant: zipRn[z] } } } }); });
+      }
+      opsB.push({ campaignCriterionOperation: { create: { campaign: cRn, language: { languageConstant: EN } } } });
+      CAMPAIGN_NEGATIVES.forEach(function (n) { opsB.push({ campaignCriterionOperation: { create: { campaign: cRn, negative: true, keyword: { text: n, matchType: "PHRASE" } } } }); });
+      if (negRn) opsB.push({ campaignSharedSetOperation: { create: { campaign: cRn, sharedSet: negRn } } });
+      if (callAsset) opsB.push({ campaignAssetOperation: { create: { campaign: cRn, asset: callAsset, fieldType: "CALL" } } });
+      if (!PREVIEW) {
+        sl.forEach(function (a) { opsB.push({ campaignAssetOperation: { create: { campaign: cRn, asset: a, fieldType: "SITELINK" } } }); });
+        co.forEach(function (a) { opsB.push({ campaignAssetOperation: { create: { campaign: cRn, asset: a, fieldType: "CALLOUT" } } }); });
+      }
+    });
+    say("Step B: targeting, negatives and assets for " + needB.map(function (c) { return c.name; }).join(", ") + " (" + opsB.length + " changes)...");
+    var resB = AdsApp.mutateAll(opsB, { partialFailure: false });
+    var failB = resB.filter(function (r) { return !r.isSuccessful(); });
+    if (failB.length) { failB.slice(0, 5).forEach(function (r) { bad("Step B error: " + errs(r)); }); return; }
+    say("OK  step B" + (PREVIEW ? " (preview: accepted)" : ""));
+  }
+
+  // Ad groups that are missing
+  var opsG = [], gIdx = [];
+  all.forEach(function (c) { GROUPS.forEach(function (g) {
+    if (groups[c.name] && groups[c.name][g.name]) return;
+    gIdx.push({ c: c, g: g, i: opsG.length });
+    opsG.push({ adGroupOperation: { create: { resourceName: T("adGroups"), campaign: camp[c.name], name: g.name, status: "ENABLED", type: "SEARCH_STANDARD" } } });
+  }); });
+  if (opsG.length) {
+    say("Creating " + opsG.length + " ad groups...");
+    var resG = AdsApp.mutateAll(opsG, { partialFailure: false });
+    var failG = resG.filter(function (r) { return !r.isSuccessful(); });
+    if (failG.length) { failG.slice(0, 5).forEach(function (r) { bad("Ad group error: " + errs(r)); }); return; }
+    if (PREVIEW) { say("Preview: ad groups accepted. Keywords and ads are added on Run."); return; }
+    gIdx.forEach(function (x) { (groups[x.c.name] = groups[x.c.name] || {})[x.g.name] = resG[x.i].getResourceName(); });
+  }
+
+  // Step C: keywords + ads for campaigns that have none yet
+  var opsC = [];
+  all.forEach(function (c) {
+    if (kws[c.name] && ads[c.name]) return;
     GROUPS.forEach(function (g) {
-      var gRn = T("adGroups");
-      ops.push({ adGroupOperation: { create: { resourceName: gRn, campaign: cRn, name: g.name, status: "ENABLED", type: "SEARCH_STANDARD" } } });
-      g.k.forEach(function (w) { ["PHRASE", "EXACT"].forEach(function (mt) {
-        ops.push({ adGroupCriterionOperation: { create: { adGroup: gRn, status: "ENABLED", keyword: { text: w, matchType: mt } } } }); }); });
-      ops.push({ adGroupAdOperation: { create: { adGroup: gRn, status: "ENABLED", ad: {
+      var gRn = groups[c.name][g.name];
+      if (!kws[c.name]) g.k.forEach(function (w) { ["PHRASE", "EXACT"].forEach(function (mt) {
+        opsC.push({ adGroupCriterionOperation: { create: { adGroup: gRn, status: "ENABLED", keyword: { text: w, matchType: mt } } } }); }); });
+      if (!ads[c.name]) opsC.push({ adGroupAdOperation: { create: { adGroup: gRn, status: "ENABLED", ad: {
         finalUrls: [SITE + LANDING],
         responsiveSearchAd: { headlines: g.h.concat(H).slice(0, 15).map(function (t) { return { text: t }; }),
                               descriptions: D.map(function (t) { return { text: t }; }), path1: g.p[0], path2: g.p[1] } } } } });
     });
   });
-
-  say("Sending " + ops.length + " changes in one batch (all or nothing)...");
-  var res = AdsApp.mutateAll(ops, { partialFailure: false });
-  var failed = res.filter(function (r) { return !r.isSuccessful(); });
-  if (failed.length) {
-    failed.slice(0, 10).forEach(function (r) { bad("Build error: " + errs(r)); });
-    say("STOPPED: nothing was created. Send me the errors above.");
-    return;
+  if (opsC.length) {
+    say("Step C: keywords and ads (" + opsC.length + " changes)...");
+    var resC = AdsApp.mutateAll(opsC, { partialFailure: false });
+    var failC = resC.filter(function (r) { return !r.isSuccessful(); });
+    if (failC.length) { failC.slice(0, 5).forEach(function (r) { bad("Step C error: " + errs(r)); }); return; }
+    say("OK  step C" + (PREVIEW ? " (preview: accepted)" : ""));
   }
-  todo.forEach(function (c) { say("OK  " + c.name + "  $" + c.budget.toFixed(2) + "/day  " + c.status + "  (" + GROUPS.length + " ad groups, phrase+exact, $" + MAX_CPC + " max CPC)"); });
-  if (PREVIEW) { say("Preview: Google checked all " + ops.length + " changes and would accept them."); say("Income exclusions and lead form are added on Run (they need the real ad groups)."); }
-  else { addIncome(); addLeadForm(); }
 
-  say(problems.length ? "DONE WITH " + problems.length + " WARNING(S) - see lines starting with !!" : "DONE. No errors.");
+  // Step D: income targeting, lead form, switch on the ZIP campaign
+  addIncome(); addLeadForm();
+  var on = all.filter(function (c) { return c.status === "ENABLED"; }).map(function (c) {
+    return { campaignOperation: { update: { resourceName: camp[c.name], status: "ENABLED" }, updateMask: "status" } }; });
+  var r = AdsApp.mutateAll(on, { partialFailure: true });
+  r.forEach(function (x) { if (!x.isSuccessful()) bad("Could not switch on: " + errs(x)); });
+  all.forEach(function (c) { say("OK  " + c.name + "  $" + c.budget.toFixed(2) + "/day  " + c.status); });
+}
+
+function addNegWords(negRn) {
+  var ops = NEGATIVES.map(function (n) { return { sharedCriterionOperation: { create: { sharedSet: negRn, keyword: { text: n, matchType: "PHRASE" } } } }; });
+  var res = AdsApp.mutateAll(ops, { partialFailure: true });
+  var bads = res.filter(function (x) { return !x.isSuccessful(); });
+  say(bads.length ? "!! negative list: " + bads.length + " words refused: " + errs(bads[0]) : "OK  negative list: " + ops.length + " words added");
 }
 
 // household income: exclude the lower 70% in every ad group of both campaigns (separate step: never blocks the build)
@@ -217,9 +307,9 @@ function addIncome() {
 
 function addLeadForm() {
   var lf = null;
-  q("SELECT campaign_asset.asset FROM campaign_asset WHERE campaign_asset.status = 'ENABLED' AND campaign_asset.field_type = 'LEAD_FORM' AND campaign.name = '" + REUSE_FROM + "'")
+  q("SELECT campaign.name, campaign_asset.asset FROM campaign_asset WHERE campaign_asset.status = 'ENABLED' AND campaign_asset.field_type = 'LEAD_FORM' AND campaign.name = '" + REUSE_FROM + "'")
     .forEach(function (r) { if (!lf) lf = r.campaignAsset.asset; });
-  if (!lf) { say("Lead form: none on '" + REUSE_FROM + "', skipped (campaigns run without it)"); return; }
+  if (!lf) { say("Lead form: none to reuse, skipped (campaigns run without it)"); return; }
   var ops = [];
   q("SELECT campaign.resource_name FROM campaign WHERE campaign.name IN " + quoteList([ZIP_CAMPAIGN.name, REST_CAMPAIGN.name]))
     .forEach(function (r) { ops.push({ campaignAssetOperation: { create: { campaign: r.campaign.resourceName, asset: lf, fieldType: "LEAD_FORM" } } }); });

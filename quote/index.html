@@ -2090,7 +2090,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       // Must be one of the pipeline column ids in admin.html. Without it the
       // card is written to the portal and rendered in no column at all.
       stage:     'new_lead',
-      notes:     (data.niche === 'trucker' ? ['Trucker lead (trucking quote page)'] : []).concat(extras).join('\n'),
+      notes:     (data.niche === 'trucker' ? ['Trucker lead (trucking quote page)'] : data.niche === 'private-ppo' ? ['Private PPO lead: full-price / no-subsidy buyer (from /private-health-insurance)'] : []).concat(extras).join('\n'),
       source:    vsChannel('index-funnel'),
       sourceDetail: data.niche ? ('index-funnel-' + data.niche) : 'index-funnel',
       niche:     data.niche || '',
@@ -2190,7 +2190,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   function vsNiche(){
     try{
       var n = (new URLSearchParams(location.search).get('niche')||'').toLowerCase();
-      return ({'trucking':'trucker','trucker':'trucker','small-business':'small-business','smallbusiness':'small-business','self-employed':'self-employed','selfemployed':'self-employed','1099':'self-employed'})[n] || '';
+      return ({'trucking':'trucker','trucker':'trucker','small-business':'small-business','smallbusiness':'small-business','self-employed':'self-employed','selfemployed':'self-employed','1099':'self-employed','private':'private-ppo','private-ppo':'private-ppo'})[n] || '';
     }catch(e){ return ''; }
   }
   // Partner referral code (?ref=). Kept 90 days, same key the old trucker form used,

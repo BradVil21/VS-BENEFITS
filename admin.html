@@ -6801,7 +6801,7 @@ function anSourceLabel(s){
 function anPageLabel(p){
   if(!p)return"Unknown";
   if(p.indexOf("ext:")===0)return p.slice(4)+" (external)";
-  var names={"/":"Homepage","/quote":"Quote Page","/get-a-quote":"Quote Page","/hmo-vs-ppo":"HMO vs PPO","/aca-subsidy-calculator":"Subsidy Calculator","/1099-health-insurance":"1099 / Self-Employed","/health-insurance-for-small-business-owners":"Small Business","/health-insurance-for-real-estate-agents":"Real Estate Agents","/family-health-insurance":"Family Plans","/dental-vision-insurance":"Dental & Vision","/contact":"Contact","/truck-driver-health-insurance":"Truck Drivers"};
+  var names={"/":"Homepage","/quote":"Quote Page","/get-a-quote":"Quote Page","/hmo-vs-ppo":"HMO vs PPO","/aca-subsidy-calculator":"Subsidy Calculator","/1099-health-insurance":"1099 / Self-Employed","/health-insurance-for-small-business-owners":"Small Business","/health-insurance-for-real-estate-agents":"Real Estate Agents","/family-health-insurance":"Family Plans","/dental-vision-insurance":"Dental & Vision","/contact":"Contact","/truck-driver-health-insurance":"Truck Drivers","/private-health-insurance":"Private PPO (Full Price)","/trucking-health-quote":"Trucker Quote Page"};
   return names[p]||p;
 }
 function anAgo(days){return Date.now()-days*864e5;}
