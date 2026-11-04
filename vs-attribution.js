@@ -38,6 +38,12 @@
   // organic search, and lumping it in with real referring sites would hide
   // the single number Bradley most needs to watch.
   var SEARCH = /(^|\.)(google|bing|duckduckgo|yahoo|ecosia|brave|startpage|search\.marcia)\./i;
+  // AI assistants (2026-11-04): ChatGPT, Perplexity, Gemini, Copilot, Claude...
+  // Checked before SEARCH so gemini.google.com is not counted as Google search.
+  var AI = /(^|\.)(chatgpt\.com|chat\.openai\.com|openai\.com|perplexity\.ai|gemini\.google\.com|bard\.google\.com|copilot\.microsoft\.com|claude\.ai|meta\.ai|you\.com|phind\.com|grok\.com|deepseek\.com|chat\.mistral\.ai)$/i;
+  function aiName(h) { h = String(h || "").toLowerCase().replace(/^www\./, "");
+    return /chatgpt|openai/.test(h) ? "ChatGPT" : /perplexity/.test(h) ? "Perplexity" : /gemini|bard/.test(h) ? "Gemini" :
+      /copilot/.test(h) ? "Copilot" : /claude/.test(h) ? "Claude" : h; }
   var SOCIAL = /(^|\.)(facebook|instagram|linkedin|twitter|x|t|tiktok|youtube|reddit|pinterest)\.(com|co|me)$/i;
 
   function read() {
@@ -70,6 +76,8 @@
     if (t.gclid || t.utm_source === "google" && t.utm_medium === "cpc") return "Google Ads";
     if (t.fbclid || /facebook|meta|instagram/i.test(t.utm_source || "")) return "Facebook / Instagram Ads";
     if (t.msclkid) return "Microsoft Ads";
+    if (t.utm_source && AI.test(String(t.utm_source).toLowerCase().replace(/^www\./, ""))) return "AI assistant — " + aiName(t.utm_source);
+    if (t.referrerHost && AI.test(String(t.referrerHost).replace(/^www\./, ""))) return "AI assistant — " + aiName(t.referrerHost);
     if (t.utm_source) {
       return t.utm_source + (t.utm_medium ? " / " + t.utm_medium : "") +
              (t.utm_campaign ? " (" + t.utm_campaign + ")" : "");
