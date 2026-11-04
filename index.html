@@ -719,8 +719,8 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <section class="section">
   <div class="container">
     <div id="cd-wrap" class="countdown-wrap">
-      <h2 id="cd-title">Open Enrollment 2027 starts in</h2>
-      <p id="cd-sub">Nov 1, 2026 is your next chance to lock in individual or family coverage. Get your documents ready.</p>
+      <h2 id="cd-title">Open Enrollment 2027 is open now</h2>
+      <p id="cd-sub">Open enrollment runs November 1, 2026 to January 15, 2027. Enroll by December 15 for coverage that starts January 1.</p>
       <div class="countdown" aria-label="Countdown to Open Enrollment">
         <div class="count-box"><div class="count-num" id="cd-days">00</div><div class="count-label">Days</div></div>
         <div class="count-box"><div class="count-num" id="cd-hrs">00</div><div class="count-label">Hours</div></div>
@@ -728,6 +728,11 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <div class="count-box"><div class="count-num" id="cd-sec">00</div><div class="count-label">Sec</div></div>
       </div>
       <a class="btn btn-teal" href="/quote">Reserve your enrollment slot</a>
+      <p class="cd-links" style="margin:16px 0 0;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;font-weight:600;font-size:.95rem">
+        <a href="/blog/aca-open-enrollment-2027-guide" style="color:inherit;text-decoration:underline;text-underline-offset:3px">When is open enrollment 2027? Dates &amp; deadlines</a>
+        <a href="/aca-subsidy-calculator" style="color:inherit;text-decoration:underline;text-underline-offset:3px">2027 ACA subsidy calculator</a>
+        <a href="/blog/aca-income-limits-2027" style="color:inherit;text-decoration:underline;text-underline-offset:3px">ACA income limits 2027</a>
+      </p>
     </div>
   </div>
 </section>
@@ -927,7 +932,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <a href="/truck-driver-health-insurance" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">Truck Driver &amp; Owner-Operator Resource Center</a>
       <a href="/ppo-health-insurance" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">PPO Health Insurance: How It Works and What It Costs</a>
       <a href="/dental-vision-insurance" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">Dental and Vision Insurance: Compare Bundled Plans</a>
-      <a href="/truck-driver-health-insurance" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">Health Insurance for Truck Drivers and Owner-Operators</a>
+      <a href="/blog/aca-open-enrollment-2027-guide" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">Open Enrollment 2027: Dates and Deadlines by State</a>
       <a href="/blog/company-truck-driver-health-insurance" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">Company Drivers: Coverage When Your Carrier Offers None</a>
       <a href="/affordable-health-insurance" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">Affordable Health Insurance: See Your Real Price by ZIP</a>
       <a href="/health-insurance-near-me" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">Health Insurance Near Me: Compare Local Plans</a>
@@ -935,7 +940,8 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <a href="/small-business-health-insurance" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">Small Business Group Health Insurance</a>
       <a href="/health-insurance" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">Individual &amp; Family Health Insurance: Compare 2027 Plans</a>
       <a href="/best-health-insurance-owner-operators" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">Best Health Insurance for Owner-Operators</a>
-      <a href="/blog/how-much-does-health-insurance-cost-2026" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">How Much Does Health Insurance Cost in 2026?</a>
+      <a href="/blog/how-much-does-health-insurance-cost-2026" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">Health Insurance Cost Per Month in 2027</a>
+      <a href="/aca-subsidy-calculator" style="background:#f7faff;border:1px solid #e4e9f2;border-radius:12px;padding:14px 16px;font-weight:600;color:#16447f;text-decoration:none;display:block">2027 ACA Subsidy Calculator: Your Price After Tax Credits</a>
     </div>
   </div>
 </section>
@@ -1153,12 +1159,22 @@ document.addEventListener("DOMContentLoaded", function () {
     if(elSub  &&s)elSub.textContent  =s;
   }
   function tick(){
+    /* Fixed 2026-11-04: a missing brace added the "closed" style every second, and
+       Dec 16 - Jan 15 said enrollment was closed while it was still open. */
     var now=Date.now();
     if(now<START){
       paint(START,"Open Enrollment 2027 starts in",
             "Nov 1, 2026 is your next chance to lock in individual or family coverage. Get your documents ready.");
       if(elWrap)elWrap.classList.remove("closed");
-    } else if(now<=DEC15){paint(END,"Open Enrollment is now open. Time left to enroll:","You have until January 15, 2027 to get better coverage. Enroll by Dec 15 for coverage that starts January 1.");if(elWrap)elWrap.classList.remove("closed");}else if(now<=END){paint(END,"Last chance to enroll for 2027 coverage","Open Enrollment closes Jan 15, 2027. A plan bought now starts Feb 1. After Jan 15 you need a qualifying life event.");if(elWrap)elWrap.classList.remove("closed");} else {
+    } else if(now<=DEC15){
+      paint(DEC15,"Open Enrollment is open. Time left for January 1 coverage:",
+            "Enroll by December 15 for coverage that starts January 1. Open enrollment closes January 15, 2027.");
+      if(elWrap)elWrap.classList.remove("closed");
+    } else if(now<=END){
+      paint(END,"Last chance: Open Enrollment closes in",
+            "Enroll by January 15, 2027 for coverage that starts February 1.");
+      if(elWrap)elWrap.classList.remove("closed");
+    } else {
       paint(Date.now(),"Open Enrollment is closed for 2027",
             "Special Enrollment may be available if you've had a qualifying life event. Reach out to check.");
       if(elWrap)elWrap.classList.add("closed");

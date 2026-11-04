@@ -1428,6 +1428,11 @@
       "permanent": true
     },
     {
+      "source": "/vshealthbenefits.com/:path*",
+      "destination": "/:path*",
+      "permanent": true
+    },
+    {
       "source": "/hmo-vs-ppo.html",
       "destination": "/hmo-vs-ppo",
       "permanent": true
