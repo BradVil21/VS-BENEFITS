@@ -28,7 +28,7 @@ Import files in this folder (Google Ads Editor → Account → Import → From f
 | Schedule | All hours (drivers search nights/weekends) | Mon–Sat 7am–8pm ET |
 | Devices | Mobile-first | All; expect more desktop |
 | Bidding | Max Conversions; tCPA ≈ 1.2× actual CPL after 30 conv. | Max Clicks, max CPC $6, → Max Conversions after 15 conv. |
-| Languages | English + Spanish | English + Spanish |
+| Languages | English only (Spanish removed Oct 20) | English only (Spanish removed Oct 20) |
 
 ## 2. Budget calendar (where the money should go)
 Leads in insurance are seasonal; spend when intent peaks, not evenly.
