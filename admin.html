@@ -5473,9 +5473,16 @@ function czFuBindQuick(box){
     var id=a.getAttribute("data-fuq"),last=0;
     function openDisp(){
       var t=Date.now();if(t-last<1500)return;last=t;
-      czFuDispOpen=id;
-      box.querySelectorAll("[data-fuq-disp]").forEach(function(d){d.hidden=d.getAttribute("data-fuq-disp")!==id;});
-      if(typeof addLeadActivity==="function")addLeadActivity(id,"followup",(a.classList.contains("fuq-call")?"Called":"Texted")+" from follow-up list");
+      var isCall=a.classList.contains("fuq-call");
+      if(typeof addLeadActivity==="function")addLeadActivity(id,"followup",(isCall?"Called":"Texted")+" from follow-up list");
+      /* Call: let the dialer launch first, then show the disposition pop-up */
+      if(isCall&&typeof czFudOpen==="function"){
+        var tries=0;setTimeout(function waitPick(){
+          /* if the "Call with…" picker is up, wait until a dialer is chosen (or it's closed) */
+          if(document.getElementById("vsd-pick")&&tries++<300){setTimeout(waitPick,250);return;}
+          czFudOpen(id);
+        },350);
+      }
     }
     a.addEventListener("pointerdown",openDisp);
     a.addEventListener("keydown",function(e){if(e.key==="Enter")openDisp();});
@@ -5516,15 +5523,15 @@ function czFuBindQuick(box){
    Pick what happened, optionally move the lead to a pipeline stage, set the next
    follow-up, add a note, Save. "Open full profile" still opens the contact editor. */
 var FUD_OUT=[
-  {k:"noanswer",l:"No answer",ico:"☎",days:2},
-  {k:"voicemail",l:"Left voicemail",ico:"✉",days:2},
-  {k:"talked",l:"Talked, follow up later",ico:"✔",days:7},
-  {k:"appt",l:"Appointment set",ico:"📅",stage:"appointment_scheduled",days:0},
-  {k:"quoted",l:"Sent a quote",ico:"$",stage:"quoted",days:3},
-  {k:"sold",l:"Sold",ico:"★",stage:"sold"},
-  {k:"notint",l:"Not interested",ico:"✕",stage:"no_longer_interested"},
-  {k:"bad",l:"Wrong number / bad lead",ico:"⚠",stage:"disqualified"},
-  {k:"done",l:"Done, no more follow-up",ico:"✓",days:-1}
+  {k:"noanswer",l:"No answer",ico:"\u260e",days:2,c:"#d97706"},
+  {k:"voicemail",l:"Left voicemail",ico:"\u2709",days:2,c:"#7c3aed"},
+  {k:"talked",l:"Talked, follow up later",ico:"\ud83d\udcac",days:7,c:"#0284c7"},
+  {k:"appt",l:"Appointment set",ico:"\ud83d\udcc5",stage:"appointment_scheduled",days:0,c:"#0d9488"},
+  {k:"quoted",l:"Sent a quote",ico:"$",stage:"quoted",days:3,c:"#4f46e5"},
+  {k:"sold",l:"Sold",ico:"\u2605",stage:"sold",c:"#059669"},
+  {k:"notint",l:"Not interested",ico:"\u2715",stage:"no_longer_interested",c:"#e11d48"},
+  {k:"bad",l:"Wrong number / bad lead",ico:"\u26a0",stage:"disqualified",c:"#64748b"},
+  {k:"done",l:"Done, no more follow-up",ico:"\u2713",days:-1,c:"#16447f"}
 ];
 function czFudClose(){var m=document.getElementById("fud-modal");if(m)m.remove();document.removeEventListener("keydown",czFudKey);}
 function czFudKey(e){if(e.key==="Escape")czFudClose();}
@@ -5536,15 +5543,16 @@ function czFudOpen(id){
   var stOpts='<option value="">Keep in '+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"current stage")+'</option>'
     +czSTAGES.filter(function(s){return s.id!==c.stage;}).map(function(s){return '<option value="'+s.id+'">'+escapeHtml(s.label)+'</option>';}).join("");
   var m=document.createElement("div");m.id="fud-modal";m.className="fud-back";
-  m.innerHTML='<div class="fud" role="dialog" aria-modal="true" aria-labelledby="fud-t">'
-    +'<div class="fud-h"><div><div class="fud-t" id="fud-t">'+escapeHtml(czName(c))+'</div>'
+  var stc=czMETA[c.stage]?czMETA[c.stage].color:"#16447f";
+  m.innerHTML='<div class="fud" role="dialog" aria-modal="true" aria-labelledby="fud-t" style="--sc:'+stc+'">'
+    +'<div class="fud-h"><div style="min-width:0"><div class="fud-t" id="fud-t">'+escapeHtml(czName(c))+'</div>'
     +'<div class="fud-meta"><span class="cz-chip" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage]?czMETA[c.stage].label:"")+'</span>'
-    +(tel?'<a href="tel:'+escapeHtml(tel)+'" class="fud-ph">'+escapeHtml(c.phone)+'</a>':'<span class="fud-faint">no phone</span>')
+    +(tel?'<a href="tel:'+escapeHtml(tel)+'" class="fud-ph" title="Call again">'+FUQ_PHONE+escapeHtml(c.phone)+'</a>':'<span class="fud-faint">no phone</span>')
     +'<span class="fud-faint">Last contact: '+(c.lastContact?czPretty(c.lastContact):"never")+'</span>'
     +(fu.label?'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span>':'')+'</div></div>'
     +'<button type="button" class="fud-x" data-fud="close" aria-label="Close">✕</button></div>'
     +'<div class="fud-l">What happened?</div><div class="fud-outs">'
-    +FUD_OUT.map(function(o){return '<button type="button" class="fud-o" data-fud-out="'+o.k+'"><span>'+o.ico+'</span>'+o.l+'</button>';}).join("")+'</div>'
+    +FUD_OUT.map(function(o){return '<button type="button" class="fud-o" data-fud-out="'+o.k+'" style="--oc:'+o.c+'"><span>'+o.ico+'</span>'+o.l+'</button>';}).join("")+'</div>'
     +'<div class="fud-row"><label class="fud-f"><span class="fud-l">Move to pipeline stage</span><select id="fud-stage">'+stOpts+'</select></label>'
     +'<div class="fud-f" id="fud-nextwrap"><span class="fud-l">Next follow-up</span><div class="fud-days">'
     +[["2","2 days"],["7","1 week"],["14","2 weeks"],["30","30 days"],["90","90 days"]].map(function(d){return '<button type="button" class="fud-d" data-fud-days="'+d[0]+'">'+d[1]+'</button>';}).join("")
@@ -5609,31 +5617,39 @@ function czFudBind(box){
   });});
 }
 (function(){try{var st=document.createElement("style");st.setAttribute("data-fud","1");st.textContent=[
-".fud-back{position:fixed;inset:0;background:rgba(13,27,42,.5);z-index:9000;display:flex;align-items:flex-start;justify-content:center;padding:6vh 16px;overflow:auto}",
-".fud{background:#fff;border-radius:18px;width:100%;max-width:600px;padding:20px 22px;box-shadow:0 24px 60px rgba(13,27,42,.3);font-size:14px;color:#0f172a}",
-".fud-h{display:flex;justify-content:space-between;gap:12px;margin-bottom:14px}",
-".fud-t{font-size:20px;font-weight:800;color:#0b2346}",
-".fud-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:6px;font-size:13px}",
-".fud-ph{font-weight:700;color:#0a7a4f;text-decoration:none}.fud-faint{color:#94a3b8}",
-".fud-x{border:0;background:none;font-size:18px;color:#94a3b8;cursor:pointer;padding:4px 8px;border-radius:8px;height:fit-content}.fud-x:hover{background:#f1f5f9;color:#334155}",
-".fud-l{display:block;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:#64748b;margin:0 0 6px}",
-".fud-outs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:16px}",
-".fud-o{display:flex;align-items:center;gap:8px;text-align:left;font:inherit;font-size:13px;font-weight:700;padding:10px 12px;border:1px solid #dbe3ef;border-radius:12px;background:#fff;color:#1e293b;cursor:pointer;min-height:44px}",
-".fud-o span{width:22px;flex:none;text-align:center;color:#16447f}",
-".fud-o:hover{border-color:#9dbbe8;background:#f6f9fe}.fud-o.on{border-color:#16447f;background:#eaf2fd;box-shadow:0 0 0 1px #16447f inset}",
-".fud-row{display:grid;grid-template-columns:1fr 1.3fr;gap:14px;margin-bottom:14px}",
-".fud-f{display:block;margin-bottom:12px}",".fud-f[hidden]{display:none!important}",
-".fud select,.fud textarea,.fud-date{width:100%;font:inherit;font-size:14px;border:1px solid #d8e0ee;border-radius:10px;padding:9px 11px;background:#fff;color:#0f172a;box-sizing:border-box}",
-".fud-days{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}",
-".fud-d{font:inherit;font-size:12.5px;font-weight:700;border:1px solid #d8e0ee;border-radius:999px;padding:5px 10px;background:#fff;color:#334155;cursor:pointer}.fud-d.on{background:#16447f;border-color:#16447f;color:#fff}",
-".fud-foot{display:flex;align-items:center;gap:10px;margin-top:6px}",
-".fud-prof{border:0;background:none;color:#16447f;font:inherit;font-weight:700;cursor:pointer;padding:8px 0}",
-".fud-err{flex:1;text-align:right;color:#e11d48;font-size:13px;font-weight:600}",
-".fud-save{font:inherit;font-weight:800;border:0;border-radius:999px;background:#0a7a4f;color:#fff;padding:11px 26px;cursor:pointer}.fud-save:hover{background:#086640}",
-"html.dark .fud{background:#111d2b;color:#e6edf6}html.dark .fud-t{color:#f0f4fa}",
-"html.dark .fud-o,html.dark .fud select,html.dark .fud textarea,html.dark .fud-date,html.dark .fud-d{background:#0f1a27;border-color:#253a54;color:#e6edf6}",
-"html.dark .fud-o.on{background:#16263a;border-color:#5b8fd8}",
-"@media(max-width:620px){.fud-outs{grid-template-columns:1fr 1fr}.fud-row{grid-template-columns:1fr}.fud{padding:16px}}"
+".fud-back{position:fixed;inset:0;background:rgba(13,27,42,.55);backdrop-filter:blur(2px);z-index:9000;display:flex;align-items:flex-start;justify-content:center;padding:5vh 16px;overflow:auto}",
+".fud{background:#fff;border-radius:20px;width:100%;max-width:620px;overflow:hidden;box-shadow:0 28px 70px rgba(13,27,42,.35);font-size:14px;color:#0f172a}",
+".fud>*:not(.fud-h){margin-left:22px;margin-right:22px}",
+".fud-h{display:flex;justify-content:space-between;gap:12px;padding:18px 22px 16px;margin-bottom:16px;background:linear-gradient(135deg,#0b2346 0%,#16447f 55%,#0d9488 130%);color:#fff;border-bottom:4px solid var(--sc)}",
+".fud-t{font-size:21px;font-weight:800;color:#fff;letter-spacing:-.01em}",
+".fud-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px;font-size:13px}",
+".fud-meta .cz-chip{background:#fff!important;border-color:#fff!important;color:var(--sc)!important;font-weight:800}",
+".fud-ph{display:inline-flex;align-items:center;gap:6px;font-weight:800;color:#fff;text-decoration:none;background:#0a7a4f;border-radius:999px;padding:4px 12px 4px 10px;box-shadow:0 2px 8px rgba(0,0,0,.2)}.fud-ph svg{width:13px;height:13px}.fud-ph:hover{background:#086640}",
+".fud-faint{color:rgba(255,255,255,.75)}",
+".fud-meta .cz-pill{box-shadow:0 0 0 1px rgba(255,255,255,.5)}",
+".fud-x{border:0;background:rgba(255,255,255,.12);font-size:16px;color:#fff;cursor:pointer;padding:6px 10px;border-radius:10px;height:fit-content}.fud-x:hover{background:rgba(255,255,255,.25)}",
+".fud-l{display:block;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#64748b;margin:0 0 7px}",
+".fud-outs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:18px}",
+".fud-o{--oc:#16447f;display:flex;align-items:center;gap:9px;text-align:left;font:inherit;font-size:13px;font-weight:700;padding:9px 11px;border:1.5px solid color-mix(in srgb,var(--oc) 22%,#fff);border-radius:13px;background:color-mix(in srgb,var(--oc) 5%,#fff);color:#1e293b;cursor:pointer;min-height:48px;transition:transform .12s,box-shadow .12s,background .12s}",
+".fud-o span{flex:none;width:28px;height:28px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--oc) 14%,#fff);color:var(--oc);font-size:14px;font-weight:800}",
+".fud-o:hover{transform:translateY(-1px);box-shadow:0 6px 16px color-mix(in srgb,var(--oc) 22%,transparent);border-color:var(--oc)}",
+".fud-o.on{background:var(--oc);border-color:var(--oc);color:#fff;box-shadow:0 8px 20px color-mix(in srgb,var(--oc) 35%,transparent)}.fud-o.on span{background:rgba(255,255,255,.22);color:#fff}",
+".fud-row{display:grid;grid-template-columns:1fr 1.3fr;gap:14px;margin-bottom:6px;padding:14px;background:#f8fafc;border:1px solid #e9eef5;border-radius:14px}",
+".fud-f{display:block;margin-bottom:12px}.fud-f[hidden]{display:none!important}.fud-row .fud-f{margin-bottom:0}",
+".fud select,.fud textarea,.fud-date{width:100%;font:inherit;font-size:14px;border:1.5px solid #d8e0ee;border-radius:11px;padding:9px 11px;background:#fff;color:#0f172a;box-sizing:border-box}",
+".fud select:focus,.fud textarea:focus,.fud-date:focus{outline:none;border-color:#0d9488;box-shadow:0 0 0 3px rgba(13,148,136,.15)}",
+"#fud-stage{font-weight:700;color:#16447f}",
+".fud-days{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:7px}",
+".fud-d{font:inherit;font-size:12.5px;font-weight:700;border:1.5px solid #cfe0f5;border-radius:999px;padding:5px 11px;background:#fff;color:#16447f;cursor:pointer}.fud-d:hover{background:#eef4fd}.fud-d.on{background:#0d9488;border-color:#0d9488;color:#fff}",
+"#fud-apptwrap{margin-top:12px;padding:12px 14px;background:#f0fdfa;border:1px solid #99f6e4;border-radius:14px}",
+"label.fud-f:last-of-type{margin-top:14px}",
+".fud-foot{display:flex;align-items:center;gap:10px;margin-top:4px;padding:14px 22px 18px!important;margin-left:0!important;margin-right:0!important;background:#f8fafc;border-top:1px solid #eef2f7}",
+".fud-prof{border:0;background:none;color:#16447f;font:inherit;font-weight:700;cursor:pointer;padding:8px 0}.fud-prof:hover{text-decoration:underline}",
+".fud-err{flex:1;text-align:right;color:#e11d48;font-size:13px;font-weight:700}",
+".fud-save{font:inherit;font-weight:800;border:0;border-radius:999px;background:linear-gradient(135deg,#0a7a4f,#0d9488);color:#fff;padding:11px 30px;cursor:pointer;box-shadow:0 6px 16px rgba(10,122,79,.3)}.fud-save:hover{filter:brightness(1.07)}",
+"html.dark .fud{background:#111d2b;color:#e6edf6}html.dark .fud-row,html.dark .fud-foot{background:#0f1a27;border-color:#1e3048}",
+"html.dark .fud-o{background:#0f1a27;color:#e6edf6}html.dark .fud select,html.dark .fud textarea,html.dark .fud-date,html.dark .fud-d{background:#0f1a27;border-color:#253a54;color:#e6edf6}",
+"@media(max-width:620px){.fud-outs{grid-template-columns:1fr 1fr}.fud-row{grid-template-columns:1fr}.fud>*:not(.fud-h){margin-left:14px;margin-right:14px}.fud-h{padding:16px 14px}}"
 ].join("");document.head.appendChild(st);}catch(e){}})();
 
 function czFuResults(){
@@ -5670,7 +5686,7 @@ function czFuResults(){
       +'<div class="fu2-last"><span class="fu2-k">Last contact</span>'+(c.lastContact?czPretty(c.lastContact):"never")+'</div>'
       +'<div class="fu2-due"><span class="cz-pill" style="'+czFUSTYLE[fu.key]+'">'+fu.label+'</span></div>'
       +'<div class="fu2-acts">'+czFuQuick(c)+'<button type="button" class="fu2-done" data-fu2-done="'+c.id+'" title="Reached them: clear this follow-up">✓ Done</button></div>'
-      +czFuDispRow(c)+'</div>';
+      +'</div>';
   }
   function section(key,title,ico,accent,rows,extra){
     if(!rows.length)return "";
@@ -13176,7 +13192,7 @@ html.dark .vsd-pill select option{background:#111d2b}
 (function(){
  try{
   var KEY="vs_dialer_prefs_v1";
-  var DEF={provider:"ask",vsScheme:"sip",vsCustom:"",rcMode:"desktop",rcAction:"call",numFmt:"1",mobile:"native"};
+  var DEF={provider:"ask",vsScheme:"sip",vsCustom:"",rcMode:"desktop",rcAction:"call",numFmt:"1",mobile:"native",rcdUrl:"https://rcdialer.vanillasoft.net/RingCentralDialer/",rcdOpen:"never"};
   function load(){var p={};try{p=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){}
     /* v2: VS Connect moves from callto: (RingCentral also claims it on Mac) to sip:, which only VS Connect handles */
     if(p.v!==2){if(!p.vsScheme||p.vsScheme==="callto")p.vsScheme="sip";p.v=2;try{localStorage.setItem(KEY,JSON.stringify(p));}catch(e){}}
@@ -13184,7 +13200,8 @@ html.dark .vsd-pill select option{background:#111d2b}
   function save(p){p.v=2;try{localStorage.setItem(KEY,JSON.stringify(p));}catch(e){}try{syncPill();}catch(e){}}
   var isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
 
-  var NAMES={vsconnect:"VS Connect",ringcentral:"RingCentral",ringy:"Ringy",native:"this device's phone app"};
+  var NAMES={vsconnect:"VS Connect",rcdialer:"VanillaSoft Dialer",ringcentral:"RingCentral",ringy:"Ringy",native:"this device's phone app"};
+  var rcdWin=null;
   var RINGY_URL="https://app.ringy.com/home/dashboard", ringyWin=null;
 
   /* Phone number → digits in the chosen format (US default country code 1) */
@@ -13243,8 +13260,19 @@ html.dark .vsd-pill select option{background:#111d2b}
     toast(pretty(d)+" copied. In Ringy, open the phone icon and paste it (\u2318V).");
   }
 
+  /* VanillaSoft Dialer (RingCentral web phone): no dial link, so copy the number and bring the dialer forward */
+  function launchRcd(d,p){
+    var ten=(d.length===11&&d.charAt(0)==="1")?d.slice(1):d;
+    copyText(ten);
+    try{window.__vsLastDial={provider:"rcdialer",url:p.rcdUrl,at:Date.now()};}catch(e){}
+    var focused=false;
+    try{if(rcdWin&&!rcdWin.closed){rcdWin.focus();focused=true;}}catch(e){}
+    if(!focused&&p.rcdOpen==="auto"&&p.rcdUrl){rcdWin=window.open(p.rcdUrl,"vs_rcdialer");}
+    toast(pretty(d)+" copied. In VanillaSoft Dialer: click the number box, paste (\u2318V), press the green call button.");
+  }
   function launch(provider,d,p){
     if(provider==="ringy"){launchRingy(d);return;}
+    if(provider==="rcdialer"){launchRcd(d,p);return;}
     var url=buildUrl(provider,d,p);
     try{window.__vsLastDial={provider:provider,url:url,at:Date.now()};}catch(e){}
     if(/^https?:/i.test(url)){
@@ -13261,7 +13289,8 @@ html.dark .vsd-pill select option{background:#111d2b}
     var old=document.getElementById("vsd-pick");if(old)old.remove();
     var ov=document.createElement("div");ov.id="vsd-pick";
     ov.innerHTML='<div class="vsd-box" role="dialog" aria-label="Call with"><h3>Call with…</h3><p class="vsd-num">'+pretty(d)+'</p>'+
-      '<button type="button" class="vsd-go" data-p="vsconnect">VS Connect<small>VanillaSoft dialer</small></button>'+
+      '<button type="button" class="vsd-go" data-p="rcdialer">VanillaSoft Dialer<small>RingCentral web phone · copies the number</small></button>'+
+      '<button type="button" class="vsd-go" data-p="vsconnect">VS Connect<small>VanillaSoft desktop app</small></button>'+
       '<button type="button" class="vsd-go" data-p="ringcentral">RingCentral<small>'+(p.rcMode==="web"?"Web app in a new tab":"RingCentral app")+'</small></button>'+
       '<button type="button" class="vsd-go" data-p="ringy">Ringy<small>Copies the number and opens Ringy</small></button>'+
       '<button type="button" class="vsd-go" data-p="native">Phone app<small>Whatever this device opens for phone links</small></button>'+
@@ -13309,7 +13338,8 @@ html.dark .vsd-pill select option{background:#111d2b}
     return '<h4 style="margin:0 0 6px;font-size:15px"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Calling</h4>'+
       '<p class="lede">Pick where the <strong>Call</strong> buttons send a lead’s number. Every Call button in the portal (leads, pipeline, business leads, clients, tasks and callback reminders) follows this setting.</p>'+
       '<div class="vsd-opts">'+
-        opt("vsd-prov","vsconnect","VS Connect","VanillaSoft dialer app")+
+        opt("vsd-prov","rcdialer","VanillaSoft Dialer","RingCentral web phone (rcdialer)")+
+        opt("vsd-prov","vsconnect","VS Connect","VanillaSoft desktop app")+
         opt("vsd-prov","ringcentral","RingCentral","RingCentral app or web")+
         opt("vsd-prov","ringy","Ringy","Copies the number, opens Ringy")+
         opt("vsd-prov","ask","Ask me each time","Pick VS Connect, RingCentral or Ringy per call")+
@@ -13324,6 +13354,9 @@ html.dark .vsd-pill select option{background:#111d2b}
         '<div class="field"><label for="vsd-rcact">When I click Call</label>'+
         '<select id="vsd-rcact"><option value="call">Start the call right away</option><option value="dialer">Open the dial pad with the number filled in (lets me pick caller ID)</option></select></div>'+
         '<div class="vsd-hint">The first time, your browser asks to open RingCentral. Tick <em>Always allow</em>. Calls use your default RingCentral caller ID unless you choose the dial-pad option.</div></div>'+
+      '<div class="vsd-sub" id="vsd-sub-rcd"><div class="field"><label for="vsd-rcdurl">VanillaSoft Dialer address</label><input id="vsd-rcdurl" type="text" style="padding:9px 12px;border:1px solid #d8e0ee;border-radius:9px;min-height:40px;width:100%"></div>'+
+        '<div class="field"><label for="vsd-rcdopen">If the dialer isn\u2019t open</label><select id="vsd-rcdopen"><option value="never">Just copy the number (I keep the dialer open)</option><option value="auto">Open the dialer in a new window</option></select></div>'+
+        '<div class="vsd-hint"><strong>How it works:</strong> clicking Call copies the lead\u2019s number. In the VanillaSoft Dialer, click <em>Enter name or number</em>, paste (\u2318V) and press the green call button. The follow-up pop-up opens at the same time so you can log the result. The dialer has no direct dial link, so the paste step can\u2019t be skipped.</div></div>'+
       '<div class="vsd-sub" id="vsd-sub-ringy"><div class="vsd-hint"><strong>How Ringy calls work:</strong> clicking Call copies the lead’s number and switches to your Ringy tab (opens one if it’s closed). Click the phone icon at the top right of Ringy, click in <em>Phone number</em> and paste (⌘V), then hit Call. Ringy picks the Smart local caller ID like normal. Ringy doesn’t offer a direct dial link, so the paste step can’t be skipped.</div></div>'+
       '<div class="vsd-sub"><div class="field"><label for="vsd-fmt">Number format sent</label>'+
         '<select id="vsd-fmt"><option value="1">15551234567 (with country code)</option><option value="plus">+15551234567</option><option value="10">5551234567 (10 digits)</option></select></div>'+
@@ -13347,6 +13380,8 @@ html.dark .vsd-pill select option{background:#111d2b}
     c.querySelector("#vsd-sub-vs").style.display=(p.provider==="vsconnect"||p.provider==="ask")?"":"none";
     c.querySelector("#vsd-sub-rc").style.display=(p.provider==="ringcentral"||p.provider==="ask")?"":"none";
     c.querySelector("#vsd-sub-ringy").style.display=(p.provider==="ringy")?"":"none";
+    c.querySelector("#vsd-sub-rcd").style.display=(p.provider==="rcdialer"||p.provider==="ask")?"":"none";
+    c.querySelector("#vsd-rcdurl").value=p.rcdUrl||"";c.querySelector("#vsd-rcdopen").value=p.rcdOpen||"never";
   }
   function mount(){
     var panel=document.getElementById("p-settings");if(!panel||document.getElementById("vs-dialer-card"))return;
@@ -13365,6 +13400,8 @@ html.dark .vsd-pill select option{background:#111d2b}
       else if(t.id==="vsd-rcact")p.rcAction=t.value;
       else if(t.id==="vsd-fmt")p.numFmt=t.value;
       else if(t.id==="vsd-mob")p.mobile=t.value;
+      else if(t.id==="vsd-rcdurl")p.rcdUrl=t.value.trim();
+      else if(t.id==="vsd-rcdopen")p.rcdOpen=t.value;
       else return;
       save(p);syncCard();saved();
     });
@@ -13383,7 +13420,7 @@ html.dark .vsd-pill select option{background:#111d2b}
     var bar=document.querySelector("#topbar .topbar-right");if(!bar)return;
     var w=document.createElement("label");w.id="vsd-pill";w.className="vsd-pill";w.title="Where Call buttons send the number";
     w.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'+
-      '<select id="vsd-pill-sel" aria-label="Call with"><option value="vsconnect">VS Connect</option><option value="ringcentral">RingCentral</option><option value="ringy">Ringy</option><option value="ask">Ask each call</option><option value="native">Default app</option></select>';
+      '<select id="vsd-pill-sel" aria-label="Call with"><option value="rcdialer">VanillaSoft Dialer</option><option value="vsconnect">VS Connect</option><option value="ringcentral">RingCentral</option><option value="ringy">Ringy</option><option value="ask">Ask each call</option><option value="native">Default app</option></select>';
     bar.insertBefore(w,bar.firstChild);
     w.querySelector("select").addEventListener("change",function(){var p=load();p.provider=this.value;save(p);syncCard();toast("Call buttons now use "+(p.provider==="ask"?"a “Call with…” picker":p.provider==="native"?"your default phone app":NAMES[p.provider]));});
     syncPill();
