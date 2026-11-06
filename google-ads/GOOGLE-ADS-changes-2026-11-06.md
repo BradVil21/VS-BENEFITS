@@ -26,3 +26,13 @@ Script "VS Trucker Ads to Quote Form (Nov 6)" (source vs-trucker-ads-to-quote-fo
 - Campaign tracking suffix unchanged: utm_source=google&utm_medium=cpc&utm_campaign=trucker-oe-2027&utm_term={keyword}.
 - Rule: ads -> short form. Organic / blog / social -> /trucking-health-quote -> form.
   /trucking-health-quote got a "Start my trucker quote ->" button under the ZIP box (same URL, no ZIP).
+
+## 12:40 PM: 8 certified states check (script "VS Trucker 8-State Check (Nov 6)")
+- Trucker Health - OE 2027 targets exactly the 8 states: Florida, Georgia, Illinois, Kentucky, Maryland, Missouri, Ohio, Texas.
+  Location option: people in or regularly in (PRESENCE). Nothing was missing, nothing added.
+- Last 7 days by state (impr / clicks / cost): FL 1,741 / 25 / $151.36; TX 2,675 / 20 / $29.78; IL 1,281 / 14 / $12.27;
+  GA 1,206 / 11 / $43.46; OH 915 / 9 / $27.52; MO 511 / 7 / $8.14; MD 496 / 2 / $4.33; KY 404 / 4 / $3.77.
+- Ad copy said "Florida" (e.g. "Florida Truck Driver Plans", "Florida truck drivers: compare...", "Licensed Florida Advisor").
+  Edited in place on 17 ads so the copy fits all 8 states: "Truck Driver Plans by State", "Trucker Plans in Your State",
+  "Licensed Health Advisor", "Truck drivers: compare PPO and Marketplace plans with a licensed broker. Free."
+  Ads keep their IDs and history; Google re-reviews the edited text (usually same day).

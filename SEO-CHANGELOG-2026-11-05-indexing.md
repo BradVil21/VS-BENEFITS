@@ -22,3 +22,12 @@
 
 ## Bing
 - All sitemap URLs sent through IndexNow on Nov 4 (271 received). Run `node indexnow.js` after this push.
+
+## 2026-11-06: Google indexing requests (URL Inspection), trucker pages first
+All showed "URL is not on Google" (Discovered - not indexed) and were sent to the priority crawl queue:
+/lp/truckers, /lp/truckers/ohio, kentucky, missouri, maryland,
+/lp/es/camioneros/texas, georgia, illinois, ohio, kentucky,
+/blog/state-farm-agents-losing-health-insurance.
+Daily quota hit on /lp/es/camioneros/maryland (11 requests went through).
+Still to request: /lp/es/camioneros/maryland, /lp/es/camioneros/missouri, /lp/es/camioneros (hub).
+Bing/IndexNow: could not send from here (network blocked); run `node indexnow.js` in Terminal.
