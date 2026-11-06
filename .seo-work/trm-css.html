@@ -1,0 +1,20 @@
+<style id="trm-css">
+.trm{padding:28px 0}
+.trm-card{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px;align-items:center;background:#0a0a0a;border-radius:20px;padding:32px;box-shadow:0 24px 50px -24px rgba(0,0,0,.6);overflow:hidden}
+.trm-k{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.14em;color:#fbbf24;margin-bottom:8px}
+.trm-h{color:#fff!important;font-size:1.7rem;line-height:1.2;margin:0 0 10px}
+.trm-copy p{color:rgba(255,255,255,.8);margin:0 0 14px;font-size:1rem;line-height:1.55}
+.trm-list{list-style:none;padding:0;margin:0 0 20px}
+.trm-list li{color:#fff;font-size:.93rem;padding-left:26px;position:relative;margin:0 0 8px}
+.trm-list li::before{content:"";position:absolute;left:0;top:3px;width:16px;height:16px;border-radius:50%;background:#fbbf24 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E") center/10px no-repeat}
+.trm-btn{background:#1f6fe5!important;border-color:#1f6fe5!important}
+.trm-map svg{width:100%;height:auto;display:block}
+.trm-labels text{fill:#cbd5e1;font:600 15px Inter,system-ui,sans-serif}
+.trm-route{animation:trm-dash 1.2s linear infinite}
+@keyframes trm-dash{to{stroke-dashoffset:-19}}
+.trm-pulse{fill:none;stroke:#fbbf24;stroke-width:2;transform-box:fill-box;transform-origin:center;animation:trm-pulse 2.4s ease-out infinite}
+@keyframes trm-pulse{0%{transform:scale(1);opacity:.9}100%{transform:scale(3.2);opacity:0}}
+@media(max-width:860px){.trm-card{grid-template-columns:1fr;padding:22px 18px;gap:14px}.trm-map{order:-1;margin:0 -6px}.trm-h{font-size:1.35rem}.trm-btn{display:block;text-align:center}.trm-labels text{font-size:26px}}
+@media(prefers-reduced-motion:reduce){.trm-route,.trm-pulse{animation:none}}
+</style>
+<script>(function(){try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.trm-map svg').forEach(function(s){s.pauseAnimations&&s.pauseAnimations()})})}catch(e){}})();</script>
