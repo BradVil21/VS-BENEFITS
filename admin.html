@@ -6737,26 +6737,34 @@ function renderAdsPerf(){
   // Insights
   var tips=[];
   if(stale)tips.push(["warn","No sync in "+Math.round(age/36e5)+" hours. Check Google Ads \u2192 Tools \u2192 Scripts for errors."]);
-  if(S.policy&&(S.policy.disapproved||S.policy.limited))tips.push([S.policy.disapproved?"bad":"warn",[S.policy.disapproved?S.policy.disapproved+" ad"+(S.policy.disapproved>1?"s":"")+" disapproved":"",S.policy.limited?S.policy.limited+" ad"+(S.policy.limited>1?"s":"")+" limited by policy":""].filter(Boolean).join(" and ")+". Open Policy manager in Google Ads (health insurance certification may be needed)."]);
+  (function(){var la=(S.ads||[]).filter(function(a){return a.status==="ENABLED"&&a.gs==="ENABLED"&&a.cs==="ENABLED";});var lim=la.filter(function(a){return a.approval==="APPROVED_LIMITED";}).length;
+    if(lim)tips.push(["warn",lim+" running ad"+(lim>1?"s are":" is")+" limited by policy. Open Policy manager in Google Ads (health insurance certification may be needed)."]);})();
   (S.campaigns||[]).forEach(function(c){if(c.status==="ENABLED"&&/LIMITED|NOT_ELIGIBLE/.test(c.primary||""))tips.push(["warn","Campaign \u201c"+c.name+"\u201d is "+String(c.primary).toLowerCase().replace(/_/g," ")+(c.reasons?" ("+String(c.reasons).toLowerCase().replace(/_/g," ")+")":"")+"."]);});
   var avgCpc=adsDiv(cur.cost,cur.clk)||5;
-  var waste=(S.terms||[]).filter(function(t){return !(+t.conv)&&(+t.cost)>=Math.max(10,2*avgCpc);}).sort(function(a,b){return b.cost-a.cost;});
+  /* "What to do next" only looks at campaigns that are running now; paused/removed campaigns are history. */
+  var liveC={};(S.campaignList||S.campaigns||[]).forEach(function(c){if(c.status==="ENABLED")liveC[c.name]=1;});
+  var isLive=function(x){return !x||!x.c||!!liveC[x.c];};
+  var liveAds=(S.ads||[]).filter(function(a){return a.status==="ENABLED"&&a.gs==="ENABLED"&&a.cs==="ENABLED";});
+  var limN=liveAds.filter(function(a){return a.approval==="APPROVED_LIMITED";}).length;
+  var ownKw={};(S.keywords||[]).filter(isLive).forEach(function(k){if(k.kw)ownKw[String(k.kw).toLowerCase()]=1;});
+  /* a search term that is exactly one of our own keywords is on target, not junk to block */
+  var waste=(S.terms||[]).filter(isLive).filter(function(t){return !ownKw[String(t.term||"").toLowerCase()];}).filter(function(t){return !(+t.conv)&&(+t.cost)>=Math.max(10,2*avgCpc);}).sort(function(a,b){return b.cost-a.cost;});
   if(waste.length){var w=waste.reduce(function(s,t){return s+(+t.cost);},0);tips.push(["bad",adsMoney(w)+" spent in 30 days on "+waste.length+" search term"+(waste.length>1?"s":"")+" with no conversions. Review them on the Keywords & searches tab and add the irrelevant ones as negatives."]);}
-  var ag=(S.adGroups||[]).filter(function(g){return g.conv>=1;}).map(function(g){g.cpa=g.cost/g.conv;return g;}).sort(function(a,b){return a.cpa-b.cpa;});
+  var ag=(S.adGroups||[]).filter(isLive).filter(function(g){return g.conv>=1;}).map(function(g){g.cpa=g.cost/g.conv;return g;}).sort(function(a,b){return a.cpa-b.cpa;});
   if(ag.length>=2&&ag[ag.length-1].cpa>ag[0].cpa*1.5)tips.push(["good","\u201c"+ag[0].g+"\u201d converts at "+adsMoney(ag[0].cpa)+" vs "+adsMoney(ag[ag.length-1].cpa)+" for \u201c"+ag[ag.length-1].g+"\u201d. Shift budget toward the cheaper ad group."]);
   if(cur.conv>=3&&pl.length<cur.conv*0.5)tips.push(["warn","Google counts "+Math.round(cur.conv)+" conversions but only "+pl.length+" Google Ads leads reached the portal. Calls are counted by Google but not as portal leads; if this gap is mostly forms, check the lead tracking."]);
-  var lowQs=(S.keywords||[]).filter(function(k){return k.qs&&k.qs<=4&&k.cost>0;});
+  var lowQs=(S.keywords||[]).filter(isLive).filter(function(k){return k.qs&&k.qs<=4&&k.cost>0;});
   if(lowQs.length)tips.push(["warn",lowQs.length+" keyword"+(lowQs.length>1?"s have":" has")+" a Quality Score of 4 or less: "+lowQs.slice(0,3).map(function(k){return "\u201c"+k.kw+"\u201d";}).join(", ")+". Tighten the ad text and landing page for these, or pause them."]);
   var hrs=(S.hours||[]).slice().sort(function(a,b){return b.conv-a.conv;});
   var hTot=hrs.reduce(function(s,h){return s+(+h.conv||0);},0);
   if(hTot>=10){var fmt=function(h){h=+h;return (h%12||12)+(h<12?"am":"pm");};tips.push(["good","Most conversions come at "+hrs.slice(0,3).map(function(h){return fmt(h.h);}).join(", ")+". Consider a bid increase for those hours."]);}
-  var adsAll=S.ads||[], nDis=adsAll.filter(function(a){return a.approval==="DISAPPROVED";}).length;
+  var adsAll=S.ads||[], nDis=adsAll.filter(function(a){return a.approval==="DISAPPROVED"&&a.status==="ENABLED"&&a.gs==="ENABLED"&&a.cs==="ENABLED";}).length;
   var nRev=adsAll.filter(function(a){return a.status==="ENABLED"&&a.cs==="ENABLED"&&/REVIEW_IN_PROGRESS|UNDER_REVIEW/.test(a.review);}).length;
   var nLive=adsAll.filter(function(a){return a.status==="ENABLED"&&a.gs==="ENABLED"&&a.cs==="ENABLED"&&/APPROVED/.test(a.approval);}).length;
   if(adsAll.length&&!nLive&&!nRev)tips.unshift(["warn","No ads are running right now. Enable a campaign in Google Ads to start getting clicks."]);
   if(nRev)tips.push(["warn",nRev+" ad"+(nRev>1?"s are":" is")+" in an enabled campaign but still under Google review. They start showing once approved, usually within a day."]);
   if(nDis)tips.unshift(["bad",nDis+" ad"+(nDis>1?"s are":" is")+" disapproved. See the reason on the Ads & assets tab; health insurance ads may need certification."]);
-  if(nDis&&!(S.policy&&S.policy.limited))tips=tips.filter(function(t){return !/Open Policy manager/.test(t[1]);});
+  if(nDis&&!limN)tips=tips.filter(function(t){return !/Open Policy manager/.test(t[1]);});
   var tipRank={bad:0,warn:1,good:2};tips.sort(function(a,b){return tipRank[a[0]]-tipRank[b[0]];});
   if(!tips.length)tips.push(["good","Nothing needs attention right now."]);
   var ins=el("div",{class:"an-section"});ins.appendChild(el("h4",{text:"What to do next"}));ins.appendChild(el("p",{class:"sub",text:"Most urgent first. Red = fix now, amber = check soon, green = an opportunity."}));
@@ -6801,10 +6809,10 @@ function renderAdsPerf(){
         h+="<tr"+(waste?" class='waste'":win?" class='win'":"")+"><td>"+esc(r.name)+"</td><td>"+(targeted[r.code]?"Yes":"<span class='ads-why'>No</span>")+"</td><td class='r'>"+r.imp+"</td><td class='r'>"+r.clk+"</td><td class='r'>"+adsPct(adsDiv(r.clk,r.imp))+"</td><td class='r'>"+adsMoney(r.cost)+"</td><td class='r'>"+(Math.round(r.conv*10)/10)+"</td><td class='r'>"+(r.conv?adsMoney(r.cost/r.conv):"–")+"</td><td class='r'>"+r.pl+"</td><td class='r'>"+r.q+"</td><td class='r'>"+r.s+"</td></tr>";});
       sec.appendChild(el("div",{html:h+"</tbody></table></div>"}));
       if(unk)sec.appendChild(el("p",{class:"ads-fine",text:unk+" Google Ads lead"+(unk>1?"s":"")+" in the last 30 days had no ZIP or state, so "+(unk>1?"they are":"it is")+" not counted by state."}));
-      var wasteSt=list.filter(function(r){return r.cost>=Math.max(30,3*avgCpc)&&!r.conv&&!r.pl;});
+      var wasteSt=list.filter(function(r){return targeted[r.code]&&r.cost>=Math.max(30,3*avgCpc)&&!r.conv&&!r.pl;});
       if(wasteSt.length)ins.appendChild(el("div",{class:"ads-tip warn",html:'<span class="ads-ico">!</span><span>'+esc(wasteSt.map(function(r){return r.name+" ("+adsMoney(r.cost)+")";}).join(", "))+" spent in 30 days with no conversions or portal leads. Check the search terms from there, or lower the bid for that state.</span>"}));
-      var conv=list.filter(function(r){return r.conv>=1;}).sort(function(a,b){return a.cost/a.conv-b.cost/b.conv;});
-      if(conv.length>=2&&conv[conv.length-1].cost/conv[conv.length-1].conv>1.5*conv[0].cost/conv[0].conv)ins.appendChild(el("div",{class:"ads-tip good",html:'<span class="ads-ico">&#10003;</span><span>'+esc(conv[0].name+" converts at "+adsMoney(conv[0].cost/conv[0].conv)+" per conversion vs "+adsMoney(conv[conv.length-1].cost/conv[conv.length-1].conv)+" in "+conv[conv.length-1].name+". Consider a +15% location bid for "+conv[0].name+".")+"</span>"}));
+      var conv=list.filter(function(r){return targeted[r.code]&&r.conv>=1;}).sort(function(a,b){return a.cost/a.conv-b.cost/b.conv;});
+      if(conv.length>=2&&conv[conv.length-1].cost/conv[conv.length-1].conv>1.5*conv[0].cost/conv[0].conv)ins.appendChild(el("div",{class:"ads-tip good",html:'<span class="ads-ico">&#10003;</span><span>'+esc(conv[0].name+" converts at "+adsMoney(conv[0].cost/conv[0].conv)+" per conversion vs "+adsMoney(conv[conv.length-1].cost/conv[conv.length-1].conv)+" in "+conv[conv.length-1].name+". On Maximize conversions Google ignores location bids, so check the state split instead. Otherwise consider a +15% location bid for "+conv[0].name+".")+"</span>"}));
     }
     if(as.length){
       var TL={SITELINK:"Sitelink",CALLOUT:"Callout",STRUCTURED_SNIPPET:"Snippet",CALL:"Call"};
