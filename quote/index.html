@@ -772,6 +772,12 @@ html.trk .trk-hide{display:none!important}
 #progressWrap{display:none!important}
 .brand-name .tm{font-size:.55em;font-weight:700;vertical-align:super;line-height:0;margin-left:1px}
 #panel-0 .start-card{background:transparent;border:0;box-shadow:none;padding:8px 0 0}
+.qs-persist{background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important}
+#qsHero{padding-top:8px!important}
+#qsFoot{margin-top:6px}
+.qs-done #qsHero,.qs-done #qsFoot{display:none}
+.qs-card{max-width:560px}
+.panel .qscreen{max-width:560px;margin-left:auto;margin-right:auto;border:1px solid #e2e7ee;border-radius:16px;box-shadow:0 10px 30px rgba(16,40,80,.08)}
 .qs-q{font-family:'Roboto',system-ui,sans-serif;font-weight:800;font-size:1.3rem;color:var(--qb-ink,#212529);margin:0 0 14px;text-align:left}
 .qs-opts{display:grid;gap:10px}
 .qs-opt{-webkit-appearance:none;appearance:none;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:58px;padding:14px 16px 14px 18px;background:#fff;border:1.5px solid #d6dde6;border-radius:12px;font:600 1.05rem/1.2 'Roboto',system-ui,sans-serif;color:var(--qb-ink,#212529);text-align:left;cursor:pointer;transition:border-color .15s,background .15s,transform .1s}
@@ -822,14 +828,18 @@ html.trk .trk-hide{display:none!important}
 <!-- FUNNEL -->
 <div class="funnel-wrap">
 
-  <!-- PANEL 0: CHOOSE TYPE -->
-  <div class="panel active" id="panel-0">
-    <div class="start-card">
+  <!-- Headline stays on every step (Nov 6 2026) -->
+  <div class="start-card qs-persist" id="qsHero">
       <div class="qs-hero">
         <div class="qs-eyebrow">Free plan review &middot; Licensed advisors</div>
         <h1>Are you paying too much for health insurance?</h1>
         <p class="sub">A licensed advisor compares plans from top carriers for you. No cost. No obligation.</p>
       </div>
+  </div>
+
+  <!-- PANEL 0: CHOOSE TYPE -->
+  <div class="panel active" id="panel-0">
+    <div class="start-card">
       <div class="qs-card">
         <div class="qs-bar" aria-hidden="true"><span></span></div>
         <h2 class="qs-q">Who needs coverage?</h2>
@@ -841,10 +851,7 @@ html.trk .trk-hide{display:none!important}
         <div class="qs-rating"><span class="qs-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span>5.0 &middot; 53 Google reviews</span></div>
         <div class="qs-lic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>Licensed in 40+ states &middot; About 2 minutes</div>
       </div>
-      <p class="qs-why">Your health care decisions are yours to make. We&rsquo;re an independent agency: a licensed advisor walks you through your options so you can choose what fits your family and your budget.</p>
-      <div class="qs-trust">Licensed in 40+ states &middot; Independent agency &middot; No obligation</div>
 
-      <p style="margin:14px 0 0;font-size:.88rem;color:#5a6b80;text-align:center;line-height:1.7">Rather talk to a person? <a href="tel:+19548251009" style="font-weight:700;color:#16447f;white-space:nowrap">Speak to an advisor</a><br/>Questions or support? Email <a href="mailto:info@vshealthbenefits.com" style="font-weight:700;color:#16447f">info@vshealthbenefits.com</a></p>
     </div>
   </div>
 
@@ -1370,6 +1377,13 @@ html.trk .trk-hide{display:none!important}
   </div>
 
 
+  <!-- Reassurance + contact stay on every step -->
+  <div class="start-card qs-persist" id="qsFoot">
+      <p class="qs-why">Your health care decisions are yours to make. We&rsquo;re an independent agency: a licensed advisor walks you through your options so you can choose what fits your family and your budget.</p>
+      <div class="qs-trust">Licensed in 40+ states &middot; Independent agency &middot; No obligation</div>
+
+      <p style="margin:14px 0 0;font-size:.88rem;color:#5a6b80;text-align:center;line-height:1.7">Rather talk to a person? <a href="tel:+19548251009" style="font-weight:700;color:#16447f;white-space:nowrap">Speak to an advisor</a><br/>Questions or support? Email <a href="mailto:info@vshealthbenefits.com" style="font-weight:700;color:#16447f">info@vshealthbenefits.com</a></p>
+  </div>
 </div><!-- /funnel-wrap -->
 
 <!-- FOOTER -->
@@ -1539,6 +1553,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
 
   // ---- PANEL SWITCH ----
   function showPanel(id){
+    document.body.classList.toggle('qs-done', id === 'panel-generating' || id === 'panel-success');
     document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
     var el = document.getElementById(id);
     if(el){
