@@ -759,6 +759,32 @@ html.trk .trk-hide{display:none!important}
 .trk-next .trk-dp p{font-size:.86rem;color:rgba(255,255,255,.8)!important;line-height:1.45}
 .trk-dp a{color:#7cc4ff;font-weight:700;text-decoration:none}
 </style>
+<style id="qs-start-css">
+/* Start screen: hero + "Who needs coverage?" card (Nov 6 2026) */
+.qs-hero{text-align:center;max-width:640px;margin:0 auto}
+.qs-eyebrow{display:inline-block;font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--qb-sel,#0f5c9c);margin:0 0 10px}
+.start-card .qs-hero h1{margin:0 auto 12px;font-size:clamp(1.85rem,5.4vw,2.6rem);line-height:1.08}
+.start-card .qs-hero .sub{margin:0 auto 20px;font-size:1.02rem}
+.qs-card{max-width:520px;margin:0 auto;background:#fff;border:1px solid #e2e7ee;border-radius:16px;padding:20px 18px 18px;box-shadow:0 10px 30px rgba(16,40,80,.08)}
+.qs-bar{height:6px;border-radius:99px;background:var(--q-track,#dcdedd);overflow:hidden;margin:0 0 16px}
+.qs-bar span{display:block;width:12%;height:100%;border-radius:99px;background:var(--qb,#2f9de6)}
+.qs-q{font-family:'Roboto',system-ui,sans-serif;font-weight:800;font-size:1.3rem;color:var(--qb-ink,#212529);margin:0 0 14px;text-align:left}
+.qs-opts{display:grid;gap:10px}
+.qs-opt{-webkit-appearance:none;appearance:none;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:58px;padding:14px 16px 14px 18px;background:#fff;border:1.5px solid #d6dde6;border-radius:12px;font:600 1.05rem/1.2 'Roboto',system-ui,sans-serif;color:var(--qb-ink,#212529);text-align:left;cursor:pointer;transition:border-color .15s,background .15s,transform .1s}
+.qs-opt .qs-chev{color:#8a97a8;flex:none;transition:transform .15s,color .15s}
+.qs-opt:hover{border-color:var(--qb,#2f9de6);background:#f3f9fe}
+.qs-opt:hover .qs-chev{color:var(--qb,#2f9de6);transform:translateX(2px)}
+.qs-opt:active{transform:translateY(1px)}
+.qs-opt:focus-visible{outline:2px solid var(--qb,#2f9de6);outline-offset:2px}
+.qs-opt.selected{background:var(--qb,#2f9de6);border-color:var(--qb,#2f9de6);color:#fff}
+.qs-opt.selected .qs-chev{color:#fff}
+.qs-rating{display:flex;align-items:center;justify-content:center;gap:8px;margin:16px 0 4px;font-size:.86rem;font-weight:600;color:#43505f}
+.qs-stars{color:#f5a623;letter-spacing:1px;font-size:1rem}
+.qs-lic{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.82rem;color:#5a6b80}
+.qs-lic svg{color:var(--teal,#0aa89a)}
+.qs-why{max-width:520px;margin:22px auto 8px;font-size:.98rem;line-height:1.6;color:#43505f;text-align:center}
+.qs-trust{max-width:520px;margin:0 auto 22px;text-align:center;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#7b8796}
+</style>
 </head>
 <body>
 
@@ -795,35 +821,24 @@ html.trk .trk-hide{display:none!important}
   <!-- PANEL 0: CHOOSE TYPE -->
   <div class="panel active" id="panel-0">
     <div class="start-card">
-      <div class="start-badge">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        Takes about 2 minutes
+      <div class="qs-hero">
+        <div class="qs-eyebrow">Free plan review &middot; Licensed advisors</div>
+        <h1>Are you paying too much for health insurance?</h1>
+        <p class="sub">A licensed advisor compares plans from top carriers for you. No cost. No obligation.</p>
       </div>
-      <h1><span class="h-lite">Let&rsquo;s get started!</span> Who is this quote for?</h1>
-      <p class="sub">Answer a few quick questions and a licensed advisor will compare plans from top carriers for you. Free, no obligation.</p>
-      <div class="type-grid">
-        <button type="button" class="qbtn type-card" id="typeIndividual" onclick="selectType('individual')">Myself and/or my family</button>
-        <button type="button" class="qbtn type-card" id="typeBusiness" onclick="selectType('business')">My small business</button>
+      <div class="qs-card">
+        <div class="qs-bar" aria-hidden="true"><span></span></div>
+        <h2 class="qs-q">Who needs coverage?</h2>
+        <div class="qs-opts">
+          <button type="button" class="qs-opt" id="typeIndividual" onclick="vsPickWho(this,'Just me','individual')"><span>Just me</span><svg class="qs-chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+          <button type="button" class="qs-opt" id="typeFamily" onclick="vsPickWho(this,'My family','individual')"><span>My family</span><svg class="qs-chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+          <button type="button" class="qs-opt" id="typeBusiness" onclick="vsPickWho(this,'My small business','business')"><span>My small business</span><svg class="qs-chev" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+        </div>
+        <div class="qs-rating"><span class="qs-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><span>5.0 &middot; 53 Google reviews</span></div>
+        <div class="qs-lic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>Licensed in 40+ states &middot; About 2 minutes</div>
       </div>
-      <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Answer a few questions &amp; find the best quotes</div>
-      <div class="start-trust">
-        <div class="trust-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-          Licensed in 40+ States
-        </div>
-        <div class="trust-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-          100% Free Service
-        </div>
-        <div class="trust-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-          No Spam, Ever
-        </div>
-        <div class="trust-item">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-          Compare Top Carriers
-        </div>
-      </div>
+      <p class="qs-why">Your health care decisions are yours to make. We&rsquo;re an independent agency: a licensed advisor walks you through your options so you can choose what fits your family and your budget.</p>
+      <div class="qs-trust">Licensed in 40+ states &middot; Independent agency &middot; No obligation</div>
 
       <!-- ===== TESTIMONIAL (real Google review only) ===== -->
       <div class="tst" id="tstShow" aria-roledescription="carousel" aria-label="Customer reviews">
@@ -1656,6 +1671,13 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     }, 200);
   };
 
+  // Start card: remember who the quote is for, then run the normal type flow.
+  window.vsPickWho = function(btn, who, type){
+    window.__vsWho = who;
+    window.selectType(type);
+    document.querySelectorAll('.qs-opt').forEach(function(b){ b.classList.toggle('selected', b === btn); });
+  };
+
   // ---- BACK TO START ----
   window.backTo = function(step){
     if(step === 0){
@@ -2258,6 +2280,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     });
     if(data.tags){ payload.tags = data.tags; }
     if(data.partner){ payload.referred_by_partner = data.partner; }
+    if(window.__vsWho){ payload.coverage_for = window.__vsWho; }
     if(data.fromPage){ payload.came_from_page = data.fromPage; }
     if(data.niche){ payload.lead_source = 'vshealthbenefits.com ' + data.niche + ' landing page -> /quote'; payload.tags = data.tags; }
     if(data.coverageWanted){
