@@ -6830,13 +6830,13 @@ function renderAdsPerf(){
     return["Running","good",""];
   }
   if(S.ads&&S.ads.length){
-    var ads=S.ads.map(function(a){var st=adState(a);return Object.assign({},a,{st:st});});
+    var ads=S.ads.map(function(a){var st=adState(a);return Object.assign({},a,{st:st});}).filter(function(a){return /^Running/.test(a.st[0]);});
     var order={"Running":0,"Running (limited)":1,"Under review":2,"Disapproved":3,"Paused":4};
     ads.sort(function(a,b){return (order[a.st[0]]-order[b.st[0]])||(b.cost-a.cost)||(a.c<b.c?-1:1);});
     var cnt={};ads.forEach(function(a){cnt[a.st[0]]=(cnt[a.st[0]]||0)+1;});
     var asec=el("div",{class:"an-section"});
     asec.appendChild(el("h4",{text:"Your ads"}));
-    asec.appendChild(el("p",{class:"sub",text:"Every ad in the account, live status from Google, last 30 days of results. Running ads first."}));
+    asec.appendChild(el("p",{class:"sub",text:"Only ads running right now (paused, under-review and disapproved ads are hidden). Last 30 days of results."}));
     var chips=el("div",{class:"ads-chips"});
     [["Running","good"],["Running (limited)","warn"],["Under review","warn"],["Disapproved","bad"],["Paused","off"]].forEach(function(c){if(cnt[c[0]])chips.appendChild(el("span",{class:"ads-chip "+c[1],text:cnt[c[0]]+" "+c[0].toLowerCase()}));});
     asec.appendChild(chips);
@@ -6894,8 +6894,8 @@ function renderAdsPerf(){
   var cm={};S.daily.filter(function(r){return inR(r.d);}).forEach(function(r){var o=cm[r.c]||(cm[r.c]={name:r.c,imp:0,clk:0,cost:0,conv:0});o.imp+=+r.imp||0;o.clk+=+r.clk||0;o.cost+=+r.cost||0;o.conv+=+r.conv||0;});
   var meta={};(S.campaigns||[]).forEach(function(c){meta[c.name]=c;});(S.campaignList||[]).forEach(function(c){meta[c.name]=c;});
   (S.campaignList||[]).forEach(function(c){if(!cm[c.name])cm[c.name]={name:c.name,imp:0,clk:0,cost:0,conv:0};});
-  var camps=Object.keys(cm).map(function(k){return cm[k];}).sort(function(a,b){var ea=(meta[a.name]||{}).status==="ENABLED"?1:0,eb=(meta[b.name]||{}).status==="ENABLED"?1:0;return (eb-ea)||(b.cost-a.cost);});
-  P.overview.appendChild(table("Campaigns","Last "+range+" days.",[["Campaign",function(r){return r.name;}],["Status",function(r){var m=meta[r.name]||{};return String(m.primary||m.status||"").toLowerCase().replace(/_/g," ");}],["Budget/day",function(r){var m=meta[r.name];return m&&m.budget?adsMoney(m.budget):"";},1]].concat(M),camps,"No campaign spend in this range."));
+  var camps=Object.keys(cm).map(function(k){return cm[k];}).filter(function(r){return (meta[r.name]||{}).status==="ENABLED";}).sort(function(a,b){var ea=(meta[a.name]||{}).status==="ENABLED"?1:0,eb=(meta[b.name]||{}).status==="ENABLED"?1:0;return (eb-ea)||(b.cost-a.cost);});
+  P.overview.appendChild(table("Campaigns","Running now. Last "+range+" days.",[["Campaign",function(r){return r.name;}],["Status",function(r){var m=meta[r.name]||{};return String(m.primary||m.status||"").toLowerCase().replace(/_/g," ");}],["Budget/day",function(r){var m=meta[r.name];return m&&m.budget?adsMoney(m.budget):"";},1]].concat(M),camps,"No campaign spend in this range."));
   P.search.appendChild(table("Ad groups","Last 30 days.",[["Ad group",function(r){return r.g;}],["Campaign",function(r){return r.c;}]].concat(M),(S.adGroups||[]).filter(function(r){return r.imp>0;}).sort(function(a,b){return b.cost-a.cost;})));
   var termRows=(S.terms||[]).slice(0,40).map(function(t){var o=Object.assign({},t);if(!(+t.conv)&&(+t.cost)>=Math.max(10,2*avgCpc))o.__cls="waste";else if(+t.conv)o.__cls="win";return o;});
   var termSec=table("Search terms","Last 30 days, by spend. <span class='ads-key waste'>Red</span> = spend with no conversions (negative keyword candidate). <span class='ads-key win'>Green</span> = converting (add as exact match).",[["Search term",function(r){return r.term;}],["Ad group",function(r){return r.g;}]].concat(M),termRows,"No search terms yet.");
@@ -9762,7 +9762,7 @@ try{(function(){
     var jump='<div class="bz-jump">'+stages.map(function(s){var n=cs.filter(function(b){var st=ids.indexOf(b.stage)>=0?b.stage:"prospect";return st===s.id;}).length;return '<button type="button" data-bzjump="'+s.id+'">'+s.label+' '+n+'</button>';}).join("")+'</div>';
     box.innerHTML=jump+'<div class="bz-board" id="biz-board" style="--bzcols:'+stages.length+'">'+stages.map(function(s){
       var items=cs.filter(function(b){var st=ids.indexOf(b.stage)>=0?b.stage:"prospect";return st===s.id;});
-      items.sort(function(a,b){var fa=a.nextFollowUp||"9999",fb=b.nextFollowUp||"9999";if(s.id==="won"||s.id==="lost")return touched(b)-touched(a);return fa<fb?-1:fa>fb?1:touched(a)-touched(b);});
+      items.sort(function(a,b){if(s.id==="won"||s.id==="lost")return touched(b)-touched(a);return (Number(b.created)||0)-(Number(a.created)||0);});
       var ee=items.reduce(function(t,b){return t+eeNum(b.employees);},0);
       var body=items.length?items.map(function(b){
         var st=b.stage||"prospect",fs=fuState(b),idle=Math.floor((Date.now()-touched(b))/D);
@@ -12218,7 +12218,7 @@ try{(function(){
   }
 
   /* ---- Business leads as a table (board still one click away) ---- */
-  var BZV={view:"table",stage:"open",sort:"new"};
+  var BZV={view:"table",stage:"open",sort:"added"};
   function bizTable(){
     var host=$("p-bizleads");if(!host)return;
     var mount=$("biz-table-mount");
@@ -12239,12 +12239,14 @@ try{(function(){
       if(BZV.sort==="fu")return String(a.nextFollowUp||"9999").localeCompare(String(b.nextFollowUp||"9999"));
       if(BZV.sort==="emp")return (parseInt(b.employees)||0)-(parseInt(a.employees)||0);
       if(BZV.sort==="stage")return BIZ_STAGES.map(function(x){return x.id;}).indexOf(stg(a))-BIZ_STAGES.map(function(x){return x.id;}).indexOf(stg(b));
+      if(BZV.sort==="added")return (Number(b.created)||0)-(Number(a.created)||0);
       return (b.updated||b.created||0)-(a.updated||a.created||0);});
     function d(v){if(!v)return "";var x=typeof v==="number"?new Date(v):pdob(String(v).slice(0,10));return x?TR.fmt(ymd(x)):"";}
     var chips=[["open","Open",counts.open],["due","Follow-up due",counts.due]].concat(BIZ_STAGES.map(function(x){return [x.id,x.label,counts[x.id]];})).concat([["all","All",counts.all]]);
     var body=L.map(function(b){var st=stg(b),m=bizStageMeta(st),fu=b.nextFollowUp?String(b.nextFollowUp).slice(0,10):"";
       var opts=BIZ_STAGES.map(function(x){return '<option value="'+x.id+'"'+(x.id===st?" selected":"")+'>'+x.label+'</option>';}).join("");
-      return '<tr data-biz="'+esc(b.id)+'"><td><b class="ap-nm">'+esc(b.company||"(no company)")+'</b><small>'+esc(b.niche||"")+'</small></td>'
+      var isNewBz=(Date.now()-(Number(b.created)||0))<864e5;
+      return '<tr data-biz="'+esc(b.id)+'"'+(isNewBz?' style="background:#f0fdf4"':'')+'><td><b class="ap-nm">'+(isNewBz?'<span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;color:#fff;background:#16a34a;border-radius:4px;padding:1px 5px;margin-right:6px;vertical-align:1px">NEW</span>':'')+esc(b.company||"(no company)")+'</b><small>'+esc(b.niche||"")+'</small></td>'
         +'<td>'+esc(b.contact||"")+(b.title?'<small>'+esc(b.title)+'</small>':'')+'</td>'
         +'<td>'+(b.phone?'<a href="tel:'+esc(String(b.phone).replace(/[^0-9+]/g,""))+'" class="bz-lnk">'+esc(b.phone)+'</a>':'')+(b.email?'<small><a href="mailto:'+esc(b.email)+'" class="bz-lnk">'+esc(b.email)+'</a></small>':'')+'</td>'
         +'<td class="num">'+esc(b.employees||"")+'</td>'
@@ -12253,7 +12255,7 @@ try{(function(){
         +'<td>'+(fu?'<span class="ap-pay '+(fu<td?"p-bad":fu===td?"p-warn":"p-mid")+'">'+d(fu)+'</span>':'<span class="ap-dash">-</span>')+'</td>'
         +'<td>'+d(b.created)+'</td></tr>';}).join("");
     mount.innerHTML='<div class="ac-bar"><div class="ap-seg" data-bzv><button type="button" data-v="table"'+(boardOn?'':' class="on"')+'>Table</button><button type="button" data-v="board"'+(boardOn?' class="on"':'')+'>Board</button></div>'
-      +(boardOn?'':'<select class="bz-sort">'+[["new","Recently updated"],["az","Company A to Z"],["fu","Next follow-up"],["emp","Most employees"],["stage","Stage"]].map(function(o){return '<option value="'+o[0]+'"'+(BZV.sort===o[0]?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>')+'</div>'
+      +(boardOn?'':'<select class="bz-sort">'+[["added","Newest first"],["new","Recently updated"],["az","Company A to Z"],["fu","Next follow-up"],["emp","Most employees"],["stage","Stage"]].map(function(o){return '<option value="'+o[0]+'"'+(BZV.sort===o[0]?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>')+'</div>'
       +(boardOn?'':'<div class="ap-chips">'+chips.map(function(c){return '<button type="button" class="ap-chip'+(BZV.stage===c[0]?" on":"")+(c[0]==="due"&&c[2]?" bad":"")+'" data-bzs="'+c[0]+'">'+esc(c[1])+'<b>'+c[2]+'</b></button>';}).join("")+'</div>'
       +'<div class="ap-card ap-tcard"><div class="ap-tw"><table class="ap-t"><thead><tr><th>Company</th><th>Contact</th><th>Phone / email</th><th class="num">Employees</th><th>Stage</th><th>Source</th><th>Next follow-up</th><th>Added</th></tr></thead><tbody>'+(body||'<tr><td colspan="8" class="ap-empty">No business leads match.</td></tr>')+'</tbody></table></div><div class="ap-foot">'+L.length+' business lead'+(L.length===1?"":"s")+' · click a row to open it</div></div>');
     mount.querySelectorAll("[data-bzv] button").forEach(function(b){b.addEventListener("click",function(){BZV.view=b.getAttribute("data-v");bizTable();});});
