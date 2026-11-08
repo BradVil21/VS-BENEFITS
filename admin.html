@@ -13216,7 +13216,7 @@ html.dark .vsd-pill select option{background:#111d2b}
   function save(p){p.v=2;try{localStorage.setItem(KEY,JSON.stringify(p));}catch(e){}try{syncPill();}catch(e){}}
   var isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
 
-  var NAMES={vsconnect:"VS Connect",rcdialer:"VanillaSoft Dialer",ringcentral:"RingCentral",ringy:"Ringy",native:"this device's phone app"};
+  var NAMES={rcweb:"RingCentral web dialer",vsconnect:"VS Connect",rcdialer:"VanillaSoft Dialer",ringcentral:"RingCentral",ringy:"Ringy",native:"this device's phone app"};
   var rcdWin=null;
   var RINGY_URL="https://app.ringy.com/home/dashboard", ringyWin=null;
 
@@ -13286,7 +13286,18 @@ html.dark .vsd-pill select option{background:#111d2b}
     if(!focused&&p.rcdOpen==="auto"&&p.rcdUrl){rcdWin=window.open(p.rcdUrl,"vs_rcdialer");}
     toast(pretty(d)+" copied. In VanillaSoft Dialer: click the number box, paste (\u2318V), press the green call button.");
   }
+  /* RingCentral web dialer (the RingCentral panel in the browser): it picks up tel: links itself,
+     so we just click a normal tel: link and let it through untouched */
+  function launchRcWeb(d){
+    try{window.__vsLastDial={provider:"rcweb",url:"tel:+"+d,at:Date.now()};}catch(e){}
+    var a=document.createElement("a");a.href="tel:+"+d;a.setAttribute("data-vsd-pass","1");a.style.display="none";
+    document.body.appendChild(a);
+    try{a.click();}catch(e){location.href="tel:+"+d;}
+    setTimeout(function(){try{a.remove();}catch(e){}},1500);
+    toast("Calling "+pretty(d)+" with the RingCentral web dialer…");
+  }
   function launch(provider,d,p){
+    if(provider==="rcweb"){launchRcWeb(d);return;}
     if(provider==="ringy"){launchRingy(d);return;}
     if(provider==="rcdialer"){launchRcd(d,p);return;}
     var url=buildUrl(provider,d,p);
@@ -13305,6 +13316,7 @@ html.dark .vsd-pill select option{background:#111d2b}
     var old=document.getElementById("vsd-pick");if(old)old.remove();
     var ov=document.createElement("div");ov.id="vsd-pick";
     ov.innerHTML='<div class="vsd-box" role="dialog" aria-label="Call with"><h3>Call with…</h3><p class="vsd-num">'+pretty(d)+'</p>'+
+      '<button type="button" class="vsd-go" data-p="rcweb">RingCentral web dialer<small>Dials in the RingCentral panel in your browser</small></button>'+
       '<button type="button" class="vsd-go" data-p="rcdialer">VanillaSoft Dialer<small>RingCentral web phone · copies the number</small></button>'+
       '<button type="button" class="vsd-go" data-p="vsconnect">VS Connect<small>VanillaSoft desktop app</small></button>'+
       '<button type="button" class="vsd-go" data-p="ringcentral">RingCentral<small>'+(p.rcMode==="web"?"Web app in a new tab":"RingCentral app")+'</small></button>'+
@@ -13339,11 +13351,15 @@ html.dark .vsd-pill select option{background:#111d2b}
   document.addEventListener("click",function(e){
     if(e.defaultPrevented||e.button>0)return;
     var a=e.target&&e.target.closest?e.target.closest('a[href^="tel:"],a[href^="TEL:"]'):null;
-    if(!a||a.closest("#vsd-pick"))return;
+    if(!a||a.closest("#vsd-pick")||a.hasAttribute("data-vsd-pass"))return;
     var href=a.getAttribute("href");
     var p=load();
     if(isMobile&&p.mobile==="native"&&!e.altKey)return;       // let the phone handle it
     if(p.provider==="native"&&!e.altKey)return;                 // default behaviour
+    if(p.provider==="rcweb"&&!e.altKey){                         // RingCentral web dialer picks up the tel: link
+      try{var dd=digits(href);if(dd.length>=7)toast("Calling "+pretty(dd)+" with the RingCentral web dialer…");}catch(_){}
+      return;
+    }
     e.preventDefault();e.stopPropagation();
     window.vsDial(href,{ask:e.altKey,force:e.altKey});
   },true);
@@ -13354,11 +13370,12 @@ html.dark .vsd-pill select option{background:#111d2b}
     return '<h4 style="margin:0 0 6px;font-size:15px"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> Calling</h4>'+
       '<p class="lede">Pick where the <strong>Call</strong> buttons send a lead’s number. Every Call button in the portal (leads, pipeline, business leads, clients, tasks and callback reminders) follows this setting.</p>'+
       '<div class="vsd-opts">'+
+        opt("vsd-prov","rcweb","RingCentral web dialer","Dials in the RingCentral panel in your browser")+
         opt("vsd-prov","rcdialer","VanillaSoft Dialer","RingCentral web phone (rcdialer)")+
         opt("vsd-prov","vsconnect","VS Connect","VanillaSoft desktop app")+
         opt("vsd-prov","ringcentral","RingCentral","RingCentral app or web")+
         opt("vsd-prov","ringy","Ringy","Copies the number, opens Ringy")+
-        opt("vsd-prov","ask","Ask me each time","Pick VS Connect, RingCentral or Ringy per call")+
+        opt("vsd-prov","ask","Ask me each time","Pick the RingCentral web dialer, VS Connect, RingCentral or Ringy per call")+
         opt("vsd-prov","native","Computer default","Whatever opens phone links now")+
       '</div>'+
       '<div class="vsd-sub" id="vsd-sub-vs"><div class="field"><label for="vsd-vs">VS Connect link type</label>'+
@@ -13373,6 +13390,7 @@ html.dark .vsd-pill select option{background:#111d2b}
       '<div class="vsd-sub" id="vsd-sub-rcd"><div class="field"><label for="vsd-rcdurl">VanillaSoft Dialer address</label><input id="vsd-rcdurl" type="text" style="padding:9px 12px;border:1px solid #d8e0ee;border-radius:9px;min-height:40px;width:100%"></div>'+
         '<div class="field"><label for="vsd-rcdopen">If the dialer isn\u2019t open</label><select id="vsd-rcdopen"><option value="never">Just copy the number (I keep the dialer open)</option><option value="auto">Open the dialer in a new window</option></select></div>'+
         '<div class="vsd-hint"><strong>How it works:</strong> clicking Call copies the lead\u2019s number. In the VanillaSoft Dialer, click <em>Enter name or number</em>, paste (\u2318V) and press the green call button. The follow-up pop-up opens at the same time so you can log the result. The dialer has no direct dial link, so the paste step can\u2019t be skipped.</div></div>'+
+      '<div class="vsd-sub" id="vsd-sub-rcweb"><div class="vsd-hint"><strong>How it works:</strong> clicking Call sends the number straight to the RingCentral web dialer (the RingCentral Phone panel in your browser) and the call starts from there, same as now. Keep the panel open and signed in. If Chrome ever asks which app to open phone links with, choose RingCentral and tick <em>Always allow</em>.</div></div>'+
       '<div class="vsd-sub" id="vsd-sub-ringy"><div class="vsd-hint"><strong>How Ringy calls work:</strong> clicking Call copies the lead’s number and switches to your Ringy tab (opens one if it’s closed). Click the phone icon at the top right of Ringy, click in <em>Phone number</em> and paste (⌘V), then hit Call. Ringy picks the Smart local caller ID like normal. Ringy doesn’t offer a direct dial link, so the paste step can’t be skipped.</div></div>'+
       '<div class="vsd-sub"><div class="field"><label for="vsd-fmt">Number format sent</label>'+
         '<select id="vsd-fmt"><option value="1">15551234567 (with country code)</option><option value="plus">+15551234567</option><option value="10">5551234567 (10 digits)</option></select></div>'+
@@ -13396,6 +13414,7 @@ html.dark .vsd-pill select option{background:#111d2b}
     c.querySelector("#vsd-sub-vs").style.display=(p.provider==="vsconnect"||p.provider==="ask")?"":"none";
     c.querySelector("#vsd-sub-rc").style.display=(p.provider==="ringcentral"||p.provider==="ask")?"":"none";
     c.querySelector("#vsd-sub-ringy").style.display=(p.provider==="ringy")?"":"none";
+    c.querySelector("#vsd-sub-rcweb").style.display=(p.provider==="rcweb")?"":"none";
     c.querySelector("#vsd-sub-rcd").style.display=(p.provider==="rcdialer"||p.provider==="ask")?"":"none";
     c.querySelector("#vsd-rcdurl").value=p.rcdUrl||"";c.querySelector("#vsd-rcdopen").value=p.rcdOpen||"never";
   }
@@ -13436,7 +13455,7 @@ html.dark .vsd-pill select option{background:#111d2b}
     var bar=document.querySelector("#topbar .topbar-right");if(!bar)return;
     var w=document.createElement("label");w.id="vsd-pill";w.className="vsd-pill";w.title="Where Call buttons send the number";
     w.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'+
-      '<select id="vsd-pill-sel" aria-label="Call with"><option value="rcdialer">VanillaSoft Dialer</option><option value="vsconnect">VS Connect</option><option value="ringcentral">RingCentral</option><option value="ringy">Ringy</option><option value="ask">Ask each call</option><option value="native">Default app</option></select>';
+      '<select id="vsd-pill-sel" aria-label="Call with"><option value="rcweb">RingCentral web</option><option value="rcdialer">VanillaSoft Dialer</option><option value="vsconnect">VS Connect</option><option value="ringcentral">RingCentral</option><option value="ringy">Ringy</option><option value="ask">Ask each call</option><option value="native">Default app</option></select>';
     bar.insertBefore(w,bar.firstChild);
     w.querySelector("select").addEventListener("change",function(){var p=load();p.provider=this.value;save(p);syncCard();toast("Call buttons now use "+(p.provider==="ask"?"a “Call with…” picker":p.provider==="native"?"your default phone app":NAMES[p.provider]));});
     syncPill();
