@@ -8911,6 +8911,12 @@ try{(function(){
         var val=czVal(c)>0?'<span style="font-size:12px;font-weight:600;color:#047857;white-space:nowrap">'+money(czVal(c))+'</span>':'';
         var contact=(c.phone||c.email)?'<div class="cz-sub" style="margin-top:4px">'+escapeHtml(c.phone||c.email)+'</div>':'';
         var src='<div class="cz-sub" style="margin-top:3px;font-size:11px;color:#94a3b8">'+(c.source?escapeHtml(czSourceLabel(c.source)):'')+odBadge(c)+'</div>';
+        var cin=(function(){var ms=Number(c.created)||0,d=null,withTime=false;
+          if(ms>0){d=new Date(ms);withTime=true;}else if(c.createdAt){var t=Date.parse(c.createdAt);if(!isNaN(t)){d=/T\d/.test(c.createdAt)?new Date(t):czParseYMD(c.createdAt);withTime=/T\d/.test(c.createdAt);}}
+          if(!d||isNaN(d.getTime()))return '';
+          var txt=d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})+(withTime?' · '+d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"}):'');
+          return '<div class="cz-sub od-cin" title="When this lead came in" style="margin-top:3px;font-size:11px;color:#64748b">🕒 Came in '+txt+'</div>';})();
+        src+=cin;
         var sub=g.ids.length>1&&czMETA[c.stage]?'<span class="od-sub" style="'+czChipStyle(c.stage)+'">'+escapeHtml(czMETA[c.stage].label)+'</span>':'';
         var fup=fu.key!=="none"?'<span class="cz-pill" style="'+czFUSTYLE[fu.key]+';margin-top:8px">'+fu.label+'</span>':'';
         var resetBtn=czCLOSED.indexOf(c.stage)<0?'<button class="cz-iconbtn" data-cz-reset="'+c.id+'" title="Reset 14-day follow-up">↻</button>':'';
