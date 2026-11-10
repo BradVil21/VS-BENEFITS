@@ -285,6 +285,11 @@ async function toCrm(d, req, res) {
       const board = await syncToBoards(n);
       out.board = board && board.ok ? (board.action || "ok") : ((board && board.reason) || "error");
       out.pipeline = n.business ? "business" : "individual";
+      // Every finished website form or calculator alerts Bradley by email and
+      // text - a new card, or a returning visitor merged into an existing one.
+      if (board && board.ok && (board.action === "created" || board.action === "merged")) {
+        try { out.alert = await alertNewLead(n, "website"); } catch (e) { out.alert = "exception"; }
+      }
     } catch (e) { out.board = "exception"; }
   } else {
     out.board = "skipped_admin_origin";
@@ -423,6 +428,11 @@ function normalize(c, d) {
 // be months old, and treating a closed card as "no match" there would resurrect
 // settled clients into New Lead every time it ran.
 async function syncToBoards(n, opts) {
+  // Bradley's own alert contact (see sendAlertSms in _lib.js) is not a lead.
+  if (n && ((Array.isArray(n.tags) && n.tags.indexOf(L.ALERT_TAG) >= 0) ||
+            (n.phone && L.alertPhone() && String(n.phone).replace(/\D/g, "").slice(-10) === L.alertPhone().replace(/\D/g, "").slice(-10)))) {
+    return { ok: true, action: "unchanged", skipped: "internal_alert_contact" };
+  }
   const reopenClosed = !opts || opts.reopenClosed !== false;
   const createIfMissing = !opts || opts.createIfMissing !== false;
   const now = Date.now();
@@ -801,7 +811,9 @@ async function sweepPortal(d, req, res) {
 }
 
 // Internal alert for a single new lead.
-async function alertNewLead(n) {
+async function alertNewLead(n, origin) {
+  const fromLabel = origin === "website" ? "your website" : "GoHighLevel";
+  const formName = n.sourceDetail || n.source || "";
   const rows = [
     ["Name", n.fullName],
     ["Phone", n.phone || "—"],
@@ -809,7 +821,7 @@ async function alertNewLead(n) {
     ["Company", n.company || "—"],
     ["Employees", n.employees || "—"],
     ["Tags", n.tags.join(", ") || "—"],
-    ["Source", n.source],
+    ["Source", n.source + (n.sourceDetail && n.sourceDetail !== n.source ? " (" + n.sourceDetail + ")" : "")],
   ];
   const table =
     '<table style="border-collapse:collapse;font:15px/1.5 system-ui,sans-serif">' +
@@ -817,12 +829,17 @@ async function alertNewLead(n) {
       return '<tr><td style="padding:4px 14px 4px 0;color:#5a6b80">' + L.esc(r[0]) +
              '</td><td style="padding:4px 0"><b>' + L.esc(r[1]) + "</b></td></tr>";
     }).join("") + "</table>";
-  return L.sendEmail({
+  const sms = "New " + (n.business ? "business " : "") + "lead: " + (n.fullName || "—") +
+    (n.phone ? " · " + n.phone : "") + (n.email ? " · " + n.email : "") +
+    (formName ? " · " + formName : "") + " · vshealthbenefits.com/admin";
+  let text = { skipped: "error" };
+  try { text = await L.sendAlertSms(sms); } catch (e) { /* non-fatal */ }
+  const mail = await L.sendEmail({
     to: L.CFG.notify,
     subject: (n.business ? "🏢 New business lead: " : "New lead: ") + n.fullName,
     html: L.shell(
       '<h2 style="margin:0 0 12px;color:' + L.CFG.navy + '">' +
-      (n.business ? "New business lead" : "New lead") + " from GoHighLevel</h2>" + table +
+      (n.business ? "New business lead" : "New lead") + " from " + fromLabel + "</h2>" + table +
       '<p style="margin-top:16px;color:#5a6b80;font-size:13px">Added to your ' +
       (n.business ? "Business Leads board (Prospect)" : "Pipeline (New Lead)") + ".</p>" +
       L.btn("https://www.vshealthbenefits.com/admin", "Open admin portal"),
@@ -830,6 +847,10 @@ async function alertNewLead(n) {
     ),
     replyTo: n.email || undefined,
   });
+  return {
+    email: mail && mail.ok ? "sent" : (mail && mail.skipped) || "error",
+    text: text && text.ok ? "sent" : (text && text.skipped) || "error",
+  };
 }
 
 // ══════════════════════════════════════════════════════════════════════════

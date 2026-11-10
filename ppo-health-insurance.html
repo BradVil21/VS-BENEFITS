@@ -215,7 +215,7 @@ footer a:hover{color:#fff}
 {"@context":"https://schema.org","@type":"InsuranceAgency","@id":"https://vshealthbenefits.com/#org","name":"VS Health Benefits","url":"https://vshealthbenefits.com/","image":"https://vshealthbenefits.com/favicon.png","logo":{"@type":"ImageObject","url":"https://vshealthbenefits.com/favicon.png","width":512,"height":512},"telephone":"+1-954-825-1009","email":"info@vshealthbenefits.com","areaServed":[{"@type":"State","name":"Florida"},{"@type":"Country","name":"United States"}],"address":{"@type":"PostalAddress","addressLocality":"Miami","addressRegion":"FL","addressCountry":"US"},"sameAs":["https://www.linkedin.com/company/vsbenefits/","https://www.instagram.com/vshealthbenefits","https://www.facebook.com/profile.php?id=61588058885222","https://www.tiktok.com/@vshealthbenefits",
     "https://www.chamberofcommerce.com/business-directory/florida/carol-city/health-insurance-agency/2034499618-vs-health-benefits"],"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"08:00","closes":"18:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Saturday","Sunday"],"opens":"08:00","closes":"13:00"}]}
 </script>
-<style id="carrier-logo-css">.carriers .carrier img{max-height:32px;max-width:122px;width:auto;height:auto;object-fit:contain;display:block}.carriers .carrier:has(img){opacity:1}</style>
+<style id="carrier-logo-css">.carriers .carrier img{max-height:32px;max-width:122px;width:auto;height:auto;object-fit:contain;display:block}.carriers .carrier:has(img){opacity:1}.carriers .carrier-item img{max-height:32px;max-width:122px;width:auto;height:auto;object-fit:contain;display:block}.carriers .carrier-item:has(img){opacity:1}.carriers .carrier-item{display:flex;align-items:center;height:40px}</style>
 <style id="vs-rg-style">
 .vs-related-guides{background:#f7faff;border-top:1px solid #e4e9f2;padding:44px 0}
 .vs-related-guides .vs-rg-inner{width:100%;max-width:1160px;margin:0 auto;padding:0 18px}
@@ -308,6 +308,46 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 }
 </style>
 <style id="vs-nav-center">@media (min-width:960px){header nav.nav-links{flex:1 1 auto;margin-left:28px}header nav.nav-links::before{content:"";margin-left:auto}header nav.nav-links>a.nav-cta{margin-left:auto;width:auto;flex:0 0 auto}}@media (min-width:1200px){header nav.nav-links>:nth-last-child(2){margin-right:98px}}</style>
+<style id="cvh-css">
+/* Coverage hero, same look as the small business hero (2026-11-03) */
+.sb-hero{background:#faf8f5;padding:32px 0 0;overflow:hidden;position:relative}
+.sb-hero .hero-grid{display:grid;grid-template-columns:1fr;gap:12px;align-items:center}
+.sb-hero h1{color:#0b2346;font-size:clamp(2rem,4vw,2.75rem);line-height:1.08;margin-bottom:12px}
+.sb-hero h1 span{background:linear-gradient(90deg,#16447f,#0db5a6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sb-hero .eyebrow{background:#fff;border:1px solid #dbe7f7}
+.sb-sub{font-size:1.08rem;line-height:1.55;color:#334155;max-width:500px;margin:0 0 16px}
+.sbz{max-width:470px;margin:0 0 16px}
+.sbz label{display:block;font-weight:700;font-size:.92rem;color:#0b2346;margin:0 0 8px}
+.sbz-row{display:flex;gap:8px;background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;padding:6px;box-shadow:0 10px 28px rgba(13,27,42,.08);transition:border-color .2s,box-shadow .2s}
+.sbz-row:focus-within{border-color:#0db5a6;box-shadow:0 10px 28px rgba(13,181,166,.18)}
+.sbz-row input{flex:1 1 0;width:0;min-width:0;border:0;outline:0;font:inherit;font-size:1.1rem;font-weight:600;letter-spacing:.06em;padding:10px 12px;color:#0b2346;background:transparent}
+.sbz-row button{flex-shrink:0;border:0;border-radius:10px;background:#1f6fe5;color:#fff;font:inherit;font-weight:700;font-size:1rem;padding:12px 20px;cursor:pointer;white-space:nowrap;box-shadow:0 10px 24px -10px rgba(31,111,229,.65)}
+.sbz-row button:hover{background:#1559c2}
+.sbz-err{color:#b42318;font-size:.86rem;margin:8px 0 0}
+.sb-rating{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.92rem;color:#475569;text-decoration:none}
+.sb-rating .st{color:#f5a400;letter-spacing:1px}
+.sb-rating svg{background:#fff;border-radius:50%;padding:3px;width:24px;height:24px;flex-shrink:0;box-shadow:0 1px 4px rgba(13,27,42,.15)}
+.sb-img{position:relative;width:min(300px,78%);margin:14px auto 0;align-self:end}
+.sb-img img{position:relative;z-index:1;display:block;width:100%;height:auto;aspect-ratio:522/600;object-fit:cover;object-position:top}
+.sb-ribbon{position:absolute;z-index:0;left:-38%;top:-4%;width:176%;height:auto;pointer-events:none;overflow:visible}
+.sb-chip{position:absolute;z-index:2;background:#fff;border-radius:14px;padding:10px 14px;box-shadow:0 14px 30px -12px rgba(11,35,70,.35);font-size:.82rem;font-weight:700;color:#0b2346;line-height:1.25;display:flex;align-items:center;gap:10px}
+.sb-chip b{display:block;font-size:1.1rem;color:#0b7f74}
+.sb-chip i{font-style:normal;width:34px;height:34px;border-radius:10px;background:#e6f7f5;color:#0b7f74;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-chip.c1{left:-8%;top:38%}.sb-chip.c2{right:-6%;top:12%}
+@media(min-width:900px){
+ .sb-hero{padding-top:40px}
+ .sb-hero .hero-grid{grid-template-columns:1.1fr .9fr;gap:24px}
+ .sb-hero .hero-grid>div:first-child{padding-bottom:36px}
+ .sb-img{width:min(320px,100%);margin:0 auto}
+ .sb-hero .sb-img img{aspect-ratio:522/560}
+ .sb-ribbon{left:-6%;width:140%;top:-8%}
+}
+@media(max-width:899px){.sb-hero .hero-grid>div:first-child{position:relative;z-index:3}.sb-img{padding-top:10px}.sb-hero .sb-img{width:min(230px,62%);margin-top:6px}.sb-hero .sb-img img{aspect-ratio:522/500}.sb-chip{display:none}.sb-ribbon{left:-50%;width:200%;top:2%;overflow:hidden}.sb-chip.c1{left:2%}.sb-chip.c2{right:2%}}
+@media(max-width:480px){.sbz-row button{padding:12px 14px;font-size:.95rem}.sb-rating{display:flex;justify-content:center;font-size:.85rem}.sb-rating .fr{display:none}.sb-chip{font-size:.74rem;padding:8px 10px}.sb-chip b{font-size:.98rem}.sb-chip i{width:28px;height:28px}}
+.cvh .sb-img img{aspect-ratio:auto!important;object-fit:contain}
+@media(min-width:900px){.cvh .sb-img{width:min(460px,100%)}.cvh .sb-img.wide{width:min(600px,100%)}.cvh .sb-img.wide .sb-ribbon{left:2%;width:104%;top:-58%}.cvh .sb-img.wide .sb-chip.c2{top:-14%;right:2%}.cvh .sb-img.wide .sb-chip.c1{top:auto;bottom:10%;left:-9%}}
+@media(max-width:899px){.cvh .sb-hero .sb-img,.cvh.sb-hero .sb-img{width:min(320px,84%)}}
+</style><style id="vs-float-anim">/* Hero info boxes gently float up and down (2026-11-04). Uses the `translate` property so it never fights a box's own transform; turned off for visitors who ask for less motion. */@keyframes vsFloat{0%,100%{translate:0 0}50%{translate:0 -9px}}.sb-chip,.chip.c1,.chip.c2,.tqx-chip,.tp-float{animation:vsFloat 4.8s ease-in-out infinite}.sb-chip.c2,.chip.c2,.tqx-chip.c2,.tp-float-b{animation-delay:-2.4s;animation-duration:5.4s}@media (prefers-reduced-motion:reduce){.sb-chip,.chip.c1,.chip.c2,.tqx-chip,.tp-float{animation:none}}</style>
 </head>
 <body>
 <div id="sb"></div>
@@ -324,26 +364,26 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
   </div>
 </header>
 
-<section class="hero">
+<section class="hero sb-hero cvh" aria-labelledby="cvh-h1">
   <div class="container">
     <div class="hero-grid">
       <div>
         <span class="eyebrow">PPO and Private Health Insurance Plans</span>
-        <h1>PPO Health Insurance Plans <span>With No Referrals Required</span></h1>
-        <p style="font-size:1.05rem;color:var(--ink-2);margin-bottom:24px">A PPO lets you see any doctor or specialist with no referral, and covers you out of network too. That flexibility usually costs more per month than an HMO. We compare PPO plans from every major carrier and we are licensed in 40+ states, so you see your real price wherever you live.</p>
-        <div class="hero-ctas">
-          <a class="btn btn-primary" href="#quote">Compare PPO Plans Free</a>
-          <a href="tel:+19548251009" class="btn btn-secondary">Call an Advisor</a>
-        </div>
-        <div class="hero-meta">
-          <span><span class="dot"></span>No referrals required</span>
-          <span><span class="dot"></span>Out-of-network coverage included</span>
-          <span><span class="dot"></span>100% free comparison</span>
-        </div>
+        <h1 id="cvh-h1">PPO Health Insurance Plans <span>With No Referrals Required</span></h1>
+        <p class="sb-sub">See any doctor or specialist with no referral, with out-of-network coverage too. We compare PPO plans from every major carrier in 40+ states, free.</p>
+        <form class="sbz" action="/quote" method="get" novalidate onsubmit="var z=this.zip.value.replace(/\D/g,'');var e=this.querySelector('.sbz-err');if(z.length!==5){e.hidden=false;this.zip.focus();return false}e.hidden=true;this.zip.value=z;">
+          <input type="hidden" name="type" value="individual" /><input type="hidden" name="niche" value="ppo" /><input type="hidden" name="from" value="ppo-health-insurance_zip" />
+          <label for="cvh-zip">Enter your ZIP code to compare</label>
+          <div class="sbz-row"><input id="cvh-zip" name="zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="ZIP code" autocomplete="postal-code" required /><button type="submit">Compare PPO Plans</button></div>
+          <p class="sbz-err" role="alert" hidden>Please enter a valid 5-digit ZIP code.</p>
+        </form>
+        <a class="sb-rating" href="/#reviews-anchor" aria-label="Rated 5.0 out of 5 from 53 Google reviews"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg><span class="st" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 5.0 from 53 Google reviews<span class="fr"> &middot; Free, no obligation</span></a>
       </div>
-      <div class="hero-photo">
-        <img decoding="async" srcset="/compressed/eyedoctor-900.jpg 900w, /compressed/eyedoctor.jpg 1200w" sizes="(max-width: 900px) 100vw, 1200px" src="/compressed/eyedoctor.jpg" alt="PPO private health insurance flexible doctor choice" loading="eager" />
-        <div class="photo-badge"><span>$0</span>Cost to compare</div>
+      <div class="sb-img">
+        <svg class="sb-ribbon" viewBox="0 0 600 700" aria-hidden="true" focusable="false"><defs><linearGradient id="cvg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16447f"/><stop offset=".55" stop-color="#1f6fe5"/><stop offset="1" stop-color="#0db5a6"/></linearGradient></defs><path d="M120 -120 C 40 120, 80 300, 300 330 C 500 358, 640 420, 560 820" fill="none" stroke="url(#cvg1)" stroke-width="84" stroke-linecap="round"/><path d="M50 -120 C -30 160, 20 360, 270 400" fill="none" stroke="#0db5a6" stroke-opacity=".35" stroke-width="14" stroke-linecap="round"/></svg>
+        <img decoding="async" fetchpriority="high" srcset="/compressed/private-market-cutout-480.webp 480w, /compressed/private-market-cutout.webp 673w" sizes="(max-width: 900px) 320px, 460px" src="/compressed/private-market-cutout.webp" width="673" height="692" alt="Smiling family of three hugging outdoors" loading="eager" />
+        <div class="sb-chip c1"><i><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></i><span><b>No</b>referrals</span></div>
+        <div class="sb-chip c2"><i><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 14s1.5 2 4 2 4-2 4-2"/><circle cx="12" cy="12" r="9"/><path d="M9 9h.01M15 9h.01"/></svg></i><span><b>$0</b>to compare</span></div>
       </div>
     </div>
   </div>

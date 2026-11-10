@@ -16,6 +16,9 @@
 //   FROM_EMAIL                  optional, default "VS Health Benefits <quotes@vshealthbenefits.com>"
 //   REPLY_TO_EMAIL              optional, default the notify address below
 //   NOTIFY_EMAIL                optional, where lead/census alerts go. Default info@vshealthbenefits.com
+//   NOTIFY_SMS                  optional, Bradley's cell (e.g. 3055551234). When set, new website
+//                               leads are also texted to it from the GoHighLevel number. If missing,
+//                               text alerts are skipped (no crash).
 //   SITE_URL                    optional, default https://www.vshealthbenefits.com
 
 const GHL_BASE = "https://services.leadconnectorhq.com";
@@ -164,6 +167,38 @@ async function sendEmail({ to, subject, html, replyTo }) {
     });
     const json = await r.json().catch(() => null);
     return { ok: r.ok, status: r.status, json };
+  } catch (e) {
+    return { ok: false, error: String((e && e.message) || e) };
+  }
+}
+
+// ---------- Text alert to Bradley (via GoHighLevel SMS) ----------
+// GHL can only text a contact, so Bradley's own cell is kept as one internal
+// contact tagged "internal-alerts". lead-sync skips that tag so it never shows
+// up as a lead on the board.
+const ALERT_TAG = "internal-alerts";
+function alertPhone() {
+  const raw = String(process.env.NOTIFY_SMS || "").replace(/[^\d+]/g, "");
+  if (!raw) return "";
+  if (raw[0] === "+") return raw;
+  if (raw.length === 10) return "+1" + raw;
+  if (raw.length === 11 && raw[0] === "1") return "+" + raw;
+  return "";
+}
+async function sendAlertSms(text) {
+  const to = alertPhone();
+  if (!to) return { ok: false, skipped: "no_notify_sms" };
+  try {
+    const up = await ghl("/contacts/upsert", "POST", {
+      locationId: GHL_LOCATION, phone: to,
+      firstName: "Lead Alerts", lastName: "(Bradley)", tags: [ALERT_TAG],
+    });
+    const c = up.json && (up.json.contact || up.json.data || up.json);
+    if (!up.ok || !c || !c.id) return { ok: false, skipped: "no_alert_contact", status: up.status };
+    const r = await ghl("/conversations/messages", "POST", {
+      type: "SMS", contactId: c.id, message: String(text || "").slice(0, 600),
+    });
+    return { ok: r.ok, status: r.status };
   } catch (e) {
     return { ok: false, error: String((e && e.message) || e) };
   }
@@ -625,7 +660,7 @@ async function guardBanned(req, res, d, opts) {
 }
 
 module.exports = {
-  CFG, esc, ghl, clientIp, geoHeader, visitorMeta, upsertContact, addNoteToContact, addTagsToContact, uploadFile, sendEmail,
+  CFG, esc, ghl, sendAlertSms, alertPhone, ALERT_TAG, clientIp, geoHeader, visitorMeta, upsertContact, addNoteToContact, addTagsToContact, uploadFile, sendEmail,
   shell, btn, businessLeadEmail, bizAlertEmail,
   BUSINESS_TAGS, normTags, isBusinessLead,
   junkSignals, junkPhone, autoBlockVisitor, ipKeyCjs,
