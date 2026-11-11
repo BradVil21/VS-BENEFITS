@@ -11845,7 +11845,7 @@ try{(function(){
     setArr(K.ushaOv,arr,true);if(sv==="paid"){try{syncActiveClients();}catch(e){}}render();try{renderClientTable();}catch(e){}
     try{if($("p-bonus").classList.contains("active"))bonusCalc();if($("p-winback").classList.contains("active"))bonusCalc("wb");}catch(e){}
   }
-  var OPTS=[["pending","Pending - checking if they paid"],["paid","They paid - mark in force (Sold, sends to GHL)"],["nottaken","Not taken"],["hide","Remove from this list"],["","Clear my update"]];
+  var OPTS=[["pending","Pending - checking if they paid"],["paid","They paid - mark in force (updates client file only)"],["nottaken","Not taken"],["hide","Remove from this list"],["","Clear my update"]];
   function openOvMenu(btn,app){
     document.querySelectorAll(".ap-ovm").forEach(function(m){m.remove();});
     var m=document.createElement("div");m.className="ap-ovm";
@@ -11858,7 +11858,7 @@ try{(function(){
       if(/^m:/.test(v)){manualAct(app,v);return;}
       if(v==="g:send"){var r=sendSold(app.name,{product:app.product,prem:app.prem,eff:app.eff,state:app.state,id:app.ids[0]});flash(nice(app.name)+(r==="sent"?" marked Sold and sent to GoHighLevel.":" is already in GoHighLevel."));render();return;}
       setOv(app,v);
-      if(v==="paid"){var r2=sendSold(app.name,{product:app.product,prem:app.prem,eff:app.eff,state:app.state,id:app.ids[0]});if(r2==="sent")flash(nice(app.name)+" is in force, marked Sold and sent to GoHighLevel.");}});
+      if(v==="paid"){flash(nice(app.name)+" is in force. Client file updated (nothing sent to GoHighLevel).");}});
     setTimeout(function(){document.addEventListener("click",function h(e){if(!m.contains(e.target)){m.remove();document.removeEventListener("click",h,true);}},true);},0);
   }
   var APPIDX={};
