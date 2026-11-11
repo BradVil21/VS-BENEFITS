@@ -58,7 +58,7 @@
         '<div id="vsvd-body">' +
           '<h2 id="vsvd-title">Happy Veterans Day &#127482;&#127480;</h2>' +
           '<p>Thank you to every veteran and their family for your service and sacrifice. From all of us at VS Health Benefits.</p>' +
-          '<a id="vsvd-cta" href="tel:' + PHONE + '">Call us: ' + PHONE_LABEL + '</a>' +
+          '<a id="vsvd-cta" href="tel:' + PHONE + '">Contact an Advisor</a>' +
         '</div>' +
       '</div>';
     document.body.appendChild(overlay);
