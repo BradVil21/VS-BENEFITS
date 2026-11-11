@@ -279,3 +279,12 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && sov && sov.classList.contains('open')) closeSt(); });
   [].forEach.call(document.querySelectorAll('.vsa-menu .vsa-h'), function (h) { if (/truck driver/i.test(h.textContent)) h.textContent = 'Choose your state'; else if (/camioneros/i.test(h.textContent)) h.textContent = 'Elija su estado'; });
 })();
+
+/* Veterans Day pop-up loader: pulls in /vs-veterans-day.js only on Nov 11
+   (or with ?vetday-preview=1). See vs-veterans-day.js for details. */
+(function () {
+  var d = new Date(), pv = /[?&]vetday-preview=1/.test(location.search);
+  if (!pv && !(d.getMonth() === 10 && d.getDate() === 11)) return;
+  try { if (!pv && localStorage.getItem('vsHealthVetDayClosed') === String(d.getFullYear())) return; } catch (e) {}
+  var s = document.createElement('script'); s.src = '/vs-veterans-day.js'; s.async = true; document.head.appendChild(s);
+})();
