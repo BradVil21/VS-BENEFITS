@@ -263,6 +263,27 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 @media(max-width:420px){.vs-bq button{flex:1 1 100%}}
 </style>
 <style id="vs-nav-center">@media (min-width:900px){header nav.nav-links{flex:1 1 auto;margin-left:28px}header nav.nav-links::before{content:"";margin-left:auto}header nav.nav-links>a.nav-cta{margin-left:auto;width:auto;flex:0 0 auto}}@media (min-width:1200px){header nav.nav-links>:nth-last-child(2){margin-right:98px}}</style>
+<style id="vsz-css">
+.vsz{margin:22px 0 26px;width:100%;max-width:480px;min-width:0;box-sizing:border-box}
+.vsz-rating{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #e4e9f2;border-radius:999px;padding:7px 14px;font-size:.88rem;line-height:1.2;color:#0d1b2a;text-decoration:none;box-shadow:0 2px 10px rgba(13,27,42,.06)}
+.vsz-rating:hover{text-decoration:none;color:#0d1b2a}
+.vsz-stars{color:#f5b400;letter-spacing:1px;font-size:.95rem}
+.vsz-rc{color:#5b6b7f}
+.vsz-label{display:block;margin:18px 0 10px;font-weight:700;font-size:.92rem;line-height:1.4;color:#0d1b2a}
+.vsz-row{display:flex;gap:8px;background:#fff;border:1.5px solid #e4e9f2;border-radius:14px;padding:6px;box-shadow:0 10px 28px rgba(13,27,42,.08);transition:border-color .2s,box-shadow .2s}
+.vsz-row:focus-within{border-color:#0db5a6;box-shadow:0 10px 28px rgba(13,181,166,.18)}
+.vsz-row input{flex:1 1 0;width:0;min-width:0;min-height:0;margin:0;border:0;outline:0;box-shadow:none;font:inherit;font-size:1.05rem;font-weight:600;letter-spacing:.08em;padding:10px 12px;color:#0d1b2a;background:transparent}
+.vsz-row input::placeholder{letter-spacing:0;font-weight:500;color:#6b7a8d}
+.vsz-btn{flex:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;margin:0;padding:12px 18px;border:0;border-radius:10px;background:#16447f;color:#fff;font:inherit;font-size:.98rem;font-weight:700;line-height:1;cursor:pointer;transition:background .15s}
+.vsz-btn:hover{background:#1e5ab0}
+.vsz-err{color:#c0392b;font-size:.85rem;margin:8px 0 0}
+.vsz.has-err .vsz-row{border-color:#c0392b}
+.vsz--dark .vsz-label{color:#fff}
+.vsz--dark .vsz-row{border-color:transparent}
+.vsz--dark .vsz-err{color:#ffd9d3}
+.vsz--dark.has-err .vsz-row{border-color:#ff8a7a}
+@media(max-width:420px){.vsz-btn{padding:12px 13px;font-size:.92rem}.vsz-row input{letter-spacing:.04em}}
+</style>
 </head>
 <body>
 <style id="vs-topbar-css">.vs-topbar{background:#0b2346;color:#fff;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.8rem;font-weight:600;line-height:1.2}.vs-topbar-in{max-width:1360px;margin:0 auto;padding:8px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}.vs-topbar a{color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}.vs-topbar a:hover{text-decoration:underline;text-underline-offset:3px}.vs-tb-l{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.9);white-space:nowrap}.vs-tb-r{display:flex;align-items:center;gap:22px}.vs-topbar svg{flex-shrink:0;color:#5eead4}@media(max-width:639px){.vs-topbar-in{padding:7px 14px;justify-content:center;gap:14px}.vs-tb-r{gap:14px}.vs-tb-mail span{display:none}}@media(max-width:359px){.vs-tb-l{display:none}}</style><div class="vs-topbar"><div class="vs-topbar-in"><span class="vs-tb-l"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Licensed in 40+ States</span><span class="vs-tb-r"><a href="tel:+19548251009"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>(954) 825-1009</a><a class="vs-tb-mail" href="mailto:info@vshealthbenefits.com" aria-label="Email info@vshealthbenefits.com"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>info@vshealthbenefits.com</span></a></span></div></div>
@@ -301,6 +322,12 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <h1 itemprop="headline">Health Insurance for Company Truck Drivers When Your Carrier Offers Nothing</h1>
 <p class="lede">You drive on a W-2, you show up every week, and your carrier still hands you zero benefits. That is the reality for thousands of company drivers at small fleets across the country. This guide explains why it happens, why you do not need an employer to get real coverage, and how to get insured this week without overpaying.</p>
       <p class="vs-series" style="font-size:.92rem;color:var(--muted);margin-top:-6px">Part of our complete guide to <a href="/truck-driver-health-insurance">health insurance for truck drivers</a>, which compares every option for company drivers, owner-operators and OTR drivers.</p>
+<form class="vsz" action="/trucking-health-quote" method="get" novalidate data-type="individual" data-dest="/trucking-health-quote" data-from="company-truck-driver-health-insurance_zip">
+  <a class="vsz-rating" href="/#reviews-anchor" aria-label="Rated 5.0 out of 5 from 53 Google reviews"><span class="vsz-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><strong>5.0</strong><span class="vsz-rc">from 53 Google reviews</span></a>
+  <label class="vsz-label" for="vsz-in-company-truck-driver-health-insurance">Company driver with no benefits? See your price. Start with your ZIP:</label>
+  <div class="vsz-row"><input id="vsz-in-company-truck-driver-health-insurance" name="zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="ZIP code" autocomplete="postal-code" required /><button type="submit" class="vsz-btn">Find Affordable Plans</button></div>
+  <p class="vsz-err" role="alert" hidden>Please enter a valid 5-digit ZIP code.</p>
+</form>
 <div class="hero-img"><picture><source type="image/webp" srcset="/compressed/truck1-640.webp 640w, /compressed/truck1-900.webp 900w, /compressed/truck1.webp 1600w" sizes="(max-width: 800px) 100vw, 760px"><img decoding="async" fetchpriority="high" src="/compressed/truck1-900.jpg" alt="View of the open road from a truck cab" width="1200" height="525" itemprop="image" /></picture></div>
 <div class="alert-box"><div class="icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg></div><div><strong style="color:var(--ink)">The short version</strong><br><span style="color:var(--ink-2);font-size:.93rem">Most small carriers are not legally required to offer health insurance. As a W-2 driver you can buy your own plan through the marketplace, and subsidies based on your wages often cut the price far below what drivers expect. If you just lost coverage or your company plan costs too much, you may be able to enroll right now.</span></div></div>
 <div id="vs-calc-cta" style="max-width:760px;margin:22px auto;padding:0 16px;box-sizing:border-box"><div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;background:linear-gradient(135deg,#f4f8fe,#e0f7f5);border:1px solid #cfe3f5;border-left:4px solid #0db5a6;border-radius:14px;padding:16px 18px;font-family:Inter,system-ui,-apple-system,sans-serif"><div style="flex:1 1 280px;min-width:0"><div style="font-weight:800;color:#0b2346;font-size:1.02rem;line-height:1.3">See your 2027 price in 60 seconds</div><div style="color:#334155;font-size:.9rem;line-height:1.5;margin-top:3px">Enter your ZIP, household and income. Our free calculator shows your ACA subsidy and what you would actually pay each month.</div></div><a href="/aca-subsidy-calculator" style="flex:0 0 auto;background:#16447f;color:#fff;font-weight:700;font-size:.92rem;padding:11px 18px;border-radius:999px;text-decoration:none;white-space:nowrap">Estimate my price &rarr;</a></div></div>
@@ -621,5 +648,23 @@ if(ans){nav.style.maxWidth="820px";nav.style.margin="0 auto 28px";var w=document
 else hs[0].parentNode.insertBefore(nav,hs[0]);
 }catch(e){}})();</script>
 <script src="/vs-search.js" defer></script>
+<script id="vsz-js">
+(function(){
+  var forms=document.querySelectorAll('form.vsz'); if(!forms.length) return;
+  function carry(){var o=new URLSearchParams(),c=new URLSearchParams(location.search);c.forEach(function(v,k){if(/^(utm_|gclid|gbraid|wbraid|fbclid|msclkid)/i.test(k))o.set(k,v);});return o;}
+  [].forEach.call(forms,function(form){
+    var input=form.querySelector('input'),err=form.querySelector('.vsz-err');
+    function ok(){return /^\d{5}$/.test(input.value.trim());}
+    input.addEventListener('input',function(){input.value=input.value.replace(/\D/g,'').slice(0,5);if(ok()){err.hidden=true;form.classList.remove('has-err');}});
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      if(!ok()){err.hidden=false;form.classList.add('has-err');input.focus();return;}
+      var q=carry();q.set('zip',input.value.trim());if(form.dataset.type)q.set('type',form.dataset.type);q.set('from',form.dataset.from||'niche_zip');
+      try{if(typeof gtag==='function')gtag('event','zip_quote_start',{zip_prefix:input.value.slice(0,3),page:location.pathname});}catch(_){}
+      location.href=(form.dataset.dest||'/trucking-health-quote')+'?'+q.toString();
+    });
+  });
+})();
+</script>
 </body>
 </html>
