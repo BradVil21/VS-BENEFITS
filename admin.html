@@ -13048,6 +13048,359 @@ try{(function(){
   acctLabel();fit();setTimeout(acctLabel,700);setTimeout(acctLabel,2000);setTimeout(fit,700);setTimeout(fit,2000);window.addEventListener("resize",fit);
 }catch(err){if(window.console)console.warn("sidenav init failed",err);}})();
 
+/* moved inside the main module so it can reach getLeads, czPipeResults, switchTab etc. */
+/* ═══ pipe-cards v2 (2026-11-12) ══════════════════════════════════════════
+   1. Cleaner pipeline cards. The "Dates & stage" drop-down (Follow up / Appt
+      date fields + stage select) is gone; stage still changes by drag or from
+      the popup.
+   2. Clicking a card opens a summary popup (stage chip, contact, dates, value,
+      latest note, tags). "Edit" (pencil) opens the full edit form as before.
+   3. "+ Closing" on every card (and every Business Leads row) puts the deal on
+      the Closing List. Flag: rec.onClosing (true/false), saved on the record.
+   Wraps czPipeResults last, so if anything here fails the board still renders. */
+(function(){try{
+  var $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
+  function tc(s){s=String(s||"");return s===s.toUpperCase()||s===s.toLowerCase()?s.toLowerCase().replace(/(^|[\s\-'])([a-z])/g,function(m,p,c){return p+c.toUpperCase();}):s;}
+  function phoneFmt(p){var d=String(p||"").replace(/\D/g,"").slice(-10);return d.length===10?"("+d.slice(0,3)+") "+d.slice(3,6)+"-"+d.slice(6):String(p||"");}
+  function svg(p){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';}
+  var I={
+    cal:svg('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'),
+    clock:svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+    phone:svg('<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>'),
+    mail:svg('<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>'),
+    pin:svg('<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>'),
+    users:svg('<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>'),
+    dollar:svg('<path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>'),
+    list:svg('<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>'),
+    tag:svg('<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><circle cx="7" cy="7" r="1.5"/>'),
+    edit:svg('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
+    flame:svg('<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.1-.2-4 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>'),
+    x:svg('<path d="M18 6 6 18M6 6l12 12"/>'),
+    msg:svg('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>')
+  };
+  function lead(id){return (getLeads()||[]).filter(function(x){return x.id===id;})[0];}
+  function biz(id){return (getBizLeads()||[]).filter(function(x){return x.id===id;})[0];}
+  function toggleClosing(kind,id){
+    var arr=kind==="biz"?getBizLeads():getLeads(),on=false;
+    arr.forEach(function(x){if(x.id===id){x.onClosing=!x.onClosing;on=x.onClosing;if(!on){x.closePin=false;}x.updated=Date.now();}});
+    setArr(kind==="biz"?K.bizLeads:K.leads,arr,true);
+    try{if(typeof window.vsRenderClosing==="function")window.vsRenderClosing();}catch(e){}
+    try{if(typeof window.vsClosingBadge==="function")window.vsClosingBadge();}catch(e){}
+    return on;
+  }
+  window.vsToggleClosing=toggleClosing;
+  function closeBtnHtml(kind,id,on){return '<button type="button" class="pc-cl'+(on?" on":"")+'" data-pc-closing="'+esc(id)+'" data-pc-kind="'+kind+'" title="'+(on?"On your Closing List. Click to remove.":"Add to your Closing List")+'">'+I.flame+'<span>'+(on?"Closing":"+ Closing")+'</span></button>';}
+  function cameIn(c){var ms=Number(c.created)||0,d=ms?new Date(ms):(c.createdAt?new Date(c.createdAt):null);if(!d||isNaN(d))return "";
+    return d.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})+(ms||/T\d/.test(c.createdAt||"")?" · "+d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"}):"");}
+
+  /* ---- card decoration ---- */
+  function decorate(){
+    var box=$("cz-pipe-results");if(!box)return;
+    var map={};getLeads().forEach(function(c){map[c.id]=c;});
+    box.querySelectorAll(".cz-card[data-cz-card]").forEach(function(card){
+      var c=map[card.getAttribute("data-cz-card")];if(!c)return;
+      card.classList.add("pc-card");
+      /* drop Dates & stage (Follow up + Appt fields, stage select) */
+      var more=card.querySelector("[data-od-more]"),host=more?more.parentNode:null;
+      if(more)more.remove();
+      card.querySelectorAll(".cz-dates,.cz-cctl").forEach(function(e){e.remove();});
+      card.classList.remove("open");
+      /* clock emoji -> icon */
+      card.querySelectorAll(".od-cin").forEach(function(e){if(e.querySelector("svg"))return;e.innerHTML=I.clock+'<span>'+esc(e.textContent.replace(/^\s*🕒\s*/,""))+'</span>';});
+      /* phone line gets an icon */
+      var first=card.querySelector(".cz-ctop + .cz-sub, .cz-ctop ~ .cz-sub");
+      if(first&&!first.classList.contains("od-cin")&&!first.querySelector("svg")&&(c.phone||c.email)&&first.textContent.trim()===(c.phone||c.email)){first.classList.add("pc-line");first.innerHTML=(c.phone?I.phone:I.mail)+'<span>'+esc(c.phone?phoneFmt(c.phone):c.email)+'</span>';}
+      /* actions row */
+      if(!host){host=document.createElement("div");card.appendChild(host);}
+      host.classList.add("pc-acts");
+      if(c.stage!=="sold"&&c.stage!=="dead"&&!host.querySelector("[data-pc-closing]"))host.insertAdjacentHTML("afterbegin",closeBtnHtml("ind",c.id,!!c.onClosing));
+      if(c.onClosing)card.classList.add("pc-on");else card.classList.remove("pc-on");
+    });
+  }
+
+  /* ---- summary popup ---- */
+  function row(icon,html){return html?'<div class="pv-row"><span class="pv-ic">'+icon+'</span><div>'+html+'</div></div>':'';}
+  function chip(txt,style){return '<span class="pv-chip"'+(style?' style="'+style+'"':'')+'>'+esc(txt)+'</span>';}
+  function openView(id){
+    var c=lead(id);if(!c)return;closeView();
+    var meta=(czMETA&&czMETA[c.stage])||{label:c.stage||"",color:"#64748b"};
+    var fu=typeof czFU==="function"?czFU(c):{key:"none"};
+    var appt=c.apptDate?new Date(c.apptDate):null;
+    var when=appt&&!isNaN(appt)?'<b>Appointment</b> '+esc(appt.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})+" · "+appt.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"})):'<b>Came in</b> '+esc(cameIn(c)||"-");
+    var tel=c.phone?String(c.phone).replace(/[^0-9+]/g,""):"";
+    var contact=[c.phone?'<a href="tel:'+esc(tel)+'">'+esc(phoneFmt(c.phone))+'</a>':"",c.email?'<a href="mailto:'+esc(c.email)+'">'+esc(c.email)+'</a>':""].filter(Boolean).join(' <span class="pv-sep">•</span> ');
+    var place=[tc(c.city),c.state,c.zipCode||c.zipcode].filter(Boolean).join(", ");
+    var hh=[c.dob?"DOB "+esc(c.dob):"",c.household?esc(c.household)+" in household":"",c.income?"Income "+esc(c.income):"",c.coverage?esc(c.coverage):""].filter(Boolean).join(' <span class="pv-sep">•</span> ');
+    var val=typeof czVal==="function"?czVal(c):0;
+    var note=String(c.notes||"").trim().split(/\n+/)[0]||"";
+    var fuTxt=fu.key&&fu.key!=="none"?esc(fu.label)+(c.followUpDue?" · due "+esc(new Date(c.followUpDue+"T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"})):""):"";
+    var tags=[c.source?chip(typeof czSourceLabel==="function"?czSourceLabel(c.source):c.source):"",c.state?chip(c.state):"",c.onClosing?chip("Closing List","background:#fff1e6;color:#c2410c"):"",c.reworkedAt?chip("Reworked"):""].join("");
+    var opts=(czSTAGES||[]).map(function(s){return '<option value="'+s.id+'"'+(s.id===c.stage?" selected":"")+'>'+esc(s.label)+'</option>';}).join("");
+    var ov=document.createElement("div");ov.className="pv-ov";ov.id="pv-ov";
+    ov.innerHTML='<div class="pv" role="dialog" aria-label="'+esc(czName(c))+'">'
+      +'<div class="pv-hd"><div class="pv-ttl"><div class="pv-nmrow"><h3>'+esc(tc(czName(c)))+'</h3><span class="pv-stage" style="background:'+meta.color+'1a;color:'+meta.color+';border-color:'+meta.color+'55">'+esc(meta.label)+'</span></div>'
+      +'<p>'+esc([c.source?(typeof czSourceLabel==="function"?czSourceLabel(c.source):c.source):"",place].filter(Boolean).join(" · ")||"Lead")+'</p></div>'
+      +'<div class="pv-hbtns"><button type="button" class="pv-edit" data-pv-edit>'+I.edit+'<span>Edit</span></button><button type="button" class="pv-x" data-pv-close aria-label="Close">'+I.x+'</button></div></div>'
+      +'<div class="pv-body">'
+      +row(I.cal,when)+row(I.phone,contact)+row(I.pin,esc(place))+row(I.users,hh)
+      +row(I.dollar,val>0?'<b>'+esc(money(val))+'</b>/mo quoted':'')
+      +row(I.clock,fuTxt?'<b>Follow-up</b> '+fuTxt:'')
+      +row(I.list,note?esc(note.length>160?note.slice(0,157)+"…":note):'')
+      +(tags.replace(/\s/g,"")?'<div class="pv-row"><span class="pv-ic">'+I.tag+'</span><div class="pv-tags">'+tags+'</div></div>':'')
+      +'</div>'
+      +'<div class="pv-ft"><div class="pv-acts">'+(tel?'<a class="pv-b" href="tel:'+esc(tel)+'">'+I.phone+'Call</a><a class="pv-b" href="sms:'+esc(tel)+'">'+I.msg+'Text</a>':'')+(c.email?'<a class="pv-b" href="mailto:'+esc(c.email)+'">'+I.mail+'Email</a>':'')
+      +(c.stage!=="sold"&&c.stage!=="dead"?closeBtnHtml("ind",c.id,!!c.onClosing).replace('class="pc-cl','class="pv-b pc-cl'):'')+'</div>'
+      +'<label class="pv-stsel"><span>Stage</span><select data-pv-stage>'+opts+'</select></label></div></div>';
+    document.body.appendChild(ov);
+    ov.addEventListener("click",function(e){if(e.target===ov||e.target.closest("[data-pv-close]"))closeView();});
+    ov.querySelector("[data-pv-edit]").addEventListener("click",function(){closeView();var x=lead(id);if(x)czOpenModal(x);});
+    var sel=ov.querySelector("[data-pv-stage]");sel.addEventListener("change",function(){czSetStage(id,sel.value);openView(id);});
+    var cb=ov.querySelector("[data-pc-closing]");if(cb)cb.addEventListener("click",function(){toggleClosing("ind",id);try{czPipeResults();}catch(e){}openView(id);});
+  }
+  function closeView(){var o=$("pv-ov");if(o)o.remove();}
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")closeView();});
+
+  /* card click -> popup (capture phase, so the old "open edit form" handler never runs) */
+  document.addEventListener("click",function(e){
+    var b=e.target.closest&&e.target.closest("#cz-pipe-results [data-pc-closing]");
+    if(b){e.preventDefault();e.stopPropagation();toggleClosing("ind",b.getAttribute("data-pc-closing"));try{czPipeResults();}catch(_){}return;}
+    var card=e.target.closest&&e.target.closest("#cz-pipe-results .cz-card[data-cz-card]");
+    if(!card||e.target.closest("select,button,a,input,option,label"))return;
+    if(typeof czDragging!=="undefined"&&czDragging)return;
+    e.stopPropagation();openView(card.getAttribute("data-cz-card"));
+  },true);
+
+  /* business leads table: + Closing on each row */
+  function bizRows(){
+    var m=$("biz-table-mount");if(!m)return;
+    m.querySelectorAll("tr[data-biz]").forEach(function(tr){
+      if(tr.querySelector("[data-pc-closing]"))return;var id=tr.getAttribute("data-biz"),b=biz(id);if(!b)return;
+      var st=b.stage||"prospect";if(st==="won"||st==="lost"||st==="dead")return;
+      var td=tr.querySelector("td");if(!td)return;
+      td.insertAdjacentHTML("beforeend",'<div style="margin-top:5px">'+closeBtnHtml("biz",id,!!b.onClosing)+'</div>');
+      td.querySelector("[data-pc-closing]").addEventListener("click",function(e){e.stopPropagation();toggleClosing("biz",id);try{renderBizLeads();}catch(_){}});
+    });
+  }
+  try{var _rb=renderBizLeads;renderBizLeads=function(){var r=_rb.apply(this,arguments);try{bizRows();}catch(e){console.warn("pipe-cards biz",e);}return r;};}catch(e){}
+
+  var _p=czPipeResults;
+  czPipeResults=function(){var o=_p.apply(this,arguments);try{decorate();}catch(e){console.warn("pipe-cards",e);}return o;};
+  czPipeResults.__keepPlace=true;
+  if($("cz-pipe-results")){try{decorate();}catch(e){}}
+  setTimeout(function(){try{bizRows();}catch(e){}},1600);
+  /* the table also re-draws on filter/sort clicks without going through renderBizLeads */
+  (function watch(n){var p=$("p-bizleads");if(!p){if(n<40)setTimeout(function(){watch(n+1);},250);return;}var t=0;new MutationObserver(function(){clearTimeout(t);t=setTimeout(function(){try{bizRows();}catch(e){}},30);}).observe(p,{childList:true,subtree:true});})(0);
+
+  var st=document.createElement("style");st.textContent=[
+  /* cards */
+  "#cz-pipe-results .cz-card.pc-card{background:#fff;border:1px solid #e6ebf3;border-radius:14px;padding:13px 14px 12px;box-shadow:0 1px 2px rgba(11,35,70,.04),0 4px 14px rgba(11,35,70,.05);transition:transform .12s,box-shadow .12s,border-color .12s;cursor:pointer}",
+  "#cz-pipe-results .cz-card.pc-card:hover{transform:translateY(-1px);box-shadow:0 2px 4px rgba(11,35,70,.06),0 10px 24px rgba(11,35,70,.09);border-color:#cfdcf0}",
+  "#cz-pipe-results .cz-card.pc-on{border-color:#fdba74;box-shadow:0 0 0 1px #fed7aa,0 6px 18px rgba(234,88,12,.10)}",
+  "#cz-pipe-results .pc-card .cz-nm{font-size:15px;font-weight:800;color:#0b2346;letter-spacing:-.01em}",
+  "#cz-pipe-results .pc-card .cz-sub{display:flex;align-items:center;gap:6px;flex-wrap:wrap;color:#64748b!important;font-size:12px!important}",
+  "#cz-pipe-results .pc-card .pc-line{color:#0b2346!important;font-weight:600;font-size:12.5px!important;margin-top:6px!important}",
+  "#cz-pipe-results .pc-card .cz-sub svg{width:13px;height:13px;flex-shrink:0;color:#94a3b8}",
+  "#cz-pipe-results .pc-card .cz-pill{border-radius:999px!important;font-size:11px!important;font-weight:700!important;padding:3px 9px!important;display:inline-block}",
+  "#cz-pipe-results .pc-acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px;padding-top:10px;border-top:1px dashed #e6ebf3}",
+  "#cz-pipe-results .pc-acts .czd-kill,#cz-pipe-results .pc-acts .czd-sold{border-radius:999px!important;font-size:11.5px!important;padding:4px 11px!important;margin:0!important}",
+  ".pc-cl{display:inline-flex;align-items:center;gap:5px;border:1.5px solid #fdba74;background:#fff;color:#c2410c;border-radius:999px;padding:4px 11px 4px 9px;font-size:11.5px;font-weight:800;cursor:pointer;font-family:inherit;line-height:1.2}",
+  ".pc-cl svg{width:13px;height:13px}.pc-cl:hover{background:#fff7ed}.pc-cl.on{background:#ea580c;border-color:#ea580c;color:#fff}.pc-cl.on:hover{background:#c2410c}",
+  /* popup */
+  ".pv-ov{position:fixed;inset:0;background:rgba(11,35,70,.28);backdrop-filter:blur(2px);z-index:9998;display:flex;align-items:center;justify-content:center;padding:18px;animation:pvf .15s}",
+  "@keyframes pvf{from{opacity:0}to{opacity:1}}@keyframes pvu{from{transform:translateY(8px);opacity:.6}to{transform:none;opacity:1}}",
+  ".pv{width:min(560px,100%);max-height:calc(100vh - 36px);overflow:auto;background:linear-gradient(180deg,#f5f9ff,#fff 90px);border:1.5px solid #9cc2f5;border-radius:18px;box-shadow:0 24px 60px rgba(11,35,70,.22);animation:pvu .18s;font-family:inherit}",
+  ".pv-hd{display:flex;justify-content:space-between;gap:12px;padding:20px 22px 14px}",
+  ".pv-nmrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pv-nmrow h3{margin:0;font-size:21px;font-weight:800;color:#1d5fd0;letter-spacing:-.01em}",
+  ".pv-stage{border:1px solid;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700}",
+  ".pv-ttl p{margin:6px 0 0;color:#334155;font-size:14px}",
+  ".pv-hbtns{display:flex;align-items:flex-start;gap:6px}",
+  ".pv-edit{display:inline-flex;align-items:center;gap:6px;border:1.5px solid #9cc2f5;background:#fff;color:#1d5fd0;border-radius:10px;padding:7px 13px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}.pv-edit:hover{background:#eef5ff}.pv-edit svg{width:15px;height:15px}",
+  ".pv-x{border:0;background:none;color:#94a3b8;cursor:pointer;padding:6px;border-radius:8px}.pv-x:hover{background:#eef2f8;color:#334155}.pv-x svg{width:18px;height:18px}",
+  ".pv-body{margin:0 22px;padding:14px 0 6px;border-top:1px solid #e3ebf7}",
+  ".pv-row{display:flex;gap:14px;align-items:flex-start;padding:7px 0;font-size:14px;color:#1e293b;line-height:1.45}.pv-row b{font-weight:700;color:#0b2346}",
+  ".pv-ic{width:20px;height:20px;flex-shrink:0;color:#475569;margin-top:1px}.pv-ic svg{width:20px;height:20px}",
+  ".pv-row a{color:#1d5fd0;text-decoration:none;font-weight:600}.pv-row a:hover{text-decoration:underline}.pv-sep{color:#cbd5e1;margin:0 2px}",
+  ".pv-tags{display:flex;flex-wrap:wrap;gap:6px}.pv-chip{background:#e8f1fd;color:#1d5fd0;border-radius:7px;padding:4px 10px;font-size:12.5px;font-weight:600}",
+  ".pv-ft{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:14px 22px 18px;margin-top:6px;border-top:1px solid #eef2f7}",
+  ".pv-acts{display:flex;flex-wrap:wrap;gap:6px}",
+  ".pv-b{display:inline-flex;align-items:center;gap:6px;border:1px solid #dfe6f0;background:#fff;color:#16447f;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;text-decoration:none;cursor:pointer;font-family:inherit}.pv-b svg{width:14px;height:14px}.pv-b:hover{background:#f3f7fd}",
+  ".pv-b.pc-cl{border:1.5px solid #fdba74;color:#c2410c}.pv-b.pc-cl.on{background:#ea580c;border-color:#ea580c;color:#fff}",
+  ".pv-stsel{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:#64748b;font-weight:700}.pv-stsel select{border:1.5px solid #dfe6f0;border-radius:999px;padding:5px 10px;font-size:12.5px;font-weight:700;color:#0b2346;background:#fff;font-family:inherit}",
+  "@media(max-width:560px){.pv-hd{padding:16px}.pv-body{margin:0 16px}.pv-ft{padding:12px 16px 16px}.pv-nmrow h3{font-size:18px}}"
+  ].join("\n");document.head.appendChild(st);
+}catch(err){if(window.console)console.warn("pipe-cards init failed",err);}})();
+
+/* moved inside the main module so it can reach getLeads, czPipeResults, switchTab etc. */
+/* ═══ Closing List (2026-11-12): open individual + business deals in one ranked list.
+   Priority (Hot/Warm/Cold), expected close date, next step and business deal value are
+   saved on the lead record itself, so they sync like every other field. ═══ */
+(function(){try{
+  var $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
+  function ymdL(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+  function today(){return ymdL(new Date());}
+  function days(a,b){return Math.round((new Date(a+"T12:00:00")-new Date(b+"T12:00:00"))/864e5);}
+  function fmt(d){if(!d)return"";var x=new Date(String(d).slice(0,10)+"T12:00:00");return isNaN(x)?"":x.toLocaleDateString("en-US",{month:"short",day:"numeric"});}
+  function money(n){n=Number(n)||0;return n?"$"+(n%1===0?n.toLocaleString():n.toFixed(2)):"";}
+
+  if(typeof ALL_TABS!=="undefined"&&ALL_TABS.indexOf("closing")<0)ALL_TABS.push("closing");
+  if(typeof TAB_TITLES!=="undefined")TAB_TITLES.closing="Closing List";
+
+  var IND_W={quoted:30,appointment_scheduled:26,open_enrollment:20,affordable_care_act:20,follow_up:14,new_lead:10,sixty_plus:6,ghosted:2};
+  var BIZ_W={proposal:30,meeting:28,contacted:14,working:12,prospect:6};
+  var HEAT={hot:{l:"Hot",c:"#dc2626",w:45},warm:{l:"Warm",c:"#f59e0b",w:22},cold:{l:"Cold",c:"#64748b",w:0}};
+  var CV={kind:"all",heat:"all",q:""};
+
+  function deals(){
+    var td=today(),out=[];
+    var indClosed=(typeof czCLOSED!=="undefined"?czCLOSED:["sold","no_longer_interested","disqualified","dead"]);
+    (typeof getLeads==="function"?getLeads():[]).forEach(function(c){
+      var st=c.stage||"new_lead";if(!c.onClosing||indClosed.indexOf(st)>=0||c.isClient)return;
+      var meta=(typeof czMETA!=="undefined"&&czMETA[st])||{label:st,color:"#64748b"};
+      out.push({kind:"ind",id:c.id,rec:c,name:(((c.firstName||"")+" "+(c.lastName||"")).trim()||c.name||c.email||"(no name)"),
+        sub:[c.state,c.source&&typeof czSourceLabel==="function"?czSourceLabel(c.source):c.source].filter(Boolean).join(" · "),
+        stage:st,stageLabel:meta.label,stageColor:meta.color,stageW:IND_W[st]!=null?IND_W[st]:8,
+        value:(typeof czVal==="function"?czVal(c):Number(c.quoteValue)||0),phone:c.phone||"",
+        fu:c.followUpDue||"",last:c.lastContact||""});
+    });
+    (typeof getBizLeads==="function"?getBizLeads():[]).forEach(function(b){
+      var st=b.stage||"prospect";if(!b.onClosing||st==="won"||st==="lost"||st==="dead")return;
+      var meta=(typeof bizStageMeta==="function"?bizStageMeta(st):{label:st,color:"#64748b"});
+      out.push({kind:"biz",id:b.id,rec:b,name:b.company||"(no company)",sub:[b.contact,b.employees?b.employees+" employees":""].filter(Boolean).join(" · "),
+        stage:st,stageLabel:meta.label,stageColor:meta.color,stageW:BIZ_W[st]!=null?BIZ_W[st]:6,
+        value:Number(b.dealValue)||0,emp:parseInt(b.employees)||0,phone:b.phone||"",
+        fu:b.nextFollowUp?String(b.nextFollowUp).slice(0,10):"",last:b.updated?ymdL(new Date(b.updated)):""});
+    });
+    out.forEach(function(d){
+      var r=d.rec,s=0,why=[];
+      var h=HEAT[r.closeHeat];s+=h?h.w:10;
+      s+=d.stageW;
+      var v=d.value;s+=Math.min(20,v/25);if(d.kind==="biz"&&!v)s+=Math.min(20,(d.emp||0)*2);
+      if(d.fu){var fd=days(d.fu,td);if(fd<0){s+=15;why.push("follow-up overdue "+(-fd)+"d");}else if(fd===0){s+=15;why.push("follow-up today");}else if(fd<=3){s+=7;}}
+      else why.push("no follow-up set");
+      if(r.closeBy){var cd=days(r.closeBy,td);if(cd<0){s+=10;why.push("close date passed");}else if(cd<=14){s+=15;why.push("closing in "+cd+"d");}else if(cd<=30)s+=7;}
+      if(d.last){var ld=days(td,String(d.last).slice(0,10));if(ld>14){s-=10;why.push("no touch in "+ld+"d");}}
+      if(r.closePin){s+=100;}
+      d.score=Math.round(s);d.why=why;
+    });
+    out.sort(function(a,b){return b.score-a.score;});
+    return out;
+  }
+
+  function save(kind,id,fn){
+    if(kind==="ind"){var a=getLeads();a.forEach(function(x){if(x.id===id){fn(x);x.updated=Date.now();}});setArr(K.leads,a,true);}
+    else{var b=getBizLeads();b.forEach(function(x){if(x.id===id){fn(x);x.updated=Date.now();}});setArr(K.bizLeads,b,true);}
+  }
+
+  function render(){
+    var host=$("closing-mount");if(!host)return;
+    var all=deals(),td=today();
+    var L=all.filter(function(d){
+      if(CV.kind!=="all"&&d.kind!==CV.kind)return false;
+      if(CV.heat!=="all"&&(d.rec.closeHeat||"none")!==CV.heat)return false;
+      if(CV.q&&(d.name+" "+d.sub+" "+d.phone+" "+(d.rec.nextStep||"")).toLowerCase().indexOf(CV.q)<0)return false;return true;});
+    var hot=all.filter(function(d){return d.rec.closeHeat==="hot";}),
+        due=all.filter(function(d){return d.fu&&d.fu<=td;}),
+        soon=all.filter(function(d){return d.rec.closeBy&&d.rec.closeBy>=td&&days(d.rec.closeBy,td)<=14;}),
+        hotVal=hot.reduce(function(s,d){return s+(d.value||0);},0);
+    function cnt(k,h){return all.filter(function(d){return (k==="all"||d.kind===k)&&(h==="all"||(d.rec.closeHeat||"none")===h);}).length;}
+    var indStages=(typeof czSTAGES!=="undefined"?czSTAGES:[]),bizStages=(typeof BIZ_STAGES!=="undefined"?BIZ_STAGES:[]);
+    var rows=L.map(function(d,i){
+      var r=d.rec,h=r.closeHeat||"",stages=d.kind==="ind"?indStages:bizStages;
+      var stOpts=stages.map(function(x){return '<option value="'+x.id+'"'+(x.id===d.stage?" selected":"")+'>'+esc(x.label)+'</option>';}).join("");
+      var fuCls=!d.fu?"":d.fu<td?"bad":d.fu===td?"warn":"";
+      return '<tr data-k="'+d.kind+'" data-id="'+esc(d.id)+'"'+(h==="hot"?' class="hot"':'')+'>'
+        +'<td class="cl-rank"><button type="button" class="cl-pin'+(r.closePin?" on":"")+'" data-act="pin" title="'+(r.closePin?"Unpin":"Pin to top")+'">'+(r.closePin?"★":"☆")+'</button><b>'+(i+1)+'</b><small title="Priority score">'+d.score+'</small></td>'
+        +'<td class="cl-nm"><span class="cl-kind k-'+d.kind+'">'+(d.kind==="ind"?"IND":"BIZ")+'</span><b>'+esc(d.name)+'</b><small>'+esc(d.sub)+'</small>'+(d.why.length?'<em>'+esc(d.why.join(" · "))+'</em>':'')+'</td>'
+        +'<td><div class="cl-heat">'+["hot","warm","cold"].map(function(k){return '<button type="button" data-act="heat" data-v="'+k+'" class="'+(h===k?"on":"")+'" style="--c:'+HEAT[k].c+'">'+HEAT[k].l+'</button>';}).join("")+'</div></td>'
+        +'<td><span class="cl-dot" style="background:'+d.stageColor+'"></span><select data-act="stage" style="color:'+d.stageColor+';border-color:'+d.stageColor+'">'+stOpts+'</select></td>'
+        +'<td class="num">'+(d.kind==="biz"?'<input data-act="val" type="number" min="0" step="1" placeholder="$/mo" value="'+(r.dealValue||"")+'">':(d.value?money(d.value)+'<small>/mo</small>':'<span class="cl-dash">-</span>'))+'</td>'
+        +'<td><input data-act="closeBy" type="date" value="'+esc(r.closeBy||"")+'"></td>'
+        +'<td><input data-act="next" type="text" placeholder="e.g. send Florida Blue quote" value="'+esc(r.nextStep||"")+'"></td>'
+        +'<td>'+(d.fu?'<span class="cl-fu '+fuCls+'">'+fmt(d.fu)+'</span>':'<span class="cl-dash">-</span>')+'</td>'
+        +'<td class="cl-acts">'+(d.phone?'<a href="tel:'+esc(String(d.phone).replace(/[^0-9+]/g,""))+'" title="Call '+esc(d.phone)+'">Call</a>':'')+'<button type="button" data-act="open">Open</button><button type="button" data-act="remove" title="Take off the Closing List">✕</button></td>'
+        +'</tr>';}).join("");
+    host.innerHTML='<div class="cl-kpis">'
+      +'<div><b>'+all.length+'</b><span>Open deals</span></div>'
+      +'<div class="hot"><b>'+hot.length+'</b><span>Hot'+(hotVal?' · '+money(hotVal)+'/mo':'')+'</span></div>'
+      +'<div class="'+(due.length?"bad":"")+'"><b>'+due.length+'</b><span>Follow-ups due</span></div>'
+      +'<div><b>'+soon.length+'</b><span>Closing in 14 days</span></div></div>'
+      +'<div class="cl-bar"><div class="cl-seg">'+[["all","All"],["ind","Individual"],["biz","Business"]].map(function(o){return '<button type="button" data-kind="'+o[0]+'"'+(CV.kind===o[0]?' class="on"':'')+'>'+o[1]+' <b>'+cnt(o[0],CV.heat)+'</b></button>';}).join("")+'</div>'
+      +'<div class="cl-seg">'+[["all","Any priority"],["hot","Hot"],["warm","Warm"],["cold","Cold"],["none","Not rated"]].map(function(o){return '<button type="button" data-heat="'+o[0]+'"'+(CV.heat===o[0]?' class="on"':'')+'>'+o[1]+' <b>'+cnt(CV.kind,o[0])+'</b></button>';}).join("")+'</div>'
+      +'<input id="cl-q" type="search" placeholder="Search name, phone, next step..." value="'+esc(CV.q)+'"></div>'
+      +'<div class="cl-card"><div class="cl-tw"><table class="cl-t"><thead><tr><th>#</th><th>Deal</th><th>Priority</th><th>Stage</th><th class="num">Value</th><th>Close by</th><th>Next step</th><th>Follow-up</th><th></th></tr></thead><tbody>'
+      +(rows||'<tr><td colspan="9" class="cl-empty">'+(all.length?'No deals match these filters.':'Nothing on your Closing List yet. On any Pipeline card or Business Leads row, tap <b style="color:#c2410c">+ Closing</b> to add a deal you think you will close.')+'</td></tr>')+'</tbody></table></div>'
+      +'<div class="cl-foot">Ranked by: your priority, how far along the stage is, deal size, follow-ups due and close date. Pin ☆ keeps a deal on top. Leads untouched for 14+ days drop. ✕ takes a deal off the list (it stays in your pipeline).</div></div>';
+
+    host.querySelectorAll("[data-kind]").forEach(function(b){b.onclick=function(){CV.kind=b.getAttribute("data-kind");render();};});
+    host.querySelectorAll("[data-heat]").forEach(function(b){b.onclick=function(){CV.heat=b.getAttribute("data-heat");render();};});
+    var q=$("cl-q");q.oninput=function(){CV.q=q.value.toLowerCase().trim();var p=q.selectionStart;render();var q2=$("cl-q");q2.focus();try{q2.setSelectionRange(p,p);}catch(e){}};
+    host.querySelectorAll("tr[data-id]").forEach(function(tr){
+      var k=tr.getAttribute("data-k"),id=tr.getAttribute("data-id");
+      tr.querySelectorAll("[data-act]").forEach(function(el){
+        var act=el.getAttribute("data-act");
+        if(act==="heat")el.onclick=function(){var v=el.getAttribute("data-v");save(k,id,function(x){x.closeHeat=x.closeHeat===v?"":v;});render();badge();};
+        else if(act==="remove")el.onclick=function(){save(k,id,function(x){x.onClosing=false;x.closePin=false;});render();badge();};
+        else if(act==="pin")el.onclick=function(){save(k,id,function(x){x.closePin=!x.closePin;});render();};
+        else if(act==="open")el.onclick=function(){var r=(k==="ind"?getLeads():getBizLeads()).filter(function(x){return x.id===id;})[0];if(!r)return;if(k==="ind"&&typeof czOpenModal==="function")czOpenModal(r);else if(k==="biz"&&typeof openBizLeadForm==="function")openBizLeadForm(r);};
+        else if(act==="stage")el.onchange=function(){if(k==="ind"&&typeof czSetStage==="function")czSetStage(id,el.value);else if(k==="biz"&&typeof bizSetStage==="function")bizSetStage(id,el.value);render();badge();};
+        else if(act==="closeBy")el.onchange=function(){save(k,id,function(x){x.closeBy=el.value;});render();};
+        else if(act==="val")el.onchange=function(){save(k,id,function(x){x.dealValue=Number(el.value)||0;});render();};
+        else if(act==="next")el.onchange=function(){save(k,id,function(x){x.nextStep=el.value.trim();});};
+      });
+    });
+  }
+  function badge(){var b=$("b-closing");if(!b)return;var td=today(),n=deals().filter(function(d){return d.rec.closeHeat==="hot"||(d.fu&&d.fu<=td&&d.rec.closeHeat!=="cold");}).length;b.textContent=n;b.style.display=n?"":"none";}
+  window.vsRenderClosing=render;window.vsClosingBadge=badge;
+
+  /* sidebar button + panel */
+  function mount(){
+    var nav=$("sidebar-nav");if(!nav)return false;
+    if(!document.querySelector('.sidebar-nav-item[data-tab="closing"]')){
+      var btn=document.createElement("button");btn.className="sidebar-nav-item";btn.type="button";btn.setAttribute("data-tab","closing");
+      btn.innerHTML='<span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span><span class="sni-label">Closing List</span><span class="sni-badge" id="b-closing" style="display:none">0</span>';
+      var after=nav.querySelector('.sidebar-nav-item[data-tab="pipeline"]')||nav.querySelector('.sidebar-nav-item[data-tab="dashboard"]');
+      if(after)after.insertAdjacentElement("afterend",btn);else nav.appendChild(btn);
+    }
+    if(!$("p-closing")){
+      var ref=$("p-pipeline")||$("p-dashboard");if(!ref)return false;
+      var p=document.createElement("div");p.id="p-closing";p.className="panel";
+      p.innerHTML='<h3>Closing List <span style="font-size:13px;font-weight:500;color:#7b8aa0">Individual + business deals you can close, ranked</span></h3><p class="lede">Deals you added with <b>+ Closing</b> on a pipeline card or business lead. Rate each one Hot, Warm or Cold, set a close-by date and the next step, then work it top to bottom.</p><div id="closing-mount"></div>';
+      ref.insertAdjacentElement("afterend",p);
+    }
+    badge();return true;
+  }
+  document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest('[data-tab="closing"]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();if(typeof switchTab==="function")switchTab("closing");render();},true);
+  var tries=0;(function go(){if(!mount()&&tries++<40)setTimeout(go,250);})();
+  setInterval(function(){try{badge();if($("p-closing")&&$("p-closing").classList.contains("active")&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest("#p-closing")))render();}catch(e){}},60000);
+
+  var css=document.createElement("style");css.textContent=[
+  "#p-closing .cl-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:6px 0 14px}",
+  "#p-closing .cl-kpis div{background:#fff;border:1px solid #e3e9f2;border-radius:12px;padding:12px 14px}#p-closing .cl-kpis b{display:block;font-size:22px;color:#0b2346}#p-closing .cl-kpis span{font-size:12px;color:#7b8aa0;font-weight:600}",
+  "#p-closing .cl-kpis .hot b{color:#dc2626}#p-closing .cl-kpis .bad b{color:#b42318}",
+  "#p-closing .cl-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 12px}",
+  "#p-closing .cl-seg{display:inline-flex;background:#eef2f8;border-radius:10px;padding:3px;gap:2px}#p-closing .cl-seg button{border:0;background:none;padding:6px 11px;border-radius:8px;font-size:12.5px;font-weight:700;color:#42566e;cursor:pointer;font-family:inherit}#p-closing .cl-seg button.on{background:#fff;color:#0b2346;box-shadow:0 1px 3px rgba(11,35,70,.12)}#p-closing .cl-seg b{color:#7b8aa0;font-weight:700;margin-left:2px}",
+  "#p-closing #cl-q{flex:1;min-width:180px;border:1px solid #dfe6f0;border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit}",
+  "#p-closing .cl-card{background:#fff;border:1px solid #e3e9f2;border-radius:14px;overflow:hidden}#p-closing .cl-tw{overflow-x:auto}",
+  "#p-closing .cl-t{width:100%;border-collapse:collapse;font-size:13px}#p-closing .cl-t th{background:#f7f9fc;text-align:left;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#7b8aa0;padding:10px 10px;white-space:nowrap}",
+  "#p-closing .cl-t td{padding:10px;border-top:1px solid #eef2f7;vertical-align:middle}#p-closing .cl-t tr.hot td{background:#fff7f7}#p-closing .cl-t .num{text-align:right}",
+  "#p-closing .cl-rank{white-space:nowrap;color:#0b2346}#p-closing .cl-rank b{font-size:15px;margin:0 4px}#p-closing .cl-rank small{display:block;font-size:10px;color:#9aa8bb;margin-left:24px}",
+  "#p-closing .cl-pin{border:0;background:none;font-size:16px;color:#c3cddb;cursor:pointer;padding:0}#p-closing .cl-pin.on{color:#f59e0b}",
+  "#p-closing .cl-nm{min-width:190px}#p-closing .cl-nm b{color:#0b2346}#p-closing .cl-nm small{display:block;color:#7b8aa0;font-size:11.5px}#p-closing .cl-nm em{display:block;font-style:normal;font-size:11px;color:#b45309;margin-top:2px}",
+  "#p-closing .cl-kind{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.05em;border-radius:4px;padding:1px 5px;margin-right:6px;vertical-align:1px}#p-closing .k-ind{background:#e0ecff;color:#16447f}#p-closing .k-biz{background:#ede9fe;color:#5b21b6}",
+  "#p-closing .cl-heat{display:inline-flex;gap:3px}#p-closing .cl-heat button{border:1.5px solid #dfe6f0;background:#fff;color:#7b8aa0;border-radius:999px;padding:3px 9px;font-size:11.5px;font-weight:800;cursor:pointer;font-family:inherit}#p-closing .cl-heat button.on{background:var(--c);border-color:var(--c);color:#fff}",
+  "#p-closing .cl-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}",
+  "#p-closing .cl-t td:nth-child(4){white-space:nowrap}#p-closing .cl-t td:nth-child(4) select{max-width:190px}",
+  "#p-closing select,#p-closing .cl-t input{border:1.5px solid #dfe6f0;border-radius:8px;padding:5px 8px;font-size:12.5px;font-family:inherit;background:#fff;color:#0b2346}#p-closing select{font-weight:800;border-radius:999px}",
+  "#p-closing input[data-act=val]{width:84px;text-align:right}#p-closing input[data-act=next]{min-width:190px;width:100%}#p-closing input[data-act=closeBy]{width:132px}",
+  "#p-closing .cl-fu{font-weight:700;color:#42566e;white-space:nowrap}#p-closing .cl-fu.bad{color:#b42318}#p-closing .cl-fu.warn{color:#b45309}",
+  "#p-closing .cl-acts{white-space:nowrap}#p-closing .cl-acts a,#p-closing .cl-acts button{display:inline-block;border:1px solid #dfe6f0;background:#fff;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;color:#16447f;text-decoration:none;cursor:pointer;margin-left:4px;font-family:inherit}",
+  "#p-closing .cl-dash{color:#c3cddb}#p-closing .cl-empty{text-align:center;color:#7b8aa0;padding:28px}#p-closing .cl-foot{font-size:11.5px;color:#7b8aa0;padding:10px 14px;border-top:1px solid #eef2f7}",
+  "@media(max-width:760px){#p-closing .cl-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}"
+  ].join("\n");document.head.appendChild(css);
+}catch(err){if(window.console)console.warn("closing list failed",err);}})();
+
 })();
 
 </script>
@@ -13473,174 +13826,7 @@ html.dark .vsd-pill select option{background:#111d2b}
 </script>
 
 
-<script id="vs-closing-js">
-/* ═══ Closing List (2026-11-12): open individual + business deals in one ranked list.
-   Priority (Hot/Warm/Cold), expected close date, next step and business deal value are
-   saved on the lead record itself, so they sync like every other field. ═══ */
-(function(){try{
-  var $=function(id){return document.getElementById(id);};
-  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
-  function ymdL(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
-  function today(){return ymdL(new Date());}
-  function days(a,b){return Math.round((new Date(a+"T12:00:00")-new Date(b+"T12:00:00"))/864e5);}
-  function fmt(d){if(!d)return"";var x=new Date(String(d).slice(0,10)+"T12:00:00");return isNaN(x)?"":x.toLocaleDateString("en-US",{month:"short",day:"numeric"});}
-  function money(n){n=Number(n)||0;return n?"$"+(n%1===0?n.toLocaleString():n.toFixed(2)):"";}
 
-  if(typeof ALL_TABS!=="undefined"&&ALL_TABS.indexOf("closing")<0)ALL_TABS.push("closing");
-  if(typeof TAB_TITLES!=="undefined")TAB_TITLES.closing="Closing List";
-
-  var IND_W={quoted:30,appointment_scheduled:26,open_enrollment:20,affordable_care_act:20,follow_up:14,new_lead:10,sixty_plus:6,ghosted:2};
-  var BIZ_W={proposal:30,meeting:28,contacted:14,working:12,prospect:6};
-  var HEAT={hot:{l:"Hot",c:"#dc2626",w:45},warm:{l:"Warm",c:"#f59e0b",w:22},cold:{l:"Cold",c:"#64748b",w:0}};
-  var CV={kind:"all",heat:"all",q:""};
-
-  function deals(){
-    var td=today(),out=[];
-    var indClosed=(typeof czCLOSED!=="undefined"?czCLOSED:["sold","no_longer_interested","disqualified","dead"]);
-    (typeof getLeads==="function"?getLeads():[]).forEach(function(c){
-      var st=c.stage||"new_lead";if(indClosed.indexOf(st)>=0||c.isClient)return;
-      var meta=(typeof czMETA!=="undefined"&&czMETA[st])||{label:st,color:"#64748b"};
-      out.push({kind:"ind",id:c.id,rec:c,name:(((c.firstName||"")+" "+(c.lastName||"")).trim()||c.name||c.email||"(no name)"),
-        sub:[c.state,c.source&&typeof czSourceLabel==="function"?czSourceLabel(c.source):c.source].filter(Boolean).join(" · "),
-        stage:st,stageLabel:meta.label,stageColor:meta.color,stageW:IND_W[st]!=null?IND_W[st]:8,
-        value:(typeof czVal==="function"?czVal(c):Number(c.quoteValue)||0),phone:c.phone||"",
-        fu:c.followUpDue||"",last:c.lastContact||""});
-    });
-    (typeof getBizLeads==="function"?getBizLeads():[]).forEach(function(b){
-      var st=b.stage||"prospect";if(st==="won"||st==="lost"||st==="dead")return;
-      var meta=(typeof bizStageMeta==="function"?bizStageMeta(st):{label:st,color:"#64748b"});
-      out.push({kind:"biz",id:b.id,rec:b,name:b.company||"(no company)",sub:[b.contact,b.employees?b.employees+" employees":""].filter(Boolean).join(" · "),
-        stage:st,stageLabel:meta.label,stageColor:meta.color,stageW:BIZ_W[st]!=null?BIZ_W[st]:6,
-        value:Number(b.dealValue)||0,emp:parseInt(b.employees)||0,phone:b.phone||"",
-        fu:b.nextFollowUp?String(b.nextFollowUp).slice(0,10):"",last:b.updated?ymdL(new Date(b.updated)):""});
-    });
-    out.forEach(function(d){
-      var r=d.rec,s=0,why=[];
-      var h=HEAT[r.closeHeat];s+=h?h.w:10;
-      s+=d.stageW;
-      var v=d.value;s+=Math.min(20,v/25);if(d.kind==="biz"&&!v)s+=Math.min(20,(d.emp||0)*2);
-      if(d.fu){var fd=days(d.fu,td);if(fd<0){s+=15;why.push("follow-up overdue "+(-fd)+"d");}else if(fd===0){s+=15;why.push("follow-up today");}else if(fd<=3){s+=7;}}
-      else why.push("no follow-up set");
-      if(r.closeBy){var cd=days(r.closeBy,td);if(cd<0){s+=10;why.push("close date passed");}else if(cd<=14){s+=15;why.push("closing in "+cd+"d");}else if(cd<=30)s+=7;}
-      if(d.last){var ld=days(td,String(d.last).slice(0,10));if(ld>14){s-=10;why.push("no touch in "+ld+"d");}}
-      if(r.closePin){s+=100;}
-      d.score=Math.round(s);d.why=why;
-    });
-    out.sort(function(a,b){return b.score-a.score;});
-    return out;
-  }
-
-  function save(kind,id,fn){
-    if(kind==="ind"){var a=getLeads();a.forEach(function(x){if(x.id===id){fn(x);x.updated=Date.now();}});setArr(K.leads,a,true);}
-    else{var b=getBizLeads();b.forEach(function(x){if(x.id===id){fn(x);x.updated=Date.now();}});setArr(K.bizLeads,b,true);}
-  }
-
-  function render(){
-    var host=$("closing-mount");if(!host)return;
-    var all=deals(),td=today();
-    var L=all.filter(function(d){
-      if(CV.kind!=="all"&&d.kind!==CV.kind)return false;
-      if(CV.heat!=="all"&&(d.rec.closeHeat||"none")!==CV.heat)return false;
-      if(CV.q&&(d.name+" "+d.sub+" "+d.phone+" "+(d.rec.nextStep||"")).toLowerCase().indexOf(CV.q)<0)return false;return true;});
-    var hot=all.filter(function(d){return d.rec.closeHeat==="hot";}),
-        due=all.filter(function(d){return d.fu&&d.fu<=td;}),
-        soon=all.filter(function(d){return d.rec.closeBy&&d.rec.closeBy>=td&&days(d.rec.closeBy,td)<=14;}),
-        hotVal=hot.reduce(function(s,d){return s+(d.value||0);},0);
-    function cnt(k,h){return all.filter(function(d){return (k==="all"||d.kind===k)&&(h==="all"||(d.rec.closeHeat||"none")===h);}).length;}
-    var indStages=(typeof czSTAGES!=="undefined"?czSTAGES:[]),bizStages=(typeof BIZ_STAGES!=="undefined"?BIZ_STAGES:[]);
-    var rows=L.map(function(d,i){
-      var r=d.rec,h=r.closeHeat||"",stages=d.kind==="ind"?indStages:bizStages;
-      var stOpts=stages.map(function(x){return '<option value="'+x.id+'"'+(x.id===d.stage?" selected":"")+'>'+esc(x.label)+'</option>';}).join("");
-      var fuCls=!d.fu?"":d.fu<td?"bad":d.fu===td?"warn":"";
-      return '<tr data-k="'+d.kind+'" data-id="'+esc(d.id)+'"'+(h==="hot"?' class="hot"':'')+'>'
-        +'<td class="cl-rank"><button type="button" class="cl-pin'+(r.closePin?" on":"")+'" data-act="pin" title="'+(r.closePin?"Unpin":"Pin to top")+'">'+(r.closePin?"★":"☆")+'</button><b>'+(i+1)+'</b><small title="Priority score">'+d.score+'</small></td>'
-        +'<td class="cl-nm"><span class="cl-kind k-'+d.kind+'">'+(d.kind==="ind"?"IND":"BIZ")+'</span><b>'+esc(d.name)+'</b><small>'+esc(d.sub)+'</small>'+(d.why.length?'<em>'+esc(d.why.join(" · "))+'</em>':'')+'</td>'
-        +'<td><div class="cl-heat">'+["hot","warm","cold"].map(function(k){return '<button type="button" data-act="heat" data-v="'+k+'" class="'+(h===k?"on":"")+'" style="--c:'+HEAT[k].c+'">'+HEAT[k].l+'</button>';}).join("")+'</div></td>'
-        +'<td><span class="cl-dot" style="background:'+d.stageColor+'"></span><select data-act="stage" style="color:'+d.stageColor+';border-color:'+d.stageColor+'">'+stOpts+'</select></td>'
-        +'<td class="num">'+(d.kind==="biz"?'<input data-act="val" type="number" min="0" step="1" placeholder="$/mo" value="'+(r.dealValue||"")+'">':(d.value?money(d.value)+'<small>/mo</small>':'<span class="cl-dash">-</span>'))+'</td>'
-        +'<td><input data-act="closeBy" type="date" value="'+esc(r.closeBy||"")+'"></td>'
-        +'<td><input data-act="next" type="text" placeholder="e.g. send Florida Blue quote" value="'+esc(r.nextStep||"")+'"></td>'
-        +'<td>'+(d.fu?'<span class="cl-fu '+fuCls+'">'+fmt(d.fu)+'</span>':'<span class="cl-dash">-</span>')+'</td>'
-        +'<td class="cl-acts">'+(d.phone?'<a href="tel:'+esc(String(d.phone).replace(/[^0-9+]/g,""))+'" title="Call '+esc(d.phone)+'">Call</a>':'')+'<button type="button" data-act="open">Open</button></td>'
-        +'</tr>';}).join("");
-    host.innerHTML='<div class="cl-kpis">'
-      +'<div><b>'+all.length+'</b><span>Open deals</span></div>'
-      +'<div class="hot"><b>'+hot.length+'</b><span>Hot'+(hotVal?' · '+money(hotVal)+'/mo':'')+'</span></div>'
-      +'<div class="'+(due.length?"bad":"")+'"><b>'+due.length+'</b><span>Follow-ups due</span></div>'
-      +'<div><b>'+soon.length+'</b><span>Closing in 14 days</span></div></div>'
-      +'<div class="cl-bar"><div class="cl-seg">'+[["all","All"],["ind","Individual"],["biz","Business"]].map(function(o){return '<button type="button" data-kind="'+o[0]+'"'+(CV.kind===o[0]?' class="on"':'')+'>'+o[1]+' <b>'+cnt(o[0],CV.heat)+'</b></button>';}).join("")+'</div>'
-      +'<div class="cl-seg">'+[["all","Any priority"],["hot","Hot"],["warm","Warm"],["cold","Cold"],["none","Not rated"]].map(function(o){return '<button type="button" data-heat="'+o[0]+'"'+(CV.heat===o[0]?' class="on"':'')+'>'+o[1]+' <b>'+cnt(CV.kind,o[0])+'</b></button>';}).join("")+'</div>'
-      +'<input id="cl-q" type="search" placeholder="Search name, phone, next step..." value="'+esc(CV.q)+'"></div>'
-      +'<div class="cl-card"><div class="cl-tw"><table class="cl-t"><thead><tr><th>#</th><th>Deal</th><th>Priority</th><th>Stage</th><th class="num">Value</th><th>Close by</th><th>Next step</th><th>Follow-up</th><th></th></tr></thead><tbody>'
-      +(rows||'<tr><td colspan="9" class="cl-empty">No open deals match.</td></tr>')+'</tbody></table></div>'
-      +'<div class="cl-foot">Ranked by: your priority, how far along the stage is, deal size, follow-ups due and close date. Pin ☆ keeps a deal on top. Leads untouched for 14+ days drop.</div></div>';
-
-    host.querySelectorAll("[data-kind]").forEach(function(b){b.onclick=function(){CV.kind=b.getAttribute("data-kind");render();};});
-    host.querySelectorAll("[data-heat]").forEach(function(b){b.onclick=function(){CV.heat=b.getAttribute("data-heat");render();};});
-    var q=$("cl-q");q.oninput=function(){CV.q=q.value.toLowerCase().trim();var p=q.selectionStart;render();var q2=$("cl-q");q2.focus();try{q2.setSelectionRange(p,p);}catch(e){}};
-    host.querySelectorAll("tr[data-id]").forEach(function(tr){
-      var k=tr.getAttribute("data-k"),id=tr.getAttribute("data-id");
-      tr.querySelectorAll("[data-act]").forEach(function(el){
-        var act=el.getAttribute("data-act");
-        if(act==="heat")el.onclick=function(){var v=el.getAttribute("data-v");save(k,id,function(x){x.closeHeat=x.closeHeat===v?"":v;});render();badge();};
-        else if(act==="pin")el.onclick=function(){save(k,id,function(x){x.closePin=!x.closePin;});render();};
-        else if(act==="open")el.onclick=function(){var r=(k==="ind"?getLeads():getBizLeads()).filter(function(x){return x.id===id;})[0];if(!r)return;if(k==="ind"&&typeof czOpenModal==="function")czOpenModal(r);else if(k==="biz"&&typeof openBizLeadForm==="function")openBizLeadForm(r);};
-        else if(act==="stage")el.onchange=function(){if(k==="ind"&&typeof czSetStage==="function")czSetStage(id,el.value);else if(k==="biz"&&typeof bizSetStage==="function")bizSetStage(id,el.value);render();badge();};
-        else if(act==="closeBy")el.onchange=function(){save(k,id,function(x){x.closeBy=el.value;});render();};
-        else if(act==="val")el.onchange=function(){save(k,id,function(x){x.dealValue=Number(el.value)||0;});render();};
-        else if(act==="next")el.onchange=function(){save(k,id,function(x){x.nextStep=el.value.trim();});};
-      });
-    });
-  }
-  function badge(){var b=$("b-closing");if(!b)return;var td=today(),n=deals().filter(function(d){return d.rec.closeHeat==="hot"||(d.fu&&d.fu<=td&&d.rec.closeHeat!=="cold");}).length;b.textContent=n;b.style.display=n?"":"none";}
-  window.vsRenderClosing=render;
-
-  /* sidebar button + panel */
-  function mount(){
-    var nav=$("sidebar-nav");if(!nav)return false;
-    if(!document.querySelector('.sidebar-nav-item[data-tab="closing"]')){
-      var btn=document.createElement("button");btn.className="sidebar-nav-item";btn.type="button";btn.setAttribute("data-tab","closing");
-      btn.innerHTML='<span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span><span class="sni-label">Closing List</span><span class="sni-badge" id="b-closing" style="display:none">0</span>';
-      var after=nav.querySelector('.sidebar-nav-item[data-tab="pipeline"]')||nav.querySelector('.sidebar-nav-item[data-tab="dashboard"]');
-      if(after)after.insertAdjacentElement("afterend",btn);else nav.appendChild(btn);
-    }
-    if(!$("p-closing")){
-      var ref=$("p-pipeline")||$("p-dashboard");if(!ref)return false;
-      var p=document.createElement("div");p.id="p-closing";p.className="panel";
-      p.innerHTML='<h3>Closing List <span style="font-size:13px;font-weight:500;color:#7b8aa0">Individual + business deals you can close, ranked</span></h3><p class="lede">Rate each deal Hot, Warm or Cold, set a close-by date and the next step. Work it top to bottom.</p><div id="closing-mount"></div>';
-      ref.insertAdjacentElement("afterend",p);
-    }
-    badge();return true;
-  }
-  document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest('[data-tab="closing"]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();if(typeof switchTab==="function")switchTab("closing");render();},true);
-  var tries=0;(function go(){if(!mount()&&tries++<40)setTimeout(go,250);})();
-  setInterval(function(){try{badge();if($("p-closing")&&$("p-closing").classList.contains("active")&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest("#p-closing")))render();}catch(e){}},60000);
-
-  var css=document.createElement("style");css.textContent=[
-  "#p-closing .cl-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:6px 0 14px}",
-  "#p-closing .cl-kpis div{background:#fff;border:1px solid #e3e9f2;border-radius:12px;padding:12px 14px}#p-closing .cl-kpis b{display:block;font-size:22px;color:#0b2346}#p-closing .cl-kpis span{font-size:12px;color:#7b8aa0;font-weight:600}",
-  "#p-closing .cl-kpis .hot b{color:#dc2626}#p-closing .cl-kpis .bad b{color:#b42318}",
-  "#p-closing .cl-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 12px}",
-  "#p-closing .cl-seg{display:inline-flex;background:#eef2f8;border-radius:10px;padding:3px;gap:2px}#p-closing .cl-seg button{border:0;background:none;padding:6px 11px;border-radius:8px;font-size:12.5px;font-weight:700;color:#42566e;cursor:pointer;font-family:inherit}#p-closing .cl-seg button.on{background:#fff;color:#0b2346;box-shadow:0 1px 3px rgba(11,35,70,.12)}#p-closing .cl-seg b{color:#7b8aa0;font-weight:700;margin-left:2px}",
-  "#p-closing #cl-q{flex:1;min-width:180px;border:1px solid #dfe6f0;border-radius:10px;padding:8px 12px;font-size:13px;font-family:inherit}",
-  "#p-closing .cl-card{background:#fff;border:1px solid #e3e9f2;border-radius:14px;overflow:hidden}#p-closing .cl-tw{overflow-x:auto}",
-  "#p-closing .cl-t{width:100%;border-collapse:collapse;font-size:13px}#p-closing .cl-t th{background:#f7f9fc;text-align:left;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#7b8aa0;padding:10px 10px;white-space:nowrap}",
-  "#p-closing .cl-t td{padding:10px;border-top:1px solid #eef2f7;vertical-align:middle}#p-closing .cl-t tr.hot td{background:#fff7f7}#p-closing .cl-t .num{text-align:right}",
-  "#p-closing .cl-rank{white-space:nowrap;color:#0b2346}#p-closing .cl-rank b{font-size:15px;margin:0 4px}#p-closing .cl-rank small{display:block;font-size:10px;color:#9aa8bb;margin-left:24px}",
-  "#p-closing .cl-pin{border:0;background:none;font-size:16px;color:#c3cddb;cursor:pointer;padding:0}#p-closing .cl-pin.on{color:#f59e0b}",
-  "#p-closing .cl-nm{min-width:190px}#p-closing .cl-nm b{color:#0b2346}#p-closing .cl-nm small{display:block;color:#7b8aa0;font-size:11.5px}#p-closing .cl-nm em{display:block;font-style:normal;font-size:11px;color:#b45309;margin-top:2px}",
-  "#p-closing .cl-kind{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.05em;border-radius:4px;padding:1px 5px;margin-right:6px;vertical-align:1px}#p-closing .k-ind{background:#e0ecff;color:#16447f}#p-closing .k-biz{background:#ede9fe;color:#5b21b6}",
-  "#p-closing .cl-heat{display:inline-flex;gap:3px}#p-closing .cl-heat button{border:1.5px solid #dfe6f0;background:#fff;color:#7b8aa0;border-radius:999px;padding:3px 9px;font-size:11.5px;font-weight:800;cursor:pointer;font-family:inherit}#p-closing .cl-heat button.on{background:var(--c);border-color:var(--c);color:#fff}",
-  "#p-closing .cl-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}",
-  "#p-closing select,#p-closing .cl-t input{border:1.5px solid #dfe6f0;border-radius:8px;padding:5px 8px;font-size:12.5px;font-family:inherit;background:#fff;color:#0b2346}#p-closing select{font-weight:800;border-radius:999px}",
-  "#p-closing input[data-act=val]{width:84px;text-align:right}#p-closing input[data-act=next]{min-width:190px;width:100%}#p-closing input[data-act=closeBy]{width:132px}",
-  "#p-closing .cl-fu{font-weight:700;color:#42566e;white-space:nowrap}#p-closing .cl-fu.bad{color:#b42318}#p-closing .cl-fu.warn{color:#b45309}",
-  "#p-closing .cl-acts{white-space:nowrap}#p-closing .cl-acts a,#p-closing .cl-acts button{display:inline-block;border:1px solid #dfe6f0;background:#fff;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;color:#16447f;text-decoration:none;cursor:pointer;margin-left:4px;font-family:inherit}",
-  "#p-closing .cl-dash{color:#c3cddb}#p-closing .cl-empty{text-align:center;color:#7b8aa0;padding:28px}#p-closing .cl-foot{font-size:11.5px;color:#7b8aa0;padding:10px 14px;border-top:1px solid #eef2f7}",
-  "@media(max-width:760px){#p-closing .cl-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}"
-  ].join("\n");document.head.appendChild(css);
-}catch(err){if(window.console)console.warn("closing list failed",err);}})();
-</script>
 
 </body>
 </html>
