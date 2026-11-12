@@ -13207,6 +13207,8 @@ try{(function(){
     body+=row(I.note,last?(lm?'<b>'+esc(lm[1])+'</b> ':'')+'<span class="pv-last">'+esc(lastTxt.length>180?lastTxt.slice(0,177)+"…":lastTxt)+'</span> <button type="button" class="pv-lnk" data-pv-notes>'+(notes.length>1?"All "+notes.length+" notes":"Open notes")+'</button>':'<button type="button" class="pv-lnk" data-pv-notes>Add a note</button>');
     if(tags)body+='<div class="pv-row"><span class="pv-ic">'+I.tag+'</span><div class="pv-tags">'+tags+'</div></div>';
     var opts=stages.map(function(s){return '<option value="'+s.id+'"'+(s.id===st?" selected":"")+'>'+esc(s.label)+'</option>';}).join("");
+    var blocked=false;try{blocked=typeof pbRowFor==="function"&&!!pbRowFor(r);}catch(e){}
+    if(blocked)tags='<span class="pv-chip" style="background:#fee2e2;color:#b91c1c">&#128683; Blocked</span>'+tags;
     var ov=document.createElement("div");ov.className="pv-ov";ov.id="pv-ov";
     ov.innerHTML='<div class="pv'+(r.onClosing?" pv-onc":"")+'" role="dialog" aria-label="'+esc(name)+'">'
       +'<div class="pv-hd"><div class="pv-ttl"><div class="pv-nmrow"><span class="pv-kind k-'+kind+'">'+(biz?"BUSINESS":"INDIVIDUAL")+'</span><h3>'+esc(name)+'</h3><span class="pv-stage" style="background:'+meta.color+'1a;color:'+meta.color+';border-color:'+meta.color+'55">'+esc(meta.label)+'</span></div>'
@@ -13214,6 +13216,7 @@ try{(function(){
       +'<div class="pv-hbtns"><button type="button" class="pv-edit" data-pv-edit>'+I.edit+'<span>Edit</span></button><button type="button" class="pv-x" data-pv-close aria-label="Close">'+I.x+'</button></div></div>'
       +closingSection(kind,r)
       +'<div class="pv-body">'+body+'</div>'
+      +(function(){try{var ipb=typeof czIpBlock==="function"?czIpBlock(r):"";return ipb?'<div class="pv-ip">'+ipb+'</div>':'';}catch(e){return "";}})()
       +'<div class="pv-ft"><div class="pv-acts">'+(tel?'<a class="pv-b" href="tel:'+esc(tel)+'">'+I.phone+'Call</a><a class="pv-b" href="sms:'+esc(tel)+'">'+I.msg+'Text</a>':'')+(r.email?'<a class="pv-b" href="mailto:'+esc(r.email)+'">'+I.mail+'Email</a>':'')
       +noteBtnHtml(kind,id,notes.length,"pv-b")+'</div>'
       +'<label class="pv-stsel"><span>Stage</span><select data-pv-stage>'+opts+'</select></label></div></div>';
@@ -13323,6 +13326,7 @@ try{(function(){
   ".pv-row a{color:#1d5fd0;text-decoration:none;font-weight:600}.pv-row a:hover{text-decoration:underline}.pv-sep{color:#cbd5e1;margin:0 2px}",
   ".pv-lnk{border:0;background:none;color:#1d5fd0;font-weight:700;font-size:13px;cursor:pointer;padding:0;font-family:inherit;text-decoration:underline}.pv-last{white-space:pre-line}",
   ".pv-tags{display:flex;flex-wrap:wrap;gap:6px}.pv-chip{background:#e8f1fd;color:#1d5fd0;border-radius:7px;padding:4px 10px;font-size:12.5px;font-weight:600}",
+  ".pv-ip{margin:6px 22px 0}.pv-ip .cz-ipbox{margin:0}",
   ".pv-ft{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:14px 22px 18px;margin-top:6px;border-top:1px solid #eef2f7}",
   ".pv-acts{display:flex;flex-wrap:wrap;gap:6px}",
   ".pv-b{display:inline-flex;align-items:center;gap:6px;border:1px solid #dfe6f0;background:#fff;color:#16447f;border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;text-decoration:none;cursor:pointer;font-family:inherit}.pv-b svg{width:14px;height:14px}.pv-b:hover{background:#f3f7fd}",
