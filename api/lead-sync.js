@@ -99,7 +99,7 @@ const VALID_STAGES = [
   "open_enrollment", "affordable_care_act", "ghosted", "no_longer_interested",
   "disqualified", "sold", "dead",
 ];
-const VALID_BIZ_STAGES = ["prospect", "contacted", "meeting", "proposal", "won", "lost", "dead"];
+const VALID_BIZ_STAGES = ["prospect", "working", "contacted", "proposal", "meeting", "won", "lost", "dead"];
 
 // A note line written by a pre-submit capture (api/lead-draft). Recognisable so
 // the merge can replace the previous one instead of appending another.
