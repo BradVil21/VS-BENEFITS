@@ -6400,6 +6400,9 @@ function openBizLeadForm(b){
    +'<label class="cz-fld"><span>Stage</span><select class="cz-inp" id="bz_stage">'+stageOpts+'</select></label>'
    +'<label class="cz-fld"><span>Email</span><input class="cz-inp" id="bz_email" value="'+escapeHtml(b.email||"")+'" placeholder="jane@acme.com"/></label>'
    +'<label class="cz-fld"><span>Phone</span><input class="cz-inp" id="bz_phone" value="'+escapeHtml(b.phone||"")+'" placeholder="(561) 555-0100"/></label>'
+   +'<label class="cz-fld cz-full"><span>Address</span><input class="cz-inp" id="bz_address" value="'+escapeHtml(b.address||"")+'" placeholder="123 Main St" autocomplete="street-address"/></label>'
+   +'<label class="cz-fld"><span>City</span><input class="cz-inp" id="bz_city" value="'+escapeHtml(b.city||"")+'" placeholder="Miami"/></label>'
+   +'<label class="cz-fld"><span>State / ZIP</span><span style="display:flex;gap:6px"><input class="cz-inp" id="bz_state" value="'+escapeHtml(b.state||"")+'" placeholder="FL" maxlength="2" style="width:64px;text-transform:uppercase"/><input class="cz-inp" id="bz_zip" value="'+escapeHtml(b.zipCode||b.zipcode||"")+'" placeholder="33101" maxlength="10" style="flex:1"/></span></label>'
    +'<label class="cz-fld"><span>Source</span><input class="cz-inp" id="bz_source" list="cz-sources" value="'+escapeHtml(b.source||"")+'" placeholder="LinkedIn, referral, chamber..."/></label>'
    +'<label class="cz-fld"><span>Next follow-up</span><input class="cz-inp" id="bz_followup" type="date" value="'+escapeHtml(b.nextFollowUp||"")+'"/></label>'
    +'<div class="cz-fld cz-full"><span>Notes</span><div class="cz-quicknote"><input class="cz-inp" id="bz_quicknote" placeholder="Quick note during a call, hit Add (timestamps it)"/><button type="button" class="cz-btn-go" id="bz-addnote">Add</button></div><textarea class="cz-inp" id="bz_notes" rows="4" placeholder="Meeting notes, objections, decision makers, plan interest...">'+escapeHtml(b.notes||"")+'</textarea></div>'
@@ -6420,6 +6423,7 @@ function openBizLeadForm(b){
     rec.company=company;rec.contact=contact;rec.niche=g("bz_niche");rec.employees=g("bz_employees");
     rec.requestedCoverage=g("bz_coverage");rec.currentlyInsured=g("bz_insured");rec.coverageStart=g("bz_start");
     rec.stage=g("bz_stage")||"prospect";rec.email=g("bz_email").trim();rec.phone=g("bz_phone").trim();
+    rec.address=g("bz_address").trim();rec.city=g("bz_city").trim();rec.state=g("bz_state").trim().toUpperCase();rec.zipCode=g("bz_zip").trim();
     rec.source=g("bz_source").trim();rec.nextFollowUp=g("bz_followup");rec.notes=g("bz_notes");rec.updated=Date.now();
     if(isNew)arr.unshift(rec);
     saveBizLeads(arr);closeModal();renderBizLeads();
@@ -9740,7 +9744,7 @@ try{(function(){
     var all=getBizLeads();
     var bdg=$("b-biz");if(bdg){var openN=all.filter(isOpen).length;bdg.textContent=openN;bdg.style.display=openN>0?"":"none";}
     var panel=$("p-bizleads");
-    var lede=panel&&panel.querySelector("p.lede");if(lede&&!lede.__bz){lede.__bz=1;lede.textContent="Every small-group and partner deal from first call to signed. Click a card for details, drag it, or use Next step to move it along.";}
+    var lede=panel&&panel.querySelector("p.lede");if(lede&&!lede.__bz){lede.__bz=1;lede.textContent="Every small-group and partner deal from first call to signed. Click a row to open it, change its status right in the table, or tap + Closing for deals you expect to close.";}
     var q=(($("biz-search")&&$("biz-search").value)||"").toLowerCase().trim();
     var searched=all.filter(function(b){return !q||[b.company,b.contact,b.email,b.phone,b.niche,b.notes].join(" ").toLowerCase().indexOf(q)>=0;});
     var open=all.filter(isOpen);
@@ -10345,6 +10349,7 @@ try{(function(){
       +item("Type / niche",esc(val("bz_niche")),{field:"bz_niche"})
       +item("Phone",ph?'<a href="tel:'+esc(tel)+'">'+esc(fmtPhone(ph))+'</a><button type="button" class="vsp-mini" data-vsp-copy="'+esc(fmtPhone(ph))+'">Copy</button>':"",{field:"bz_phone"})
       +item("Email",em?'<a href="mailto:'+esc(em)+'">'+esc(em.toLowerCase())+'</a><button type="button" class="vsp-mini" data-vsp-copy="'+esc(em)+'">Copy</button>':"",{field:"bz_email"})
+      +(function(){var ad=[val("bz_address"),val("bz_city"),[val("bz_state").toUpperCase(),val("bz_zip")].filter(Boolean).join(" ")].filter(Boolean).join(", ");return item("Address",ad?'<a href="https://maps.google.com/?q='+encodeURIComponent(ad)+'" target="_blank" rel="noopener">'+esc(ad)+'</a><button type="button" class="vsp-mini" data-vsp-copy="'+esc(ad)+'">Copy</button>':"",{field:"bz_address",wide:true});})()
       +item("Employees",esc(val("bz_employees")),{field:"bz_employees"})
       +item("Requested coverage",esc(selText("bz_coverage")),{field:"bz_coverage"})
       +item("Currently insured",ins?esc(ins)+(ins==="No"?' <span class="vsp-tag warn">First group plan</span>':''):"",{field:"bz_insured"})
@@ -10387,7 +10392,7 @@ try{(function(){
     ["bz_contact","bz_niche","bz_employees"].forEach(function(id){var f=fld(id);if(f)A.grid.appendChild(f);});
     ["bz_coverage","bz_insured","bz_start"].forEach(function(id){var f=fld(id);if(f)B.grid.appendChild(f);});
     ["bz_stage","bz_source","bz_followup"].forEach(function(id){var f=fld(id);if(f)C.grid.appendChild(f);});
-    ["bz_phone","bz_email"].forEach(function(id){var f=fld(id);if(f)D.grid.appendChild(f);});
+    ["bz_phone","bz_email","bz_address","bz_city","bz_state"].forEach(function(id){var f=fld(id);if(f){if(id==="bz_address")f.classList.add("cz-full");D.grid.appendChild(f);}});
     var nf=fld("bz_notes");if(nf){nf.classList.add("cz-full");N.grid.appendChild(nf);}
     N.grid.style.gridTemplateColumns="1fr";
     [].slice.call(grid.children).forEach(function(ch){N.grid.appendChild(ch);});
@@ -12239,7 +12244,7 @@ try{(function(){
     var host=$("p-bizleads");if(!host)return;
     var mount=$("biz-table-mount");
     if(!mount){mount=document.createElement("div");mount.id="biz-table-mount";var lst=$("biz-list");if(lst)lst.parentNode.insertBefore(mount,lst);else host.appendChild(mount);}
-    var boardOn=BZV.view==="board";host.classList.toggle("bz-boardview",boardOn);
+    BZV.view="table";var boardOn=false;host.classList.toggle("bz-boardview",false);
     var all=getBizLeads(),q=(($("biz-search")||{}).value||"").toLowerCase().trim(),td=ymd(new Date());
     function stg(b){var st=b.stage||"prospect";return BIZ_STAGES.some(function(x){return x.id===st;})?st:"prospect";}
     var closed={won:1,lost:1,dead:1};
@@ -12271,13 +12276,15 @@ try{(function(){
         +'<td>'+(b.source?esc(czSourceLabel(b.source)):'<span class="ap-dash">-</span>')+'</td>'
         +'<td>'+(fu?'<span class="ap-pay '+(fu<td?"p-bad":fu===td?"p-warn":"p-mid")+'">'+d(fu)+'</span>':'<span class="ap-dash">-</span>')+'</td>'
         +'<td>'+d(b.created)+'</td></tr>';}).join("");
-    mount.innerHTML='<div class="ac-bar"><div class="ap-seg" data-bzv><button type="button" data-v="table"'+(boardOn?'':' class="on"')+'>Table</button><button type="button" data-v="board"'+(boardOn?' class="on"':'')+'>Board</button></div>'
-      +(boardOn?'':'<select class="bz-sort">'+[["added","Newest first"],["new","Recently updated"],["az","Company A to Z"],["fu","Next follow-up"],["emp","Most employees"],["stage","Stage"]].map(function(o){return '<option value="'+o[0]+'"'+(BZV.sort===o[0]?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>')+'</div>'
-      +(boardOn?'':'<div class="ap-chips">'+chips.map(function(c){return '<button type="button" class="ap-chip'+(BZV.stage===c[0]?" on":"")+(c[0]==="due"&&c[2]?" bad":"")+'" data-bzs="'+c[0]+'">'+esc(c[1])+'<b>'+c[2]+'</b></button>';}).join("")+'</div>'
-      +'<div class="ap-card ap-tcard"><div class="ap-tw"><table class="ap-t"><thead><tr><th>Company</th><th>Status</th><th>Contact</th><th>Phone / email</th><th class="num">Employees</th><th>Source</th><th>Next follow-up</th><th>Added</th></tr></thead><tbody>'+(body||'<tr><td colspan="8" class="ap-empty">No business leads match.</td></tr>')+'</tbody></table></div><div class="ap-foot">'+L.length+' business lead'+(L.length===1?"":"s")+' · click a row to open it</div></div>');
+    /* 2026-11-12: table only (no board), stage filter is a drop-down instead of a row of chips */
+    var fsel='<label class="bz-fl"><span>Show</span><select class="bz-filter">'+chips.map(function(c){return '<option value="'+c[0]+'"'+(BZV.stage===c[0]?" selected":"")+'>'+esc(c[1])+' ('+c[2]+')</option>';}).join("")+'</select></label>';
+    mount.innerHTML='<div class="ac-bar">'+fsel
+      +(boardOn?'':'<label class="bz-fl"><span>Sort</span><select class="bz-sort">'+[["added","Newest first"],["new","Recently updated"],["az","Company A to Z"],["fu","Next follow-up"],["emp","Most employees"],["stage","Stage"]].map(function(o){return '<option value="'+o[0]+'"'+(BZV.sort===o[0]?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select></label>')+(counts.due?'<button type="button" class="bz-duebtn'+(BZV.stage==="due"?" on":"")+'" data-bzs="due">'+counts.due+' follow-up'+(counts.due===1?"":"s")+' due</button>':'')+'</div>'
+      +(boardOn?'':'<div class="ap-card ap-tcard"><div class="ap-tw"><table class="ap-t"><thead><tr><th>Company</th><th>Status</th><th>Contact</th><th>Phone / email</th><th class="num">Employees</th><th>Source</th><th>Next follow-up</th><th>Added</th></tr></thead><tbody>'+(body||'<tr><td colspan="8" class="ap-empty">No business leads match.</td></tr>')+'</tbody></table></div><div class="ap-foot">'+L.length+' business lead'+(L.length===1?"":"s")+' · click a row to open it</div></div>');
     mount.querySelectorAll("[data-bzv] button").forEach(function(b){b.addEventListener("click",function(){BZV.view=b.getAttribute("data-v");bizTable();});});
     mount.querySelectorAll("[data-bzs]").forEach(function(b){b.addEventListener("click",function(){BZV.stage=b.getAttribute("data-bzs");bizTable();});});
     var so=mount.querySelector(".bz-sort");if(so)so.addEventListener("change",function(){BZV.sort=so.value;bizTable();});
+    var fs=mount.querySelector(".bz-filter");if(fs)fs.addEventListener("change",function(){BZV.stage=fs.value;bizTable();});
     mount.querySelectorAll("[data-bzst]").forEach(function(se){se.addEventListener("click",function(e){e.stopPropagation();});se.addEventListener("change",function(){bizSetStage(se.getAttribute("data-bzst"),se.value);});});
     mount.querySelectorAll("tr[data-biz]").forEach(function(tr){tr.addEventListener("click",function(e){if(e.target.closest("a,select,button,input"))return;var id=tr.getAttribute("data-biz");var b=getBizLeads().filter(function(x){return x.id===id;})[0];if(b)openBizLeadForm(b);});});
   }
@@ -12941,7 +12948,9 @@ try{(function(){
   "#p-bonus .bc-log .ap-card-h{flex-wrap:wrap;gap:6px}#p-bonus .bc-logn{font-size:12px;color:#7b8aa0}#p-bonus .bc-logl{display:grid;gap:6px}#p-bonus .bc-li{display:grid;grid-template-columns:56px minmax(0,1.3fr) 64px auto minmax(0,1.6fr);gap:10px;align-items:center;font-size:13px;padding:7px 10px;border-radius:10px;background:#f7f9fc}#p-bonus .bc-li .d{color:#8a99ad;font-size:12px}#p-bonus .bc-li .nm{font-weight:800;color:#0b2346}#p-bonus .bc-li .nm i{font-style:normal;margin-left:4px}#p-bonus .bc-li .mo{font-weight:700;color:#33455c}#p-bonus .bc-li b{font-size:12px;border-radius:999px;padding:2px 8px;white-space:nowrap}#p-bonus .bc-li b.up{background:#e6f8f1;color:#047857}#p-bonus .bc-li b.dn{background:#fde8e8;color:#b42318}#p-bonus .bc-li b.mid{background:#eef4fd;color:#16447f}#p-bonus .bc-li em{font-style:normal;color:#6b7c92;font-size:12px}@media(max-width:700px){#p-bonus .bc-li{grid-template-columns:1fr auto;}#p-bonus .bc-li .d,#p-bonus .bc-li em{grid-column:1/-1}}",
   ".ap-pchk{font-size:12.5px;color:#42566e;background:#f3f6fb;border-radius:10px;padding:8px 12px;margin:0 0 12px;line-height:1.5}.ap-pchk b.ok{color:#047857}.ap-pchk b.bad{color:#b42318}",
   ".ap-man{display:inline-block;background:#eef4fd;color:#16447f;border-radius:999px;padding:0 7px;font-weight:800;font-size:10.5px}.ap-ghl{color:#08776c;font-weight:800;font-style:normal;font-size:11px}",
-  "#p-bizleads:not(.bz-boardview) #biz-list,#p-bizleads:not(.bz-boardview) #bz-top .bz-chips{display:none!important}",
+  "#p-bizleads #biz-list,#p-bizleads #bz-top .bz-chips{display:none!important}",
+  "#p-bizleads .bz-fl{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;color:#7b8aa0;text-transform:uppercase;letter-spacing:.04em}#p-bizleads .bz-fl select{appearance:none;-webkit-appearance:none;border:1.5px solid #dfe6f0;border-radius:10px;padding:8px 34px 8px 12px;font-size:13.5px;font-weight:700;color:#0b2346;background:#fff url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='2' fill='none'/%3E%3C/svg%3E\") no-repeat right 12px center;cursor:pointer;font-family:inherit;text-transform:none;letter-spacing:0;min-width:190px}#p-bizleads .bz-fl select:focus{outline:none;border-color:#5b9cf0;box-shadow:0 0 0 3px #dbeafe}",
+  "#p-bizleads .bz-duebtn{border:1.5px solid #fecaca;background:#fff5f5;color:#b42318;border-radius:999px;padding:7px 13px;font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit}#p-bizleads .bz-duebtn.on{background:#b42318;border-color:#b42318;color:#fff}",
   "#p-bizleads .ac-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:4px 0 14px}",
   "#p-bizleads .bz-sort{border:1px solid #dfe6f0;border-radius:10px;padding:8px 12px;font-size:13.5px;background:#fff;color:#0b2346;font-weight:700}",
   "#p-bizleads .ap-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}#p-bizleads .ap-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid #dfe6f0;background:#fff;border-radius:999px;padding:8px 14px;font-weight:750;font-size:13px;color:#33455c;cursor:pointer}#p-bizleads .ap-chip b{background:#eef2f8;color:#0b2346;border-radius:999px;padding:1px 8px;font-size:12px}#p-bizleads .ap-chip.on{background:#0b2346;color:#fff;border-color:#0b2346}#p-bizleads .ap-chip.on b{background:rgba(255,255,255,.18);color:#fff}#p-bizleads .ap-chip.bad b{background:#fdecec;color:#b42a24}",
@@ -13171,13 +13180,14 @@ try{(function(){
     var tel=r.phone?String(r.phone).replace(/[^0-9+]/g,""):"";
     var contact=[r.phone?'<a href="tel:'+esc(tel)+'">'+esc(phoneFmt(r.phone))+'</a>':"",r.email?'<a href="mailto:'+esc(r.email)+'">'+esc(r.email)+'</a>':""].filter(Boolean).join(SEP);
     var place=[tc(r.city),r.state,r.zipCode||r.zipcode].filter(Boolean).join(", ");
+    var full=[r.address,place].filter(Boolean).join(", ");
     var notes=noteEntries(r),last=notes[0]||"";
     var body="",sub="",tags="";
     if(biz){
       sub=[r.niche,place].filter(Boolean).join(" · ")||"Business lead";
       var who=[r.contact?'<b>'+esc(tc(r.contact))+'</b>':"",r.title?esc(r.title):""].filter(Boolean).join(SEP);
       var cov=[r.requestedCoverage?"Wants "+esc(r.requestedCoverage):"",r.currentlyInsured?"Currently insured: "+esc(r.currentlyInsured):"",r.coverageStart?"Start "+esc(shortDate(r.coverageStart)):""].filter(Boolean).join(SEP);
-      body=row(I.cal,'<b>Came in</b> '+esc(cameIn(r)||"-"))+row(I.user,who)+row(I.phone,contact)+row(I.users,r.employees?'<b>'+esc(r.employees)+'</b> employees':'')+row(I.shield,cov)+row(I.pin,esc(place))
+      body=row(I.cal,'<b>Came in</b> '+esc(cameIn(r)||"-"))+row(I.user,who)+row(I.phone,contact)+row(I.users,r.employees?'<b>'+esc(r.employees)+'</b> employees':'')+row(I.shield,cov)+row(I.pin,full?'<a href="https://maps.google.com/?q='+encodeURIComponent(full)+'" target="_blank" rel="noopener">'+esc(full)+'</a>':'')
         +row(I.dollar,Number(r.dealValue)>0?'<b>'+esc(money(r.dealValue))+'</b>/mo estimated':'')
         +row(I.clock,r.nextFollowUp?'<b>Follow-up</b> '+esc(shortDate(r.nextFollowUp)):'');
       tags=chip(srcLabel(r.source))+chip(r.niche)+chip(r.state);
