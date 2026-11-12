@@ -12261,8 +12261,9 @@ try{(function(){
     var chips=[["open","Open",counts.open],["due","Follow-up due",counts.due]].concat(BIZ_STAGES.map(function(x){return [x.id,x.label,counts[x.id]];})).concat([["all","All",counts.all]]);
     var body=L.map(function(b){var st=stg(b),m=bizStageMeta(st),fu=b.nextFollowUp?String(b.nextFollowUp).slice(0,10):"";
       var opts=BIZ_STAGES.map(function(x){return '<option value="'+x.id+'"'+(x.id===st?" selected":"")+'>'+x.label+'</option>';}).join("");
-      var isNewBz=(Date.now()-(Number(b.created)||0))<864e5;
-      return '<tr data-biz="'+esc(b.id)+'"'+(isNewBz?' style="background:#f0fdf4"':'')+'><td><b class="ap-nm">'+(isNewBz?'<span style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;color:#fff;background:#16a34a;border-radius:4px;padding:1px 5px;margin-right:6px;vertical-align:1px">NEW</span>':'')+esc(b.company||"(no company)")+'</b><small>'+esc(b.niche||"")+'</small></td>'
+      /* badge next to the company follows the status: green NEW for a lead added in the last 24h that you haven't touched, otherwise the current status in its color */
+      var isNewBz=st==="prospect"&&(Date.now()-(Number(b.created)||0))<864e5,bgc=isNewBz?"#16a34a":m.color,blb=isNewBz?"NEW":m.label.toUpperCase();
+      return '<tr data-biz="'+esc(b.id)+'"'+(isNewBz?' style="background:#f0fdf4"':'')+'><td><b class="ap-nm"><span class="bz-badge" style="display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;color:#fff;background:'+bgc+';border-radius:4px;padding:1px 5px;margin-right:6px;vertical-align:1px">'+esc(blb)+'</span>'+esc(b.company||"(no company)")+'</b><small>'+esc(b.niche||"")+'</small></td>'
         +'<td><span class="bz-dot" style="background:'+m.color+'"></span><select class="bz-st" data-bzst="'+esc(b.id)+'" style="border-color:'+m.color+';color:'+m.color+'">'+opts+'</select></td>'
         +'<td>'+esc(b.contact||"")+(b.title?'<small>'+esc(b.title)+'</small>':'')+'</td>'
         +'<td>'+(b.phone?'<a href="tel:'+esc(String(b.phone).replace(/[^0-9+]/g,""))+'" class="bz-lnk">'+esc(b.phone)+'</a>':'')+(b.email?'<small><a href="mailto:'+esc(b.email)+'" class="bz-lnk">'+esc(b.email)+'</a></small>':'')+'</td>'
