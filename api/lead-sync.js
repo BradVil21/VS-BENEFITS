@@ -254,6 +254,8 @@ async function toCrm(d, req, res) {
       out.tagged = Boolean(t.ok);
       out.tags = tags;
     } catch (e) { out.tagged = false; }
+    // Tell the creator someone used their link (never who). See api/_affiliate-event.js
+    if (out.affiliate) out.affiliateNotice = await affiliateHeadsUp(out.affiliate, contactId);
 
     if (p.notes) {
       try { await L.ghl("/contacts/" + contactId + "/notes", "POST", { body: p.notes }); out.noted = true; }
@@ -886,6 +888,23 @@ async function pushLeadToBoards(d) {
     companyName: d.company || "",
   };
   return syncToBoards(normalize(contact, d));
+}
+
+
+// "Someone just used your link" to the creator behind ?ref=code. Capped at 5s
+// so a slow CRM never holds up the lead. Keyed on the referred contact, so the
+// same person re-submitting doesn't text the creator twice in a row.
+async function affiliateHeadsUp(code, referredContactId) {
+  try {
+    const AE = require("./_affiliate-event");
+    const job = (async function () {
+      const c = await AE.findCreator(function (x) { return x && String(x.code || "").toLowerCase() === code; });
+      if (!c || !AE.valid("referral", c, "")) return "no_active_creator";
+      const r = await AE.notify(c, "referral", referredContactId || "");
+      return r.sent ? "sent" : (r.skipped || "not_sent");
+    })();
+    return await Promise.race([job, new Promise(function (r) { setTimeout(function () { r("timeout"); }, 5000); })]);
+  } catch (e) { return "error"; }
 }
 
 module.exports = async (req, res) => {

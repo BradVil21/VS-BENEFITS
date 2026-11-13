@@ -124,6 +124,16 @@ module.exports = async (req, res) => {
       return true;
     });
     out.portal = w.action || w.reason;
+    // Welcome text + email through the GHL workflow "Affiliate - Send Update".
+    try {
+      if (w.ok) {
+        const AE = require("./_affiliate-event");
+        out.welcome = await Promise.race([
+          AE.notify(Object.assign({}, rec, { id: w.id || rec.id }), "applied", "welcome"),
+          new Promise(function (r) { setTimeout(function () { r({ skipped: "timeout" }); }, 5000); }),
+        ]);
+      }
+    } catch (e) { out.welcome = "error"; }
   } catch (e) { out.portal = "error"; }
 
   // ---- 3. text alert ----

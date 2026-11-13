@@ -13540,6 +13540,9 @@ try{(function(){
   function save(a){return setArr(K.affiliates,a,true);}
   function upd(id,fn){var a=load();a.forEach(function(x){if(x.id===id){fn(x);x.updated=Date.now();}});save(a);}
   function get(id){return load().filter(function(x){return x.id===id;})[0];}
+  /* GHL messages to the creator (api/_affiliate-event.js -> workflow "Affiliate - Send Update"). Waits for the Firestore save to land first. */
+  function affEvent(id,event,key){try{setTimeout(function(){fetch("/api/affiliate-event",{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,body:JSON.stringify({id:id,event:event,key:String(key||"")})}).then(function(r){return r.json();}).then(function(j){if(window.console)console.log("affiliate-event",event,j);if(j&&j.sent&&typeof addNotif==="function")addNotif("lead",event==="approved"?"Approval + link sent":event==="qualified"?"Reward-earned message sent":"Payout message sent","Texted and emailed the creator via GHL","affiliates");}).catch(function(){});},2500);}catch(e){}}
+  function affApproved(id){var c=get(id);if(c&&normCode(c.code)&&(c.stage==="approved"||c.stage==="active"))affEvent(id,"approved",normCode(c.code));}
   var ST=[
     {id:"applied",label:"New application",color:"#2563eb"},
     {id:"reviewing",label:"Reviewing",color:"#7c3aed"},
@@ -13628,7 +13631,7 @@ try{(function(){
     $("aff-filter").onchange=function(){V.stage=this.value;render();};
     var q=$("aff-q");q.oninput=function(){V.q=q.value.toLowerCase().trim();var p=q.selectionStart;render();var q2=$("aff-q");q2.focus();try{q2.setSelectionRange(p,p);}catch(e){}};
     $("aff-add").onclick=function(){var now=Date.now();var c={id:"aff_"+now.toString(36)+Math.random().toString(36).slice(2,6),firstName:"",lastName:"",email:"",phone:"",handle:"",platforms:[],audience:[],stage:"approved",code:"",reward:Number(localStorage.getItem("vs_aff_reward"))||0,refs:{},payouts:[],notes:"",source:"Added in portal",created:now,updated:now};var a=load();a.unshift(c);save(a);render();openCreator(c.id,true);};
-    host.querySelectorAll("[data-aff-st]").forEach(function(s){s.onclick=function(e){e.stopPropagation();};s.onchange=function(){var v=s.value;upd(s.getAttribute("data-aff-st"),function(c){c.stage=v;stamp(c,"Status: "+stMeta(v).label);});render();badge();};});
+    host.querySelectorAll("[data-aff-st]").forEach(function(s){s.onclick=function(e){e.stopPropagation();};s.onchange=function(){var v=s.value,sid=s.getAttribute("data-aff-st");upd(sid,function(c){c.stage=v;stamp(c,"Status: "+stMeta(v).label);});render();badge();if(v==="approved")affApproved(sid);};});
     host.querySelectorAll("[data-aff-copy]").forEach(function(b){b.onclick=function(e){e.stopPropagation();copy(b.getAttribute("data-aff-copy"),b);};});
     host.querySelectorAll(".afc[data-aff]").forEach(function(cd){cd.onclick=function(e){if(e.target.closest("select,a,input,[data-aff-copy]"))return;openCreator(cd.getAttribute("data-aff"));};});
   }
@@ -13664,7 +13667,7 @@ try{(function(){
       +'<p class="af-err" id="afc-err" hidden></p>'
       +(code?'<div class="af-links"><div class="af-lrow"><input readonly value="'+esc(linkFor(code))+'"><button type="button" data-copy="'+esc(linkFor(code))+'">Copy</button></div>'
         +'<div class="af-lrow"><select id="afc-page">'+pageOpts+'</select><input readonly id="afc-pagelink" value="'+esc(linkFor(code))+'"><button type="button" id="afc-copypage">Copy</button></div>'
-        +'<details class="af-msg"><summary>Approval message to send them</summary><textarea readonly rows="9">'+esc(msg)+'</textarea><button type="button" data-copy="'+esc(msg)+'">Copy message</button></details></div>':'<p class="af-hint2">Pick a short code (their name or handle). Their link will be <b>vshealthbenefits.com/code</b>. Creating it moves them to Approved.</p>')
+        +'<details class="af-msg"><summary>Approval message to send them</summary><textarea readonly rows="9">'+esc(msg)+'</textarea><button type="button" data-copy="'+esc(msg)+'">Copy message</button></details></div>':'<p class="af-hint2">Pick a short code (their name or handle). Their link will be <b>vshealthbenefits.com/code</b>. Creating it moves them to Approved and texts + emails them their link automatically (GHL).</p>')
       +'</div>'
       /* referred leads + payouts */
       +'<div class="af-sec"><div class="af-sech"><b>Leads they sent</b><span class="af-sum">'+s.leads+' lead'+(s.leads===1?"":"s")+' · '+s.q+' qualified · <b>'+money2(s.owed)+'</b> owed</span></div>'
@@ -13696,17 +13699,17 @@ try{(function(){
       var clash=load().filter(function(x){return x.id!==id&&normCode(x.code)===v;})[0];
       if(clash){err.textContent="That code belongs to "+tc((clash.firstName||"")+" "+(clash.lastName||""))+". Pick another.";err.hidden=false;return;}
       if(rw)try{localStorage.setItem("vs_aff_reward",String(rw));}catch(e){}
-      var go=function(){upd(id,function(x){var was=x.code;x.code=v;x.reward=rw;if(!was){if(x.stage==="applied"||x.stage==="reviewing")x.stage="approved";stamp(x,"Link created: /"+v);}else if(was!==v)stamp(x,"Link code changed from /"+was+" to /"+v+" (old link stops crediting)");});re();};err.hidden=true;fetch("/"+v,{cache:"no-store"}).then(function(r){if(r.status!==200)return go();return r.text().then(function(t){if(t.indexOf("vs-creator-go")<0){err.textContent="vshealthbenefits.com/"+v+" is already a page on your site. Pick another code.";err.hidden=false;return;}go();});}).catch(go);
+      var go=function(){upd(id,function(x){var was=x.code;x.code=v;x.reward=rw;if(!was){if(x.stage==="applied"||x.stage==="reviewing")x.stage="approved";stamp(x,"Link created: /"+v);}else if(was!==v)stamp(x,"Link code changed from /"+was+" to /"+v+" (old link stops crediting)");});re();affApproved(id);};err.hidden=true;fetch("/"+v,{cache:"no-store"}).then(function(r){if(r.status!==200)return go();return r.text().then(function(t){if(t.indexOf("vs-creator-go")<0){err.textContent="vshealthbenefits.com/"+v+" is already a page on your site. Pick another code.";err.hidden=false;return;}go();});}).catch(go);
     };
-    $("afc-stage").onchange=function(){var v=this.value;upd(id,function(x){x.stage=v;stamp(x,"Status: "+stMeta(v).label);});re();};
+    $("afc-stage").onchange=function(){var v=this.value;upd(id,function(x){x.stage=v;stamp(x,"Status: "+stMeta(v).label);});re();if(v==="approved")affApproved(id);};
     ov.querySelectorAll("[data-afc-f]").forEach(function(inp){inp.onchange=function(){var k=inp.getAttribute("data-afc-f"),v=inp.value.trim();upd(id,function(x){x[k]=(k==="platforms"||k==="audience")?v.split(/\s*,\s*/).filter(Boolean):(k==="state"?v.toUpperCase().slice(0,2):v);});render();};});
-    ov.querySelectorAll("[data-afl-q]").forEach(function(b){b.onclick=function(){var key=b.getAttribute("data-afl-q");upd(id,function(x){x.refs=x.refs||{};var r=x.refs[key]||{};if(r.q&&!r.paid){delete x.refs[key];}else{r.q=Date.now();r.paid=r.paid||"";x.refs[key]=r;}});re();};});
+    ov.querySelectorAll("[data-afl-q]").forEach(function(b){b.onclick=function(){var key=b.getAttribute("data-afl-q");var nowQ=false;upd(id,function(x){x.refs=x.refs||{};var r=x.refs[key]||{};if(r.q&&!r.paid){delete x.refs[key];}else{if(!r.q)nowQ=true;r.q=Date.now();r.paid=r.paid||"";x.refs[key]=r;}});re();if(nowQ)affEvent(id,"qualified",key);};});
     ov.querySelectorAll("[data-afl-open]").forEach(function(b){b.onclick=function(){var p=b.getAttribute("data-afl-open").split(":");closeAll();if(typeof window.vsOpenLeadView==="function")window.vsOpenLeadView(p[0],p.slice(1).join(":"));};});
     var pay=$("afc-pay");if(pay)pay.onclick=function(){
       var amt=Number($("afc-payamt").value)||0;if(!amt){$("afc-payamt").focus();return;}
       var note=$("afc-paynote").value.trim(),pid="pay_"+Date.now().toString(36);
       if(!confirm("Record a payout of "+money2(amt)+" to "+name+" for "+s.unpaid+" qualified referral"+(s.unpaid===1?"":"s")+"?\n\nThis only records it here. Send the money yourself."))return;
-      upd(id,function(x){var keys=[];Object.keys(x.refs||{}).forEach(function(k){var r=x.refs[k];if(r&&r.q&&!r.paid&&s.list.some(function(l){return l.key===k;})){r.paid=pid;keys.push(k);}});x.payouts=(x.payouts||[]).concat([{id:pid,at:Date.now(),amount:amt,keys:keys,note:note}]);if(x.stage==="approved")x.stage="active";stamp(x,"Payout recorded: "+money2(amt)+(note?" ("+note+")":""));});re();
+      upd(id,function(x){var keys=[];Object.keys(x.refs||{}).forEach(function(k){var r=x.refs[k];if(r&&r.q&&!r.paid&&s.list.some(function(l){return l.key===k;})){r.paid=pid;keys.push(k);}});x.payouts=(x.payouts||[]).concat([{id:pid,at:Date.now(),amount:amt,keys:keys,note:note}]);if(x.stage==="approved")x.stage="active";stamp(x,"Payout recorded: "+money2(amt)+(note?" ("+note+")":""));});re();affEvent(id,"paid",pid);
     };
     function addNote(){var v=$("afc-note").value.trim();if(!v)return;upd(id,function(x){stamp(x,v);});re();}
     $("afc-addnote").onclick=addNote;$("afc-note").onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();addNote();}};

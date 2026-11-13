@@ -84,6 +84,15 @@ module.exports = async (req, res) => {
   // Affiliate / creator link (?ref=code): tag the contact so the creator can be credited.
   if (contactId && attribution && attribution.ref) {
     try { await L.addTagsToContact(contactId, ["affiliate-referral", "aff-" + attribution.ref]); } catch (e) { /* non-fatal */ }
+    // "Someone just used your link" to the creator (never who). See api/_affiliate-event.js
+    try {
+      const AE = require("./_affiliate-event");
+      const code = String(attribution.ref).toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 40);
+      await Promise.race([(async function () {
+        const c = await AE.findCreator(function (x) { return x && String(x.code || "").toLowerCase() === code; });
+        if (c && AE.valid("referral", c, "")) await AE.notify(c, "referral", contactId);
+      })(), new Promise(function (r) { setTimeout(r, 5000); })]);
+    } catch (e) { /* non-fatal */ }
   }
 
   // ---- Business Leads board (Prospect column) ----

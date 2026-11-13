@@ -2034,6 +2034,10 @@
       "destination": "/api/voice-lookup?op=affiliate-apply"
     },
     {
+      "source": "/api/affiliate-event",
+      "destination": "/api/voice-lookup?op=affiliate-event"
+    },
+    {
       "source": "/api/plans",
       "destination": "/api/voice-lookup?op=plans"
     },

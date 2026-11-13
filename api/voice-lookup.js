@@ -148,6 +148,10 @@ module.exports = async (req, res) => {
   if (req.method === "POST" && ((req.query && req.query.op === "affiliate-apply") || /affiliate-apply/.test(req.url || ""))) {
     return require("./_affiliate-apply")(req, res);
   }
+  // POST /api/affiliate-event: portal approved / qualified / paid -> GHL texts + emails. See api/_affiliate-event.js
+  if (req.method === "POST" && ((req.query && req.query.op === "affiliate-event") || /affiliate-event/.test(req.url || ""))) {
+    return require("./_affiliate-event")(req, res);
+  }
   // GET /api/google-rating is rewritten here (see vercel.json); see api/_google-rating.js
   if (req.method === "GET" && ((req.query && req.query.op === "google-rating") || /google-rating/.test(req.url || ""))) {
     return require("./_google-rating")(req, res);
