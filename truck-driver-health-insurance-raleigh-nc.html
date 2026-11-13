@@ -537,6 +537,15 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 }
 </style>
 <style id="vs-nav-center">@media (min-width:960px){header nav.nav-links{flex:1 1 auto;margin-left:28px}header nav.nav-links::before{content:"";margin-left:auto}header nav.nav-links>a.nav-cta{margin-left:auto;width:auto;flex:0 0 auto}}@media (min-width:1200px){header nav.nav-links>:nth-last-child(2){margin-right:98px}}</style>
+<style id="vs-hh-css">
+.vs-hh{display:grid;gap:26px;align-items:center}
+@media(min-width:900px){.vs-hh{grid-template-columns:1.08fr .92fr;gap:48px}.vs-hh-copy{text-align:left}.vs-hh-copy [style*="text-align:center"]{text-align:left!important;margin-left:0!important}.vs-hh-copy .center{text-align:left!important}.vs-hh-copy p,.vs-hh-copy .hero-sub{margin-left:0}}
+.vs-hh-photo{margin:0;border-radius:20px;overflow:hidden;box-shadow:0 26px 54px -26px rgba(11,35,70,.5);background:#e8f0fb;aspect-ratio:4/3;border:5px solid #fff}
+.vs-hh-photo picture,.vs-hh-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.vs-hh-top{aspect-ratio:16/9;margin-bottom:18px}
+.vs-hh-inline{aspect-ratio:16/8;margin:14px 0 18px}
+@media(max-width:899px){.vs-hh-photo{aspect-ratio:16/10}.vs-hh-tool .vs-hh-photo{display:none}}
+</style>
 </head>
 <body>
 
@@ -554,11 +563,11 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
     </button>
     <nav id="nav-links" class="nav-links">
       <a href="/">Home</a>
-      <a href="/services">Services</a><div class="vcov"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">Coverage<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu" role="menu"><a href="/private-health-insurance" role="menuitem"><strong>Private Market Plans</strong><span>Private PPO plans from A-rated carriers</span></a><a href="/truck-driver-health-insurance" role="menuitem"><strong>Truck Drivers &amp; Owner-Operators</strong><span>Nationwide plans for life on the road</span></a><a href="/short-term-health-insurance" role="menuitem"><strong>Short-Term Health Insurance</strong><span>Temporary coverage between plans</span></a><a href="/dental-vision-insurance" role="menuitem"><strong>Dental &amp; Vision</strong><span>Cleanings, glasses and contacts</span></a><a href="/small-business-health-insurance" role="menuitem"><strong>Employer Group Plans</strong><span>Group health for your team</span></a><a class="vcov-foot" href="/trucking-health-quote">Not sure which fits? Get a quote &rarr;</a></div></div><div class="vcov vsa"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">Service Areas<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu vsa-menu" role="menu"><p class="vsa-h">Choose your state</p><div class="vsa-grid"><a href="/alabama-small-business-health-insurance" role="menuitem">Alabama</a><a href="/arizona-small-business-health-insurance" role="menuitem">Arizona</a><a href="/arkansas-small-business-health-insurance" role="menuitem">Arkansas</a><a href="/colorado-small-business-health-insurance" role="menuitem">Colorado</a><a href="/lp/self-employed/florida" role="menuitem">Florida</a><a href="/lp/self-employed/georgia" role="menuitem">Georgia</a><a href="/lp/self-employed/illinois" role="menuitem">Illinois</a><a href="/indiana-small-business-health-insurance" role="menuitem">Indiana</a><a href="/iowa-small-business-health-insurance" role="menuitem">Iowa</a><a href="/kansas-small-business-health-insurance" role="menuitem">Kansas</a><a href="/lp/self-employed/kentucky" role="menuitem">Kentucky</a><a href="/louisiana-small-business-health-insurance" role="menuitem">Louisiana</a><a href="/lp/self-employed/maryland" role="menuitem">Maryland</a><a href="/michigan-small-business-health-insurance" role="menuitem">Michigan</a><a href="/minnesota-small-business-health-insurance" role="menuitem">Minnesota</a><a href="/mississippi-small-business-health-insurance" role="menuitem">Mississippi</a><a href="/lp/self-employed/missouri" role="menuitem">Missouri</a><a href="/montana-small-business-health-insurance" role="menuitem">Montana</a><a href="/nebraska-small-business-health-insurance" role="menuitem">Nebraska</a><a href="/nevada-small-business-health-insurance" role="menuitem">Nevada</a><a href="/north-carolina-small-business-health-insurance" role="menuitem">North Carolina</a><a href="/north-dakota-small-business-health-insurance" role="menuitem">North Dakota</a><a href="/lp/self-employed/ohio" role="menuitem">Ohio</a><a href="/oklahoma-small-business-health-insurance" role="menuitem">Oklahoma</a><a href="/south-carolina-small-business-health-insurance" role="menuitem">South Carolina</a><a href="/south-dakota-small-business-health-insurance" role="menuitem">South Dakota</a><a href="/tennessee-small-business-health-insurance" role="menuitem">Tennessee</a><a href="/lp/self-employed/texas" role="menuitem">Texas</a><a href="/utah-small-business-health-insurance" role="menuitem">Utah</a><a href="/virginia-small-business-health-insurance" role="menuitem">Virginia</a><a href="/west-virginia-small-business-health-insurance" role="menuitem">West Virginia</a><a href="/wisconsin-small-business-health-insurance" role="menuitem">Wisconsin</a><a href="/wyoming-small-business-health-insurance" role="menuitem">Wyoming</a></div><a class="vcov-foot" href="/nationwide-ppo-health-insurance-truck-drivers">Nationwide PPO options: doctors in all 50 states &rarr;</a></div></div>
+      <a href="/services">Services</a><div class="vcov"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">Coverage<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu" role="menu"><a href="/private-health-insurance" role="menuitem"><strong>Private Market Plans</strong><span>Private PPO plans from A-rated carriers</span></a><a href="/truck-driver-health-insurance" role="menuitem"><strong>Truck Drivers &amp; Owner-Operators</strong><span>Nationwide plans for life on the road</span></a><a href="/short-term-health-insurance" role="menuitem"><strong>Short-Term Health Insurance</strong><span>Temporary coverage between plans</span></a><a href="/dental-vision-insurance" role="menuitem"><strong>Dental &amp; Vision</strong><span>Cleanings, glasses and contacts</span></a><a href="/small-business-health-insurance" role="menuitem"><strong>Employer Group Plans</strong><span>Group health for your team</span></a><a class="vcov-foot" href="/quote?from=truck-driver-health-insurance-raleigh-nc&amp;type=individual&amp;niche=trucking">Not sure which fits? Get a quote &rarr;</a></div></div><div class="vcov vsa"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">Service Areas<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu vsa-menu" role="menu"><p class="vsa-h">Choose your state</p><div class="vsa-grid"><a href="/alabama-small-business-health-insurance" role="menuitem">Alabama</a><a href="/arizona-small-business-health-insurance" role="menuitem">Arizona</a><a href="/arkansas-small-business-health-insurance" role="menuitem">Arkansas</a><a href="/colorado-small-business-health-insurance" role="menuitem">Colorado</a><a href="/lp/self-employed/florida" role="menuitem">Florida</a><a href="/lp/self-employed/georgia" role="menuitem">Georgia</a><a href="/lp/self-employed/illinois" role="menuitem">Illinois</a><a href="/indiana-small-business-health-insurance" role="menuitem">Indiana</a><a href="/iowa-small-business-health-insurance" role="menuitem">Iowa</a><a href="/kansas-small-business-health-insurance" role="menuitem">Kansas</a><a href="/lp/self-employed/kentucky" role="menuitem">Kentucky</a><a href="/louisiana-small-business-health-insurance" role="menuitem">Louisiana</a><a href="/lp/self-employed/maryland" role="menuitem">Maryland</a><a href="/michigan-small-business-health-insurance" role="menuitem">Michigan</a><a href="/minnesota-small-business-health-insurance" role="menuitem">Minnesota</a><a href="/mississippi-small-business-health-insurance" role="menuitem">Mississippi</a><a href="/lp/self-employed/missouri" role="menuitem">Missouri</a><a href="/montana-small-business-health-insurance" role="menuitem">Montana</a><a href="/nebraska-small-business-health-insurance" role="menuitem">Nebraska</a><a href="/nevada-small-business-health-insurance" role="menuitem">Nevada</a><a href="/north-carolina-small-business-health-insurance" role="menuitem">North Carolina</a><a href="/north-dakota-small-business-health-insurance" role="menuitem">North Dakota</a><a href="/lp/self-employed/ohio" role="menuitem">Ohio</a><a href="/oklahoma-small-business-health-insurance" role="menuitem">Oklahoma</a><a href="/south-carolina-small-business-health-insurance" role="menuitem">South Carolina</a><a href="/south-dakota-small-business-health-insurance" role="menuitem">South Dakota</a><a href="/tennessee-small-business-health-insurance" role="menuitem">Tennessee</a><a href="/lp/self-employed/texas" role="menuitem">Texas</a><a href="/utah-small-business-health-insurance" role="menuitem">Utah</a><a href="/virginia-small-business-health-insurance" role="menuitem">Virginia</a><a href="/west-virginia-small-business-health-insurance" role="menuitem">West Virginia</a><a href="/wisconsin-small-business-health-insurance" role="menuitem">Wisconsin</a><a href="/wyoming-small-business-health-insurance" role="menuitem">Wyoming</a></div><a class="vcov-foot" href="/nationwide-ppo-health-insurance-truck-drivers">Nationwide PPO options: doctors in all 50 states &rarr;</a></div></div>
       <a href="/about">About</a>
       <a href="/blog">Blog</a>
       <a href="/contact">Contact</a>
-      <a class="nav-cta" href="/trucking-health-quote?from=truck-driver-health-insurance-raleigh-nc">Get a Quote</a>
+      <a class="nav-cta" href="/quote?from=truck-driver-health-insurance-raleigh-nc&amp;type=individual&amp;niche=trucking">Get a Quote</a>
     </nav>
   </div>
 </header>
@@ -571,7 +580,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <h1>Health Insurance for Truck Drivers in Raleigh, NC</h1>
         <p class="hero-sub">Licensed in North Carolina. Compare BCBS NC, UnitedHealthcare, Aetna, Cigna and Ambetter plans available in your county, plus expanded Medicaid and ACA subsidies most drivers do not realize they qualify for.</p>
         <div class="hero-ctas">
-          <a class="btn btn-primary" href="/trucking-health-quote?from=truck-driver-health-insurance-raleigh-nc">See My North Carolina Plans &rarr;</a>
+          <a class="btn btn-primary" href="/quote?from=truck-driver-health-insurance-raleigh-nc&amp;type=individual&amp;niche=trucking">See My North Carolina Plans &rarr;</a>
           <a class="btn btn-secondary" href="tel:+19548251009">Call an Advisor</a>
         </div>
         <div class="hero-meta">
@@ -579,7 +588,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
           <span><span class="dot"></span> 40+ States Licensed</span>
           <span><span class="dot"></span> Results in 2 Minutes</span>
         </div>
-<form class="vsz" action="/trucking-health-quote" method="get" novalidate data-type="individual" data-dest="/trucking-health-quote" data-from="truck-driver-health-insurance-raleigh-nc_zip">
+<form class="vsz" action="/trucking-health-quote" method="get" novalidate data-type="individual" data-dest="/quote" data-niche="trucking" data-from="truck-driver-health-insurance-raleigh-nc_zip">
   <a class="vsz-rating" href="/#reviews-anchor" aria-label="Rated 5.0 out of 5 from 53 Google reviews"><span class="vsz-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span><strong>5.0</strong><span class="vsz-rc">from 53 Google reviews</span></a>
   <label class="vsz-label" for="vsz-in-truck-driver-health-insurance-raleigh-nc">Get your free quote. Start with your ZIP code:</label>
   <div class="vsz-row"><input id="vsz-in-truck-driver-health-insurance-raleigh-nc" name="zip" type="text" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="ZIP code" autocomplete="postal-code" required /><button type="submit" class="vsz-btn">Find Affordable Plans</button></div>
@@ -587,6 +596,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 </form>
 
       </div>
+      <figure class="vs-hh-photo"><picture><source type="image/webp" srcset="/compressed/semi-truck-highway-rain-autumn-640.webp 640w, /compressed/semi-truck-highway-rain-autumn-900.webp 900w, /compressed/semi-truck-highway-rain-autumn.webp 1600w" sizes="(max-width: 900px) 100vw, 560px"><img src="/compressed/semi-truck-highway-rain-autumn.jpg" alt="Semi truck on a North Carolina highway in autumn" width="1600" height="1201" decoding="async" fetchpriority="high" loading="eager"></picture></figure>
     </div>
   </div>
 </section>
@@ -638,7 +648,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <div class="midcta">
   <h3>Based in Raleigh or anywhere in North Carolina?</h3>
   <p>We are licensed in North Carolina and we will compare every carrier available in your county. Free, and there is no obligation.</p>
-  <a class="btn btn-primary" href="/trucking-health-quote?from=truck-driver-health-insurance-raleigh-nc">See My NC Plans &rarr;</a>
+  <a class="btn btn-primary" href="/quote?from=truck-driver-health-insurance-raleigh-nc&amp;type=individual&amp;niche=trucking">See My NC Plans &rarr;</a>
 </div>
 
 <h2>What It Costs in North Carolina</h2>
@@ -708,7 +718,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 
 <div class="container"><div class="vs-oer" data-from="truck-driver-health-insurance-raleigh-nc" data-lang="en"></div></div>
 <section class="qf-section" id="quote" style="padding:36px 0">
-  <div class="qf-cta" style="text-align:center;padding:10px 24px 30px"><a href="/trucking-health-quote?from=truck-driver-health-insurance-raleigh-nc" class="qf-cta-btn" style="display:inline-block;background:#1565d8;color:#fff;font-weight:700;font-size:1.08rem;padding:16px 40px;border-radius:10px;text-decoration:none;box-shadow:0 8px 20px rgba(21,101,216,.28)">Get My Free Quote &rarr;</a><p style="font-size:.85rem;color:#5a6b80;margin:12px 0 0">Free, no obligation.</p></div>
+  <div class="qf-cta" style="text-align:center;padding:10px 24px 30px"><a href="/quote?from=truck-driver-health-insurance-raleigh-nc&amp;type=individual&amp;niche=trucking" class="qf-cta-btn" style="display:inline-block;background:#1565d8;color:#fff;font-weight:700;font-size:1.08rem;padding:16px 40px;border-radius:10px;text-decoration:none;box-shadow:0 8px 20px rgba(21,101,216,.28)">Get My Free Quote &rarr;</a><p style="font-size:.85rem;color:#5a6b80;margin:12px 0 0">Free, no obligation.</p></div>
 </section>
 
 <style>
@@ -780,7 +790,7 @@ function qfFunnelRedirect_truck_driver_health_insurance_raleigh_nc() {
 
 
 <!-- vs-trucking-hub -->
-<section class="section" style="background:#f4f8fe"><div class="container"><h2 style="margin-top:0">Trucking Coverage Guides</h2><p style="margin-top:-.4rem;opacity:.8">Everything we publish for drivers, owner-operators and fleets.</p><ul style="columns:2;column-gap:2rem;line-height:2;list-style:none;padding-left:0"><li><a href="/truck-driver-health-insurance">Truck Driver Health Insurance</a></li><li><a href="/best-health-insurance-owner-operators">Best Plans for Owner-Operators</a></li><li><a href="/truck-driver-health-insurance-cost">What Drivers Actually Pay</a></li><li><a href="/cdl-driver-health-insurance">CDL Drivers &amp; Your Medical Card</a></li><li><a href="/does-health-insurance-cover-dot-physical">Does Insurance Cover DOT Physicals?</a></li><li><a href="/blog/can-owner-operators-deduct-health-insurance">Can Truckers Deduct Premiums?</a></li><li><a href="/health-insurance-for-trucking-companies">Fleet &amp; Company Group Plans</a></li><li><a href="/owner-operator-plan-finder">Owner-Operator Plan Finder</a></li><li><a href="/truck-driver-health-insurance-florida">Florida Truck Drivers</a></li><li><a href="/aca-vs-private-health-insurance-truck-drivers">ACA vs Private Plans</a></li></ul><p style="margin-bottom:0"><a class="btn btn-primary" href="/trucking-health-quote?from=truck-driver-health-insurance-raleigh-nc">Get a Free Quote</a></p></div></section>
+<section class="section" style="background:#f4f8fe"><div class="container"><h2 style="margin-top:0">Trucking Coverage Guides</h2><p style="margin-top:-.4rem;opacity:.8">Everything we publish for drivers, owner-operators and fleets.</p><ul style="columns:2;column-gap:2rem;line-height:2;list-style:none;padding-left:0"><li><a href="/truck-driver-health-insurance">Truck Driver Health Insurance</a></li><li><a href="/best-health-insurance-owner-operators">Best Plans for Owner-Operators</a></li><li><a href="/truck-driver-health-insurance-cost">What Drivers Actually Pay</a></li><li><a href="/cdl-driver-health-insurance">CDL Drivers &amp; Your Medical Card</a></li><li><a href="/does-health-insurance-cover-dot-physical">Does Insurance Cover DOT Physicals?</a></li><li><a href="/blog/can-owner-operators-deduct-health-insurance">Can Truckers Deduct Premiums?</a></li><li><a href="/health-insurance-for-trucking-companies">Fleet &amp; Company Group Plans</a></li><li><a href="/owner-operator-plan-finder">Owner-Operator Plan Finder</a></li><li><a href="/truck-driver-health-insurance-florida">Florida Truck Drivers</a></li><li><a href="/aca-vs-private-health-insurance-truck-drivers">ACA vs Private Plans</a></li></ul><p style="margin-bottom:0"><a class="btn btn-primary" href="/quote?from=truck-driver-health-insurance-raleigh-nc&amp;type=individual&amp;niche=trucking">Get a Free Quote</a></p></div></section>
 <section class="section vs-guide-sec" style="padding-top:36px;padding-bottom:36px"><div class="container"><div data-vs-guide="/truck-driver-health-insurance-raleigh-nc"></div></div></section>
 <section class="vs-related-guides" data-block="truck-cluster">
   <div class="vs-rg-inner">
@@ -809,7 +819,7 @@ function qfFunnelRedirect_truck_driver_health_insurance_raleigh_nc() {
 <section class="vs-related-guides" data-block="vs-truck-verticals">
   <div class="vs-rg-inner">
     <h2>Fleet coverage and driver medical certification</h2>
-    <p class="vs-rg-sub">Group plans for fleets by segment, plus what actually decides whether a driver keeps a two-year card. Ready for numbers instead? <a href="/trucking-health-quote?from=truck-driver-health-insurance-raleigh-nc" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
+    <p class="vs-rg-sub">Group plans for fleets by segment, plus what actually decides whether a driver keeps a two-year card. Ready for numbers instead? <a href="/quote?from=truck-driver-health-insurance-raleigh-nc&amp;type=individual&amp;niche=trucking" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
     <div class="vs-rg-grid">
         <a class="vs-rg-card" href="/health-insurance-for-trucking-companies">
           <strong>Group Health for Trucking Companies</strong>
@@ -827,7 +837,7 @@ function qfFunnelRedirect_truck_driver_health_insurance_raleigh_nc() {
 <section class="vs-related-guides" data-block="vs-trucking-tools">
   <div class="vs-rg-inner">
     <h2>Driver tools and coverage guides</h2>
-    <p class="vs-rg-sub">Work out the number first, then choose where to buy. Ready to talk to somebody? <a href="/trucking-health-quote?from=truck-driver-health-insurance-raleigh-nc" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
+    <p class="vs-rg-sub">Work out the number first, then choose where to buy. Ready to talk to somebody? <a href="/quote?from=truck-driver-health-insurance-raleigh-nc&amp;type=individual&amp;niche=trucking" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
     <div class="vs-rg-grid">
         <a class="vs-rg-card" href="/dot-physical-blood-pressure-requirements">
           <strong>DOT Blood Pressure Limits</strong>
@@ -930,7 +940,7 @@ function qfFunnelRedirect_truck_driver_health_insurance_raleigh_nc() {
           <li><a href="/about">About</a></li><li><a href="/meet-the-team">Meet the Team</a></li><li><a href="/bradley-vilsaint">Our Founder</a></li><li><a href="/careers">Careers</a></li><li><a href="/refer-and-earn">Refer &amp; Earn</a></li><li><a href="/affiliate-program">Affiliate Program</a></li><li><a href="/trucking-partners">Trucking Partners</a></li>
           <li><a href="/blog">Blog</a></li>
           <li><a href="/contact">Contact</a></li>
-          <li><a href="/trucking-health-quote?from=truck-driver-health-insurance-raleigh-nc">Get a Quote</a></li>
+          <li><a href="/quote?from=truck-driver-health-insurance-raleigh-nc&amp;type=individual&amp;niche=trucking">Get a Quote</a></li>
           <li><a href="/privacy">Privacy Policy</a></li>
           <li><a href="/terms">Terms and Conditions</a></li>
         </ul>
@@ -1340,9 +1350,9 @@ function qfSubmit(pid, label) {
     form.addEventListener('submit',function(e){
       e.preventDefault();
       if(!ok()){err.hidden=false;form.classList.add('has-err');input.focus();return;}
-      var q=carry();q.set('zip',input.value.trim());if(form.dataset.type)q.set('type',form.dataset.type);q.set('from',form.dataset.from||'niche_zip');
+      var q=carry();q.set('zip',input.value.trim());if(form.dataset.type)q.set('type',form.dataset.type);q.set('from',form.dataset.from||'niche_zip');if(form.dataset.niche){q.set('niche',form.dataset.niche);if(!q.get('type'))q.set('type','individual');}
       try{if(typeof gtag==='function')gtag('event','zip_quote_start',{zip_prefix:input.value.slice(0,3),page:location.pathname});}catch(_){}
-      location.href=(form.dataset.dest||'/trucking-health-quote')+'?'+q.toString();
+      location.href=(form.dataset.dest||'/quote')+'?'+q.toString();
     });
   });
 })();

@@ -552,6 +552,15 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 }
 </style>
 <style id="vs-nav-center">@media (min-width:960px){header nav.nav-links{flex:1 1 auto;margin-left:28px}header nav.nav-links::before{content:"";margin-left:auto}header nav.nav-links>a.nav-cta{margin-left:auto;width:auto;flex:0 0 auto}}@media (min-width:1200px){header nav.nav-links>:nth-last-child(2){margin-right:98px}}</style>
+<style id="vs-hh-css">
+.vs-hh{display:grid;gap:26px;align-items:center}
+@media(min-width:900px){.vs-hh{grid-template-columns:1.08fr .92fr;gap:48px}.vs-hh-copy{text-align:left}.vs-hh-copy [style*="text-align:center"]{text-align:left!important;margin-left:0!important}.vs-hh-copy .center{text-align:left!important}.vs-hh-copy p,.vs-hh-copy .hero-sub{margin-left:0}}
+.vs-hh-photo{margin:0;border-radius:20px;overflow:hidden;box-shadow:0 26px 54px -26px rgba(11,35,70,.5);background:#e8f0fb;aspect-ratio:4/3;border:5px solid #fff}
+.vs-hh-photo picture,.vs-hh-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.vs-hh-top{aspect-ratio:16/9;margin-bottom:18px}
+.vs-hh-inline{aspect-ratio:16/8;margin:14px 0 18px}
+@media(max-width:899px){.vs-hh-photo{aspect-ratio:16/10}.vs-hh-tool .vs-hh-photo{display:none}}
+</style>
 </head>
 <body>
 
@@ -569,11 +578,11 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
     </button>
     <nav id="nav-links" class="nav-links">
       <a href="/">Inicio</a>
-      <a href="/services">Servicios</a><div class="vcov"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">Coberturas<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu" role="menu"><a href="/private-health-insurance" role="menuitem"><strong>Planes del Mercado Privado</strong><span>Planes PPO fuera del Marketplace</span></a><a href="/seguro-medico-camioneros" role="menuitem"><strong>Camioneros y Owner-Operators</strong><span>Planes nacionales para la carretera</span></a><a href="/short-term-health-insurance" role="menuitem"><strong>Seguro M&eacute;dico a Corto Plazo</strong><span>Cobertura temporal entre planes</span></a><a href="/dental-vision-insurance" role="menuitem"><strong>Dental y Visi&oacute;n</strong><span>Limpiezas, lentes y contactos</span></a><a href="/small-business-health-insurance" role="menuitem"><strong>Planes Grupales para Empleadores</strong><span>Seguro grupal para su equipo</span></a><a class="vcov-foot" href="/trucking-health-quote">&iquest;No est&aacute; seguro? Obtenga una cotizaci&oacute;n &rarr;</a></div></div><div class="vcov vsa"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">&Aacute;reas de servicio<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu vsa-menu" role="menu"><p class="vsa-h">Elija su estado</p><div class="vsa-grid"><a href="/alabama-small-business-health-insurance" role="menuitem">Alabama</a><a href="/arizona-small-business-health-insurance" role="menuitem">Arizona</a><a href="/arkansas-small-business-health-insurance" role="menuitem">Arkansas</a><a href="/colorado-small-business-health-insurance" role="menuitem">Colorado</a><a href="/lp/self-employed/florida" role="menuitem">Florida</a><a href="/lp/self-employed/georgia" role="menuitem">Georgia</a><a href="/lp/self-employed/illinois" role="menuitem">Illinois</a><a href="/indiana-small-business-health-insurance" role="menuitem">Indiana</a><a href="/iowa-small-business-health-insurance" role="menuitem">Iowa</a><a href="/kansas-small-business-health-insurance" role="menuitem">Kansas</a><a href="/lp/self-employed/kentucky" role="menuitem">Kentucky</a><a href="/louisiana-small-business-health-insurance" role="menuitem">Louisiana</a><a href="/lp/self-employed/maryland" role="menuitem">Maryland</a><a href="/michigan-small-business-health-insurance" role="menuitem">Michigan</a><a href="/minnesota-small-business-health-insurance" role="menuitem">Minnesota</a><a href="/mississippi-small-business-health-insurance" role="menuitem">Mississippi</a><a href="/lp/self-employed/missouri" role="menuitem">Missouri</a><a href="/montana-small-business-health-insurance" role="menuitem">Montana</a><a href="/nebraska-small-business-health-insurance" role="menuitem">Nebraska</a><a href="/nevada-small-business-health-insurance" role="menuitem">Nevada</a><a href="/north-carolina-small-business-health-insurance" role="menuitem">North Carolina</a><a href="/north-dakota-small-business-health-insurance" role="menuitem">North Dakota</a><a href="/lp/self-employed/ohio" role="menuitem">Ohio</a><a href="/oklahoma-small-business-health-insurance" role="menuitem">Oklahoma</a><a href="/south-carolina-small-business-health-insurance" role="menuitem">South Carolina</a><a href="/south-dakota-small-business-health-insurance" role="menuitem">South Dakota</a><a href="/tennessee-small-business-health-insurance" role="menuitem">Tennessee</a><a href="/lp/self-employed/texas" role="menuitem">Texas</a><a href="/utah-small-business-health-insurance" role="menuitem">Utah</a><a href="/virginia-small-business-health-insurance" role="menuitem">Virginia</a><a href="/west-virginia-small-business-health-insurance" role="menuitem">West Virginia</a><a href="/wisconsin-small-business-health-insurance" role="menuitem">Wisconsin</a><a href="/wyoming-small-business-health-insurance" role="menuitem">Wyoming</a></div><a class="vcov-foot" href="/nationwide-ppo-health-insurance-truck-drivers">Opciones PPO nacionales: m&eacute;dicos en los 50 estados &rarr;</a></div></div>
+      <a href="/services">Servicios</a><div class="vcov"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">Coberturas<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu" role="menu"><a href="/private-health-insurance" role="menuitem"><strong>Planes del Mercado Privado</strong><span>Planes PPO fuera del Marketplace</span></a><a href="/seguro-medico-camioneros" role="menuitem"><strong>Camioneros y Owner-Operators</strong><span>Planes nacionales para la carretera</span></a><a href="/short-term-health-insurance" role="menuitem"><strong>Seguro M&eacute;dico a Corto Plazo</strong><span>Cobertura temporal entre planes</span></a><a href="/dental-vision-insurance" role="menuitem"><strong>Dental y Visi&oacute;n</strong><span>Limpiezas, lentes y contactos</span></a><a href="/small-business-health-insurance" role="menuitem"><strong>Planes Grupales para Empleadores</strong><span>Seguro grupal para su equipo</span></a><a class="vcov-foot" href="/quote?from=costo-seguro-medico-camioneros&amp;type=individual&amp;niche=trucking">&iquest;No est&aacute; seguro? Obtenga una cotizaci&oacute;n &rarr;</a></div></div><div class="vcov vsa"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">&Aacute;reas de servicio<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu vsa-menu" role="menu"><p class="vsa-h">Elija su estado</p><div class="vsa-grid"><a href="/alabama-small-business-health-insurance" role="menuitem">Alabama</a><a href="/arizona-small-business-health-insurance" role="menuitem">Arizona</a><a href="/arkansas-small-business-health-insurance" role="menuitem">Arkansas</a><a href="/colorado-small-business-health-insurance" role="menuitem">Colorado</a><a href="/lp/self-employed/florida" role="menuitem">Florida</a><a href="/lp/self-employed/georgia" role="menuitem">Georgia</a><a href="/lp/self-employed/illinois" role="menuitem">Illinois</a><a href="/indiana-small-business-health-insurance" role="menuitem">Indiana</a><a href="/iowa-small-business-health-insurance" role="menuitem">Iowa</a><a href="/kansas-small-business-health-insurance" role="menuitem">Kansas</a><a href="/lp/self-employed/kentucky" role="menuitem">Kentucky</a><a href="/louisiana-small-business-health-insurance" role="menuitem">Louisiana</a><a href="/lp/self-employed/maryland" role="menuitem">Maryland</a><a href="/michigan-small-business-health-insurance" role="menuitem">Michigan</a><a href="/minnesota-small-business-health-insurance" role="menuitem">Minnesota</a><a href="/mississippi-small-business-health-insurance" role="menuitem">Mississippi</a><a href="/lp/self-employed/missouri" role="menuitem">Missouri</a><a href="/montana-small-business-health-insurance" role="menuitem">Montana</a><a href="/nebraska-small-business-health-insurance" role="menuitem">Nebraska</a><a href="/nevada-small-business-health-insurance" role="menuitem">Nevada</a><a href="/north-carolina-small-business-health-insurance" role="menuitem">North Carolina</a><a href="/north-dakota-small-business-health-insurance" role="menuitem">North Dakota</a><a href="/lp/self-employed/ohio" role="menuitem">Ohio</a><a href="/oklahoma-small-business-health-insurance" role="menuitem">Oklahoma</a><a href="/south-carolina-small-business-health-insurance" role="menuitem">South Carolina</a><a href="/south-dakota-small-business-health-insurance" role="menuitem">South Dakota</a><a href="/tennessee-small-business-health-insurance" role="menuitem">Tennessee</a><a href="/lp/self-employed/texas" role="menuitem">Texas</a><a href="/utah-small-business-health-insurance" role="menuitem">Utah</a><a href="/virginia-small-business-health-insurance" role="menuitem">Virginia</a><a href="/west-virginia-small-business-health-insurance" role="menuitem">West Virginia</a><a href="/wisconsin-small-business-health-insurance" role="menuitem">Wisconsin</a><a href="/wyoming-small-business-health-insurance" role="menuitem">Wyoming</a></div><a class="vcov-foot" href="/nationwide-ppo-health-insurance-truck-drivers">Opciones PPO nacionales: m&eacute;dicos en los 50 estados &rarr;</a></div></div>
       <a href="/about">Nosotros</a>
       <a href="/blog">Blog</a>
       <a href="/contact">Contacto</a>
-      <a class="nav-cta" href="/trucking-health-quote?from=costo-seguro-medico-camioneros">Obtener Cotización</a>
+      <a class="nav-cta" href="/quote?from=costo-seguro-medico-camioneros&amp;type=individual&amp;niche=trucking">Obtener Cotización</a>
     </nav>
   </div>
 </header>
@@ -587,7 +596,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <h1>¿Cuánto Cuesta el Seguro Médico para los Camioneros?</h1>
         <p class="hero-sub">Entre $0 y alrededor de $900 al mes, y la diferencia se reduce a una sola cosa que la mayoría de los conductores entiende mal. Aquí están los rangos reales, cómo se calculan los subsidios y cómo encontrar su precio exacto.</p>
         <div class="hero-ctas">
-          <a class="btn btn-primary" href="/trucking-health-quote?from=truck-driver-health-insurance-cost">Ver Mi Precio Real &rarr;</a>
+          <a class="btn btn-primary" href="/quote?from=truck-driver-health-insurance-cost&amp;type=individual&amp;niche=trucking">Ver Mi Precio Real &rarr;</a>
           <a class="btn btn-secondary" href="tel:+19548251009">Llamar a un Asesor</a>
         </div>
         <div class="hero-meta">
@@ -603,6 +612,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 </form>
 
       </div>
+      <figure class="vs-hh-photo"><picture><source type="image/webp" srcset="/compressed/trucker-driving-cab-sunset-900.webp 900w, /compressed/trucker-driving-cab-sunset.webp 1224w" sizes="(max-width: 900px) 100vw, 560px"><img src="/compressed/trucker-driving-cab-sunset.jpg" alt="Camionero manejando al atardecer" width="1224" height="816" decoding="async" fetchpriority="high" loading="eager"></picture></figure>
     </div>
   </div>
 </section>
@@ -658,7 +668,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 <div class="midcta">
   <h3>¿Quiere su número exacto en lugar de un rango?</h3>
   <p>Ingrese su código postal y le mostraremos planes reales y precios reales, incluido cualquier subsidio para el que califique. Gratis y sin compromiso.</p>
-  <a class="btn btn-primary" href="/trucking-health-quote?from=truck-driver-health-insurance-cost">Ver Mi Precio Real &rarr;</a>
+  <a class="btn btn-primary" href="/quote?from=truck-driver-health-insurance-cost&amp;type=individual&amp;niche=trucking">Ver Mi Precio Real &rarr;</a>
 </div>
 
 <h2>Cómo los Subsidios Cambian las Cuentas</h2>
@@ -743,7 +753,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 
 <div class="container"><div class="vs-oer" data-from="costo-seguro-medico-camioneros" data-lang="es"></div></div>
 <section class="qf-section" id="quote" style="padding:36px 0">
-  <div class="qf-cta" style="text-align:center;padding:10px 24px 30px"><a href="/trucking-health-quote?from=costo-seguro-medico-camioneros" class="qf-cta-btn" style="display:inline-block;background:#1565d8;color:#fff;font-weight:700;font-size:1.08rem;padding:16px 40px;border-radius:10px;text-decoration:none;box-shadow:0 8px 20px rgba(21,101,216,.28)">Cotizar Gratis &rarr;</a><p style="font-size:.85rem;color:#5a6b80;margin:12px 0 0">Gratis, sin compromiso.</p></div>
+  <div class="qf-cta" style="text-align:center;padding:10px 24px 30px"><a href="/quote?from=costo-seguro-medico-camioneros&amp;type=individual&amp;niche=trucking" class="qf-cta-btn" style="display:inline-block;background:#1565d8;color:#fff;font-weight:700;font-size:1.08rem;padding:16px 40px;border-radius:10px;text-decoration:none;box-shadow:0 8px 20px rgba(21,101,216,.28)">Cotizar Gratis &rarr;</a><p style="font-size:.85rem;color:#5a6b80;margin:12px 0 0">Gratis, sin compromiso.</p></div>
 </section>
 
 <style>
@@ -817,7 +827,7 @@ function qfFunnelRedirect_truck_driver_health_insurance_cost() {
 <section class="vs-related-guides" data-block="vs-truck-verticals">
   <div class="vs-rg-inner">
     <h2>Fleet coverage and driver medical certification</h2>
-    <p class="vs-rg-sub">Group plans for fleets by segment, plus what actually decides whether a driver keeps a two-year card. Ready for numbers instead? <a href="/trucking-health-quote?from=costo-seguro-medico-camioneros" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
+    <p class="vs-rg-sub">Group plans for fleets by segment, plus what actually decides whether a driver keeps a two-year card. Ready for numbers instead? <a href="/quote?from=costo-seguro-medico-camioneros&amp;type=individual&amp;niche=trucking" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
     <div class="vs-rg-grid">
         <a class="vs-rg-card" href="/health-insurance-for-trucking-companies">
           <strong>Group Health for Trucking Companies</strong>
@@ -835,7 +845,7 @@ function qfFunnelRedirect_truck_driver_health_insurance_cost() {
 <section class="vs-related-guides" data-block="vs-trucking-tools">
   <div class="vs-rg-inner">
     <h2>Driver tools and coverage guides</h2>
-    <p class="vs-rg-sub">Work out the number first, then choose where to buy. Ready to talk to somebody? <a href="/trucking-health-quote?from=costo-seguro-medico-camioneros" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
+    <p class="vs-rg-sub">Work out the number first, then choose where to buy. Ready to talk to somebody? <a href="/quote?from=costo-seguro-medico-camioneros&amp;type=individual&amp;niche=trucking" style="color:#16447f;font-weight:700">Get my quote &rarr;</a></p>
     <div class="vs-rg-grid">
         <a class="vs-rg-card" href="/dot-physical-blood-pressure-requirements">
           <strong>DOT Blood Pressure Limits</strong>
@@ -942,7 +952,7 @@ function qfFunnelRedirect_truck_driver_health_insurance_cost() {
           <li><a href="/about">Nosotros</a></li><li><a href="/meet-the-team">Conozca al equipo</a></li><li><a href="/bradley-vilsaint">Nuestro Fundador</a></li><li><a href="/careers">Empleos</a></li><li><a href="/refer-and-earn">Refiere y Gana</a></li><li><a href="/affiliate-program">Programa de Afiliados</a></li><li><a href="/trucking-partners">Socios de Transporte</a></li>
           <li><a href="/blog">Blog</a></li>
           <li><a href="/contact">Contacto</a></li>
-          <li><a href="/trucking-health-quote?from=costo-seguro-medico-camioneros">Obtener Cotización</a></li>
+          <li><a href="/quote?from=costo-seguro-medico-camioneros&amp;type=individual&amp;niche=trucking">Obtener Cotización</a></li>
           <li><a href="/privacy">Política de Privacidad</a></li>
           <li><a href="/terms">Términos y Condiciones</a></li>
         </ul>

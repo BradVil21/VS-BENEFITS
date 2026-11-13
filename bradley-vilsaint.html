@@ -698,6 +698,15 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 }
 </style>
 <style id="vs-nav-center">@media (min-width:960px){header nav.nav-links{flex:1 1 auto;margin-left:28px}header nav.nav-links::before{content:"";margin-left:auto}header nav.nav-links>a.nav-cta{margin-left:auto;width:auto;flex:0 0 auto}}@media (min-width:1200px){header nav.nav-links>:nth-last-child(2){margin-right:98px}}</style>
+<style id="vs-hh-css">
+.vs-hh{display:grid;gap:26px;align-items:center}
+@media(min-width:900px){.vs-hh{grid-template-columns:1.08fr .92fr;gap:48px}.vs-hh-copy{text-align:left}.vs-hh-copy [style*="text-align:center"]{text-align:left!important;margin-left:0!important}.vs-hh-copy .center{text-align:left!important}.vs-hh-copy p,.vs-hh-copy .hero-sub{margin-left:0}}
+.vs-hh-photo{margin:0;border-radius:20px;overflow:hidden;box-shadow:0 26px 54px -26px rgba(11,35,70,.5);background:#e8f0fb;aspect-ratio:4/3;border:5px solid #fff}
+.vs-hh-photo picture,.vs-hh-photo img{display:block;width:100%;height:100%;object-fit:cover}
+.vs-hh-top{aspect-ratio:16/9;margin-bottom:18px}
+.vs-hh-inline{aspect-ratio:16/8;margin:14px 0 18px}
+@media(max-width:899px){.vs-hh-photo{aspect-ratio:16/10}.vs-hh-tool .vs-hh-photo{display:none}}
+</style>
 </head>
 <body>
 
@@ -725,10 +734,12 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 
 <section class="hero" style="padding-bottom:28px">
   <div class="container">
+<div class="vs-hh"><div class="vs-hh-copy">
     <span class="eyebrow">Founder &amp; CEO</span>
     <h1>Bradley Vilsaint, Founder and CEO of <span>VS Health Benefits</span></h1>
     <p class="hero-sub">A self-made entrepreneur who turned a deep care for people into a mission. Bradley Vilsaint built VS Health Benefits from the ground up into a licensed independent health insurance brokerage that puts clients first, serving individuals, families, and small businesses across 40+ states.</p>
-  </div>
+  </div><figure class="vs-hh-photo"><picture><source type="image/webp" srcset="/compressed/bradley-headshot.webp 320w" sizes="(max-width: 900px) 100vw, 560px"><img src="/compressed/bradley-headshot.jpg" alt="Bradley Vilsaint, licensed health insurance advisor" width="320" height="320" decoding="async" fetchpriority="high" loading="eager"></picture></figure></div>
+</div>
 </section>
 
 <section class="section">
