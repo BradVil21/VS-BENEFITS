@@ -32,6 +32,19 @@
   "use strict";
 
   var KEY = "vs_attr";
+
+  // ---- reset a creator tag (added 2026-11-13) ----
+  // Any page with ?ref=clear forgets the creator this browser was credited to
+  // (handy after testing a creator link on your own computer).
+  try {
+    var rq = new URLSearchParams(location.search);
+    if (/^(clear|none|off|reset)$/i.test(rq.get("ref") || "")) {
+      ["vs_attr", "vs_journey", "vs_partner"].forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} });
+      rq.delete("ref");
+      var rs = rq.toString();
+      history.replaceState(history.state, "", location.pathname + (rs ? "?" + rs : "") + location.hash);
+    }
+  } catch (e) { /* ignore */ }
   var TTL = 90 * 24 * 3600 * 1000;
 
   // Search engines get their own label - "google.com" as a referrer is
@@ -230,7 +243,9 @@
   // visitor copies and shares. No reload, no new history entry. Skipped on
   // the private portals.
   try {
-    if (!/^\/(admin|client|creator)(\/|\.html|$)/.test(location.pathname) && window.history && history.replaceState) {
+    var isOwner = false;
+    try { isOwner = localStorage.getItem("vs_affiliates") !== null; } catch (e) { /* ignore */ }
+    if (!isOwner && !/^\/(admin|client|creator)(\/|\.html|$)/.test(location.pathname) && window.history && history.replaceState) {
       var pa = payload();
       var keepRef = pa && pa.ref ? String(pa.ref).toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 40) : "";
       if (keepRef) {
