@@ -13212,7 +13212,7 @@ try{(function(){
     var blocked=false;try{blocked=typeof pbRowFor==="function"&&!!pbRowFor(r);}catch(e){}
     if(blocked)tags='<span class="pv-chip" style="background:#fee2e2;color:#b91c1c">&#128683; Blocked</span>'+tags;
     var ov=document.createElement("div");ov.className="pv-ov";ov.id="pv-ov";
-    ov.innerHTML='<div class="pv'+(r.onClosing?" pv-onc":"")+'" role="dialog" aria-label="'+esc(name)+'">'
+    ov.innerHTML='<div class="pv'+(r.onClosing?" pv-onc":"")+'" data-pvk="'+kind+'" data-pvid="'+esc(id)+'" role="dialog" aria-label="'+esc(name)+'">'
       +'<div class="pv-hd"><div class="pv-ttl"><div class="pv-nmrow"><span class="pv-kind k-'+kind+'">'+(biz?"BUSINESS":"INDIVIDUAL")+'</span><h3>'+esc(name)+'</h3><span class="pv-stage" style="background:'+meta.color+'1a;color:'+meta.color+';border-color:'+meta.color+'55">'+esc(meta.label)+'</span></div>'
       +'<p>'+esc(sub)+'</p></div>'
       +'<div class="pv-hbtns"><button type="button" class="pv-edit" data-pv-edit>'+I.edit+'<span>Edit</span></button><button type="button" class="pv-x" data-pv-close aria-label="Close">'+I.x+'</button></div></div>'
@@ -13345,6 +13345,70 @@ try{(function(){
   "@media(max-width:560px){.pv-hd{padding:16px}.pv-body,.pv-cls,.nt-add,.nt-list{margin-left:16px;margin-right:16px}.pv-ft{padding:12px 16px 16px}.pv-nmrow h3{font-size:18px}.pv-clsgrid{grid-template-columns:1fr 1fr}}"
   ].join("\n");document.head.appendChild(st);
 }catch(err){if(window.console)console.warn("pipe-cards init failed",err);}})();
+/* ═══ Creator badge on lead cards (2026-11-13) ════════════════════════════
+   Any lead that came through a creator's link (lead.attribution.ref) gets a
+   bright purple "video" badge with the creator's name on the pipeline cards,
+   business cards/rows, and in the lead popup, plus the pages they viewed on
+   the site before submitting (attribution.journey, from vs-attribution.js). */
+(function(){try{
+  var $=function(id){return document.getElementById(id);};
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
+  function tc(s){s=String(s||"");return s===s.toUpperCase()||s===s.toLowerCase()?s.toLowerCase().replace(/(^|[\s\-'])([a-z])/g,function(m,p,c){return p+c.toUpperCase();}):s;}
+  function norm(v){return String(v||"").toLowerCase().replace(/[^a-z0-9-]/g,"").slice(0,40);}
+  function refOf(l){var a=l&&l.attribution;var r=a&&a.ref?a.ref:"";if(!r&&a&&a.source){var m=/^Partner\s+\S+\s+(.+)$/.exec(String(a.source));if(m)r=m[1];}return norm(r);}
+  function who(code){var cr=(typeof window.vsAffList==="function"?window.vsAffList():[]).filter(function(x){return norm(x.code)===code;})[0];var n=cr?tc(((cr.firstName||"")+" "+(cr.lastName||"")).trim()):"";return {name:n||code,id:cr&&cr.id};}
+  var VID='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4z"/></svg>';
+  function badge(code,big){var w=who(code);return '<span class="crb'+(big?" crb-big":"")+'" data-crb="'+esc(w.id||"")+'" title="Came in through '+esc(w.name)+'\'s creator link (vshealthbenefits.com/'+esc(code)+')">'+VID+'<span>Creator · '+esc(w.name)+'</span></span>';}
+  window.vsCreatorBadge=function(l,big){var c=refOf(l);return c?badge(c,big):"";};
+  function byId(list,id){for(var i=0;i<list.length;i++)if(String(list[i].id)===String(id))return list[i];return null;}
+  function mark(el,lead){
+    if(!el||!lead)return;var c=refOf(lead);
+    var has=el.querySelector(":scope > .crb, :scope .crb-slot > .crb");
+    if(!c){if(has)has.remove();el.classList.remove("crb-card");return;}
+    el.classList.add("crb-card");if(has)return;
+    var w=document.createElement("div");w.className="crb-slot";w.innerHTML=badge(c,false);el.insertBefore(w,el.firstChild);
+  }
+  function decorate(){
+    var leads=typeof getLeads==="function"?getLeads():[],biz=typeof getBizLeads==="function"?getBizLeads():[];
+    document.querySelectorAll("#cz-pipe-results .cz-card[data-cz-card]").forEach(function(el){mark(el,byId(leads,el.getAttribute("data-cz-card")));});
+    document.querySelectorAll("#p-bizleads [data-bizcard]").forEach(function(el){mark(el,byId(biz,el.getAttribute("data-bizcard")));});
+    document.querySelectorAll("#biz-table-mount tr[data-biz]").forEach(function(tr){var l=byId(biz,tr.getAttribute("data-biz"));var td=tr.querySelector("td");if(!td||!l)return;var c=refOf(l),h=td.querySelector(".crb");if(!c){if(h)h.remove();return;}if(!h)td.insertAdjacentHTML("beforeend",' '+badge(c,false));});
+  }
+  /* lead popup: swap the plain chip for the bright badge + add the pages they viewed */
+  function enhancePopup(){
+    var ov=$("pv-ov");if(!ov||ov.__crb)return;var pv=ov.querySelector(".pv");if(!pv||pv.classList.contains("af-pv")||pv.classList.contains("nt"))return;
+    var kind=pv.getAttribute("data-pvk"),lid=pv.getAttribute("data-pvid");if(!kind||!lid)return;
+    var list=kind==="biz"?(typeof getBizLeads==="function"?getBizLeads():[]):(typeof getLeads==="function"?getLeads():[]);
+    var lead=byId(list,lid);
+    if(!lead||!refOf(lead))return;ov.__crb=true;var c=refOf(lead);
+    pv.querySelectorAll(".pv-chip").forEach(function(ch){if(/Creator:/.test(ch.textContent))ch.remove();});
+    var hd=pv.querySelector(".pv-hd .pv-ttl");if(hd)hd.insertAdjacentHTML("beforeend",'<div style="margin-top:8px">'+badge(c,true)+'</div>');
+    var j=(lead.attribution&&Array.isArray(lead.attribution.journey))?lead.attribution.journey:[];
+    var body=pv.querySelector(".pv-body");
+    if(body){
+      var t0=j.length?j[0].t:0;
+      var rows=j.map(function(x){var d=new Date(x.t);var when=isNaN(d)?"":d.toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});return '<li><span>'+esc(when)+'</span><code>'+esc(x.p)+'</code></li>';}).join("");
+      body.insertAdjacentHTML("beforeend",'<div class="crb-jr"><div class="crb-jrh">'+VID+'<b>Creator referral</b><span>vshealthbenefits.com/'+esc(c)+'</span></div>'
+        +(rows?'<p>Pages they viewed before submitting ('+j.length+'):</p><ol>'+rows+'</ol>':'<p>Came in through this creator\'s link. Page history is recorded for new visitors from Nov 13, 2026.</p>')+'</div>');
+    }
+    pv.querySelectorAll("[data-crb]").forEach(function(b){var id=b.getAttribute("data-crb");if(!id)return;b.style.cursor="pointer";b.addEventListener("click",function(e){e.stopPropagation();if(typeof window.vsOpenCreator==="function"){var o=$("pv-ov");if(o)o.remove();window.vsOpenCreator(id);}});});
+  }
+  new MutationObserver(function(){try{enhancePopup();}catch(e){}}).observe(document.body,{childList:true});
+  if(typeof czPipeResults==="function"){var _p=czPipeResults;czPipeResults=function(){var o=_p.apply(this,arguments);try{decorate();}catch(e){}return o;};czPipeResults.__keepPlace=true;}
+  (function watch(n){var p=$("p-bizleads");if(!p){if(n<40)setTimeout(function(){watch(n+1);},250);return;}var t=0;new MutationObserver(function(m){if(m.every(function(x){return x.target.closest&&x.target.closest(".crb-slot");}))return;clearTimeout(t);t=setTimeout(function(){try{decorate();}catch(e){}},60);}).observe(p,{childList:true,subtree:true});})(0);
+  setTimeout(function(){try{decorate();}catch(e){}},800);
+  var st=document.createElement("style");st.textContent=[
+  ".crb{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#7c3aed,#db2777);color:#fff;font-weight:800;font-size:11px;letter-spacing:.01em;border-radius:999px;padding:3px 10px 3px 7px;box-shadow:0 2px 8px rgba(219,39,119,.35);white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;line-height:1.5}",
+  ".crb svg{width:13px;height:13px;flex:none}.crb span{overflow:hidden;text-overflow:ellipsis}",
+  ".crb-big{font-size:12.5px;padding:5px 13px 5px 9px}.crb-big svg{width:15px;height:15px}",
+  ".crb-slot{margin:0 0 7px}",
+  ".crb-card{border-color:#e9d5ff!important;box-shadow:0 0 0 2px rgba(124,58,237,.18),0 4px 14px rgba(124,58,237,.12)!important;background:linear-gradient(180deg,#faf5ff,#fff 40%)!important}",
+  ".crb-jr{margin:12px 0 2px;border:1.5px solid #e9d5ff;background:#faf5ff;border-radius:12px;padding:11px 13px}",
+  ".crb-jrh{display:flex;align-items:center;gap:7px;color:#6d28d9;flex-wrap:wrap}.crb-jrh svg{width:16px;height:16px}.crb-jrh span{color:#7b8aa0;font-size:12px}",
+  ".crb-jr p{margin:6px 0 4px;font-size:12.5px;color:#5b6b80}",
+  ".crb-jr ol{margin:0;padding-left:20px;max-height:190px;overflow:auto;font-size:12.5px}.crb-jr li{margin:2px 0}.crb-jr li span{color:#7b8aa0;margin-right:8px;font-size:11.5px}.crb-jr code{background:#fff;border:1px solid #ede9fe;border-radius:5px;padding:0 5px;color:#0b2346;font-size:12px}"
+  ].join("\n");document.head.appendChild(st);
+}catch(err){if(window.console)console.warn("creator badge init failed",err);}})();
 
 /* moved inside the main module so it can reach getLeads, czPipeResults, switchTab etc. */
 /* ═══ Closing List (2026-11-12): open individual + business deals in one ranked list.

@@ -256,6 +256,16 @@ async function toCrm(d, req, res) {
     } catch (e) { out.tagged = false; }
     // Tell the creator someone used their link (never who). See api/_affiliate-event.js
     if (out.affiliate) out.affiliateNotice = await affiliateHeadsUp(out.affiliate, contactId);
+    // Note on the GHL contact: which creator, and the pages they viewed first.
+    if (out.affiliate) {
+      try {
+        const j = Array.isArray(d.attribution && d.attribution.journey) ? d.attribution.journey.slice(-30) : [];
+        const fmt = function (t) { try { return new Date(t).toLocaleString("en-US", { timeZone: "America/New_York", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }); } catch (e) { return ""; } };
+        const body = "CREATOR REFERRAL: came in through vshealthbenefits.com/" + out.affiliate +
+          (j.length ? "\nPages viewed before submitting:\n" + j.map(function (x) { return "- " + fmt(x.t) + "  " + clean(x.p, 120); }).join("\n") : "");
+        await L.ghl("/contacts/" + contactId + "/notes", "POST", { body: body });
+      } catch (e) { /* non-fatal */ }
+    }
 
     if (p.notes) {
       try { await L.ghl("/contacts/" + contactId + "/notes", "POST", { body: p.notes }); out.noted = true; }

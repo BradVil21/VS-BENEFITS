@@ -193,11 +193,35 @@
       ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
        "gclid", "fbclid", "msclkid", "ref"].forEach(function (k) { if (f[k]) out[k] = f[k]; });
       if (!f.ref && l.ref) { out.ref = l.ref; out.source = l.label; }
+      if (out.ref) {
+        try {
+          var js = JSON.parse(localStorage.getItem("vs_journey") || "[]");
+          if (Array.isArray(js) && js.length) out.journey = js.slice(-30);
+        } catch (e) { /* ignore */ }
+      }
       return out;
     } catch (e) { return null; }
   }
 
   window.vsAttribution = payload;
+
+  // ---- creator visitor journey (added 2026-11-13) ----
+  // For visitors who came through a creator's link, remember the pages they
+  // open (last 30, this browser only) so the lead shows what they looked at
+  // before filling out the form. Nothing is sent until they submit a form.
+  try {
+    var jp = payload();
+    if (jp && jp.ref && !/^\/(admin|client|creator)(\/|\.html|$)/.test(location.pathname)) {
+      var jr = [];
+      try { jr = JSON.parse(localStorage.getItem("vs_journey") || "[]"); } catch (e) { jr = []; }
+      if (!Array.isArray(jr)) jr = [];
+      var jpath = (location.pathname || "/") + (location.search ? location.search.replace(/([?&])(ref|gclid|fbclid|msclkid|ttclid)=[^&]*/g, "$1").replace(/[?&]+$/, "").replace(/\?&/, "?") : "");
+      var lastJ = jr[jr.length - 1];
+      if (!lastJ || lastJ.p !== jpath || Date.now() - (lastJ.t || 0) > 60000) jr.push({ p: jpath.slice(0, 120), t: Date.now() });
+      if (jr.length > 30) jr = jr.slice(-30);
+      localStorage.setItem("vs_journey", JSON.stringify(jr));
+    }
+  } catch (e) { /* ignore */ }
 
   // ---- keep the creator code visible on every page (added 2026-11-13) ----
   // Once someone arrives through a creator's link, every page they open shows
