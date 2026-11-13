@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Creator Dashboard | VS Health Benefits</title>
+<meta name="description" content="Sign in to your VS Health Benefits creator dashboard to see your link visits, referrals and rewards." />
+<link rel="canonical" href="https://www.vshealthbenefits.com/creator" />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root{--navy:#0b2346;--blue:#16447f;--qb:#2f9de6;--qb-edge:#1d78bb;--teal:#0db5a6;--teal-d:#098374;--ink:#0d1b2a;--muted:#5a6b80;--line:#e4e9f2;--orange:#c2410c;--green:#16a34a}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:'DM Sans',system-ui,-apple-system,sans-serif;color:var(--ink);line-height:1.55;font-size:16px;-webkit-font-smoothing:antialiased;min-height:100vh;background:#f7faff;background-image:radial-gradient(1100px 520px at 50% -160px,rgba(47,157,230,.16),rgba(47,157,230,0) 72%)}
+a{color:var(--blue)}
+.hd{background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:0 20px;position:sticky;top:0;z-index:10}
+.hd-in{max-width:1040px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:62px;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.85rem;font-family:'Poppins',sans-serif}
+.bname{font-family:'Poppins',sans-serif;font-weight:700;color:var(--navy);font-size:.95rem}
+.bname small{display:block;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.7rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;line-height:1}
+.out{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:7px 12px;font:600 .85rem 'DM Sans',sans-serif;color:var(--muted);cursor:pointer}
+.out:hover{color:var(--navy);border-color:#cbd5e1}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 20px 48px}
+.card{background:#fff;border:1px solid #e2e7ee;border-radius:16px;box-shadow:0 10px 30px rgba(16,40,80,.06)}
+[hidden]{display:none!important}
+
+/* sign in */
+.auth{max-width:440px;margin:6vh auto 0;padding:30px 26px;text-align:center}
+.auth .ic{width:54px;height:54px;border-radius:14px;margin:0 auto 14px;background:linear-gradient(135deg,#5b21b6,var(--qb));color:#fff;display:flex;align-items:center;justify-content:center}
+.auth .ic svg{width:26px;height:26px}
+.auth h1{font-family:'Poppins',sans-serif;font-size:1.5rem;color:var(--navy);margin:0 0 6px;line-height:1.2}
+.auth p{color:var(--muted);margin:0 0 20px}
+.auth input{width:100%;border:1.5px solid #d6dde6;border-radius:10px;padding:14px;font:500 1rem 'DM Sans',sans-serif;outline:none}
+.auth input:focus{border-color:var(--qb);box-shadow:0 0 0 3px rgba(47,157,230,.15)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;margin-top:12px;border:0;border-radius:10px;border-bottom:4px solid var(--qb-edge);background:var(--qb);color:#fff;font:700 1.02rem 'DM Sans',sans-serif;cursor:pointer}
+.btn:hover{background:#2389d4}.btn[disabled]{opacity:.55;cursor:wait}
+.small{font-size:.86rem;color:var(--muted);margin-top:16px}
+.err{color:#b23a1d;font-size:.9rem;margin:10px 0 0}
+
+/* dashboard */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 0 18px}
+.top h1{font-family:'Poppins',sans-serif;font-size:clamp(1.4rem,3.4vw,1.9rem);color:var(--navy);margin:0;line-height:1.15}
+.top p{margin:4px 0 0;color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;border-radius:999px;padding:5px 11px;background:#dcfce7;color:#166534}
+.chip i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.chip.paused{background:#ffedd5;color:#9a3412}
+.notice{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:12px;padding:12px 14px;margin:0 0 16px;font-size:.93rem}
+.link{padding:18px;margin:0 0 16px;display:grid;gap:12px}
+.link h2,.sec h2{font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0;font-weight:700}
+.lrow{display:flex;gap:8px;flex-wrap:wrap}
+.lbox{flex:1;min-width:220px;display:flex;align-items:center;border:1.5px solid #c7d7ee;border-radius:12px;background:#f5f9ff;padding:0 6px 0 14px;min-height:52px}
+.lbox input{flex:1;min-width:0;border:0;background:transparent;font:700 1.05rem 'DM Sans',sans-serif;color:var(--navy);outline:none}
+.lbox select{border:0;background:transparent;font:600 .92rem 'DM Sans',sans-serif;color:var(--blue);max-width:46%;cursor:pointer;outline:none}
+.cp{border:0;border-radius:10px;background:var(--navy);color:#fff;font:700 .9rem 'DM Sans',sans-serif;padding:0 16px;min-height:52px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.cp svg{width:16px;height:16px}.cp.ok{background:var(--green)}
+.cp.alt{background:#fff;color:var(--navy);border:1.5px solid #c7d7ee}
+.hint{font-size:.86rem;color:var(--muted);margin:0}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 16px}
+.k{padding:16px 16px 14px;position:relative;overflow:hidden}
+.k span{display:block;font-size:.8rem;font-weight:700;color:var(--muted)}
+.k b{display:block;font-family:'Poppins',sans-serif;font-size:1.75rem;line-height:1.15;color:var(--navy);margin-top:4px}
+.k small{display:block;font-size:.8rem;color:var(--muted);margin-top:2px}
+.k.money b{color:var(--teal-d)}.k.owe b{color:var(--orange)}
+.k svg.sp{position:absolute;right:14px;top:16px;width:40%;height:30px}
+.grid2{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
+.sec{padding:18px}
+.sec h2{margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:.93rem}
+th{text-align:left;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#7b8aa0;padding:8px 6px;border-bottom:1px solid var(--line)}
+td{padding:10px 6px;border-bottom:1px solid #f0f3f8;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.pill{display:inline-block;font-size:.78rem;font-weight:700;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.p-requested{background:#eef2f8;color:#42566e}.p-qualified{background:#dbeafe;color:#1d4ed8}.p-paid{background:#dcfce7;color:#166534}
+.empty{color:var(--muted);text-align:center;padding:22px 8px;font-size:.93rem}
+.pay{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #f0f3f8;font-size:.93rem}
+.pay:last-child{border-bottom:0}.pay b{color:var(--navy)}.pay span{color:var(--muted);text-align:right}
+.how{margin-top:16px;padding:18px}
+.how ol{margin:0;padding-left:20px;color:#43505f;font-size:.94rem}.how li{margin:4px 0}
+.ft{max-width:1040px;margin:0 auto;padding:0 20px 36px;color:#7b8796;font-size:.8rem;text-align:center}
+.ft a{color:#7b8796}
+.load{display:flex;justify-content:center;padding:14vh 0}.load i{width:34px;height:34px;border-radius:50%;border:3px solid #dbe5f2;border-top-color:var(--qb);animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media(max-width:860px){.grid2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.lbox input{font-size:.95rem}.k b{font-size:1.4rem}.k svg.sp{display:none}.lbox select{display:none}.wrap{padding:20px 14px 40px}}
+</style>
+</head>
+<body>
+<header class="hd"><div class="hd-in">
+  <a href="/" class="brand"><div class="badge">VS</div><span class="bname">VS Health Benefits<small>Creator dashboard</small></span></a>
+  <button type="button" class="out" id="cr-out" hidden>Sign out</button>
+</div></header>
+
+<main class="wrap">
+  <div class="load" id="v-load"><i></i></div>
+
+  <section class="card auth" id="v-login" hidden>
+    <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg></div>
+    <h1>Creator dashboard</h1>
+    <p>See your link visits, referrals and rewards. Enter the email you applied with and we'll send you a sign-in link.</p>
+    <form id="cr-form" novalidate>
+      <label for="cr-email" class="sr" hidden>Email</label>
+      <input id="cr-email" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com" required />
+      <button class="btn" id="cr-send" type="submit">Email me a sign-in link</button>
+      <p class="err" id="cr-err" hidden></p>
+    </form>
+    <p class="small">Not a creator yet? <a href="/affiliate-program">Join the creator program</a></p>
+  </section>
+
+  <section class="card auth" id="v-sent" hidden>
+    <div class="ic" style="background:linear-gradient(135deg,var(--teal),var(--qb))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div>
+    <h1>Check your email</h1>
+    <p>If <b id="cr-sentto"></b> belongs to an approved creator, a sign-in link is on its way. It works for 30 minutes.</p>
+    <p class="small">Nothing after a few minutes? Check spam, or text us at <a href="sms:+19548251009">(954) 825-1009</a>.</p>
+    <button type="button" class="out" id="cr-back" style="margin-top:6px">Use a different email</button>
+  </section>
+
+  <section id="v-dash" hidden>
+    <div class="top">
+      <div><h1 id="d-hi">Welcome back</h1><p id="d-since"></p></div>
+      <span class="chip" id="d-chip"><i></i><span>Active creator</span></span>
+    </div>
+    <div class="notice" id="d-paused" hidden>Your link is paused right now, so new visitors aren't being credited to you. Questions? Text us at (954) 825-1009.</div>
+
+    <div class="card link">
+      <h2>Your link</h2>
+      <div class="lrow">
+        <div class="lbox"><input id="d-link" readonly aria-label="Your link" /><select id="d-page" aria-label="Send people to a specific page"></select></div>
+        <button type="button" class="cp" id="d-copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button>
+        <button type="button" class="cp alt" id="d-share" hidden><span>Share</span></button>
+      </div>
+      <p class="hint">Anyone who opens your link is credited to you for 90 days, on every page of our site, even if they come back later and request a quote.</p>
+    </div>
+
+    <div class="kpis">
+      <div class="card k"><span>Link visits</span><b id="k-clicks">0</b><small>Last 30 days &middot; <span id="k-clicksall" style="display:inline;font-weight:500"></span></small><svg class="sp" id="k-spark" viewBox="0 0 120 34" preserveAspectRatio="none" aria-hidden="true"></svg></div>
+      <div class="card k"><span>Quote requests</span><b id="k-req">0</b><small>People who asked us for a quote</small></div>
+      <div class="card k"><span>Qualified referrals</span><b id="k-q">0</b><small>Finished a consultation with us</small></div>
+      <div class="card k money"><span>Total earned</span><b id="k-earned">$0</b><small id="k-rate"></small></div>
+      <div class="card k owe"><span>On the way</span><b id="k-owed">$0</b><small id="k-owedn">Earned, not paid yet</small></div>
+      <div class="card k"><span>Paid to you</span><b id="k-paid">$0</b><small id="k-paidn">All time</small></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card sec">
+        <h2>Your referrals</h2>
+        <div id="d-refs"></div>
+      </div>
+      <div class="card sec">
+        <h2>Payouts</h2>
+        <div id="d-pays"></div>
+      </div>
+    </div>
+
+    <div class="card how">
+      <h2 style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 10px">How rewards work</h2>
+      <ol>
+        <li><b>Quote requested:</b> someone used your link and asked us for a quote.</li>
+        <li><b>Qualified:</b> they finished a free consultation with one of our licensed advisors. That earns your reward, whether or not they buy.</li>
+        <li><b>Paid:</b> we sent your reward. You'll get a text and email each step of the way.</li>
+      </ol>
+      <p class="hint" style="margin-top:10px">For their privacy, we never share who your referrals are or anything about their coverage.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="ft">
+  <p>Rewards are a flat amount per qualified referral and are never tied to whether anyone buys insurance (s. 626.112(8), Florida Statutes). Where state law does not allow referral rewards, we cannot pay one. VS BENEFITS LLC is a licensed independent insurance agency, NPN 22116298.</p>
+  <p><a href="/affiliate-program">Creator Program</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/contact">Contact</a></p>
+</footer>
+
+<script id="vs-creator-dash">
+(function(){
+  var KEY="vs_creator_s",$=function(id){return document.getElementById(id);};
+  var PAGES=[["/","Home page"],["/trucking-health-quote","Truck driver quote"],["/truck-driver-health-insurance","Truck driver guide"],["/get-a-quote","Individual & family quote"],["/aca-subsidy-calculator","ACA subsidy calculator"],["/small-business-health-insurance","Small business"],["/seguro-medico-camioneros","Camioneros (Spanish)"],["/open-enrollment","Open enrollment"]];
+  function show(v){["v-load","v-login","v-sent","v-dash"].forEach(function(x){$(x).hidden=(x!==v);});$("cr-out").hidden=(v!=="v-dash");}
+  function getS(){try{return localStorage.getItem(KEY)||"";}catch(e){return "";}}
+  function setS(v){try{if(v)localStorage.setItem(KEY,v);else localStorage.removeItem(KEY);}catch(e){}}
+  function api(body){return fetch("/api/creator",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){j._status=r.status;return j;});});}
+  function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
+  function money(n){n=Number(n)||0;return "$"+n.toLocaleString("en-US",{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2});}
+  function d8(s,long){if(!s)return "";var p=s.split("-");var d=new Date(+p[0],+p[1]-1,+p[2]);var o={month:"short",day:"numeric"};if(long||d.getFullYear()!==new Date().getFullYear())o.year="numeric";return d.toLocaleDateString("en-US",o);}
+  var LBL={requested:"Quote requested",qualified:"Qualified",paid:"Reward paid"};
+
+  function render(j){
+    var c=j.creator||{},t=j.totals||{},name=String(c.firstName||"").split(" ")[0];
+    $("d-hi").textContent=name?("Hi "+name+"!"):"Welcome back";
+    $("d-since").textContent=c.since?("Creator since "+d8(c.since,true)):"";
+    var paused=c.stage==="paused";$("d-paused").hidden=!paused;$("d-chip").className="chip"+(paused?" paused":"");$("d-chip").lastChild.textContent=paused?"Link paused":"Active creator";
+    var base=j.link||"",sel=$("d-page");
+    sel.innerHTML=PAGES.map(function(p){return '<option value="'+p[0]+'">'+esc(p[1])+'</option>';}).join("");
+    function cur(){var v=sel.value;return (!v||v==="/")?base:("https://www.vshealthbenefits.com"+v+"?ref="+encodeURIComponent(c.code));}
+    $("d-link").value=base.replace(/^https:\/\/(www\.)?/,"");
+    sel.onchange=function(){$("d-link").value=cur().replace(/^https:\/\/(www\.)?/,"");};
+    $("d-copy").onclick=function(){var b=this,txt=cur();function ok(){b.classList.add("ok");b.lastChild.textContent="Copied!";setTimeout(function(){b.classList.remove("ok");b.lastChild.textContent="Copy";},1400);}
+      try{navigator.clipboard.writeText(txt).then(ok,fb);}catch(e){fb();}
+      function fb(){var i=$("d-link");i.value=txt;i.select();try{document.execCommand("copy");ok();}catch(e){}}};
+    if(navigator.share){$("d-share").hidden=false;$("d-share").onclick=function(){navigator.share({title:"VS Health Benefits",text:"Get help finding affordable health insurance:",url:cur()}).catch(function(){});};}
+    $("k-clicks").textContent=(t.clicks30||0).toLocaleString();
+    $("k-clicksall").textContent=(t.clicks||0).toLocaleString()+" all time";
+    $("k-req").textContent=t.requests||0;$("k-q").textContent=t.qualified||0;
+    var rw=Number(j.reward)||0;
+    if(rw){$("k-earned").textContent=money(t.earned);$("k-owed").textContent=money(t.owed);$("k-rate").textContent=money(rw)+" per qualified referral";$("k-owedn").textContent=(t.unpaid||0)+" qualified referral"+(t.unpaid===1?"":"s")+" not paid yet";}
+    else{$("k-earned").textContent="—";$("k-owed").textContent=(t.unpaid||0)+"";$("k-rate").textContent="Reward amount confirmed when you're approved";$("k-owedn").textContent="Qualified referrals not paid yet";}
+    $("k-paid").textContent=money(t.paid);$("k-paidn").textContent=(j.payouts||[]).length+" payout"+((j.payouts||[]).length===1?"":"s")+" all time";
+    var sp=t.spark||[],mx=Math.max.apply(null,sp.concat([1]));
+    if(sp.length){var pts=sp.map(function(v,i){return (i*(120/(sp.length-1))).toFixed(1)+","+(32-v/mx*28).toFixed(1);}).join(" ");$("k-spark").innerHTML='<polyline points="'+pts+'" fill="none" stroke="#2f9de6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity=".75"/>';}
+    var R=j.referrals||[];
+    $("d-refs").innerHTML=R.length?('<table><thead><tr><th>#</th><th>Date</th><th>Type</th><th>Status</th></tr></thead><tbody>'+R.map(function(r){return '<tr><td>'+r.n+'</td><td>'+esc(d8(r.date))+'</td><td>'+esc(r.type)+'</td><td><span class="pill p-'+esc(r.status)+'">'+esc(LBL[r.status]||r.status)+'</span></td></tr>';}).join("")+'</tbody></table>')
+      :'<div class="empty">No quote requests through your link yet.<br>Share it and they\'ll show up here.</div>';
+    var P=j.payouts||[];
+    $("d-pays").innerHTML=P.length?P.map(function(p){return '<div class="pay"><b>'+money(p.amount)+'</b><span>'+esc(d8(p.date))+' &middot; '+p.count+' referral'+(p.count===1?"":"s")+(p.how?' &middot; '+esc(p.how):'')+'</span></div>';}).join(""):'<div class="empty">No payouts yet.</div>';
+    show("v-dash");
+  }
+  function load(){var s=getS();if(!s){show("v-login");return;}show("v-load");
+    api({op:"stats",s:s}).then(function(j){if(j.ok)render(j);else{if(j._status===401)setS("");show("v-login");if(j.error==="no_access")err("This creator account doesn't have dashboard access. Text us at (954) 825-1009.");}}).catch(function(){show("v-login");err("Couldn't load your dashboard. Check your connection and try again.");});}
+  function err(m){var e=$("cr-err");e.textContent=m;e.hidden=!m;}
+
+  $("cr-form").onsubmit=function(e){e.preventDefault();var em=$("cr-email").value.trim();err("");
+    if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(em)){err("Enter the email you applied with.");return;}
+    var b=$("cr-send");b.disabled=true;b.textContent="Sending...";
+    api({op:"login",email:em}).then(function(){$("cr-sentto").textContent=em;show("v-sent");}).catch(function(){err("Something went wrong. Try again.");}).then(function(){b.disabled=false;b.textContent="Email me a sign-in link";});};
+  $("cr-back").onclick=function(){show("v-login");$("cr-email").focus();};
+  $("cr-out").onclick=function(){setS("");show("v-login");};
+
+  var m=/[#&]t=([A-Za-z0-9_\-.]+)/.exec(location.hash||"");
+  if(m){try{history.replaceState(null,"",location.pathname);}catch(e){}show("v-load");
+    api({op:"verify",t:m[1]}).then(function(j){if(j.ok&&j.s){setS(j.s);load();}else{show("v-login");err("That sign-in link has expired. Enter your email for a new one.");}}).catch(function(){show("v-login");err("Couldn't sign you in. Try again.");});}
+  else load();
+})();
+</script>
+</body>
+</html>

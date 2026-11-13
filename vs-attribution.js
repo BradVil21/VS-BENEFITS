@@ -131,6 +131,23 @@
   var state = null;
   try { state = current(); } catch (e) { state = null; }
 
+  // ---- creator link visit (added 2026-11-13) ----
+  // Someone landed through a creator's link (/theirname -> /?ref=theirname).
+  // Count it once a day per browser for the creator's dashboard (/creator).
+  try {
+    var refCode = String(params().ref || "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 40);
+    if (refCode) {
+      var ck = "vs_rc_" + refCode, today = new Date().toISOString().slice(0, 10), seenDay = "";
+      try { seenDay = localStorage.getItem(ck) || ""; } catch (e) { /* private mode */ }
+      if (seenDay !== today) {
+        try { localStorage.setItem(ck, today); } catch (e) { /* ignore */ }
+        var cbody = JSON.stringify({ op: "click", code: refCode });
+        if (navigator.sendBeacon) navigator.sendBeacon("/api/creator", new Blob([cbody], { type: "application/json" }));
+        else fetch("/api/creator", { method: "POST", headers: { "Content-Type": "application/json" }, body: cbody, keepalive: true });
+      }
+    }
+  } catch (e) { /* never break the page */ }
+
   // ---- device id (added 2026-11-04) ----
   // A random id for this browser, kept in a first-party cookie (sent to our own
   // /api automatically) with a localStorage copy that restores the cookie if it

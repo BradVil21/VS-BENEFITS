@@ -108,7 +108,7 @@ function copy(event, c) {
     case "approved": return {
       subject: "You're approved! Here's your link",
       sms: "VS Health Benefits: " + hi + "You're approved! Your link: " + link + " - we'll text you when someone uses it." + stop,
-      email: hi + "\n\nYou're approved for the VS Health Benefits creator program.\n\nYour personal link: https://www." + link + "\n\nEveryone who comes through your link and asks for a quote is credited to you. You earn a flat reward for every qualified referral (they complete a free consultation with one of our licensed advisors), whether or not they buy.\n\nA few quick rules:\n- Share your own experience in your own words.\n- Label sponsored posts #ad or #partner.\n- Please don't quote prices, plans or coverage details. Our licensed advisors handle that.\n\nWe'll let you know every time someone uses your link." + sign,
+      email: hi + "\n\nYou're approved for the VS Health Benefits creator program.\n\nYour personal link: https://www." + link + "\n\nEveryone who comes through your link and asks for a quote is credited to you. You earn a flat reward for every qualified referral (they complete a free consultation with one of our licensed advisors), whether or not they buy.\n\nA few quick rules:\n- Share your own experience in your own words.\n- Label sponsored posts #ad or #partner.\n- Please don't quote prices, plans or coverage details. Our licensed advisors handle that.\n\nWe'll let you know every time someone uses your link.\n\nSee your visits, referrals and earnings any time: https://www." + SITE_SHORT + "/creator (sign in with this email address)." + sign,
     };
     case "referral": return {
       subject: "Someone just used your link",
@@ -119,6 +119,11 @@ function copy(event, c) {
       subject: "You earned a referral reward",
       sms: "VS Health Benefits: Nice work" + (n ? ", " + n : "") + "! A referral of yours finished a consultation. Your reward is on the way." + stop,
       email: hi + "\n\nGood news: one of the people you referred just completed a consultation with our team, so it counts as a qualified referral and your reward is on its way.\n\nThank you for sharing VS Health Benefits!\n\nYour link: https://www." + link + sign,
+    };
+    case "login": return {
+      subject: "Your creator dashboard sign-in link",
+      sms: "VS Health Benefits: Your creator dashboard sign-in link (works 30 min): " + (c._loginUrl || "") + stop,
+      email: hi + "\n\nHere's your sign-in link for your creator dashboard. It works for 30 minutes:\n\n" + (c._loginUrl || "") + sign,
     };
     case "paid": return {
       subject: "Your creator reward was sent",
@@ -222,3 +227,5 @@ module.exports.notify = notify;
 module.exports.findCreator = findCreator;
 module.exports.valid = valid;
 module.exports.copy = copy;
+// Sign-in link fallback when the site's own email sender is down.
+module.exports.notifyLogin = function (c, url) { return notify(Object.assign({}, c, { _loginUrl: url }), "login", String(Date.now())); };

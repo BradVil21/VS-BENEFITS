@@ -148,6 +148,10 @@ module.exports = async (req, res) => {
   if (req.method === "POST" && ((req.query && req.query.op === "affiliate-apply") || /affiliate-apply/.test(req.url || ""))) {
     return require("./_affiliate-apply")(req, res);
   }
+  // POST /api/creator: creator dashboard (sign-in link, stats, link visits). See api/_creator.js
+  if (req.method === "POST" && ((req.query && req.query.op === "creator") || /\/api\/creator/.test(req.url || ""))) {
+    return require("./_creator")(req, res);
+  }
   // POST /api/affiliate-event: portal approved / qualified / paid -> GHL texts + emails. See api/_affiliate-event.js
   if (req.method === "POST" && ((req.query && req.query.op === "affiliate-event") || /affiliate-event/.test(req.url || ""))) {
     return require("./_affiliate-event")(req, res);
