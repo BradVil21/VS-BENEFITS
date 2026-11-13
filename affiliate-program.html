@@ -147,6 +147,12 @@ textarea.tp-in{resize:vertical;min-height:84px}
 .af-agree input{width:18px;height:18px;margin-top:2px;flex:none;accent-color:#16447f}
 .af-done-ic{width:56px;height:56px;border-radius:50%;background:#e9faf7;color:#098374;display:flex;align-items:center;justify-content:center;margin-bottom:10px}.af-done-ic svg{width:28px;height:28px}
 #af-done h2{margin:0}
+.af-hero-art .hero-photo img{object-position:60% 35%}
+.af-linkchip{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:8px;background:#0b2346;color:#fff;border-radius:999px;padding:9px 16px;font-size:.86rem;font-weight:600;box-shadow:0 14px 30px rgba(11,35,70,.3);white-space:nowrap;z-index:2}
+.af-linkchip svg{width:16px;height:16px;flex:none;color:#8ff0e4}.af-linkchip b{color:#8ff0e4}
+.af-hero-art .af-f1{left:-8px;bottom:56px}.af-hero-art .af-f2{right:-8px;top:18px}
+@media(max-width:520px){.af-hero-art .af-f1{display:none}.af-linkchip{font-size:.78rem;padding:8px 13px}}
+.af-cta h2{margin:6px 0 8px}.af-cta .eyebrow{margin:0}
 </style>
 
 <style id="tp-css">
@@ -269,21 +275,14 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
         <span class="eyebrow">Creator &amp; affiliate program</span>
         <h1>Create content. Share your link. <span>Get paid for every qualified referral.</span></h1>
         <p class="hero-sub">Join the VS Health Benefits creator program. Post about getting covered, send your audience to us with your own tracked link, and earn a flat reward for every qualified referral, whether or not they buy. Our licensed advisors handle all the insurance work.</p>
-        <div class="hero-ctas"><a class="btn btn-primary" href="#apply">Apply to the program</a><a class="btn btn-secondary" href="#how">See how it works</a></div>
+        <div class="hero-ctas"><a class="btn btn-primary" href="/affiliate-apply">Apply to the program</a><a class="btn btn-secondary" href="#how">See how it works</a></div>
         <div class="hero-meta"><span><span class="dot"></span>Free to join</span><span><span class="dot"></span>No license needed</span><span><span class="dot"></span>English &amp; Spanish creators</span></div>
       </div>
-      <div class="af-art" aria-hidden="true">
-        <div class="af-phone">
-          <div class="af-notch"></div>
-          <div class="af-screen">
-            <div class="af-prof"><span class="af-av">YN</span><div><b>@yourname</b><small>Creator &middot; VS Health Benefits partner</small></div></div>
-            <div class="af-post"><div class="af-play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div><span>How I finally got health insurance as a 1099 worker</span></div>
-            <div class="af-linkbox"><small>Your personal link</small><b>vshealthbenefits.com/c/yourname</b></div>
-            <div class="af-stats"><div><b>Tracked</b><small>every visit</small></div><div><b>Flat</b><small>reward each</small></div><div><b>Monthly</b><small>payouts</small></div></div>
-          </div>
-        </div>
-        <div class="tp-float af-f1"><span class="tp-float-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><div><strong>Referral qualified</strong><small>Credited to your link</small></div></div>
-        <div class="tp-float af-f2"><span class="af-ugc">UGC</span><div><strong>Creators wanted</strong><small>TikTok &middot; IG &middot; YouTube</small></div></div>
+      <div class="tp-hero-art af-hero-art">
+        <div class="hero-photo"><img decoding="async" srcset="/compressed/trucker-woman-cab-window-900.webp 900w, /compressed/trucker-woman-cab-window.webp 1200w" sizes="(max-width: 900px) 100vw, 600px" src="/compressed/trucker-woman-cab-window.webp" alt="Smiling creator leaning out of her truck cab window" width="1200" height="827" fetchpriority="high"></div>
+        <div class="tp-float af-f2"><span class="af-ugc">UGC</span><div><strong>Creators wanted</strong><small>TikTok &middot; Instagram &middot; YouTube</small></div></div>
+        <div class="tp-float af-f1"><span class="tp-float-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><div><strong>Referral credited</strong><small>Tracked to your personal link</small></div></div>
+        <div class="af-linkchip" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg><span>vshealthbenefits.com/c/<b>yourname</b></span></div>
       </div>
     </div>
   </div>
@@ -353,57 +352,18 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       </div>
     </aside>
     <div class="tp-join-main">
-    <form class="tp-form" id="af-form" novalidate>
-      <h2>Apply to the creator program</h2>
-      <p style="color:var(--muted,#5a6b80);margin:0 0 6px">Takes about 2 minutes. We review every application and reply within 2 business days.</p>
-      <div class="tp-row">
-        <div><label class="tp-lbl" for="af-first">First name</label><input class="tp-in" id="af-first" placeholder="Jane" autocomplete="given-name"></div>
-        <div><label class="tp-lbl" for="af-last">Last name</label><input class="tp-in" id="af-last" placeholder="Smith" autocomplete="family-name"></div>
+      <div class="tp-form af-cta">
+        <span class="eyebrow">Apply in about 2 minutes</span>
+        <h2>Ready to join the creator program?</h2>
+        <p style="color:var(--muted,#5a6b80);margin:0 0 4px">Answer a few quick questions about your channel and audience. We review every application within 2 business days and send approved creators their personal link.</p>
+        <ol class="tp-steps" style="margin:18px 0 6px">
+          <li><strong>Tell us about your channel</strong>Platforms, followers and who your audience is.</li>
+          <li><strong>We review it</strong>Within 2 business days, by a real person.</li>
+          <li><strong>Get your link and start posting</strong>Every qualified referral earns your flat reward.</li>
+        </ol>
+        <a class="tp-btn" href="/affiliate-apply" style="text-decoration:none">Start my application &rarr;</a>
+        <p style="font-size:.82rem;color:var(--muted,#5a6b80);margin:12px 0 0;text-align:center">Free to join &middot; No license needed &middot; No minimum followers</p>
       </div>
-      <div class="tp-row">
-        <div><label class="tp-lbl" for="af-email">Email</label><input class="tp-in" id="af-email" placeholder="you@email.com" type="email" autocomplete="email"></div>
-        <div><label class="tp-lbl" for="af-phone">Phone</label><input class="tp-in" id="af-phone" placeholder="(305) 555-0100" type="tel" inputmode="tel" autocomplete="tel"></div>
-      </div>
-      <span class="tp-lbl">Where do you post? <small class="af-hint">Pick all that apply</small></span>
-      <div class="af-chips" id="af-platforms">
-        <label><input type="checkbox" value="TikTok"><span>TikTok</span></label><label><input type="checkbox" value="Instagram"><span>Instagram</span></label><label><input type="checkbox" value="YouTube"><span>YouTube</span></label><label><input type="checkbox" value="Facebook"><span>Facebook</span></label><label><input type="checkbox" value="LinkedIn"><span>LinkedIn</span></label><label><input type="checkbox" value="X"><span>X</span></label><label><input type="checkbox" value="Podcast"><span>Podcast</span></label><label><input type="checkbox" value="Blog / website"><span>Blog / website</span></label>
-      </div>
-      <div class="tp-row">
-        <div><label class="tp-lbl" for="af-handle">Main handle</label><input class="tp-in" id="af-handle" placeholder="@yourname"></div>
-        <div><label class="tp-lbl" for="af-followers">Followers (biggest account)</label><select class="tp-in" id="af-followers"><option value="">Choose one</option><option>Under 1K</option><option>1K&ndash;10K</option><option>10K&ndash;50K</option><option>50K&ndash;250K</option><option>250K+</option></select></div>
-      </div>
-      <label class="tp-lbl" for="af-url">Link to your main profile or channel</label><input class="tp-in" id="af-url" placeholder="https://www.tiktok.com/@yourname" type="url" inputmode="url">
-      <span class="tp-lbl">Who is your audience? <small class="af-hint">Pick all that apply</small></span>
-      <div class="af-chips" id="af-audience">
-        <label><input type="checkbox" value="Truck drivers"><span>Truck drivers</span></label><label><input type="checkbox" value="Small business owners"><span>Small business owners</span></label><label><input type="checkbox" value="Self-employed / 1099"><span>Self-employed / 1099</span></label><label><input type="checkbox" value="Families"><span>Families</span></label><label><input type="checkbox" value="Spanish-speaking"><span>Spanish-speaking</span></label><label><input type="checkbox" value="Other"><span>Other</span></label>
-      </div>
-      <div class="tp-row">
-        <div><label class="tp-lbl" for="af-type">Content you make</label><select class="tp-in" id="af-type"><option value="">Choose one</option><option>UGC videos</option><option>Reviews &amp; testimonials</option><option>Educational / tips</option><option>Lifestyle / vlog</option><option>Podcast / interviews</option><option>Other</option></select></div>
-        <div><label class="tp-lbl" for="af-lang">Language</label><select class="tp-in" id="af-lang"><option>English</option><option>Spanish</option><option>English &amp; Spanish</option></select></div>
-      </div>
-      <div class="tp-row">
-        <div><label class="tp-lbl" for="af-state">State</label><input class="tp-in" id="af-state" placeholder="FL" maxlength="2" autocomplete="address-level1" style="text-transform:uppercase"></div>
-        <div></div>
-      </div>
-      <label class="tp-lbl" for="af-pitch">How would you promote VS Health Benefits? <small class="af-hint">Optional</small></label>
-      <textarea class="tp-in" id="af-pitch" rows="3" placeholder="e.g. a TikTok series on how I got covered as a 1099 driver, plus a link in bio"></textarea>
-      <div style="position:absolute;left:-9999px" aria-hidden="true"><label>Website <input id="af-hp" tabindex="-1" autocomplete="off"></label></div>
-      <label class="af-agree"><input type="checkbox" id="af-agree"><span>I've read the <a href="#rules">program rules</a> and agree to disclose sponsored posts and not quote plans or prices.</span></label>
-      <p class="tp-err" hidden></p>
-      <button class="tp-btn" type="submit" id="af-submit">Apply to the program</button>
-      <p style="font-size:.76rem;color:var(--muted,#5a6b80);margin:12px 0 0">By submitting, you agree to our <a href="/privacy">Privacy Policy</a> and that VS BENEFITS LLC (d/b/a VS Health Benefits) may call, text or email you at the contact info provided about the creator program, including by automated technology. Consent is not a condition of joining. Msg &amp; data rates may apply. Reply STOP to opt out.</p>
-    </form>
-    <div class="tp-form" id="af-done" hidden>
-      <div class="af-done-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-      <h2>Application received, <span id="af-dname"></span>!</h2>
-      <p style="color:#334155;margin:6px 0 0">Here's what happens next:</p>
-      <ol class="tp-steps" style="margin-top:14px">
-        <li><strong>We review your channel</strong>Within 2 business days.</li>
-        <li><strong>You get your personal link</strong>We build it just for you and send it with your reward details and talking points.</li>
-        <li><strong>Start posting</strong>Everyone who comes through your link is tracked to you.</li>
-      </ol>
-      <p style="font-size:.86rem;color:#334155;margin:16px 0 0">Questions? <a href="tel:+19548251009">Call (954) 825-1009</a> or email <a href="mailto:info@vshealthbenefits.com">info@vshealthbenefits.com</a>.</p>
-    </div>
     </div>
   </div>
 </section>
@@ -512,37 +472,6 @@ document.addEventListener("DOMContentLoaded",function(){var toggle=document.quer
     });
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
-})();
-</script>
-<script id="af-js">
-(function(){
-  var f=document.getElementById('af-form');if(!f)return;
-  var $=function(id){return document.getElementById(id);};
-  function checked(id){return [].map.call(document.querySelectorAll('#'+id+' input:checked'),function(i){return i.value;});}
-  function err(m,el){var e=f.querySelector('.tp-err');e.textContent=m;e.hidden=!m;if(el&&el.focus)el.focus();}
-  f.addEventListener('submit',function(ev){
-    ev.preventDefault();err('');
-    var first=$('af-first').value.trim(),last=$('af-last').value.trim(),email=$('af-email').value.trim(),phone=$('af-phone').value.trim();
-    if(!first)return err('Please enter your first name.',$('af-first'));
-    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return err('Please enter a valid email so we can send your link.',$('af-email'));
-    if(phone.replace(/\D/g,'').length<10)return err('Please enter a 10-digit phone number.',$('af-phone'));
-    var plats=checked('af-platforms');if(!plats.length)return err('Pick at least one platform where you post.');
-    if(!$('af-handle').value.trim()&&!$('af-url').value.trim())return err('Please add your handle or a link to your profile.',$('af-handle'));
-    if(!$('af-agree').checked)return err('Please confirm you agree to the program rules.',$('af-agree'));
-    var b=$('af-submit');b.disabled=true;b.textContent='Sending...';
-    var body={firstName:first,lastName:last,email:email,phone:phone,platforms:plats,handle:$('af-handle').value.trim(),profileUrl:$('af-url').value.trim(),
-      followers:$('af-followers').value,audience:checked('af-audience'),contentType:$('af-type').value,language:$('af-lang').value,state:$('af-state').value.trim(),
-      pitch:$('af-pitch').value.trim(),website_url:$('af-hp').value,
-      meta:{tz:(function(){try{return Intl.DateTimeFormat().resolvedOptions().timeZone;}catch(e){return '';}})(),device:navigator.userAgent,referrer:document.referrer||''}};
-    fetch('/api/affiliate-apply',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
-      .then(function(r){if(r.status===400)throw new Error('bad');return r.json().catch(function(){return{};});})
-      .then(function(){
-        try{if(typeof gtag==='function')gtag('event','affiliate_application',{platforms:plats.join(','),followers:body.followers||''});}catch(_){}
-        f.hidden=true;$('af-dname').textContent=first;$('af-done').hidden=false;
-        try{$('af-done').scrollIntoView({behavior:'smooth',block:'center'});}catch(_){}
-      })
-      .catch(function(){b.disabled=false;b.textContent='Apply to the program';err('Something went wrong sending your application. Please try again, or email info@vshealthbenefits.com.');});
-  });
 })();
 </script>
 <script src="/vs-search.js" defer></script>
