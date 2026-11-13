@@ -176,7 +176,7 @@ tr:last-child td{border-bottom:0}
 <script id="vs-creator-dash">
 (function(){
   var KEY="vs_creator_s",$=function(id){return document.getElementById(id);};
-  var PAGES=[["/","Home page"],["/trucking-health-quote","Truck driver quote"],["/truck-driver-health-insurance","Truck driver guide"],["/get-a-quote","Individual & family quote"],["/aca-subsidy-calculator","ACA subsidy calculator"],["/small-business-health-insurance","Small business"],["/seguro-medico-camioneros","Camioneros (Spanish)"],["/open-enrollment","Open enrollment"]];
+  var PAGES=[["/","Home page"],["/quote","Quote form (straight to the form)"],["/trucking-health-quote","Truck driver quote"],["/truck-driver-health-insurance","Truck driver guide"],["/get-a-quote","Individual & family quote"],["/aca-subsidy-calculator","ACA subsidy calculator"],["/small-business-health-insurance","Small business"],["/seguro-medico-camioneros","Camioneros (Spanish)"],["/open-enrollment","Open enrollment"]];
   function show(v){["v-load","v-login","v-sent","v-dash"].forEach(function(x){$(x).hidden=(x!==v);});$("cr-out").hidden=(v!=="v-dash");}
   function getS(){try{return localStorage.getItem(KEY)||"";}catch(e){return "";}}
   function setS(v){try{if(v)localStorage.setItem(KEY,v);else localStorage.removeItem(KEY);}catch(e){}}
