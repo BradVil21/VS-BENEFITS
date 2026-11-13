@@ -129,11 +129,11 @@ tr:last-child td{border-bottom:0}
     <div class="card link">
       <h2>Your link</h2>
       <div class="lrow">
-        <div class="lbox"><input id="d-link" readonly aria-label="Your link" /><select id="d-page" aria-label="Send people to a specific page"></select></div>
+        <div class="lbox"><input id="d-link" readonly aria-label="Your link" /></div>
         <button type="button" class="cp" id="d-copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy</span></button>
         <button type="button" class="cp alt" id="d-share" hidden><span>Share</span></button>
       </div>
-      <p class="hint">Anyone who opens your link is credited to you for 90 days, on every page of our site, even if they come back later and request a quote.</p>
+      <p class="hint">This is your only link. Anyone who opens it is credited to you for 90 days on every page of our site, including our quote form, even if they leave and come back later.</p>
     </div>
 
     <div class="kpis">
@@ -191,11 +191,9 @@ tr:last-child td{border-bottom:0}
     $("d-hi").textContent=name?("Hi "+name+"!"):"Welcome back";
     $("d-since").textContent=c.since?("Creator since "+d8(c.since,true)):"";
     var paused=c.stage==="paused";$("d-paused").hidden=!paused;$("d-chip").className="chip"+(paused?" paused":"");$("d-chip").lastChild.textContent=paused?"Link paused":"Active creator";
-    var base=j.link||"",sel=$("d-page");
-    sel.innerHTML=PAGES.map(function(p){return '<option value="'+p[0]+'">'+esc(p[1])+'</option>';}).join("");
-    function cur(){var v=sel.value;return (!v||v==="/")?base:("https://www.vshealthbenefits.com"+v+"?ref="+encodeURIComponent(c.code));}
+    var base=j.link||"";
+    function cur(){return base;}
     $("d-link").value=base.replace(/^https:\/\/(www\.)?/,"");
-    sel.onchange=function(){$("d-link").value=cur().replace(/^https:\/\/(www\.)?/,"");};
     $("d-copy").onclick=function(){var b=this,txt=cur();function ok(){b.classList.add("ok");b.lastChild.textContent="Copied!";setTimeout(function(){b.classList.remove("ok");b.lastChild.textContent="Copy";},1400);}
       try{navigator.clipboard.writeText(txt).then(ok,fb);}catch(e){fb();}
       function fb(){var i=$("d-link");i.value=txt;i.select();try{document.execCommand("copy");ok();}catch(e){}}};

@@ -13666,7 +13666,7 @@ try{(function(){
       +'<div class="af-codeRow"><label><span>Link code</span><div class="af-codein"><em>.com/</em><input id="afc-code" value="'+esc(code||c.suggestedCode||"")+'" placeholder="janes" maxlength="40"></div></label><label><span>Reward per qualified referral</span><div class="af-codein"><em>$</em><input id="afc-reward" type="number" min="0" step="1" value="'+esc(c.reward||"")+'" placeholder="0"></div></label><button type="button" class="af-save" id="afc-savecode">'+(code?"Update":"Create link")+'</button></div>'
       +'<p class="af-err" id="afc-err" hidden></p>'
       +(code?'<div class="af-links"><div class="af-lrow"><input readonly value="'+esc(linkFor(code))+'"><button type="button" data-copy="'+esc(linkFor(code))+'">Copy</button></div>'
-        +'<div class="af-lrow"><select id="afc-page">'+pageOpts+'</select><input readonly id="afc-pagelink" value="'+esc(linkFor(code))+'"><button type="button" id="afc-copypage">Copy</button></div>'
+        +'<p class="af-hint2" style="margin:2px 0 0">One link for everything. Anyone who opens it is credited to them for 90 days on every page of the site, including the quote form.</p>'
         +'<details class="af-msg"><summary>Approval message to send them</summary><textarea readonly rows="9">'+esc(msg)+'</textarea><button type="button" data-copy="'+esc(msg)+'">Copy message</button></details></div>':'<p class="af-hint2">Pick a short code (their name or handle). Their link will be <b>vshealthbenefits.com/code</b>. Creating it moves them to Approved and texts + emails them their link automatically (GHL). They can sign in at <b>vshealthbenefits.com/creator</b> with their email to see their stats.</p>')
       +'</div>'
       /* referred leads + payouts */
