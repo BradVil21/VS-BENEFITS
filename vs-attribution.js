@@ -199,6 +199,26 @@
 
   window.vsAttribution = payload;
 
+  // ---- keep the creator code visible on every page (added 2026-11-13) ----
+  // Once someone arrives through a creator's link, every page they open shows
+  // ?ref=theirname in the address bar. Credit is already remembered in this
+  // browser either way; this makes it visible and keeps it on any URL the
+  // visitor copies and shares. No reload, no new history entry. Skipped on
+  // the private portals.
+  try {
+    if (!/^\/(admin|client|creator)(\/|\.html|$)/.test(location.pathname) && window.history && history.replaceState) {
+      var pa = payload();
+      var keepRef = pa && pa.ref ? String(pa.ref).toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 40) : "";
+      if (keepRef) {
+        var u = new URL(location.href);
+        if (u.searchParams.get("ref") !== keepRef) {
+          u.searchParams.set("ref", keepRef);
+          history.replaceState(history.state, "", u.pathname + u.search + u.hash);
+        }
+      }
+    }
+  } catch (e) { /* never break the page */ }
+
   // ---- fold it into every lead POST the site makes ----
   // The alternative is editing every form on 150 pages and remembering to
   // edit the next one too. This way attribution is the default and a form
