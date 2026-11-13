@@ -13380,7 +13380,8 @@ try{(function(){
     var kind=pv.getAttribute("data-pvk"),lid=pv.getAttribute("data-pvid");if(!kind||!lid)return;
     var list=kind==="biz"?(typeof getBizLeads==="function"?getBizLeads():[]):(typeof getLeads==="function"?getLeads():[]);
     var lead=byId(list,lid);
-    if(!lead||!refOf(lead))return;ov.__crb=true;var c=refOf(lead);
+    if(!lead)return;
+    if(!refOf(lead)){manualCredit(ov,pv,kind,lid);return;}ov.__crb=true;var c=refOf(lead);
     pv.querySelectorAll(".pv-chip").forEach(function(ch){if(/Creator:/.test(ch.textContent))ch.remove();});
     var hd=pv.querySelector(".pv-hd .pv-ttl");if(hd)hd.insertAdjacentHTML("beforeend",'<div style="margin-top:8px">'+badge(c,true)+'</div>');
     var j=(lead.attribution&&Array.isArray(lead.attribution.journey))?lead.attribution.journey:[];
@@ -13388,10 +13389,32 @@ try{(function(){
     if(body){
       var t0=j.length?j[0].t:0;
       var rows=j.map(function(x){var d=new Date(x.t);var when=isNaN(d)?"":d.toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});return '<li><span>'+esc(when)+'</span><code>'+esc(x.p)+'</code></li>';}).join("");
-      body.insertAdjacentHTML("beforeend",'<div class="crb-jr"><div class="crb-jrh">'+VID+'<b>Creator referral</b><span>vshealthbenefits.com/'+esc(c)+'</span></div>'
+      body.insertAdjacentHTML("beforeend",'<div class="crb-jr"><div class="crb-jrh">'+VID+'<b>Creator referral</b><span>vshealthbenefits.com/'+esc(c)+'</span><button type="button" class="crb-rm" data-crb-rm>Remove credit</button></div>'
         +(rows?'<p>Pages they viewed before submitting ('+j.length+'):</p><ol>'+rows+'</ol>':'<p>Came in through this creator\'s link. Page history is recorded for new visitors from Nov 13, 2026.</p>')+'</div>');
     }
+    var rm=pv.querySelector("[data-crb-rm]");if(rm)rm.addEventListener("click",function(){if(!confirm("Remove "+who(c).name+"'s credit from this lead?"))return;setRef(kind,lid,"");});
     pv.querySelectorAll("[data-crb]").forEach(function(b){var id=b.getAttribute("data-crb");if(!id)return;b.style.cursor="pointer";b.addEventListener("click",function(e){e.stopPropagation();if(typeof window.vsOpenCreator==="function"){var o=$("pv-ov");if(o)o.remove();window.vsOpenCreator(id);}});});
+  }
+  /* credit a lead to a creator by hand (they called or texted instead of using the form) */
+  function setRef(kind,lid,code){
+    var get=kind==="biz"?getBizLeads:getLeads,save=kind==="biz"?saveBizLeads:saveLeads;
+    var list=get();list.forEach(function(l){if(String(l.id)!==String(lid))return;var a=Object.assign({},l.attribution||{});
+      if(code){a.ref=code;a.manualRef=true;a.source=a.source&&!/^Partner/.test(a.source)?a.source:"Partner — "+code;}
+      else{delete a.ref;delete a.manualRef;delete a.journey;if(/^Partner/.test(a.source||""))a.source="Direct";}
+      l.attribution=a;l.updated=Date.now();
+      var s=new Date().toLocaleString(undefined,{month:"numeric",day:"numeric",hour:"numeric",minute:"2-digit"});
+      l.notes="["+s+"] "+(code?"Credited to creator /"+code+" by hand":"Creator credit removed")+"\n"+(l.notes||"");});
+    save(list);
+    var o=$("pv-ov");if(o)o.remove();
+    try{if(typeof czPipeResults==="function"&&kind==="ind")czPipeResults();}catch(e){}try{decorate();}catch(e){}
+    if(typeof window.vsOpenLeadView==="function")window.vsOpenLeadView(kind,lid);
+  }
+  function manualCredit(ov,pv,kind,lid){
+    var cr=(typeof window.vsAffList==="function"?window.vsAffList():[]).filter(function(x){return norm(x.code)&&(x.stage==="approved"||x.stage==="active"||x.stage==="paused");});
+    if(!cr.length)return;ov.__crb=true;
+    var body=pv.querySelector(".pv-body");if(!body)return;
+    body.insertAdjacentHTML("beforeend",'<div class="crb-man">'+VID+'<span>Referred by a creator?</span><select data-crb-pick><option value="">Credit to a creator…</option>'+cr.map(function(x){return '<option value="'+esc(norm(x.code))+'">'+esc(tc(((x.firstName||"")+" "+(x.lastName||"")).trim())||x.code)+' (/'+esc(norm(x.code))+')</option>';}).join("")+'</select></div>');
+    var sel=body.querySelector("[data-crb-pick]");sel.addEventListener("change",function(){if(sel.value)setRef(kind,lid,sel.value);});
   }
   new MutationObserver(function(){try{enhancePopup();}catch(e){}}).observe(document.body,{childList:true});
   if(typeof czPipeResults==="function"){var _p=czPipeResults;czPipeResults=function(){var o=_p.apply(this,arguments);try{decorate();}catch(e){}return o;};czPipeResults.__keepPlace=true;}
@@ -13402,6 +13425,8 @@ try{(function(){
   ".crb svg{width:13px;height:13px;flex:none}.crb span{overflow:hidden;text-overflow:ellipsis}",
   ".crb-big{font-size:12.5px;padding:5px 13px 5px 9px}.crb-big svg{width:15px;height:15px}",
   ".crb-slot{margin:0 0 7px}",
+  ".crb-rm{margin-left:auto;border:0;background:none;color:#94a3b8;font-size:11.5px;font-weight:700;cursor:pointer;text-decoration:underline;font-family:inherit}.crb-rm:hover{color:#dc2626}",
+  ".crb-man{display:flex;align-items:center;gap:8px;margin:12px 0 2px;padding:8px 11px;border:1.5px dashed #e9d5ff;border-radius:11px;color:#6d28d9;font-size:12.5px;font-weight:700}.crb-man svg{width:15px;height:15px;flex:none}.crb-man select{margin-left:auto;border:1.5px solid #e9d5ff;border-radius:8px;padding:4px 8px;font:600 12.5px inherit;color:#0b2346;background:#fff;max-width:60%}",
   ".crb-card{border-color:#e9d5ff!important;box-shadow:0 0 0 2px rgba(124,58,237,.18),0 4px 14px rgba(124,58,237,.12)!important;background:linear-gradient(180deg,#faf5ff,#fff 40%)!important}",
   ".crb-jr{margin:12px 0 2px;border:1.5px solid #e9d5ff;background:#faf5ff;border-radius:12px;padding:11px 13px}",
   ".crb-jrh{display:flex;align-items:center;gap:7px;color:#6d28d9;flex-wrap:wrap}.crb-jrh svg{width:16px;height:16px}.crb-jrh span{color:#7b8aa0;font-size:12px}",
@@ -13718,7 +13743,7 @@ try{(function(){
       return '<div class="afl-row'+(r.q?" q":"")+'"><div class="afl-main"><span class="afl-k k-'+x.kind+'">'+(x.kind==="ind"?"IND":"BIZ")+'</span><b data-afl-open="'+x.kind+':'+esc(x.id)+'">'+esc(x.name)+'</b><small>'+esc(d8(x.at))+'</small></div>'
         +'<span class="afl-st" style="color:'+x.color+';border-color:'+x.color+'55;background:'+x.color+'12">'+esc(x.stageLabel)+'</span>'
         +(r.paid?'<span class="afl-paid">Paid</span>':(r.q?'<button type="button" class="afl-b on" data-afl-q="'+esc(x.key)+'" title="Undo">✓ Qualified</button>':'<button type="button" class="afl-b'+(likely?" likely":"")+'" data-afl-q="'+esc(x.key)+'" title="They completed a consultation with a licensed advisor">'+(likely?"Mark qualified?":"Mark qualified")+'</button>'))+'</div>';}).join("");
-    var pays=(c.payouts||[]).slice().reverse().map(function(p){return '<div class="afp-row"><b>'+money2(p.amount)+'</b><span>'+esc(d8(p.at))+' · '+(p.keys||[]).length+' referral'+((p.keys||[]).length===1?"":"s")+(p.note?' · '+esc(p.note):'')+'</span></div>';}).join("");
+    var pays=(c.payouts||[]).slice().reverse().map(function(p){return '<div class="afp-row"><b>'+money2(p.amount)+'</b><span>'+esc(d8(p.at))+' · '+(p.keys||[]).length+' referral'+((p.keys||[]).length===1?"":"s")+(p.note?' · '+esc(p.note):'')+'</span><span class="afp-act"><button type="button" data-afp-edit="'+esc(p.id)+'">Edit</button><button type="button" data-afp-del="'+esc(p.id)+'">Delete</button></span></div>';}).join("");
     var pageOpts=PAGES.map(function(p){return '<option value="'+p[0]+'">'+esc(p[1])+'</option>';}).join("");
     var msg=code?("Hi "+(c.firstName||"")+"! You're approved for the VS Health Benefits creator program.\n\nYour personal link: "+linkFor(code)+"\n\nEveryone who comes through it and asks for a quote is credited to you. You earn "+(c.reward?money2(c.reward)+" ":"a flat reward ")+"for every qualified referral (they complete a free consultation with a licensed advisor), whether or not they buy.\n\nQuick rules: share your own experience, label posts #ad or #partner, and please don't quote prices or plan details. Our licensed advisors handle that.\n\nSee your visits, referrals and earnings any time at "+SITE+"/creator (sign in with "+(c.email||"your email")+").\n\nQuestions? Call or text (954) 825-1009.\n- Bradley, VS Health Benefits"):"";
     var ov=document.createElement("div");ov.className="pv-ov";ov.id="pv-ov";
@@ -13775,6 +13800,13 @@ try{(function(){
       if(!confirm("Record a payout of "+money2(amt)+" to "+name+" for "+s.unpaid+" qualified referral"+(s.unpaid===1?"":"s")+"?\n\nThis only records it here. Send the money yourself."))return;
       upd(id,function(x){var keys=[];Object.keys(x.refs||{}).forEach(function(k){var r=x.refs[k];if(r&&r.q&&!r.paid&&s.list.some(function(l){return l.key===k;})){r.paid=pid;keys.push(k);}});x.payouts=(x.payouts||[]).concat([{id:pid,at:Date.now(),amount:amt,keys:keys,note:note}]);if(x.stage==="approved")x.stage="active";stamp(x,"Payout recorded: "+money2(amt)+(note?" ("+note+")":""));});re();affEvent(id,"paid",pid);
     };
+    ov.querySelectorAll("[data-afp-edit]").forEach(function(b){b.onclick=function(){var pid=b.getAttribute("data-afp-edit"),cur=(get(id).payouts||[]).filter(function(p){return p.id===pid;})[0];if(!cur)return;
+      var a=prompt("Payout amount ($):",String(cur.amount||""));if(a===null)return;var amt=Number(String(a).replace(/[^0-9.]/g,""));if(!amt){alert("Enter an amount above 0.");return;}
+      var n=prompt("How paid (Zelle, check...). The creator sees this:",cur.note||"");if(n===null)n=cur.note||"";
+      upd(id,function(x){(x.payouts||[]).forEach(function(p){if(p.id===pid){p.amount=amt;p.note=String(n).trim().slice(0,60);}});stamp(x,"Payout edited: "+money2(amt));});re();};});
+    ov.querySelectorAll("[data-afp-del]").forEach(function(b){b.onclick=function(){var pid=b.getAttribute("data-afp-del"),cur=(get(id).payouts||[]).filter(function(p){return p.id===pid;})[0];if(!cur)return;
+      if(!confirm("Delete the "+money2(cur.amount)+" payout?\n\nIts "+(cur.keys||[]).length+" referral(s) go back to qualified, unpaid. No message is sent to the creator."))return;
+      upd(id,function(x){x.payouts=(x.payouts||[]).filter(function(p){return p.id!==pid;});Object.keys(x.refs||{}).forEach(function(k){if(x.refs[k]&&x.refs[k].paid===pid)x.refs[k].paid="";});stamp(x,"Payout deleted: "+money2(cur.amount));});re();};});
     function addNote(){var v=$("afc-note").value.trim();if(!v)return;upd(id,function(x){stamp(x,v);});re();}
     $("afc-addnote").onclick=addNote;$("afc-note").onkeydown=function(e){if(e.key==="Enter"){e.preventDefault();addNote();}};
     $("afc-del").onclick=function(){if(!confirm("Delete "+name+" from your affiliates?\n\nTheir link stops crediting them in the portal. Leads they already sent stay in your pipeline."))return;save(load().filter(function(x){return x.id!==id;}));closeAll();render();badge();};
@@ -13794,6 +13826,7 @@ try{(function(){
   var tries=0;(function go(){if(!mount()&&tries++<40)setTimeout(go,250);else{watch();setInterval(watch,8000);}})();
 
   var st=document.createElement("style");st.textContent=[
+  ".afp-row .afp-act{margin-left:auto;display:inline-flex;gap:6px}.afp-row .afp-act button{border:1.5px solid #d6dde6;background:#fff;color:#42566e;border-radius:7px;padding:2px 8px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit}.afp-row .afp-act button:hover{border-color:#16447f;color:#16447f}.afp-row .afp-act button[data-afp-del]:hover{border-color:#dc2626;color:#dc2626}",
   "#p-affiliates .af-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:4px 0 12px}",
   "#p-affiliates .af-kpis>div{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e3e9f2;border-radius:12px;padding:9px 12px}",
   "#p-affiliates .afk-ic{width:30px;height:30px;border-radius:9px;background:#eef2f8;color:#42566e;display:flex;align-items:center;justify-content:center;flex:none}#p-affiliates .afk-ic svg{width:16px;height:16px}",

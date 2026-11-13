@@ -1469,6 +1469,8 @@ function vsMergeInto(existing, item){
   Object.keys(item).forEach(function(k){
     if (k === "id" || k === "created" || k === "stage" || k === "status") return;
     var cur = existing[k], next = item[k];
+    // A returning visitor who came back through a creator's link: credit the creator.
+    if (k === "attribution" && next && next.ref && !(cur && cur.ref)) { existing[k] = next; return; }
     if (next === null || next === undefined || next === "") return;
     if (cur === null || cur === undefined || cur === "") { existing[k] = next; return; }
     if (k === "notes" && String(cur) !== String(next)) existing[k] = cur + "\n" + next;

@@ -530,7 +530,7 @@ async function syncToBoards(n, opts) {
         if (!existing.employees && n.employees) existing.employees = n.employees;
         if (!existing.requestedCoverage && n.requestedCoverage) existing.requestedCoverage = n.requestedCoverage;
         if (n.meta && n.meta.ip && !(existing.meta && existing.meta.ip)) existing.meta = n.meta;
-        if (!existing.attribution && n.attribution) existing.attribution = n.attribution;
+        if (n.attribution && (!existing.attribution || (n.attribution.ref && !existing.attribution.ref))) existing.attribution = n.attribution; // a creator link wins over an older, uncredited source
         // The card was opened by a pre-submit capture, whose source says
         // "(in progress)". They are not in progress any more.
         if (n.source && isInProgress(existing) && !isInProgress(n)) {
@@ -624,7 +624,7 @@ async function syncToBoards(n, opts) {
         existing.notes = (prev ? prev + "\n" : "") + n.notesIn;
       }
       if (n.meta && n.meta.ip && !(existing.meta && existing.meta.ip)) existing.meta = n.meta;
-      if (!existing.attribution && n.attribution) existing.attribution = n.attribution;
+      if (n.attribution && (!existing.attribution || (n.attribution.ref && !existing.attribution.ref))) existing.attribution = n.attribution; // a creator link wins over an older, uncredited source
       // The quote funnel writes its own card straight to Firestore without a
       // stage, so a card we merge into can be one the board cannot place - it
       // renders in no column at all. admin.html repairs that on load, but only
