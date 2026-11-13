@@ -144,6 +144,10 @@ module.exports = async (req, res) => {
   if (req.method === "POST" && ((req.query && req.query.op === "gads-lead") || /gads-lead/.test(req.url || ""))) {
     return require("./_gads-lead")(req, res);
   }
+  // POST /api/affiliate-apply: creator / affiliate program application. See api/_affiliate-apply.js
+  if (req.method === "POST" && ((req.query && req.query.op === "affiliate-apply") || /affiliate-apply/.test(req.url || ""))) {
+    return require("./_affiliate-apply")(req, res);
+  }
   // GET /api/google-rating is rewritten here (see vercel.json); see api/_google-rating.js
   if (req.method === "GET" && ((req.query && req.query.op === "google-rating") || /google-rating/.test(req.url || ""))) {
     return require("./_google-rating")(req, res);

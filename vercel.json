@@ -2,6 +2,11 @@
   "cleanUrls": true,
   "redirects": [
     {
+      "source": "/c/:code",
+      "destination": "/?ref=:code",
+      "permanent": false
+    },
+    {
       "source": "/truck-driver-health-insurance-texas.html",
       "destination": "/truck-driver-health-insurance-texas",
       "permanent": true
@@ -2024,6 +2029,10 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/api/affiliate-apply",
+      "destination": "/api/voice-lookup?op=affiliate-apply"
+    },
     {
       "source": "/api/plans",
       "destination": "/api/voice-lookup?op=plans"

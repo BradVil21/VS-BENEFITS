@@ -50,6 +50,7 @@ module.exports = async (req, res) => {
     source: aStr(A.source), lastSource: aStr(A.lastSource), landing: aStr(A.landing, 200),
     utm_source: aStr(A.utm_source), utm_medium: aStr(A.utm_medium), utm_campaign: aStr(A.utm_campaign),
     utm_term: aStr(A.utm_term, 120), gclid: aStr(A.gclid, 200), firstSeen: aStr(A.firstSeen, 20),
+    ref: String(A.ref || "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 40),
   } : null;
   const formName = aStr(d.formName || d.form || "", 60);
   const channel = attribution && attribution.source ? attribution.source : "";
@@ -60,6 +61,7 @@ module.exports = async (req, res) => {
     attribution.utm_term ? "Keyword: " + attribution.utm_term : "",
     attribution.landing ? "Landing page: " + attribution.landing : "",
     attribution.gclid ? "gclid: " + attribution.gclid : "",
+    attribution.ref ? "Affiliate / partner link: " + attribution.ref : "",
   ].filter(Boolean) : [];
 
   let contactId = null;
@@ -79,6 +81,10 @@ module.exports = async (req, res) => {
       lifecyclestage: "lead",
     });
   } catch (e) { /* non-fatal */ }
+  // Affiliate / creator link (?ref=code): tag the contact so the creator can be credited.
+  if (contactId && attribution && attribution.ref) {
+    try { await L.addTagsToContact(contactId, ["affiliate-referral", "aff-" + attribution.ref]); } catch (e) { /* non-fatal */ }
+  }
 
   // ---- Business Leads board (Prospect column) ----
   // The board is keyed by company, so a second request from the same company

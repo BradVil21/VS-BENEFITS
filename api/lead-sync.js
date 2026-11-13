@@ -242,6 +242,13 @@ async function toCrm(d, req, res) {
     const tags = ["website-lead"];
     const raw = Array.isArray(d.tags) ? d.tags : (d.tag ? [d.tag] : []);
     raw.slice(0, 8).forEach(function (t) { const n = normTag(t); if (n) tags.push(n); });
+    // Affiliate / creator / partner links (?ref=code): tag who sent them so the
+    // creator can be credited and paid. Same normalisation as vs-attribution.js
+    // and the portal's Affiliates tab.
+    try {
+      const ref = String((d.attribution && d.attribution.ref) || "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 40);
+      if (ref) { tags.push("affiliate-referral"); tags.push("aff-" + ref); out.affiliate = ref; }
+    } catch (e) { /* never block a lead on this */ }
     try {
       const t = await L.ghl("/contacts/" + contactId + "/tags", "POST", { tags: tags });
       out.tagged = Boolean(t.ok);
