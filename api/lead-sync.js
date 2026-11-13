@@ -675,7 +675,11 @@ async function toPortal(d, req, res) {
     return;
   }
 
-  const result = await syncToBoards(n);
+  // ?keepClosed=1 (sent by the GHL "Portal Sync - All Leads" workflow, which also
+  // fires on every SMS reply): a reply from a Sold / Lost client updates their
+  // existing card instead of opening a fresh New Lead card for them.
+  const keepClosed = String((req.query && req.query.keepClosed) || d.keepClosed || "") === "1";
+  const result = await syncToBoards(n, keepClosed ? { reopenClosed: false } : undefined);
 
   if (result && result.ok && result.action === "created") {
     try { await alertNewLead(n); } catch (e) { /* non-fatal */ }
