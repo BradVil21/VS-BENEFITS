@@ -732,27 +732,48 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
 </header>
 
 
-<section class="hero" style="padding-bottom:28px">
-  <div class="container">
-<div class="vs-hh" style="grid-template-columns:1fr"><div class="vs-hh-copy">
-    <span class="eyebrow">Founder &amp; CEO</span>
-    <h1>Bradley Vilsaint, Founder and CEO of <span>VS Health Benefits</span></h1>
-    <p class="hero-sub">A self-made entrepreneur who turned a deep care for people into a mission. Bradley Vilsaint built VS Health Benefits from the ground up into a licensed independent health insurance brokerage that puts clients first, serving individuals, families, and small businesses across 40+ states.</p>
-  </div></div>
-</div>
-</section>
-
-<section class="section">
-  <div class="container about-grid">
+<section class="bvf">
+<style>
+.bvf{background:var(--blue-50,#f4f8fe);padding:72px 0 80px}
+.bvf-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:72px;align-items:center}
+.bvf-photo{position:relative;margin:0;padding:14px 0 0 14px}
+.bvf-photo::before{content:"";position:absolute;top:0;left:0;width:76px;height:76px;border-top:5px solid #0db5a6;border-left:5px solid #0db5a6;border-top-left-radius:28px}
+.bvf-photo picture,.bvf-photo img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:50% 20%;border-radius:24px}
+.bvf-photo picture{box-shadow:0 30px 60px -28px rgba(11,35,70,.45);border-radius:24px}
+.bvf-eyebrow{display:block;font:700 13px/1.2 'Inter',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#098374;margin-bottom:14px}
+.bvf h1{font-family:'Poppins',sans-serif;font-weight:800;font-size:clamp(30px,3.6vw,46px);line-height:1.12;letter-spacing:-.02em;color:var(--ink,#0d1b2a);margin:0 0 22px;text-align:left}
+.bvf h1 span{background:linear-gradient(90deg,#1e5ab0,#0db5a6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bvf p{font-size:17px;line-height:1.7;color:var(--ink-2,#334155);margin:0 0 16px;text-align:left}
+.bvf-close{font-family:'Poppins',sans-serif;font-weight:700;font-size:18px;color:var(--ink,#0d1b2a);margin:26px 0 2px!important}
+.bvf-sig{font-family:'Allura',cursive;font-size:58px;line-height:1;color:#0f2e5c;margin:4px 0 6px;display:block}
+.bvf-name{font-weight:700;color:var(--ink,#0d1b2a);font-size:16px;margin:0!important}
+.bvf-title{font-size:15px;color:#64748b;margin:0 0 24px!important}
+@media (max-width:900px){
+  .bvf{padding:44px 0 56px}
+  .bvf-grid{grid-template-columns:1fr;gap:36px}
+  .bvf-photo{max-width:420px;margin:0 auto;width:100%}
+  .bvf p{font-size:16px}
+}
+</style>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Allura&display=swap&text=Bradley">
+  <div class="container bvf-grid">
+    <figure class="bvf-photo">
+      <picture>
+        <source type="image/webp" srcset="/compressed/bradley-vilsaint-founder-480.webp 480w, /compressed/bradley-vilsaint-founder.webp 716w" sizes="(max-width: 900px) 420px, 480px">
+        <img src="/compressed/bradley-vilsaint-founder.jpg" alt="Bradley Vilsaint, Founder and CEO of VS Health Benefits" width="716" height="896" decoding="async" fetchpriority="high" loading="eager">
+      </picture>
+    </figure>
     <div>
-      <div class="about-portrait" style="aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:#0b2346">
-        <img decoding="async" src="/compressed/bradley-vilsaint.jpg" alt="Bradley Vilsaint, Founder and CEO of VS Health Benefits" width="800" height="1198" loading="eager" style="width:100%;height:100%;object-fit:cover;object-position:64% 16%" />
-      </div>
-    </div>
-    <div>
-      <h2>Meet Bradley Vilsaint</h2>
-      <p>Bradley Vilsaint is the Founder and CEO of VS Health Benefits. He did not inherit a book of business or follow a traditional insurance path. He built this company the hard way, from nothing, on a simple belief: that ordinary people deserve honest, expert help with one of the most important and most confusing purchases of their lives.</p>
-      <p>That belief is the thread running through everything VS Health Benefits does. No carrier quotas. No pressure. Just clear, unbiased guidance from someone who genuinely cares whether you end up better off.</p>
+      <span class="bvf-eyebrow">Meet our founder, Bradley Vilsaint</span>
+      <h1>I started VS Health Benefits because good people deserve <span>a straight answer.</span></h1>
+      <p>I didn't come up through insurance. I started in public service as a Police Service Aide in Coral Springs, then taught myself technology and built a career in tech, until I got laid off.</p>
+      <p>That setback pointed me back to what I've always cared about most: helping people. In health insurance I kept seeing families and business owners overpay, end up underinsured, or get lost in a system that was never built to be clear.</p>
+      <p>So I built VS Health Benefits, an independent brokerage licensed in 40+ states. Every carrier pays us the same, so my only job is finding the plan that actually fits your life and budget.</p>
+      <p class="bvf-close">Let's find coverage that works for you.</p>
+      <span class="bvf-sig" aria-hidden="true">Bradley</span>
+      <p class="bvf-name">Bradley Vilsaint</p>
+      <p class="bvf-title">Founder &amp; CEO, VS Health Benefits</p>
       <a class="btn btn-primary" href="/contact">Talk with our team</a>
     </div>
   </div>
