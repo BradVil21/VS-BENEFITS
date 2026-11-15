@@ -429,7 +429,12 @@ function normalize(c, d) {
     meta: (d.meta && typeof d.meta === "object") ? d.meta : null,
     // Product funnels (dental/vision) always land in the main pipeline's New
     // Lead column, business or family - they are worked like any new lead.
-    business: product ? false : L.isBusinessLead(d.pipeline || d.leadType || d.coverageType || d.type, tags),
+    // A business source (business quote, census, abandoned business quote) also
+    // counts, so a business lead that left only a phone number never lands in
+    // the individual pipeline (Bradley, 2026-11-15).
+    business: product ? false : (L.isBusinessLead(d.pipeline || d.leadType || d.coverageType || d.type, tags) ||
+      (!/^(individual|family|personal)$/i.test(String(d.pipeline || d.leadType || d.coverageType || d.type || "").trim()) &&
+       /business quote|census received|quote funnel . business/i.test(formSource))),
     fullName: (firstName + " " + lastName).trim() || company || email || phone,
   };
 }
@@ -481,6 +486,15 @@ async function syncToBoards(n, opts) {
     if (n.email && String(x.email || "").toLowerCase() === n.email) return true;
     if (n.phone && lastTen(x.phone) && lastTen(x.phone) === n.phone) return true;
     return false;
+  }
+
+  // Someone already on the Business Leads board is a business lead. A GHL
+  // webhook or sweep about them never opens an individual card (2026-11-15).
+  if (!n.business && opts && opts.fromGhl) {
+    const biz = await FS.readStore("biz_leads");
+    if (biz.ok && (biz.items || []).some(sameContact)) {
+      return { ok: true, action: "unchanged", skipped: "on_business_board" };
+    }
   }
 
   if (n.business) {
@@ -695,7 +709,7 @@ async function toPortal(d, req, res) {
   // fires on every SMS reply): a reply from a Sold / Lost client updates their
   // existing card instead of opening a fresh New Lead card for them.
   const keepClosed = String((req.query && req.query.keepClosed) || d.keepClosed || "") === "1";
-  const result = await syncToBoards(n, keepClosed ? { reopenClosed: false } : undefined);
+  const result = await syncToBoards(n, keepClosed ? { reopenClosed: false, fromGhl: true } : { fromGhl: true });
 
   if (result && result.ok && result.action === "created") {
     try { await alertNewLead(n); } catch (e) { /* non-fatal */ }
@@ -810,6 +824,7 @@ async function sweepPortal(d, req, res) {
 
       try {
         const result = await syncToBoards(n, {
+          fromGhl: true,
           reopenClosed: false,
           createIfMissing: isNew || lateWebchat,
         });

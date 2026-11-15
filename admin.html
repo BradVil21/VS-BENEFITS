@@ -2238,6 +2238,8 @@ LOCAL_TO_REMOTE[K.blockedIps]="blocked_ips";
    was actually updated, so callers can say so out loud. */
 function setArr(k,v,force){setArrLocal(k,v);var r=LOCAL_TO_REMOTE[k];return r?cloudPush(r,v,force):Promise.resolve(true);}
 function isAffApp(l){return !!l&&l.stage!=="sold"&&/^affiliate \/ creator/i.test(String(l.source||"")+"")&&!/quote|consult/i.test(String(l.sourceDetail||""));}
+function bizDupIndex(){var ix={c:{},e:{},p:{}};asArr(K.bizLeads).forEach(function(b){if(!b)return;if(b.ghlContactId)ix.c[b.ghlContactId]=1;var e=String(b.email||"").trim().toLowerCase();if(e)ix.e[e]=1;var ph=String(b.phone||"").replace(/\D/g,"").slice(-10);if(ph.length===10)ix.p[ph]=1;});return ix;}
+function isBizDup(l,ix){if(!l||l.stage==="sold")return false;var src=String(l.source||"")+" "+String(l.sourceDetail||"");var noName=!String((l.firstName||"")+(l.lastName||"")).trim();if(!/abandoned|business|group|employer|census/i.test(src)&&!noName)return false;var e=String(l.email||"").trim().toLowerCase(),ph=String(l.phone||"").replace(/\D/g,"").slice(-10);return !!((l.ghlContactId&&ix.c[l.ghlContactId])||(e&&ix.e[e])||(ph.length===10&&ix.p[ph]));}
 function getLeads(){return asArr(K.leads);}function saveLeads(v){setArr(K.leads,v);}
 function getAccounts(){return asArr(K.accounts);}function saveAccounts(v){setArr(K.accounts,v);}
 function getMessages(){return asArr(K.messages);}function saveMessages(v){setArr(K.messages,v);}
@@ -2336,7 +2338,10 @@ async function initCloud(){
         setArrLocal(REMOTE_TO_LOCAL[rk],items);
         /* Creator / affiliate applications belong on the Affiliates board only (2026-11-15).
            Drop any that reached the regular pipeline, using the copy the server just sent. */
-        if(rk==="leads"&&items.some(isAffApp)){var keepItems=items.filter(function(l){return !isAffApp(l);});items=keepItems;setTimeout(function(){var cur=getLeads();var kept=cur.filter(function(l){return !isAffApp(l);});if(kept.length<cur.length)saveLeads(kept);},0);}
+        if(rk==="leads"&&items.some(isAffApp)){var keepItems=items.filter(function(l){return !isAffApp(l);});items=keepItems;}
+        /* Business leads belong on the Business Leads board only (2026-11-15): drop
+           individual cards for anyone already there, plus affiliate applications. */
+        if(rk==="leads"||rk==="biz_leads"){setTimeout(function(){var ix=bizDupIndex();var cur=getLeads();var kept=cur.filter(function(l){return !isAffApp(l)&&!isBizDup(l,ix);});if(kept.length<cur.length)saveLeads(kept);},0);}
         if(rk==="leads"&&prevCount>=0&&items.length>prevCount&&$("shell")&&!$("shell").hidden){
           var prevLeadIds={};prevItems.forEach(function(l){if(l&&l.id)prevLeadIds[l.id]=true;});
           var newLeads=items.filter(function(l){return l&&l.id&&!prevLeadIds[l.id];});

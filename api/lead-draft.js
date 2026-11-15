@@ -156,7 +156,9 @@ module.exports = async (req, res) => {
       state: state,                                  // same contact later
       address: address,
       zip: zip,
-      website_lead_stage: "Abandoned Draft — Recover",
+      // Business drafts carry "Business" in the source from the moment the GHL
+      // contact exists, so the GHL webhook routes them to Business Leads too.
+      website_lead_stage: type === "business" ? "Abandoned Business Quote — Recover" : "Abandoned Draft — Recover",
       lifecyclestage: "lead",
     });
   } catch (e) { /* non-fatal */ }
@@ -179,7 +181,8 @@ module.exports = async (req, res) => {
           "Source: " + (srcLabel ? L.esc(srcLabel) : "/quote autosave"),
         ].filter(Boolean).join("<br>");
       await L.addNoteToContact(contactId, note);
-      if (tags.length) await L.addTagsToContact(contactId, tags);
+      const allTags = type === "business" ? tags.concat(["business-lead"]) : tags;
+      if (allTags.length) await L.addTagsToContact(contactId, allTags);
       if (product) {
         const who = (firstName + " " + lastName).trim() || company || phone || email;
         await LEADSYNC.ensureOpportunity(contactId, product + " - " + who, srcLabel);
