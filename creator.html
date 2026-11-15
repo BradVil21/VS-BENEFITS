@@ -96,6 +96,26 @@ tr:last-child td{border-bottom:0}
 .states .stkey i.on{background:var(--green)}
 .states .stlist{margin:12px 0 0;font-size:.9rem;line-height:1.6;color:var(--ink)}
 @media(max-width:480px){.states .stmap{gap:3px}.states .st{font-size:9px;border-radius:4px}}
+.tiers .trhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.tiers .trhead h2{margin:0 0 4px}
+.tiers .trbadge{flex:none;font-weight:800;font-size:.85rem;padding:6px 14px;border-radius:999px;background:#e0f2fe;color:#075985}
+.tiers .trbadge.t1{background:#dcfce7;color:#166534}.tiers .trbadge.t2{background:#ede9fe;color:#5b21b6}.tiers .trbadge.t3{background:#fef3c7;color:#92400e}
+.tiers .trbar{height:8px;border-radius:999px;background:#eef1f5;overflow:hidden;margin:0 0 14px}
+.tiers .trbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--qb),var(--teal));border-radius:999px;transition:width .5s}
+.tiers .trlist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.tiers .trlist li{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;color:var(--muted);font-size:.8rem}
+.tiers .trlist li b{color:var(--ink);font-size:.92rem}
+.tiers .trlist li.done{background:#f6fbf8;border-color:#cdeedd}
+.tiers .trlist li.cur{border-color:var(--teal);box-shadow:0 0 0 2px rgba(13,181,166,.18);background:#f0fbfa}
+.tiers .trlist li.cur b::after{content:" \2022  You";color:var(--teal);font-size:.75rem}
+@media(max-width:640px){.tiers .trlist{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.help .hlinks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.help .hl{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;text-decoration:none;color:var(--ink);font-weight:700;font-size:.92rem;min-width:0}
+.help .hl:hover{border-color:var(--qb);background:#f5faff}
+.help .hl svg{flex:none;width:20px;height:20px;color:var(--blue)}
+.help .hl span{display:flex;flex-direction:column;min-width:0;overflow-wrap:anywhere}
+.help .hl small{font-weight:600;color:var(--muted);font-size:.75rem}
+@media(max-width:560px){.help .hlinks{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -154,6 +174,17 @@ tr:last-child td{border-bottom:0}
       <div class="card k"><span>Paid to you</span><b id="k-paid">$0</b><small id="k-paidn">All time</small></div>
     </div>
 
+    <div class="card sec tiers" id="d-tier">
+      <div class="trhead"><div><h2>Your tier</h2><p class="hint" id="t-next" style="margin:0"></p></div><span class="trbadge" id="t-badge">Beginner</span></div>
+      <div class="trbar"><i id="t-fill"></i></div>
+      <ol class="trlist">
+        <li data-t="0"><b>Beginner</b><span>0-4 qualified referrals</span></li>
+        <li data-t="1"><b>Rising</b><span>5-14 qualified referrals</span></li>
+        <li data-t="2"><b>Pro</b><span>15-29 qualified referrals</span></li>
+        <li data-t="3"><b>Elite</b><span>30+ qualified referrals</span></li>
+      </ol>
+    </div>
+
     <div class="grid2">
       <div class="card sec">
         <h2>Your referrals</h2>
@@ -180,6 +211,16 @@ tr:last-child td{border-bottom:0}
         <li><b>Paid:</b> we sent your reward. You'll get a text and email each step of the way.</li>
       </ol>
       <p class="hint" style="margin-top:10px">For their privacy, we never share who your referrals are or anything about their coverage.</p>
+    </div>
+
+    <div class="card sec help" id="d-help">
+      <h2>Need help?</h2>
+      <p class="hint" style="margin:0 0 14px">Questions about billing, payouts or your link? Reach us by email or text. Please include <b>your full name and the word "Affiliate"</b> so we can find your account fast.</p>
+      <div class="hlinks">
+        <a class="hl" id="h-mail" href="mailto:info@vshealthbenefits.com?subject=Affiliate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span><small>Email</small>info@vshealthbenefits.com</span></a>
+        <a class="hl" id="h-sms" href="sms:+19548251009"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span><small>Text</small>(954) 825-1009</span></a>
+      </div>
+      <p class="hint" id="h-example" style="margin:12px 0 0">Example: "Affiliate - Jane Smith: question about my payout."</p>
     </div>
   </section>
 </main>
@@ -228,6 +269,18 @@ tr:last-child td{border-bottom:0}
       :'<div class="empty">No quote requests through your link yet.<br>Share it and they\'ll show up here.</div>';
     var P=j.payouts||[];
     $("d-pays").innerHTML=P.length?P.map(function(p){return '<div class="pay"><b>'+money(p.amount)+'</b><span>'+esc(d8(p.date))+' &middot; '+p.count+' referral'+(p.count===1?"":"s")+(p.how?' &middot; '+esc(p.how):'')+'</span></div>';}).join(""):'<div class="empty">No payouts yet.</div>';
+    /* Tier (by qualified referrals) + help links with name and "Affiliate" filled in (2026-11-15) */
+    var TIERS=[["Beginner",0],["Rising",5],["Pro",15],["Elite",30]],q=Number(t.qualified)||0,ti=0;
+    TIERS.forEach(function(x,i){if(q>=x[1])ti=i;});
+    $("t-badge").textContent=TIERS[ti][0];$("t-badge").className="trbadge t"+ti;
+    var nx=TIERS[ti+1];
+    if(nx){var need=nx[1]-q;$("t-next").textContent=need+" more qualified referral"+(need===1?"":"s")+" to reach "+nx[0]+".";$("t-fill").style.width=Math.max(4,Math.round((q-TIERS[ti][1])/(nx[1]-TIERS[ti][1])*100))+"%";}
+    else{$("t-next").textContent="You've reached our top tier. Thank you!";$("t-fill").style.width="100%";}
+    [].forEach.call(document.querySelectorAll(".trlist li"),function(li){var k=+li.getAttribute("data-t");li.className=k<ti?"done":(k===ti?"cur":"");});
+    var full=(String(c.firstName||"")+" "+String(c.lastName||"")).trim(),tag="Affiliate"+(full?" - "+full:"");
+    $("h-mail").href="mailto:info@vshealthbenefits.com?subject="+encodeURIComponent(tag);
+    $("h-sms").href="sms:+19548251009?&body="+encodeURIComponent(tag+": ");
+    if(full)$("h-example").textContent='Example: "'+tag+': question about my payout."';
     show("v-dash");
   }
   function load(){var s=getS();if(!s){show("v-login");return;}show("v-load");
