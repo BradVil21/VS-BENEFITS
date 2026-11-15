@@ -245,8 +245,7 @@ function businessLeadEmail({ firstName, businessName, censusUrl }) {
       <li>The ZIP code of your business</li>
     </ul>
     ${btn(censusUrl, "📋  Fill out census form")}
-    <p style="margin:16px 0 0;font-size:15px;line-height:1.6">It takes about two minutes. I'll review it and call to introduce myself and walk you through your options — I saw your request and I'm on it.</p>
-    <p style="margin:18px 0 0;font-size:15px;line-height:1.6">Talk soon,<br><strong>Bradley Vilsaint</strong><br>VS Health Benefits</p>`;
+    <p style="margin:16px 0 0;font-size:15px;line-height:1.6">It takes about two minutes. I'll review it and call to introduce myself and walk you through your options — I saw your request and I'm on it.</p>`;
   return shell(inner, "Just need a quick employee census to build your group quote.");
 }
 

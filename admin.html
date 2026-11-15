@@ -2237,6 +2237,7 @@ LOCAL_TO_REMOTE[K.blockedIps]="blocked_ips";
    visitor stayed on the 404 page. Returns a promise for whether the cloud copy
    was actually updated, so callers can say so out loud. */
 function setArr(k,v,force){setArrLocal(k,v);var r=LOCAL_TO_REMOTE[k];return r?cloudPush(r,v,force):Promise.resolve(true);}
+function isAffApp(l){return !!l&&l.stage!=="sold"&&/^affiliate \/ creator/i.test(String(l.source||"")+"")&&!/quote|consult/i.test(String(l.sourceDetail||""));}
 function getLeads(){return asArr(K.leads);}function saveLeads(v){setArr(K.leads,v);}
 function getAccounts(){return asArr(K.accounts);}function saveAccounts(v){setArr(K.accounts,v);}
 function getMessages(){return asArr(K.messages);}function saveMessages(v){setArr(K.messages,v);}
@@ -2333,6 +2334,9 @@ async function initCloud(){
       cloud.suspend++;
       try{
         setArrLocal(REMOTE_TO_LOCAL[rk],items);
+        /* Creator / affiliate applications belong on the Affiliates board only (2026-11-15).
+           Drop any that reached the regular pipeline, using the copy the server just sent. */
+        if(rk==="leads"&&items.some(isAffApp)){var keepItems=items.filter(function(l){return !isAffApp(l);});items=keepItems;setTimeout(function(){var cur=getLeads();var kept=cur.filter(function(l){return !isAffApp(l);});if(kept.length<cur.length)saveLeads(kept);},0);}
         if(rk==="leads"&&prevCount>=0&&items.length>prevCount&&$("shell")&&!$("shell").hidden){
           var prevLeadIds={};prevItems.forEach(function(l){if(l&&l.id)prevLeadIds[l.id]=true;});
           var newLeads=items.filter(function(l){return l&&l.id&&!prevLeadIds[l.id];});
@@ -5530,7 +5534,7 @@ var FUD_OUT=[
   {k:"appt",l:"Appointment set",ico:"\ud83d\udcc5",stage:"appointment_scheduled",days:0,c:"#0d9488"},
   {k:"quoted",l:"Sent a quote",ico:"$",stage:"quoted",days:3,c:"#4f46e5"},
   {k:"sold",l:"Sold",ico:"\u2605",stage:"sold",c:"#059669"},
-  {k:"notint",l:"Not interested",ico:"\u2715",stage:"no_longer_interested",c:"#e11d48"},
+  {k:"notint",l:"Not interested",ico:"\u2715",stage:"dead",c:"#e11d48"},
   {k:"bad",l:"Wrong number / bad lead",ico:"\u26a0",stage:"disqualified",c:"#64748b"},
   {k:"done",l:"Done, no more follow-up",ico:"\u2713",days:-1,c:"#16447f"}
 ];
@@ -13646,7 +13650,7 @@ try{(function(){
     {id:"approved",label:"Approved (link sent)",color:"#0ea5e9"},
     {id:"active",label:"Active creator",color:"#16a34a"},
     {id:"paused",label:"Paused",color:"#f59e0b"},
-    {id:"declined",label:"Declined",color:"#94a3b8"}
+    {id:"declined",label:"Denied",color:"#94a3b8"}
   ];
   function stMeta(id){return ST.filter(function(s){return s.id===id;})[0]||ST[0];}
   var PAGES=[["/","Home page"],["/quote","Quote form (straight to the form)"],["/trucking-health-quote","Truck driver quote"],["/truck-driver-health-insurance","Truck driver guide"],["/get-a-quote","Individual & family quote"],["/aca-subsidy-calculator","ACA subsidy calculator"],["/small-business-health-insurance","Small business"],["/seguro-medico-camioneros","Camioneros (Spanish)"],["/open-enrollment","Open enrollment 2027"]];

@@ -410,6 +410,7 @@ function normalize(c, d) {
     sourceDetail: ((attr || product) && formSource) ? formSource : "",
     contactId: contactId,
     tags: tags,
+    affiliateApp: /^affiliate \/ creator/i.test(formSource),
     firstName: firstName,
     lastName: lastName,
     email: email,
@@ -452,6 +453,9 @@ async function syncToBoards(n, opts) {
             (n.phone && L.alertPhone() && String(n.phone).replace(/\D/g, "").slice(-10) === L.alertPhone().replace(/\D/g, "").slice(-10)))) {
     return { ok: true, action: "unchanged", skipped: "internal_alert_contact" };
   }
+  // Creator / affiliate applicants live on the Affiliates board (vs_state/affiliates),
+  // never on the regular lead pipeline (Bradley, 2026-11-15).
+  if (n && n.affiliateApp) return { ok: true, action: "unchanged", skipped: "affiliate_applicant" };
   const reopenClosed = !opts || opts.reopenClosed !== false;
   const createIfMissing = !opts || opts.createIfMissing !== false;
   const now = Date.now();

@@ -98,7 +98,7 @@ function copy(event, c) {
   const n = first(c), hi = n ? "Hi " + n + "! " : "Hi! ";
   const link = c.code ? SITE_SHORT + "/" + normCode(c.code) : "";
   const stop = " Reply STOP to opt out.";
-  const sign = "\n\n- Bradley Vilsaint\nVS Health Benefits\n(954) 825-1009";
+  const sign = ""; // no signature on creator emails (Bradley, 2026-11-15)
   switch (event) {
     case "applied": return {
       subject: "We got your creator application",

@@ -129,8 +129,7 @@ module.exports = async (req, res) => {
         '<h1 style="margin:0 0 14px;font-size:21px;font-weight:800">Thanks — we\'ve got your census</h1>' +
         '<p style="margin:0 0 14px;font-size:15px;line-height:1.6">' + (businessName ? "For <b>" + L.esc(businessName) + "</b>: " : "") +
         "we received your employee census (" + totalLives + " total lives) and we're preparing your group options now.</p>" +
-        '<p style="margin:0 0 14px;font-size:15px;line-height:1.6">Bradley will reach out shortly to review plans and pricing with you. If anything changes, just reply to this email.</p>' +
-        '<p style="margin:18px 0 0;font-size:15px">— <b>Bradley Vilsaint</b>, VS Health Benefits</p>',
+        '<p style="margin:0 0 14px;font-size:15px;line-height:1.6">We will reach out shortly to review plans and pricing with you. If anything changes, just reply to this email.</p>',
         "We received your census — quote on the way."
       );
       await L.sendEmail({ to: email, subject: "We received your census — quote on the way", html: c });
