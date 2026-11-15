@@ -13706,7 +13706,7 @@ try{(function(){
   function agoDay(k){if(!k)return "None yet";var p=k.split("-");return ago(new Date(+p[0],+p[1]-1,+p[2],12).getTime()).replace(/^\d+h ago$|^Just now$|^\d+ min ago$/,"Today");}
 
   /* ---- nav + panel ---- */
-  var V={stage:"all",q:""};
+  var V={stage:"all",q:"",view:(function(){try{return localStorage.getItem("vs_aff_view")||"board";}catch(e){return "board";}})(),sort:"created",dir:-1};
   function mount(){
     var nav=$("sidebar-nav");if(!nav)return false;
     if(!document.querySelector('.sidebar-nav-item[data-tab="affiliates"]')){
@@ -13737,18 +13737,33 @@ try{(function(){
     var L=S.filter(function(x){var c=x.c;if(V.stage!=="all"&&(c.stage||"applied")!==V.stage)return false;
       if(V.q&&[c.firstName,c.lastName,c.email,c.phone,c.handle,c.code,(c.platforms||[]).join(" "),(c.audience||[]).join(" ")].join(" ").toLowerCase().indexOf(V.q)<0)return false;return true;});
     var opts=[["all","All creators"]].concat(ST.map(function(s){return [s.id,s.label];})).map(function(o){return '<option value="'+o[0]+'"'+(V.stage===o[0]?" selected":"")+'>'+esc(o[1])+' ('+(cnt[o[0]]||0)+')</option>';}).join("");
-    var cards=L.map(function(x){var c=x.c,s=x.s,m=stMeta(c.stage||"applied"),isNew=(c.stage||"applied")==="applied";
-      var nm=tc(((c.firstName||"")+" "+(c.lastName||"")).trim())||c.email||"(no name)";
-      var ini=nm.split(/\s+/).slice(0,2).map(function(w){return w.charAt(0);}).join("").toUpperCase();
-      var sopts=ST.map(function(t){return '<option value="'+t.id+'"'+(t.id===(c.stage||"applied")?" selected":"")+'>'+esc(t.label)+'</option>';}).join("");
-      return '<div class="afc'+(isNew?" new":"")+'" data-aff="'+esc(c.id)+'" style="--sc:'+m.color+'">'
-        +'<div class="afc-top"><span class="afc-av">'+esc(ini)+'</span><div class="afc-who"><b>'+esc(nm)+'</b><small>'+esc(c.handle||c.email||"")+'</small></div>'+(isNew?'<span class="afc-new">NEW</span>':'')+'</div>'
-        +'<div class="afc-pl">'+platIcons(c.platforms)+(c.followers?'<span class="afc-fol">'+esc(c.followers)+'</span>':'')+'</div>'
-        +'<div class="afc-st"><span class="afc-dot"></span><select data-aff-st="'+esc(c.id)+'">'+sopts+'</select></div>'
-        +(c.code?(function(tr){return '<div class="afc-act"><span title="Link visits, last 30 days"><b>'+tr.v30+'</b> visits (30d)</span><span title="Last sign-in to their creator dashboard">Login: <b>'+esc(ago(tr.lastLogin))+'</b></span></div>';})(traffic(c)):'')
-        +'<div class="afc-nums"><div><b>'+s.leads+'</b><small>Leads</small></div><div><b>'+s.q+'</b><small>Qualified</small></div><div class="'+(s.owed?"owe":"")+'"><b>'+money2(s.owed)+'</b><small>Owed</small></div></div>'
-        +'<div class="afc-ft">'+(c.code?'<button type="button" class="afc-link" data-aff-copy="'+esc(linkFor(c.code))+'" title="Copy their link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg><span>/'+esc(c.code)+'</span></button>':'<button type="button" class="afc-link mk" data-aff-open="'+esc(c.id)+'">+ Create link</button>')+'<span class="afc-date">'+esc(d8(c.created))+'</span></div>'
-        +'</div>';}).join("");
+    function nmOf(c){return tc(((c.firstName||"")+" "+(c.lastName||"")).trim())||c.email||"(no name)";}
+    function iniOf(n){return n.split(/\s+/).slice(0,2).map(function(w){return w.charAt(0);}).join("").toUpperCase();}
+    function stSel(c,cls){return '<select class="'+cls+'" data-aff-st="'+esc(c.id)+'" style="--sc:'+stMeta(c.stage||"applied").color+';border-color:'+stMeta(c.stage||"applied").color+'!important;color:'+stMeta(c.stage||"applied").color+'!important;-webkit-text-fill-color:'+stMeta(c.stage||"applied").color+'" title="Move to stage">'+ST.map(function(t){return '<option value="'+t.id+'"'+(t.id===(c.stage||"applied")?" selected":"")+'>'+esc(t.label)+'</option>';}).join("")+'</select>';}
+    /* compact card (pipeline board) */
+    function card(x){var c=x.c,s=x.s,nm=nmOf(c),isNew=(c.stage||"applied")==="applied",tr=c.code?traffic(c):null;
+      return '<div class="afb-card'+(isNew?" new":"")+'" draggable="true" data-aff="'+esc(c.id)+'">'
+        +'<div class="afb-top"><span class="afb-av">'+esc(iniOf(nm))+'</span><div class="afb-who"><b>'+esc(nm)+'</b><small>'+(platIcons(c.platforms)||"")+(c.followers?'<em>'+esc(c.followers)+'</em>':'')+'</small></div></div>'
+        +'<div class="afb-stats"><span title="Quote requests"><b>'+s.leads+'</b> leads</span><span title="Qualified referrals"><b>'+s.q+'</b> qual.</span>'+(s.owed?'<span class="owe" title="Owed"><b>'+money2(s.owed)+'</b></span>':'')+(tr?'<span title="Link visits, last 30 days"><b>'+tr.v30+'</b> visits</span>':'')+'</div>'
+        +'<div class="afb-ft">'+(c.code?'<button type="button" class="afb-link" data-aff-copy="'+esc(linkFor(c.code))+'" title="Copy their link">/'+esc(c.code)+'</button>':'<span class="afb-nolink">No link yet</span>')+'<span class="afb-when" title="'+(tr?"Last dashboard login":"Applied")+'">'+esc(tr?("Login "+ago(tr.lastLogin)):d8(c.created))+'</span></div>'
+        +'<div class="afb-mv">'+stSel(c,"afb-sel")+'</div>'
+        +'</div>';}
+    var view="";
+    if(V.view==="table"){
+      var SORT={name:function(x){return nmOf(x.c).toLowerCase();},stage:function(x){return ST.map(function(t){return t.id;}).indexOf(x.c.stage||"applied");},visits:function(x){return x.c.code?traffic(x.c).v30:-1;},leads:function(x){return x.s.leads;},q:function(x){return x.s.q;},owed:function(x){return x.s.owed;},login:function(x){return x.c.code?traffic(x.c).lastLogin:0;},created:function(x){return Number(x.c.created)||0;}};
+      var sk=SORT[V.sort]?V.sort:"created",dir=V.dir===1?1:-1;
+      var rows=L.slice().sort(function(p,q2){var a1=SORT[sk](p),b1=SORT[sk](q2);return (a1<b1?-1:a1>b1?1:0)*dir;}).map(function(x){var c=x.c,s=x.s,nm=nmOf(c),tr=c.code?traffic(c):null,isNew=(c.stage||"applied")==="applied";
+        return '<tr data-aff="'+esc(c.id)+'"'+(isNew?' class="new"':'')+'><td><div class="aft-who"><span class="afb-av sm">'+esc(iniOf(nm))+'</span><div><b class="af-nm">'+(isNew?'<span class="af-newtag">NEW</span>':'')+esc(nm)+'</b><small>'+esc(c.email||c.phone||"")+'</small></div></div></td>'
+          +'<td>'+stSel(c,"aft-sel")+'</td><td>'+(platIcons(c.platforms)||"")+(c.followers?' <small style="display:inline">'+esc(c.followers)+'</small>':'')+'</td>'
+          +'<td>'+(c.code?'<button type="button" class="af-copy" data-aff-copy="'+esc(linkFor(c.code))+'">/'+esc(c.code)+'</button>':'<button type="button" class="af-mk" data-aff-open="'+esc(c.id)+'">+ Link</button>')+'</td>'
+          +'<td class="num">'+(tr?tr.v30:"-")+'</td><td class="num">'+s.leads+'</td><td class="num">'+s.q+'</td><td class="num'+(s.owed?" owe":"")+'">'+money2(s.owed)+'</td>'
+          +'<td>'+esc(tr?ago(tr.lastLogin):"-")+'</td><td>'+esc(d8(c.created))+'</td></tr>';}).join("");
+      var th=function(k,l,num){return '<th'+(num?' class="num"':'')+'><button type="button" class="aft-sort'+(sk===k?" on":"")+'" data-aff-sort="'+k+'">'+l+(sk===k?(dir===1?" ▲":" ▼"):"")+'</button></th>';};
+      view=rows?'<div class="af-card"><div class="af-tw"><table class="af-t aft"><thead><tr>'+th("name","Creator")+th("stage","Stage")+'<th>Platforms</th><th>Link</th>'+th("visits","Visits 30d",1)+th("leads","Leads",1)+th("q","Qualified",1)+th("owed","Owed",1)+th("login","Last login")+th("created","Applied")+'</tr></thead><tbody>'+rows+'</tbody></table></div></div>':"";
+    }else{
+      view='<div class="afb">'+ST.map(function(t){var col=L.filter(function(x){return (x.c.stage||"applied")===t.id;});
+        return '<div class="afb-col" data-aff-col="'+t.id+'" style="--sc:'+t.color+'"><div class="afb-h"><span class="afb-dot"></span><b>'+esc(t.label)+'</b><span class="afb-n">'+col.length+'</span></div><div class="afb-list">'+(col.map(card).join("")||'<div class="afb-empty">Drop here</div>')+'</div></div>';}).join("")+'</div>';
+    }
     var kp=function(ic,v,l,cls){return '<div class="'+(cls||"")+'"><span class="afk-ic">'+ic+'</span><div><b>'+v+'</b><span>'+l+'</span></div></div>';};
     var IK={inbox:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.1 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.9A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.1z"/></svg>',
       star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m22 8-6 4 6 4z"/></svg>',
@@ -13757,16 +13772,36 @@ try{(function(){
       paid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'};
     loadAct();
     var vis30=all.reduce(function(t,c){return t+(c.code?traffic(c).v30:0);},0);
+    var vt='<div class="afv"><button type="button" data-aff-view="board" class="'+(V.view!=="table"?"on":"")+'">Pipeline</button><button type="button" data-aff-view="table" class="'+(V.view==="table"?"on":"")+'">Table</button></div>';
     host.innerHTML='<div class="af-kpis">'+kp(IK.inbox,cnt.applied||0,"New applications",cnt.applied?"hl":"")+kp(IK.star,cnt.active||0,"Active creators","")+kp(IK.users,vis30,"Link visits (30d)","")+kp(IK.users,tot.leads,"Leads from creators","")+kp(IK.owe,money2(tot.owed),"Owed ("+tot.unpaid+")",tot.owed?"owe":"")+kp(IK.paid,money2(tot.paid),"Paid out","ok")+'</div>'
-      +'<div class="af-bar"><label class="af-fl"><span>Show</span><select id="aff-filter">'+opts+'</select></label><input id="aff-q" type="search" placeholder="Search name, handle, code..." value="'+esc(V.q)+'"><button type="button" class="af-add" id="aff-add">+ Add creator</button></div>'
-      +(cards?'<div class="afc-grid">'+cards+'</div>':'<div class="af-empty-card">'+(all.length?"No creators match.":"No applications yet. Share <b>vshealthbenefits.com/affiliate-program</b> or add a creator yourself.")+'</div>');
-    $("aff-filter").onchange=function(){V.stage=this.value;render();};
+      +'<div class="af-bar">'+vt+(V.view==="table"?'<label class="af-fl"><span>Show</span><select id="aff-filter">'+opts+'</select></label>':'')+'<input id="aff-q" type="search" placeholder="Search name, handle, code..." value="'+esc(V.q)+'"><button type="button" class="af-add" id="aff-add">+ Add creator</button></div>'
+      +'<p class="afb-tip">Moving a creator texts and emails them through GoHighLevel and moves their card in your GHL Affiliates pipeline. Drag cards between columns, or use the stage menu on each card.</p>'
+      +(L.length||V.view!=="table"?view:'<div class="af-empty-card">'+(all.length?"No creators match.":"No applications yet. Share <b>vshealthbenefits.com/affiliate-program</b> or add a creator yourself.")+'</div>');
+    var f=$("aff-filter");if(f)f.onchange=function(){V.stage=this.value;render();};
     var q=$("aff-q");q.oninput=function(){V.q=q.value.toLowerCase().trim();var p=q.selectionStart;render();var q2=$("aff-q");q2.focus();try{q2.setSelectionRange(p,p);}catch(e){}};
     $("aff-add").onclick=function(){var now=Date.now();var c={id:"aff_"+now.toString(36)+Math.random().toString(36).slice(2,6),firstName:"",lastName:"",email:"",phone:"",handle:"",platforms:[],audience:[],stage:"approved",code:"",reward:Number(localStorage.getItem("vs_aff_reward"))||0,refs:{},payouts:[],notes:"",source:"Added in portal",created:now,updated:now};var a=load();a.unshift(c);save(a);render();openCreator(c.id,true);};
-    host.querySelectorAll("[data-aff-st]").forEach(function(s){s.onclick=function(e){e.stopPropagation();};s.onchange=function(){var v=s.value,sid=s.getAttribute("data-aff-st");upd(sid,function(c){c.stage=v;stamp(c,"Status: "+stMeta(v).label);});render();badge();if(v==="approved")affApproved(sid);};});
+    host.querySelectorAll("[data-aff-view]").forEach(function(b){b.onclick=function(){V.view=b.getAttribute("data-aff-view");try{localStorage.setItem("vs_aff_view",V.view);}catch(e){}if(V.view!=="table")V.stage="all";render();};});
+    host.querySelectorAll("[data-aff-sort]").forEach(function(b){b.onclick=function(e){e.stopPropagation();var k=b.getAttribute("data-aff-sort");if(V.sort===k)V.dir=V.dir===1?-1:1;else{V.sort=k;V.dir=(k==="name"||k==="stage")?1:-1;}render();};});
+    host.querySelectorAll("[data-aff-st]").forEach(function(sl){sl.onclick=function(e){e.stopPropagation();};sl.onmousedown=function(e){e.stopPropagation();};sl.onchange=function(){setStage(sl.getAttribute("data-aff-st"),sl.value);};});
     host.querySelectorAll("[data-aff-copy]").forEach(function(b){b.onclick=function(e){e.stopPropagation();copy(b.getAttribute("data-aff-copy"),b);};});
-    host.querySelectorAll(".afc[data-aff]").forEach(function(cd){cd.onclick=function(e){if(e.target.closest("select,a,input,[data-aff-copy]"))return;openCreator(cd.getAttribute("data-aff"));};});
+    host.querySelectorAll("[data-aff-open]").forEach(function(b){b.onclick=function(e){e.stopPropagation();openCreator(b.getAttribute("data-aff-open"));};});
+    host.querySelectorAll("[data-aff]").forEach(function(cd){cd.onclick=function(e){if(e.target.closest("select,a,input,button"))return;openCreator(cd.getAttribute("data-aff"));};});
+    /* drag and drop between pipeline columns */
+    host.querySelectorAll(".afb-card").forEach(function(cd){cd.ondragstart=function(e){try{e.dataTransfer.setData("text/plain",cd.getAttribute("data-aff"));e.dataTransfer.effectAllowed="move";}catch(x){}cd.classList.add("drag");};cd.ondragend=function(){cd.classList.remove("drag");};});
+    host.querySelectorAll(".afb-col").forEach(function(col){col.ondragover=function(e){e.preventDefault();col.classList.add("over");};col.ondragleave=function(e){if(!col.contains(e.relatedTarget))col.classList.remove("over");};
+      col.ondrop=function(e){e.preventDefault();col.classList.remove("over");var id="";try{id=e.dataTransfer.getData("text/plain");}catch(x){}if(id)setStage(id,col.getAttribute("data-aff-col"));};});
   }
+  /* One place for every stage change: saves, notes it, and tells GHL (text + email + pipeline card). */
+  var STAGE_MSG={reviewing:"reviewing",paused:"paused",declined:"declined"};
+  function setStage(id,v){var c=get(id);if(!c)return;var prev=c.stage||"applied";if(prev===v)return;
+    upd(id,function(x){x.stage=v;stamp(x,"Status: "+stMeta(v).label);});render();badge();
+    var msg="";
+    if(v==="approved"||(v==="active"&&prev!=="paused"&&prev!=="approved")){if(normCode(c.code)){affApproved(id);msg=" GoHighLevel will text and email them their link.";}else msg=" Add their link code to send the approval text and email.";}
+    else if(v==="active"&&prev==="paused"){affEvent(id,"resumed",String(Date.now()));msg=" GoHighLevel will let them know their link is live again.";}
+    else if(STAGE_MSG[v]){affEvent(id,STAGE_MSG[v],String(Date.now()));msg=" GoHighLevel will text and email them.";}
+    affToast("Moved to "+stMeta(v).label+"."+msg);
+  }
+  function affToast(m){var t=$("aff-toast");if(!t){t=document.createElement("div");t.id="aff-toast";document.body.appendChild(t);}t.textContent=m;t.className="on";clearTimeout(affToast._t);affToast._t=setTimeout(function(){t.className="";},3200);}
   function stamp(c,txt){var s=new Date().toLocaleString(undefined,{month:"numeric",day:"numeric",hour:"numeric",minute:"2-digit"});c.notes=("["+s+"] "+txt+"\n"+(c.notes||""));}
   function copy(text,btn){
     function ok(){if(!btn)return;var o=btn.innerHTML;btn.classList.add("done");btn.innerHTML="Copied!";setTimeout(function(){btn.classList.remove("done");btn.innerHTML=o;},1200);}
@@ -13840,7 +13875,7 @@ try{(function(){
       if(rw)try{localStorage.setItem("vs_aff_reward",String(rw));}catch(e){}
       var go=function(){upd(id,function(x){var was=x.code;x.code=v;x.reward=rw;if(!was){if(x.stage==="applied"||x.stage==="reviewing")x.stage="approved";stamp(x,"Link created: /"+v);}else if(was!==v)stamp(x,"Link code changed from /"+was+" to /"+v+" (old link stops crediting)");});re();affApproved(id);};err.hidden=true;fetch("/"+v,{cache:"no-store"}).then(function(r){if(r.status!==200)return go();return r.text().then(function(t){if(t.indexOf("vs-creator-go")<0){err.textContent="vshealthbenefits.com/"+v+" is already a page on your site. Pick another code.";err.hidden=false;return;}go();});}).catch(go);
     };
-    $("afc-stage").onchange=function(){var v=this.value;upd(id,function(x){x.stage=v;stamp(x,"Status: "+stMeta(v).label);});re();if(v==="approved")affApproved(id);};
+    $("afc-stage").onchange=function(){setStage(id,this.value);re();};
     ov.querySelectorAll("[data-afc-f]").forEach(function(inp){inp.onchange=function(){var k=inp.getAttribute("data-afc-f"),v=inp.value.trim();upd(id,function(x){x[k]=(k==="platforms"||k==="audience")?v.split(/\s*,\s*/).filter(Boolean):(k==="state"?v.toUpperCase().slice(0,2):v);});render();};});
     ov.querySelectorAll("[data-afl-q]").forEach(function(b){b.onclick=function(){var key=b.getAttribute("data-afl-q");var nowQ=false;upd(id,function(x){x.refs=x.refs||{};var r=x.refs[key]||{};if(r.q&&!r.paid){delete x.refs[key];}else{if(!r.q)nowQ=true;r.q=Date.now();r.paid=r.paid||"";x.refs[key]=r;}});re();if(nowQ)affEvent(id,"qualified",key);};});
     ov.querySelectorAll("[data-afl-open]").forEach(function(b){b.onclick=function(){var p=b.getAttribute("data-afl-open").split(":");closeAll();if(typeof window.vsOpenLeadView==="function")window.vsOpenLeadView(p[0],p.slice(1).join(":"));};});
@@ -13877,7 +13912,24 @@ try{(function(){
 
   var st=document.createElement("style");st.textContent=[
   ".afp-row .afp-act{margin-left:auto;display:inline-flex;gap:6px}.afp-row .afp-act button{border:1.5px solid #d6dde6;background:#fff;color:#42566e;border-radius:7px;padding:2px 8px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit}.afp-row .afp-act button:hover{border-color:#16447f;color:#16447f}.afp-row .afp-act button[data-afp-del]:hover{border-color:#dc2626;color:#dc2626}",
-  "#p-affiliates .af-kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:4px 0 12px}",
+  "#p-affiliates .afv{display:inline-flex;background:#eef2f7;border-radius:10px;padding:3px;gap:2px}#p-affiliates .afv button{border:0;background:transparent;border-radius:8px;padding:7px 14px;font-weight:800;font-size:12.5px;color:#5a6b80;cursor:pointer;font-family:inherit}#p-affiliates .afv button.on{background:#fff;color:#0b2346;box-shadow:0 1px 3px rgba(11,35,70,.12)}",
+  "#p-affiliates .afb-tip{font-size:12px;color:#7b8aa0;margin:-4px 0 10px}",
+  "#p-affiliates .afb{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(168px,1fr);gap:10px;overflow-x:auto;padding-bottom:8px;align-items:start}",
+  "#p-affiliates .afb-col{background:#f6f8fb;border:1px solid #e6ebf2;border-radius:12px;padding:8px;min-height:120px;transition:background .12s,border-color .12s}#p-affiliates .afb-col.over{background:#eef6ff;border-color:var(--sc)}",
+  "#p-affiliates .afb-h{display:flex;align-items:center;gap:7px;padding:2px 4px 8px;border-bottom:2px solid var(--sc);margin-bottom:8px}#p-affiliates .afb-h b{font-size:12.5px;color:#0b2346;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#p-affiliates .afb-dot{width:8px;height:8px;border-radius:50%;background:var(--sc);flex:none}#p-affiliates .afb-n{font-size:11px;font-weight:800;color:#5a6b80;background:#fff;border:1px solid #e3e9f2;border-radius:999px;padding:1px 8px}",
+  "#p-affiliates .afb-list{display:flex;flex-direction:column;gap:7px}#p-affiliates .afb-empty{font-size:11.5px;color:#a3adbb;text-align:center;padding:18px 6px;border:1.5px dashed #dbe3ee;border-radius:10px}",
+  "#p-affiliates .afb-card{background:#fff;border:1px solid #e3e9f2;border-radius:10px;padding:8px 9px;cursor:pointer;display:flex;flex-direction:column;gap:6px;transition:box-shadow .12s,border-color .12s}#p-affiliates .afb-card:hover{border-color:#cfdcf0;box-shadow:0 6px 16px rgba(11,35,70,.08)}#p-affiliates .afb-card.new{box-shadow:inset 3px 0 0 #2563eb}#p-affiliates .afb-card.drag{opacity:.45}",
+  "#p-affiliates .afb-top{display:flex;align-items:center;gap:8px;min-width:0}#p-affiliates .afb-av{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#5b21b6,#2563eb);color:#fff;font-weight:800;font-size:10.5px;display:flex;align-items:center;justify-content:center;flex:none}#p-affiliates .afb-av.sm{width:28px;height:28px}",
+  "#p-affiliates .afb-who{min-width:0;flex:1}#p-affiliates .afb-who b{display:block;font-size:12.5px;color:#0b2346;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25}#p-affiliates .afb-who small{display:flex;align-items:center;gap:3px;margin-top:2px;min-height:14px}#p-affiliates .afb-who small .afp-ic{width:14px;height:14px;border-radius:4px}#p-affiliates .afb-who small .afp-ic svg{width:9px;height:9px}#p-affiliates .afb-who em{font-style:normal;font-size:10.5px;color:#7b8aa0;font-weight:700;margin-left:3px}",
+  "#p-affiliates .afb-stats{display:flex;flex-wrap:wrap;gap:4px 9px;font-size:11px;color:#7b8aa0}#p-affiliates .afb-stats b{color:#0b2346}#p-affiliates .afb-stats .owe b{color:#c2410c}",
+  "#p-affiliates .afb-ft{display:flex;align-items:center;justify-content:space-between;gap:6px}#p-affiliates .afb-link{border:0;background:#eef4ff;color:#16447f;border-radius:6px;padding:2px 7px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;max-width:60%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#p-affiliates .afb-link.done{background:#dcfce7;color:#166534}#p-affiliates .afb-nolink{font-size:11px;color:#a3adbb;font-weight:700}#p-affiliates .afb-when{font-size:10.5px;color:#94a3b8;white-space:nowrap}",
+  "#p-affiliates .afb-sel,#p-affiliates .aft-sel{width:100%;appearance:none;-webkit-appearance:none;border:1.5px solid var(--sc);color:var(--sc);border-radius:999px;padding:3px 10px;font-size:11px;font-weight:800;background:#fff;cursor:pointer;font-family:inherit}#p-affiliates .aft-sel{width:auto;font-size:12px;padding:4px 12px}",
+  "#p-affiliates .aft-who{display:flex;align-items:center;gap:9px}#p-affiliates .aft td.num,#p-affiliates .aft th.num{text-align:right}#p-affiliates .aft td.owe{color:#c2410c;font-weight:800}#p-affiliates .aft-sort{border:0;background:none;padding:0;font:inherit;color:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}#p-affiliates .aft-sort.on{color:#16447f}#p-affiliates .aft td{white-space:nowrap}",
+  "#aff-toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:#0b2346;color:#fff;font-size:13.5px;font-weight:700;padding:11px 18px;border-radius:12px;box-shadow:0 12px 30px rgba(11,35,70,.3);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:9999;max-width:min(560px,92vw);text-align:center}#aff-toast.on{opacity:1;transform:translate(-50%,0)}",
+  ".af-pv .af-grid{gap:6px 10px}.af-pv .af-grid label{font-size:10px}.af-pv .af-grid input{padding:6px 9px!important;font-size:12.5px!important;border-radius:8px!important}.af-pv .af-pitch{font-size:12.5px;padding:8px 10px}.af-pv .af-sec{padding:11px 0}",
+  "@media(max-width:1100px){#p-affiliates .af-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}",
+  "@media(max-width:700px){#p-affiliates .afb{grid-auto-columns:minmax(78vw,1fr)}#p-affiliates .af-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}",
+  "#p-affiliates .af-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin:4px 0 12px}",
   "#p-affiliates .af-kpis>div{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e3e9f2;border-radius:12px;padding:9px 12px}",
   "#p-affiliates .afk-ic{width:30px;height:30px;border-radius:9px;background:#eef2f8;color:#42566e;display:flex;align-items:center;justify-content:center;flex:none}#p-affiliates .afk-ic svg{width:16px;height:16px}",
   "#p-affiliates .af-kpis b{display:block;font-size:17px;line-height:1.15;color:#0b2346}#p-affiliates .af-kpis div>div>span{display:block;font-size:11px;color:#7b8aa0;font-weight:600;white-space:nowrap}",

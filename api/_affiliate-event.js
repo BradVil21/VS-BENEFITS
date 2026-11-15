@@ -30,7 +30,8 @@ const F = require("./_fs");
 
 const SITE_SHORT = "vshealthbenefits.com";
 const TRIGGER_TAG = "affiliate-update";
-const STATUS_TAG = { applied: "affiliate-applicant", approved: "affiliate-approved", referral: "affiliate-got-referral", qualified: "affiliate-referral-qualified", paid: "affiliate-paid" };
+const STATUS_TAG = { applied: "affiliate-applicant", approved: "affiliate-approved", referral: "affiliate-got-referral", qualified: "affiliate-referral-qualified", paid: "affiliate-paid",
+  reviewing: "affiliate-reviewing", paused: "affiliate-paused", resumed: "affiliate-approved", declined: "affiliate-denied" };
 
 // Known field ids for this location; the lookup by fieldKey below wins when the
 // token can read custom fields.
@@ -50,7 +51,15 @@ const AFF_STAGE = {
   referral: "fd8d358a-83f7-46e6-8d89-f23e315dad41",  // Sending referrals
   qualified: "fd8d358a-83f7-46e6-8d89-f23e315dad41", // Sending referrals
   paid: "30483e0b-70fa-4852-a37d-8edfd07ab381",      // Paid
+  // Stage moves made in the admin portal pipeline (2026-11-15). Denied and
+  // Paused keep the card in place and change its status (lost / abandoned),
+  // so the GHL Affiliates pipeline shows them without new stages.
+  reviewing: "565cca44-bb2e-4b04-ba5e-5e8c0bae418d", // Applied (open)
+  resumed: "32ef7171-bda6-4dc6-8ae6-223a456990e7",   // Approved (open)
+  paused: "32ef7171-bda6-4dc6-8ae6-223a456990e7",    // Approved (abandoned)
+  declined: "565cca44-bb2e-4b04-ba5e-5e8c0bae418d",  // Applied (lost)
 };
+const AFF_STATUS = { paused: "abandoned", declined: "lost" };
 const LOC = process.env.GHL_LOCATION_ID || "cNCy6JUURpb4eBDdb9bU";
 
 async function moveCard(cid, c, event) {
@@ -62,10 +71,10 @@ async function moveCard(cid, c, event) {
     const f = await L.ghl(q, "GET");
     const list = f.json && (f.json.opportunities || f.json.data);
     if (f.ok && Array.isArray(list) && list.length) {
-      const u = await L.ghl("/opportunities/" + list[0].id, "PUT", { pipelineId: AFF_PIPELINE, pipelineStageId: stage, name: name, status: "open" });
+      const u = await L.ghl("/opportunities/" + list[0].id, "PUT", { pipelineId: AFF_PIPELINE, pipelineStageId: stage, name: name, status: AFF_STATUS[event] || "open" });
       return u.ok ? "moved" : "move_failed_" + u.status;
     }
-    const r = await L.ghl("/opportunities/", "POST", { locationId: LOC, pipelineId: AFF_PIPELINE, pipelineStageId: stage, contactId: cid, name: name, status: "open", source: "Creator program" });
+    const r = await L.ghl("/opportunities/", "POST", { locationId: LOC, pipelineId: AFF_PIPELINE, pipelineStageId: stage, contactId: cid, name: name, status: AFF_STATUS[event] || "open", source: "Creator program" });
     return r.ok ? "created" : "create_failed_" + r.status;
   } catch (e) { return "error"; }
 }
@@ -120,6 +129,26 @@ function copy(event, c) {
       sms: "VS Health Benefits: Nice work" + (n ? ", " + n : "") + "! A referral of yours finished a consultation. Your reward is on the way." + stop,
       email: hi + "\n\nGood news: one of the people you referred just completed a consultation with our team, so it counts as a qualified referral and your reward is on its way.\n\nThank you for sharing VS Health Benefits!\n\nYour link: https://www." + link + sign,
     };
+    case "reviewing": return {
+      subject: "We're reviewing your creator application",
+      sms: "VS Health Benefits: " + hi + "We're reviewing your creator application now. We'll text you with a decision within 2 business days." + stop,
+      email: hi + "\n\nThanks again for applying to the VS Health Benefits creator program. We're reviewing your application now and will text and email you with a decision within 2 business days." + sign,
+    };
+    case "paused": return {
+      subject: "Your creator link is paused",
+      sms: "VS Health Benefits: " + hi + "Your creator link is paused for now, so new visitors aren't being credited. Questions? Text (954) 825-1009 with your name and \"Affiliate\"." + stop,
+      email: hi + "\n\nYour VS Health Benefits creator link is paused for now, so new visitors who use it aren't being credited to you. Referrals you already sent still count.\n\nQuestions? Email info@vshealthbenefits.com or text (954) 825-1009 with your full name and the word \"Affiliate\"." + sign,
+    };
+    case "resumed": return {
+      subject: "Your creator link is live again",
+      sms: "VS Health Benefits: " + hi + "Your creator link is live again: " + link + " - everyone who uses it is credited to you." + stop,
+      email: hi + "\n\nGood news: your VS Health Benefits creator link is live again.\n\nYour link: https://www." + link + "\n\nEveryone who comes through it and asks for a quote is credited to you. See your numbers any time: https://www." + SITE_SHORT + "/creator" + sign,
+    };
+    case "declined": return {
+      subject: "About your creator application",
+      sms: "VS Health Benefits: " + hi + "Thanks for applying to our creator program. It isn't a fit right now, but we appreciate your interest and may reach out in the future." + stop,
+      email: hi + "\n\nThank you for applying to the VS Health Benefits creator program. After reviewing your application, it isn't a fit for the program right now.\n\nWe truly appreciate your interest, and we may reach out if that changes." + sign,
+    };
     case "login": return {
       subject: "Your creator dashboard sign-in link",
       sms: "VS Health Benefits: Your creator dashboard sign-in link (works 30 min): " + (c._loginUrl || "") + stop,
@@ -139,6 +168,11 @@ function valid(event, c, key) {
   if (!c) return false;
   const st = String(c.stage || "");
   if (event === "applied") return true;
+  // Portal pipeline moves: only when the record really sits in that stage now.
+  if (event === "reviewing") return st === "reviewing";
+  if (event === "declined") return st === "declined";
+  if (event === "paused") return st === "paused" && !!normCode(c.code);
+  if (event === "resumed") return (st === "active" || st === "approved") && !!normCode(c.code);
   if (st === "declined" || st === "paused") return false;
   if (event === "approved") return !!normCode(c.code) && (st === "approved" || st === "active");
   if (event === "referral") return !!normCode(c.code);
@@ -207,7 +241,7 @@ async function handler(req, res) {
   d = d || {};
   const id = String(d.id || "").slice(0, 60), event = String(d.event || "").slice(0, 20), key = String(d.key || "").slice(0, 120);
   // Only the portal's events come through here; applied/referral are server-side.
-  if (!id || ["approved", "qualified", "paid"].indexOf(event) < 0) { res.status(400).json({ ok: false, error: "bad_request" }); return; }
+  if (!id || ["approved", "qualified", "paid", "reviewing", "paused", "resumed", "declined"].indexOf(event) < 0) { res.status(400).json({ ok: false, error: "bad_request" }); return; }
 
   // The portal's Firestore save can land a moment after this call, so look twice.
   let c = null;
