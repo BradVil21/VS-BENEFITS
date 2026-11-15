@@ -8,6 +8,14 @@
 //   { op:"stats", s }            -> the creator's own numbers.
 //   { op:"click", code }         -> +1 link visit (sent once a day per browser
 //                                    by vs-attribution.js).
+//   { op:"setpw", s, username, password } -> creates / changes the creator's
+//                                    username + password (needs a session).
+//   { op:"pwlogin", user, password } -> username OR email + password -> session.
+//
+// Passwords (2026-11-15) live in vs_state/creator_auth as scrypt hashes with a
+// per-account salt, never in plain text, and never in the portal's affiliates
+// record. 8 wrong passwords lock that account for 15 minutes. The email link
+// keeps working as the "forgot password" route.
 //
 // What a creator sees: their link, visits, quote requests, qualified referrals,
 // earned / paid / owed and payout history. NEVER who they referred: each
@@ -64,6 +72,78 @@ function day(ts) { return new Date(ts).toLocaleDateString("en-CA", { timeZone: "
 async function creators() { const r = await F.readStore("affiliates"); return r.ok ? (r.items || []) : null; }
 
 function json(res, code, o) { res.status(code).json(o); }
+
+// ---- username + password (2026-11-15) ----
+const PW_MIN = 8, MAX_FAILS = 8, LOCK_MS = 15 * 60 * 1000;
+function normUser(v) { return String(v || "").trim().toLowerCase(); }
+function validUser(u) { return /^[a-z0-9][a-z0-9._-]{2,29}$/.test(u); }
+function hashPw(pw, salt) {
+  return new Promise(function (ok, bad) {
+    crypto.scrypt(String(pw), salt, 64, { N: 16384, r: 8, p: 1 }, function (e, k) { if (e) bad(e); else ok(k.toString("hex")); });
+  });
+}
+function sameHex(a, b) {
+  const x = Buffer.from(String(a), "hex"), y = Buffer.from(String(b), "hex");
+  return x.length === y.length && x.length > 0 && crypto.timingSafeEqual(x, y);
+}
+async function auths(token) { const r = await F.readStore("creator_auth", token); return r.ok ? (r.items || []) : null; }
+
+async function setpw(d, req, res) {
+  const o = check(d.s, "sess");
+  if (!o) return json(res, 401, { ok: false, error: "signed_out" });
+  const username = normUser(d.username), password = String(d.password || "");
+  if (!validUser(username)) return json(res, 200, { ok: false, error: "bad_username" });
+  if (password.length < PW_MIN || password.length > 200) return json(res, 200, { ok: false, error: "weak_password" });
+  const token = await F.fsToken();
+  const [list, A] = await Promise.all([creators(), auths(token)]);
+  if (!list || !A) return json(res, 503, { ok: false, error: "try_again" });
+  const c = list.filter(function (x) { return x && x.id === o.i; })[0];
+  if (!c || !OK_STAGES[c.stage]) return json(res, 401, { ok: false, error: "no_access" });
+  // A username is one person's: not someone else's username, and not someone else's email.
+  if (A.some(function (a) { return a && a.id !== c.id && a.username === username; }) ||
+      list.some(function (x) { return x && x.id !== c.id && String(x.email || "").trim().toLowerCase() === username; })) {
+    return json(res, 200, { ok: false, error: "username_taken" });
+  }
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hash = await hashPw(password, salt);
+  const now = Date.now();
+  const w = await F.appendRecord("creator_auth", { id: c.id, username: username, salt: salt, hash: hash, fails: 0, lockUntil: 0, created: now, updated: now },
+    function (x) { return x && x.id === c.id; },
+    function (ex) { ex.username = username; ex.salt = salt; ex.hash = hash; ex.fails = 0; ex.lockUntil = 0; ex.updated = now; return true; });
+  if (!w.ok) return json(res, 503, { ok: false, error: "try_again" });
+  return json(res, 200, { ok: true, username: username });
+}
+
+async function pwlogin(d, req, res) {
+  const user = normUser(d.user), password = String(d.password || "");
+  const fail = function () { return json(res, 200, { ok: false, error: "bad_login" }); };
+  if (!user || !password || password.length > 200) return fail();
+  const token = await F.fsToken();
+  const [list, A] = await Promise.all([creators(), auths(token)]);
+  if (!list || !A) return json(res, 503, { ok: false, error: "try_again" });
+  let c = null, a = null;
+  if (user.indexOf("@") > 0) {
+    c = list.filter(function (x) { return x && String(x.email || "").trim().toLowerCase() === user; })[0] || null;
+    a = c ? (A.filter(function (x) { return x && x.id === c.id; })[0] || null) : null;
+  } else {
+    a = A.filter(function (x) { return x && x.username === user; })[0] || null;
+    c = a ? (list.filter(function (x) { return x && x.id === a.id; })[0] || null) : null;
+  }
+  // Same work and same answer whether or not the account exists.
+  const hash = await hashPw(password, (a && a.salt) || "no-such-account");
+  if (!a || !c || !a.hash) return fail();
+  if (a.lockUntil && a.lockUntil > Date.now()) return json(res, 200, { ok: false, error: "locked" });
+  const good = sameHex(hash, a.hash);
+  await F.appendRecord("creator_auth", a, function (x) { return x && x.id === a.id; }, function (ex) {
+    if (good) { if (!ex.fails && !ex.lockUntil) return false; ex.fails = 0; ex.lockUntil = 0; }
+    else { ex.fails = (Number(ex.fails) || 0) + 1; if (ex.fails >= MAX_FAILS) { ex.lockUntil = Date.now() + LOCK_MS; ex.fails = 0; } }
+    return true;
+  });
+  if (!good) return fail();
+  if (!OK_STAGES[c.stage] || !normCode(c.code)) return json(res, 200, { ok: false, error: "no_access" });
+  await touch(c, true);
+  return json(res, 200, { ok: true, s: sign({ k: "sess", i: c.id, e: Date.now() + SESSION_TTL }) });
+}
 
 // Sign-in tracking for the admin portal (2026-11-15). Kept in its own store,
 // vs_state/creator_activity, so the portal's affiliates record is never written
@@ -125,7 +205,7 @@ async function stats(d, req, res) {
   const o = check(d.s, "sess");
   if (!o) return json(res, 401, { ok: false, error: "signed_out" });
   const token = await F.fsToken();
-  const [aff, ind, biz, clk] = await Promise.all([F.readStore("affiliates", token), F.readStore("leads", token), F.readStore("biz_leads", token), F.readStore("creator_clicks", token)]);
+  const [aff, ind, biz, clk, au] = await Promise.all([F.readStore("affiliates", token), F.readStore("leads", token), F.readStore("biz_leads", token), F.readStore("creator_clicks", token), F.readStore("creator_auth", token)]);
   if (!aff.ok) return json(res, 503, { ok: false, error: "try_again" });
   const c = (aff.items || []).filter(function (x) { return x && x.id === o.i; })[0];
   if (!c || !OK_STAGES[c.stage]) return json(res, 401, { ok: false, error: "no_access" });
@@ -156,6 +236,7 @@ async function stats(d, req, res) {
   return json(res, 200, {
     ok: true,
     creator: { firstName: c.firstName || "", lastName: c.lastName || "", code: code, stage: c.stage, since: c.created ? day(c.created) : "" },
+    account: (function () { const a = au.ok ? (au.items || []).filter(function (x) { return x && x.id === c.id && x.hash; })[0] : null; return { hasPassword: !!a, username: a ? a.username : "", ok: au.ok }; })(),
     link: L.CFG.site.replace(/\/$/, "") + "/" + code,
     reward: reward,
     totals: { clicks: Number(cr.total) || 0, clicks30: clicks30, spark: spark, requests: list.length, qualified: q, earned: q * reward, paid: paidAmt, owed: unpaid * reward, unpaid: unpaid },
@@ -197,6 +278,8 @@ module.exports = async function (req, res) {
     if (op === "verify") return await verify(d, req, res);
     if (op === "stats") return await stats(d, req, res);
     if (op === "click") return await click(d, req, res);
+    if (op === "setpw") return await setpw(d, req, res);
+    if (op === "pwlogin") return await pwlogin(d, req, res);
   } catch (e) { if (!res.headersSent) return json(res, 500, { ok: false, error: "server" }); return; }
   return json(res, 400, { ok: false, error: "bad_op" });
 };

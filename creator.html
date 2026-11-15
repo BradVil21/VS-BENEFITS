@@ -116,6 +116,22 @@ tr:last-child td{border-bottom:0}
 .help .hl span{display:flex;flex-direction:column;min-width:0;overflow-wrap:anywhere}
 .help .hl small{font-weight:600;color:var(--muted);font-size:.75rem}
 @media(max-width:560px){.help .hlinks{grid-template-columns:1fr}}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:#eef2f7;border-radius:11px;padding:4px;margin:0 0 16px}
+.tab{border:0;background:transparent;border-radius:8px;padding:9px 6px;font:700 .86rem 'DM Sans',sans-serif;color:var(--muted);cursor:pointer}
+.tab.on{background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(16,40,80,.12)}
+.flab{display:block;text-align:left;font-weight:700;font-size:.82rem;color:var(--navy);margin:12px 0 6px}
+.fhint{display:block;text-align:left;font-size:.76rem;color:var(--muted);margin-top:5px}
+.pwrow{position:relative}.pwrow input{padding-right:64px}
+.eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:#eef2f7;border-radius:7px;padding:6px 9px;font:700 .75rem 'DM Sans',sans-serif;color:var(--muted);cursor:pointer}
+.mback{position:fixed;inset:0;z-index:100;background:rgba(11,35,70,.55);display:flex;align-items:center;justify-content:center;padding:16px}
+.mback[hidden]{display:none}
+.modal{width:100%;max-width:420px;max-height:calc(100vh - 32px);overflow:auto;padding:26px 24px;text-align:center}
+.modal h2{font-family:'Poppins',sans-serif;font-size:1.3rem;color:var(--navy);margin:0 0 6px}
+.modal p{color:var(--muted);margin:0 0 6px;font-size:.93rem}
+.modal input{width:100%;border:1.5px solid #d6dde6;border-radius:10px;padding:13px;font:500 1rem 'DM Sans',sans-serif;outline:none}
+.modal input:focus{border-color:var(--qb);box-shadow:0 0 0 3px rgba(47,157,230,.15)}
+.later{margin-top:10px;border:0;background:none;color:var(--muted);font:600 .88rem 'DM Sans',sans-serif;cursor:pointer;text-decoration:underline}
+.ok-note{background:#dcfce7;color:#166534;border-radius:10px;padding:10px 12px;font-weight:700;font-size:.9rem;margin-top:12px}
 </style>
 </head>
 <body>
@@ -130,12 +146,23 @@ tr:last-child td{border-bottom:0}
   <section class="card auth" id="v-login" hidden>
     <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/></svg></div>
     <h1>Creator dashboard</h1>
-    <p>See your link visits, referrals and rewards. Enter the email you applied with and we'll send you a sign-in link.</p>
-    <form id="cr-form" novalidate>
-      <label for="cr-email" class="sr" hidden>Email</label>
+    <p id="cr-lede">Sign in to see your link visits, referrals and rewards.</p>
+    <div class="tabs" role="tablist"><button type="button" class="tab on" id="tab-pw" role="tab" aria-selected="true">Username &amp; password</button><button type="button" class="tab" id="tab-link" role="tab" aria-selected="false">Email me a link</button></div>
+    <form id="pw-form" novalidate>
+      <label for="pw-user" class="flab">Username or email</label>
+      <input id="pw-user" type="text" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="yourname or you@email.com" required />
+      <label for="pw-pass" class="flab">Password</label>
+      <div class="pwrow"><input id="pw-pass" type="password" autocomplete="current-password" placeholder="Password" required /><button type="button" class="eye" data-eye="pw-pass" aria-label="Show password">Show</button></div>
+      <button class="btn" id="pw-go" type="submit">Sign in</button>
+      <p class="err" id="pw-err" hidden></p>
+      <p class="small" style="margin-top:12px">First time here, or forgot your password? <a href="#" id="pw-tolink">Email me a sign-in link</a></p>
+    </form>
+    <form id="cr-form" novalidate hidden>
+      <label for="cr-email" class="flab">Email you applied with</label>
       <input id="cr-email" type="email" autocomplete="email" inputmode="email" placeholder="you@email.com" required />
       <button class="btn" id="cr-send" type="submit">Email me a sign-in link</button>
       <p class="err" id="cr-err" hidden></p>
+      <p class="small" style="margin-top:12px">After you sign in, you can create a username and password for next time.</p>
     </form>
     <p class="small">Not a creator yet? <a href="/affiliate-program">Join the creator program</a></p>
     <p class="small" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--line)">Tip: bookmark <b>vshealthbenefits.com/creator</b>, or tap <b>Creator Login</b> at the bottom of any page on our site. Once you sign in, you stay signed in on this device for 30 days.</p>
@@ -221,10 +248,31 @@ tr:last-child td{border-bottom:0}
         <a class="hl" id="h-mail" href="mailto:info@vshealthbenefits.com?subject=Affiliate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span><small>Email</small>info@vshealthbenefits.com</span></a>
         <a class="hl" id="h-sms" href="sms:+19548251009"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span><small>Text</small>(954) 825-1009</span></a>
       </div>
+      <button type="button" class="out" id="h-acct" style="margin-top:14px">Change username or password</button>
       <p class="hint" id="h-example" style="margin:12px 0 0">Example: "Affiliate - Jane Smith: question about my payout."</p>
     </div>
   </section>
 </main>
+
+<div class="mback" id="acct-modal" hidden>
+  <div class="modal card" role="dialog" aria-modal="true" aria-labelledby="acct-t">
+    <div class="ic" style="width:48px;height:48px;border-radius:13px;margin:0 auto 12px;background:linear-gradient(135deg,var(--teal),var(--qb));color:#fff;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+    <h2 id="acct-t">Create your login</h2>
+    <p id="acct-sub">Pick a username and password so you can sign in right away next time, no email needed.</p>
+    <form id="acct-form" novalidate>
+      <label for="ac-user" class="flab">Username</label>
+      <input id="ac-user" type="text" autocomplete="username" autocapitalize="off" spellcheck="false" maxlength="30" placeholder="yourname" required />
+      <small class="fhint">3-30 characters: letters, numbers, dots, dashes or underscores.</small>
+      <label for="ac-pass" class="flab">Password</label>
+      <div class="pwrow"><input id="ac-pass" type="password" autocomplete="new-password" placeholder="At least 8 characters" required /><button type="button" class="eye" data-eye="ac-pass" aria-label="Show password">Show</button></div>
+      <label for="ac-pass2" class="flab">Confirm password</label>
+      <input id="ac-pass2" type="password" autocomplete="new-password" placeholder="Type it again" required />
+      <button class="btn" id="ac-save" type="submit">Save my login</button>
+      <p class="err" id="ac-err" hidden></p>
+      <button type="button" class="later" id="ac-later">Maybe later</button>
+    </form>
+  </div>
+</div>
 
 <footer class="ft">
   <p>Rewards are a flat amount per qualified referral and are never tied to whether anyone buys insurance (s. 626.112(8), Florida Statutes). Where state law does not allow referral rewards, we cannot pay one. VS BENEFITS LLC is a licensed independent insurance agency, NPN 22116298.</p>
@@ -283,7 +331,46 @@ tr:last-child td{border-bottom:0}
     $("h-sms").href="sms:+19548251009?&body="+encodeURIComponent(tag+": ");
     if(full)$("h-example").textContent='Example: "'+tag+': question about my payout."';
     show("v-dash");
+    ACCT={username:(j.account&&j.account.username)||"",code:c.code||""};
+    if(j.account&&j.account.ok&&!j.account.hasPassword){var skip="";try{skip=sessionStorage.getItem("vs_creator_pwlater")||"";}catch(e){}if(!skip)openAcct(false);}
   }
+  /* ---- username + password (2026-11-15) ---- */
+  var ACCT={username:"",code:""};
+  function openAcct(change){
+    $("acct-t").textContent=change?"Change your login":"Create your login";
+    $("acct-sub").textContent=change?"Pick a new username and/or password.":"Pick a username and password so you can sign in right away next time, no email needed.";
+    $("ac-user").value=ACCT.username||String(ACCT.code||"").replace(/[^a-z0-9._-]/gi,"").toLowerCase();
+    $("ac-pass").value="";$("ac-pass2").value="";acErr("");
+    $("ac-later").textContent=change?"Cancel":"Maybe later";
+    $("acct-modal").hidden=false;setTimeout(function(){$(ACCT.username?"ac-pass":"ac-user").focus();},50);
+  }
+  function closeAcct(){$("acct-modal").hidden=true;}
+  function acErr(m){var e=$("ac-err");e.textContent=m;e.hidden=!m;}
+  $("ac-later").onclick=function(){try{sessionStorage.setItem("vs_creator_pwlater","1");}catch(e){}closeAcct();};
+  $("h-acct").onclick=function(){openAcct(true);};
+  $("acct-form").onsubmit=function(e){e.preventDefault();acErr("");
+    var u=$("ac-user").value.trim().toLowerCase(),p1=$("ac-pass").value,p2=$("ac-pass2").value;
+    if(!/^[a-z0-9][a-z0-9._-]{2,29}$/.test(u)){acErr("Usernames are 3-30 characters: letters, numbers, dots, dashes or underscores.");return;}
+    if(p1.length<8){acErr("Use at least 8 characters for your password.");return;}
+    if(p1!==p2){acErr("The two passwords don't match.");return;}
+    var b=$("ac-save");b.disabled=true;b.textContent="Saving...";
+    api({op:"setpw",s:getS(),username:u,password:p1}).then(function(j){
+      if(j.ok){ACCT.username=j.username;var f=$("acct-form");var n=document.createElement("p");n.className="ok-note";n.textContent="Saved! Next time, sign in with "+j.username+" and your password.";f.appendChild(n);setTimeout(function(){n.remove();closeAcct();},2200);}
+      else acErr(j.error==="username_taken"?"That username is taken. Try another.":j.error==="bad_username"?"Usernames are 3-30 characters: letters, numbers, dots, dashes or underscores.":j.error==="weak_password"?"Use at least 8 characters for your password.":j._status===401?"Your session ended. Sign in again, then try once more.":"Couldn't save right now. Try again.");
+    }).catch(function(){acErr("Couldn't save right now. Try again.");}).then(function(){b.disabled=false;b.textContent="Save my login";});};
+  document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-eye]");if(!b)return;var i=$(b.getAttribute("data-eye"));var show=i.type==="password";i.type=show?"text":"password";b.textContent=show?"Hide":"Show";});
+  function tab(pw){$("tab-pw").classList.toggle("on",pw);$("tab-link").classList.toggle("on",!pw);$("tab-pw").setAttribute("aria-selected",pw);$("tab-link").setAttribute("aria-selected",!pw);$("pw-form").hidden=!pw;$("cr-form").hidden=pw;err("");pwErr("");setTimeout(function(){$(pw?"pw-user":"cr-email").focus();},30);}
+  $("tab-pw").onclick=function(){tab(true);};$("tab-link").onclick=function(){tab(false);};
+  $("pw-tolink").onclick=function(e){e.preventDefault();var u=$("pw-user").value.trim();if(u.indexOf("@")>0)$("cr-email").value=u;tab(false);};
+  function pwErr(m){var e=$("pw-err");e.textContent=m;e.hidden=!m;}
+  $("pw-form").onsubmit=function(e){e.preventDefault();pwErr("");
+    var u=$("pw-user").value.trim(),p=$("pw-pass").value;
+    if(!u||!p){pwErr("Enter your username (or email) and password.");return;}
+    var b=$("pw-go");b.disabled=true;b.textContent="Signing in...";
+    api({op:"pwlogin",user:u,password:p}).then(function(j){
+      if(j.ok&&j.s){setS(j.s);$("pw-pass").value="";load();return;}
+      pwErr(j.error==="locked"?"Too many tries. Wait 15 minutes, or use \"Email me a sign-in link\".":j.error==="no_access"?"This creator account doesn't have dashboard access. Text us at (954) 825-1009.":j.error==="try_again"?"Couldn't sign you in right now. Try again.":"That username or password isn't right. Forgot it? Use \"Email me a sign-in link\".");
+    }).catch(function(){pwErr("Couldn't sign you in right now. Try again.");}).then(function(){b.disabled=false;b.textContent="Sign in";});};
   function load(){var s=getS();if(!s){show("v-login");return;}show("v-load");
     api({op:"stats",s:s}).then(function(j){if(j.ok)render(j);else{if(j._status===401)setS("");show("v-login");if(j.error==="no_access")err("This creator account doesn't have dashboard access. Text us at (954) 825-1009.");}}).catch(function(){show("v-login");err("Couldn't load your dashboard. Check your connection and try again.");});}
   function err(m){var e=$("cr-err");e.textContent=m;e.hidden=!m;}
