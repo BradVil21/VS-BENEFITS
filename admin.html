@@ -5134,11 +5134,13 @@ function czEnsure(){
     if((l.zipCode==null||l.zipCode==="")&&l.zipcode){l.zipCode=l.zipcode;}
     if(!l.lastContact){l.lastContact=l.updated?czYMD(new Date(l.updated)):(l.created?czYMD(new Date(l.created)):todayStr());changed=true;}
     if(!l.createdAt){l.createdAt=l.created?czYMD(new Date(l.created)):todayStr();}
-    if(!l.followUpDue&&!l.fuCleared&&czCLOSED.indexOf(l.stage)<0){l.followUpDue=czAddDays(l.lastContact||todayStr(),czFollowupDays);changed=true;}
+    /* Keep following up with everyone in an open stage (2026-11-15): no open lead is ever left without a date. Only closed stages (sold, dead, ...) stop. */
+    if(!l.followUpDue&&czCLOSED.indexOf(l.stage)<0){l.followUpDue=czAddDays(l.lastContact||todayStr(),czFollowupDays);l.fuCleared=false;changed=true;}
   });
   if(changed)saveLeads(arr);
   return arr;
 }
+function czNextFU(c){return czCLOSED.indexOf(c.stage)>=0?"":czAddDays(todayStr(),czFollowupDays);}
 function czFU(c){
   if(czCLOSED.indexOf(c.stage)>=0||!c.followUpDue)return{key:"none",label:""};
   var diff=czDaysBetween(c.followUpDue,todayStr());
@@ -5207,11 +5209,11 @@ function czRestart(id){
   if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","Logged contact · follow-up reset");
   czCurrentRender();
 }
-/* Follow-up handled — clears it from the list */
+/* Follow-up handled: logs it and schedules the next check-in (open stages always stay on the list) */
 function czFuComplete(id){
   var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
-  var t=todayStr();c.lastContact=t;c.followUpDue="";c.fuCleared=true;c.updated=Date.now();
-  czStampNote(c,"Follow-up completed");
+  var t=todayStr();c.lastContact=t;c.followUpDue=czNextFU(c);c.fuCleared=!c.followUpDue;c.updated=Date.now();
+  czStampNote(c,"Follow-up completed"+(c.followUpDue?" · next check-in "+czPretty(c.followUpDue):""));
   saveLeads(arr);
   if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","Follow-up completed");
   czCurrentRender();if(typeof renderTasks==="function")renderTasks();
@@ -5222,10 +5224,10 @@ function czFuClearAll(key){
   cs.forEach(function(c){var fu=czFU(c);if(fu.key!=="none"&&(key==="all"||fu.key===key)&&(!czFuStage||c.stage===czFuStage))ids.push(c.id);});
   if(!ids.length)return;
   var what=key==="all"?("all "+ids.length+" follow-ups"):(ids.length+" "+key+" follow-up"+(ids.length>1?"s":""));
-  if(!confirm("Mark "+what+" as completed? This clears them from the list. They will not come back until a new follow-up date is set."))return;
+  if(!confirm("Mark "+what+" as completed? Each one comes back for a check-in in "+czFollowupDays+" days until you move them to Sold, Dead or another closed stage."))return;
   var arr=getLeads();var t=todayStr();
   arr.forEach(function(c){
-    if(ids.indexOf(c.id)>=0){c.lastContact=t;c.followUpDue="";c.fuCleared=true;c.updated=Date.now();czStampNote(c,"Follow-up completed (bulk clear)");}
+    if(ids.indexOf(c.id)>=0){c.lastContact=t;c.followUpDue=czNextFU(c);c.fuCleared=!c.followUpDue;c.updated=Date.now();czStampNote(c,"Follow-up completed (bulk)"+(c.followUpDue?" · next check-in "+czPretty(c.followUpDue):""));}
   });
   saveLeads(arr);
   if(typeof addLeadActivity==="function")ids.forEach(function(id){addLeadActivity(id,"followup","Follow-up completed \u00b7 bulk clear");});
@@ -5234,9 +5236,9 @@ function czFuClearAll(key){
 /* Remove one person from the follow-up list entirely */
 function czFuRemove(id){
   var arr=getLeads();var c=arr.filter(function(x){return x.id===id;})[0];if(!c)return;
-  if(!confirm("Remove "+(czName(c)||"this lead")+" from the follow-up list? They stay in your pipeline but will not come back up until you set a new follow-up date."))return;
-  c.followUpDue="";c.fuCleared=true;c.updated=Date.now();
-  czStampNote(c,"Removed from follow-up list");
+  if(!confirm("Push "+(czName(c)||"this lead")+" back "+czFollowupDays+" days? To stop following up for good, move them to Sold, Dead or another closed stage."))return;
+  c.followUpDue=czNextFU(c);c.fuCleared=!c.followUpDue;c.updated=Date.now();
+  czStampNote(c,c.followUpDue?"Follow-up pushed to "+czPretty(c.followUpDue):"Removed from follow-up list");
   saveLeads(arr);
   if(typeof addLeadActivity==="function")addLeadActivity(id,"followup","Removed from follow-up list");
   czCurrentRender();if(typeof renderTasks==="function")renderTasks();
@@ -5448,7 +5450,7 @@ function czFollowups(){
   var mount=$("cz-followups");if(!mount)return;
   czEnsure();czBadges();
   mount.innerHTML='<div class="fu2-head"><div><h3 class="cz-h" style="margin:0">Follow-ups</h3><p class="cz-lede" style="margin:4px 0 0">Everyone you owe a call, sorted by how late they are.</p></div>'
-    +'<details class="fu2-how"><summary>How it works</summary><div><b style="color:#0a7a4f">✓ Done</b> clears it once you reach them. <b style="color:#b45309">☎ No answer</b> brings them back in 2 days. <b style="color:#16447f">⏱ Snooze</b> pushes them 30, 60 or 90 days. <b style="color:#0284c7">↻ Reset</b> restarts the 14-day clock. Click a name to log what happened and move them to a pipeline stage. Everyone comes back up on their own when they’re due.</div></details></div>'
+    +'<details class="fu2-how"><summary>How it works</summary><div><b style="color:#0a7a4f">✓ Done</b> logs the call and brings them back in 14 days. Everyone in an open stage stays on this list until you move them to Sold, Dead or another closed stage. <b style="color:#b45309">☎ No answer</b> brings them back in 2 days. <b style="color:#16447f">⏱ Snooze</b> pushes them 30, 60 or 90 days. <b style="color:#0284c7">↻ Reset</b> restarts the 14-day clock. Click a name to log what happened and move them to a pipeline stage. Everyone comes back up on their own when they’re due.</div></details></div>'
     +'<div id="fu2-tiles" class="fu2-tiles"></div>'
     +'<div class="cz-toolbar fu2-bar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search name, phone, email…" value="'+escapeHtml(czQuery)+'"/></div>'
     +'<select id="fu2-stage" class="fu2-sel" aria-label="Filter by stage"></select></div>'
@@ -5541,7 +5543,7 @@ var FUD_OUT=[
   {k:"sold",l:"Sold",ico:"\u2605",stage:"sold",c:"#059669"},
   {k:"notint",l:"Not interested",ico:"\u2715",stage:"dead",c:"#e11d48"},
   {k:"bad",l:"Wrong number / bad lead",ico:"\u26a0",stage:"disqualified",c:"#64748b"},
-  {k:"done",l:"Done, no more follow-up",ico:"\u2713",days:-1,c:"#16447f"}
+  {k:"done",l:"Done for now, check in 2 weeks",ico:"\u2713",days:14,c:"#16447f"}
 ];
 function czFudClose(){var m=document.getElementById("fud-modal");if(m)m.remove();document.removeEventListener("keydown",czFudKey);}
 function czFudKey(e){if(e.key==="Escape")czFudClose();}
@@ -5581,7 +5583,7 @@ function czFudOpen(id){
   }
   function syncStage(){
     var st=$q("#fud-stage").value||c.stage;
-    var closed=czCLOSED.indexOf(st)>=0||(sel&&sel.k==="done");
+    var closed=czCLOSED.indexOf(st)>=0;
     $q("#fud-nextwrap").style.opacity=closed?".4":"";
     $q("#fud-nextwrap").style.pointerEvents=closed?"none":"";
     $q("#fud-apptwrap").hidden=st!=="appointment_scheduled";
@@ -5609,13 +5611,13 @@ function czFudOpen(id){
   $q("[data-fud=save]").addEventListener("click",function(){
     var newStage=$q("#fud-stage").value,note=$q("#fud-note").value.trim(),next=$q("#fud-date").value,appt=$q("#fud-appt").value;
     if(!sel&&!newStage&&!note){$q("#fud-err").textContent="Pick what happened (or a stage).";return;}
-    var stage=newStage||c.stage,closed=czCLOSED.indexOf(stage)>=0||(sel&&sel.k==="done");
+    var stage=newStage||c.stage,closed=czCLOSED.indexOf(stage)>=0;
     if(stage==="appointment_scheduled"&&newStage&&!appt&&sel&&sel.k==="appt"){$q("#fud-err").textContent="Add the appointment date and time.";return;}
     var arr=getLeads();var r=arr.filter(function(x){return x.id===id;})[0];if(!r){czFudClose();return;}
     var t=todayStr();
     r.lastContact=t;r.updated=Date.now();
     if(closed){r.followUpDue="";r.fuCleared=true;}
-    else if(next){r.followUpDue=next;r.fuCleared=false;}
+    else{r.followUpDue=next||czNextFU(r);r.fuCleared=false;} /* open stages always get a next date */
     var line=(sel?sel.l:"Updated")+(newStage?" → "+(czMETA[newStage]?czMETA[newStage].label:newStage):"")
       +(!closed&&next?" · next follow-up "+czPretty(next):"")+(note?" — "+note:"");
     czStampNote(r,line);
@@ -6093,7 +6095,7 @@ function czOpenModal(client){
   var dispBlock=(!isNew&&fu&&fu.key!=="none")?('<div id="cz-dispwrap">'
     +'<button type="button" class="cz-btn-go" id="cz-dispbtn">\u2691 Disposition this follow-up</button>'
     +'<div id="cz-dispacts" style="display:none">'
-    +'<button type="button" class="cz-resetbtn vsfu-done" id="cz-disp-complete" title="Reached them / handled \u2014 clears the follow-up">\u2713 Completed</button>'
+    +'<button type="button" class="cz-resetbtn vsfu-done" id="cz-disp-complete" title="Reached them / handled \u2014 next check-in in 14 days">\u2713 Completed</button>'
     +'<button type="button" class="cz-resetbtn vsfu-no" id="cz-disp-noanswer" title="No answer \u2014 comes back in 2 days">\u260e No answer</button>'
     +'<select class="cz-resetbtn" id="cz-disp-snooze" title="Push it out \u2014 comes back when due"><option value="">\u23f1 Snooze</option><option value="30">30 days out</option><option value="60">60 days out</option><option value="90">90 days out</option></select>'
     +'<button type="button" class="cz-resetbtn" id="cz-disp-reset" title="Log contact \u2014 restart 14-day clock">\u21bb Reset</button>'
@@ -8230,7 +8232,7 @@ if(btn)btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"
       var arr=(typeof getLeads==="function"?getLeads():[]); var c=null;
       for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ c=arr[i]; break; } }
       if(!c)return;
-      c.followUpDue=""; c.fuCleared=true; c.updated=Date.now();
+      c.followUpDue=(typeof czNextFU==="function"?czNextFU(c):""); c.fuCleared=!c.followUpDue; c.updated=Date.now(); /* open stages come back in 14 days */
       if(typeof saveLeads==="function")saveLeads(arr);
       if(typeof addLeadActivity==="function"){ try{ addLeadActivity(id,"followup","Follow-up marked complete"); }catch(e){} }
       try{ if(typeof window.renderDash3D==="function")window.renderDash3D(); }catch(e){}
