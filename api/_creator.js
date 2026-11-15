@@ -65,6 +65,24 @@ async function creators() { const r = await F.readStore("affiliates"); return r.
 
 function json(res, code, o) { res.status(code).json(o); }
 
+// Sign-in tracking for the admin portal (2026-11-15). Kept in its own store,
+// vs_state/creator_activity, so the portal's affiliates record is never written
+// from here. { id, code, lastLogin, logins, lastSeen }
+async function touch(c, isLogin) {
+  try {
+    const now = Date.now();
+    await F.appendRecord("creator_activity",
+      { id: c.id, code: normCode(c.code), lastLogin: isLogin ? now : 0, logins: isLogin ? 1 : 0, lastSeen: now },
+      function (x) { return x && x.id === c.id; },
+      function (ex) {
+        if (!isLogin && ex.lastSeen && now - ex.lastSeen < 10 * 60 * 1000) return false; // at most one write per 10 min
+        if (isLogin) { ex.lastLogin = now; ex.logins = (Number(ex.logins) || 0) + 1; }
+        ex.lastSeen = now; ex.code = normCode(c.code);
+        return true;
+      });
+  } catch (e) { /* tracking never blocks the dashboard */ }
+}
+
 async function login(d, req, res) {
   const email = String(d.email || "").trim().toLowerCase().slice(0, 160);
   const out = { ok: true };
@@ -99,6 +117,7 @@ async function verify(d, req, res) {
   const list = await creators();
   const c = (list || []).filter(function (x) { return x && x.id === o.i; })[0];
   if (!c || !OK_STAGES[c.stage]) return json(res, 401, { ok: false, error: "no_access" });
+  await touch(c, true);
   return json(res, 200, { ok: true, s: sign({ k: "sess", i: c.id, e: Date.now() + SESSION_TTL }) });
 }
 
@@ -111,6 +130,7 @@ async function stats(d, req, res) {
   const c = (aff.items || []).filter(function (x) { return x && x.id === o.i; })[0];
   if (!c || !OK_STAGES[c.stage]) return json(res, 401, { ok: false, error: "no_access" });
   const code = normCode(c.code), reward = Number(c.reward) || 0, refs = c.refs || {};
+  await touch(c, false);
 
   const list = [];
   (ind.items || []).forEach(function (l) { if (l && refOf(l) === code) list.push({ key: "ind:" + l.id, at: Number(l.created) || 0 }); });

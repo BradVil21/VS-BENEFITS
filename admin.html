@@ -13681,6 +13681,29 @@ try{(function(){
     var paidAmt=(c.payouts||[]).reduce(function(s,p){return s+(Number(p.amount)||0);},0);
     return {leads:L.length,q:q,unpaid:unpaid,paid:paid,owed:unpaid*(Number(c.reward)||0),paidAmt:paidAmt,list:L};
   }
+  /* ---- creator traffic + sign-ins (2026-11-15): vs_state/creator_clicks + vs_state/creator_activity ---- */
+  var ACT={clk:{},act:{},at:0,busy:false};
+  function dayKey(t){var d=new Date(t);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+  function loadAct(force){
+    if(ACT.busy||(!force&&Date.now()-ACT.at<60000))return;ACT.busy=true;
+    Promise.all([getDoc(doc(db,"vs_state","creator_clicks")),getDoc(doc(db,"vs_state","creator_activity"))]).then(function(r){
+      var clk={},act={};
+      (r[0].exists()?(r[0].data().items||[]):[]).forEach(function(x){if(x&&x.code)clk[normCode(x.code)]=x;});
+      (r[1].exists()?(r[1].data().items||[]):[]).forEach(function(x){if(x&&x.id)act[x.id]=x;});
+      ACT.clk=clk;ACT.act=act;ACT.at=Date.now();ACT.busy=false;
+      if($("p-affiliates")&&$("p-affiliates").classList.contains("active"))render();
+      var ov=$("pv-ov"),fe=document.activeElement;if(ov&&ov.getAttribute("data-aff-id")&&!(fe&&ov.contains(fe)&&/INPUT|TEXTAREA|SELECT/.test(fe.tagName)))openCreator(ov.getAttribute("data-aff-id"));
+    }).catch(function(){ACT.busy=false;});
+  }
+  function traffic(c){
+    var x=ACT.clk[normCode(c.code)]||{},days=x.days||{},v30=0,v7=0,last="",spark=[],now=Date.now();
+    for(var i=29;i>=0;i--){var k=dayKey(now-i*864e5),n=Number(days[k])||0;spark.push(n);v30+=n;if(i<7)v7+=n;}
+    Object.keys(days).forEach(function(k){if(Number(days[k])>0&&k>last)last=k;});
+    var a=ACT.act[c.id]||{};
+    return {v7:v7,v30:v30,all:Number(x.total)||0,lastClick:last,spark:spark,lastLogin:Number(a.lastLogin)||0,logins:Number(a.logins)||0,lastSeen:Number(a.lastSeen)||0};
+  }
+  function ago(t){if(!t)return "Never";var m=Math.round((Date.now()-t)/60000);if(m<2)return "Just now";if(m<60)return m+" min ago";var h=Math.round(m/60);if(h<24)return h+"h ago";var d=Math.round(h/24);if(d<31)return d+"d ago";return d8(t);}
+  function agoDay(k){if(!k)return "None yet";var p=k.split("-");return ago(new Date(+p[0],+p[1]-1,+p[2],12).getTime()).replace(/^\d+h ago$|^Just now$|^\d+ min ago$/,"Today");}
 
   /* ---- nav + panel ---- */
   var V={stage:"all",q:""};
@@ -13722,6 +13745,7 @@ try{(function(){
         +'<div class="afc-top"><span class="afc-av">'+esc(ini)+'</span><div class="afc-who"><b>'+esc(nm)+'</b><small>'+esc(c.handle||c.email||"")+'</small></div>'+(isNew?'<span class="afc-new">NEW</span>':'')+'</div>'
         +'<div class="afc-pl">'+platIcons(c.platforms)+(c.followers?'<span class="afc-fol">'+esc(c.followers)+'</span>':'')+'</div>'
         +'<div class="afc-st"><span class="afc-dot"></span><select data-aff-st="'+esc(c.id)+'">'+sopts+'</select></div>'
+        +(c.code?(function(tr){return '<div class="afc-act"><span title="Link visits, last 30 days"><b>'+tr.v30+'</b> visits (30d)</span><span title="Last sign-in to their creator dashboard">Login: <b>'+esc(ago(tr.lastLogin))+'</b></span></div>';})(traffic(c)):'')
         +'<div class="afc-nums"><div><b>'+s.leads+'</b><small>Leads</small></div><div><b>'+s.q+'</b><small>Qualified</small></div><div class="'+(s.owed?"owe":"")+'"><b>'+money2(s.owed)+'</b><small>Owed</small></div></div>'
         +'<div class="afc-ft">'+(c.code?'<button type="button" class="afc-link" data-aff-copy="'+esc(linkFor(c.code))+'" title="Copy their link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg><span>/'+esc(c.code)+'</span></button>':'<button type="button" class="afc-link mk" data-aff-open="'+esc(c.id)+'">+ Create link</button>')+'<span class="afc-date">'+esc(d8(c.created))+'</span></div>'
         +'</div>';}).join("");
@@ -13731,7 +13755,9 @@ try{(function(){
       users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>',
       owe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M15 9.5a2.5 2.5 0 0 0-2.5-2h-1a2.5 2.5 0 0 0 0 5h1a2.5 2.5 0 0 1 0 5h-1A2.5 2.5 0 0 1 9 15"/></svg>',
       paid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'};
-    host.innerHTML='<div class="af-kpis">'+kp(IK.inbox,cnt.applied||0,"New applications",cnt.applied?"hl":"")+kp(IK.star,cnt.active||0,"Active creators","")+kp(IK.users,tot.leads,"Leads from creators","")+kp(IK.owe,money2(tot.owed),"Owed ("+tot.unpaid+")",tot.owed?"owe":"")+kp(IK.paid,money2(tot.paid),"Paid out","ok")+'</div>'
+    loadAct();
+    var vis30=all.reduce(function(t,c){return t+(c.code?traffic(c).v30:0);},0);
+    host.innerHTML='<div class="af-kpis">'+kp(IK.inbox,cnt.applied||0,"New applications",cnt.applied?"hl":"")+kp(IK.star,cnt.active||0,"Active creators","")+kp(IK.users,vis30,"Link visits (30d)","")+kp(IK.users,tot.leads,"Leads from creators","")+kp(IK.owe,money2(tot.owed),"Owed ("+tot.unpaid+")",tot.owed?"owe":"")+kp(IK.paid,money2(tot.paid),"Paid out","ok")+'</div>'
       +'<div class="af-bar"><label class="af-fl"><span>Show</span><select id="aff-filter">'+opts+'</select></label><input id="aff-q" type="search" placeholder="Search name, handle, code..." value="'+esc(V.q)+'"><button type="button" class="af-add" id="aff-add">+ Add creator</button></div>'
       +(cards?'<div class="afc-grid">'+cards+'</div>':'<div class="af-empty-card">'+(all.length?"No creators match.":"No applications yet. Share <b>vshealthbenefits.com/affiliate-program</b> or add a creator yourself.")+'</div>');
     $("aff-filter").onchange=function(){V.stage=this.value;render();};
@@ -13764,6 +13790,7 @@ try{(function(){
     var pageOpts=PAGES.map(function(p){return '<option value="'+p[0]+'">'+esc(p[1])+'</option>';}).join("");
     var msg=code?("Hi "+(c.firstName||"")+"! You're approved for the VS Health Benefits creator program.\n\nYour personal link: "+linkFor(code)+"\n\nEveryone who comes through it and asks for a quote is credited to you. You earn "+(c.reward?money2(c.reward)+" ":"a flat reward ")+"for every qualified referral (they complete a free consultation with a licensed advisor), whether or not they buy.\n\nQuick rules: share your own experience, label posts #ad or #partner, and please don't quote prices or plan details. Our licensed advisors handle that.\n\nSee your visits, referrals and earnings any time at "+SITE+"/creator (sign in with "+(c.email||"your email")+").\n\nQuestions? Call or text (954) 825-1009.\n- Bradley, VS Health Benefits"):"";
     var ov=document.createElement("div");ov.className="pv-ov";ov.id="pv-ov";
+    ov.setAttribute("data-aff-id",id);loadAct();
     ov.innerHTML='<div class="pv af-pv" role="dialog" aria-label="'+esc(name)+'">'
       +'<div class="pv-hd"><div class="pv-ttl"><div class="pv-nmrow"><span class="pv-kind" style="background:#ede9fe;color:#5b21b6">CREATOR</span><h3>'+esc(name)+'</h3><span class="pv-stage" style="background:'+m.color+'1a;color:'+m.color+';border-color:'+m.color+'55">'+esc(m.label)+'</span></div><p class="af-dsub">'+platIcons(c.platforms)+'<span>'+esc([c.handle,c.followers?c.followers+" followers":""].filter(Boolean).join(" \u00b7 ")||"Fill in their details below")+'</span></p></div>'
       +'<div class="pv-hbtns"><button type="button" class="pv-x" data-pv-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div></div>'
@@ -13790,6 +13817,12 @@ try{(function(){
       +'</div>'
       +(function(){try{var ipb=typeof czIpBlock==="function"&&c.meta?czIpBlock(c):"";return ipb?'<div class="pv-ip" style="margin:6px 22px 0">'+ipb+'</div>':'';}catch(e){return "";}})()
       /* notes */
+      +(code?(function(tr){var mx=Math.max.apply(null,tr.spark.concat([1]));var bars=tr.spark.map(function(n,i){return '<i style="height:'+Math.max(2,Math.round(n/mx*100))+'%" title="'+n+' visit'+(n===1?"":"s")+'"></i>';}).join("");var conv=tr.all?Math.round(s.leads/tr.all*1000)/10:0;
+        return '<div class="af-sec af-actsec"><div class="af-sech"><b>Activity</b><small style="color:#7b8aa0">Traffic and sign-ins</small></div>'
+        +'<div class="af-actg"><div><small>Last login</small><b>'+esc(ago(tr.lastLogin))+'</b></div><div><small>Logins</small><b>'+tr.logins+'</b></div><div><small>Last dashboard visit</small><b>'+esc(ago(tr.lastSeen))+'</b></div>'
+        +'<div><small>Link visits (7d)</small><b>'+tr.v7+'</b></div><div><small>Link visits (30d)</small><b>'+tr.v30+'</b></div><div><small>Link visits (all time)</small><b>'+tr.all+'</b></div>'
+        +'<div><small>Last link visit</small><b>'+esc(agoDay(tr.lastClick))+'</b></div><div><small>Quote requests</small><b>'+s.leads+'</b></div><div><small>Visit to quote</small><b>'+(tr.all?conv+"%":"-")+'</b></div></div>'
+        +'<div class="af-spark" aria-label="Link visits per day, last 30 days">'+bars+'</div><small style="display:block;color:#7b8aa0;font-size:11px;margin-top:4px">Link visits per day, last 30 days</small></div>';})(traffic(c)):'')
       +'<div class="af-sec"><div class="af-sech"><b>Notes</b></div><div class="af-noteadd"><input id="afc-note" placeholder="Add a note (Enter to save)"><button type="button" id="afc-addnote">Add</button></div><div class="af-notes">'+esc(c.notes||"").replace(/\n/g,"<br>")+'</div></div>'
       +'<div class="pv-ft"><div class="pv-acts">'+(tel?'<a class="pv-b" href="tel:'+esc(tel)+'">Call</a><a class="pv-b" href="sms:'+esc(tel)+'">Text</a>':'')+(c.email?'<a class="pv-b" href="mailto:'+esc(c.email)+'?subject='+encodeURIComponent("VS Health Benefits creator program")+(msg?'&body='+encodeURIComponent(msg):'')+'">Email'+(msg?" link":"")+'</a>':'')+'<button type="button" class="pv-b af-del" id="afc-del">Delete</button></div>'
       +'<label class="pv-stsel"><span>Status</span><select id="afc-stage">'+sopts+'</select></label></div></div>';
@@ -13861,6 +13894,10 @@ try{(function(){
   "#p-affiliates .afc-fol{margin-left:auto;font-size:11px;font-weight:700;color:#42566e;background:#f1f5f9;border-radius:999px;padding:2px 8px}",
   "#p-affiliates .afc-st{display:flex;align-items:center;gap:6px}#p-affiliates .afc-dot{width:8px;height:8px;border-radius:50%;background:var(--sc);flex:none}",
   "#p-affiliates .afc-st select{flex:1;min-width:0;border:1.5px solid var(--sc);color:var(--sc);border-radius:999px;padding:3px 8px;font-size:11.5px;font-weight:800;background:#fff;cursor:pointer;font-family:inherit}",
+  "#p-affiliates .afc-act{display:flex;justify-content:space-between;gap:6px;font-size:11px;color:#5a6b80}#p-affiliates .afc-act b{color:#0b2346}",
+  ".af-actg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.af-actg>div{background:#f7f9fc;border-radius:9px;padding:8px 10px;min-width:0}.af-actg small{display:block;font-size:10.5px;color:#7b8aa0;font-weight:600}.af-actg b{display:block;font-size:14px;color:#0b2346;margin-top:2px}",
+  ".af-spark{display:flex;align-items:flex-end;gap:2px;height:46px;margin-top:10px;padding:4px;background:#f7f9fc;border-radius:9px}.af-spark i{flex:1;background:linear-gradient(180deg,#2f9de6,#0db5a6);border-radius:2px 2px 0 0;min-height:2px}",
+  "@media(max-width:560px){.af-actg{grid-template-columns:repeat(2,minmax(0,1fr))}}",
   "#p-affiliates .afc-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:#f7f9fc;border-radius:9px;padding:6px 4px;text-align:center}#p-affiliates .afc-nums b{display:block;font-size:14px;color:#0b2346;line-height:1.2}#p-affiliates .afc-nums small{font-size:10px;color:#7b8aa0;font-weight:700;text-transform:uppercase;letter-spacing:.04em}#p-affiliates .afc-nums .owe b{color:#c2410c}",
   "#p-affiliates .afc-ft{display:flex;align-items:center;justify-content:space-between;gap:8px}#p-affiliates .afc-date{font-size:11px;color:#94a3b8}",
   "#p-affiliates .afc-link{display:inline-flex;align-items:center;gap:5px;border:1.5px solid #c7d7ee;background:#fff;color:#16447f;border-radius:8px;padding:3px 8px;font-size:11.5px;font-weight:800;cursor:pointer;font-family:inherit;max-width:150px;overflow:hidden}#p-affiliates .afc-link span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#p-affiliates .afc-link svg{width:12px;height:12px;flex:none}#p-affiliates .afc-link.mk{border-style:dashed}#p-affiliates .afc-link.done{background:#16a34a;border-color:#16a34a;color:#fff}",
