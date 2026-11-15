@@ -22,8 +22,8 @@
 // referral is a date and a status, nothing else. These are health insurance
 // leads and the creator isn't licensed.
 //
-// The portal (vs_state/affiliates) is the source of truth; nothing here writes
-// to it. A creator set to Declined loses access on their next page load.
+// The portal (vs_state/affiliates) is the source of truth. The one write here is promote(): first sign-in moves Approved -> Active creator.
+// A creator set to Declined loses access on their next page load.
 //
 // Tokens are HMAC-signed, stateless. Key: CREATOR_PORTAL_SECRET, or derived
 // from GHL_PIT_TOKEN when that isn't set (both server-only).
@@ -72,6 +72,25 @@ function day(ts) { return new Date(ts).toLocaleDateString("en-CA", { timeZone: "
 async function creators() { const r = await F.readStore("affiliates"); return r.ok ? (r.items || []) : null; }
 
 function json(res, code, o) { res.status(code).json(o); }
+
+// First sign-in after approval: Approved (link sent) -> Active creator (2026-11-15).
+// The only write this file makes to the portal's affiliates record, and only
+// for that one stage change, with a dated note the portal shows.
+async function promote(c) {
+  if (!c || c.stage !== "approved") return;
+  try {
+    const now = Date.now();
+    const when = new Date(now).toLocaleString("en-US", { timeZone: "America/New_York", month: "numeric", day: "numeric", hour: "numeric", minute: "2-digit" });
+    await F.appendRecord("affiliates", c, function (x) { return x && x.id === c.id; }, function (ex) {
+      if (ex.stage !== "approved") return false;
+      ex.stage = "active";
+      ex.notes = "[" + when + "] Status: Active creator (signed in to their dashboard)\n" + (ex.notes || "");
+      ex.updated = now;
+      return true;
+    });
+    c.stage = "active";
+  } catch (e) { /* never block sign-in */ }
+}
 
 // ---- username + password (2026-11-15) ----
 const PW_MIN = 8, MAX_FAILS = 8, LOCK_MS = 15 * 60 * 1000;
@@ -142,6 +161,7 @@ async function pwlogin(d, req, res) {
   if (!good) return fail();
   if (!OK_STAGES[c.stage] || !normCode(c.code)) return json(res, 200, { ok: false, error: "no_access" });
   await touch(c, true);
+  await promote(c);
   return json(res, 200, { ok: true, s: sign({ k: "sess", i: c.id, e: Date.now() + SESSION_TTL }) });
 }
 
@@ -198,6 +218,7 @@ async function verify(d, req, res) {
   const c = (list || []).filter(function (x) { return x && x.id === o.i; })[0];
   if (!c || !OK_STAGES[c.stage]) return json(res, 401, { ok: false, error: "no_access" });
   await touch(c, true);
+  await promote(c);
   return json(res, 200, { ok: true, s: sign({ k: "sess", i: c.id, e: Date.now() + SESSION_TTL }) });
 }
 
@@ -211,6 +232,7 @@ async function stats(d, req, res) {
   if (!c || !OK_STAGES[c.stage]) return json(res, 401, { ok: false, error: "no_access" });
   const code = normCode(c.code), reward = Number(c.reward) || 0, refs = c.refs || {};
   await touch(c, false);
+  await promote(c); // creators who were already signed in before this change
 
   const list = [];
   (ind.items || []).forEach(function (l) { if (l && refOf(l) === code) list.push({ key: "ind:" + l.id, at: Number(l.created) || 0 }); });

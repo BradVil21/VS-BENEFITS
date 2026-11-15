@@ -9014,6 +9014,7 @@ try{(function(){
   function odMonthCard(){
     var box=document.getElementById("gp-container");if(!box)return;
     var key=odMonthKey(),m=OD_MONTHS[key];var old=document.getElementById("od-month");if(old)old.remove();
+    return; /* monthly plan card removed (Bradley, 2026-11-15) */
     if(!m)return;
     var store="vs_month_plan_"+key+(key==="2026-10"?"_v2":""),done={};try{done=JSON.parse(localStorage.getItem(store)||"{}");}catch(e){}
     var c=document.createElement("div");c.className="od-month";c.id="od-month";
