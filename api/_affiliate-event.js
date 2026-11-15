@@ -116,8 +116,10 @@ function copy(event, c) {
     };
     case "approved": return {
       subject: "You're approved! Here's your link",
-      sms: "VS Health Benefits: " + hi + "You're approved! Your link: " + link + " - we'll text you when someone uses it." + stop,
-      email: hi + "\n\nYou're approved for the VS Health Benefits creator program.\n\nYour personal link: https://www." + link + "\n\nEveryone who comes through your link and asks for a quote is credited to you. You earn a flat reward for every qualified referral (they complete a free consultation with one of our licensed advisors), whether or not they buy.\n\nA few quick rules:\n- Share your own experience in your own words.\n- Label sponsored posts #ad or #partner.\n- Please don't quote prices, plans or coverage details. Our licensed advisors handle that.\n\nWe'll let you know every time someone uses your link.\n\nSee your visits, referrals and earnings any time: https://www." + SITE_SHORT + "/creator (sign in with this email address)." + sign,
+      sms: c._inviteUrl
+        ? "VS Health Benefits: " + hi + "You're approved! Set up your creator login here (expires in 48 hrs): " + c._inviteUrl + " Your link to share: " + link + stop
+        : "VS Health Benefits: " + hi + "You're approved! Your link: " + link + " - we'll text you when someone uses it." + stop,
+      email: hi + "\n\nYou're approved for the VS Health Benefits creator program.\n\n" + (c._inviteUrl ? "Step 1: Set up your creator login. Tap this link to open your dashboard and create your username and password. It's just for you and expires in 48 hours:\n" + c._inviteUrl + "\n\nStep 2: Share your personal link: https://www." + link : "Your personal link: https://www." + link) + "\n\nEveryone who comes through your link and asks for a quote is credited to you. You earn a flat reward for every qualified referral (they complete a free consultation with one of our licensed advisors), whether or not they buy.\n\nA few quick rules:\n- Share your own experience in your own words.\n- Label sponsored posts #ad or #partner.\n- Please don't quote prices, plans or coverage details. Our licensed advisors handle that.\n\nWe'll let you know every time someone uses your link.\n\nSee your visits, referrals and earnings any time: https://www." + SITE_SHORT + "/creator (sign in with your username and password, or with this email address)." + sign,
     };
     case "referral": return {
       subject: "Someone just used your link",
@@ -191,6 +193,10 @@ async function findCreator(match) {
 // _affiliate-apply.js (applied) and by lead-sync.js (referral).
 async function notify(c, event, key) {
   const out = { event: event };
+  // Approval: a personal 48-hour setup link straight into the creator dashboard (2026-11-15).
+  if (event === "approved" && !c._inviteUrl) {
+    try { const CR = require("./_creator"); const u = CR.inviteUrl && CR.inviteUrl(c); if (u) c = Object.assign({}, c, { _inviteUrl: u }); } catch (e) { /* send without it */ }
+  }
   const msg = copy(event, c);
   if (!msg) return Object.assign(out, { skipped: "unknown_event" });
   const email = String(c.email || "").trim().toLowerCase(), phone = String(c.phone || "").trim();
@@ -218,7 +224,7 @@ async function notify(c, event, key) {
   put("affiliate_subject", msg.subject);
   put("affiliate_sms", msg.sms);
   // Email body goes in as HTML so the line breaks survive the GHL email builder.
-  put("affiliate_email", L.esc(msg.email).replace(/(https:\/\/www\.[^\s<]+)/g, '<a href="$1">$1</a>').replace(/\n/g, "<br>"));
+  put("affiliate_email", L.esc(msg.email).replace(/(https:\/\/[^\s<]+)/g, function (u) { return c._inviteUrl && u === L.esc(c._inviteUrl) ? '<a href="' + u + '">Set up my creator login</a>' : '<a href="' + u + '">' + u + '</a>'; }).replace(/\n/g, "<br>"));
   put("affiliate_link", c.code ? "https://www." + SITE_SHORT + "/" + normCode(c.code) : "");
   put("affiliate_event_key", eventKey);
   if (!fields.length) return Object.assign(out, { skipped: "custom_fields_missing" });

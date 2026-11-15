@@ -33,6 +33,7 @@ const L = require("./_lib");
 const F = require("./_fs");
 
 const LINK_TTL = 30 * 60 * 1000;
+const INVITE_TTL = 48 * 3600 * 1000; // first-time setup link sent with the approval (2026-11-15)
 const SESSION_TTL = 30 * 24 * 3600 * 1000;
 const OK_STAGES = { approved: 1, active: 1, paused: 1 };
 
@@ -59,6 +60,13 @@ function check(tok, kind) {
   let o = null; try { o = JSON.parse(unb64u(parts[0])); } catch (e) { return null; }
   if (!o || o.k !== kind || !o.i || !(o.e > Date.now())) return null;
   return o;
+}
+
+// Which kind a token claims to be (for a friendlier "expired" message). Unverified: never trusted for access.
+function tokenKind(tok) { try { return JSON.parse(unb64u(String(tok).split(".")[0])).k || ""; } catch (e) { return ""; } }
+function inviteUrl(c) {
+  const t = sign({ k: "invite", i: c.id, e: Date.now() + INVITE_TTL });
+  return t ? L.CFG.site.replace(/\/$/, "") + "/creator#t=" + t : "";
 }
 
 function normCode(v) { return String(v || "").toLowerCase().replace(/[^a-z0-9-]/g, "").slice(0, 40); }
@@ -212,14 +220,21 @@ async function login(d, req, res) {
 }
 
 async function verify(d, req, res) {
-  const o = check(d.t, "link");
-  if (!o) return json(res, 401, { ok: false, error: "expired" });
+  // Either a 30-minute email sign-in link, or the 48-hour setup link from the approval message.
+  const inv = check(d.t, "invite");
+  const o = inv || check(d.t, "link");
+  if (!o) return json(res, 401, { ok: false, error: "expired", invite: tokenKind(d.t) === "invite" });
   const list = await creators();
   const c = (list || []).filter(function (x) { return x && x.id === o.i; })[0];
   if (!c || !OK_STAGES[c.stage]) return json(res, 401, { ok: false, error: "no_access" });
+  if (inv) {
+    // The setup link is for the first visit only: once a password exists, it stops working.
+    const A = await auths();
+    if (A && A.some(function (a) { return a && a.id === c.id && a.hash; })) return json(res, 401, { ok: false, error: "invite_used" });
+  }
   await touch(c, true);
   await promote(c);
-  return json(res, 200, { ok: true, s: sign({ k: "sess", i: c.id, e: Date.now() + SESSION_TTL }) });
+  return json(res, 200, { ok: true, invite: !!inv, s: sign({ k: "sess", i: c.id, e: Date.now() + SESSION_TTL }) });
 }
 
 async function stats(d, req, res) {
@@ -305,4 +320,4 @@ module.exports = async function (req, res) {
   } catch (e) { if (!res.headersSent) return json(res, 500, { ok: false, error: "server" }); return; }
   return json(res, 400, { ok: false, error: "bad_op" });
 };
-module.exports._sign = sign; module.exports._check = check;
+module.exports._sign = sign; module.exports._check = check; module.exports.inviteUrl = inviteUrl;

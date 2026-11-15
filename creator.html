@@ -133,6 +133,7 @@ tr:last-child td{border-bottom:0}
 .later{margin-top:10px;border:0;background:none;color:var(--muted);font:600 .88rem 'DM Sans',sans-serif;cursor:pointer;text-decoration:underline}
 .ok-note{background:#dcfce7;color:#166534;border-radius:10px;padding:10px 12px;font-weight:700;font-size:.9rem;margin-top:12px}
 .note-ap{background:#f4f8fe;border:1px solid #dbe7f6;border-radius:10px;padding:10px 12px;margin:12px 0 0;font-size:.84rem;line-height:1.5;color:#42566e;text-align:left}.note-ap a{font-weight:700;color:var(--blue)}
+.spam-note{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:10px;padding:10px 12px;font-size:.9rem;line-height:1.5;margin:0 0 6px}.auth .spam-note{color:#9a3412}
 </style>
 </head>
 <body>
@@ -174,7 +175,8 @@ tr:last-child td{border-bottom:0}
     <div class="ic" style="background:linear-gradient(135deg,var(--teal),var(--qb))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div>
     <h1>Check your email</h1>
     <p>If <b id="cr-sentto"></b> belongs to an approved creator, a sign-in link is on its way. It works for 30 minutes.</p>
-    <p class="small">Nothing after a few minutes? Check spam. No email usually means that address isn't an approved creator yet. <a href="/affiliate-program">Apply here</a>, or text us at <a href="sms:+19548251009?&body=Affiliate%20-%20">(954) 825-1009</a> with your full name and the word "Affiliate."</p>
+    <p class="spam-note"><b>Don't see it?</b> Check your <b>spam or junk folder</b>. It comes from VS Health Benefits with the subject "Your creator dashboard sign-in link."</p>
+    <p class="small">Still nothing after a few minutes? No email usually means that address isn't an approved creator yet. <a href="/affiliate-program">Apply here</a>, or text us at <a href="sms:+19548251009?&body=Affiliate%20-%20">(954) 825-1009</a> with your full name and the word "Affiliate."</p>
     <button type="button" class="out" id="cr-back" style="margin-top:6px">Use a different email</button>
   </section>
 
@@ -334,16 +336,17 @@ tr:last-child td{border-bottom:0}
     if(full)$("h-example").textContent='Example: "'+tag+': question about my payout."';
     show("v-dash");
     ACCT={username:(j.account&&j.account.username)||"",code:c.code||""};
-    if(j.account&&j.account.ok&&!j.account.hasPassword){var skip="";try{skip=sessionStorage.getItem("vs_creator_pwlater")||"";}catch(e){}if(!skip)openAcct(false);}
+    if(j.account&&j.account.ok&&!j.account.hasPassword){var skip="";try{skip=sessionStorage.getItem("vs_creator_pwlater")||"";}catch(e){}if(FIRST||!skip)openAcct(false,FIRST);}
   }
   /* ---- username + password (2026-11-15) ---- */
-  var ACCT={username:"",code:""};
-  function openAcct(change){
+  var ACCT={username:"",code:""},FIRST=false;
+  function openAcct(change,required){
     $("acct-t").textContent=change?"Change your login":"Create your login";
     $("acct-sub").textContent=change?"Pick a new username and/or password.":"Pick a username and password so you can sign in right away next time, no email needed.";
     $("ac-user").value=ACCT.username||String(ACCT.code||"").replace(/[^a-z0-9._-]/gi,"").toLowerCase();
     $("ac-pass").value="";$("ac-pass2").value="";acErr("");
-    $("ac-later").textContent=change?"Cancel":"Maybe later";
+    $("ac-later").textContent=change?"Cancel":"Maybe later";$("ac-later").hidden=!!required;
+    if(required){$("acct-t").textContent="Welcome! Create your login";$("acct-sub").textContent="You're approved. Pick a username and password; you'll use them to sign in from now on.";}
     $("acct-modal").hidden=false;setTimeout(function(){$(ACCT.username?"ac-pass":"ac-user").focus();},50);
   }
   function closeAcct(){$("acct-modal").hidden=true;}
@@ -357,7 +360,7 @@ tr:last-child td{border-bottom:0}
     if(p1!==p2){acErr("The two passwords don't match.");return;}
     var b=$("ac-save");b.disabled=true;b.textContent="Saving...";
     api({op:"setpw",s:getS(),username:u,password:p1}).then(function(j){
-      if(j.ok){ACCT.username=j.username;var f=$("acct-form");var n=document.createElement("p");n.className="ok-note";n.textContent="Saved! Next time, sign in with "+j.username+" and your password.";f.appendChild(n);setTimeout(function(){n.remove();closeAcct();},2200);}
+      if(j.ok){ACCT.username=j.username;FIRST=false;var f=$("acct-form");var n=document.createElement("p");n.className="ok-note";n.textContent="Saved! Next time, sign in with "+j.username+" and your password.";f.appendChild(n);setTimeout(function(){n.remove();closeAcct();},2200);}
       else acErr(j.error==="username_taken"?"That username is taken. Try another.":j.error==="bad_username"?"Usernames are 3-30 characters: letters, numbers, dots, dashes or underscores.":j.error==="weak_password"?"Use at least 8 characters for your password.":j._status===401?"Your session ended. Sign in again, then try once more.":"Couldn't save right now. Try again.");
     }).catch(function(){acErr("Couldn't save right now. Try again.");}).then(function(){b.disabled=false;b.textContent="Save my login";});};
   document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-eye]");if(!b)return;var i=$(b.getAttribute("data-eye"));var show=i.type==="password";i.type=show?"text":"password";b.textContent=show?"Hide":"Show";});
@@ -386,7 +389,13 @@ tr:last-child td{border-bottom:0}
 
   var m=/[#&]t=([A-Za-z0-9_\-.]+)/.exec(location.hash||"");
   if(m){try{history.replaceState(null,"",location.pathname);}catch(e){}show("v-load");
-    api({op:"verify",t:m[1]}).then(function(j){if(j.ok&&j.s){setS(j.s);load();}else{show("v-login");err("That sign-in link has expired. Enter your email for a new one.");}}).catch(function(){show("v-login");err("Couldn't sign you in. Try again.");});}
+    api({op:"verify",t:m[1]}).then(function(j){
+      if(j.ok&&j.s){setS(j.s);if(j.invite){FIRST=true;try{sessionStorage.removeItem("vs_creator_pwlater");}catch(e){}}load();return;}
+      show("v-login");
+      if(j.error==="invite_used"){tab(true);pwErr("You've already set up your login. Sign in with your username and password.");}
+      else if(j.invite){tab(false);err("Your setup link has expired (they last 48 hours). Enter the email you applied with and we'll send you a new sign-in link.");}
+      else{tab(false);err("That sign-in link has expired. Enter your email for a new one.");}
+    }).catch(function(){show("v-login");err("Couldn't sign you in. Try again.");});}
   else load();
 })();
 </script>
