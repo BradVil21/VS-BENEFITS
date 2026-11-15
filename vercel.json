@@ -2,6 +2,26 @@
   "cleanUrls": true,
   "redirects": [
     {
+      "source": "/creator-login",
+      "destination": "/creator",
+      "permanent": false
+    },
+    {
+      "source": "/creators",
+      "destination": "/creator",
+      "permanent": false
+    },
+    {
+      "source": "/creator/login",
+      "destination": "/creator",
+      "permanent": false
+    },
+    {
+      "source": "/login/creator",
+      "destination": "/creator",
+      "permanent": false
+    },
+    {
       "source": "/c/:code",
       "destination": "/?ref=:code",
       "permanent": false
