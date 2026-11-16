@@ -77,6 +77,7 @@ module.exports = async (req, res) => {
   };
 
   const out = { ok: true };
+  let welcomeJob = null; // the welcome text + email, finished before we answer
 
   // ---- 1. GoHighLevel (first, so the portal card carries the contact id) ----
   try {
@@ -128,12 +129,12 @@ module.exports = async (req, res) => {
     try {
       if (w.ok) {
         const AE = require("./_affiliate-event");
-        out.welcome = await Promise.race([
+        welcomeJob = Promise.race([
           AE.notify(Object.assign({}, rec, { id: w.id || rec.id }), "applied", "welcome"),
-          new Promise(function (r) { setTimeout(function () { r({ skipped: "timeout" }); }, 5000); }),
+          new Promise(function (r) { setTimeout(function () { r({ skipped: "timeout" }); }, 8500); }),
         ]);
       }
-    } catch (e) { out.welcome = "error"; }
+    } catch (e) { welcomeJob = Promise.resolve("error"); }
   } catch (e) { out.portal = "error"; }
 
   // ---- 3. text alert ----
@@ -144,5 +145,7 @@ module.exports = async (req, res) => {
     ]);
   } catch (e) {}
 
+  // Answer only after the welcome is sent: Vercel can freeze the function once it responds.
+  if (welcomeJob) { try { out.welcome = await welcomeJob; } catch (e) { out.welcome = "error"; } }
   res.status(200).json(out);
 };

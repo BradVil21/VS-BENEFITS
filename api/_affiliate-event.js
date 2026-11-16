@@ -30,6 +30,11 @@ const F = require("./_fs");
 
 const SITE_SHORT = "vshealthbenefits.com";
 const TRIGGER_TAG = "affiliate-update";
+// The GHL workflow "Affiliate - Send Update". Contacts are enrolled in it directly
+// through the API (2026-11-16): re-adding the trigger tag did not always start it
+// (a contact that still carried the tag, or a remove + add GHL treated as no change).
+// The tag dance below is kept only as a fallback if the direct enrollment is refused.
+const WORKFLOW_ID = process.env.GHL_AFFILIATE_WORKFLOW_ID || "fae05dc6-7063-4562-9499-fce71dbc8d31";
 const STATUS_TAG = { applied: "affiliate-applicant", approved: "affiliate-approved", referral: "affiliate-got-referral", qualified: "affiliate-referral-qualified", paid: "affiliate-paid",
   reviewing: "affiliate-reviewing", paused: "affiliate-paused", resumed: "affiliate-approved", declined: "affiliate-denied" };
 
@@ -206,7 +211,8 @@ async function notify(c, event, key) {
   if (!cid) cid = await L.upsertContact({ firstName: c.firstName, lastName: c.lastName, email: email, phone: phone, state: c.state, website_lead_stage: "Affiliate / creator" });
   if (!cid) return Object.assign(out, { skipped: "no_ghl_contact" });
   out.contactId = cid;
-  out.pipeline = await moveCard(cid, c, event);
+  // Pipeline card moves in parallel with the message, so a slow GHL search never delays the send.
+  const cardJob = moveCard(cid, c, event).catch(function () { return "error"; });
 
   const eventKey = event + ":" + (key || "") + ":" + (c.id || "");
   // Skip a repeat of the last event (double click, a lead re-syncing).
@@ -215,7 +221,7 @@ async function notify(c, event, key) {
     const f = await fieldIds();
     const cf = (g.json && g.json.contact && g.json.contact.customFields) || [];
     const last = cf.filter(function (x) { return x && x.id === f.affiliate_event_key; })[0];
-    if (last && String(last.value || "") === eventKey) return Object.assign(out, { skipped: "duplicate" });
+    if (last && String(last.value || "") === eventKey) { out.pipeline = await cardJob; return Object.assign(out, { skipped: "duplicate" }); }
   } catch (e) { /* send anyway */ }
 
   const f = await fieldIds();
@@ -227,15 +233,26 @@ async function notify(c, event, key) {
   put("affiliate_email", L.esc(msg.email).replace(/(https:\/\/[^\s<]+)/g, function (u) { return c._inviteUrl && u === L.esc(c._inviteUrl) ? '<a href="' + u + '">Set up my creator login</a>' : '<a href="' + u + '">' + u + '</a>'; }).replace(/\n/g, "<br>"));
   put("affiliate_link", c.code ? "https://www." + SITE_SHORT + "/" + normCode(c.code) : "");
   put("affiliate_event_key", eventKey);
-  if (!fields.length) return Object.assign(out, { skipped: "custom_fields_missing" });
+  if (!fields.length) { out.pipeline = await cardJob; return Object.assign(out, { skipped: "custom_fields_missing" }); }
   const u = await L.ghl("/contacts/" + cid, "PUT", { customFields: fields });
   out.fields = u.ok;
-  if (!u.ok) return Object.assign(out, { skipped: "field_write_failed_" + u.status });
+  if (!u.ok) { out.pipeline = await cardJob; return Object.assign(out, { skipped: "field_write_failed_" + u.status }); }
 
-  // Re-arm the trigger tag, then add it (a tag already on the contact doesn't fire).
-  try { await L.ghl("/contacts/" + cid + "/tags", "DELETE", { tags: [TRIGGER_TAG] }); } catch (e) {}
-  const t = await L.ghl("/contacts/" + cid + "/tags", "POST", { tags: [TRIGGER_TAG, STATUS_TAG[event], "creator"].filter(Boolean) });
-  out.sent = !!t.ok;
+  // Status tags (affiliate-approved, ...) for reporting. Not the trigger tag.
+  try { await L.ghl("/contacts/" + cid + "/tags", "POST", { tags: [STATUS_TAG[event], "creator"].filter(Boolean) }); } catch (e) {}
+
+  // 1) Enroll the contact in the workflow directly (re-entry is on, so every event runs).
+  const w = await L.ghl("/contacts/" + cid + "/workflow/" + WORKFLOW_ID, "POST", {});
+  if (w.ok) { out.sent = true; out.via = "workflow"; }
+  else {
+    // 2) Fallback: re-arm the trigger tag. Strip it, give GHL a moment, then add it.
+    out.workflowError = w.status || w.error || "failed";
+    try { await L.ghl("/contacts/" + cid + "/tags", "DELETE", { tags: [TRIGGER_TAG] }); } catch (e) {}
+    await new Promise(function (r) { setTimeout(r, 1200); });
+    const t = await L.ghl("/contacts/" + cid + "/tags", "POST", { tags: [TRIGGER_TAG] });
+    out.sent = !!t.ok; out.via = "tag";
+  }
+  out.pipeline = await cardJob;
   return out;
 }
 
