@@ -34,7 +34,24 @@ const TRIGGER_TAG = "affiliate-update";
 // through the API (2026-11-16): re-adding the trigger tag did not always start it
 // (a contact that still carried the tag, or a remove + add GHL treated as no change).
 // The tag dance below is kept only as a fallback if the direct enrollment is refused.
-const WORKFLOW_ID = process.env.GHL_AFFILIATE_WORKFLOW_ID || "fae05dc6-7063-4562-9499-fce71dbc8d31";
+// (Superseded 2026-11-16: "Affiliate - Send Update" was turned off in GHL and replaced
+// by one workflow per event, each with its own editable text + email.)
+//
+// GHL workflows, one per event. The creator is enrolled straight into the matching
+// workflow, so it runs every time, even for a contact that already carries the tag.
+// Each workflow also has a "Tag added" trigger (the tag in WF_TAG); the site never
+// adds those tags itself, so nobody is messaged twice. The tag is only used as a
+// fallback if GHL refuses the direct enrollment.
+const WF = {
+  applied:   "920044d1-0223-4914-a32f-545a300156ad", // Affiliate 1 - Applied
+  approved:  "d4b02c1e-0a43-4f73-96dd-49043522d68a", // Affiliate 2 - Approved
+  declined:  "ab1475f8-b2cd-4a82-98d5-b012637dc5f4", // Affiliate 3 - Denied
+  referral:  "a1fb2808-1378-43b6-90d8-386f33cf77b5", // Affiliate 4 - Someone Used Your Link
+  qualified: "0a5a78ec-1056-4af2-9cac-1b4eb707d405", // Affiliate 5 - Referral Qualified
+  paid:      "8e76534b-d8ea-42fc-be0d-42e0823f4e1c", // Affiliate 6 - Paid
+};
+const WF_TAG = { applied: "affiliate-applicant", approved: "affiliate-approved", declined: "affiliate-denied",
+  referral: "affiliate-got-referral", qualified: "affiliate-referral-qualified", paid: "affiliate-paid" };
 const STATUS_TAG = { applied: "affiliate-applicant", approved: "affiliate-approved", referral: "affiliate-got-referral", qualified: "affiliate-referral-qualified", paid: "affiliate-paid",
   reviewing: "affiliate-reviewing", paused: "affiliate-paused", resumed: "affiliate-approved", declined: "affiliate-denied" };
 
@@ -46,6 +63,8 @@ const FALLBACK_FIELD_IDS = {
   affiliate_email: "7MRru3sbdFQIGRe7qsjM",
   affiliate_link: "NYxqtrDFblOWfxSWq8cS",
   affiliate_event_key: "1nnPpz6d01BEsmL2ifmb",
+  // affiliate_login_link (the 48-hour setup link, used as {{contact.affiliate_login_link}}
+  // in "Affiliate 2 - Approved") is found by its key at run time.
 };
 
 // GHL pipeline "Affiliates" (created 2026-11-13). Each event moves the creator's card.
@@ -233,23 +252,25 @@ async function notify(c, event, key) {
   put("affiliate_email", L.esc(msg.email).replace(/(https:\/\/[^\s<]+)/g, function (u) { return c._inviteUrl && u === L.esc(c._inviteUrl) ? '<a href="' + u + '">Set up my creator login</a>' : '<a href="' + u + '">' + u + '</a>'; }).replace(/\n/g, "<br>"));
   put("affiliate_link", c.code ? "https://www." + SITE_SHORT + "/" + normCode(c.code) : "");
   put("affiliate_event_key", eventKey);
+  if (c._inviteUrl) put("affiliate_login_link", c._inviteUrl);
   if (!fields.length) { out.pipeline = await cardJob; return Object.assign(out, { skipped: "custom_fields_missing" }); }
   const u = await L.ghl("/contacts/" + cid, "PUT", { customFields: fields });
   out.fields = u.ok;
   if (!u.ok) { out.pipeline = await cardJob; return Object.assign(out, { skipped: "field_write_failed_" + u.status }); }
 
-  // Status tags (affiliate-approved, ...) for reporting. Not the trigger tag.
-  try { await L.ghl("/contacts/" + cid + "/tags", "POST", { tags: [STATUS_TAG[event], "creator"].filter(Boolean) }); } catch (e) {}
-
-  // 1) Enroll the contact in the workflow directly (re-entry is on, so every event runs).
-  const w = await L.ghl("/contacts/" + cid + "/workflow/" + WORKFLOW_ID, "POST", {});
+  // No workflow for this event (reviewing, paused, resumed, login) -> nothing to send.
+  const wf = WF[event];
+  if (!wf) { out.pipeline = await cardJob; return Object.assign(out, { skipped: "no_workflow" }); }
+  // 1) Enroll the contact in the event's workflow directly (re-entry is on).
+  const w = await L.ghl("/contacts/" + cid + "/workflow/" + wf, "POST", {});
   if (w.ok) { out.sent = true; out.via = "workflow"; }
   else {
-    // 2) Fallback: re-arm the trigger tag. Strip it, give GHL a moment, then add it.
+    // 2) Fallback: re-arm the workflow's trigger tag. Strip it, give GHL a moment, then add it.
     out.workflowError = w.status || w.error || "failed";
-    try { await L.ghl("/contacts/" + cid + "/tags", "DELETE", { tags: [TRIGGER_TAG] }); } catch (e) {}
+    const tag = WF_TAG[event];
+    try { await L.ghl("/contacts/" + cid + "/tags", "DELETE", { tags: [tag] }); } catch (e) {}
     await new Promise(function (r) { setTimeout(r, 1200); });
-    const t = await L.ghl("/contacts/" + cid + "/tags", "POST", { tags: [TRIGGER_TAG] });
+    const t = await L.ghl("/contacts/" + cid + "/tags", "POST", { tags: [tag, "creator"] });
     out.sent = !!t.ok; out.via = "tag";
   }
   out.pipeline = await cardJob;

@@ -84,7 +84,9 @@ module.exports = async (req, res) => {
     const cid = await L.upsertContact({ firstName: firstName, lastName: lastName, email: email, phone: phone, state: rec.state, website_lead_stage: "Affiliate / creator application" });
     if (cid) {
       out.ghl = true;
-      const tags = ["affiliate-applicant", "creator"];
+      // Not "affiliate-applicant": that tag starts the GHL "Affiliate 1 - Applied" workflow, and
+      // _affiliate-event.js enrolls the applicant in it directly (so the welcome never goes twice).
+      const tags = ["creator"];
       platforms.forEach(function (p) { tags.push("creator-" + slug(p)); });
       audience.slice(0, 3).forEach(function (a) { tags.push("aud-" + slug(a)); });
       await L.addTagsToContact(cid, tags);

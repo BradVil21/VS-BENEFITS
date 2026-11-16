@@ -13650,10 +13650,11 @@ try{(function(){
   function upd(id,fn){var a=load();a.forEach(function(x){if(x.id===id){fn(x);x.updated=Date.now();}});save(a);}
   function get(id){return load().filter(function(x){return x.id===id;})[0];}
   /* GHL messages to the creator (api/_affiliate-event.js -> workflow "Affiliate - Send Update"). Waits for the Firestore save to land first. */
-  var AFF_EV_LABEL={approved:"Approval text and email with their login link",reviewing:"\"Reviewing your application\" message",paused:"\"Link paused\" message",resumed:"\"Link live again\" message",declined:"\"Not a fit right now\" message",qualified:"Reward-earned message",paid:"Payout message"};
+  var AFF_EV_LABEL={applied:"Welcome message",referral:"\"Someone used your link\" message",approved:"Approval text and email with their login link",reviewing:"\"Reviewing your application\" message",paused:"\"Link paused\" message",resumed:"\"Link live again\" message",declined:"\"Not a fit right now\" message",qualified:"Reward-earned message",paid:"Payout message"};
   function affEvent(id,event,key){try{setTimeout(function(){fetch("/api/affiliate-event",{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,body:JSON.stringify({id:id,event:event,key:String(key||"")})}).then(function(r){return r.json();}).then(function(j){if(window.console)console.log("affiliate-event",event,j);var lbl=AFF_EV_LABEL[event]||"Message";
       if(j&&j.sent){affToast("\u2713 GoHighLevel: "+lbl+" sent.");if(typeof addNotif==="function")addNotif("lead",lbl+" sent","Texted and emailed the creator via GoHighLevel","affiliates");}
       else if(j&&j.skipped==="duplicate"){affToast("Already sent: "+lbl+".");}
+      else if(j&&j.skipped==="no_workflow"){/* no GHL workflow for this step: pipeline card still moves */}
       else affToast("\u26a0 GoHighLevel didn't send ("+((j&&(j.skipped||j.error))||"no response")+"). Try moving them again, or text them.");}).catch(function(){affToast("\u26a0 Couldn't reach GoHighLevel. Check your connection and try again.");});},2500);}catch(e){}}
   function affApproved(id){var c=get(id);if(c&&normCode(c.code)&&(c.stage==="approved"||c.stage==="active"))affEvent(id,"approved",normCode(c.code));}
   var ST=[
@@ -13806,8 +13807,9 @@ try{(function(){
     if(v==="approved"||(v==="active"&&prev!=="paused"&&prev!=="approved")){
       if(!normCode(c.code)){var code=autoCode(c);if(code)upd(id,function(x){x.code=code;stamp(x,"Link created automatically on approval: /"+code);});render();}
       if(normCode((get(id)||{}).code)){affApproved(id);msg=" GoHighLevel is sending their approval text and email with their login link.";}else msg=" Couldn't create a link code. Open them and add one to send the approval.";}
-    else if(v==="active"&&prev==="paused"){affEvent(id,"resumed",String(Date.now()));msg=" GoHighLevel will let them know their link is live again.";}
-    else if(STAGE_MSG[v]){affEvent(id,STAGE_MSG[v],String(Date.now()));msg=" GoHighLevel will text and email them.";}
+    else if(v==="active"&&prev==="paused"){affEvent(id,"resumed",String(Date.now()));msg=" No GoHighLevel message is set up for this step.";}
+    else if(v==="declined"){affEvent(id,"declined",String(Date.now()));msg=" GoHighLevel is sending the \"Affiliate 3 - Denied\" message.";}
+    else if(STAGE_MSG[v]){affEvent(id,STAGE_MSG[v],String(Date.now()));msg=" No GoHighLevel message is set up for this step.";}
     affToast("Moved to "+stMeta(v).label+"."+msg);
   }
   /* A unique link code from their suggested code or name (jane-s, jane-s2, ...). */
