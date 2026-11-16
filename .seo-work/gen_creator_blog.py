@@ -24,14 +24,14 @@ STATES = ["Alabama", "Arkansas", "Colorado", "Delaware", "Florida", "Georgia", "
 A = dict(
     title="VS Health Benefits Launches Creator & Affiliate Program (2026)",
     h1="VS Health Benefits Launches Its Creator and Affiliate Program",
-    desc="VS Health Benefits launched a creator and affiliate program. Share your link and earn a flat reward for every referral who completes a free consultation.",
+    desc="VS Health Benefits launched a creator and affiliate program. Share your link and earn a flat reward for every referral our team approves.",
     keywords=["health insurance affiliate program", "health insurance referral program", "insurance affiliate program for creators",
               "health insurance creator program", "influencer affiliate program", "VS Health Benefits creator program",
               "earn money referring health insurance"],
-    alt="VS Health Benefits Creator Program: share your link and earn a flat reward for every qualified referral",
+    alt="VS Health Benefits Creator Program: share your link and earn a flat reward for every approved referral",
     w=1600, h=700, mins=5,
-    lede="We just launched the VS Health Benefits Creator Program. If you have an audience of self-employed people, truck drivers, families or small business owners, you can now share your own personal link and earn a flat reward for every person who completes a free consultation with our team.",
-    short="The <strong>VS Health Benefits Creator Program</strong> is free to join. Approved creators get a personal link, a live dashboard and a <strong>flat reward for every referral who completes a free consultation</strong> with a licensed advisor, whether or not they buy. You never sell or explain insurance; our advisors handle that. <a href=\"/affiliate-program\">Apply here</a>.",
+    lede="We just launched the VS Health Benefits Creator Program. If you have an audience of self-employed people, truck drivers, families or small business owners, you can now share your own personal link and earn a flat reward for every referral our team approves.",
+    short="The <strong>VS Health Benefits Creator Program</strong> is free to join. Approved creators get a personal link, a live dashboard and a <strong>flat reward for every referral our team approves</strong>. You get paid once the referral is approved, whether or not they buy. You never sell or explain insurance; our advisors handle that. <a href=\"/affiliate-program\">Apply here</a>.",
     sections=[
         ("what", "What the Creator Program is",
          "<p>Most of our best clients found us the same way: someone they trust told them, <em>\"Call VS Health Benefits. They'll actually help you.\"</em> The Creator Program is how we thank the people who already do that.</p>"
@@ -43,7 +43,7 @@ A = dict(
          "<li><strong>Set up your login.</strong> Your approval message includes a personal setup link, good for 48 hours, that takes you straight into your creator dashboard to pick a username and password.</li>"
          "<li><strong>Share your link.</strong> You get one personal link, like <em>vshealthbenefits.com/yourname</em>. Anyone who opens it is credited to you for 90 days on every page of our site, including the quote form.</li>"
          "<li><strong>We help your audience.</strong> A licensed advisor compares plans for them for free, with no pressure.</li>"
-         "<li><strong>You earn your reward.</strong> When someone you referred completes a free consultation, it counts as a qualified referral. We text and email you at each step.</li>"
+         "<li><strong>You earn your reward.</strong> When someone you referred completes a free consultation with a licensed advisor, our team reviews it. Once the referral is approved, you get paid. We text and email you at each step.</li>"
          "</ol>"),
         ("who", "Who the program is for",
          "<p>The program is a fit if your audience includes people who often struggle to find good coverage:</p>"
@@ -55,15 +55,15 @@ A = dict(
          "</ul>"
          "<p>You do not need an insurance license, and you never quote prices or explain plans. That is our job.</p>"),
         ("rewards", "How rewards work",
-         "<p>You earn a <strong>flat reward for every qualified referral</strong>, meaning a person who used your link and completed a free consultation with one of our licensed advisors. Your reward does not depend on whether they buy a plan. That keeps it simple for you and fair for the people you refer.</p>"
-         "<p>Creators also move up <strong>tiers</strong> as their qualified referrals grow: <strong>Beginner</strong> (0 to 4), <strong>Rising</strong> (5 to 14), <strong>Pro</strong> (15 to 29) and <strong>Elite</strong> (30 and up). Your current tier and your progress to the next one are always on your dashboard.</p>"
-         "<p style=\"font-size:.9rem;color:var(--muted)\">Rewards are a flat amount per qualified referral and are never tied to whether anyone buys insurance (s. 626.112(8), Florida Statutes). Where state law does not allow referral rewards, we cannot pay one.</p>"),
+         "<p>You earn a <strong>flat reward for every approved referral</strong>: a person who used your link, completed a free consultation with one of our licensed advisors, and was approved by our team. Once a referral is approved, your reward is paid. It does not depend on whether they buy a plan. That keeps it simple for you and fair for the people you refer.</p>"
+         "<p>Creators also move up <strong>tiers</strong> as their approved referrals grow: <strong>Beginner</strong> (0 to 4), <strong>Rising</strong> (5 to 14), <strong>Pro</strong> (15 to 29) and <strong>Elite</strong> (30 and up). Your current tier and your progress to the next one are always on your dashboard.</p>"
+         "<p style=\"font-size:.9rem;color:var(--muted)\">Rewards are a flat amount per approved referral and are never tied to whether anyone buys insurance (s. 626.112(8), Florida Statutes). Where state law does not allow referral rewards, we cannot pay one.</p>"),
         ("dashboard", "Your creator dashboard",
          "<p>Every approved creator gets a private dashboard at <a href=\"/creator\">vshealthbenefits.com/creator</a>. Sign in with your username and password, or with a one-time email link. It shows:</p>"
          "<ul>"
          "<li>Your personal link, ready to copy or share</li>"
          "<li>Link visits over the last 30 days and all time</li>"
-         "<li>Quote requests and qualified referrals</li>"
+         "<li>Quote requests and approved referrals</li>"
          "<li>What you have earned, what is on the way and what has been paid</li>"
          "<li>Your tier and how close you are to the next one</li>"
          "</ul>"
@@ -83,7 +83,7 @@ A = dict(
     faq=[
         ("Is the VS Health Benefits Creator Program free to join?", "Yes. There is no cost to apply or to participate. Apply on our <a href=\"/affiliate-program\">Creator Program page</a>."),
         ("Do I need an insurance license to be a creator?", "No. Creators only share their personal link. Our licensed advisors handle every conversation about plans, prices and coverage."),
-        ("Do my referrals have to buy insurance for me to earn a reward?", "No. You earn a flat reward when someone you referred completes a free consultation with our team, whether or not they buy."),
+        ("Do my referrals have to buy insurance for me to earn a reward?", "No. You get paid once our team approves the referral (after they complete a free consultation with a licensed advisor), whether or not they buy."),
         ("How long is a visitor credited to my link?", "90 days. Anyone who opens your link is credited to you on every page of our site for 90 days, even if they leave and come back later."),
         ("How do I log in to my creator dashboard?", "Go to <a href=\"/creator\">vshealthbenefits.com/creator</a> and sign in with your username and password, or ask for a one-time email sign-in link. New creators set up their login from the personal link in their approval message."),
         ("How long does approval take?", "We review every application within 2 business days and text and email you our decision."),
@@ -173,7 +173,7 @@ article = (
     '    <aside class="article-sidebar">\n<a href="/blog" class="back-link">&larr; Back to Blog</a>\n'
     '<div class="sidebar-card"><h4>In This Article</h4><ul class="toc-list">%s</ul></div>\n'
     '<div class="sidebar-card" style="background:linear-gradient(135deg,var(--blue-700),var(--teal));border:none"><h4 style="color:#fff">Become a Creator</h4>'
-    '<p style="color:rgba(255,255,255,.9);font-size:.88rem;margin-bottom:14px">Get your own link and earn a flat reward for every referral who completes a free consultation.</p>'
+    '<p style="color:rgba(255,255,255,.9);font-size:.88rem;margin-bottom:14px">Get your own link and earn a flat reward for every referral our team approves.</p>'
     '<a class="btn" href="/affiliate-program" style="background:#fff;color:var(--blue-700);width:100%%;justify-content:center;font-weight:700">Apply Now</a></div>\n'
     '<div class="sidebar-card"><h4>Already a Creator?</h4><p style="font-size:.88rem;color:var(--muted);margin-bottom:10px">See your visits, referrals and rewards.</p>'
     '<a href="/creator" style="font-size:1rem;font-weight:700;color:var(--blue-700)">Creator Login &rarr;</a></div>\n'
