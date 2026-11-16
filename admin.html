@@ -13650,7 +13650,11 @@ try{(function(){
   function upd(id,fn){var a=load();a.forEach(function(x){if(x.id===id){fn(x);x.updated=Date.now();}});save(a);}
   function get(id){return load().filter(function(x){return x.id===id;})[0];}
   /* GHL messages to the creator (api/_affiliate-event.js -> workflow "Affiliate - Send Update"). Waits for the Firestore save to land first. */
-  function affEvent(id,event,key){try{setTimeout(function(){fetch("/api/affiliate-event",{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,body:JSON.stringify({id:id,event:event,key:String(key||"")})}).then(function(r){return r.json();}).then(function(j){if(window.console)console.log("affiliate-event",event,j);if(j&&j.sent&&typeof addNotif==="function")addNotif("lead",event==="approved"?"Approval + link sent":event==="qualified"?"Reward-earned message sent":"Payout message sent","Texted and emailed the creator via GHL","affiliates");}).catch(function(){});},2500);}catch(e){}}
+  var AFF_EV_LABEL={approved:"Approval text and email with their login link",reviewing:"\"Reviewing your application\" message",paused:"\"Link paused\" message",resumed:"\"Link live again\" message",declined:"\"Not a fit right now\" message",qualified:"Reward-earned message",paid:"Payout message"};
+  function affEvent(id,event,key){try{setTimeout(function(){fetch("/api/affiliate-event",{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,body:JSON.stringify({id:id,event:event,key:String(key||"")})}).then(function(r){return r.json();}).then(function(j){if(window.console)console.log("affiliate-event",event,j);var lbl=AFF_EV_LABEL[event]||"Message";
+      if(j&&j.sent){affToast("\u2713 GoHighLevel: "+lbl+" sent.");if(typeof addNotif==="function")addNotif("lead",lbl+" sent","Texted and emailed the creator via GoHighLevel","affiliates");}
+      else if(j&&j.skipped==="duplicate"){affToast("Already sent: "+lbl+".");}
+      else affToast("\u26a0 GoHighLevel didn't send ("+((j&&(j.skipped||j.error))||"no response")+"). Try moving them again, or text them.");}).catch(function(){affToast("\u26a0 Couldn't reach GoHighLevel. Check your connection and try again.");});},2500);}catch(e){}}
   function affApproved(id){var c=get(id);if(c&&normCode(c.code)&&(c.stage==="approved"||c.stage==="active"))affEvent(id,"approved",normCode(c.code));}
   var ST=[
     {id:"applied",label:"New application",color:"#2563eb"},
@@ -13799,11 +13803,17 @@ try{(function(){
   function setStage(id,v){var c=get(id);if(!c)return;var prev=c.stage||"applied";if(prev===v)return;
     upd(id,function(x){x.stage=v;stamp(x,"Status: "+stMeta(v).label);});render();badge();
     var msg="";
-    if(v==="approved"||(v==="active"&&prev!=="paused"&&prev!=="approved")){if(normCode(c.code)){affApproved(id);msg=" GoHighLevel will text and email them their link.";}else msg=" Add their link code to send the approval text and email.";}
+    if(v==="approved"||(v==="active"&&prev!=="paused"&&prev!=="approved")){
+      if(!normCode(c.code)){var code=autoCode(c);if(code)upd(id,function(x){x.code=code;stamp(x,"Link created automatically on approval: /"+code);});render();}
+      if(normCode((get(id)||{}).code)){affApproved(id);msg=" GoHighLevel is sending their approval text and email with their login link.";}else msg=" Couldn't create a link code. Open them and add one to send the approval.";}
     else if(v==="active"&&prev==="paused"){affEvent(id,"resumed",String(Date.now()));msg=" GoHighLevel will let them know their link is live again.";}
     else if(STAGE_MSG[v]){affEvent(id,STAGE_MSG[v],String(Date.now()));msg=" GoHighLevel will text and email them.";}
     affToast("Moved to "+stMeta(v).label+"."+msg);
   }
+  /* A unique link code from their suggested code or name (jane-s, jane-s2, ...). */
+  function autoCode(c){var taken={};load().forEach(function(x){if(x.id!==c.id&&normCode(x.code))taken[normCode(x.code)]=1;});
+    var base=normCode(c.suggestedCode)||normCode(String(c.firstName||"").trim().replace(/\s+/g,"-")+(c.lastName?"-"+String(c.lastName).trim().charAt(0):""))||normCode(String(c.handle||"").replace(/^@/,""))||"creator";
+    base=base.replace(/^-+|-+$/g,"").slice(0,30)||"creator";var code=base,n=2;while(taken[code])code=base+(n++);return code;}
   function affToast(m){var t=$("aff-toast");if(!t){t=document.createElement("div");t.id="aff-toast";document.body.appendChild(t);}t.textContent=m;t.className="on";clearTimeout(affToast._t);affToast._t=setTimeout(function(){t.className="";},3200);}
   function stamp(c,txt){var s=new Date().toLocaleString(undefined,{month:"numeric",day:"numeric",hour:"numeric",minute:"2-digit"});c.notes=("["+s+"] "+txt+"\n"+(c.notes||""));}
   function copy(text,btn){
