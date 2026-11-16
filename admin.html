@@ -13711,6 +13711,8 @@ try{(function(){
     return {v7:v7,v30:v30,all:Number(x.total)||0,lastClick:last,spark:spark,lastLogin:Number(a.lastLogin)||0,logins:Number(a.logins)||0,lastSeen:Number(a.lastSeen)||0};
   }
   function ago(t){if(!t)return "Never";var m=Math.round((Date.now()-t)/60000);if(m<2)return "Just now";if(m<60)return m+" min ago";var h=Math.round(m/60);if(h<24)return h+"h ago";var d=Math.round(h/24);if(d<31)return d+"d ago";return d8(t);}
+  function exact(t){return t?new Date(t).toLocaleString("en-US",{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"}):"Never signed in";}
+  function signedIn(t){return t?"Signed in "+ago(t).replace(/^Just now$/,"just now"):"Never signed in";}
   function agoDay(k){if(!k)return "None yet";var p=k.split("-");return ago(new Date(+p[0],+p[1]-1,+p[2],12).getTime()).replace(/^\d+h ago$|^Just now$|^\d+ min ago$/,"Today");}
 
   /* ---- nav + panel ---- */
@@ -13753,7 +13755,7 @@ try{(function(){
       return '<div class="afb-card'+(isNew?" new":"")+'" draggable="true" data-aff="'+esc(c.id)+'">'
         +'<div class="afb-top"><span class="afb-av">'+esc(iniOf(nm))+'</span><div class="afb-who"><b>'+esc(nm)+'</b><small>'+(platIcons(c.platforms)||"")+(c.followers?'<em>'+esc(c.followers)+'</em>':'')+'</small></div></div>'
         +'<div class="afb-stats"><span title="Quote requests"><b>'+s.leads+'</b> leads</span><span title="Qualified referrals"><b>'+s.q+'</b> qual.</span>'+(s.owed?'<span class="owe" title="Owed"><b>'+money2(s.owed)+'</b></span>':'')+(tr?'<span title="Link visits, last 30 days"><b>'+tr.v30+'</b> visits</span>':'')+'</div>'
-        +'<div class="afb-ft">'+(c.code?'<button type="button" class="afb-link" data-aff-copy="'+esc(linkFor(c.code))+'" title="Copy their link">/'+esc(c.code)+'</button>':'<span class="afb-nolink">No link yet</span>')+'<span class="afb-when" title="'+(tr?"Last dashboard login":"Applied")+'">'+esc(tr?("Login "+ago(tr.lastLogin)):d8(c.created))+'</span></div>'
+        +'<div class="afb-ft">'+(c.code?'<button type="button" class="afb-link" data-aff-copy="'+esc(linkFor(c.code))+'" title="Copy their link">/'+esc(c.code)+'</button>':'<span class="afb-nolink">No link yet</span>')+'<span class="afb-when" title="'+esc(tr?("Last sign-in: "+exact(tr.lastLogin)):"Applied")+'">'+esc(tr?signedIn(tr.lastLogin):d8(c.created))+'</span></div>'
         +'<div class="afb-mv">'+stSel(c,"afb-sel")+'</div>'
         +'</div>';}
     var view="";
@@ -13765,9 +13767,9 @@ try{(function(){
           +'<td>'+stSel(c,"aft-sel")+'</td><td>'+(platIcons(c.platforms)||"")+(c.followers?' <small style="display:inline">'+esc(c.followers)+'</small>':'')+'</td>'
           +'<td>'+(c.code?'<button type="button" class="af-copy" data-aff-copy="'+esc(linkFor(c.code))+'">/'+esc(c.code)+'</button>':'<button type="button" class="af-mk" data-aff-open="'+esc(c.id)+'">+ Link</button>')+'</td>'
           +'<td class="num">'+(tr?tr.v30:"-")+'</td><td class="num">'+s.leads+'</td><td class="num">'+s.q+'</td><td class="num'+(s.owed?" owe":"")+'">'+money2(s.owed)+'</td>'
-          +'<td>'+esc(tr?ago(tr.lastLogin):"-")+'</td><td>'+esc(d8(c.created))+'</td></tr>';}).join("");
+          +'<td title="'+esc(tr?exact(tr.lastLogin):"")+'">'+esc(tr?(tr.lastLogin?ago(tr.lastLogin):"Never"):"-")+'</td><td>'+esc(d8(c.created))+'</td></tr>';}).join("");
       var th=function(k,l,num){return '<th'+(num?' class="num"':'')+'><button type="button" class="aft-sort'+(sk===k?" on":"")+'" data-aff-sort="'+k+'">'+l+(sk===k?(dir===1?" ▲":" ▼"):"")+'</button></th>';};
-      view=rows?'<div class="af-card"><div class="af-tw"><table class="af-t aft"><thead><tr>'+th("name","Creator")+th("stage","Stage")+'<th>Platforms</th><th>Link</th>'+th("visits","Visits 30d",1)+th("leads","Leads",1)+th("q","Qualified",1)+th("owed","Owed",1)+th("login","Last login")+th("created","Applied")+'</tr></thead><tbody>'+rows+'</tbody></table></div></div>':"";
+      view=rows?'<div class="af-card"><div class="af-tw"><table class="af-t aft"><thead><tr>'+th("name","Creator")+th("stage","Stage")+'<th>Platforms</th><th>Link</th>'+th("visits","Visits 30d",1)+th("leads","Leads",1)+th("q","Qualified",1)+th("owed","Owed",1)+th("login","Last sign-in")+th("created","Applied")+'</tr></thead><tbody>'+rows+'</tbody></table></div></div>':"";
     }else{
       view='<div class="afb">'+ST.map(function(t){var col=L.filter(function(x){return (x.c.stage||"applied")===t.id;});
         return '<div class="afb-col" data-aff-col="'+t.id+'" style="--sc:'+t.color+'"><div class="afb-h"><span class="afb-dot"></span><b>'+esc(t.label)+'</b><span class="afb-n">'+col.length+'</span></div><div class="afb-list">'+(col.map(card).join("")||'<div class="afb-empty">Drop here</div>')+'</div></div>';}).join("")+'</div>';
@@ -13869,7 +13871,7 @@ try{(function(){
       /* notes */
       +(code?(function(tr){var mx=Math.max.apply(null,tr.spark.concat([1]));var bars=tr.spark.map(function(n,i){return '<i style="height:'+Math.max(2,Math.round(n/mx*100))+'%" title="'+n+' visit'+(n===1?"":"s")+'"></i>';}).join("");var conv=tr.all?Math.round(s.leads/tr.all*1000)/10:0;
         return '<div class="af-sec af-actsec"><div class="af-sech"><b>Activity</b><small style="color:#7b8aa0">Traffic and sign-ins</small></div>'
-        +'<div class="af-actg"><div><small>Last login</small><b>'+esc(ago(tr.lastLogin))+'</b></div><div><small>Logins</small><b>'+tr.logins+'</b></div><div><small>Last dashboard visit</small><b>'+esc(ago(tr.lastSeen))+'</b></div>'
+        +'<div class="af-actg"><div><small>Last sign-in</small><b>'+esc(ago(tr.lastLogin))+'</b>'+(tr.lastLogin?'<small style="display:block;opacity:.7">'+esc(exact(tr.lastLogin))+'</small>':'')+'</div><div><small>Logins</small><b>'+tr.logins+'</b></div><div><small>Last dashboard visit</small><b>'+esc(ago(tr.lastSeen))+'</b></div>'
         +'<div><small>Link visits (7d)</small><b>'+tr.v7+'</b></div><div><small>Link visits (30d)</small><b>'+tr.v30+'</b></div><div><small>Link visits (all time)</small><b>'+tr.all+'</b></div>'
         +'<div><small>Last link visit</small><b>'+esc(agoDay(tr.lastClick))+'</b></div><div><small>Quote requests</small><b>'+s.leads+'</b></div><div><small>Visit to quote</small><b>'+(tr.all?conv+"%":"-")+'</b></div></div>'
         +'<div class="af-spark" aria-label="Link visits per day, last 30 days">'+bars+'</div><small style="display:block;color:#7b8aa0;font-size:11px;margin-top:4px">Link visits per day, last 30 days</small></div>';})(traffic(c)):'')
