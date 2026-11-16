@@ -63,8 +63,8 @@ const FALLBACK_FIELD_IDS = {
   affiliate_email: "7MRru3sbdFQIGRe7qsjM",
   affiliate_link: "NYxqtrDFblOWfxSWq8cS",
   affiliate_event_key: "1nnPpz6d01BEsmL2ifmb",
-  // affiliate_login_link (the 48-hour setup link, used as {{contact.affiliate_login_link}}
-  // in "Affiliate 2 - Approved") is found by its key at run time.
+  // The 48-hour setup link, used as {{contact.affiliate_login_link}} in "Affiliate 2 - Approved".
+  affiliate_login_link: "6uyUt60Lb0waaoztOuIZ",
 };
 
 // GHL pipeline "Affiliates" (created 2026-11-13). Each event moves the creator's card.
