@@ -33,19 +33,31 @@ VIDEO = open(".seo-work/yt_embed_snippet.html", encoding="utf-8").read()
 
 H1 = "Your Health Insurance Went Up Again. Here&rsquo;s How to Stop Overpaying in 2027"
 A = dict(
-    title="Health Insurance Premiums Rising in 2027? How to Stop Overpaying",
+    title="Health Insurance Premiums 2027: Paying Too Much? How to Pay Less",
     h1=H1,
-    desc="Premiums are up again for 2027, with a 15% median proposed Marketplace increase after 20% in 2026. Signs you're overpaying, 7 ways to pay less, and a free rate review.",
-    keywords=["health insurance premiums rising 2027", "why is my health insurance so expensive", "paying too much for health insurance",
-              "health insurance premium increase 2027", "how to lower health insurance premiums", "health insurance went up"],
-    alt="Woman reading a health insurance renewal notice with a higher premium",
+    desc="Health insurance premiums are rising again in 2027: a 15% median Marketplace increase after 20% in 2026. Why it's so expensive, signs you're overpaying, and 7 ways to pay less.",
+    keywords=["health insurance premiums 2027", "health insurance premiums rising", "paying too much for health insurance",
+              "why is health insurance so expensive", "will health insurance go up in 2027", "health insurance premium increase 2027",
+              "how to lower health insurance premiums", "average health insurance premium 2027", "health insurance too expensive",
+              "cheaper health insurance 2027"],
+    alt="Woman reading a 2027 health insurance premium increase notice",
     mins=7,
     lede="If your renewal letter made your stomach drop, you are not alone. Health insurance premiums are rising for a second straight year, and health care costs have become one of the biggest money worries for American families. The good news: a lot of people paying the most are also paying more than they need to. Here is what is going on, how to tell if you are overpaying, and how to get a lower price before the December 15 deadline.",
     short="Marketplace insurers proposed a <strong>15% median increase for 2027</strong>, after a 20% jump in 2026, and job-based family coverage now averages <strong>$28,303 a year</strong>. Many people overpay because they auto-renew, use an old income figure, stay on COBRA, or pay full price without checking for help. <a href=\"/quote\">A free quote</a> shows what you could pay instead.",
     sections=[
         ("video", "Watch: Americans are paying more for health insurance",
          "<p>The National Desk&rsquo;s Fact Check Team recently covered how rising health care costs are squeezing families and why the issue keeps coming up in national politics. It is a quick, useful overview of the pressure people are feeling right now.</p>" + VIDEO),
-        ("how-much", "How much are premiums going up?",
+        ("how-much", "How much are health insurance premiums going up in 2027?",
+         "<div class=\"vs-tw\"><table class=\"vs-t\" style=\"min-width:0\"><thead><tr><th>2027 health insurance cost</th><th style=\"white-space:nowrap\">Number</th></tr></thead><tbody>"
+         "<tr><td>Median proposed Marketplace premium increase, 2027</td><td style=\"white-space:nowrap\"><strong>15%</strong></td></tr>"
+         "<tr><td>Median Marketplace premium increase, 2026</td><td style=\"white-space:nowrap\">20%</td></tr>"
+         "<tr><td>Average Florida Marketplace increase, 2027 (before subsidies)</td><td style=\"white-space:nowrap\">About 10%</td></tr>"
+         "<tr><td>Benchmark silver plan, age 40, before subsidies</td><td style=\"white-space:nowrap\">About $704/month</td></tr>"
+         "<tr><td>Average job-based family premium, 2026</td><td style=\"white-space:nowrap\">$28,303/year</td></tr>"
+         "<tr><td>What workers pay toward family coverage, 2026</td><td style=\"white-space:nowrap\">$7,471/year<br>(up 9%)</td></tr>"
+         "<tr><td>Out-of-pocket maximum, one person, 2027</td><td style=\"white-space:nowrap\">$12,000</td></tr>"
+         "</tbody></table></div>"
+         "<p><strong>Yes, health insurance is going up again in 2027.</strong> Here is what that looks like:</p>"
          "<ul>"
          "<li><strong>Marketplace (Obamacare) plans:</strong> across 276 insurers in all 50 states and DC, the median proposed increase for 2027 is <strong>15%</strong>, according to KFF. That comes on top of a <strong>20%</strong> median increase in 2026. If it holds, typical Marketplace premiums will be up about a third in just two years.</li>"
          "<li><strong>Florida:</strong> final 2027 Marketplace rates rose about <strong>10%</strong> on average before subsidies, and some plans rose far more.</li>"
@@ -53,7 +65,7 @@ A = dict(
          "<li><strong>Out-of-pocket maximum:</strong> the 2027 limit for one person on a Marketplace plan is <strong>$12,000</strong>, up from $10,600.</li>"
          "</ul>"
          "<p>Premiums are rising faster than wages and general inflation, which is why so many households feel it.</p>"),
-        ("why", "Why your bill keeps climbing",
+        ("why", "Why is health insurance so expensive?",
          "<ul>"
          "<li><strong>The extra tax credits ended.</strong> The enhanced ACA subsidies expired at the end of 2025. Households earning above 400% of the poverty level (about $63,840 for one person) no longer get any help on the Marketplace.</li>"
          "<li><strong>Medical and drug costs are up.</strong> Insurers point to higher hospital prices and expensive specialty drugs.</li>"
@@ -62,7 +74,7 @@ A = dict(
          "<li><strong>Auto-renewal.</strong> Auto-renewing keeps your plan, not your price. Your tax credit can also shrink if your benchmark plan changed.</li>"
          "</ul>"
          "<p>More detail: <a href=\"/blog/why-did-my-health-insurance-go-up-2027\">7 reasons your health insurance went up in 2027</a>.</p>"),
-        ("signs", "Signs you are paying too much",
+        ("signs", "Am I paying too much for health insurance? 6 signs",
          "<p>You are probably overpaying if any of these sound familiar:</p>"
          "<ul>"
          "<li>Your 2027 renewal went up and you have not compared other plans</li>"
@@ -73,7 +85,7 @@ A = dict(
          "<li>You earn just over the subsidy cliff and only looked at Marketplace plans</li>"
          "</ul>"
          "<p>If two or more apply, a review almost always turns up something.</p>"),
-        ("lower", "7 ways people are lowering their premiums for 2027",
+        ("lower", "How to lower your health insurance premium: 7 ways people pay less in 2027",
          "<ol>"
          "<li><strong>Update your income.</strong> Your tax credit is based on what you expect to earn in 2027. For self-employed people, that is <a href=\"/blog/what-income-counts-for-aca-subsidies\">net income after business expenses</a>, which is often lower than people think.</li>"
          "<li><strong>Re-shop every year.</strong> The cheapest plan for you changes when insurers change prices. Compare before you let it renew.</li>"
@@ -83,10 +95,10 @@ A = dict(
          "<li><strong>Move family members off an expensive work plan.</strong> When family coverage through work costs too much, your spouse and kids may qualify for Marketplace help on their own.</li>"
          "<li><strong>Small business owner?</strong> An ICHRA or a different group plan can soften a big renewal. Start with a <a href=\"/small-business-renewal-review\">small business renewal review</a>.</li>"
          "</ol>"),
-        ("review", "Get a lower-cost quote",
+        ("review", "Get a cheaper health insurance quote for 2027",
          "<p>Fill out our quick quote form. A licensed advisor prices every Marketplace and private plan for your ZIP, rechecks your tax credit, and checks your doctors and prescriptions. If your current plan is still your best deal, we will tell you. It is free, and carriers pay us, not you.</p>"
          + cta("See if you can pay less for 2027", "Takes about 2 minutes. Free, no obligation. English y Espa&ntilde;ol.")),
-        ("deadlines", "Deadlines to know",
+        ("deadlines", "2027 open enrollment deadlines",
          "<ul>"
          "<li><strong>December 15, 2026:</strong> last day to pick a plan that starts January 1, 2027.</li>"
          "<li><strong>January 15, 2027:</strong> Open Enrollment ends in Florida and most HealthCare.gov states. Plans picked after December 15 start February 1.</li>"
@@ -95,6 +107,8 @@ A = dict(
          "<p>See every state&rsquo;s dates in our <a href=\"/blog/aca-open-enrollment-2027-guide\">2027 Open Enrollment guide</a>.</p>"),
     ],
     faq=[
+        ("Will health insurance go up in 2027?", "Yes. Marketplace insurers proposed a median 15% premium increase for 2027 after a 20% increase in 2026, and job-based premiums keep rising too. Your own price depends on your plan, ZIP code, age and tax credit, so compare before you renew."),
+        ("How much is health insurance per month in 2027?", "A benchmark silver Marketplace plan costs about $704 a month for a 40-year-old before subsidies. Many people pay far less after tax credits, so get a quote based on your income and ZIP code."),
         ("Why did my health insurance go up so much in 2027?", "Insurers cite higher medical and drug costs, a smaller and sicker risk pool, and the end of the enhanced ACA tax credits after 2025. If your plan was replaced or your tax credit changed, your price can jump even more."),
         ("How do I know if I'm paying too much for health insurance?", "Compare what you pay to what a similar plan costs for your ZIP and income. Common signs are auto-renewing without shopping, paying for COBRA, using an old income figure, or paying full price without checking for a tax credit."),
         ("Can I switch health insurance plans because the price went up?", "Yes, during Open Enrollment (November 1 to January 15 in most states). Outside that window you generally need a qualifying life event."),
@@ -197,6 +211,8 @@ article = (
 b = s.index('<nav class="breadcrumb"'); e = s.index("</main>", b) + len("</main>")
 s = s[:b] + article + s[e:]
 s = s.replace(OLD_SLUG, SLUG).replace("&amp;niche=trucking", "").replace("&niche=trucking", "")
+if 'id="vs-post-tbl"' not in s:
+    s = s.replace("</head>", re.search(r'<style id="vs-post-tbl">.*?</style>', rr, re.S).group(0) + "\n</head>", 1)
 assert "Team Truck Drivers" not in s, "template text leaked"
 open("blog/%s.html" % SLUG, "w", encoding="utf-8").write(s)
 print("wrote blog/%s.html" % SLUG, len(s))
