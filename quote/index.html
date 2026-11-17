@@ -833,11 +833,22 @@ body{background-color:#f7faff;background-image:radial-gradient(1100px 560px at 5
   <!-- Headline stays on every step (Nov 6 2026) -->
   <div class="start-card qs-persist" id="qsHero">
       <div class="qs-hero">
-        <div class="qs-eyebrow">Free plan review &middot; Licensed advisors</div>
-        <h1>Are you paying too much for health insurance?</h1>
+        <div class="qs-eyebrow" id="qsEyebrow">Free quote &middot; Licensed advisors</div>
+        <h1 id="qsH1">Get your free health insurance quote</h1>
         <p class="sub">A licensed advisor compares plans from top carriers for you. No cost. No obligation.</p>
       </div>
   </div>
+  <script>
+  /* Headline by where the visitor came from (2026-11-17). "Paying too much?" only for visitors
+     sent from the price-increase / overpaying pages (?from=<that page>); everyone else gets the general headline. */
+  (function(){try{
+    var q=new URLSearchParams(location.search), from=(q.get('from')||'').toLowerCase(), niche=(q.get('niche')||'').toLowerCase();
+    var h=document.getElementById('qsH1'), e=document.getElementById('qsEyebrow'); if(!h) return;
+    if(/premium|overpay|too-much|go-up|went-up|rate-increase|cobra|lower-health|cost-2026|rising/.test(from)){
+      h.textContent='Are you paying too much for health insurance?'; if(e) e.innerHTML='Free plan review &middot; Licensed advisors';
+    }
+  }catch(err){}})();
+  </script>
 
   <!-- PANEL 0: CHOOSE TYPE -->
   <div class="panel active" id="panel-0">

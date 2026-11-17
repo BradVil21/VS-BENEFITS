@@ -26,7 +26,7 @@ RR_JS = (RR_JS.replace("source:'premium-increase-review'", "source:'blog-premium
               .replace("var notes='Overpaying rate review. Covered: '", "var notes='Overpaying rate review (premiums rising blog). Covered: '"))
 assert "blog-premiums-rising-2027" in RR_JS and "blog-premiums-rising'" in RR_JS
 
-def cta(h, p, href="/quote", btn="Get my free quote &rarr;"):
+def cta(h, p, href="/quote?from=blog/health-insurance-premiums-rising-2027", btn="Get my free quote &rarr;"):
     return '<div class="cta-block"><h3>%s</h3><p>%s</p><a class="btn btn-teal" href="%s">%s</a></div>' % (h, p, href, btn)
 
 VIDEO = open(".seo-work/yt_embed_snippet.html", encoding="utf-8").read()
@@ -43,7 +43,7 @@ A = dict(
     alt="Woman reading a 2027 health insurance premium increase notice",
     mins=7,
     lede="If your renewal letter made your stomach drop, you are not alone. Health insurance premiums are rising for a second straight year, and health care costs have become one of the biggest money worries for American families. The good news: a lot of people paying the most are also paying more than they need to. Here is what is going on, how to tell if you are overpaying, and how to get a lower price before the December 15 deadline.",
-    short="Marketplace insurers proposed a <strong>15% median increase for 2027</strong>, after a 20% jump in 2026, and job-based family coverage now averages <strong>$28,303 a year</strong>. Many people overpay because they auto-renew, use an old income figure, stay on COBRA, or pay full price without checking for help. <a href=\"/quote\">A free quote</a> shows what you could pay instead.",
+    short="Marketplace insurers proposed a <strong>15% median increase for 2027</strong>, after a 20% jump in 2026, and job-based family coverage now averages <strong>$28,303 a year</strong>. Many people overpay because they auto-renew, use an old income figure, stay on COBRA, or pay full price without checking for help. <a href=\"/quote?from=blog/health-insurance-premiums-rising-2027\">A free quote</a> shows what you could pay instead.",
     sections=[
         ("video", "Watch: Americans are paying more for health insurance",
          "<p>The National Desk&rsquo;s Fact Check Team recently covered how rising health care costs are squeezing families and why the issue keeps coming up in national politics. It is a quick, useful overview of the pressure people are feeling right now.</p>" + VIDEO),
@@ -121,7 +121,7 @@ A = dict(
         ("KFF: Health Care in the 2026 Midterm Election", "https://www.kff.org/public-opinion/health-care-in-the-2026-midterm-election/"),
         ("The National Desk (TND): Americans are paying more for health insurance (YouTube, Nov. 10, 2026)", "https://www.youtube.com/watch?v=" + YT),
     ],
-    related=[("Free quote", "Get a Free 2027 Health Insurance Quote", "/quote"),
+    related=[("Free quote", "Get a Free 2027 Health Insurance Quote", "/quote?from=blog/health-insurance-premiums-rising-2027"),
              ("Calculator", "2027 ACA Subsidy Calculator", "/aca-subsidy-calculator"),
              ("Guide", "How to Lower Your Health Insurance Premium in 2027", "/blog/how-to-lower-health-insurance-premiums-2027")],
 )
@@ -200,7 +200,7 @@ article = (
     '<div class="sidebar-card"><h4>In This Article</h4><ul class="toc-list">%s</ul></div>\n'
     '<div class="sidebar-card" style="background:linear-gradient(135deg,var(--blue-700),var(--teal));border:none"><h4 style="color:#fff">Paying too much?</h4>'
     '<p style="color:rgba(255,255,255,.9);font-size:.88rem;margin-bottom:14px">Get a free 2027 quote from a licensed advisor.</p>'
-    '<a class="btn" href="/quote" style="background:#fff;color:var(--blue-700);width:100%%;justify-content:center;font-weight:700">Get My Free Quote</a></div>\n'
+    '<a class="btn" href="/quote?from=blog/health-insurance-premiums-rising-2027" style="background:#fff;color:var(--blue-700);width:100%%;justify-content:center;font-weight:700">Get My Free Quote</a></div>\n'
     '<div class="sidebar-card"><h4>Prefer to talk?</h4><p style="font-size:.88rem;color:var(--muted);margin-bottom:10px">Call or text a licensed advisor. English y Espa&ntilde;ol.</p>'
     '<a href="tel:+19548251009" style="font-size:1.1rem;font-weight:700;color:var(--blue-700)">(954) 825-1009</a></div>\n'
     '</aside>\n  </div>\n</main>'
