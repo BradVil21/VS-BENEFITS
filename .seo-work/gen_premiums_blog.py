@@ -213,6 +213,8 @@ s = s[:b] + article + s[e:]
 s = s.replace(OLD_SLUG, SLUG).replace("&amp;niche=trucking", "").replace("&niche=trucking", "")
 if 'id="vs-post-tbl"' not in s:
     s = s.replace("</head>", re.search(r'<style id="vs-post-tbl">.*?</style>', rr, re.S).group(0) + "\n</head>", 1)
+s = re.sub(r'<section class="section vs-guide-sec".*?</section>', '', s, count=1, flags=re.S)
+s = s.replace('<script src="/vs-guide.js" defer></script>', '')
 assert "Team Truck Drivers" not in s, "template text leaked"
 open("blog/%s.html" % SLUG, "w", encoding="utf-8").write(s)
 print("wrote blog/%s.html" % SLUG, len(s))

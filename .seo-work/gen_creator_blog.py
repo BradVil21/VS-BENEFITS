@@ -188,6 +188,8 @@ b = s.index('<nav class="breadcrumb"')
 e = s.index("</main>", b) + len("</main>")
 s = s[:b] + article + s[e:]
 s = s.replace(OLD_SLUG, SLUG).replace("&amp;niche=trucking", "").replace("&niche=trucking", "")
+s = re.sub(r'<section class="section vs-guide-sec".*?</section>', '', s, count=1, flags=re.S)
+s = s.replace('<script src="/vs-guide.js" defer></script>', '')
 assert "Team Truck Drivers" not in s, "template text leaked"
 open("blog/%s.html" % SLUG, "w", encoding="utf-8").write(s)
 print("wrote blog/%s.html" % SLUG)
