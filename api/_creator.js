@@ -75,6 +75,16 @@ function refOf(l) {
   if (!r && a && a.source) { const m = /^Partner\s+\S+\s+(.+)$/.exec(String(a.source)); if (m) r = m[1]; }
   return normCode(r);
 }
+// Referral name for the creator: first name + last initial only. Never contact
+// details or anything about coverage.
+function shortName(first, last, full) {
+  let f = String(first || "").trim(), l = String(last || "").trim();
+  if (!f && full) { const p = String(full).trim().split(/\s+/); f = p[0] || ""; l = l || p.slice(1).join(" "); }
+  const cap = function (w) { return w ? w.charAt(0).toUpperCase() + w.slice(1).toLowerCase() : ""; };
+  f = cap(f.split(/\s+/)[0]).slice(0, 24);
+  const li = l ? l.replace(/[^A-Za-z]/g, "").charAt(0).toUpperCase() : "";
+  return f ? f + (li ? " " + li + "." : "") : "Referral";
+}
 function day(ts) { return new Date(ts).toLocaleDateString("en-CA", { timeZone: "America/New_York" }); }
 
 async function creators() { const r = await F.readStore("affiliates"); return r.ok ? (r.items || []) : null; }
@@ -250,15 +260,17 @@ async function stats(d, req, res) {
   await promote(c); // creators who were already signed in before this change
 
   const list = [];
-  (ind.items || []).forEach(function (l) { if (l && refOf(l) === code) list.push({ key: "ind:" + l.id, at: Number(l.created) || 0 }); });
-  (biz.items || []).forEach(function (b) { if (b && refOf(b) === code) list.push({ key: "biz:" + b.id, at: Number(b.created) || 0 }); });
+  (ind.items || []).forEach(function (l) { if (l && refOf(l) === code) list.push({ key: "ind:" + l.id, at: Number(l.created) || 0, name: shortName(l.firstName, l.lastName, l.name), dead: l.stage === "dead" }); });
+  (biz.items || []).forEach(function (b) { if (b && refOf(b) === code) list.push({ key: "biz:" + b.id, at: Number(b.created) || 0, name: shortName(b.firstName, b.lastName, b.contact || b.company), dead: b.stage === "dead" }); });
   list.sort(function (a, b) { return b.at - a.at; });
   let q = 0, unpaid = 0, paidN = 0;
   const referrals = list.map(function (x, i) {
     const r = refs[x.key];
-    const st = r && r.q ? (r.paid ? "paid" : "qualified") : "requested";
+    // What the creator sees (2026-11-18): approved/paid when Bradley marks it qualified,
+    // "not_selected" when the lead is moved to Dead Lead, "reviewing" when he flags it.
+    const st = r && r.q ? (r.paid ? "paid" : "approved") : (x.dead ? "not_selected" : (r && r.rv ? "reviewing" : "requested"));
     if (r && r.q) { q++; if (r.paid) paidN++; else unpaid++; }
-    return { n: list.length - i, date: x.at ? day(x.at) : "", status: st, type: x.key.slice(0, 3) === "biz" ? "Business" : "Individual" };
+    return { n: list.length - i, name: x.name, date: x.at ? day(x.at) : "", status: st, type: x.key.slice(0, 3) === "biz" ? "Business" : "Individual" };
   });
   const payouts = (c.payouts || []).slice().sort(function (a, b) { return (b.at || 0) - (a.at || 0); })
     .map(function (p) { return { date: p.at ? day(p.at) : "", amount: Number(p.amount) || 0, count: (p.keys || []).length, how: String(p.note || "").slice(0, 40) }; });

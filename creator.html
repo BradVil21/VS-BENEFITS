@@ -75,7 +75,9 @@ th{text-align:left;font-size:.72rem;letter-spacing:.06em;text-transform:uppercas
 td{padding:10px 6px;border-bottom:1px solid #f0f3f8;white-space:nowrap}
 tr:last-child td{border-bottom:0}
 .pill{display:inline-block;font-size:.78rem;font-weight:700;border-radius:999px;padding:3px 10px;white-space:nowrap}
-.p-requested{background:#eef2f8;color:#42566e}.p-qualified{background:#dbeafe;color:#1d4ed8}.p-paid{background:#dcfce7;color:#166534}
+.p-requested{background:#eef2f8;color:#42566e}.p-reviewing{background:#fef3c7;color:#92400e}.p-approved,.p-qualified{background:#dbeafe;color:#1d4ed8}.p-paid{background:#dcfce7;color:#166534}.p-not_selected{background:#f1f5f9;color:#64748b}
+.rf-f{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}.rf-f button{font:inherit;font-size:.78rem;font-weight:700;border:1px solid #dbe3ee;background:#fff;color:#42566e;border-radius:999px;padding:5px 11px;cursor:pointer}.rf-f button.on{background:#0f2b55;border-color:#0f2b55;color:#fff}.rf-f button i{font-style:normal;opacity:.7;margin-left:4px}
+.rf-nm{font-weight:700;color:#0f172a}
 .empty{color:var(--muted);text-align:center;padding:22px 8px;font-size:.93rem}
 .pay{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #f0f3f8;font-size:.93rem}
 .pay:last-child{border-bottom:0}.pay b{color:var(--navy)}.pay span{color:var(--muted);text-align:right}
@@ -200,7 +202,7 @@ tr:last-child td{border-bottom:0}
     <div class="kpis">
       <div class="card k"><span>Link visits</span><b id="k-clicks">0</b><small>Last 30 days &middot; <span id="k-clicksall" style="display:inline;font-weight:500"></span></small><svg class="sp" id="k-spark" viewBox="0 0 120 34" preserveAspectRatio="none" aria-hidden="true"></svg></div>
       <div class="card k"><span>Quote requests</span><b id="k-req">0</b><small>People who asked us for a quote</small></div>
-      <div class="card k"><span>Qualified referrals</span><b id="k-q">0</b><small>Finished a consultation with us</small></div>
+      <div class="card k"><span>Approved referrals</span><b id="k-q">0</b><small>Approved by our team</small></div>
       <div class="card k money"><span>Total earned</span><b id="k-earned">$0</b><small id="k-rate"></small></div>
       <div class="card k owe"><span>On the way</span><b id="k-owed">$0</b><small id="k-owedn">Earned, not paid yet</small></div>
       <div class="card k"><span>Paid to you</span><b id="k-paid">$0</b><small id="k-paidn">All time</small></div>
@@ -210,10 +212,10 @@ tr:last-child td{border-bottom:0}
       <div class="trhead"><div><h2>Your tier</h2><p class="hint" id="t-next" style="margin:0"></p></div><span class="trbadge" id="t-badge">Beginner</span></div>
       <div class="trbar"><i id="t-fill"></i></div>
       <ol class="trlist">
-        <li data-t="0"><b>Beginner</b><span>0-4 qualified referrals</span></li>
-        <li data-t="1"><b>Rising</b><span>5-14 qualified referrals</span></li>
-        <li data-t="2"><b>Pro</b><span>15-29 qualified referrals</span></li>
-        <li data-t="3"><b>Elite</b><span>30+ qualified referrals</span></li>
+        <li data-t="0"><b>Beginner</b><span>0-4 approved referrals</span></li>
+        <li data-t="1"><b>Rising</b><span>5-14 approved referrals</span></li>
+        <li data-t="2"><b>Pro</b><span>15-29 approved referrals</span></li>
+        <li data-t="3"><b>Elite</b><span>30+ approved referrals</span></li>
       </ol>
     </div>
 
@@ -239,10 +241,12 @@ tr:last-child td{border-bottom:0}
       <h2 style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 10px">How rewards work</h2>
       <ol>
         <li><b>Quote requested:</b> someone used your link and asked us for a quote.</li>
-        <li><b>Qualified:</b> they finished a free consultation with one of our licensed advisors. That earns your reward, whether or not they buy.</li>
-        <li><b>Paid:</b> we sent your reward. You'll get a text and email each step of the way.</li>
+        <li><b>Reviewing:</b> our team is working with them.</li>
+        <li><b>Approved:</b> they finished a free consultation with one of our licensed advisors and our team approved the referral. That earns your reward, whether or not they buy.</li>
+        <li><b>Reward paid:</b> we sent your reward.</li>
+        <li><b>Didn't make the cut:</b> the referral didn't qualify, so no reward for that one.</li>
       </ol>
-      <p class="hint" style="margin-top:10px">For their privacy, we never share who your referrals are or anything about their coverage.</p>
+      <p class="hint" style="margin-top:10px">For their privacy, we only show each referral&rsquo;s first name and last initial. We never share their contact details or anything about their coverage.</p>
     </div>
 
     <div class="card sec help" id="d-help">
@@ -279,7 +283,7 @@ tr:last-child td{border-bottom:0}
 </div>
 
 <footer class="ft">
-  <p>Rewards are a flat amount per qualified referral and are never tied to whether anyone buys insurance (s. 626.112(8), Florida Statutes). Where state law does not allow referral rewards, we cannot pay one. VS BENEFITS LLC is a licensed independent insurance agency, NPN 22116298.</p>
+  <p>Rewards are a flat amount per approved referral and are never tied to whether anyone buys insurance (s. 626.112(8), Florida Statutes). Where state law does not allow referral rewards, we cannot pay one. VS BENEFITS LLC is a licensed independent insurance agency, NPN 22116298.</p>
   <p><a href="/affiliate-program">Creator Program</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/contact">Contact</a></p>
 </footer>
 
@@ -294,7 +298,8 @@ tr:last-child td{border-bottom:0}
   function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];});}
   function money(n){n=Number(n)||0;return "$"+n.toLocaleString("en-US",{minimumFractionDigits:n%1?2:0,maximumFractionDigits:2});}
   function d8(s,long){if(!s)return "";var p=s.split("-");var d=new Date(+p[0],+p[1]-1,+p[2]);var o={month:"short",day:"numeric"};if(long||d.getFullYear()!==new Date().getFullYear())o.year="numeric";return d.toLocaleDateString("en-US",o);}
-  var LBL={requested:"Quote requested",qualified:"Qualified",paid:"Reward paid"};
+  var LBL={requested:"Quote requested",reviewing:"Reviewing",approved:"Approved",qualified:"Approved",paid:"Reward paid",not_selected:"Didn't make the cut"};
+  var RF="all";
 
   function render(j){
     var c=j.creator||{},t=j.totals||{},name=String(c.firstName||"").split(" ")[0];
@@ -312,14 +317,22 @@ tr:last-child td{border-bottom:0}
     $("k-clicksall").textContent=(t.clicks||0).toLocaleString()+" all time";
     $("k-req").textContent=t.requests||0;$("k-q").textContent=t.qualified||0;
     var rw=Number(j.reward)||0;
-    if(rw){$("k-earned").textContent=money(t.earned);$("k-owed").textContent=money(t.owed);$("k-rate").textContent=money(rw)+" per qualified referral";$("k-owedn").textContent=(t.unpaid||0)+" qualified referral"+(t.unpaid===1?"":"s")+" not paid yet";}
-    else{$("k-earned").textContent="—";$("k-owed").textContent=(t.unpaid||0)+"";$("k-rate").textContent="Reward amount confirmed when you're approved";$("k-owedn").textContent="Qualified referrals not paid yet";}
+    if(rw){$("k-earned").textContent=money(t.earned);$("k-owed").textContent=money(t.owed);$("k-rate").textContent=money(rw)+" per approved referral";$("k-owedn").textContent=(t.unpaid||0)+" approved referral"+(t.unpaid===1?"":"s")+" not paid yet";}
+    else{$("k-earned").textContent="—";$("k-owed").textContent=(t.unpaid||0)+"";$("k-rate").textContent="Reward amount confirmed when you're approved";$("k-owedn").textContent="Approved referrals not paid yet";}
     $("k-paid").textContent=money(t.paid);$("k-paidn").textContent=(j.payouts||[]).length+" payout"+((j.payouts||[]).length===1?"":"s")+" all time";
     var sp=t.spark||[],mx=Math.max.apply(null,sp.concat([1]));
     if(sp.length){var pts=sp.map(function(v,i){return (i*(120/(sp.length-1))).toFixed(1)+","+(32-v/mx*28).toFixed(1);}).join(" ");$("k-spark").innerHTML='<polyline points="'+pts+'" fill="none" stroke="#2f9de6" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" opacity=".75"/>';}
     var R=j.referrals||[];
-    $("d-refs").innerHTML=R.length?('<table><thead><tr><th>#</th><th>Date</th><th>Type</th><th>Status</th></tr></thead><tbody>'+R.map(function(r){return '<tr><td>'+r.n+'</td><td>'+esc(d8(r.date))+'</td><td>'+esc(r.type)+'</td><td><span class="pill p-'+esc(r.status)+'">'+esc(LBL[r.status]||r.status)+'</span></td></tr>';}).join("")+'</tbody></table>')
-      :'<div class="empty">No quote requests through your link yet.<br>Share it and they\'ll show up here.</div>';
+    function drawRefs(){
+      var ORDER=[["all","All"],["requested","Quote requested"],["reviewing","Reviewing"],["approved","Approved"],["paid","Reward paid"],["not_selected","Didn't make the cut"]];
+      var cnt={all:R.length};R.forEach(function(r){var k=r.status==="qualified"?"approved":r.status;cnt[k]=(cnt[k]||0)+1;});
+      var F=R.filter(function(r){var k=r.status==="qualified"?"approved":r.status;return RF==="all"||k===RF;});
+      var chips='<div class="rf-f" role="group" aria-label="Filter referrals">'+ORDER.filter(function(o){return o[0]==="all"||cnt[o[0]];}).map(function(o){return '<button type="button" data-rf="'+o[0]+'" class="'+(RF===o[0]?"on":"")+'">'+esc(o[1])+'<i>'+(cnt[o[0]]||0)+'</i></button>';}).join("")+'</div>';
+      $("d-refs").innerHTML=R.length?(chips+(F.length?'<table><thead><tr><th>Name</th><th>Date</th><th>Type</th><th>Status</th></tr></thead><tbody>'+F.map(function(r){return '<tr><td class="rf-nm">'+esc(r.name||("Referral #"+r.n))+'</td><td>'+esc(d8(r.date))+'</td><td>'+esc(r.type)+'</td><td><span class="pill p-'+esc(r.status)+'">'+esc(LBL[r.status]||r.status)+'</span></td></tr>';}).join("")+'</tbody></table>':'<div class="empty">No referrals with this status.</div>'))
+        :'<div class="empty">No quote requests through your link yet.<br>Share it and they\'ll show up here.</div>';
+      [].forEach.call(document.querySelectorAll("[data-rf]"),function(b){b.onclick=function(){RF=b.getAttribute("data-rf");drawRefs();};});
+    }
+    drawRefs();
     var P=j.payouts||[];
     $("d-pays").innerHTML=P.length?P.map(function(p){return '<div class="pay"><b>'+money(p.amount)+'</b><span>'+esc(d8(p.date))+' &middot; '+p.count+' referral'+(p.count===1?"":"s")+(p.how?' &middot; '+esc(p.how):'')+'</span></div>';}).join(""):'<div class="empty">No payouts yet.</div>';
     /* Tier (by qualified referrals) + help links with name and "Affiliate" filled in (2026-11-15) */
@@ -327,7 +340,7 @@ tr:last-child td{border-bottom:0}
     TIERS.forEach(function(x,i){if(q>=x[1])ti=i;});
     $("t-badge").textContent=TIERS[ti][0];$("t-badge").className="trbadge t"+ti;
     var nx=TIERS[ti+1];
-    if(nx){var need=nx[1]-q;$("t-next").textContent=need+" more qualified referral"+(need===1?"":"s")+" to reach "+nx[0]+".";$("t-fill").style.width=Math.max(4,Math.round((q-TIERS[ti][1])/(nx[1]-TIERS[ti][1])*100))+"%";}
+    if(nx){var need=nx[1]-q;$("t-next").textContent=need+" more approved referral"+(need===1?"":"s")+" to reach "+nx[0]+".";$("t-fill").style.width=Math.max(4,Math.round((q-TIERS[ti][1])/(nx[1]-TIERS[ti][1])*100))+"%";}
     else{$("t-next").textContent="You've reached our top tier. Thank you!";$("t-fill").style.width="100%";}
     [].forEach.call(document.querySelectorAll(".trlist li"),function(li){var k=+li.getAttribute("data-t");li.className=k<ti?"done":(k===ti?"cur":"");});
     var full=(String(c.firstName||"")+" "+String(c.lastName||"")).trim(),tag="Affiliate"+(full?" - "+full:"");
