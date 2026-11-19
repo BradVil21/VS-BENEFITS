@@ -13245,6 +13245,18 @@ try{(function(){
       +'<label class="wide"><span>Next step</span><input type="text" data-pv-f="nextStep" value="'+esc(r.nextStep||"")+'" placeholder="e.g. send Florida Blue quote, call Friday"></label>'
       +'</div></div>';
   }
+  /* Employee census from the business quote form (2026-11-19): ages, genders, ZIP, spouse and children. */
+  function censusBlock(r){
+    var c=Array.isArray(r.census)?r.census:[];if(!c.length)return "";
+    var G=function(x){return x==="M"?"M":x==="F"?"F":"";};
+    var sp=0,ch=0;c.forEach(function(e){if(e.spouse)sp++;ch+=(e.children||[]).length;});
+    var lives=c.length+sp+ch;
+    var rows=c.map(function(e,i){return '<tr><td>'+(i+1)+'</td><td>'+esc(String(e.age))+' '+G(e.gender)+'</td><td>'+(e.spouse?esc(String(e.spouse.age))+' '+G(e.spouse.gender):'<span style="color:#94a3b8">-</span>')+'</td><td>'+((e.children&&e.children.length)?e.children.map(function(k){return esc(String(k.age))+' '+G(k.gender);}).join(", "):'<span style="color:#94a3b8">-</span>')+'</td><td>'+esc(e.zip||"")+'</td></tr>';}).join("");
+    var tsv=["Employee\tAge\tGender\tZIP\tRelationship"];c.forEach(function(e,i){tsv.push((i+1)+"\t"+e.age+"\t"+(e.gender||"")+"\t"+(e.zip||"")+"\tEmployee");if(e.spouse)tsv.push((i+1)+"\t"+e.spouse.age+"\t"+(e.spouse.gender||"")+"\t"+(e.zip||"")+"\tSpouse");(e.children||[]).forEach(function(k){tsv.push((i+1)+"\t"+k.age+"\t"+(k.gender||"")+"\t"+(e.zip||"")+"\tChild");});});
+    return '<div class="pv-row"><span class="pv-ic">'+I.users+'</span><div style="flex:1;min-width:0"><details class="pv-cen"><summary style="cursor:pointer"><b>Employee census</b> &middot; '+c.length+' employee'+(c.length===1?'':'s')+(sp?', '+sp+' spouse'+(sp===1?'':'s'):'')+(ch?', '+ch+' child'+(ch===1?'':'ren'):'')+' &middot; <b>'+lives+'</b> lives</summary>'
+      +'<div style="overflow-x:auto;margin-top:8px"><table style="width:100%;border-collapse:collapse;font-size:.82rem"><thead><tr style="text-align:left;color:#64748b"><th style="padding:4px 6px">#</th><th style="padding:4px 6px">Employee</th><th style="padding:4px 6px">Spouse</th><th style="padding:4px 6px">Children</th><th style="padding:4px 6px">ZIP</th></tr></thead><tbody>'+rows.replace(/<td>/g,'<td style="padding:5px 6px;border-top:1px solid #eef2f7">')+'</tbody></table></div>'
+      +'<button type="button" class="pv-lnk" data-cen-copy="'+esc(tsv.join("\n"))+'" style="margin-top:6px">Copy census for a carrier spreadsheet</button></details></div></div>';
+  }
   function openView(kind,id){
     var r=rec(kind,id);if(!r)return;closeAll();
     var biz=kind==="biz",stages=biz?BIZ_STAGES:czSTAGES,st=r.stage||(biz?"prospect":"new_lead");
@@ -13260,7 +13272,7 @@ try{(function(){
       sub=[r.niche,place].filter(Boolean).join(" · ")||"Business lead";
       var who=[r.contact?'<b>'+esc(tc(r.contact))+'</b>':"",r.title?esc(r.title):""].filter(Boolean).join(SEP);
       var cov=[r.requestedCoverage?"Wants "+esc(r.requestedCoverage):"",r.currentlyInsured?"Currently insured: "+esc(r.currentlyInsured):"",r.coverageStart?"Start "+esc(shortDate(r.coverageStart)):""].filter(Boolean).join(SEP);
-      body=row(I.cal,'<b>Came in</b> '+esc(cameIn(r)||"-"))+row(I.user,who)+row(I.phone,contact)+row(I.users,r.employees?'<b>'+esc(r.employees)+'</b> employees':'')+row(I.shield,cov)+row(I.pin,full?'<a href="https://maps.google.com/?q='+encodeURIComponent(full)+'" target="_blank" rel="noopener">'+esc(full)+'</a>':'')
+      body=row(I.cal,'<b>Came in</b> '+esc(cameIn(r)||"-"))+row(I.user,who)+row(I.phone,contact)+row(I.users,r.employees?'<b>'+esc(r.employees)+'</b> employees':'')+censusBlock(r)+row(I.shield,cov)+row(I.pin,full?'<a href="https://maps.google.com/?q='+encodeURIComponent(full)+'" target="_blank" rel="noopener">'+esc(full)+'</a>':'')
         +row(I.dollar,Number(r.dealValue)>0?'<b>'+esc(money(r.dealValue))+'</b>/mo estimated':'')
         +row(I.clock,r.nextFollowUp?'<b>Follow-up</b> '+esc(shortDate(r.nextFollowUp)):'');
       tags=chip(srcLabel(r.source))+chip(r.niche)+chip(r.state);
@@ -13332,7 +13344,7 @@ try{(function(){
   }
   function closeAll(){var o=$("pv-ov");if(o)o.remove();}
   document.addEventListener("keydown",function(e){if(e.key==="Escape"&&$("pv-ov")){closeAll();}});
-  window.vsOpenLeadView=openView;window.vsOpenLeadNotes=openNotes;
+  window.vsOpenLeadView=openView;document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("[data-cen-copy]");if(!b)return;var t=b.getAttribute("data-cen-copy");try{navigator.clipboard.writeText(t).then(function(){b.textContent="Copied. Paste into Excel or a carrier census";});}catch(_){}});window.vsOpenLeadNotes=openNotes;
 
   /* ---- clicks (capture phase, so the old "open edit form" handlers never run) ---- */
   document.addEventListener("click",function(e){
