@@ -30,7 +30,11 @@ class Chrome:
         self.fonts = _grab(r'<link rel="icon".*?rel="stylesheet" />', d, "fonts")
         self.header = _grab(r'<header class="site-header">.*?</header>', d, "header")
         self.footer = _grab(r'<footer>.*?</footer>', d, "footer")
-        self.tail = _grab(r'<div class="modal-backdrop" id="login-modal".*?</body>', d, "tail")
+        m = re.search(r'<div class="modal-backdrop" id="login-modal".*?</body>', d, re.S)
+        if m:
+            self.tail = m.group(0)
+        else:  # login modal was removed site-wide; take everything after the footer
+            self.tail = _grab(r'(?<=</footer>).*?</body>', d, "tail")
         # The donor is itself a trucking page, so a previous wiring pass may have
         # injected the sticky call bar into it. Strip anything this library adds
         # back, or every page built afterwards inherits a duplicate.
