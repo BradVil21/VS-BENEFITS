@@ -1116,6 +1116,19 @@ body{background-color:#f7faff;background-image:radial-gradient(1100px 560px at 5
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(2)">&lsaquo; Back</button></div>
   </div>
+  <div class="panel" id="panel-biz-cen">
+    <div class="qscreen">
+      <h2>Who needs coverage?</h2>
+      <p class="vs-cen-lead">Optional. Add each employee&rsquo;s age, gender and ZIP code, plus a spouse or children if they&rsquo;ll be covered. Group rates are priced on each person&rsquo;s age, so this gets you a more accurate quote.</p>
+      <div class="vs-cen vs-cen-step"><div class="vs-cen-body">
+        <div id="cen-rows"></div>
+        <button type="button" class="vs-cen-add" id="cen-add">+ Add employee</button>
+      </div></div>
+      <button type="button" class="qbtn q-continue" onclick="bizNav(4)">Continue</button>
+      <button type="button" class="vs-cen-skip" onclick="bizNav(4)">Skip this step</button>
+    </div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(window.vsIsDental()?2:3)">&lsaquo; Back</button></div>
+  </div>
   <div class="panel" id="panel-biz-4">
     <div class="qscreen">
       <h2>What is the name of your business?</h2>
@@ -1134,7 +1147,7 @@ body{background-color:#f7faff;background-image:radial-gradient(1100px 560px at 5
       <button type="button" class="qbtn q-continue" onclick="bizNext(4)">Continue</button>
       <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
-    <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(window.vsIsDental()?2:3)">&lsaquo; Back</button></div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="bizCensus()">&lsaquo; Back</button></div>
   </div>
   <div class="panel" id="panel-biz-5">
     <div class="qscreen">
@@ -1268,15 +1281,10 @@ body{background-color:#f7faff;background-image:radial-gradient(1100px 560px at 5
         <div class="err-msg">Please enter a valid business email.</div>
       </div>
       </div>
-      <details class="vs-cen" id="biz-census-box">
-        <summary><span><b>Optional:</b> add employee ages for a more accurate quote</span><i aria-hidden="true">+</i></summary>
-        <div class="vs-cen-body">
-          <p class="vs-cen-note">Group rates are priced on each person&rsquo;s age. Add whoever you want covered, or skip this and share it later.</p>
-          <div id="cen-rows"></div>
-          <button type="button" class="vs-cen-add" id="cen-add">+ Add employee</button>
-        </div>
-      </details>
       <style>
+      .vs-cen-lead{font-size:.92rem;color:var(--muted,#5a6b80);text-align:center;max-width:520px;margin:-4px auto 14px;line-height:1.5}
+      .vs-cen-step{background:#f8fafc;padding-top:14px}
+      .vs-cen-skip{display:block;margin:10px auto 0;background:none;border:0;color:var(--blue-700,#16447f);font:inherit;font-weight:600;font-size:.9rem;text-decoration:underline;cursor:pointer}
       .vs-cen{margin:16px 0 4px;border:1.5px solid var(--line,#e2e8f0);border-radius:14px;background:#f8fafc;overflow:hidden}
       .vs-cen summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;font-size:.92rem;color:var(--ink,#0b2346)}
       .vs-cen summary::-webkit-details-marker{display:none}
@@ -1709,6 +1717,10 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   };
 
   // ---- BUSINESS NAVIGATION ----
+  window.bizCensus = function(){
+    bizStep = 3; updateProgress(3, BIZ_STEPS); showPanel('panel-biz-cen');
+    try{ if(window.vsCensusStart) window.vsCensusStart(); }catch(e){}
+  };
   window.bizNav = function(toStep){
     try{ if(window.vsTrack && toStep>bizStep) window.vsTrack('quote_step',{ lead_type:'business', step:bizStep, of:BIZ_STEPS }); }catch(e){}
     bizStep = toStep;
@@ -1880,8 +1892,8 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   window.bizNext = function(fromStep){
     if(fromStep === 1){ var e=v('biz-employees'); setErr('f-biz-employees', !e); if(!e) return; bizNav(2);
     } else if(fromStep === 2){ var ins=v('biz-insured'); setErr('f-biz-insured', !ins); if(!ins) return;
-      if(dental){ var cs=document.getElementById('biz-coverage'); if(cs) cs.value='Dental & Vision'; bizNav(4); } else bizNav(3);
-    } else if(fromStep === 3){ var cov=v('biz-coverage'); setErr('f-biz-coverage', !cov); if(!cov) return; bizNav(4);
+      if(dental){ var cs=document.getElementById('biz-coverage'); if(cs) cs.value='Dental & Vision'; bizCensus(); } else bizNav(3);
+    } else if(fromStep === 3){ var cov=v('biz-coverage'); setErr('f-biz-coverage', !cov); if(!cov) return; bizCensus();
     } else if(fromStep === 4){
       var bn=v('biz-name');
       var bnOk = (typeof window.vsIsTextName === 'function') ? window.vsIsTextName(bn) : !!bn;
@@ -2395,8 +2407,7 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       box.appendChild(e);renum();
     }
     add.onclick=addEmp;
-    var det=document.getElementById('biz-census-box');
-    if(det) det.addEventListener('toggle',function(){if(det.open&&!box.querySelector('.cen-emp'))addEmp();});
+    window.vsCensusStart=function(){ if(!box.querySelector('.cen-emp')) addEmp(); };
     function n(v,lo,hi){var x=parseInt(v,10);return isFinite(x)&&x>=lo&&x<=hi?x:null;}
     window.vsReadCensus=function(){
       var out=[];
