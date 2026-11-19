@@ -2,6 +2,16 @@
   "cleanUrls": true,
   "redirects": [
     {
+      "source": "/open-enrollment",
+      "destination": "/blog/aca-open-enrollment-2027-guide",
+      "permanent": true
+    },
+    {
+      "source": "/open-enrollment.html",
+      "destination": "/blog/aca-open-enrollment-2027-guide",
+      "permanent": true
+    },
+    {
       "source": "/creator-login",
       "destination": "/creator",
       "permanent": false
@@ -1474,7 +1484,7 @@
     },
     {
       "source": "/open-enrollment.html",
-      "destination": "/open-enrollment",
+      "destination": "/blog/aca-open-enrollment-2027-guide",
       "permanent": true
     },
     {
