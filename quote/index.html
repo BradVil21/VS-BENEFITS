@@ -1118,14 +1118,15 @@ body{background-color:#f7faff;background-image:radial-gradient(1100px 560px at 5
   </div>
   <div class="panel" id="panel-biz-cen">
     <div class="qscreen">
+      <span class="vs-cen-opt">Optional &middot; Speeds up your quote</span>
       <h2>Who needs coverage?</h2>
-      <p class="vs-cen-lead">Optional. Add each employee&rsquo;s age, gender and ZIP code, plus a spouse or children if they&rsquo;ll be covered. Group rates are priced on each person&rsquo;s age, so this gets you a more accurate quote.</p>
+      <p class="vs-cen-lead">Add each employee&rsquo;s age, gender and ZIP code, plus a spouse or children if they&rsquo;ll be covered. Carriers price group plans on each person&rsquo;s age, so sharing it now means we can get your real rates faster. Don&rsquo;t have it handy? Skip it.</p>
       <div class="vs-cen vs-cen-step"><div class="vs-cen-body">
         <div id="cen-rows"></div>
         <button type="button" class="vs-cen-add" id="cen-add">+ Add employee</button>
       </div></div>
       <button type="button" class="qbtn q-continue" onclick="bizNav(4)">Continue</button>
-      <button type="button" class="vs-cen-skip" onclick="bizNav(4)">Skip this step</button>
+      <button type="button" class="vs-cen-skip" onclick="bizNav(4)">Skip for now</button>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(window.vsIsDental()?2:3)">&lsaquo; Back</button></div>
   </div>
@@ -1282,6 +1283,7 @@ body{background-color:#f7faff;background-image:radial-gradient(1100px 560px at 5
       </div>
       </div>
       <style>
+      .vs-cen-opt{display:table;margin:0 auto 8px;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#0f766e;background:#e6fbf8;border-radius:999px;padding:4px 12px}
       .vs-cen-lead{font-size:.92rem;color:var(--muted,#5a6b80);text-align:center;max-width:520px;margin:-4px auto 14px;line-height:1.5}
       .vs-cen-step{background:#f8fafc;padding-top:14px}
       .vs-cen-skip{display:block;margin:10px auto 0;background:none;border:0;color:var(--blue-700,#16447f);font:inherit;font-weight:600;font-size:.9rem;text-decoration:underline;cursor:pointer}
