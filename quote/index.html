@@ -1116,20 +1116,6 @@ body{background-color:#f7faff;background-image:radial-gradient(1100px 560px at 5
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(2)">&lsaquo; Back</button></div>
   </div>
-  <div class="panel" id="panel-biz-cen">
-    <div class="qscreen">
-      <span class="vs-cen-opt">Optional &middot; Speeds up your quote</span>
-      <h2>Who needs coverage?</h2>
-      <p class="vs-cen-lead">Add each employee&rsquo;s age, gender and ZIP code, plus a spouse or children if they&rsquo;ll be covered. Carriers price group plans on each person&rsquo;s age, so sharing it now means we can get your real rates faster. Don&rsquo;t have it handy? Skip it.</p>
-      <div class="vs-cen vs-cen-step"><div class="vs-cen-body">
-        <div id="cen-rows"></div>
-        <button type="button" class="vs-cen-add" id="cen-add">+ Add employee</button>
-      </div></div>
-      <button type="button" class="qbtn q-continue" onclick="bizNav(4)">Continue</button>
-      <button type="button" class="vs-cen-skip" onclick="bizNav(4)">Skip for now</button>
-    </div>
-    <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(window.vsIsDental()?2:3)">&lsaquo; Back</button></div>
-  </div>
   <div class="panel" id="panel-biz-4">
     <div class="qscreen">
       <h2>What is the name of your business?</h2>
@@ -1148,7 +1134,7 @@ body{background-color:#f7faff;background-image:radial-gradient(1100px 560px at 5
       <button type="button" class="qbtn q-continue" onclick="bizNext(4)">Continue</button>
       <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
-    <div class="q-back"><button type="button" class="q-back-btn" onclick="bizCensus()">&lsaquo; Back</button></div>
+    <div class="q-back"><button type="button" class="q-back-btn" onclick="bizNav(window.vsIsDental()?2:3)">&lsaquo; Back</button></div>
   </div>
   <div class="panel" id="panel-biz-5">
     <div class="qscreen">
@@ -1282,33 +1268,6 @@ body{background-color:#f7faff;background-image:radial-gradient(1100px 560px at 5
         <div class="err-msg">Please enter a valid business email.</div>
       </div>
       </div>
-      <style>
-      .vs-cen-opt{display:table;margin:0 auto 8px;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#0f766e;background:#e6fbf8;border-radius:999px;padding:4px 12px}
-      .vs-cen-lead{font-size:.92rem;color:var(--muted,#5a6b80);text-align:center;max-width:520px;margin:-4px auto 14px;line-height:1.5}
-      .vs-cen-step{background:#f8fafc;padding-top:14px}
-      .vs-cen-skip{display:block;margin:10px auto 0;background:none;border:0;color:var(--blue-700,#16447f);font:inherit;font-weight:600;font-size:.9rem;text-decoration:underline;cursor:pointer}
-      .vs-cen{margin:16px 0 4px;border:1.5px solid var(--line,#e2e8f0);border-radius:14px;background:#f8fafc;overflow:hidden}
-      .vs-cen summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;font-size:.92rem;color:var(--ink,#0b2346)}
-      .vs-cen summary::-webkit-details-marker{display:none}
-      .vs-cen summary i{font-style:normal;font-weight:700;font-size:1.2rem;color:var(--teal,#0db5a6)}
-      .vs-cen[open] summary i{transform:rotate(45deg)}
-      .vs-cen-body{padding:0 14px 14px}
-      .vs-cen-note{font-size:.82rem;color:var(--muted,#5a6b80);margin:0 0 10px;line-height:1.45}
-      .cen-emp{background:#fff;border:1px solid var(--line,#e2e8f0);border-radius:12px;padding:12px;margin-bottom:10px}
-      .cen-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:700;font-size:.88rem;color:var(--ink,#0b2346)}
-      .cen-x{background:none;border:0;color:#94a3b8;font-size:.8rem;cursor:pointer;text-decoration:underline}
-      .cen-g{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-      .cen-g.two{grid-template-columns:1fr 1fr}
-      .cen-emp label{display:block;font-size:.72rem;font-weight:600;color:var(--muted,#5a6b80);margin:0 0 3px}
-      .cen-emp input,.cen-emp select{width:100%;box-sizing:border-box;padding:9px 10px;border:1.5px solid #d7dfeb;border-radius:9px;font:inherit;font-size:.9rem;background:#fff;min-height:40px}
-      .cen-sub{margin-top:10px;padding-top:10px;border-top:1px dashed #e2e8f0}
-      .cen-sub .cen-t{font-size:.78rem;font-weight:700;color:#334155;margin-bottom:6px}
-      .cen-kid{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin-bottom:6px}
-      .cen-kid button{background:none;border:0;color:#94a3b8;cursor:pointer;font-size:1.1rem;padding:0 4px 10px}
-      .cen-addkid,.vs-cen-add{background:#fff;border:1.5px dashed #b6c6dc;color:var(--blue-700,#16447f);font:inherit;font-weight:700;font-size:.85rem;border-radius:10px;padding:9px 12px;cursor:pointer;width:100%}
-      .cen-addkid{width:auto;padding:6px 10px;font-size:.8rem}
-      @media(max-width:480px){.cen-g{grid-template-columns:1fr 1fr}.cen-g .cen-zip{grid-column:1/-1}}
-      </style>
       <div class="field" style="display:flex;gap:10px;align-items:flex-start;margin-top:14px">
       <input id="biz-sms-opt" type="checkbox" style="width:18px;height:18px;margin-top:3px;flex-shrink:0;cursor:pointer" />
       <label for="biz-sms-opt" style="font-size:.78rem;line-height:1.5;cursor:pointer;font-weight:400">
@@ -1719,10 +1678,6 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   };
 
   // ---- BUSINESS NAVIGATION ----
-  window.bizCensus = function(){
-    bizStep = 3; updateProgress(3, BIZ_STEPS); showPanel('panel-biz-cen');
-    try{ if(window.vsCensusStart) window.vsCensusStart(); }catch(e){}
-  };
   window.bizNav = function(toStep){
     try{ if(window.vsTrack && toStep>bizStep) window.vsTrack('quote_step',{ lead_type:'business', step:bizStep, of:BIZ_STEPS }); }catch(e){}
     bizStep = toStep;
@@ -1894,8 +1849,8 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
   window.bizNext = function(fromStep){
     if(fromStep === 1){ var e=v('biz-employees'); setErr('f-biz-employees', !e); if(!e) return; bizNav(2);
     } else if(fromStep === 2){ var ins=v('biz-insured'); setErr('f-biz-insured', !ins); if(!ins) return;
-      if(dental){ var cs=document.getElementById('biz-coverage'); if(cs) cs.value='Dental & Vision'; bizCensus(); } else bizNav(3);
-    } else if(fromStep === 3){ var cov=v('biz-coverage'); setErr('f-biz-coverage', !cov); if(!cov) return; bizCensus();
+      if(dental){ var cs=document.getElementById('biz-coverage'); if(cs) cs.value='Dental & Vision'; bizNav(4); } else bizNav(3);
+    } else if(fromStep === 3){ var cov=v('biz-coverage'); setErr('f-biz-coverage', !cov); if(!cov) return; bizNav(4);
     } else if(fromStep === 4){
       var bn=v('biz-name');
       var bnOk = (typeof window.vsIsTextName === 'function') ? window.vsIsTextName(bn) : !!bn;
@@ -2171,7 +2126,6 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     if(data.situations && data.situations.length) extras.push('Situation: ' + data.situations.join(', '));
     if(data.businessAddress) extras.push('Address: ' + data.businessAddress + (data.businessState ? ', ' + data.businessState : '') + (data.businessZip ? ' ' + data.businessZip : ''));
     if(data.businessPhone && data.businessPhone !== data.contactPhone) extras.push('Business phone: ' + data.businessPhone);
-    if(data.censusText) extras.push(data.censusText);
     return {
       id: 'id_' + Math.random().toString(36).slice(2,10) + Date.now().toString(36),
       company:   data.businessName || '',
@@ -2181,7 +2135,6 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       email:     data.contactEmail || '',
       phone:     data.contactPhone || data.businessPhone || '',
       employees: data.employees || '',
-      census:    data.census || [],
       requestedCoverage: data.requestedCoverage || '',
       currentlyInsured:  data.currentlyInsured || '',
       coverageStart:     data.coverageStart || '',
@@ -2306,7 +2259,6 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       lead_source: 'vshealthbenefits.com /quote funnel'
     });
     if(data.tags){ payload.tags = data.tags; }
-    if(data.censusText){ payload.census_summary = data.censusText; payload.census_count = (data.census||[]).length; }
     if(data.partner){ payload.referred_by_partner = data.partner; }
     if(window.__vsWho){ payload.coverage_for = window.__vsWho; }
     if(data.fromPage){ payload.came_from_page = data.fromPage; }
@@ -2385,51 +2337,6 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
     sendToWebhook(data, btn);
   };
 
-  // ---- OPTIONAL EMPLOYEE CENSUS on the business quote (2026-11-19) ----
-  // Ages, genders and ZIP for each employee, plus spouse/children if covered.
-  // Saved on the admin portal's business lead as `census` and summarized for GoHighLevel.
-  (function(){
-    var box=document.getElementById('cen-rows'), add=document.getElementById('cen-add'); if(!box||!add) return;
-    function g(){return '<option value="">Select</option><option value="M">Male</option><option value="F">Female</option>';}
-    function zipDefault(){var z=document.getElementById('biz-zip');return z&&/^\d{5}$/.test(z.value.trim())?z.value.trim():'';}
-    function renum(){[].forEach.call(box.querySelectorAll('.cen-emp'),function(e,i){e.querySelector('.cen-n').textContent='Employee '+(i+1);});}
-    function kidRow(){var d=document.createElement('div');d.className='cen-kid';d.innerHTML='<div><label>Child age</label><input type="number" min="0" max="26" inputmode="numeric" class="k-age"></div><div><label>Gender</label><select class="k-g">'+g()+'</select></div><button type="button" aria-label="Remove child">&times;</button>';d.querySelector('button').onclick=function(){d.remove();};return d;}
-    function sync(e){var t=e.querySelector('.e-tier').value;e.querySelector('.e-sp').hidden=!(t==='spouse'||t==='family');var kids=e.querySelector('.e-kids');kids.hidden=!(t==='children'||t==='family');if(!kids.hidden&&!kids.querySelector('.cen-kid'))kids.querySelector('.k-list').appendChild(kidRow());}
-    function addEmp(){
-      if(box.querySelectorAll('.cen-emp').length>=60) return;
-      var e=document.createElement('div');e.className='cen-emp';
-      e.innerHTML='<div class="cen-hd"><span class="cen-n"></span><button type="button" class="cen-x">Remove</button></div>'
-        +'<div class="cen-g"><div><label>Age</label><input type="number" min="15" max="99" inputmode="numeric" class="e-age"></div><div><label>Gender</label><select class="e-g">'+g()+'</select></div><div class="cen-zip"><label>Home ZIP</label><input type="text" maxlength="5" inputmode="numeric" class="e-zip" value="'+zipDefault()+'"></div></div>'
-        +'<div style="margin-top:8px"><label>Who should be covered?</label><select class="e-tier"><option value="employee">Employee only</option><option value="spouse">Employee + spouse</option><option value="children">Employee + child(ren)</option><option value="family">Employee + spouse + child(ren)</option></select></div>'
-        +'<div class="cen-sub e-sp" hidden><div class="cen-t">Spouse</div><div class="cen-g two"><div><label>Spouse age</label><input type="number" min="15" max="99" inputmode="numeric" class="s-age"></div><div><label>Gender</label><select class="s-g">'+g()+'</select></div></div></div>'
-        +'<div class="cen-sub e-kids" hidden><div class="cen-t">Children</div><div class="k-list"></div><button type="button" class="cen-addkid">+ Add child</button></div>';
-      e.querySelector('.cen-x').onclick=function(){e.remove();renum();};
-      e.querySelector('.e-tier').onchange=function(){sync(e);};
-      e.querySelector('.cen-addkid').onclick=function(){e.querySelector('.k-list').appendChild(kidRow());};
-      box.appendChild(e);renum();
-    }
-    add.onclick=addEmp;
-    window.vsCensusStart=function(){ if(!box.querySelector('.cen-emp')) addEmp(); };
-    function n(v,lo,hi){var x=parseInt(v,10);return isFinite(x)&&x>=lo&&x<=hi?x:null;}
-    window.vsReadCensus=function(){
-      var out=[];
-      [].forEach.call(box.querySelectorAll('.cen-emp'),function(e){
-        var age=n(e.querySelector('.e-age').value,15,99); if(age===null) return;
-        var tier=e.querySelector('.e-tier').value, row={age:age,gender:e.querySelector('.e-g').value||'',zip:(e.querySelector('.e-zip').value||'').replace(/\D/g,'').slice(0,5),tier:tier};
-        if(tier==='spouse'||tier==='family'){var sa=n(e.querySelector('.s-age').value,15,99);if(sa!==null)row.spouse={age:sa,gender:e.querySelector('.s-g').value||''};}
-        if(tier==='children'||tier==='family'){row.children=[];[].forEach.call(e.querySelectorAll('.cen-kid'),function(k){var ka=n(k.querySelector('.k-age').value,0,26);if(ka!==null)row.children.push({age:ka,gender:k.querySelector('.k-g').value||''});});}
-        out.push(row);
-      });
-      return out;
-    };
-    window.vsCensusText=function(c){
-      if(!c||!c.length) return '';
-      var sp=0,ch=0;c.forEach(function(r){if(r.spouse)sp++;ch+=(r.children||[]).length;});
-      return 'Census: '+c.length+' employee'+(c.length===1?'':'s')+(sp?', '+sp+' spouse'+(sp===1?'':'s'):'')+(ch?', '+ch+' child'+(ch===1?'':'ren'):'')+'\n'+c.map(function(r,i){
-        return 'E'+(i+1)+': '+r.age+(r.gender?' '+r.gender:'')+(r.zip?' · ZIP '+r.zip:'')+(r.spouse?' | Spouse '+r.spouse.age+(r.spouse.gender?' '+r.spouse.gender:''):'')+((r.children&&r.children.length)?' | Children '+r.children.map(function(k){return k.age+(k.gender?' '+k.gender:'');}).join(', '):'');
-      }).join('\n');
-    };
-  })();
   window.submitBiz = function(){
     // Owner name + business email live on this last step now.
     var namesOk = checkNameFields('biz-firstname','f-biz-firstname','biz-lastname','f-biz-lastname');
@@ -2460,7 +2367,6 @@ window.hubspotSyncLead = window.ghlSyncLead = function(l){
       bizNav(6); return;
     }
     var data = collectBiz();
-    try{ var cen = window.vsReadCensus ? window.vsReadCensus() : []; if(cen.length){ data.census = cen; data.censusText = window.vsCensusText(cen); } }catch(e){}
     data.sms_opt_in = document.getElementById('biz-sms-opt') && document.getElementById('biz-sms-opt').checked ? 'yes' : 'no';
     var btn = document.querySelector('#panel-biz-8 .btn-submit');
     sendToWebhook(data, btn);
