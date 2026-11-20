@@ -6357,6 +6357,7 @@ var BIZ_STAGES=[
  {id:"prospect",label:"New",color:"#94a3b8"},
  {id:"working",label:"Working",color:"#0ea5e9"},
  {id:"contacted",label:"Contacted",color:"#2563eb"},
+ {id:"quoting",label:"Actively Quoting",color:"#0891b2"},
  {id:"proposal",label:"Sent Proposal",color:"#f59e0b"},
  {id:"meeting",label:"Appointment Booked",color:"#7c3aed"},
  {id:"won",label:"Closed",color:"#16a34a"},
@@ -13536,7 +13537,7 @@ try{(function(){
   if(typeof TAB_TITLES!=="undefined")TAB_TITLES.closing="Closing List";
 
   var IND_W={quoted:30,appointment_scheduled:26,open_enrollment:20,affordable_care_act:20,follow_up:14,new_lead:10,sixty_plus:6,ghosted:2};
-  var BIZ_W={proposal:30,meeting:28,contacted:14,working:12,prospect:6};
+  var BIZ_W={proposal:30,quoting:29,meeting:28,contacted:14,working:12,prospect:6};
   var HEAT={hot:{l:"Hot",c:"#dc2626",w:45},warm:{l:"Warm",c:"#f59e0b",w:22},cold:{l:"Cold",c:"#64748b",w:0}};
   var CV={kind:"all",heat:"all",q:""};
 
@@ -13746,7 +13747,7 @@ try{(function(){
     (typeof getBizLeads==="function"?getBizLeads():[]).forEach(function(b){if(refOf(b)===code){var m=typeof bizStageMeta==="function"?bizStageMeta(b.stage||"prospect"):{label:b.stage,color:"#64748b"};out.push({key:"biz:"+b.id,kind:"biz",id:b.id,rec:b,name:tc(b.company||b.contact||"(no name)"),stage:b.stage||"prospect",stageLabel:m.label,color:m.color,at:Number(b.created)||0});}});
     out.sort(function(a,b){return b.at-a.at;});return out;
   }
-  var LIKELY={appointment_scheduled:1,quoted:1,sold:1,sixty_plus:1,open_enrollment:1,affordable_care_act:1,meeting:1,proposal:1,won:1};
+  var LIKELY={appointment_scheduled:1,quoted:1,sold:1,sixty_plus:1,open_enrollment:1,affordable_care_act:1,meeting:1,quoting:1,proposal:1,won:1};
   function stats(c){
     var L=referred(c.code),refs=c.refs||{},q=0,unpaid=0,paid=0;
     L.forEach(function(x){var r=refs[x.key];if(r&&r.q){q++;if(r.paid)paid++;else unpaid++;}});
