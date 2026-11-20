@@ -12,6 +12,7 @@ TODAY = "2026-11-17"
 # slug -> (base image name in /compressed, alt). Swap in owner photos here.
 IMG = {
  "health-insurance-for-electricians": ("electrician-lineman-utility-pole", "Electrician working on a utility pole"),
+ "health-insurance-for-hvac-technicians": ("hvac-rooftop-technician", "HVAC technician servicing a rooftop unit"),
 }
 
 def fig(slug):
@@ -258,7 +259,23 @@ DASH = se_page("health-insurance-for-doordash-drivers", "delivery drivers", "Doo
   "Self-Employed Health Insurance", "/self-employed-health-insurance",
   [("Health insurance for Uber and Lyft drivers", "/health-insurance-uber-drivers"), ("1099 health insurance", "/1099-health-insurance"), ("What income counts for ACA subsidies", "/blog/what-income-counts-for-aca-subsidies"), ("2027 ACA subsidy calculator", "/aca-subsidy-calculator")])
 
-PAGES = [PLUMB, ELEC, LAND, BARB, NAIL, DASH]
+HVACT = se_page("health-insurance-for-hvac-technicians", "HVAC technicians", "HVAC techs and self-employed HVAC contractors", "HVAC technicians",
+  "Your shop doesn't offer coverage, or you work for yourself? Here is how HVAC techs get health insurance in 2027, what it costs, and how to pay less.",
+  "If your HVAC company offers a group plan, that is usually your best deal. If it doesn&rsquo;t, or you&rsquo;re a <strong>self-employed HVAC contractor</strong>, you <strong>buy an individual plan</strong>. Marketplace tax credits are based on your <strong>net income</strong> after truck, tools and other business costs, so many techs pay <strong>$0 to $100 a month</strong>. If your income is above the subsidy cliff, private PPO plans can cost less than full Marketplace price.",
+  "Where HVAC techs get health insurance",
+  "<ul><li><strong>Your HVAC company&rsquo;s group plan</strong>, if it offers one. Ask what the company pays toward your premium and what adding family costs.</li><li><strong>A spouse&rsquo;s plan</strong> through their job.</li><li><strong>An individual Marketplace (ACA) plan</strong>, with tax credits based on household income. Most HVAC techs who buy their own coverage start here.</li><li><strong>A private PPO</strong>, which can beat Marketplace prices for healthy techs earning too much for a tax credit.</li></ul><p>HVAC techs earn a median of about $61,010 a year (U.S. Bureau of Labor Statistics), and many households at that income qualify for meaningful tax credits.</p>",
+  "your truck and fuel, tools and gauges, EPA and state licensing, business insurance and other job costs",
+  "Coverage that fits HVAC work",
+  "<p>Attics in July, ladders, rooftops and refrigerant. Workers&rsquo; comp covers an injury on the job. It doesn&rsquo;t cover a heat-related illness at home, a kid&rsquo;s ER visit, or your blood pressure medication. Look for a plan with good urgent care, physical therapy and specialist coverage, and check that your doctors are in network.</p><p><strong>Company plan too expensive?</strong> If your share of employee-only coverage costs more than <strong>10.22% of household income</strong> in 2027, you may qualify for Marketplace tax credits instead. Even if it&rsquo;s affordable for you, your spouse and kids may qualify under the family glitch fix.</p><p>Own the shop? See <a href='/health-insurance-for-hvac-companies'>group health insurance for HVAC companies</a> and <a href='/blog/hvac-employee-benefits'>HVAC employee benefits</a>.</p>",
+  [("Do HVAC companies offer health insurance?", "Many do, especially larger shops competing for licensed techs. Companies with fewer than 50 full-time equivalent employees aren't required to, so smaller shops may not. If yours doesn't, you can buy an individual plan with tax credits based on income."),
+   ("Can I get a tax credit if my HVAC company offers health insurance?", "Usually not, unless the company's coverage is unaffordable (your employee-only premium costs more than 10.22% of household income in 2027) or doesn't meet minimum value. Your spouse and children may still qualify under the family glitch fix.")],
+  "Health Insurance for HVAC Technicians (2027): Costs & Options",
+  "Health insurance for HVAC techs in 2027: options when your shop offers nothing, costs for self-employed HVAC contractors, and tax credits on net income.",
+  "health insurance for hvac technicians, hvac tech health insurance, self employed hvac health insurance, hvac contractor health insurance, health insurance for hvac workers",
+  "Self-Employed Health Insurance", "/self-employed-health-insurance",
+  [("Group health insurance for HVAC companies", "/health-insurance-for-hvac-companies"), ("HVAC employee benefits", "/blog/hvac-employee-benefits"), ("Self-employed health insurance", "/self-employed-health-insurance"), ("2027 ACA subsidy calculator", "/aca-subsidy-calculator")])
+
+PAGES = [PLUMB, ELEC, LAND, BARB, NAIL, DASH, HVACT]
 
 RELATED = """
 <section class="vs-related-guides" data-block="vs-job-pages">
@@ -272,7 +289,7 @@ RELATED = """
       <a class="vs-rg-card" href="/health-insurance-for-barbers"><strong>Barbers</strong><span>Booth renters and shop owners.</span><em>See the guide &rarr;</em></a>
       <a class="vs-rg-card" href="/health-insurance-for-nail-technicians"><strong>Nail techs</strong><span>Booth renters and salon owners.</span><em>See the guide &rarr;</em></a>
       <a class="vs-rg-card" href="/health-insurance-for-doordash-drivers"><strong>Delivery drivers</strong><span>DoorDash, Instacart and gig work.</span><em>See the guide &rarr;</em></a>
-      <a class="vs-rg-card" href="/health-insurance-for-hvac-companies"><strong>HVAC</strong><span>HVAC companies and technicians.</span><em>See the guide &rarr;</em></a>
+      <a class="vs-rg-card" href="/health-insurance-for-hvac-technicians"><strong>HVAC techs</strong><span>HVAC technicians and self-employed contractors.</span><em>See the guide &rarr;</em></a>
       <a class="vs-rg-card" href="/group-health-insurance-by-industry"><strong>Every industry</strong><span>Costs and plan options by trade.</span><em>Browse all &rarr;</em></a>
     </div>
   </div>
