@@ -1083,11 +1083,10 @@ body{background-color:#f7faff;background-image:radial-gradient(1100px 560px at 5
     <div class="qscreen">
       <h2>How many employees will be covered, including yourself?</h2>
       <div class="field q-choice" id="f-biz-employees">
-        <select id="biz-employees" class="vs-sel-hidden" tabindex="-1" aria-hidden="true"><option value=""></option><option value="2 - 4">2 - 4</option><option value="5 - 9">5 - 9</option><option value="10 - 24">10 - 24</option><option value="25 - 49">25 - 49</option><option value="50 - 99">50 - 99</option><option value="100+">100+</option></select>
-        <div class="qbtn-grid" role="group"><button type="button" class="qbtn" data-set="biz-employees" data-val="2 - 4" data-next="biz:2">2 - 4</button><button type="button" class="qbtn" data-set="biz-employees" data-val="5 - 9" data-next="biz:2">5 - 9</button><button type="button" class="qbtn" data-set="biz-employees" data-val="10 - 24" data-next="biz:2">10 - 24</button><button type="button" class="qbtn" data-set="biz-employees" data-val="25 - 49" data-next="biz:2">25 - 49</button><button type="button" class="qbtn" data-set="biz-employees" data-val="50 - 99" data-next="biz:2">50 - 99</button><button type="button" class="qbtn" data-set="biz-employees" data-val="100+" data-next="biz:2">More than 100</button></div>
+        <select id="biz-employees" class="vs-sel-hidden" tabindex="-1" aria-hidden="true"><option value=""></option><option value="1 (self-employed)">Self-employed / 1099</option><option value="2 - 4">2 - 4</option><option value="5 - 10">5 - 10</option><option value="11 - 25">11 - 25</option><option value="25+">25+</option></select>
+        <div class="qbtn-grid" role="group"><button type="button" class="qbtn" style="grid-column:1/-1" data-set="biz-employees" data-val="1 (self-employed)" data-next="biz:2">Self-employed / 1099</button><button type="button" class="qbtn" data-set="biz-employees" data-val="2 - 4" data-next="biz:2">2 - 4</button><button type="button" class="qbtn" data-set="biz-employees" data-val="5 - 10" data-next="biz:2">5 - 10</button><button type="button" class="qbtn" data-set="biz-employees" data-val="11 - 25" data-next="biz:2">11 - 25</button><button type="button" class="qbtn" data-set="biz-employees" data-val="25+" data-next="biz:2">25+</button></div>
         <div class="err-msg">Please choose one.</div>
       </div>
-      <button type="button" class="qbtn-alt" data-set="biz-employees" data-val="1 (just me)" data-next="biz:2">It's just me, no employees yet</button>
       <div class="q-safe"><img class="q-safe-photo" src="/images/quote-advisor.jpg" alt="" width="48" height="48" loading="lazy" decoding="async"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#2f9de6"/><path d="M7 12.5l3.2 3L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Your information is safe &amp; secure</div>
     </div>
     <div class="q-back"><button type="button" class="q-back-btn" onclick="backTo(0)">&lsaquo; Back</button></div>
@@ -1126,8 +1125,8 @@ body{background-color:#f7faff;background-image:radial-gradient(1100px 560px at 5
         <div class="err-msg">Please enter your business name.</div>
       </div>
       <div class="field" id="f-biz-start">
-        <label>When would you like coverage to start? (optional)</label>
-        <input type="date" id="biz-start" />
+        <label for="biz-start">How soon do you need the plan to start?</label>
+        <select id="biz-start"><option value="">Choose one</option><option value="ASAP">ASAP</option><option value="1-2 months">1-2 months</option><option value="3+ months">3+ months</option><option value="Just researching">Just researching</option></select>
         <div class="err-msg"></div>
       </div>
       </div>

@@ -65,6 +65,86 @@ footer{background:var(--blue-900);color:#ffffff;padding:48px 0 24px}footer a{col
 @media(min-width:760px){.vs-rg-grid{grid-template-columns:1fr 1fr}}
 </style>
 <style id="carrier-logo-css">.carriers .carrier img{max-height:32px;max-width:122px;width:auto;height:auto;object-fit:contain;display:block}.carriers .carrier:has(img){opacity:1}</style>
+<style id="vsz-css">
+.vsz{margin:22px 0 26px;width:100%;max-width:480px;min-width:0;box-sizing:border-box}
+.vsz-rating{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #e4e9f2;border-radius:999px;padding:7px 14px;font-size:.88rem;line-height:1.2;color:#0d1b2a;text-decoration:none;box-shadow:0 2px 10px rgba(13,27,42,.06)}
+.vsz-rating:hover{text-decoration:none;color:#0d1b2a}
+.vsz-stars{color:#f5b400;letter-spacing:1px;font-size:.95rem}
+.vsz-rc{color:#5b6b7f}
+.vsz-label{display:block;margin:18px 0 10px;font-weight:700;font-size:.92rem;line-height:1.4;color:#0d1b2a}
+.vsz-row{display:flex;gap:8px;background:#fff;border:1.5px solid #e4e9f2;border-radius:14px;padding:6px;box-shadow:0 10px 28px rgba(13,27,42,.08);transition:border-color .2s,box-shadow .2s}
+.vsz-row:focus-within{border-color:#0db5a6;box-shadow:0 10px 28px rgba(13,181,166,.18)}
+.vsz-row input{flex:1 1 0;width:0;min-width:0;min-height:0;margin:0;border:0;outline:0;box-shadow:none;font:inherit;font-size:1.05rem;font-weight:600;letter-spacing:.08em;padding:10px 12px;color:#0d1b2a;background:transparent}
+.vsz-row input::placeholder{letter-spacing:0;font-weight:500;color:#6b7a8d}
+.vsz-btn{flex:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;margin:0;padding:12px 18px;border:0;border-radius:10px;background:#16447f;color:#fff;font:inherit;font-size:.98rem;font-weight:700;line-height:1;cursor:pointer;transition:background .15s}
+.vsz-btn:hover{background:#1e5ab0}
+.vsz-err{color:#c0392b;font-size:.85rem;margin:8px 0 0}
+.vsz.has-err .vsz-row{border-color:#c0392b}
+.vsz--dark .vsz-label{color:#fff}
+.vsz--dark .vsz-row{border-color:transparent}
+.vsz--dark .vsz-err{color:#ffd9d3}
+.vsz--dark.has-err .vsz-row{border-color:#ff8a7a}
+@media(max-width:420px){.vsz-btn{padding:12px 13px;font-size:.92rem}.vsz-row input{letter-spacing:.04em}}
+</style>
+<style id="vcov-css">
+.vcov{position:relative;display:flex;align-items:center}
+.vcov-btn{display:inline-flex;align-items:center;gap:5px;background:none;border:0;margin:0;cursor:pointer;font:inherit;font-weight:600;color:inherit;text-align:left;line-height:inherit}
+.vcov-chev{width:15px;height:15px;transition:transform .2s;flex:none}
+.vcov.open .vcov-chev{transform:rotate(180deg)}
+.vcov-menu{display:none;position:absolute;top:calc(100% + 12px);left:50%;transform:translateX(-50%);min-width:300px;background:#fff;border:1px solid #e4e9f2;border-radius:14px;box-shadow:0 18px 44px rgba(13,27,42,.16);padding:8px;z-index:300;text-align:left}
+.vcov-menu::before{content:"";position:absolute;left:0;right:0;top:-14px;height:14px}
+.vcov.open .vcov-menu{display:block}
+@media (hover:hover){.vcov:not(.vcov-col):hover .vcov-menu{display:block}.vcov:not(.vcov-col):hover .vcov-chev{transform:rotate(180deg)}}
+.nav-links .vcov-menu a{display:flex!important;flex-direction:column;align-items:flex-start;gap:2px;width:auto!important;min-height:0!important;margin:0!important;padding:10px 12px!important;border:0!important;border-radius:10px;background:none!important;color:#0d1b2a!important;font-size:.92rem!important;font-weight:600;line-height:1.3;text-align:left;white-space:normal;text-decoration:none!important;box-shadow:none!important}
+.nav-links .vcov-menu a:hover{background:#f4f8fe!important}
+.vcov-menu strong{font-weight:700;color:#0b2346}
+.vcov-menu span{font-size:.8rem;font-weight:500;color:#5b6b7f}
+.nav-links .vcov-menu a.vcov-foot{margin-top:4px!important;padding-top:11px!important;border-top:1px solid #eef2f7!important;border-radius:0 0 10px 10px;color:#0b7f74!important;font-size:.84rem!important;font-weight:700}
+.vcov.vcov-col{flex-direction:column;align-items:stretch;width:100%}
+.vcov.vcov-col .vcov-btn{justify-content:space-between;width:100%}
+.vcov.vcov-col .vcov-menu{position:static;transform:none;min-width:0;box-shadow:none;border:0;border-radius:0;background:#f8fafc;padding:6px 10px 10px}
+.vcov.vcov-col .vcov-menu::before{display:none}
+@media (min-width:960px) and (max-width:1239px){
+.nav-links{gap:14px!important}
+.nav-links>a,.nav-links>button,.nav-links .vcov-btn{white-space:nowrap;font-size:.88rem!important}
+.nav-links>a[href="/"]{display:none!important}
+.brand,.site-nav .brand{white-space:nowrap;flex-shrink:0}
+.nav-links>a.nav-cta{padding-left:15px!important;padding-right:15px!important}
+}
+.vsa .vcov-btn{white-space:nowrap}
+.vsa-menu{min-width:560px}
+.vsa-h{margin:4px 12px 6px;font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5b6b7f}
+.vsa-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 4px}
+.nav-links .vsa-grid a{padding:7px 12px!important;font-size:.88rem!important;font-weight:600}
+.vcov.vcov-col .vsa-menu{min-width:0}
+.vcov.vcov-col .vsa-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (min-width:960px) and (max-width:1239px){.nav-links{gap:10px!important}.nav-links>a,.nav-links>button,.nav-links .vcov-btn{font-size:.84rem!important}}
+</style>
+<style id="vs-mobile-css">
+/* Mobile polish: no sideways scroll, comfortable tap targets, no iOS zoom on form fields */
+img,video,iframe{max-width:100%}
+.article-wrap>*,.hero-grid>*,.tds-seg>*,.sp-facts>*{min-width:0}
+@media(max-width:640px){
+.article-wrap{grid-template-columns:minmax(0,1fr)!important}
+#oe-annc-bar a{display:inline-flex;align-items:center;min-height:36px}
+footer a{display:inline-flex;align-items:center;min-height:36px}
+.foot-grid{grid-template-columns:1fr 1fr!important;gap:22px 18px!important}
+.foot-grid>:first-child,.foot-grid>:last-child{grid-column:1/-1}
+.foot-grid ul{gap:0!important}
+footer .social-icon,footer a[aria-label]{min-width:40px;min-height:40px;justify-content:center}
+.breadcrumb a,.breadcrumbs a,.crumbs a,nav[aria-label="Breadcrumb"] a,nav[aria-label="breadcrumb"] a{display:inline-flex;align-items:center;min-height:32px}
+.article-tags a,.tags a,.tag-list a{min-height:34px;display:inline-flex;align-items:center}
+.sidebar-card a[href^="tel:"]{display:inline-flex;align-items:center;min-height:36px}
+.article-body table,.cost-table,.vsd-table,.prose table,main table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}
+}
+@media(max-width:380px){
+.tc-nav{flex-wrap:wrap}
+.btn,button.btn,.qf-submit,.tq-go,.vsz-btn{white-space:normal}
+#vs-callbar a{font-size:.86rem!important;padding-left:8px!important;padding-right:8px!important}
+}
+</style>
+<style id="vs-nav-center">@media (min-width:960px){header nav.nav-links{flex:1 1 auto;margin-left:28px}header nav.nav-links::before{content:"";margin-left:auto}header nav.nav-links>a.nav-cta{margin-left:auto;width:auto;flex:0 0 auto}}@media (min-width:1200px){header nav.nav-links>:nth-last-child(2){margin-right:98px}}</style>
 <style id="vs-sticky-call">
 #vs-callbar{position:fixed;left:0;right:0;bottom:0;z-index:120;display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);backdrop-filter:saturate(160%) blur(8px);border-top:1px solid var(--line);box-shadow:0 -6px 18px rgba(13,27,42,.10)}
 #vs-callbar a{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;min-height:48px;border-radius:999px;font-weight:700;font-size:.95rem;text-decoration:none;line-height:1.1}
@@ -94,13 +174,14 @@ body{padding-bottom:0}
 </head>
 <body>
 <div id="vs-scroll-bar"></div>
+<style id="vs-topbar-css">.vs-topbar{background:#0b2346;color:#fff;font-family:Inter,system-ui,-apple-system,sans-serif;font-size:.8rem;font-weight:600;line-height:1.2}.vs-topbar-in{max-width:1360px;margin:0 auto;padding:8px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}.vs-topbar a{color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}.vs-topbar a:hover{text-decoration:underline;text-underline-offset:3px}.vs-tb-l{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.9);white-space:nowrap}.vs-tb-r{display:flex;align-items:center;gap:22px}.vs-topbar svg{flex-shrink:0;color:#5eead4}@media(max-width:639px){.vs-topbar-in{padding:7px 14px;justify-content:center;gap:14px}.vs-tb-r{gap:14px}.vs-tb-mail span{display:none}}@media(max-width:359px){.vs-tb-l{display:none}}</style><div class="vs-topbar"><div class="vs-topbar-in"><span class="vs-tb-l"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>Licensed in 40+ States</span><span class="vs-tb-r"><a href="tel:+19548251009"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>(954) 825-1009</a><a class="vs-tb-mail" href="mailto:info@vshealthbenefits.com" aria-label="Email info@vshealthbenefits.com"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span>info@vshealthbenefits.com</span></a></span></div></div>
 <header class="site-header">
   <div class="container nav-wrap">
     <a class="brand" href="/" aria-label="VS Health Benefits home"><span class="brand-badge">VS</span><span>VS Health Benefits<sup class="vs-reg" style="font-size:1em;vertical-align:.38em;line-height:0;margin-left:2px;font-weight:500">&reg;</sup></span></a>
     <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <nav id="nav-links" class="nav-links">
-      <a href="/">Home</a><a href="/services">Services</a><div class="vcov"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">Coverage<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu" role="menu"><a href="/private-health-insurance" role="menuitem"><strong>Private Market Plans</strong><span>Private PPO plans from A-rated carriers</span></a><a href="/truck-driver-health-insurance" role="menuitem"><strong>Truck Drivers &amp; Owner-Operators</strong><span>Nationwide plans for life on the road</span></a><a href="/short-term-health-insurance" role="menuitem"><strong>Short-Term Health Insurance</strong><span>Temporary coverage between plans</span></a><a href="/dental-vision-insurance" role="menuitem"><strong>Dental &amp; Vision</strong><span>Cleanings, glasses and contacts</span></a><a href="/small-business-health-insurance" role="menuitem"><strong>Employer Group Plans</strong><span>Group health for your team</span></a><a class="vcov-foot" href="/quote?from=health-insurance-for-hvac-technicians&amp;type=individual">Not sure which fits? Get a quote &rarr;</a></div></div><div class="vcov vsa"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">Service Areas<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu vsa-menu" role="menu"><p class="vsa-h">Choose your state</p><div class="vsa-grid"><a href="/alabama-small-business-health-insurance" role="menuitem">Alabama</a><a href="/arizona-small-business-health-insurance" role="menuitem">Arizona</a><a href="/arkansas-small-business-health-insurance" role="menuitem">Arkansas</a><a href="/colorado-small-business-health-insurance" role="menuitem">Colorado</a><a href="/lp/self-employed/florida" role="menuitem">Florida</a><a href="/lp/self-employed/georgia" role="menuitem">Georgia</a><a href="/lp/self-employed/illinois" role="menuitem">Illinois</a><a href="/indiana-small-business-health-insurance" role="menuitem">Indiana</a><a href="/iowa-small-business-health-insurance" role="menuitem">Iowa</a><a href="/kansas-small-business-health-insurance" role="menuitem">Kansas</a><a href="/lp/self-employed/kentucky" role="menuitem">Kentucky</a><a href="/louisiana-small-business-health-insurance" role="menuitem">Louisiana</a><a href="/lp/self-employed/maryland" role="menuitem">Maryland</a><a href="/michigan-small-business-health-insurance" role="menuitem">Michigan</a><a href="/minnesota-small-business-health-insurance" role="menuitem">Minnesota</a><a href="/mississippi-small-business-health-insurance" role="menuitem">Mississippi</a><a href="/lp/self-employed/missouri" role="menuitem">Missouri</a><a href="/montana-small-business-health-insurance" role="menuitem">Montana</a><a href="/nebraska-small-business-health-insurance" role="menuitem">Nebraska</a><a href="/nevada-small-business-health-insurance" role="menuitem">Nevada</a><a href="/north-carolina-small-business-health-insurance" role="menuitem">North Carolina</a><a href="/north-dakota-small-business-health-insurance" role="menuitem">North Dakota</a><a href="/lp/self-employed/ohio" role="menuitem">Ohio</a><a href="/oklahoma-small-business-health-insurance" role="menuitem">Oklahoma</a><a href="/south-carolina-small-business-health-insurance" role="menuitem">South Carolina</a><a href="/south-dakota-small-business-health-insurance" role="menuitem">South Dakota</a><a href="/tennessee-small-business-health-insurance" role="menuitem">Tennessee</a><a href="/lp/self-employed/texas" role="menuitem">Texas</a><a href="/utah-small-business-health-insurance" role="menuitem">Utah</a><a href="/virginia-small-business-health-insurance" role="menuitem">Virginia</a><a href="/west-virginia-small-business-health-insurance" role="menuitem">West Virginia</a><a href="/wisconsin-small-business-health-insurance" role="menuitem">Wisconsin</a><a href="/wyoming-small-business-health-insurance" role="menuitem">Wyoming</a></div><a class="vcov-foot" href="/nationwide-ppo-health-insurance-truck-drivers">Nationwide PPO options: doctors in all 50 states &rarr;</a></div></div><a href="/about">About</a><a href="/blog">Blog</a><a href="/contact">Contact</a>
-      <a class="nav-cta" href="/quote?from=health-insurance-for-hvac-technicians&amp;type=individual">Get Quotes</a>
+      <a href="/">Home</a><a href="/services">Services</a><div class="vcov"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">Coverage<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu" role="menu"><a href="/private-health-insurance" role="menuitem"><strong>Private Market Plans</strong><span>Private PPO plans from A-rated carriers</span></a><a href="/truck-driver-health-insurance" role="menuitem"><strong>Truck Drivers &amp; Owner-Operators</strong><span>Nationwide plans for life on the road</span></a><a href="/short-term-health-insurance" role="menuitem"><strong>Short-Term Health Insurance</strong><span>Temporary coverage between plans</span></a><a href="/dental-vision-insurance" role="menuitem"><strong>Dental &amp; Vision</strong><span>Cleanings, glasses and contacts</span></a><a href="/small-business-health-insurance" role="menuitem"><strong>Employer Group Plans</strong><span>Group health for your team</span></a><a class="vcov-foot" href="/quote?from=health-insurance-for-hvac-technicians&amp;type=business">Not sure which fits? Get a quote &rarr;</a></div></div><div class="vcov vsa"><button type="button" class="vcov-btn" aria-expanded="false" aria-haspopup="true">Service Areas<svg class="vcov-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="vcov-menu vsa-menu" role="menu"><p class="vsa-h">Choose your state</p><div class="vsa-grid"><a href="/alabama-small-business-health-insurance" role="menuitem">Alabama</a><a href="/arizona-small-business-health-insurance" role="menuitem">Arizona</a><a href="/arkansas-small-business-health-insurance" role="menuitem">Arkansas</a><a href="/colorado-small-business-health-insurance" role="menuitem">Colorado</a><a href="/lp/self-employed/florida" role="menuitem">Florida</a><a href="/lp/self-employed/georgia" role="menuitem">Georgia</a><a href="/lp/self-employed/illinois" role="menuitem">Illinois</a><a href="/indiana-small-business-health-insurance" role="menuitem">Indiana</a><a href="/iowa-small-business-health-insurance" role="menuitem">Iowa</a><a href="/kansas-small-business-health-insurance" role="menuitem">Kansas</a><a href="/lp/self-employed/kentucky" role="menuitem">Kentucky</a><a href="/louisiana-small-business-health-insurance" role="menuitem">Louisiana</a><a href="/lp/self-employed/maryland" role="menuitem">Maryland</a><a href="/michigan-small-business-health-insurance" role="menuitem">Michigan</a><a href="/minnesota-small-business-health-insurance" role="menuitem">Minnesota</a><a href="/mississippi-small-business-health-insurance" role="menuitem">Mississippi</a><a href="/lp/self-employed/missouri" role="menuitem">Missouri</a><a href="/montana-small-business-health-insurance" role="menuitem">Montana</a><a href="/nebraska-small-business-health-insurance" role="menuitem">Nebraska</a><a href="/nevada-small-business-health-insurance" role="menuitem">Nevada</a><a href="/north-carolina-small-business-health-insurance" role="menuitem">North Carolina</a><a href="/north-dakota-small-business-health-insurance" role="menuitem">North Dakota</a><a href="/lp/self-employed/ohio" role="menuitem">Ohio</a><a href="/oklahoma-small-business-health-insurance" role="menuitem">Oklahoma</a><a href="/south-carolina-small-business-health-insurance" role="menuitem">South Carolina</a><a href="/south-dakota-small-business-health-insurance" role="menuitem">South Dakota</a><a href="/tennessee-small-business-health-insurance" role="menuitem">Tennessee</a><a href="/lp/self-employed/texas" role="menuitem">Texas</a><a href="/utah-small-business-health-insurance" role="menuitem">Utah</a><a href="/virginia-small-business-health-insurance" role="menuitem">Virginia</a><a href="/west-virginia-small-business-health-insurance" role="menuitem">West Virginia</a><a href="/wisconsin-small-business-health-insurance" role="menuitem">Wisconsin</a><a href="/wyoming-small-business-health-insurance" role="menuitem">Wyoming</a></div><a class="vcov-foot" href="/nationwide-ppo-health-insurance-truck-drivers">Nationwide PPO options: doctors in all 50 states &rarr;</a></div></div><a href="/about">About</a><a href="/blog">Blog</a><a href="/contact">Contact</a>
+      <a class="nav-cta" href="/quote?from=health-insurance-for-hvac-technicians&amp;type=business">Get Quotes</a>
     </nav>
   </div>
 </header>
@@ -111,7 +192,7 @@ body{padding-bottom:0}
       <span class="eyebrow">HVAC techs and self-employed HVAC contractors</span>
       <h1>Health insurance for <span>HVAC technicians</span></h1>
       <p class="hero-sub">Your shop doesn't offer coverage, or you work for yourself? Here is how HVAC techs get health insurance in 2027, what it costs, and how to pay less.</p>
-      <div class="hero-ctas"><a class="btn btn-primary" href="/quote?type=individual&from=health-insurance-for-hvac-technicians">Get my free quote</a><a class="btn btn-secondary" href="/aca-subsidy-calculator">Check my subsidy</a></div>
+      <div class="hero-ctas"><a class="btn btn-primary" href="/quote?type=business&from=health-insurance-for-hvac-technicians">Get my free quote</a><a class="btn btn-secondary" href="/aca-subsidy-calculator">Check my subsidy</a></div>
       <div class="hero-meta">
         <span><span class="dot"></span>Licensed independent brokerage</span>
         <span><span class="dot"></span>40+ states</span>
@@ -145,7 +226,7 @@ body{padding-bottom:0}
 </section>
 <section class="section">
   <div class="container" style="max-width:820px">
-<div class="cta-strip"><h2>See your real price</h2><p>A licensed advisor checks every plan and tax credit for your ZIP and income. Free, and English y Espa&ntilde;ol.</p><a class="btn" href="/quote?type=individual&from=health-insurance-for-hvac-technicians" style="background:#fff;color:var(--blue-700)">Get my free quote</a></div>
+<div class="cta-strip"><h2>See your real price</h2><p>A licensed advisor checks every plan and tax credit for your ZIP and income. Free, and English y Espa&ntilde;ol.</p><a class="btn" href="/quote?type=business&from=health-insurance-for-hvac-technicians" style="background:#fff;color:var(--blue-700)">Get my free quote</a></div>
   </div>
 </section>
 <section class="section">
@@ -181,7 +262,7 @@ body{padding-bottom:0}
 </section>
 <section class="section">
   <div class="container" style="max-width:820px">
-<div class="cta-strip"><h2>Stop guessing what coverage costs</h2><p>Get your free quote in about 2 minutes. No obligation.</p><a class="btn" href="/quote?type=individual&from=health-insurance-for-hvac-technicians" style="background:#fff;color:var(--blue-700)">Get my free quote</a></div>
+<div class="cta-strip"><h2>Stop guessing what coverage costs</h2><p>Get your free quote in about 2 minutes. No obligation.</p><a class="btn" href="/quote?type=business&from=health-insurance-for-hvac-technicians" style="background:#fff;color:var(--blue-700)">Get my free quote</a></div>
   </div>
 </section></main>
 
@@ -193,6 +274,7 @@ body{padding-bottom:0}
       <a class="vs-rg-card" href="/health-insurance-for-plumbers"><strong>Plumbers</strong><span>Plumbing companies and self-employed plumbers.</span><em>See the guide &rarr;</em></a>
       <a class="vs-rg-card" href="/health-insurance-for-electricians"><strong>Electricians</strong><span>Electrical contractors and apprentices.</span><em>See the guide &rarr;</em></a>
       <a class="vs-rg-card" href="/health-insurance-for-landscaping-companies"><strong>Landscapers</strong><span>Lawn care crews and seasonal workers.</span><em>See the guide &rarr;</em></a>
+      <a class="vs-rg-card" href="/health-insurance-for-restoration-companies"><strong>Restoration</strong><span>Water, fire and mold restoration crews.</span><em>See the guide &rarr;</em></a>
       <a class="vs-rg-card" href="/health-insurance-for-barbers"><strong>Barbers</strong><span>Booth renters and shop owners.</span><em>See the guide &rarr;</em></a>
       <a class="vs-rg-card" href="/health-insurance-for-nail-technicians"><strong>Nail techs</strong><span>Booth renters and salon owners.</span><em>See the guide &rarr;</em></a>
       <a class="vs-rg-card" href="/health-insurance-for-doordash-drivers"><strong>Delivery drivers</strong><span>DoorDash, Instacart and gig work.</span><em>See the guide &rarr;</em></a>
@@ -215,7 +297,7 @@ body{padding-bottom:0}
         </div>
       </div>
       <div><h4>Solutions</h4><ul><li><a href="/small-business-health-insurance">Small Business</a></li><li><a href="/health-insurance-for-contractors">Contractors</a></li><li><a href="/health-insurance-for-trucking-companies">Trucking Companies</a></li><li><a href="/health-insurance-for-restaurants">Restaurants</a></li><li><a href="/health-insurance-for-dental-offices">Dental Offices</a></li><li><a href="/dental-vision-insurance">Dental and Vision</a></li></ul></div>
-      <div><h4>Company</h4><ul><li><a href="/about">About</a></li><li><a href="/meet-the-team">Meet the Team</a></li><li><a href="/bradley-vilsaint">Our Founder</a></li><li><a href="/careers">Careers</a></li><li><a href="/refer-and-earn">Refer &amp; Earn</a></li><li><a href="/affiliate-program">Affiliate Program</a></li><li><a href="/creator">Creator Login</a></li><li><a href="/trucking-partners">Trucking Partners</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li><li><a href="/quote?from=health-insurance-for-hvac-technicians&amp;type=individual">Get a Quote</a></li><li><a href="/privacy">Privacy Policy</a></li><li><a href="/terms">Terms and Conditions</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="/about">About</a></li><li><a href="/meet-the-team">Meet the Team</a></li><li><a href="/bradley-vilsaint">Our Founder</a></li><li><a href="/careers">Careers</a></li><li><a href="/refer-and-earn">Refer &amp; Earn</a></li><li><a href="/affiliate-program">Affiliate Program</a></li><li><a href="/creator">Creator Login</a></li><li><a href="/trucking-partners">Trucking Partners</a></li><li><a href="/blog">Blog</a></li><li><a href="/contact">Contact</a></li><li><a href="/quote?from=health-insurance-for-hvac-technicians&amp;type=business">Get a Quote</a></li><li><a href="/privacy">Privacy Policy</a></li><li><a href="/terms">Terms and Conditions</a></li></ul></div>
       <div><h4>Reach Us</h4><ul><li><a href="tel:+19548251009">(954) 825-1009</a></li><li><a href="mailto:info@vshealthbenefits.com">info@vshealthbenefits.com</a></li><li>Mon-Fri 8am-6pm ET</li><li>Sat-Sun 8am-1pm ET</li><li>Miami, FL | 40+ states</li><li class="vs-npn">Licensed agent &middot; NPN 22116298<br><a href="https://licenseesearch.fldfs.com/" target="_blank" rel="noopener" title="Search NPN 22116298 at the Florida Department of Financial Services">Verify my license (FL DFS) &#8599;</a></li></ul></div>
     </div>
     <div class="foot-disclaimer" style="font-size:.78rem;color:rgba(255,255,255,.9);line-height:1.55;max-width:760px;margin-bottom:16px">VS Health Benefits only sends official enrollment materials after direct client confirmation. We do not mail unsolicited insurance packages. VS BENEFITS LLC is a licensed independent insurance agency, not an insurance company, and is not affiliated with or endorsed by HealthCare.gov, the Centers for Medicare &amp; Medicaid Services (CMS) or any government agency. We do not offer every plan available in your area; HealthCare.gov or your state marketplace lists all options. Prices, savings and $0 premiums depend on eligibility and are estimates, not quotes. Content is general information, not tax, legal or medical advice.</div>
@@ -241,7 +323,7 @@ body{padding-bottom:0}
 </footer>
 <div id="vs-callbar" role="region" aria-label="Contact a licensed advisor">
   <a class="vs-call" href="tel:+19548251009" data-vs-cta="sticky-call"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.4.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1l-2.3 2.2z"/></svg>Call an advisor</a>
-  <a class="vs-quote" href="/quote?from=health-insurance-for-hvac-technicians" data-vs-cta="sticky-quote">Get my quote</a>
+  <a class="vs-quote" href="/quote?type=business&amp;from=health-insurance-for-hvac-technicians" data-vs-cta="sticky-quote">Get my quote</a>
 </div>
 <script>(function(){var b=document.getElementById("vs-callbar");if(!b)return;b.addEventListener("click",function(e){var a=e.target.closest("a[data-vs-cta]");if(!a)return;try{if(window.vsTrack)window.vsTrack(a.getAttribute("data-vs-cta")==="sticky-call"?"contact_call":"quote_start",{lead_type:"sticky_bar"});}catch(_){}});})();</script>
 

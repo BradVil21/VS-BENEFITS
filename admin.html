@@ -6469,7 +6469,7 @@ function openBizLeadForm(b){
    +'<label class="cz-fld"><span>Employees</span><input class="cz-inp" id="bz_employees" value="'+escapeHtml(b.employees||"")+'" placeholder="5 - 9"/></label>'
    +'<label class="cz-fld"><span>Requested coverage</span><select class="cz-inp" id="bz_coverage"><option value="">-</option><option'+(b.requestedCoverage==="PPO"?" selected":"")+'>PPO</option><option'+(b.requestedCoverage==="HMO"?" selected":"")+'>HMO</option><option'+(b.requestedCoverage==="Not sure yet"?" selected":"")+'>Not sure yet</option></select></label>'
    +'<label class="cz-fld"><span>Currently insured</span><select class="cz-inp" id="bz_insured"><option value="">-</option><option'+(b.currentlyInsured==="No"?" selected":"")+'>No</option><option'+(b.currentlyInsured==="Yes"?" selected":"")+'>Yes</option></select></label>'
-   +'<label class="cz-fld"><span>Coverage start</span><input class="cz-inp" id="bz_start" type="date" value="'+escapeHtml(b.coverageStart||"")+'"/></label>'
+   +'<label class="cz-fld"><span>Coverage start</span><input class="cz-inp" id="bz_start" list="bz_start_opts" placeholder="ASAP, 1-2 months, or a date" value="'+escapeHtml(b.coverageStart||"")+'"/><datalist id="bz_start_opts"><option value="ASAP"><option value="1-2 months"><option value="3+ months"><option value="Just researching"></datalist></label>'
    +'<label class="cz-fld"><span>Stage</span><select class="cz-inp" id="bz_stage">'+stageOpts+'</select></label>'
    +'<label class="cz-fld"><span>Email</span><input class="cz-inp" id="bz_email" value="'+escapeHtml(b.email||"")+'" placeholder="jane@acme.com"/></label>'
    +'<label class="cz-fld"><span>Phone</span><input class="cz-inp" id="bz_phone" value="'+escapeHtml(b.phone||"")+'" placeholder="(561) 555-0100"/></label>'

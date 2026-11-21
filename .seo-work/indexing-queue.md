@@ -28,17 +28,17 @@ Request ~10 a day in Search Console (URL inspection > Request indexing). Tick ea
 - [ ] /lp/truckers/missouri
 - [x] /lp/es/camioneros   (requested 11/17)
 - [x] /lp/es/camioneros/texas   (requested 11/17)
-- [ ] /lp/es/camioneros/illinois
-- [ ] /lp/es/camioneros/ohio
-- [ ] /lp/es/camioneros/kentucky
-- [ ] /lp/es/camioneros/maryland
-- [ ] /lp/es/camioneros/missouri
+- [x] /lp/es/camioneros/illinois   (requested 11/21)
+- [x] /lp/es/camioneros/ohio   (requested 11/21)
+- [x] /lp/es/camioneros/kentucky   (requested 11/21)
+- [x] /lp/es/camioneros/maryland   (requested 11/21)
+- [x] /lp/es/camioneros/missouri   (requested 11/21)
 - [x] /lp/es/independientes   (requested 11/17)
 
 ## Day 3
 - [x] /lp/es/independientes/florida   (requested 11/17)
 - [x] /lp/es/independientes/texas   (requested 11/18)
-- [ ] /lp/es/independientes/georgia
+- [x] /lp/es/independientes/georgia   (requested 11/21)
 - [ ] /lp/es/independientes/illinois
 - [ ] /lp/es/independientes/ohio
 - [ ] /lp/es/independientes/kentucky
@@ -75,3 +75,8 @@ Request first when the quota resets (after ~7:40 PM ET 11/19):
 - /blog/hvac-employee-benefits
 - /health-insurance-for-hvac-technicians
 - /health-insurance-for-hvac-companies (updated links)
+
+## 2026-11-21
+Already indexed (no request needed): /blog/hvac-employee-benefits, /health-insurance-for-hvac-technicians
+Requested: /health-insurance-for-hvac-companies, /qualifying-life-events-health-insurance, /family-health-insurance, /blog/aca-open-enrollment-2027-guide, 6 Spanish LPs
+Quota ran out. Next: /lp/es/independientes/illinois, ohio, kentucky, maryland, missouri

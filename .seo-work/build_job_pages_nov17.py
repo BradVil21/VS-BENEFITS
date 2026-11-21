@@ -6,6 +6,7 @@ owner sends them; pages render without a photo until then."""
 import sys, os, json
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import page_lib as P
+import trade_hero as TH
 SITE = "https://www.vshealthbenefits.com"
 TODAY = "2026-11-17"
 
@@ -58,7 +59,7 @@ def answer(t):
 
 # ----------------------------------------------------------------- shared text
 GROUP_COST = """
-    <h2>What group health insurance costs a %(trade)s business</h2>
+    <h2>What group health insurance costs %(a_trade)s business</h2>
     <p>Small group coverage for a trade business generally runs about <strong>$350 to $650 per employee per month</strong> for employee-only coverage, before you decide how much the company pays. Most owners cover 50%% to 100%% of the employee&rsquo;s own premium and let employees add family members at their own cost.</p>
     <p>Three things move your rate more than the carrier you pick:</p>
     <ul>
@@ -69,7 +70,7 @@ GROUP_COST = """
     <p><a href="/small-business-health-insurance-calculator">Estimate your cost with your real headcount</a>, or send us a census and we price every carrier for you.</p>"""
 
 GROUP_STRUCT = """
-    <h2>Plan options that fit a %(trade)s business</h2>
+    <h2>Plan options that fit %(a_trade)s business</h2>
     <div class="vs-tw"><table class="vs-t">
       <thead><tr><th>Option</th><th>Fits when</th><th>Watch for</th></tr></thead>
       <tbody>
@@ -116,10 +117,10 @@ def group_page(slug, trade, trade_plural, eyebrow, h1span, sub, intro_h, intro, 
       hero(eyebrow, "Health insurance for", h1span, sub, q, ("/small-business-health-insurance-calculator", "Estimate my cost")),
       fig(slug),
       section(answer(answer_t) + "\n<h2>%s</h2>\n%s" % (intro_h, intro) + PENALTY),
-      section(GROUP_COST % {"trade": trade}, soft=True),
+      section(GROUP_COST % {"trade": trade, "a_trade": ("an " if trade[0] in "aeiou" else "a ") + trade}, soft=True),
       section(cta("Want the real number for your crew?", "Send us headcount, ages and ZIP codes. We price every carrier that writes %s groups and show them side by side. Free." % trade, q)),
       section("<h2>%s</h2>\n%s" % (special_h, special)),
-      section(GROUP_STRUCT % {"trade": trade}, soft=True),
+      section(GROUP_STRUCT % {"trade": trade, "a_trade": ("an " if trade[0] in "aeiou" else "a ") + trade}, soft=True),
       section(OWNER_ONLY % {"trade": trade}),
       section('<h2>%s health insurance: common questions</h2>\n' % trade.capitalize() + P.faq_html(faq), soft=True),
       section(cta("Get a quote, not a guess", "Tell us your headcount and ZIP. A licensed advisor comes back with every option for your %s, free and with no obligation." % ("business" if trade_plural else "crew"), q)),
@@ -165,6 +166,19 @@ LAND = group_page("health-insurance-for-landscaping-companies", "landscaping", "
   "Health Insurance for Landscaping & Lawn Care Companies (2027)",
   "Health insurance for landscaping and lawn care companies in 2027: group plan costs, seasonal crews and the 50-employee rule, and plans for solo lawn care owners.",
   "health insurance for landscaping companies, lawn care business health insurance, landscaper health insurance, group health insurance landscaping, seasonal employee health insurance")
+
+RESTO = group_page("health-insurance-for-restoration-companies", "restoration", "restoration companies",
+  "Water, fire and mold restoration", "restoration companies",
+  "On-call crews, storm surges and techs every competitor wants. Here is what health coverage costs a restoration company in 2027 and how to cover crews whose headcount jumps after every storm.",
+  "Why benefits matter in restoration",
+  "<p>Restoration techs work nights, weekends and holidays, in flooded basements, smoke-damaged homes and mold-filled crawl spaces. Certified water and fire techs are in short supply, and insurance-program and franchise competitors recruit them with full benefits packages.</p><p>Workers&rsquo; comp handles an injury on a job. It doesn&rsquo;t pay for a child&rsquo;s ER visit, ongoing asthma medication, or the routine care your crew and their families need. Health insurance fills that gap, and it is one of the first things an experienced tech asks about.</p>",
+  "Restoration companies offer health insurance through a <strong>group plan</strong> (about $350 to $650 per employee per month for employee-only coverage) or an <strong>ICHRA</strong> that reimburses a set amount toward each tech&rsquo;s own plan. Companies under 50 full-time equivalent employees aren&rsquo;t required to offer coverage, but it is one of the strongest tools for hiring and keeping certified techs.",
+  "Storm surges, on-call crews and subcontractors",
+  "<p>After a hurricane or freeze, a restoration company can double its crew for a few months. Temporary storm workers who aren&rsquo;t expected to work 30+ hours a week for a full measurement period usually don&rsquo;t have to be offered coverage, and a seasonal worker exception can keep you under the 50-employee line if you only go over it for 120 days or fewer. <a href='/blog/seasonal-part-time-crew-health-insurance'>How seasonal and part-time workers are counted</a>.</p><p>Out-of-area subcontractors paid on a 1099 can&rsquo;t join your group plan. If you control their hours, tools and methods, they may be employees in practice. <a href='/blog/1099-crew-vs-w2-health-insurance'>1099 crews vs. W-2 employees</a>.</p>",
+  [("Can I cover my full-time restoration techs and not temporary storm crews?", "Yes. You can offer coverage by job class, such as full-time technicians versus temporary storm workers, as long as the classes are based on the job and not on health.")],
+  "Health Insurance for Restoration Companies (2027 Costs)",
+  "Health insurance for water, fire and mold restoration companies in 2027: group plan costs per tech, storm-season crews, 1099 subs and the 50-employee rule.",
+  "health insurance for restoration companies, water damage restoration company health insurance, fire restoration employee benefits, mold remediation company health insurance, restoration contractor health insurance")
 
 # ------------------------------------------------------------ INDIVIDUAL PAGES
 SE_COST = """
@@ -275,7 +289,7 @@ HVACT = se_page("health-insurance-for-hvac-technicians", "HVAC technicians", "HV
   "Self-Employed Health Insurance", "/self-employed-health-insurance",
   [("Group health insurance for HVAC companies", "/health-insurance-for-hvac-companies"), ("HVAC employee benefits", "/blog/hvac-employee-benefits"), ("Self-employed health insurance", "/self-employed-health-insurance"), ("2027 ACA subsidy calculator", "/aca-subsidy-calculator")])
 
-PAGES = [PLUMB, ELEC, LAND, BARB, NAIL, DASH, HVACT]
+PAGES = [PLUMB, ELEC, LAND, RESTO, BARB, NAIL, DASH, HVACT]
 
 RELATED = """
 <section class="vs-related-guides" data-block="vs-job-pages">
@@ -286,6 +300,7 @@ RELATED = """
       <a class="vs-rg-card" href="/health-insurance-for-plumbers"><strong>Plumbers</strong><span>Plumbing companies and self-employed plumbers.</span><em>See the guide &rarr;</em></a>
       <a class="vs-rg-card" href="/health-insurance-for-electricians"><strong>Electricians</strong><span>Electrical contractors and apprentices.</span><em>See the guide &rarr;</em></a>
       <a class="vs-rg-card" href="/health-insurance-for-landscaping-companies"><strong>Landscapers</strong><span>Lawn care crews and seasonal workers.</span><em>See the guide &rarr;</em></a>
+      <a class="vs-rg-card" href="/health-insurance-for-restoration-companies"><strong>Restoration</strong><span>Water, fire and mold restoration crews.</span><em>See the guide &rarr;</em></a>
       <a class="vs-rg-card" href="/health-insurance-for-barbers"><strong>Barbers</strong><span>Booth renters and shop owners.</span><em>See the guide &rarr;</em></a>
       <a class="vs-rg-card" href="/health-insurance-for-nail-technicians"><strong>Nail techs</strong><span>Booth renters and salon owners.</span><em>See the guide &rarr;</em></a>
       <a class="vs-rg-card" href="/health-insurance-for-doordash-drivers"><strong>Delivery drivers</strong><span>DoorDash, Instacart and gig work.</span><em>See the guide &rarr;</em></a>
@@ -301,6 +316,15 @@ def service_schema(slug, name):
                          "email": "info@vshealthbenefits.com", "address": {"@type": "PostalAddress", "addressLocality": "Miami", "addressRegion": "FL", "addressCountry": "US"}},
             "areaServed": {"@type": "Country", "name": "United States"}}
 
+# Simple homepage-style hero (2026-11-21). img None = stats card until the owner sends a photo.
+SUB = "Hire and keep %s with health benefits that fit your budget. We compare every major carrier for crews of 2 to 100+, free."
+NEWHERO = {
+ "health-insurance-for-plumbers": ("Plumbers &amp; Plumbing Companies", SUB % "licensed plumbers", "plumbing-faucet", "Plumbing faucet with running water", 900, 600),
+ "health-insurance-for-electricians": ("Electricians &amp; Electrical Contractors", SUB % "licensed electricians", "electrician-lineman-utility-pole", "Electrician working on a utility pole", 1600, 1067),
+ "health-insurance-for-landscaping-companies": ("Landscaping &amp; Lawn Care Companies", SUB % "your best crew leads", None, "", 0, 0),
+ "health-insurance-for-restoration-companies": ("Restoration Companies", SUB % "certified restoration techs", None, "", 0, 0),
+}
+
 import re as _re
 C = P.Chrome()
 for p in PAGES:
@@ -310,10 +334,20 @@ for p in PAGES:
                P.faq_schema([(q, plainq(a)) for q, a in p["faq"]]),
                P.article_schema(p["slug"], p["title"], p["desc"], TODAY)]
     og = "/compressed/%s.jpg" % IMG[p["slug"]][0] if p["slug"] in IMG else "/compressed/hvac-rooftop-technician.jpg"
+    if p["slug"] in NEWHERO:
+        span, sub, img, alt, w, h = NEWHERO[p["slug"]]
+        new = TH.hero(p["slug"], "Health Insurance for", span, sub, img, alt, w, h)
+        p["main"], n = _re.subn(r'<section class="hero">.*?</section>(<div class="container" style="max-width:900px;margin-top:-12px[^"]*">.*?</div>)?', lambda m: new, p["main"], count=1, flags=_re.S)
+        assert n == 1, p["slug"]
+        if img: og = "/compressed/%s.jpg" % img
     html = C.page(p["slug"], p["title"], p["desc"], p["keywords"], p["main"], schemas, og_image=og, related_block=RELATED, sticky_call=True)
     qt = "business" if p["crumb"].startswith("Group") else "individual"
     html = html.replace("from=group-health-insurance-for-dump-truck-fleets&amp;type=business&amp;niche=trucking", "from=%s&amp;type=%s" % (p["slug"], qt))
     html = html.replace("from=group-health-insurance-for-dump-truck-fleets", "from=" + p["slug"])
     assert "dump-truck" not in html.replace("/group-health-insurance-for-dump-truck-fleets\"", ""), p["slug"]
-    html = html.replace('href="/quote" data-vs-cta="sticky-quote"', 'href="/quote?from=%s" data-vs-cta="sticky-quote"' % p["slug"])
+    html = html.replace('href="/quote" data-vs-cta="sticky-quote"', 'href="/quote?%sfrom=%s" data-vs-cta="sticky-quote"' % ("type=business&amp;" if qt == "business" else "", p["slug"]))
+    if p["slug"] in NEWHERO:
+        html = html.replace("</head>", TH.CSS + "\n</head>", 1)
+    if p["slug"] == "health-insurance-for-hvac-technicians":  # owner: every HVAC page goes to the business quote
+        html = html.replace("type=individual", "type=business").replace('href="/quote?from=%s" data-vs-cta' % p["slug"], 'href="/quote?type=business&amp;from=%s" data-vs-cta' % p["slug"])
     print(P.write(p["slug"], html), len(p["title"]), len(p["desc"]))

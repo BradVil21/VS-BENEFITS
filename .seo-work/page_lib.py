@@ -29,6 +29,15 @@ class Chrome:
         self.org_schema = _grab(r'<script type="application/ld\+json">\s*\{"@context":"https://schema\.org","@type":"InsuranceAgency".*?</script>', d, "org schema")
         self.fonts = _grab(r'<link rel="icon".*?rel="stylesheet" />', d, "fonts")
         self.header = _grab(r'<header class="site-header">.*?</header>', d, "header")
+        # Site-wide styles added after this library was written (nav dropdowns,
+        # ZIP widget, mobile polish, centred nav). Missing them left the
+        # Coverage and Service Areas menus permanently open on desktop.
+        self.style_extra = "\n".join(m.group(0) for m in re.finditer(
+            r'<style id="(?:vsz-css|vcov-css|vs-mobile-css|vs-nav-center)">.*?</style>', d, re.S))
+        if 'id="vcov-css"' not in self.style_extra:
+            raise SystemExit("page_lib: could not find vcov-css in donor")
+        m = re.search(r'<style id="vs-topbar-css">.*?</style><div class="vs-topbar">.*?</div></div>', d, re.S)
+        self.topbar = m.group(0) if m else ""
         self.footer = _grab(r'<footer>.*?</footer>', d, "footer")
         m = re.search(r'<div class="modal-backdrop" id="login-modal".*?</body>', d, re.S)
         if m:
@@ -76,6 +85,7 @@ class Chrome:
         parts.append(self.style_main)
         parts.append(self.style_rg)
         parts.append(self.style_carrier)
+        parts.append(self.style_extra)
         if sticky_call:
             parts.append(STICKY_CSS)
         parts.append(self.org_schema)
@@ -85,6 +95,7 @@ class Chrome:
         parts.append("</head>")
         parts.append("<body>")
         parts.append('<div id="vs-scroll-bar"></div>')
+        parts.append(self.topbar)
         parts.append(self.header)
         parts.append(main)
         if related_block:
