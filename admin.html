@@ -1732,7 +1732,7 @@ html.dark .ads-kg{background:#1c2d42;border-color:#253a54}html.dark .ads-k .n{co
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></svg></span><span class="sni-label">Pipeline</span>
     </button>
     <button class="sidebar-nav-item" data-tab="leads" type="button">
-      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="sni-label">Leads</span>
+      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span class="sni-label">Add Leads</span>
       <span class="sni-badge" id="b-leads" style="display:none">0</span>
     </button>
     <button class="sidebar-nav-item" data-tab="followups" type="button">
@@ -1806,7 +1806,7 @@ html.dark .ads-kg{background:#1c2d42;border-color:#253a54}html.dark .ads-k .n{co
 <!-- ══════════════════════ TOPBAR ══════════════════════ -->
 <header class="topbar" id="topbar">
   <button class="topbar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
-  <div class="topbar-title" id="topbar-title">Leads</div>
+  <div class="topbar-title" id="topbar-title">Add Leads</div>
   <div class="topbar-right">
     <span id="sync-pill" class="sync-pill off">
       <span class="dot"></span><span id="sync-lbl">Offline</span>
@@ -2349,7 +2349,7 @@ var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,conta
 K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.ushaKpis="vs_usha_kpis";K.ushaOv="vs_usha_overrides";K.ushaIncome="vs_usha_income";K.ushaPlan="vs_usha_plan";K.clientSkip="vs_client_skip";K.msHist="vs_ms_hist";
 LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";LOCAL_TO_REMOTE[K.ushaKpis]="usha_kpis";LOCAL_TO_REMOTE[K.ushaOv]="usha_overrides";LOCAL_TO_REMOTE[K.ushaIncome]="usha_income";LOCAL_TO_REMOTE[K.ushaPlan]="usha_plan";LOCAL_TO_REMOTE[K.clientSkip]="client_skip";LOCAL_TO_REMOTE[K.msHist]="ms_hist";
 REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta","usha_kpis");REMOTE_TO_LOCAL.usha_kpis=K.ushaKpis;REMOTE_KEYS.push("usha_overrides","usha_income","usha_plan");REMOTE_TO_LOCAL.usha_plan=K.ushaPlan;REMOTE_KEYS.push("client_skip","ms_hist");REMOTE_TO_LOCAL.client_skip=K.clientSkip;REMOTE_TO_LOCAL.ms_hist=K.msHist;REMOTE_TO_LOCAL.usha_overrides=K.ushaOv;REMOTE_TO_LOCAL.usha_income=K.ushaIncome;REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
-K.affiliates="vs_affiliates";LOCAL_TO_REMOTE[K.affiliates]="affiliates";REMOTE_KEYS.push("affiliates");REMOTE_TO_LOCAL.affiliates=K.affiliates; /* creator program, 2026-11-12 */
+K.affiliates="vs_affiliates";LOCAL_TO_REMOTE[K.affiliates]="affiliates";REMOTE_KEYS.push("affiliates");REMOTE_TO_LOCAL.affiliates=K.affiliates; K.trash="vs_trash";LOCAL_TO_REMOTE[K.trash]="trash";REMOTE_KEYS.push("trash");REMOTE_TO_LOCAL.trash=K.trash; /* trash, 2026-11-22 */ /* creator program, 2026-11-12 */
 K.ushaManual="vs_usha_manual";K.ghlSent="vs_ghl_sent";LOCAL_TO_REMOTE[K.ushaManual]="usha_manual";LOCAL_TO_REMOTE[K.ghlSent]="ghl_sent";REMOTE_KEYS.push("usha_manual","ghl_sent");REMOTE_TO_LOCAL.usha_manual=K.ushaManual;REMOTE_TO_LOCAL.ghl_sent=K.ghlSent;K.bcSnap="vs_bc_snap";K.bcLog="vs_bc_log";LOCAL_TO_REMOTE[K.bcSnap]="bc_snap";LOCAL_TO_REMOTE[K.bcLog]="bc_log";REMOTE_KEYS.push("bc_snap","bc_log");REMOTE_TO_LOCAL.bc_snap=K.bcSnap;REMOTE_TO_LOCAL.bc_log=K.bcLog;
 
 function setSyncPill(state){
@@ -4796,7 +4796,7 @@ function renderTasks(){
         removeLeadFromTasks(lead.id);renderTasks();renderLeads();
       }}));
       sa.appendChild(el("button",{class:"btn btn-danger btn-sm",type:"button",html:"<svg class='ico' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' style='width:1em;height:1em;display:inline-block;vertical-align:-.14em' aria-hidden='true'><path d='M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M10 11v6M14 11v6'/></svg> Delete lead",onclick:function(){
-        if(!confirm("Permanently delete "+fullName(lead)+"?"))return;
+        if(!confirm("Move "+fullName(lead)+" to Trash?\n\nYou can restore them from Trash in the sidebar."))return;
         saveLeads(getLeads().filter(function(x){return x.id!==lead.id;}));removeLeadFromTasks(lead.id);
         renderLeads();renderPipeline();renderTasks();
       }}));
@@ -5467,10 +5467,10 @@ function czClients(){
   var mount=$("cz-clients");if(!mount)return;
   czEnsure();czBadges();
   if(getLeads().length===0){
-    mount.innerHTML='<h3 class="cz-h">Leads</h3><p class="cz-lede">Your leads and clients.</p><div class="cz-panel cz-empty"><div style="font-size:40px;margin-bottom:6px"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><p class="cz-eh">No clients yet</p><p class="cz-es">Add your first lead, or load sample data to explore.</p><div style="display:flex;gap:8px;justify-content:center"><button class="cz-btn-go" data-cz-add="1">+ Add new lead</button><button class="cz-btn-soft" data-cz-sample="1">Load sample data</button></div></div>';
+    mount.innerHTML='<h3 class="cz-h">Add Leads</h3><p class="cz-lede">Add new leads to your database and manage the ones you have.</p><div class="cz-panel cz-empty"><div style="font-size:40px;margin-bottom:6px"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><p class="cz-eh">No clients yet</p><p class="cz-es">Add your first lead, or load sample data to explore.</p><div style="display:flex;gap:8px;justify-content:center"><button class="cz-btn-go" data-cz-add="1">+ Add new lead</button><button class="cz-btn-soft" data-cz-sample="1">Load sample data</button></div></div>';
     czBind(mount);return;
   }
-  mount.innerHTML='<h3 class="cz-h">Leads</h3><p class="cz-lede">Your leads and clients.</p>'
+  mount.innerHTML='<h3 class="cz-h">Add Leads</h3><p class="cz-lede">Add new leads to your database and manage the ones you have.</p>'
     +'<div class="cz-toolbar"><div class="cz-search">'+czSearchSVG+'<input data-cz-search type="search" placeholder="Search name, email, phone, zip…" value="'+escapeHtml(czQuery)+'"/></div><select data-cz-sort class="sortsel" aria-label="Sort leads">'+czSortOptions(czSort)+'</select><button class="cz-btn-soft" data-cz-export="1" title="Download these leads as a CSV">&#11015; Download CSV</button><button class="cz-btn-soft" data-cz-import="1" title="Import leads from a CSV file">&#11014; Import CSV</button><button class="cz-btn-go" data-cz-add="1">+ Add new lead</button></div>'
     +'<div id="cz-clients-results"></div>';
   var sb=mount.querySelector("[data-cz-search]");if(sb)sb.addEventListener("input",function(){czQuery=sb.value;czClientResults();});
@@ -6262,7 +6262,7 @@ function czOpenModal(client){
   });
   if(!isNew){
     var r=$("cz-mReset");if(r)r.addEventListener("click",function(){czRestart(client.id);closeModal();});
-    var d=$("cz-mDel");if(d)d.addEventListener("click",function(){if(confirm("Delete this client?")){czRemove(client.id);closeModal();}});
+    var d=$("cz-mDel");if(d)d.addEventListener("click",function(){if(confirm("Move this lead to Trash?\n\nYou can restore it from Trash in the sidebar.")){czRemove(client.id);closeModal();}});
   }
 }
 function czConfetti(){
@@ -6294,7 +6294,7 @@ function czCelebrate(name,sub){
 }
 /* ---- route the existing CRM tabs through the new views ---- */
 ALL_TABS=["dashboard","pipeline","leads","followups","tasks","mytasks","accounts","users","support","referrals","bizleads","ads","notes","analytics","blocked","settings"];
-TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",mytasks:"My Tasks",accounts:"Active Clients",users:"Users",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",ads:"Marketing",notes:"Notes",analytics:"Analytics",blocked:"Blocked IPs",settings:"Settings"};
+TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Add Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",mytasks:"My Tasks",accounts:"Active Clients",users:"Users",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",ads:"Marketing",notes:"Notes",analytics:"Analytics",blocked:"Blocked IPs",settings:"Settings"};
 function renderDashboard(){czDashboard();}
 function renderLeads(){czClients();}
 function renderPipeline(){czPipeline();}
@@ -6501,7 +6501,7 @@ function openBizLeadForm(b){
     if(isNew)arr.unshift(rec);
     saveBizLeads(arr);closeModal();renderBizLeads();
   });
-  var del=$("bz-del");if(del)del.addEventListener("click",function(){if(!confirm("Delete this business lead?"))return;saveBizLeads(getBizLeads().filter(function(x){return x.id!==b.id;}));closeModal();renderBizLeads();});
+  var del=$("bz-del");if(del)del.addEventListener("click",function(){if(!confirm("Move this business lead to Trash?\n\nYou can restore it from Trash in the sidebar."))return;saveBizLeads(getBizLeads().filter(function(x){return x.id!==b.id;}));closeModal();renderBizLeads();});
 }
 function bizExportCsv(){
   var all=getBizLeads();
@@ -14083,7 +14083,149 @@ try{(function(){
   ].join("\n");document.head.appendChild(st);
 }catch(err){if(window.console)console.warn("affiliates init failed",err);}})();
 
+/* ═══════════════ TRASH (2026-11-22) ═══════════════
+   Leads and business leads you delete land here instead of vanishing.
+   Restore them, delete one for good, or empty the whole trash.
+   Stored in Firestore vs_state/trash so every admin sees the same trash. */
+(function(){
+ try{
+  var TICON='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>';
+  var COLL={leads:{label:"Lead",get:function(){return getLeads();},save:function(v){saveLeads(v);}},
+            biz:{label:"Business lead",get:function(){return getBizLeads();},save:function(v){saveBizLeads(v);}}};
+  var V={f:"all",q:""};
+  function load(){return asArr(K.trash);}
+  function store(list){
+    list=list.slice(0,600);
+    try{while(list.length>1&&JSON.stringify(list).length>700000)list.pop();}catch(e){}
+    setArr(K.trash,list,true);badge();
+  }
+  function who(){try{var m=(typeof currentAdmin==="function"&&currentAdmin())||{};return m.name||m.username||m.email||"";}catch(e){return "";}}
+  function strip(o){var c=Object.assign({},o);delete c.photoDataUrl;delete c.documents;return c;}
+  function nameOf(t){var x=t.item||{};if(t.coll==="biz")return x.company||x.contact||x.email||"Business lead";return fullName(x);}
+  function digits(p){return String(p||"").replace(/\D/g,"").slice(-10);}
+  /* Was it really deleted, or just moved (lead -> client, lead -> business board)? */
+  function stillHere(x){
+    var id=x.id,em=normEmail(x.email),ph=digits(x.phone);
+    var lists=[getLeads(),getBizLeads(),getAccounts()];
+    for(var i=0;i<lists.length;i++){for(var j=0;j<lists[i].length;j++){var y=lists[i][j];if(!y)continue;
+      if(id&&y.id===id)return true;
+      if(em&&normEmail(y.email)===em)return true;
+      if(ph&&ph.length===10&&digits(y.phone)===ph)return true;}}
+    return false;
+  }
+  var pending=[],timer=null;
+  function queue(coll,items){
+    items.forEach(function(x){pending.push({coll:coll,item:strip(x)});});
+    clearTimeout(timer);
+    timer=setTimeout(function(){
+      var add=pending.filter(function(p){return !stillHere(p.item);}).map(function(p){
+        return {tid:"t"+Date.now().toString(36)+Math.random().toString(36).slice(2,7),coll:p.coll,item:p.item,deletedAt:Date.now(),by:who()};});
+      pending=[];
+      if(add.length){store(add.concat(load()));render();}
+    },2500);
+  }
+  function wrap(coll,g,orig){
+    var w=function(v){
+      try{var prev=g()||[],keep={};(v||[]).forEach(function(x){if(x&&x.id)keep[x.id]=1;});
+        var gone=prev.filter(function(x){return x&&x.id&&!keep[x.id];});
+        if(coll==="leads"&&typeof isAffApp==="function")gone=gone.filter(function(x){return !isAffApp(x);});
+        if(gone.length)queue(coll,gone);}catch(e){console.warn("trash capture",e);}
+      return orig.apply(this,arguments);
+    };
+    return w;
+  }
+  saveLeads=wrap("leads",getLeads,saveLeads);
+  saveBizLeads=wrap("biz",getBizLeads,saveBizLeads);
+
+  function rerender(){
+    try{if(typeof czCurrentRender==="function")czCurrentRender();}catch(e){}
+    try{if(typeof renderLeads==="function")renderLeads();}catch(e){}
+    try{if(typeof renderBizLeads==="function")renderBizLeads();}catch(e){}
+    try{if(typeof renderPipeline==="function")renderPipeline();}catch(e){}
+  }
+  function restore(tid){
+    var list=load(),t=list.filter(function(x){return x.tid===tid;})[0];if(!t)return;
+    var c=COLL[t.coll];if(!c)return;
+    var arr=c.get();
+    if(!arr.some(function(x){return x.id===t.item.id;})){arr.unshift(t.item);c.save(arr);}
+    store(list.filter(function(x){return x.tid!==tid;}));
+    rerender();render();
+    if(typeof toast==="function")toast("Restored "+nameOf(t));
+  }
+  function purge(tid){
+    var list=load(),t=list.filter(function(x){return x.tid===tid;})[0];if(!t)return;
+    if(!confirm("Delete "+nameOf(t)+" forever?\n\nThis can't be undone."))return;
+    store(list.filter(function(x){return x.tid!==tid;}));render();
+  }
+  function emptyAll(){
+    var n=load().length;if(!n)return;
+    if(!confirm("Empty the trash?\n\n"+n+" item"+(n===1?"":"s")+" will be deleted forever. This can't be undone."))return;
+    store([]);render();if(typeof toast==="function")toast("Trash emptied");
+  }
+  function when(ts){try{return new Date(ts).toLocaleString(undefined,{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"});}catch(e){return "";}}
+  function render(){
+    var host=$("trash-mount");if(!host)return;
+    var all=load(),q=V.q.toLowerCase().trim();
+    var cnt={all:all.length,leads:0,biz:0};all.forEach(function(t){cnt[t.coll]=(cnt[t.coll]||0)+1;});
+    var L=all.filter(function(t){if(V.f!=="all"&&t.coll!==V.f)return false;if(!q)return true;var x=t.item||{};
+      return [nameOf(t),x.email,x.phone,x.company].join(" ").toLowerCase().indexOf(q)>=0;});
+    var chip=function(k,l){return '<button type="button" class="tr-chip'+(V.f===k?" on":"")+'" data-trf="'+k+'">'+l+' <b>'+(cnt[k]||0)+'</b></button>';};
+    var rows=L.map(function(t){var x=t.item||{};var sub=[x.phone,x.email].filter(Boolean).map(escapeHtml).join(" &middot; ");
+      return '<div class="tr-row"><div class="tr-main"><div class="tr-name">'+escapeHtml(nameOf(t))+'<span class="tr-tag'+(t.coll==="biz"?" biz":"")+'">'+COLL[t.coll].label+'</span></div>'
+        +(sub?'<div class="tr-sub">'+sub+'</div>':'')
+        +'<div class="tr-when">Deleted '+escapeHtml(when(t.deletedAt))+(t.by?' by '+escapeHtml(t.by):'')+'</div></div>'
+        +'<div class="tr-acts"><button type="button" class="btn btn-sm tr-restore" data-trr="'+t.tid+'">Restore</button><button type="button" class="btn btn-ghost btn-sm tr-del" data-trd="'+t.tid+'">Delete forever</button></div></div>';}).join("");
+    host.innerHTML='<div class="tr-bar"><div class="tr-chips">'+chip("all","All")+chip("leads","Leads")+chip("biz","Business leads")+'</div>'
+      +'<input type="search" class="search tr-q" placeholder="Search trash..." value="'+escapeHtml(V.q)+'"/>'
+      +'<button type="button" class="btn btn-danger btn-sm tr-empty"'+(all.length?'':' disabled')+'>'+TICON+' Empty trash</button></div>'
+      +(rows?'<div class="tr-list">'+rows+'</div>':'<div class="tr-none">'+TICON+'<p>'+(all.length?"Nothing matches.":"Trash is empty. Leads and business leads you delete will show up here.")+'</p></div>');
+    host.querySelectorAll("[data-trf]").forEach(function(b){b.onclick=function(){V.f=b.getAttribute("data-trf");render();};});
+    host.querySelectorAll("[data-trr]").forEach(function(b){b.onclick=function(){restore(b.getAttribute("data-trr"));};});
+    host.querySelectorAll("[data-trd]").forEach(function(b){b.onclick=function(){purge(b.getAttribute("data-trd"));};});
+    var e=host.querySelector(".tr-empty");if(e)e.onclick=emptyAll;
+    var s=host.querySelector(".tr-q");if(s){s.oninput=function(){V.q=s.value;var pos=s.selectionStart;render();var n=host.querySelector(".tr-q");if(n){n.focus();try{n.setSelectionRange(pos,pos);}catch(_){}}};}
+  }
+  function badge(){var b=$("b-trash");if(!b)return;var n=load().length;b.textContent=n;b.style.display=n?"":"none";}
+  function mount(){
+    var nav=$("sidebar-nav");if(!nav)return false;
+    if(!nav.querySelector('[data-tab="trash"]')){
+      var b=document.createElement("button");b.className="sidebar-nav-item";b.type="button";b.setAttribute("data-tab","trash");
+      b.innerHTML='<span class="sni-icon">'+TICON+'</span><span class="sni-label">Trash</span><span class="sni-badge" id="b-trash" style="display:none;background:#64748b">0</span>';
+      var ref=nav.querySelector('.sidebar-nav-item[data-tab="settings"]');
+      var div=ref&&ref.previousElementSibling&&ref.previousElementSibling.classList.contains("sidebar-divider")?ref.previousElementSibling:ref;
+      if(div)nav.insertBefore(b,div);else nav.appendChild(b);
+    }
+    if(!$("p-trash")){
+      var anchor=$("p-blocked")||$("p-settings");if(!anchor)return false;
+      var p=document.createElement("div");p.id="p-trash";p.className="panel";
+      p.innerHTML='<h3>Trash</h3><p class="lede">Leads and business leads you delete land here. Restore anything you deleted by mistake, or empty the trash to remove it for good.</p><div id="trash-mount"></div>';
+      anchor.insertAdjacentElement("afterend",p);
+      var st=document.createElement("style");st.textContent=
+        ".tr-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 14px}.tr-chips{display:flex;gap:6px;flex-wrap:wrap}"
+       +".tr-chip{border:1px solid #d6dde6;background:#fff;border-radius:999px;padding:6px 12px;font:600 13px Inter,sans-serif;color:#334155;cursor:pointer}.tr-chip b{color:#64748b;margin-left:3px}"
+       +".tr-chip.on{background:#0b2346;border-color:#0b2346;color:#fff}.tr-chip.on b{color:#cbd5e1}.tr-q{flex:1 1 200px;min-width:160px;max-width:320px;padding:8px 12px;border:1px solid #d6dde6;border-radius:10px;font:14px Inter,sans-serif;background:#fff}.tr-empty{margin-left:auto}.tr-empty[disabled]{opacity:.45;cursor:not-allowed}"
+       +".tr-list{display:grid;gap:8px}.tr-row{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#fff;border:1px solid #e4e9f2;border-radius:12px;padding:12px 14px}"
+       +".tr-name{font-weight:700;color:#0b2346;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.tr-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:#eef4fb;color:#16447f;border-radius:6px;padding:2px 7px}.tr-tag.biz{background:#e3f7f4;color:#0b766c}"
+       +".tr-sub{font-size:13px;color:#475569;margin-top:2px}.tr-when{font-size:12px;color:#94a3b8;margin-top:3px}.tr-acts{display:flex;gap:6px}"
+       +".tr-restore{background:#16447f;color:#fff;border-color:#16447f}.tr-none{text-align:center;color:#64748b;padding:40px 10px;background:#fff;border:1px dashed #d6dde6;border-radius:12px}.tr-none .ico{width:34px!important;height:34px!important;color:#94a3b8}";
+      document.head.appendChild(st);
+    }
+    if(typeof ALL_TABS!=="undefined"&&ALL_TABS.indexOf("trash")<0)ALL_TABS.push("trash");
+    if(typeof TAB_TITLES!=="undefined")TAB_TITLES.trash="Trash";
+    badge();return true;
+  }
+  document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest('[data-tab="trash"]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();if(typeof switchTab==="function")switchTab("trash");render();},true);
+  if(!mount()){var tries=0,iv=setInterval(function(){if(mount()||++tries>40)clearInterval(iv);},250);}
+  /* keep the badge and open panel in step with other admins' changes */
+  var lastSig="";
+  setInterval(function(){badge();var sig=load().map(function(t){return t.tid;}).join(",");if(sig===lastSig)return;lastSig=sig;var p=$("p-trash");if(p&&p.classList.contains("active")&&!(document.activeElement&&document.activeElement.classList.contains("tr-q")))render();},4000);
+  window.vsTrash={load:load,restore:restore,render:render};
+ }catch(err){if(window.console)console.warn("trash init failed",err);}
 })();
+
+
+})();
+
 
 </script>
 <script>
