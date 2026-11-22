@@ -19,19 +19,19 @@ def cta(h, p, href=Q, btn="Get Quotes &rarr;"):
 
 HOURS = ('<div class="vs-tw"><table class="vs-t" style="min-width:0"><thead><tr><th>Day</th><th>Hours (Eastern)</th></tr></thead><tbody>'
          '<tr><td>Monday &ndash; Friday</td><td>8:00am &ndash; 8:00pm</td></tr>'
-         '<tr><td>Saturday</td><td>1:00pm &ndash; 5:00pm</td></tr>'
+         '<tr><td>Saturday</td><td>10:00am &ndash; 5:00pm</td></tr>'
          '<tr><td>Sunday</td><td><strong>Closed</strong></td></tr></tbody></table></div>')
 
 H1 = "Why VS Health Benefits Is Closed on Sundays"
 A = dict(
     title="Is VS Health Benefits Open on Sunday? Hours & Why We’re Closed",
     h1=H1,
-    desc="VS Health Benefits hours: Mon–Fri 8am–8pm and Sat 1pm–5pm ET, closed Sundays for rest, family and worship. Call or text (954) 825-1009, or request a quote any day.",
+    desc="VS Health Benefits hours: Mon–Fri 8am–8pm and Sat 10am–5pm ET, closed Sundays for rest, family and worship. Call or text (954) 825-1009, or request a quote any day.",
     keywords=["vs health benefits hours", "is vs health benefits open on sunday", "vs health benefits open saturday", "vs health benefits phone number", "vs health benefits closed sunday", "health insurance agent open on weekends", "health insurance broker hours", "vs health benefits miami"],
     alt="Family walking together on the beach at sunset",
     mins=2,
     lede="If you&rsquo;ve tried to reach us on a Sunday, you may have noticed we&rsquo;re closed. That&rsquo;s on purpose, and here&rsquo;s why.",
-    short="We&rsquo;re open <strong>Monday through Friday, 8am to 8pm</strong>, and <strong>Saturday, 1pm to 5pm</strong> Eastern. Sundays are our day to rest, be with family and friends, and worship. You can still <a href=\"" + Q + "\">request a quote</a> any day, and we&rsquo;ll get back to you first thing Monday.",
+    short="We&rsquo;re open <strong>Monday through Friday, 8am to 8pm</strong>, and <strong>Saturday, 10am to 5pm</strong> Eastern. Sundays are our day to rest, be with family and friends, and worship. You can still <a href=\"" + Q + "\">request a quote</a> any day, and we&rsquo;ll get back to you first thing Monday.",
     sections=[
         ("rest", "A day to rest",
          "<p>Open enrollment is our busiest time of year. We spend six days a week comparing plans, answering questions and helping families and business owners find coverage that fits. Taking Sunday off lets us recharge, so when we pick up the phone on Monday, you get our best.</p>"),
@@ -46,10 +46,10 @@ A = dict(
          "<li>Leave a voicemail or text us at <a href=\"tel:+19548251009\">(954) 825-1009</a>, and we&rsquo;ll get back to you Monday.</li></ul>"),
     ],
     faq=[
-        ("Is VS Health Benefits open on Sundays?", "No. We are closed on Sundays so our team can rest, spend time with family and friends, and worship. We're open Monday through Friday from 8am to 8pm and Saturday from 1pm to 5pm Eastern."),
+        ("Is VS Health Benefits open on Sundays?", "No. We are closed on Sundays so our team can rest, spend time with family and friends, and worship. We're open Monday through Friday from 8am to 8pm and Saturday from 10am to 5pm Eastern."),
         ("Can I request a quote on a Sunday?", "Yes. Our quote form is available any day. A licensed advisor will contact you during business hours, usually first thing Monday."),
-        ("What are VS Health Benefits' hours?", "Monday through Friday from 8am to 8pm, and Saturday from 1pm to 5pm, Eastern Time. We are closed on Sundays."),
-        ("Is VS Health Benefits open on Saturday?", "Yes. We're open Saturday from 1pm to 5pm Eastern, so you can talk to a licensed advisor on the weekend."),
+        ("What are VS Health Benefits' hours?", "Monday through Friday from 8am to 8pm, and Saturday from 10am to 5pm, Eastern Time. We are closed on Sundays."),
+        ("Is VS Health Benefits open on Saturday?", "Yes. We're open Saturday from 10am to 5pm Eastern, so you can talk to a licensed advisor on the weekend."),
         ("What is VS Health Benefits' phone number?", "Call or text (954) 825-1009. We help in English and Spanish. If you reach us after hours or on a Sunday, leave a message and we'll call you back the next business day."),
         ("Can I still sign up for health insurance on a Sunday?", "You can start any time by requesting a quote online, and we'll help you finish enrolling during business hours. For 2027 open enrollment, sign up by Tuesday, December 15, 2026 for coverage that starts January 1. Open enrollment ends Friday, January 15, 2027, so don't wait until the last weekend."),
         ("Where is VS Health Benefits located?", "We're a licensed independent health insurance brokerage based in Miami, Florida, and we help clients by phone and online in more than 40 states."),
@@ -131,7 +131,7 @@ article = (
     '<p style="color:rgba(255,255,255,.9);font-size:.88rem;margin-bottom:14px">Send us your info any day of the week. We&rsquo;ll get back to you during business hours.</p>'
     '<a class="btn" href="/quote?from=blog/why-we-are-closed-on-sundays" style="background:#fff;color:var(--blue-700);width:100%%;justify-content:center;font-weight:700">Get My Free Quote</a></div>\n'
     '<div class="sidebar-card"><h4>Prefer to talk?</h4><p style="font-size:.88rem;color:var(--muted);margin-bottom:10px">Call or text a licensed advisor. English y Espa&ntilde;ol.</p>'
-    '<a href="tel:+19548251009" style="font-size:1.1rem;font-weight:700;color:var(--blue-700)">(954) 825-1009</a><p style="font-size:.82rem;color:var(--muted);margin:8px 0 0">Mon&ndash;Fri 8am&ndash;8pm, Sat 1pm&ndash;5pm ET. Closed Sundays.</p></div>\n'
+    '<a href="tel:+19548251009" style="font-size:1.1rem;font-weight:700;color:var(--blue-700)">(954) 825-1009</a><p style="font-size:.82rem;color:var(--muted);margin:8px 0 0">Mon&ndash;Fri 8am&ndash;8pm, Sat 10am&ndash;5pm ET. Closed Sundays.</p></div>\n'
     '</aside>\n  </div>\n</main>'
 ) % (DATE_ISO, DATE_ISO, A["mins"], META_DIV, H1, A["lede"], hero, ALERT_ICON, A["short"].replace('href=\\"#review\\"', 'href="#rate-review"').replace('href="#review"', 'href="#rate-review"'),
      "\n\n".join(secs), faq_html,
