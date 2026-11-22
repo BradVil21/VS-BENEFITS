@@ -24,10 +24,10 @@ HOURS = ('<div class="vs-tw"><table class="vs-t" style="min-width:0"><thead><tr>
 
 H1 = "Why VS Health Benefits Is Closed on Sundays"
 A = dict(
-    title="Why We’re Closed on Sundays | VS Health Benefits",
+    title="Is VS Health Benefits Open on Sunday? Hours & Why We’re Closed",
     h1=H1,
-    desc="VS Health Benefits is closed on Sundays so our team can rest, spend time with family and friends, and worship. Our hours, and how to reach us any day.",
-    keywords=["vs health benefits hours", "is vs health benefits open on sunday", "vs health benefits closed sunday", "health insurance broker hours", "vs health benefits"],
+    desc="VS Health Benefits hours: Mon–Fri 8am–6pm and Sat 8am–1pm ET, closed Sundays for rest, family and worship. Call or text (954) 825-1009, or request a quote any day.",
+    keywords=["vs health benefits hours", "is vs health benefits open on sunday", "vs health benefits open saturday", "vs health benefits phone number", "vs health benefits closed sunday", "health insurance agent open on weekends", "health insurance broker hours", "vs health benefits miami"],
     alt="Family walking together on the beach at sunset",
     mins=2,
     lede="If you&rsquo;ve tried to reach us on a Sunday, you may have noticed we&rsquo;re closed. That&rsquo;s on purpose, and here&rsquo;s why.",
@@ -39,7 +39,7 @@ A = dict(
          "<p>We help people protect the ones they love, and we want to make time for the ones we love, too. Sundays are for family dinners, time with friends, and simply enjoying ourselves.</p>"),
         ("faith", "Time to worship and give thanks",
          "<p>Sunday is also a day for us to worship and give thanks. We&rsquo;re grateful for every client who trusts us with something as important as their health coverage, and for the chance to do this work.</p>"),
-        ("reach", "Need us on a Sunday?",
+        ("hours", "VS Health Benefits hours and how to reach us on a Sunday",
          HOURS + "<p>You don&rsquo;t have to wait to get started. Any day of the week, you can:</p><ul>"
          "<li><a href=\"" + Q + "\">Fill out a quote request</a>, and a licensed advisor will reach out during business hours.</li>"
          "<li>Try our <a href=\"/aca-subsidy-calculator\">2027 subsidy calculator</a> to estimate your price.</li>"
@@ -48,6 +48,11 @@ A = dict(
     faq=[
         ("Is VS Health Benefits open on Sundays?", "No. We are closed on Sundays so our team can rest, spend time with family and friends, and worship. We're open Monday through Friday from 8am to 6pm and Saturday from 8am to 1pm Eastern."),
         ("Can I request a quote on a Sunday?", "Yes. Our quote form is available any day. A licensed advisor will contact you during business hours, usually first thing Monday."),
+        ("What are VS Health Benefits' hours?", "Monday through Friday from 8am to 6pm, and Saturday from 8am to 1pm, Eastern Time. We are closed on Sundays."),
+        ("Is VS Health Benefits open on Saturday?", "Yes. We're open Saturday from 8am to 1pm Eastern, so you can talk to a licensed advisor on the weekend."),
+        ("What is VS Health Benefits' phone number?", "Call or text (954) 825-1009. We help in English and Spanish. If you reach us after hours or on a Sunday, leave a message and we'll call you back the next business day."),
+        ("Can I still sign up for health insurance on a Sunday?", "You can start any time by requesting a quote online, and we'll help you finish enrolling during business hours. For 2027 open enrollment, sign up by Tuesday, December 15, 2026 for coverage that starts January 1. Open enrollment ends Friday, January 15, 2027, so don't wait until the last weekend."),
+        ("Where is VS Health Benefits located?", "We're a licensed independent health insurance brokerage based in Miami, Florida, and we help clients by phone and online in more than 40 states."),
     ],
     sources=[],
     related=[("Free quote", "Get a Free Health Insurance Quote", Q),
