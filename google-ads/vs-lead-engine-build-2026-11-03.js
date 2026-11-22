@@ -152,7 +152,7 @@ var NEGATIVES = ["aca", "obamacare", "obama care", "affordable care act", "marke
   "low income", "dot physical", "login", "claims",
   "trabajo", "empleo", "seguro de camion", "seguro de carga", "seguro de auto", "subsidio", "mercado de seguros", "escuela cdl"];
 // staffed hours for the call asset (account time zone)
-var HOURS = [["MONDAY", 8, 18], ["TUESDAY", 8, 18], ["WEDNESDAY", 8, 18], ["THURSDAY", 8, 18], ["FRIDAY", 8, 18], ["SATURDAY", 8, 13], ["SUNDAY", 8, 13]];
+var HOURS = [["MONDAY", 8, 20], ["TUESDAY", 8, 20], ["WEDNESDAY", 8, 20], ["THURSDAY", 8, 20], ["FRIDAY", 8, 20], ["SATURDAY", 10, 17]];  // closed Sunday
 
 // ---------------------------------------------------------------- helpers
 var CID, PREVIEW, tmp = -1, problems = [];

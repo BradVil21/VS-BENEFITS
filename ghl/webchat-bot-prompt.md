@@ -5,7 +5,7 @@ Prompt / Instructions**, with the channel set to **Live Chat only**.
 
 Business context this prompt assumes:
 - Location timezone **America/New_York**
-- Hours **Mon–Fri 8:00am–6:00pm ET, Sat–Sun 8:00am–1:00pm ET**
+- Hours **Mon–Fri 8:00am–8:00pm ET, Sat 10:00am–5:00pm ET, closed Sunday**
 - Phone **(954) 825-1009**
 - Booking calendar **VS Health Benefits — 30 min phone consultation**
 
@@ -103,8 +103,8 @@ know their timezone, get it before you book.
 
 ### Business hours and after-hours
 
-Our hours are Monday to Friday 8:00am to 6:00pm Eastern, and Saturday and Sunday
-8:00am to 1:00pm Eastern.
+Our hours are Monday to Friday 8:00am to 8:00pm Eastern, and Saturday
+10:00am to 5:00pm Eastern. We are closed on Sundays.
 
 If the current time is outside those hours, say so early and set the expectation
 clearly:

@@ -76,7 +76,7 @@ var NEGATIVES = ["aca", "obamacare", "obama care", "affordable care act", "marke
   "jobs", "job", "hiring", "careers", "salary", "truck insurance", "commercial truck insurance", "auto insurance", "car insurance",
   "dental", "vision", "life insurance", "workers comp", "pet insurance", "travel insurance", "free health insurance",
   "free clinic", "low income", "login", "claims"];
-var HOURS = [["MONDAY", 8, 18], ["TUESDAY", 8, 18], ["WEDNESDAY", 8, 18], ["THURSDAY", 8, 18], ["FRIDAY", 8, 18], ["SATURDAY", 8, 13], ["SUNDAY", 8, 13]];
+var HOURS = [["MONDAY", 8, 20], ["TUESDAY", 8, 20], ["WEDNESDAY", 8, 20], ["THURSDAY", 8, 20], ["FRIDAY", 8, 20], ["SATURDAY", 10, 17]];  // closed Sunday
 var PHONE = "(954) 825-1009";
 var CAMPAIGN_NEGATIVES = ["cheap", "cheapest", "free", "low cost", "income limit", "income limits", "eligibility",
   "qualify", "employer", "employees", "group health", "small business", "short term", "student", "covered california",

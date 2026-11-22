@@ -2,7 +2,7 @@
 
 Location `cNCy6JUURpb4eBDdb9bU` · timezone America/New_York
 Live Chat widget `6a8339a143b7e14560ca7528` — already on 219 pages
-Hours: **Mon–Fri 8:00am–6:00pm ET, Sat–Sun 8:00am–1:00pm ET**
+Hours: **Mon–Fri 8:00am–8:00pm ET, Sat 10:00am–5:00pm ET, closed Sunday**
 
 Status: **step 4 is done.** Steps 1–3 are the click-through below.
 
@@ -41,7 +41,7 @@ Mirror the Calendly event exactly:
 | Meeting location | **Phone call** — advisor calls the contact |
 | Booking window | 60 days into the future |
 | Minimum notice | 4 hours |
-| Availability | Mon–Fri 8:00am–6:00pm, Sat–Sun 8:00am–1:00pm |
+| Availability | Mon–Fri 8:00am–8:00pm, Sat 10:00am–5:00pm, closed Sunday |
 | Calendar timezone | America/New_York |
 | Slot interval | 30 min |
 

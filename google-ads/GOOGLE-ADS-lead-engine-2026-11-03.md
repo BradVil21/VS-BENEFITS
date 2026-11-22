@@ -40,7 +40,7 @@ sitelinks, callouts, lead form asset. "Trucker Health - OE 2027" is paused.
 New script **VS Lead Engine - Hourly**, paste `google-ads/vs-lead-engine-hourly-2026-11-03.js`.
 At the top, replace `PASTE_THE_SAME_SECRET...` with the secret already in your "VS Ads Sync" script.
 Preview, then set Frequency: **Hourly**. It:
-- pauses call-only ads outside Mon-Fri 8-6 / Sat-Sun 8-1 so no call rings unanswered
+- pauses call-only ads outside Mon-Fri 8-8 / Sat 10-5 (closed Sunday) so no call rings unanswered
 - switches all 5 campaigns to Maximize conversions once they pass 15 leads together
 - uploads SOLD leads every Monday 9am as "Sold Policy" (only leads that came from an ad click)
 

@@ -1,5 +1,5 @@
 /* VS Lead Engine - HOURLY (Nov 3 2026).  Schedule: Hourly.  Safe to run any time.
-   1. Call-only ads run only while someone can answer (Mon-Fri 8am-6pm, Sat-Sun 8am-1pm,
+   1. Call-only ads run only while someone can answer (Mon-Fri 8am-8pm, Sat 10am-5pm, closed Sunday,
       account time zone). Outside those hours they pause, so no call rings out unanswered.
    2. Daily at 9am: once the 5 campaigns together pass 15 leads, switch them from
       "Maximize clicks ($15 cap)" to "Maximize conversions".
@@ -13,7 +13,7 @@ var CAMPAIGNS = ["Trucker - FL & GA", "Trucker - TX, IL & OH", "Trucker - KY, MO
                  "Self-Employed 1099 - 8 States", "Spanish - Camioneros e Independientes"];
 var START = "2026-11-03";          // count leads from the day the campaigns launched
 var LEADS_TO_SWITCH = 15;
-var OPEN = { 1: [8, 18], 2: [8, 18], 3: [8, 18], 4: [8, 18], 5: [8, 18], 6: [8, 13], 7: [8, 13] };  // ISO day: [from, to)
+var OPEN = { 1: [8, 20], 2: [8, 20], 3: [8, 20], 4: [8, 20], 5: [8, 20], 6: [10, 17], 7: [0, 0] };  // ISO day: [from, to)
 
 function q(gaql) { var out = [], it = AdsApp.search(gaql); while (it.hasNext()) out.push(it.next()); return out; }
 function inList() { return "(" + CAMPAIGNS.map(function (c) { return "'" + c.replace(/'/g, "\\'") + "'"; }).join(", ") + ")"; }
