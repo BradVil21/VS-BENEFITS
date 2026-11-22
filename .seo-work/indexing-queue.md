@@ -80,3 +80,19 @@ Request first when the quota resets (after ~7:40 PM ET 11/19):
 Already indexed (no request needed): /blog/hvac-employee-benefits, /health-insurance-for-hvac-technicians
 Requested: /health-insurance-for-hvac-companies, /qualifying-life-events-health-insurance, /family-health-insurance, /blog/aca-open-enrollment-2027-guide, 6 Spanish LPs
 Quota ran out. Next: /lp/es/independientes/illinois, ohio, kentucky, maryland, missouri
+
+## 2026-11-22
+Requested (11): /blog/why-we-are-closed-on-sundays, /health-insurance-for-restoration-companies (already indexed), /blog/cheapest-health-insurance-2027, /blog/health-insurance-premiums-rising-2027 (already indexed), /seguro-de-salud-miami, /aca-subsidy-calculator, /blog/health-insurance-for-truck-drivers, /health-insurance-for-construction-companies, /health-insurance-for-small-business-owners, /health-insurance-for-salons-and-spas, /health-insurance-for-restaurants
+Quota ran out. Next (check status first, then request if still not on Google):
+- /health-insurance-for-cleaning-companies (confirmed not indexed)
+- /health-insurance-for-my-employees
+- /1099-truck-driver-health-insurance
+- /health-insurance-for-self-employed-truck-drivers
+- /can-truckers-deduct-health-insurance
+- /blog/small-business-group-health-guide
+- /how-much-does-health-insurance-cost
+- /blog/health-insurance-near-me-local-broker
+- /lp/es/independientes/illinois, ohio, kentucky, maryland, missouri
+Not worth requesting until improved (thin/duplicate per Google, "Crawled - currently not indexed"):
+- /health-insurance-{alabama,arizona,arkansas,south-carolina,south-dakota,tennessee,texas,utah,virginia,west-virginia}
+- /dental-vision-insurance-{georgia,north-carolina,texas,utah,wisconsin,wyoming}

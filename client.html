@@ -869,7 +869,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{f
       <div class="ft-contact">
         <span>(954) 825-1009</span>
         <span>info@vshealthbenefits.com</span>
-        <span>Mon-Fri 8am-6pm ET, Sat 8am-1pm ET</span>
+        <span>Mon-Fri 8am-8pm ET, Sat 1pm-5pm ET</span>
         <span>Miami, FL | 40+ states</span>
         <span class="vs-npn">Licensed agent &middot; NPN 22116298 &middot; <a href="https://licenseesearch.fldfs.com/" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline">Verify my license (FL DFS) &#8599;</a></span>
         <div class="ft-socials">
@@ -2113,17 +2113,17 @@ function cpPlanDate(s){if(!s)return null;var t=new Date(s+"T00:00:00").getTime()
 function cpDaysUntil(t){return Math.ceil((t-Date.now())/864e5);}
 function cpHasPlan(a){var p=a&&a.plan;return !!(p&&(p.carrier||p.planName));}
 
-/* ---- office hours (Mon-Fri 8-6, Sat 8-1 Eastern) ---- */
+/* ---- office hours (Mon-Fri 8-8, Sat 1-5 Eastern) ---- */
 function cpOfficeStatus(){
   try{
     var parts=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",weekday:"short",hour:"numeric",minute:"numeric",hour12:false}).formatToParts(new Date());
     var wd="",h=0,m=0;parts.forEach(function(p){if(p.type==="weekday")wd=p.value;if(p.type==="hour")h=+p.value%24;if(p.type==="minute")m=+p.value;});
-    var mins=h*60+m,sat=(wd==="Sat"),close=sat?13*60:18*60;
+    var mins=h*60+m,sat=(wd==="Sat"),open=sat?13*60:8*60,close=sat?17*60:20*60;
     if(wd==="Sun")return{open:false,text:"Closed Sundays · opens 8 AM ET Monday"};
-    if(mins>=480&&mins<close)return{open:true,text:"Open now · until "+(sat?"1 PM":"6 PM")+" ET"};
-    if(mins<480)return{open:false,text:"Closed · opens 8 AM ET"};
-    return{open:false,text:sat?"Closed · opens 8 AM ET Monday":"Closed · opens 8 AM ET tomorrow"};
-  }catch(e){return{open:false,text:"Mon-Fri 8-6, Sat 8-1 ET"};}
+    if(mins>=open&&mins<close)return{open:true,text:"Open now · until "+(sat?"5 PM":"8 PM")+" ET"};
+    if(mins<open)return{open:false,text:"Closed · opens "+(sat?"1 PM":"8 AM")+" ET"};
+    return{open:false,text:sat?"Closed · opens 8 AM ET Monday":(wd==="Fri"?"Closed · opens 1 PM ET Saturday":"Closed · opens 8 AM ET tomorrow")};
+  }catch(e){return{open:false,text:"Mon-Fri 8-8, Sat 1-5 ET"};}
 }
 
 /* ---- Open Enrollment window for 2027 plans ---- */
@@ -2215,7 +2215,7 @@ function cpAdvisorCard(){
     +'<a class="db-btn" href="tel:'+CP_PHONE+'">'+IC.phone+' Call</a>'
     +'<a class="db-btn" href="sms:'+CP_PHONE+'">'+IC.sms+' Text</a>'
     +'<a class="db-btn" href="/book" target="_blank" rel="noopener">'+IC.cal+' Book a call</a>'
-    +'</div><p class="adv-hours">Mon&ndash;Fri 8am&ndash;6pm, Sat&ndash;Sun 8am&ndash;1pm ET. Messages are answered within 1 business day. Email <a href="mailto:'+CP_EMAIL+'">'+CP_EMAIL+'</a>.</p></div>';
+    +'</div><p class="adv-hours">Mon&ndash;Fri 8am&ndash;8pm, Sat 1pm&ndash;5pm ET. Messages are answered within 1 business day. Email <a href="mailto:'+CP_EMAIL+'">'+CP_EMAIL+'</a>.</p></div>';
 }
 function cpOEBanner(acct){
   var oe=cpOE();if(!oe)return "";
