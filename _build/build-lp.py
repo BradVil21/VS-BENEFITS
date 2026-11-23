@@ -14,7 +14,7 @@ import html, json, os
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 SITE = 'https://www.vshealthbenefits.com'
-PHONE, TEL = '(954) 825-1009', 'tel:+19548251009'
+PHONE, TEL = '(954) 866-6872', 'tel:+19548666872'
 
 # code, slug, English name, Spanish name, cities, interstates, freight hubs (EN), freight hubs (ES)
 STATES = [
@@ -357,7 +357,7 @@ def page(nk, st):
          {'@type': 'ListItem', 'position': i + 1, 'name': nm, 'item': SITE + u} for i, (nm, u) in enumerate(crumbs)]},
       {'@context': 'https://schema.org', '@type': 'FAQPage', 'mainEntity': [
          {'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}} for q, a in faqs]},
-      {'@context': 'https://schema.org', '@type': 'InsuranceAgency', 'name': 'VS Health Benefits', 'url': SITE + '/', 'telephone': '+1-954-825-1009',
+      {'@context': 'https://schema.org', '@type': 'InsuranceAgency', 'name': 'VS Health Benefits', 'url': SITE + '/', 'telephone': '+1-954-866-6872',
        'image': SITE + n['img'], 'priceRange': 'Free consultation',
        'areaServed': ({'@type': 'State', 'name': en_name} if st else [{'@type': 'State', 'name': s[2]} for s in STATES]),
        'aggregateRating': {'@type': 'AggregateRating', 'ratingValue': '5.0', 'reviewCount': '53'}},

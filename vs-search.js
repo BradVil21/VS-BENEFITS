@@ -3,7 +3,7 @@
    The index is /search-index.json, rebuilt by _build/build-search-index.py. */
 (function () {
   if (window.__vsSearch) return; window.__vsSearch = 1;
-  var PHONE = 'tel:+19548251009', PHONE_TXT = '(954) 825-1009';
+  var PHONE = 'tel:+19548666872', PHONE_TXT = '(954) 866-6872';
   var wrap = document.querySelector('.site-header .nav-wrap');
   if (!wrap) return;
 

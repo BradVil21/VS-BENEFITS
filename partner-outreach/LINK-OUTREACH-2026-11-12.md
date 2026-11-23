@@ -38,7 +38,7 @@ Happy to return the favor if there's a page of yours you'd like us to point driv
 Thanks,
 Bradley Vilsaint
 Licensed Health Insurance Broker, VS Health Benefits
-(954) 825-1009 | vshealthbenefits.com
+(954) 866-6872 | vshealthbenefits.com
 
 ---
 
@@ -67,7 +67,7 @@ I'm flexible on dates and happy to record whenever works for you.
 Thanks,
 Bradley Vilsaint
 Licensed Health Insurance Broker, VS Health Benefits
-(954) 825-1009 | vshealthbenefits.com
+(954) 866-6872 | vshealthbenefits.com
 
 ---
 
@@ -88,7 +88,7 @@ If it's easier, I'm happy to write a short guest post for your blog, such as "He
 
 Thanks,
 Bradley Vilsaint
-VS Health Benefits | (954) 825-1009
+VS Health Benefits | (954) 866-6872
 
 ---
 

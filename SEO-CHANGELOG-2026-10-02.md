@@ -44,10 +44,10 @@ hreflang, sitemap and llms.txt. See SEO-CHANGELOG-2026-09-30.md.
 
 ---
 # Update 3 Oct 2026: phone number
-Site phone switched back from (954) 866-6872 to **(954) 825-1009** everywhere: 1,636 instances in 318 files
+Site phone switched back from (954) 866-6872 to **(954) 866-6872** everywhere: 1,636 instances in 318 files
 (tel: links, displayed numbers, JSON-LD "telephone", the mobile call bar, chat widget, quote funnel,
-.seo-work page builders, GHL prompts/templates, ad notes). Formats kept: +19548251009, (954) 825-1009,
-+1-954-825-1009. Older changelogs left as historical records.
+.seo-work page builders, GHL prompts/templates, ad notes). Formats kept: +19548666872, (954) 866-6872,
++1-954-866-6872. Older changelogs left as historical records.
 Also update the number in: Google Business Profile, Google Ads call assets, GHL (Sarah/Vee phone agents,
 email signatures, SMS sender), social profiles, so Google sees one consistent number.
 

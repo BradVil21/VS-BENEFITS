@@ -48,7 +48,7 @@ def build_post(p):
         qb = ('<aside class="vs-bq" aria-label="Get a truck driver quote">\n<strong class="t">Get your driver quote in about 60 seconds</strong>\n'
               '<p>A licensed advisor checks every plan and tax credit for your home ZIP code, including PPO options that work on the road. Free, no obligation.</p>\n'
               '<form action="/trucking-health-quote" method="get"><input type="hidden" name="from" value="blog-%s"><input name="zip" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" placeholder="Home ZIP code" aria-label="Home ZIP code" required autocomplete="postal-code"><button type="submit">See my plans &rarr;</button></form>\n'
-              '<span class="alt">Driving right now? <a href="tel:+19548251009">Speak to an advisor</a> when you\'re parked.</span>\n</aside>') % slug
+              '<span class="alt">Driving right now? <a href="tel:+19548666872">Speak to an advisor</a> when you\'re parked.</span>\n</aside>') % slug
     else:
         pillar = '<p class="vs-pillar-link" style="font-size:.95rem;color:#334155">Open Enrollment for 2027 runs November 1 to January 15. Dates and deadlines: <a href="/blog/aca-open-enrollment-2027-guide">Open Enrollment 2027 guide</a>.</p>'
         qb = p["quote_box"]
@@ -69,7 +69,7 @@ def build_post(p):
             '        <p style="color:rgba(255,255,255,.9);font-size:.88rem;margin-bottom:14px">%s</p>\n'
             '        <a class="btn btn-teal" href="%s" style="background:#fff;color:var(--blue-700);width:100%%;justify-content:center">Get Started →</a>\n      </div>\n'
             '      <div class="sidebar-card">\n        <h4>Prefer to talk?</h4>\n        <p style="font-size:.88rem;color:var(--muted);margin-bottom:10px">Mon–Fri 8am–6pm · Sat–Sun 8am–1pm ET</p>\n'
-            '        <a href="tel:+19548251009" style="font-size:1.1rem;font-weight:700;color:var(--blue-700)">(954) 825-1009</a>\n      </div>\n    </aside>') % (toc, e(p["side_h"]), e(p["side_p"]), p["side_href"])
+            '        <a href="tel:+19548666872" style="font-size:1.1rem;font-weight:700;color:var(--blue-700)">(954) 866-6872</a>\n      </div>\n    </aside>') % (toc, e(p["side_h"]), e(p["side_p"]), p["side_href"])
     s = sub1(s, r'<aside class="article-sidebar">.*?</aside>', side)
     cards = "".join('\n        <a class="vs-rg-card" href="%s">\n          <strong>%s</strong>\n          <span>%s</span>\n          <em>Read the guide &rarr;</em>\n        </a>' % (h, e(t), e(d)) for h, t, d in p["related"])
     rel = ('<section class="vs-related-guides" data-block="%s">\n  <div class="vs-rg-inner">\n    <h2>%s</h2>\n    <p class="vs-rg-sub">%s</p>\n    <div class="vs-rg-grid">%s\n    </div>\n  </div>\n</section>') % (slug, e(p["related_h"]), p["related_sub"], cards)

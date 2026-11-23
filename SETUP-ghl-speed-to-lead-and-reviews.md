@@ -32,7 +32,7 @@ What already exists (no changes needed):
 
 **Message A (instant)**
 > Hi {{contact.first_name}}, it's Bradley's team at VS Health Benefits. Got your request. A licensed
-> advisor will call you in a few minutes from 954-825-1009. Is now a good time? Reply STOP to opt out.
+> advisor will call you in a few minutes from 954-866-6872. Is now a good time? Reply STOP to opt out.
 
 **Message B (missed call)**
 > Just tried you, {{contact.first_name}}. When's a better time today? Or book a quick 15-min call:

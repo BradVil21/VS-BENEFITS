@@ -178,7 +178,7 @@ tr:last-child td{border-bottom:0}
     <h1>Check your email</h1>
     <p>If <b id="cr-sentto"></b> belongs to an approved creator, a sign-in link is on its way. It works for 30 minutes.</p>
     <p class="spam-note"><b>Don't see it?</b> Check your <b>spam or junk folder</b>. It comes from VS Health Benefits with the subject "Your creator dashboard sign-in link."</p>
-    <p class="small">Still nothing after a few minutes? No email usually means that address isn't an approved creator yet. <a href="/affiliate-program">Apply here</a>, or text us at <a href="sms:+19548251009?&body=Affiliate%20-%20">(954) 825-1009</a> with your full name and the word "Affiliate."</p>
+    <p class="small">Still nothing after a few minutes? No email usually means that address isn't an approved creator yet. <a href="/affiliate-program">Apply here</a>, or text us at <a href="sms:+19548666872?&body=Affiliate%20-%20">(954) 866-6872</a> with your full name and the word "Affiliate."</p>
     <button type="button" class="out" id="cr-back" style="margin-top:6px">Use a different email</button>
   </section>
 
@@ -187,7 +187,7 @@ tr:last-child td{border-bottom:0}
       <div><h1 id="d-hi">Welcome back</h1><p id="d-since"></p></div>
       <span class="chip" id="d-chip"><i></i><span>Active creator</span></span>
     </div>
-    <div class="notice" id="d-paused" hidden>Your link is paused right now, so new visitors aren't being credited to you. Questions? Text us at (954) 825-1009.</div>
+    <div class="notice" id="d-paused" hidden>Your link is paused right now, so new visitors aren't being credited to you. Questions? Text us at (954) 866-6872.</div>
 
     <div class="card link">
       <h2>Your link</h2>
@@ -254,7 +254,7 @@ tr:last-child td{border-bottom:0}
       <p class="hint" style="margin:0 0 14px">Questions about billing, payouts or your link? Reach us by email or text. Please include <b>your full name and the word "Affiliate"</b> so we can find your account fast.</p>
       <div class="hlinks">
         <a class="hl" id="h-mail" href="mailto:info@vshealthbenefits.com?subject=Affiliate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span><small>Email</small>info@vshealthbenefits.com</span></a>
-        <a class="hl" id="h-sms" href="sms:+19548251009"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span><small>Text</small>(954) 825-1009</span></a>
+        <a class="hl" id="h-sms" href="sms:+19548666872"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span><small>Text</small>(954) 866-6872</span></a>
       </div>
       <button type="button" class="out" id="h-acct" style="margin-top:14px">Change username or password</button>
       <p class="hint" id="h-example" style="margin:12px 0 0">Example: "Affiliate - Jane Smith: question about my payout."</p>
@@ -345,7 +345,7 @@ tr:last-child td{border-bottom:0}
     [].forEach.call(document.querySelectorAll(".trlist li"),function(li){var k=+li.getAttribute("data-t");li.className=k<ti?"done":(k===ti?"cur":"");});
     var full=(String(c.firstName||"")+" "+String(c.lastName||"")).trim(),tag="Affiliate"+(full?" - "+full:"");
     $("h-mail").href="mailto:info@vshealthbenefits.com?subject="+encodeURIComponent(tag);
-    $("h-sms").href="sms:+19548251009?&body="+encodeURIComponent(tag+": ");
+    $("h-sms").href="sms:+19548666872?&body="+encodeURIComponent(tag+": ");
     if(full)$("h-example").textContent='Example: "'+tag+': question about my payout."';
     show("v-dash");
     ACCT={username:(j.account&&j.account.username)||"",code:c.code||""};
@@ -387,10 +387,10 @@ tr:last-child td{border-bottom:0}
     var b=$("pw-go");b.disabled=true;b.textContent="Signing in...";
     api({op:"pwlogin",user:u,password:p}).then(function(j){
       if(j.ok&&j.s){setS(j.s);$("pw-pass").value="";load();return;}
-      pwErr(j.error==="locked"?"Too many tries. Wait 15 minutes, or use \"Email me a sign-in link\".":j.error==="no_access"?"This creator account doesn't have dashboard access. Text us at (954) 825-1009.":j.error==="try_again"?"Couldn't sign you in right now. Try again.":"That username or password isn't right. Forgot it? Use \"Email me a sign-in link\".");
+      pwErr(j.error==="locked"?"Too many tries. Wait 15 minutes, or use \"Email me a sign-in link\".":j.error==="no_access"?"This creator account doesn't have dashboard access. Text us at (954) 866-6872.":j.error==="try_again"?"Couldn't sign you in right now. Try again.":"That username or password isn't right. Forgot it? Use \"Email me a sign-in link\".");
     }).catch(function(){pwErr("Couldn't sign you in right now. Try again.");}).then(function(){b.disabled=false;b.textContent="Sign in";});};
   function load(){var s=getS();if(!s){show("v-login");return;}show("v-load");
-    api({op:"stats",s:s}).then(function(j){if(j.ok)render(j);else{if(j._status===401)setS("");show("v-login");if(j.error==="no_access")err("This creator account doesn't have dashboard access. Text us at (954) 825-1009.");}}).catch(function(){show("v-login");err("Couldn't load your dashboard. Check your connection and try again.");});}
+    api({op:"stats",s:s}).then(function(j){if(j.ok)render(j);else{if(j._status===401)setS("");show("v-login");if(j.error==="no_access")err("This creator account doesn't have dashboard access. Text us at (954) 866-6872.");}}).catch(function(){show("v-login");err("Couldn't load your dashboard. Check your connection and try again.");});}
   function err(m){var e=$("cr-err");e.textContent=m;e.hidden=!m;}
 
   $("cr-form").onsubmit=function(e){e.preventDefault();var em=$("cr-email").value.trim();err("");

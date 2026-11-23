@@ -23,7 +23,7 @@ head_ld = [
  {"@context":"https://schema.org","@type":"WebPage","name":TITLE,"url":URL,"description":DESC,"dateModified":"2026-10-27","inLanguage":"en-US",
   "author":{"@type":"Person","name":"Bradley Vilsaint","jobTitle":"Licensed Health Insurance Advisor","url":"https://www.vshealthbenefits.com/bradley-vilsaint"}},
  {"@context":"https://schema.org","@type":"Service","name":"Individual and family health insurance premium increase review","serviceType":"Health insurance renewal review","areaServed":"US",
-  "provider":{"@type":"InsuranceAgency","name":"VS Health Benefits","telephone":"+1-954-825-1009"},
+  "provider":{"@type":"InsuranceAgency","name":"VS Health Benefits","telephone":"+1-954-866-6872"},
   "offers":{"@type":"Offer","price":"0","priceCurrency":"USD","description":"Free review of a 2027 individual or family health insurance premium increase"}},
  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
   {"@type":"ListItem","position":1,"name":"Home","item":"https://www.vshealthbenefits.com/"},
@@ -47,7 +47,7 @@ MAIN = r'''<main class="container" id="main">
         <li><strong>For individuals, families, self-employed and truck drivers.</strong> English y Español.</li>
       </ul>
       <a class="rr-jump" href="#review">Start my free review &darr;</a>
-      <p class="rr-by">Reviewed by <a href="/bradley-vilsaint">Bradley Vilsaint</a>, licensed health insurance advisor (NPN 22116298). Updated October 27, 2026. Prefer to talk? <a href="tel:+19548251009">(954) 825-1009</a></p>
+      <p class="rr-by">Reviewed by <a href="/bradley-vilsaint">Bradley Vilsaint</a>, licensed health insurance advisor (NPN 22116298). Updated October 27, 2026. Prefer to talk? <a href="tel:+19548666872">(954) 866-6872</a></p>
     </div>
 
     <div class="rr-card" id="review">
@@ -77,7 +77,7 @@ MAIN = r'''<main class="container" id="main">
       <div class="rr-ok" id="rr-ok" aria-live="polite">
         <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>
         <h3>Got it. Your review is started.</h3>
-        <p>An advisor will reach out today during business hours. To speed things up, email a photo of your 2027 renewal letter to <a href="mailto:info@vshealthbenefits.com?subject=Premium%20increase%20review">info@vshealthbenefits.com</a> or text it to <a href="sms:+19548251009">(954) 825-1009</a>.</p>
+        <p>An advisor will reach out today during business hours. To speed things up, email a photo of your 2027 renewal letter to <a href="mailto:info@vshealthbenefits.com?subject=Premium%20increase%20review">info@vshealthbenefits.com</a> or text it to <a href="sms:+19548666872">(954) 866-6872</a>.</p>
         <p>While you wait, see what a benchmark plan should cost at your income.</p>
         <a class="rr-btn" href="/health-insurance-premium-increase-calculator">Open the 2027 calculator &rarr;</a>
       </div>
@@ -149,7 +149,7 @@ MAIN = r'''<main class="container" id="main">
     <h2>Don't auto-renew a price increase.</h2>
     <p>A review is free and usually takes one phone call.</p>
     <a href="#review">Start my premium review</a>
-    <a href="tel:+19548251009">Call (954) 825-1009</a>
+    <a href="tel:+19548666872">Call (954) 866-6872</a>
   </section>
 
   <p class="rr-src">Sources: <a href="https://acasignups.net/rate_changes/2027/fl" rel="noopener" target="_blank">ACASignups, Florida 2027 final approved rates (updated Oct 19, 2026)</a>; <a href="https://www.healthsystemtracker.org/brief/how-much-and-why-aca-marketplace-premiums-are-going-up-in-2027/" rel="noopener" target="_blank">Peterson-KFF Health System Tracker, 2027 rate filings (Aug 3, 2026)</a>; <a href="https://www.healthinsurance.org/aca-marketplace/florida/" rel="noopener" target="_blank">healthinsurance.org, Florida 2027 Marketplace (Sep 17, 2026)</a>; CMS 2027 Notice of Benefit and Payment Parameters; 2026 HHS poverty guidelines. Your own rate depends on your plan, age, ZIP code and income.</p>
@@ -200,7 +200,7 @@ JS = r'''<script id="rr-js">
         $('review').scrollIntoView({behavior:'smooth',block:'start'});
       })
       .catch(function(){ btn.disabled=false; btn.textContent='Review my increase →';
-        msg.innerHTML='Something went wrong. Please call <a href="tel:+19548251009">(954) 825-1009</a> or try again.'; });
+        msg.innerHTML='Something went wrong. Please call <a href="tel:+19548666872">(954) 866-6872</a> or try again.'; });
   });
 })();
 </script>'''

@@ -53,7 +53,7 @@ function main() {
   function t() { return tid--; }
   var shared = [];
   var callRes = P + "assets/" + t();
-  shared.push({ assetOperation: { create: { resourceName: callRes, callAsset: { countryCode: "US", phoneNumber: "(954) 825-1009" } } } });
+  shared.push({ assetOperation: { create: { resourceName: callRes, callAsset: { countryCode: "US", phoneNumber: "(954) 866-6872" } } } });
   var calloutRes = CALLOUTS.map(function (txt) { var rn = P + "assets/" + t(); shared.push({ assetOperation: { create: { resourceName: rn, calloutAsset: { calloutText: txt } } } }); return rn; });
 
   CAMPAIGNS.forEach(function (c) {

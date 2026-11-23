@@ -373,7 +373,7 @@ function trustPage(ok, host) {
   const title = ok ? "This device is approved" : "This link is not valid";
   const text = ok
     ? "You can now use vshealthbenefits.com on this phone or computer. If you still see a blocked page, wait one minute and refresh."
-    : "This approval link has expired or was removed. Ask VS Health Benefits for a new one: (954) 825-1009.";
+    : "This approval link has expired or was removed. Ask VS Health Benefits for a new one: (954) 866-6872.";
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>${title}</title>
 <style>body{margin:0;font-family:Inter,system-ui,-apple-system,sans-serif;background:#f6f9fc;color:#0d1b2a;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:16px}
 .c{max-width:440px;background:#fff;border:1px solid #e4e9f2;border-radius:16px;padding:28px 24px;text-align:center;box-shadow:0 6px 20px rgba(13,27,42,.07)}

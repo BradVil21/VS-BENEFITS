@@ -8,8 +8,8 @@ def box(h, p, frm):
             '<div style="flex:1 1 280px"><strong style="display:block;font-size:1.12rem;color:#fff;margin-bottom:4px">' + h + '</strong>'
             '<span style="color:rgba(255,255,255,.86);font-size:.95rem;line-height:1.5">' + p + '</span></div>'
             '<div style="display:flex;gap:10px;flex-wrap:wrap">'
-            '<a href="tel:+19548251009" style="display:inline-flex;align-items:center;gap:8px;background:#0db5a6;color:#fff;font-weight:700;padding:12px 18px;border-radius:999px;text-decoration:none">'
-            '&#9742; Call (954) 825-1009</a>'
+            '<a href="tel:+19548666872" style="display:inline-flex;align-items:center;gap:8px;background:#0db5a6;color:#fff;font-weight:700;padding:12px 18px;border-radius:999px;text-decoration:none">'
+            '&#9742; Call (954) 866-6872</a>'
             '<a href="/trucking-health-quote?from=' + frm + '-midcta" style="display:inline-flex;align-items:center;background:#fff;color:#0b2346;font-weight:700;padding:12px 18px;border-radius:999px;text-decoration:none">Get a free quote &rarr;</a>'
             '</div></div>\n')
 
@@ -30,7 +30,7 @@ PAGES = {
    before_h2='Your Four Real Options', style='details',
    cta=('Price your owner-operator plan in minutes', 'Compare private PPO plans with nationwide networks from top A-rated carriers. A licensed advisor does the shopping for you, free.'),
    faq=[('How fast can an owner-operator get covered?', 'Private PPO plans accept applications year-round, and if you are approved, coverage can often start on the first of the next month.'),
-        ('How do I get an owner-operator health insurance quote?', 'Call (954) 825-1009 or fill in the short quote form. A licensed advisor asks your age, ZIP code, household and doctors, then compares plans from several carriers for you.')]),
+        ('How do I get an owner-operator health insurance quote?', 'Call (954) 866-6872 or fill in the short quote form. A licensed advisor asks your age, ZIP code, household and doctors, then compares plans from several carriers for you.')]),
 }
 
 def plain(t): return re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]+>', '', t))).strip()

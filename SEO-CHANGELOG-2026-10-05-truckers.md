@@ -3,7 +3,7 @@
 Based on Search Console export (Jul 4 – Oct 4, 2026): trucking = ~17% of clicks; head terms ("health insurance for truck drivers", owner-operator variants) at positions 37–49; DOT-physical long tail at 2–5.
 
 ## Lead capture
-- Added a **Text us** button (sms:+19548251009, prefilled "TRUCK – …" / "CAMIONERO – …") to the mobile sticky bar on 60 trucking pages; Spanish pages say "Texto". Fires GA4 event `contact_text`.
+- Added a **Text us** button (sms:+19548666872, prefilled "TRUCK – …" / "CAMIONERO – …") to the mobile sticky bar on 60 trucking pages; Spanish pages say "Texto". Fires GA4 event `contact_text`.
 - Fixed overlapping mobile bars on 28 pages: the old `#vs-sticky` bar covered the Call/Text/Quote bar after scrolling; now hidden on mobile where `#vs-callbar` exists (still shows on desktop).
 - Trucking pages' OE announcement bar now links to /truck-driver-open-enrollment-2027 with driver-specific copy (39 pages).
 

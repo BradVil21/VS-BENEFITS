@@ -39,8 +39,8 @@ Send windows: 9:30–10:45am or 2:30–4:00pm. Never 11:30–2:00 or after 5.
 
 Every file contains these. Search each template after pasting:
 
-The phone number is already filled in: **(954) 825-1009** in every signature, and
-`sms:+19548251009&amp;body=HEADCOUNT` behind the text buttons in files 2 and 3. That href
+The phone number is already filled in: **(954) 866-6872** in every signature, and
+`sms:+19548666872&amp;body=HEADCOUNT` behind the text buttons in files 2 and 3. That href
 opens a pre-filled text on a phone and does nothing on desktop, which is fine.
 
 The Calendly link is in too, on the buttons in files 1 and 4:

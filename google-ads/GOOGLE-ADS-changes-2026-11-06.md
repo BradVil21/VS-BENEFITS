@@ -59,7 +59,7 @@ source vs-private-health-no-subsidy-fl-2026-11-06.js). Campaign ID 24438705086. 
   The shared "VS Leads - Negatives (Nov 3)" list is NOT attached: it blocks every search with "subsidy", which would block
   the No Subsidy ad group.
 - One RSA per group: 11 headlines (the requested ones + 3 per group), 4 descriptions.
-  Changes from the brief: "Call 954-825-1009" -> "Call a Licensed Advisor" (Google rejects phone numbers in ad text; the
+  Changes from the brief: "Call 954-866-6872" -> "Call a Licensed Advisor" (Google rejects phone numbers in ad text; the
   account call asset shows the number). "Free Quote · Licensed Advisor" -> "Free Quote, Licensed Advisor" (symbol policy).
   "Private Health Plans in Florida" (31) -> "Private Health Plans in FL"; "Plans for Individuals & Families" (32) ->
   "Individual & Family Plans" (30-character limit). First description shortened to fit 90 characters.

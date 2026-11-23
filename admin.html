@@ -5991,7 +5991,7 @@ function ipBlockRemove(raw){
      ips     addresses they are later seen on - added by the server on its own
    Details are gathered from this lead AND every other lead from the same IP.
    Unblock deletes the row, which lifts every part of it at once. */
-var PB_NEVER_PHONES=["9548251009"];   /* never block our own number by accident */
+var PB_NEVER_PHONES=["9548666872"];   /* never block our own number by accident */
 function pbEmail(v){v=String(v==null?"":v).trim().toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))return "";if(/@vshealthbenefits\.com$/.test(v))return "";return v;}
 function pbPhone(v){var d=String(v==null?"":v).replace(/\D/g,"");if(d.length===11&&d.charAt(0)==="1")d=d.slice(1);if(d.length!==10||PB_NEVER_PHONES.indexOf(d)>=0)return "";return d;}
 function pbFmtPhone(d){return d&&d.length===10?"("+d.slice(0,3)+") "+d.slice(3,6)+"-"+d.slice(6):d;}
@@ -13907,7 +13907,7 @@ try{(function(){
         +'<small class="afl-sees" style="flex-basis:100%;font-size:.72rem;color:#64748b;margin-top:2px">Creator sees: <b>'+(r.paid?"Reward paid":r.q?"Approved":x.stage==="dead"?"Didn\'t make the cut":r.rv?"Reviewing":"Quote requested")+'</b></small></div>';}).join("");
     var pays=(c.payouts||[]).slice().reverse().map(function(p){return '<div class="afp-row"><b>'+money2(p.amount)+'</b><span>'+esc(d8(p.at))+' · '+(p.keys||[]).length+' referral'+((p.keys||[]).length===1?"":"s")+(p.note?' · '+esc(p.note):'')+'</span><span class="afp-act"><button type="button" data-afp-edit="'+esc(p.id)+'">Edit</button><button type="button" data-afp-del="'+esc(p.id)+'">Delete</button></span></div>';}).join("");
     var pageOpts=PAGES.map(function(p){return '<option value="'+p[0]+'">'+esc(p[1])+'</option>';}).join("");
-    var msg=code?("Hi "+(c.firstName||"")+"! You're approved for the VS Health Benefits creator program.\n\nYour personal link: "+linkFor(code)+"\n\nEveryone who comes through it and asks for a quote is credited to you. You earn "+(c.reward?money2(c.reward)+" ":"a flat reward ")+"for every qualified referral (they complete a free consultation with a licensed advisor), whether or not they buy.\n\nQuick rules: share your own experience, label posts #ad or #partner, and please don't quote prices or plan details. Our licensed advisors handle that.\n\nSee your visits, referrals and earnings any time at "+SITE+"/creator (sign in with "+(c.email||"your email")+").\n\nQuestions? Call or text (954) 825-1009.\n- Bradley, VS Health Benefits"):"";
+    var msg=code?("Hi "+(c.firstName||"")+"! You're approved for the VS Health Benefits creator program.\n\nYour personal link: "+linkFor(code)+"\n\nEveryone who comes through it and asks for a quote is credited to you. You earn "+(c.reward?money2(c.reward)+" ":"a flat reward ")+"for every qualified referral (they complete a free consultation with a licensed advisor), whether or not they buy.\n\nQuick rules: share your own experience, label posts #ad or #partner, and please don't quote prices or plan details. Our licensed advisors handle that.\n\nSee your visits, referrals and earnings any time at "+SITE+"/creator (sign in with "+(c.email||"your email")+").\n\nQuestions? Call or text (954) 866-6872.\n- Bradley, VS Health Benefits"):"";
     var ov=document.createElement("div");ov.className="pv-ov";ov.id="pv-ov";
     ov.setAttribute("data-aff-id",id);loadAct();
     ov.innerHTML='<div class="pv af-pv" role="dialog" aria-label="'+esc(name)+'">'

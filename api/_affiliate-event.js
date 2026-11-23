@@ -162,8 +162,8 @@ function copy(event, c) {
     };
     case "paused": return {
       subject: "Your creator link is paused",
-      sms: "VS Health Benefits: " + hi + "Your creator link is paused for now, so new visitors aren't being credited. Questions? Text (954) 825-1009 with your name and \"Affiliate\"." + stop,
-      email: hi + "\n\nYour VS Health Benefits creator link is paused for now, so new visitors who use it aren't being credited to you. Referrals you already sent still count.\n\nQuestions? Email info@vshealthbenefits.com or text (954) 825-1009 with your full name and the word \"Affiliate\"." + sign,
+      sms: "VS Health Benefits: " + hi + "Your creator link is paused for now, so new visitors aren't being credited. Questions? Text (954) 866-6872 with your name and \"Affiliate\"." + stop,
+      email: hi + "\n\nYour VS Health Benefits creator link is paused for now, so new visitors who use it aren't being credited to you. Referrals you already sent still count.\n\nQuestions? Email info@vshealthbenefits.com or text (954) 866-6872 with your full name and the word \"Affiliate\"." + sign,
     };
     case "resumed": return {
       subject: "Your creator link is live again",

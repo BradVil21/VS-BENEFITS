@@ -44,7 +44,7 @@ coverage. That includes Marketplace plans priced on their net income (many quali
 credits) and nationwide PPOs that work on the road.
 
 Easiest way to send someone: vshealthbenefits.com/trucking-health-quote?ref=[partner]
-or have them call/text 954-825-1009. I'll take good care of them and let you know they
+or have them call/text 954-866-6872. I'll take good care of them and let you know they
 were helped.
 
 I can drop off cards whenever works. And if your website has a resources page, a link to our

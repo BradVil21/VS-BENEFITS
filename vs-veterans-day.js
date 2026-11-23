@@ -11,8 +11,8 @@
 (function () {
   "use strict";
   var IMAGE_URL = "/images/veterans-day-2026.jpg";
-  var PHONE = "+19548251009";
-  var PHONE_LABEL = "(954) 825-1009";
+  var PHONE = "+19548666872";
+  var PHONE_LABEL = "(954) 866-6872";
   var STORAGE_KEY = "vsHealthVetDayClosed";
 
   var now = new Date();

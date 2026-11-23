@@ -45,7 +45,7 @@ How many W-2 employees do you have right now?
 Bradley Vilsaint
 Health Benefits Advisor, VS Health Benefits
 St. Petersburg, FL
-(954) 825-1009
+(954) 866-6872
 
 VS Health Benefits, 7901 4th St N Ste 300, St. Petersburg, FL 33702
 Unsubscribe: {{unsubscribe_link}}
@@ -82,7 +82,7 @@ What does your W-2 headcount look like?
 Bradley Vilsaint
 Health Benefits Advisor, VS Health Benefits
 St. Petersburg, FL
-(954) 825-1009
+(954) 866-6872
 
 VS Health Benefits, 7901 4th St N Ste 300, St. Petersburg, FL 33702
 Unsubscribe: {{unsubscribe_link}}
@@ -122,7 +122,7 @@ Worth fifteen minutes?
 Bradley Vilsaint
 Health Benefits Advisor, VS Health Benefits
 St. Petersburg, FL
-(954) 825-1009
+(954) 866-6872
 
 VS Health Benefits, 7901 4th St N Ste 300, St. Petersburg, FL 33702
 Unsubscribe: {{unsubscribe_link}}
@@ -158,7 +158,7 @@ If January 1 does matter, this is the week.
 Bradley Vilsaint
 Health Benefits Advisor, VS Health Benefits
 St. Petersburg, FL
-(954) 825-1009
+(954) 866-6872
 
 VS Health Benefits, 7901 4th St N Ste 300, St. Petersburg, FL 33702
 Unsubscribe: {{unsubscribe_link}}
@@ -187,7 +187,7 @@ Either way, thanks for the patience.
 Bradley Vilsaint
 Health Benefits Advisor, VS Health Benefits
 St. Petersburg, FL
-(954) 825-1009
+(954) 866-6872
 
 VS Health Benefits, 7901 4th St N Ste 300, St. Petersburg, FL 33702
 Unsubscribe: {{unsubscribe_link}}

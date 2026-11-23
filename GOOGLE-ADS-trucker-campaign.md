@@ -68,7 +68,7 @@ Pin "Health Insurance for Truckers" (or the ad group's version) to position 1.
 - Plans are priced by your home ZIP, not where you park. Get a free quote from the road.
 
 ## Assets
-- **Call asset:** (954) 825-1009, tracked as "Calls from ads (1)". Schedule it for staffed hours only.
+- **Call asset:** (954) 866-6872, tracked as "Calls from ads (1)". Schedule it for staffed hours only.
 - **Sitelinks:**
   - Owner-Operator Plans → /best-health-insurance-owner-operators
   - Plans by State → /truck-driver-health-insurance#by-state

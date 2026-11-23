@@ -45,7 +45,7 @@ What showed up: FreightWaves, ATBS, Clutch, mployeradvisor, selfemployed.com, Ta
 3. **Reviews that describe what you did.** When you ask happy clients for a review, ask them to say in their
    own words what they needed ("I'm an owner-operator and needed coverage on the road"). AI reads review text.
    Never write reviews for them or offer anything in exchange.
-4. **Same name, phone, address everywhere** ("VS Health Benefits", (954) 825-1009, info@vshealthbenefits.com,
+4. **Same name, phone, address everywhere** ("VS Health Benefits", (954) 866-6872, info@vshealthbenefits.com,
    Miami, FL). Claim or fix: Clutch (it ranked for "health insurance brokers Florida"), mployeradvisor, BBB,
    Yelp, Chamber of Commerce, NABIP member directory, Expertise.com, Lantern. Each listing should link to the site.
 5. **HealthCare.gov "Find Local Help."** If you're registered with the federal Marketplace as an agent, make
