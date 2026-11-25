@@ -23,7 +23,7 @@ def tbl(head, rows, note=""):
     return h + ('<p class="vs-src">%s</p>' % note if note else "")
 
 
-H1 = "Health Insurance for HVAC Companies in Florida and Texas (2027)"
+H1 = "Health Insurance for HVAC Companies and Contractors in Florida and Texas (2027)"
 
 def fig(img, alt, cap, w=1200, h=900):
     return ('<figure style="margin:22px 0"><picture><source type="image/webp" srcset="/compressed/%s-900.webp 900w, /compressed/%s.webp %dw" sizes="(max-width: 800px) 100vw, 760px">'
@@ -48,14 +48,14 @@ OPTIONS = tbl(["Option", "Best for an HVAC shop that...", "Watch for"], [
 
 SLUG_URL = "/blog/hvac-health-insurance-florida-texas"
 A = dict(
-    title="HVAC Company Health Insurance in Florida & Texas (2027)",
+    title="HVAC Company Health Insurance in Florida & Texas: 2027 Costs",
     h1=H1,
-    desc="Health insurance for HVAC companies and contractors in Florida and Texas: 2027 group plan costs, each state's small-group rules, ICHRA, and options for 1099 techs.",
-    keywords=["hvac company health insurance florida", "hvac company health insurance texas", "health insurance for hvac contractors florida", "health insurance for hvac contractors texas",
+    desc="Health insurance for HVAC companies and contractors in Florida and Texas: 2027 costs from $350 per employee, each state's small-group rules, ICHRA and 1099 tech options.",
+    keywords=["hvac company health insurance florida", "hvac health insurance texas", "health insurance for hvac companies florida", "health insurance for hvac companies texas", "air conditioning company health insurance florida", "hvac contractor benefits texas", "minimum employees for group health insurance florida", "minimum employees for group health insurance texas", "hvac company health insurance texas", "health insurance for hvac contractors florida", "health insurance for hvac contractors texas",
               "small business health insurance florida hvac", "texas small employer health insurance", "group health insurance hvac", "health insurance for 1099 hvac techs"],
     alt="Three HVAC technicians in safety glasses working on an outdoor AC unit with gauges",
     mins=8,
-    lede="Florida and Texas run on air conditioning, and both states are short on the techs who keep it running. If you own an HVAC company in either state, health insurance is one of the strongest tools you have to hire and keep good people. Here is how the rules work in each state, what coverage costs in 2027, and the options that fit an HVAC crew.",
+    lede="Florida and Texas run on air conditioning, and both states are short on the techs who keep it running. If you own an HVAC company or work as an HVAC contractor in either state, health insurance is one of the strongest tools you have to hire and keep good people. Here is how the rules work in each state, what coverage costs in 2027, and the options that fit an HVAC crew.",
     short="HVAC companies in Florida and Texas can offer a <strong>small group plan</strong> (about <strong>$350 to $650 per employee per month</strong> for employee-only coverage), an <strong>ICHRA</strong>, or help techs buy their own plans. The key difference: <strong>Florida</strong> treats businesses with <strong>1 to 50 employees</strong>, including the self-employed, as small employers, while <strong>Texas</strong> starts at <strong>2 employees</strong>. Neither state requires a company under 50 full-time equivalents to offer coverage. <a href=\"" + Q.replace("&", "&amp;") + "\">Get group quotes for your crew</a>.",
     sections=[
         ("why", "Why benefits matter more for HVAC in Florida and Texas",
@@ -76,6 +76,11 @@ A = dict(
          fig("contractor-roof-window-work", "Contractor working on the second-story roof of a house", "Independent contractors buy their own coverage. Tax credits are based on net income after business expenses.")
          + "<p>A genuine 1099 subcontractor can&rsquo;t join your group plan. Self-employed HVAC contractors in either state buy individual coverage, and Marketplace tax credits are based on <strong>net</strong> income after the truck, tools and other business costs. A single person qualifies up to about $63,840 for 2027 coverage. See <a href=\"/health-insurance-for-hvac-technicians\">health insurance for HVAC technicians</a>.</p>"
          "<p>If you control a sub&rsquo;s hours, tools and methods, they may be an employee in practice, which changes both your headcount and your obligations. <a href=\"/blog/1099-crew-vs-w2-health-insurance\">1099 crews vs. W-2 employees</a>.</p>"),
+        ("cities", "Florida and Texas cities we quote HVAC groups in",
+         "<p>Carriers, networks and prices change by county, so the plan that fits a shop in Miami may not be the best one in Jacksonville. We quote HVAC companies across both states, including:</p>"
+         "<ul><li><strong>Florida:</strong> <a href=\"/miami-small-business-health-insurance\">Miami</a>, <a href=\"/fort-lauderdale-small-business-health-insurance\">Fort Lauderdale</a>, <a href=\"/tampa-small-business-health-insurance\">Tampa</a>, Orlando, Jacksonville, West Palm Beach and Fort Myers.</li>"
+         "<li><strong>Texas:</strong> Houston, Dallas&ndash;Fort Worth, San Antonio, Austin, El Paso and the Rio Grande Valley.</li></ul>"
+         "<p>Before you enroll, we check that the hospitals and doctors your techs actually use are in network in your area.</p>"),
         ("steps", "How to get your crew covered",
          "<ol><li>List each W-2 employee&rsquo;s age, ZIP code and average weekly hours.</li><li>Decide who&rsquo;s eligible, for example everyone at 30+ hours, after a waiting period of up to 90 days.</li>"
          "<li>Pick a monthly amount you can carry through the slower months.</li><li><a href=\"" + Q.replace("&", "&amp;") + "\">Get quotes</a> from every carrier that writes HVAC groups in your county, plus ICHRA options.</li>"
@@ -85,6 +90,9 @@ A = dict(
         ("Do HVAC companies in Florida or Texas have to offer health insurance?", "Not until they have 50 or more full-time equivalent employees. Neither state adds its own employer mandate. At 50 or more, the 2027 federal penalty for offering no coverage is $3,780 per full-time employee, minus the first 30."),
         ("How much does group health insurance cost for an HVAC company in Florida or Texas?", "Small group coverage usually runs about $350 to $650 per employee per month for employee-only coverage, before the employer's share. Rates depend mostly on employee ages, ZIP code and plan design."),
         ("Can a one-person HVAC business get group health insurance?", "In Florida, state law counts businesses with 1 to 50 employees, including the self-employed, as small employers, so it may be possible depending on the carrier. In Texas, a small employer needs at least 2 employees, so a one-person business buys an individual plan."),
+        ("What is the minimum number of employees for group health insurance in Florida?", "Florida law counts businesses with 1 to 50 employees, including the self-employed, as small employers. In practice, many carriers want at least one W-2 employee besides the owner, so options for a one-person business are limited. A licensed broker can check which carriers will write your group."),
+        ("What is the minimum number of employees for group health insurance in Texas?", "Two. Texas law defines a small employer as one with an average of at least 2 and no more than 50 employees, with at least 2 employees on the first day of the plan year."),
+        ("Is health insurance tax deductible for an HVAC company?", "Premiums a business pays for its employees' health coverage are generally a deductible business expense, and very small employers with lower average wages may qualify for the small business health care tax credit. Self-employed HVAC contractors can usually deduct their own premiums. Check with your tax preparer."),
         ("Can I cover my W-2 techs and not my 1099 subcontractors?", "Yes. Genuine 1099 subcontractors can't join a group plan. They buy individual coverage, often with Marketplace tax credits based on their net income."),
         ("What if my HVAC crew grows every summer?", "Seasonal workers who aren't expected to work 30+ hours for a full measurement period usually don't have to be offered coverage. An ICHRA can also give you a fixed cost per tech as headcount changes."),
     ],

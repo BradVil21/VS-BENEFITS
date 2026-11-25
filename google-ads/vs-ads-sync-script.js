@@ -31,6 +31,7 @@ function main() {
              cost: Math.round((+x.costMicros || 0) / 1e4) / 100,
              conv: Math.round((+x.conversions || 0) * 100) / 100 };
   }
+  function sh(r, k) { var v = (r.metrics || {})[k]; v = v == null || v === "" ? NaN : +v; return isFinite(v) ? Math.round(v * 1000) / 1000 : null; }
   function put(o, r) { var v = m(r); for (var k in v) o[k] = v[k]; return o; }
   var DATE30 = "segments.date BETWEEN '" + start30 + "' AND '" + end + "'";
   var MET = "metrics.impressions, metrics.clicks, metrics.cost_micros, metrics.conversions";
@@ -38,20 +39,25 @@ function main() {
   var daily = q("SELECT segments.date, campaign.name, " + MET + " FROM campaign WHERE segments.date BETWEEN '" + start + "' AND '" + end + "' AND metrics.impressions > 0")
     .map(function (r) { return put({ d: r.segments.date, c: r.campaign.name }, r); });
 
-  var campaigns = q("SELECT campaign.name, campaign.status, campaign.primary_status, campaign.primary_status_reasons, campaign.bidding_strategy_type, campaign_budget.amount_micros, " + MET +
+  var campaigns = q("SELECT campaign.name, campaign.status, campaign.primary_status, campaign.primary_status_reasons, campaign.bidding_strategy_type, campaign_budget.amount_micros, campaign.network_settings.target_content_network, campaign.network_settings.target_search_network, " + MET +
+                    ", metrics.search_impression_share, metrics.search_top_impression_share, metrics.search_budget_lost_impression_share, metrics.search_rank_lost_impression_share" +
                     " FROM campaign WHERE " + DATE30 + " AND campaign.status != 'REMOVED'")
     .map(function (r) { var c = r.campaign;
       return put({ name: c.name, status: c.status, primary: c.primaryStatus || "", reasons: (c.primaryStatusReasons || []).join(", "),
-                   bidding: c.biddingStrategyType || "", budget: Math.round(((r.campaignBudget || {}).amountMicros || 0) / 1e4) / 100 }, r); });
+                   bidding: c.biddingStrategyType || "", budget: Math.round(((r.campaignBudget || {}).amountMicros || 0) / 1e4) / 100,
+                   // Impression share (added 2026-11-25 for the playbook's "position 1" check). Fractions 0-1; null when Google has too little data.
+                   is: sh(r, "searchImpressionShare"), top: sh(r, "searchTopImpressionShare"),
+                   lostBudget: sh(r, "searchBudgetLostImpressionShare"), lostRank: sh(r, "searchRankLostImpressionShare"),
+                   display: !!((c.networkSettings || {}).targetContentNetwork), partners: !!((c.networkSettings || {}).targetSearchNetwork) }, r); });
 
   var adGroups = q("SELECT campaign.name, ad_group.name, ad_group.status, " + MET + " FROM ad_group WHERE " + DATE30 + " AND ad_group.status != 'REMOVED'")
     .map(function (r) { return put({ c: r.campaign.name, g: r.adGroup.name, status: r.adGroup.status }, r); });
 
-  var keywords = q("SELECT campaign.name, ad_group.name, ad_group_criterion.keyword.text, ad_group_criterion.keyword.match_type, ad_group_criterion.quality_info.quality_score, " + MET +
+  var keywords = q("SELECT campaign.name, ad_group.name, ad_group_criterion.keyword.text, ad_group_criterion.keyword.match_type, ad_group_criterion.quality_info.quality_score, " + MET + ", metrics.search_impression_share, metrics.search_top_impression_share" +
                    " FROM keyword_view WHERE " + DATE30 + " AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC LIMIT 80")
     .map(function (r) { var k = r.adGroupCriterion || {};
       return put({ c: r.campaign.name, g: r.adGroup.name, kw: (k.keyword || {}).text || "", mt: (k.keyword || {}).matchType || "",
-                   qs: (k.qualityInfo || {}).qualityScore || null }, r); });
+                   qs: (k.qualityInfo || {}).qualityScore || null, is: sh(r, "searchImpressionShare"), top: sh(r, "searchTopImpressionShare") }, r); });
 
   var terms = q("SELECT campaign.name, ad_group.name, search_term_view.search_term, " + MET +
                 " FROM search_term_view WHERE " + DATE30 + " AND metrics.impressions > 0 ORDER BY metrics.cost_micros DESC LIMIT 120")

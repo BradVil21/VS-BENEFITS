@@ -1777,7 +1777,11 @@ html.dark .ads-kg{background:#1c2d42;border-color:#253a54}html.dark .ads-k .n{co
     <button class="sidebar-nav-item" data-tab="applist" type="button">
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg></span><span class="sni-label">Applications</span>
     </button>
-    <!-- Marketing tab removed 2026-11-25 (owner request). Panel #p-ads and renderAdsPerf are kept; re-add the button to bring it back. -->
+    <!-- Ad Performance (2026-11-25): replaces the removed Marketing tab; same #p-ads panel, simpler view. -->
+    <button class="sidebar-nav-item" data-tab="ads" type="button">
+      <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></span>
+      <span class="sni-label">Ad Performance</span>
+    </button>
     <button class="sidebar-nav-item" data-tab="blocked" type="button">
       <span class="sni-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg></span><span class="sni-label">Blocked IPs</span>
       <span class="sni-badge" id="b-blocked" style="display:none">0</span>
@@ -2033,7 +2037,7 @@ html.dark .ads-kg{background:#1c2d42;border-color:#253a54}html.dark .ads-k .n{co
     </div>
 
     <div id="p-ads" class="panel">
-      <h3>Marketing</h3>
+      <h3>Ad Performance</h3>
       <p class="lede">Live from your Google Ads account (synced hourly) next to the leads, quotes and sales those ads produced in this portal.</p>
       <div id="ads-mount"></div>
     </div>
@@ -6292,7 +6296,7 @@ function czCelebrate(name,sub){
 }
 /* ---- route the existing CRM tabs through the new views ---- */
 ALL_TABS=["dashboard","pipeline","leads","followups","tasks","mytasks","accounts","users","support","referrals","bizleads","ads","notes","analytics","blocked","settings"];
-TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Add Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",mytasks:"My Tasks",accounts:"Active Clients",users:"Users",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",ads:"Marketing",notes:"Notes",analytics:"Analytics",blocked:"Blocked IPs",settings:"Settings"};
+TAB_TITLES={dashboard:"Dashboard",pipeline:"Pipeline",leads:"Add Leads",followups:"Follow-ups",tasks:"Daily Sales Sequences",mytasks:"My Tasks",accounts:"Active Clients",users:"Users",support:"Support Inbox",referrals:"Referrals",bizleads:"Business Leads (1099 Companies)",ads:"Ad Performance",notes:"Notes",analytics:"Analytics",blocked:"Blocked IPs",settings:"Settings"};
 function renderDashboard(){czDashboard();}
 function renderLeads(){czClients();}
 function renderPipeline(){czPipeline();}
@@ -14255,7 +14259,13 @@ try{(function(){
   function esc(s){return escapeHtml(s==null?"":String(s));}
   function fu(p){if(!p.nextFollowUp||p.status==="ended")return "";var t=td();return p.nextFollowUp<t?"late":p.nextFollowUp===t?"today":"soon";}
   function fmtD(s){if(!s)return "";var d=new Date(String(s).slice(0,10)+"T12:00:00");return isNaN(d)?s:d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});}
-  function link(p){var c=code(p.ref);return c?SITE+"/?ref="+c:"";}
+  /* Short links (2026-11-25): vshealthbenefits.com/<code> -> the funnel below, via middleware.js + /shortlinks.js */
+  var SL=null;try{import("/shortlinks.js").then(function(m){SL=m;}).catch(function(){});}catch(e){}
+  var FUN_FB=[["auto","Best fit for their partner type"],["choose","Quote form: visitor picks individual or business"],["individual","Individual & family quote"],["trucking","Trucker / owner-operator quote"],["business","Small business (group) quote"],["home","Homepage"]];
+  function funnels(){return SL?SL.FUNNELS:FUN_FB;}
+  function destLabel(p){if(!SL)return "";var d=SL.destFor(p),f=SL.funnelFor(p),l="";SL.FUNNELS.forEach(function(x){if(x[0]===f)l=x[1];});return l+" ("+d+")";}
+  function creatorCodes(){try{return asArr(K.affiliates).map(function(a){return code(a.code);}).filter(Boolean);}catch(e){return [];}}
+  function link(p){var c=code(p.ref);return c?SITE+"/"+c:"";}
 
   function render(){
     var host=$("partners-mount");if(!host)return;
@@ -14274,14 +14284,14 @@ try{(function(){
         +'<td><span class="pt-st" style="--c:'+m[2]+'">'+m[1]+'</span></td>'
         +'<td class="pt-num">'+s.leads+(s.last30?'<span class="pt-sm">'+s.last30+' in 30d</span>':'')+'</td>'
         +'<td class="pt-num">'+s.sold+'</td>'
-        +'<td>'+(p.ref?'<code class="pt-code">'+esc(code(p.ref))+'</code>':'<span class="pt-muted">No link yet</span>')+'</td>'
+        +'<td>'+(p.ref?'<code class="pt-code">vshealthbenefits.com/'+esc(code(p.ref))+'</code>':'<span class="pt-muted">No link yet</span>')+'</td>'
         +'<td>'+(p.nextFollowUp?'<span class="pt-fu '+f+'">'+esc(fmtD(p.nextFollowUp))+'</span>':'<span class="pt-muted">&ndash;</span>')+'</td></tr>';}).join("");
     host.innerHTML='<div class="pt-kpis">'+kpi(cnt.active||0,"Active partners")+kpi(tot.leads,"Leads from partners",tot.l30+" in the last 30 days")+kpi(tot.sold,"Sold from partners")+kpi(due,"Follow-ups due","today or late")+'</div>'
       +'<div class="pt-bar"><div class="pt-chips">'+chip("all","All")+STAT.map(function(s){return chip(s[0],s[1]);}).join("")+'</div>'
       +'<input type="search" class="pt-q" placeholder="Search partners..." value="'+esc(V.q)+'"/><button type="button" class="btn btn-primary btn-sm pt-add">+ Add partner</button></div>'
-      +(body?'<div class="pt-tw"><table class="pt-t"><thead><tr><th>Partner</th><th>Status</th><th>Leads</th><th>Sold</th><th>Referral code</th><th>Next follow-up</th></tr></thead><tbody>'+body+'</tbody></table></div>'
+      +(body?'<div class="pt-tw"><table class="pt-t"><thead><tr><th>Partner</th><th>Status</th><th>Leads</th><th>Sold</th><th>Referral link</th><th>Next follow-up</th></tr></thead><tbody>'+body+'</tbody></table></div>'
            :'<div class="pt-none">'+PICON+'<p>'+(all.length?"No partners match.":"No partners yet. Add the businesses that send you clients or that you're working on.")+'</p></div>')
-      +'<p class="pt-note">Leads are counted automatically when someone comes in through a partner&rsquo;s link: <code>'+SITE+'/?ref=theircode</code>. Give each partner a short code (for example <code>expressfreight</code>).</p>';
+      +'<p class="pt-note">Each partner gets a short link like <code>vshealthbenefits.com/expressfreight</code> that opens the quote form you pick for them. Leads that come in through it are counted here automatically.</p>';
     host.querySelectorAll("[data-ptf]").forEach(function(b){b.onclick=function(){V.f=b.getAttribute("data-ptf");render();};});
     host.querySelectorAll("tr[data-pt]").forEach(function(tr){tr.onclick=function(){openForm(tr.getAttribute("data-pt"));};});
     var a=host.querySelector(".pt-add");if(a)a.onclick=function(){openForm(null);};
@@ -14301,11 +14311,12 @@ try{(function(){
       +'<label class="pt-f"><span>Type</span><select data-k="type"><option value="">Choose&hellip;</option>'+opt(TYPES,p.type)+'</select></label>'
       +'<label class="pt-f"><span>Status</span><select data-k="status">'+opt(STAT.map(function(x){return [x[0],x[1]];}),p.status||"prospect")+'</select></label>'
       +f("contact","Contact person")+f("phone","Phone","tel")+f("email","Email","email")+f("website","Website","text","https://")
-      +f("ref","Referral code","text","expressfreight")
+      +f("ref","Referral code (their short link)","text","expressfreight")
+      +'<label class="pt-f"><span>Link sends them to</span><select data-k="funnel">'+opt(funnels().map(function(x){return [x[0],x[1]];}),p.funnel||"auto")+'</select></label>'
       +f("startDate","Partner since","date")+f("lastContact","Last contacted","date")+f("nextFollowUp","Next follow-up","date")
       +'<label class="pt-f pt-wide"><span>What we agreed (terms, what each side does)</span><textarea data-k="terms" rows="2" placeholder="e.g. They share our link with new drivers; we feature DropPay on our trucking pages">'+esc(p.terms||"")+'</textarea></label>'
       +'<label class="pt-f pt-wide"><span>Notes</span><textarea data-k="notes" rows="3">'+esc(p.notes||"")+'</textarea></label></div>'
-      +'<div class="pt-linkrow"><span>Their referral link:</span> <code class="pt-link">'+(link(p)||"Add a referral code above")+'</code> <button type="button" class="btn btn-ghost btn-sm pt-copy"'+(link(p)?"":" disabled")+'>Copy</button></div>'
+      +'<div class="pt-linkrow"><span>Their link:</span> <code class="pt-link">'+(link(p)||"Add a referral code above")+'</code> <button type="button" class="btn btn-ghost btn-sm pt-copy"'+(link(p)?"":" disabled")+'>Copy</button><div class="pt-dest" style="flex-basis:100%;font-size:12px;color:#64748b;margin-top:4px"></div></div>'
       +'<div class="pt-acts">'+(isNew?'':'<button type="button" class="btn btn-ghost btn-sm pt-del">Delete</button>')+'<span style="flex:1"></span><button type="button" class="btn btn-ghost btn-sm pt-cancel">Cancel</button><button type="button" class="btn btn-primary btn-sm pt-save">Save partner</button></div></div>';
     document.body.appendChild(ov);
     function close(){ov.remove();document.removeEventListener("keydown",onKey);}
@@ -14314,7 +14325,12 @@ try{(function(){
     ov.addEventListener("click",function(e){if(e.target===ov)close();});
     ov.querySelector(".pt-x").onclick=close;ov.querySelector(".pt-cancel").onclick=close;
     var refIn=ov.querySelector('[data-k="ref"]'),lk=ov.querySelector(".pt-link"),cp=ov.querySelector(".pt-copy");
-    refIn.addEventListener("input",function(){var c=code(refIn.value);lk.textContent=c?SITE+"/?ref="+c:"Add a referral code above";cp.disabled=!c;});
+    var funIn=ov.querySelector('[data-k="funnel"]'),typeIn=ov.querySelector('[data-k="type"]'),dst=ov.querySelector(".pt-dest");
+    function upd(){var c=code(refIn.value);lk.textContent=c?SITE+"/"+c:"Add a referral code above";cp.disabled=!c;
+      var bad=c&&SL&&SL.isReserved(c)?"That code is already a page on the website. Pick a different one.":c&&creatorCodes().indexOf(c)>=0?"A creator already uses this code. Pick a different one.":"";
+      dst.style.color=bad?"#dc2626":"#64748b";dst.textContent=bad||(c?"Opens: "+destLabel({ref:c,type:typeIn.value,funnel:funIn.value}):"");}
+    refIn.addEventListener("input",upd);funIn.addEventListener("change",upd);typeIn.addEventListener("change",upd);
+    if(SL)upd();else setTimeout(upd,600);
     cp.onclick=function(){var t=lk.textContent;try{navigator.clipboard.writeText(t);}catch(e){}cp.textContent="Copied";setTimeout(function(){cp.textContent="Copy";},1200);};
     ov.querySelector(".pt-save").onclick=function(){
       var rec=Object.assign({},p);
@@ -14322,6 +14338,9 @@ try{(function(){
       if(!rec.name){ov.querySelector('[data-k="name"]').focus();ov.querySelector('[data-k="name"]').style.borderColor="#dc2626";return;}
       rec.ref=code(rec.ref);
       if(rec.ref&&load().some(function(x){return x.id!==rec.id&&code(x.ref)===rec.ref;})){alert("Another partner already uses the code \""+rec.ref+"\". Pick a different one.");return;}
+      if(rec.ref&&SL&&SL.isReserved(rec.ref)){alert("\""+rec.ref+"\" is already a page on the website, so it can't be a partner link. Pick a different code.");return;}
+      if(rec.ref&&creatorCodes().indexOf(rec.ref)>=0){alert("A creator already uses the code \""+rec.ref+"\". Pick a different one.");return;}
+      if(rec.ref&&rec.ref.length<2){alert("Use at least 2 letters or numbers for the code.");return;}
       rec.updated=Date.now();
       var cur=load(),i=cur.findIndex(function(x){return x.id===rec.id;});if(i>=0)cur[i]=rec;else cur.unshift(rec);
       save(cur);close();render();if(typeof toast==="function")toast((isNew?"Added ":"Saved ")+rec.name);
@@ -14370,6 +14389,159 @@ try{(function(){
   setInterval(function(){badge();var sig=JSON.stringify(load()).length+":"+getLeads().length+":"+getBizLeads().length;if(sig===lastSig)return;lastSig=sig;var pn=$("p-partners");if(pn&&pn.classList.contains("active")&&!document.querySelector(".pt-ov")&&!(document.activeElement&&document.activeElement.classList.contains("pt-q")))render();},5000);
   window.vsPartners={load:load,render:render,stats:stats};
  }catch(err){if(window.console)console.warn("partners init failed",err);}
+})();
+
+/* ═══════════════ AD PERFORMANCE (2026-11-25) ═══════════════
+   Plain-language Google Ads view: am I making or losing money? Built on the
+   same live data as the old Marketing tab (vs_state/ads_perf, synced hourly by
+   google-ads/vs-ads-sync-script.js). The old detailed report is one click away.
+   Checks follow GOOGLE-ADS-PLAYBOOK.md (coliseum keywords, no broad match,
+   80-85% impression share, 80% of budget on the winners). */
+(function(){
+ try{
+  var oldRender=(typeof renderAdsPerf==="function")?renderAdsPerf:null;
+  var V={range:30,detail:false};
+  try{V.range=+localStorage.getItem("vs_ah_range")||30;}catch(e){}
+  function target(){var t=60;try{t=+localStorage.getItem("vs_ah_target")||60;}catch(e){}return t;}
+  var e=function(s){return escapeHtml(s==null?"":String(s));};
+  var $m=function(n){n=+n||0;return "$"+(Math.abs(n)>=1000?Math.round(n).toLocaleString():n.toFixed(2));};
+  var $0=function(n){n=+n||0;return "$"+Math.round(n).toLocaleString();};
+  var pct=function(n){return n==null||!isFinite(n)?"–":Math.round(n*100)+"%";};
+  var n1=function(n){n=+n||0;return n%1?n.toFixed(1):String(n);};
+  function dayMs(d){var p=String(d||"").split("-");return new Date(+p[0],(+p[1]||1)-1,+p[2]||1).getTime();}
+  function sum(rows){var o={imp:0,clk:0,cost:0,conv:0};rows.forEach(function(r){o.imp+=+r.imp||0;o.clk+=+r.clk||0;o.cost+=+r.cost||0;o.conv+=+r.conv||0;});return o;}
+  function stageOf(x){return String((x&&(x.stage||x.status))||"").toLowerCase();}
+  function fromGoogle(x){return typeof adsIsGoogle==="function"?adsIsGoogle(x):false;}
+  function verdict(spent,leads,T){
+    if(spent<T*0.5&&!leads)return ["new","Too early to tell"];
+    if(!leads)return ["bad","Losing money: no leads"];
+    var cpl=spent/leads; if(cpl<=T)return ["good","Winning"]; if(cpl<=T*2)return ["warn","Watch: costly leads"]; return ["bad","Losing money"];
+  }
+  function css(){
+    if(document.getElementById("ah-css"))return;
+    var st=document.createElement("style");st.id="ah-css";
+    st.textContent=".ah-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px}"
+     +".ah-sync{font-size:12.5px;color:#15803d;font-weight:600}.ah-sync.stale{color:#b45309}.ah-ctl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:#475569}"
+     +".ah-pills{display:inline-flex;background:#eef2f7;border-radius:999px;padding:3px}.ah-pills button{border:0;background:none;padding:5px 11px;border-radius:999px;font-weight:600;font-size:12.5px;font-family:inherit;color:#475569;cursor:pointer}.ah-pills button.on{background:#fff;color:#0f2f5c;box-shadow:0 1px 3px rgba(0,0,0,.12)}"
+     +".ah-tgt{width:62px;padding:5px 7px;border:1px solid #d5dde8;border-radius:8px;font-weight:600;font-size:12.5px;font-family:inherit}"
+     +".ah-ban{border-radius:14px;padding:16px 18px;margin:0 0 14px;font-size:15px;line-height:1.5;border:1px solid}.ah-ban b{font-weight:800}.ah-ban.good{background:#ecfdf3;border-color:#a7e3bd;color:#14532d}.ah-ban.warn{background:#fff8eb;border-color:#f5d48a;color:#7c4a03}.ah-ban.bad{background:#fef2f2;border-color:#f6b9b9;color:#7f1d1d}.ah-ban.new{background:#f1f5f9;border-color:#d5dde8;color:#334155}"
+     +".ah-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 14px}.ah-card{background:#fff;border:1px solid #e5ebf2;border-radius:14px;padding:14px 16px}.ah-card span{display:block;font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.04em}.ah-card b{display:block;font-weight:800;font-size:26px;line-height:1.15;font-family:inherit;color:#0f2f5c;margin:6px 0 2px}.ah-card em{font-style:normal;font-size:12.5px;color:#64748b}.ah-card.good b{color:#15803d}.ah-card.bad b{color:#b91c1c}.ah-card.warn b{color:#b45309}"
+     +".ah-box{background:#fff;border:1px solid #e5ebf2;border-radius:14px;padding:16px 18px;margin:0 0 14px}.ah-box h4{margin:0 0 4px;font-size:15px;color:#0f2f5c}.ah-box .ah-sub{margin:0 0 12px;font-size:12.5px;color:#64748b}"
+     +".ah-bar{display:flex;height:22px;border-radius:999px;overflow:hidden;background:#eef2f7;margin:4px 0 10px}.ah-bar i{display:block;height:100%}.ah-leg{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:#334155}.ah-leg span{display:inline-flex;align-items:center;gap:6px}.ah-leg i{width:11px;height:11px;border-radius:3px;display:inline-block}"
+     +".ah-chart{display:flex;align-items:flex-end;gap:3px;height:120px;padding:6px 0 0;border-bottom:1px solid #e5ebf2}.ah-chart div{flex:1;position:relative;background:#c7d6ea;border-radius:3px 3px 0 0;min-height:2px}.ah-chart div.l{background:#16a34a}.ah-chart div span{position:absolute;left:50%;top:-16px;transform:translateX(-50%);font-weight:800;font-size:10.5px;font-family:inherit;color:#15803d}.ah-axis{display:flex;justify-content:space-between;font-size:11px;color:#94a3b8;margin-top:4px}"
+     +".ah-t{width:100%;border-collapse:collapse;font-size:13.5px}.ah-t th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;padding:6px 8px;border-bottom:1px solid #e5ebf2}.ah-t td{padding:9px 8px;border-bottom:1px solid #f1f5f9;vertical-align:top}.ah-t td.n{text-align:right;font-variant-numeric:tabular-nums}.ah-t th.n{text-align:right}"
+     +".ah-v{display:inline-block;padding:3px 9px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}.ah-v.good{background:#dcfce7;color:#166534}.ah-v.warn{background:#fef3c7;color:#92400e}.ah-v.bad{background:#fee2e2;color:#991b1b}.ah-v.new{background:#e2e8f0;color:#334155}.ah-st{font-size:11.5px;color:#64748b}.ah-st.on{color:#15803d;font-weight:700}"
+     +".ah-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.ah-two .ah-box{margin:0 0 14px}.ah-copy{margin-top:10px}"
+     +".ah-chk{list-style:none;margin:0;padding:0}.ah-chk li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:13.5px;line-height:1.45}.ah-chk li:last-child{border:0}.ah-chk i{font-style:normal;flex:0 0 22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px}.ah-chk i.ok{background:#dcfce7;color:#166534}.ah-chk i.no{background:#fee2e2;color:#991b1b}.ah-chk i.na{background:#e2e8f0;color:#475569}.ah-chk small{display:block;color:#64748b;font-size:12.5px}"
+     +".ah-more{display:flex;justify-content:center;margin:4px 0 0}"
+     +"@media(max-width:860px){.ah-cards{grid-template-columns:1fr 1fr}.ah-two{grid-template-columns:1fr}.ah-t .hm{display:none}}";
+    document.head.appendChild(st);
+  }
+
+  function render(){
+    var mount=$("ads-mount");if(!mount)return;
+    var S=typeof adsSnap==="function"?adsSnap():null;
+    if(V.detail||!S||!S.daily){
+      if(oldRender)oldRender();
+      if(V.detail&&S&&S.daily){var b=document.createElement("div");b.className="ah-more";b.style.margin="0 0 12px";b.innerHTML='<button type="button" class="btn btn-primary btn-sm">&larr; Back to the simple view</button>';b.firstChild.onclick=function(){V.detail=false;render();};mount.insertBefore(b,mount.firstChild);}
+      return;
+    }
+    css();
+    var T=target(), R=V.range;
+    var endMs=dayMs(S.range&&S.range.end)||Date.now(), startMs=endMs-(R-1)*864e5, prevStart=startMs-R*864e5;
+    var cur=sum(S.daily.filter(function(r){var t=dayMs(r.d);return t>=startMs&&t<=endMs;}));
+    var prev=sum(S.daily.filter(function(r){var t=dayMs(r.d);return t>=prevStart&&t<startMs;}));
+    var inR=function(x){var t=Number(x.created||x.createdAt||0);return t>=startMs&&t<endMs+864e5;};
+    var L=(typeof getLeads==="function"?getLeads():[]).filter(fromGoogle).filter(inR);
+    var B=(typeof getBizLeads==="function"?getBizLeads():[]).filter(fromGoogle).filter(inR);
+    var portal=L.length+B.length, sold=L.filter(function(x){return /sold|enrolled/.test(stageOf(x));}).length+B.filter(function(x){return stageOf(x)==="won";}).length;
+    var leads=cur.conv, cpl=leads?cur.cost/leads:NaN, pcpl=prev.conv?prev.cost/prev.conv:NaN;
+    var vd=verdict(cur.cost,leads,T);
+    var age=Date.now()-(S.syncedAt||0), stale=age>3*36e5;
+    var running=(S.campaignList||[]).filter(function(c){return c.status==="ENABLED";}).length;
+    var h='';
+    h+='<div class="ah-top"><div class="ah-sync'+(stale?" stale":"")+'">'+(stale?"&#9888; ":"&#9679; ")+'Updated '+(age<36e5?Math.max(1,Math.round(age/6e4))+' min ago':Math.round(age/36e5)+' h ago')+' &middot; '+running+' campaign'+(running===1?"":"s")+' running</div>'
+      +'<div class="ah-ctl"><span class="ah-pills">'+[7,14,30,60].map(function(n){return '<button type="button" data-ahr="'+n+'" class="'+(n===R?"on":"")+'">'+n+' days</button>';}).join("")+'</span>'
+      +'<label>Target cost per lead $<input class="ah-tgt" type="number" min="5" step="5" value="'+T+'"></label></div></div>';
+    // 1. The verdict, in one sentence
+    var trend=isFinite(cpl)&&isFinite(pcpl)?(cpl<pcpl?" That's better than the "+R+" days before ("+$m(pcpl)+" a lead).":cpl>pcpl?" That's worse than the "+R+" days before ("+$m(pcpl)+" a lead).":""):"";
+    var msg=cur.cost<1?"<b>No ad spend in the last "+R+" days.</b> Your campaigns are paused, so you're not spending or losing anything right now."
+      :vd[0]==="good"?"<b>Your ads are making money.</b> You spent "+$0(cur.cost)+" and got "+n1(leads)+" lead"+(leads===1?"":"s")+" at "+$m(cpl)+" each, under your "+$0(T)+" target."+trend
+      :vd[0]==="warn"?"<b>Your ads work, but leads cost too much.</b> You spent "+$0(cur.cost)+" for "+n1(leads)+" lead"+(leads===1?"":"s")+" at "+$m(cpl)+" each. Your target is "+$0(T)+". Cut the money leaks below."+trend
+      :vd[0]==="new"?"<b>Too early to tell.</b> You've spent "+$0(cur.cost)+" so far. Give it a few more days of data."
+      :"<b>You're losing money on ads.</b> You spent "+$0(cur.cost)+(leads?" for only "+n1(leads)+" lead"+(leads===1?"":"s")+" ("+$m(cpl)+" each, target "+$0(T)+").":" and got no leads.")+" Pause what isn't working and keep only your best keywords."+trend;
+    h+='<div class="ah-ban '+(cur.cost<1?"new":vd[0])+'">'+msg+'</div>';
+    // 2. Four numbers
+    var cls=function(ok,mid){return ok?"good":mid?"warn":"bad";};
+    h+='<div class="ah-cards">'
+      +'<div class="ah-card"><span>Spent</span><b>'+$0(cur.cost)+'</b><em>'+cur.clk+' clicks &middot; '+(cur.clk?$m(cur.cost/cur.clk):"–")+' each</em></div>'
+      +'<div class="ah-card"><span>Leads (Google)</span><b>'+n1(leads)+'</b><em>'+portal+' reached your portal</em></div>'
+      +'<div class="ah-card '+(isFinite(cpl)?cls(cpl<=T,cpl<=T*2):"")+'"><span>Cost per lead</span><b>'+(isFinite(cpl)?$m(cpl):"–")+'</b><em>Target '+$0(T)+'</em></div>'
+      +'<div class="ah-card"><span>Sold</span><b>'+sold+'</b><em>'+(sold?$m(cur.cost/sold)+" ad cost per sale":"No sales from ads yet")+'</em></div></div>';
+    // 3. Where the money went (search terms, last 30 days)
+    var terms=S.terms||[], camps=S.campaigns||[];
+    var tot30=camps.reduce(function(a,c){return a+(+c.cost||0);},0);
+    var made=0,leak=0;terms.forEach(function(t){if(+t.conv>0)made+=+t.cost||0;else leak+=+t.cost||0;});
+    var hidden=Math.max(0,tot30-made-leak), all=made+leak+hidden;
+    if(all>0){
+      var w=function(v){return (v/all*100).toFixed(1)+"%";};
+      h+='<div class="ah-box"><h4>Where your money went</h4><p class="ah-sub">Last 30 days, by what people actually searched.</p>'
+        +'<div class="ah-bar"><i style="width:'+w(made)+';background:#16a34a"></i><i style="width:'+w(leak)+';background:#ef4444"></i><i style="width:'+w(hidden)+';background:#cbd5e1"></i></div>'
+        +'<div class="ah-leg"><span><i style="background:#16a34a"></i><b>'+$0(made)+'</b> on searches that made leads</span><span><i style="background:#ef4444"></i><b>'+$0(leak)+'</b> on searches with no leads</span><span><i style="background:#cbd5e1"></i>'+$0(hidden)+' Google doesn&rsquo;t show</span></div></div>';
+    }
+    // 4. Daily chart
+    var days=[],mx=0;for(var t=startMs;t<=endMs;t+=864e5){var d=new Date(t),k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");var s=sum(S.daily.filter(function(r){return r.d===k;}));days.push({k:k,cost:s.cost,conv:s.conv});mx=Math.max(mx,s.cost);}
+    if(mx>0){
+      h+='<div class="ah-box"><h4>Spend and leads by day</h4><p class="ah-sub">Bar height is what you spent. Green bars made at least one lead (the number on top).</p><div class="ah-chart">'
+        +days.map(function(x){return '<div class="'+(x.conv>0?"l":"")+'" style="height:'+Math.max(2,x.cost/mx*100)+'%" title="'+e(x.k)+': '+$m(x.cost)+', '+n1(x.conv)+' leads">'+(x.conv>0?'<span>'+n1(Math.round(x.conv*10)/10)+'</span>':'')+'</div>';}).join("")
+        +'</div><div class="ah-axis"><span>'+e(days[0].k)+'</span><span>'+e(days[days.length-1].k)+'</span></div></div>';
+    }
+    // 5. Campaign scorecard
+    var list=(S.campaignList||[]).map(function(c){var m=camps.filter(function(x){return x.name===c.name;})[0]||{};return Object.assign({},c,m,{status:c.status});})
+      .sort(function(a,b){return (b.status==="ENABLED")-(a.status==="ENABLED")||(+b.cost||0)-(+a.cost||0);});
+    if(list.length){
+      h+='<div class="ah-box"><h4>Campaign scorecard</h4><p class="ah-sub">Last 30 days. &ldquo;Shows at top&rdquo; is how often your ad appeared above the search results when it could have. The playbook goal is 80%+ on your best campaign.</p>'
+        +'<div style="overflow-x:auto"><table class="ah-t"><thead><tr><th>Campaign</th><th class="n">Spent</th><th class="n">Leads</th><th class="n">Cost / lead</th><th class="n hm">Shows at top</th><th class="n hm">Budget / day</th><th>Verdict</th></tr></thead><tbody>'
+        +list.map(function(c){var sp=+c.cost||0,cv=+c.conv||0,v=verdict(sp,cv,T);if(!sp&&c.status!=="ENABLED")v=["new","Paused"];
+          return '<tr><td><b>'+e(c.name)+'</b><div class="ah-st'+(c.status==="ENABLED"?" on":"")+'">'+(c.status==="ENABLED"?"Running":"Paused")+'</div></td><td class="n">'+$0(sp)+'</td><td class="n">'+n1(cv)+'</td><td class="n">'+(cv?$m(sp/cv):"–")+'</td><td class="n hm">'+pct(c.top)+'</td><td class="n hm">'+(c.budget?$0(c.budget):"–")+'</td><td><span class="ah-v '+v[0]+'">'+v[1]+'</span></td></tr>';}).join("")
+        +'</tbody></table></div></div>';
+    }
+    // 6. Makers and leaks
+    var makers=terms.filter(function(t){return +t.conv>0;}).sort(function(a,b){return b.conv-a.conv||a.cost-b.cost;}).slice(0,10);
+    var leaks=terms.filter(function(t){return !(+t.conv>0)&&+t.cost>0;}).sort(function(a,b){return b.cost-a.cost;}).slice(0,12);
+    var row=function(t,good){return '<tr><td>'+e(t.term)+'<div class="ah-st">'+e(t.c)+'</div></td><td class="n">'+$m(t.cost)+'</td><td class="n">'+(good?n1(t.conv)+' lead'+(+t.conv===1?"":"s"):(t.clk||0)+' click'+(+t.clk===1?'':'s'))+'</td></tr>';};
+    h+='<div class="ah-two"><div class="ah-box"><h4>&#9989; Searches that made leads</h4><p class="ah-sub">Your best keywords. Put more budget behind these.</p>'
+      +(makers.length?'<table class="ah-t"><tbody>'+makers.map(function(t){return row(t,true);}).join("")+'</tbody></table>':'<p class="ah-sub">None in the last 30 days.</p>')+'</div>'
+      +'<div class="ah-box"><h4>&#128680; Money leaks</h4><p class="ah-sub">Searches you paid for that never made a lead. Block them as negative keywords.</p>'
+      +(leaks.length?'<table class="ah-t"><tbody>'+leaks.map(function(t){return row(t,false);}).join("")+'</tbody></table><div class="ah-copy"><button type="button" class="btn btn-ghost btn-sm ah-cp">Copy these as negative keywords</button></div>':'<p class="ah-sub">No leaks. Nice.</p>')+'</div></div>';
+    // 7. Playbook checks
+    var kws=S.keywords||[], kCost=kws.reduce(function(a,k){return a+(+k.cost||0);},0), broad=kws.filter(function(k){return /BROAD/i.test(k.mt);}).reduce(function(a,k){return a+(+k.cost||0);},0);
+    var on=list.filter(function(c){return c.status==="ENABLED";});
+    var best=list.filter(function(c){return +c.conv>0;}).sort(function(a,b){return (b.conv-a.conv)||((a.cost/a.conv)-(b.cost/b.conv));})[0];
+    var topShare=tot30&&best?(+best.cost||0)/tot30:NaN;
+    var chk=[];
+    var add=function(state,t,sub){chk.push('<li><i class="'+state+'">'+(state==="ok"?"&#10003;":state==="no"?"!":"&ndash;")+'</i><div>'+t+(sub?'<small>'+sub+'</small>':'')+'</div></li>');};
+    add(kCost?(broad/kCost<0.05?"ok":"no"):"na","No broad match spend",kCost?(broad?$0(broad)+" ("+pct(broad/kCost)+") went to broad match keywords. Switch them to exact or phrase.":"All keyword spend is exact or phrase match."):"No keyword spend yet.");
+    var net=on.filter(function(c){return c.display||c.partners;});
+    add(on.length?(net.length?"no":"ok"):"na","Google Search only (Display and Search Partners off)",on.length?(net.length?"Turn off Display / Search Partners in: "+net.map(function(c){return e(c.name);}).join(", "):"Every running campaign is Search only."):"Nothing is running right now.");
+    add(best?(best.top==null?"na":best.top>=0.8?"ok":"no"):"na","Your best campaign shows at the top 80%+ of the time",best?(best.top==null?e(best.name)+": Google hasn't reported this yet (it needs more impressions).":e(best.name)+" shows at the top "+pct(best.top)+" of the time.")+(best.lostBudget>0.1?" Budget is holding it back ("+pct(best.lostBudget)+" of searches missed). Raise the budget.":"")+(best.lostRank>0.2?" Bids are too low ("+pct(best.lostRank)+" missed on rank). Raise bids 10-20%.":""):"No campaign has made a lead yet.");
+    add(isFinite(topShare)?(topShare>=0.8?"ok":"no"):"na","80% of spend goes to your best campaign",isFinite(topShare)?pct(topShare)+" of the last 30 days went to "+e(best.name)+".":"Not enough data yet.");
+    add(isFinite(cpl)?(cpl<=T?"ok":"no"):"na","Cost per lead under your target",isFinite(cpl)?$m(cpl)+" vs a "+$0(T)+" target.":"No leads in this period.");
+    add(stale?"no":"ok","Data is up to date",stale?"The hourly sync hasn't run in a while. Check the script in Google Ads (Tools > Scripts).":"Synced from Google Ads every hour.");
+    h+='<div class="ah-box"><h4>Playbook check</h4><p class="ah-sub">The rules from your Google Ads playbook. Fix anything with a red mark first.</p><ul class="ah-chk">'+chk.join("")+'</ul></div>';
+    h+='<div class="ah-more"><button type="button" class="btn btn-ghost btn-sm ah-det">Show the detailed report</button></div>';
+    mount.innerHTML=h;
+    mount.querySelectorAll("[data-ahr]").forEach(function(b){b.onclick=function(){V.range=+b.getAttribute("data-ahr");try{localStorage.setItem("vs_ah_range",V.range);}catch(_){}render();};});
+    var ti=mount.querySelector(".ah-tgt");if(ti)ti.onchange=function(){var v=Math.max(5,+ti.value||60);try{localStorage.setItem("vs_ah_target",v);}catch(_){}render();};
+    var cp=mount.querySelector(".ah-cp");if(cp)cp.onclick=function(){var txt=leaks.map(function(t){return '"'+t.term+'"';}).join("\n");try{navigator.clipboard.writeText(txt);}catch(_){}cp.textContent="Copied "+leaks.length+" negatives";setTimeout(function(){cp.textContent="Copy these as negative keywords";},1600);};
+    var dt=mount.querySelector(".ah-det");if(dt)dt.onclick=function(){V.detail=true;render();};
+  }
+  renderAdsPerf=render;
+  if(typeof TAB_TITLES!=="undefined")TAB_TITLES.ads="Ad Performance";
+  if(typeof ALL_TABS!=="undefined"&&ALL_TABS.indexOf("ads")<0)ALL_TABS.push("ads");
+  var p=$("p-ads");if(p){var h3=p.querySelector("h3"),ld=p.querySelector(".lede");if(h3)h3.textContent="Ad Performance";if(ld)ld.textContent="Are your Google Ads making or losing money? Live from your Google Ads account, updated every hour, next to the leads and sales they produced.";}
+  window.vsAdHub={render:render};
+ }catch(err){if(window.console)console.warn("ad performance init failed",err);}
 })();
 
 

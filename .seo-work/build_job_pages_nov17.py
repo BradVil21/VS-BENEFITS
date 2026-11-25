@@ -287,7 +287,7 @@ HVACT = se_page("health-insurance-for-hvac-technicians", "HVAC technicians", "HV
   "Health insurance for HVAC techs in 2027: options when your shop offers nothing, costs for self-employed HVAC contractors, and tax credits on net income.",
   "health insurance for hvac technicians, hvac tech health insurance, self employed hvac health insurance, hvac contractor health insurance, health insurance for hvac workers",
   "Self-Employed Health Insurance", "/self-employed-health-insurance",
-  [("Group health insurance for HVAC companies", "/health-insurance-for-hvac-companies"), ("HVAC employee benefits", "/blog/hvac-employee-benefits"), ("Self-employed health insurance", "/self-employed-health-insurance"), ("2027 ACA subsidy calculator", "/aca-subsidy-calculator")])
+  [("Group health insurance for HVAC companies", "/health-insurance-for-hvac-companies"), ("HVAC health insurance in Florida and Texas", "/blog/hvac-health-insurance-florida-texas"), ("HVAC employee benefits", "/blog/hvac-employee-benefits"), ("Self-employed health insurance", "/self-employed-health-insurance"), ("2027 ACA subsidy calculator", "/aca-subsidy-calculator")])
 
 PAGES = [PLUMB, ELEC, LAND, RESTO, BARB, NAIL, DASH, HVACT]
 

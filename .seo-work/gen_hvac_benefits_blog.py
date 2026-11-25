@@ -162,7 +162,7 @@ article = (
     '<p style="color:rgba(255,255,255,.9);font-size:.88rem;margin-bottom:14px">We compare every carrier that writes HVAC groups, side by side. Free.</p>'
     '<a class="btn" href="/quote?from=blog/health-insurance-premiums-rising-2027" style="background:#fff;color:var(--blue-700);width:100%%;justify-content:center;font-weight:700">Get My Free Quote</a></div>\n'
     '<div class="sidebar-card"><h4>Prefer to talk?</h4><p style="font-size:.88rem;color:var(--muted);margin-bottom:10px">Call or text a licensed advisor. English y Espa&ntilde;ol.</p>'
-    '<a href="tel:+19548251009" style="font-size:1.1rem;font-weight:700;color:var(--blue-700)">(954) 825-1009</a></div>\n'
+    '<a href="tel:+19548666872" style="font-size:1.1rem;font-weight:700;color:var(--blue-700)">(954) 866-6872</a></div>\n'
     '</aside>\n  </div>\n</main>'
 ) % (DATE_ISO, DATE_ISO, A["mins"], META_DIV, H1, A["lede"], hero, ALERT_ICON, A["short"].replace('href=\\"#review\\"', 'href="#rate-review"').replace('href="#review"', 'href="#rate-review"'),
      "\n\n".join(secs), faq_html,

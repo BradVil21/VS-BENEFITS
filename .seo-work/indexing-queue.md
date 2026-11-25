@@ -96,3 +96,9 @@ Quota ran out. Next (check status first, then request if still not on Google):
 Not worth requesting until improved (thin/duplicate per Google, "Crawled - currently not indexed"):
 - /health-insurance-{alabama,arizona,arkansas,south-carolina,south-dakota,tennessee,texas,utah,virginia,west-virginia}
 - /dental-vision-insurance-{georgia,north-carolina,texas,utah,wisconsin,wyoming}
+
+## 2026-11-25
+Requested (9): /blog/hvac-health-insurance-florida-texas (new, was unknown to Google), /health-insurance-for-cleaning-companies, /health-insurance-for-my-employees, /1099-truck-driver-health-insurance, /health-insurance-for-self-employed-truck-drivers, /can-truckers-deduct-health-insurance, /blog/small-business-group-health-guide, /how-much-does-health-insurance-cost, /blog/health-insurance-near-me-local-broker
+Quota ran out on /lp/es/independientes/illinois (confirmed "Discovered - currently not indexed").
+Next: /lp/es/independientes/illinois, ohio, kentucky, maryland, missouri; then /lp/truckers/kentucky, maryland, missouri; /blog/health-insurance-rate-increases-2027-by-state
+Tip: after each request, reload the Overview page before typing the next URL (focus otherwise stays on "Request again" and Enter re-submits).
