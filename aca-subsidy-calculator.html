@@ -502,6 +502,17 @@ tick();setInterval(tick,1000);})();</script>
         <p class="gate-fine">By submitting, you agree to our <a href="/privacy">Privacy Policy</a> and that a licensed advisor from VS BENEFITS LLC (d/b/a VS Health Benefits) may call, text or email you at the contact info provided about health coverage, including by automated technology. Consent is not a condition of purchase. Msg &amp; data rates may apply; reply STOP to opt out. We never sell your information.</p>
 
         <div class="results" id="results">
+          <!-- No-subsidy alert (2026-11-25): shown when income is over the 400% cliff or the subsidy works out to $0. -->
+          <div class="nosub" id="r-nosub" hidden role="alert">
+            <div class="nosub-h">You don&rsquo;t qualify for a subsidy, but you may still pay less</div>
+            <p class="nosub-p">Many people over the income limit lower their premium with private PPO and off-marketplace plans the subsidy calculator can&rsquo;t show. A licensed advisor compares them for you at no cost.</p>
+            <div class="nosub-btns">
+              <a class="nosub-b call" id="nosub-call" href="tel:+19548666872">&#128222; Call (954) 866-6872</a>
+              <a class="nosub-b" id="nosub-text" href="sms:+19548666872?&amp;body=Hi%2C%20I%20used%20the%20subsidy%20calculator%20and%20don%27t%20qualify.%20Can%20you%20help%20me%20lower%20my%20premium%3F">&#128172; Text us</a>
+              <a class="nosub-b" id="nosub-book" href="/book?from=subsidy-calculator-no-subsidy">&#128197; Book a call</a>
+            </div>
+            <div class="nosub-f">Mon&ndash;Fri 8am&ndash;8pm, Sat 10am&ndash;5pm ET. We&rsquo;ll also reach out to you shortly. <a href="/private-health-insurance">How private plans work &rarr;</a></div>
+          </div>
           <div class="res-hl"><div class="big" id="r-subsidy">$0/mo</div><div class="lbl">Estimated monthly subsidy</div></div>
           <div class="breakdown" id="r-breakdown"></div>
           <div class="tiers" id="tier-wrap">
@@ -513,6 +524,18 @@ tick();setInterval(tick,1000);})();</script>
             </div>
           </div>
           <div class="res-note" id="r-note"></div>
+<style id="nosub-css">
+.nosub{background:linear-gradient(135deg,#fff7ed,#fffbeb);border:2px solid #f59e0b;border-radius:14px;padding:16px 18px;margin:0 0 16px;text-align:left;box-shadow:0 6px 18px rgba(245,158,11,.15)}
+.nosub[hidden]{display:none}
+.nosub-h{font-family:Poppins,Inter,sans-serif;font-weight:800;color:#7c2d12;font-size:1.12rem;line-height:1.3;margin:0 0 6px}
+.nosub-p{margin:0 0 12px;color:#431407;font-size:.95rem;line-height:1.5}
+.nosub-btns{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px}
+.nosub-b{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:10px 16px;border-radius:10px;border:1.5px solid #16447f;color:#16447f;background:#fff;font:700 .95rem Inter,sans-serif;text-decoration:none}
+.nosub-b.call{background:#16a34a;border-color:#16a34a;color:#fff;font-size:1rem}
+.nosub-b:hover{filter:brightness(.96)}
+.nosub-f{font-size:.84rem;color:#78350f}.nosub-f a{color:#16447f;font-weight:600}
+@media(max-width:520px){.nosub-b{flex:1 1 100%;justify-content:center}}
+</style>
 <style id="hsq-css">
 #hsq{margin:18px 0 6px;text-align:left}
 #hsq[hidden]{display:none}
@@ -884,9 +907,17 @@ document.addEventListener("DOMContentLoaded",function(){
     document.getElementById("r-silver").textContent=money(silver);
     document.getElementById("r-gold").textContent=money(gold);
     document.getElementById("r-note").innerHTML=note;
+    // No-subsidy alert: over the 400% cliff, or the math leaves $0 of credit (not the Medicaid range).
+    var noSub=fplPct>=100&&(overCliff||subsidy<=0);
+    try{
+      var ns=document.getElementById("r-nosub");
+      if(ns){ ns.hidden=!noSub;
+        if(noSub){ try{window.vsTrack&&window.vsTrack("no_subsidy_alert",{fpl:Math.round(fplPct)});}catch(e){}
+          ["nosub-call","nosub-text","nosub-book"].forEach(function(id){var el=document.getElementById(id);if(el&&!el.__t){el.__t=1;el.addEventListener("click",function(){try{window.vsTrack&&window.vsTrack("quote_cta",{from_page:location.pathname,cta:id});}catch(e){}});}}); } }
+    }catch(e){}
     document.getElementById("r-disclaimer").textContent=
       "Estimate only. Based on the ACA premium tax credit formula and an estimated benchmark Silver premium of "+money(bench)+"/mo for your household (2027 average for your state, adjusted for age). Tier costs are approximate. Actual subsidies and plan prices depend on your zip code and the plans available. This is not a quote or tax advice.";
-    lastEstimate={income:income,size:size,age1:age1,age2:(age2&&age2>=18)?age2:"",kids:kids,zip:(document.getElementById("zip").value||""),fplPct:fplPct,bench:bench,subsidy:subsidy,bronze:bronze,silver:silver,gold:gold};
+    lastEstimate={income:income,size:size,age1:age1,age2:(age2&&age2>=18)?age2:"",kids:kids,zip:(document.getElementById("zip").value||""),fplPct:fplPct,bench:bench,subsidy:subsidy,bronze:bronze,silver:silver,gold:gold,noSub:noSub};
 
     var r=document.getElementById("results");r.classList.add("show");
     try{
@@ -977,7 +1008,8 @@ document.addEventListener("DOMContentLoaded",function(){
     var summary="Est. subsidy "+money(est.subsidy||0)+"/mo (Bronze "+money(est.bronze||0)+
       ", Silver "+money(est.silver||0)+", Gold "+money(est.gold||0)+"/mo). Income $"+
       (est.income||0).toLocaleString()+", household "+(est.size||"")+", age "+(est.age1||"")+
-      (est.age2?"/"+est.age2:"")+", "+(est.kids||0)+" kids, "+Math.round(est.fplPct||0)+"% FPL.";
+      (est.age2?"/"+est.age2:"")+", "+(est.kids||0)+" kids, "+Math.round(est.fplPct||0)+"% FPL."+
+      (est.noSub?" NO SUBSIDY: over the income limit. Call about private PPO / off-marketplace plans to lower their premium.":"");
 
     var sEl=document.getElementById("advisor-success");
     if(sEl){
@@ -1002,7 +1034,7 @@ document.addEventListener("DOMContentLoaded",function(){
         firstName:first, lastName:last, phone:phone, email:email,
         zip:est.zip||"", state:"",
         source:"subsidy-calculator",
-        tags:["subsidy-calculator","website-lead"],
+        tags:["subsidy-calculator","website-lead"].concat(est.noSub?["no-subsidy","private-ppo-fit"]:[]),
         meta:vsMetaFields(),
         notes:summary
       })
