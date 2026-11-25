@@ -2347,7 +2347,7 @@ var REMOTE_TO_LOCAL={leads:K.leads,accounts:K.accounts,messages:K.messages,conta
 K.ushaApps="vs_usha_apps";K.ushaAges="vs_usha_ages";K.ushaMeta="vs_usha_meta";K.ushaKpis="vs_usha_kpis";K.ushaOv="vs_usha_overrides";K.ushaIncome="vs_usha_income";K.ushaPlan="vs_usha_plan";K.clientSkip="vs_client_skip";K.msHist="vs_ms_hist";
 LOCAL_TO_REMOTE[K.ushaApps]="usha_apps";LOCAL_TO_REMOTE[K.ushaAges]="usha_ages";LOCAL_TO_REMOTE[K.ushaMeta]="usha_meta";LOCAL_TO_REMOTE[K.ushaKpis]="usha_kpis";LOCAL_TO_REMOTE[K.ushaOv]="usha_overrides";LOCAL_TO_REMOTE[K.ushaIncome]="usha_income";LOCAL_TO_REMOTE[K.ushaPlan]="usha_plan";LOCAL_TO_REMOTE[K.clientSkip]="client_skip";LOCAL_TO_REMOTE[K.msHist]="ms_hist";
 REMOTE_KEYS.push("usha_apps","usha_ages","usha_meta","usha_kpis");REMOTE_TO_LOCAL.usha_kpis=K.ushaKpis;REMOTE_KEYS.push("usha_overrides","usha_income","usha_plan");REMOTE_TO_LOCAL.usha_plan=K.ushaPlan;REMOTE_KEYS.push("client_skip","ms_hist");REMOTE_TO_LOCAL.client_skip=K.clientSkip;REMOTE_TO_LOCAL.ms_hist=K.msHist;REMOTE_TO_LOCAL.usha_overrides=K.ushaOv;REMOTE_TO_LOCAL.usha_income=K.ushaIncome;REMOTE_TO_LOCAL.usha_apps=K.ushaApps;REMOTE_TO_LOCAL.usha_ages=K.ushaAges;REMOTE_TO_LOCAL.usha_meta=K.ushaMeta;
-K.affiliates="vs_affiliates";LOCAL_TO_REMOTE[K.affiliates]="affiliates";REMOTE_KEYS.push("affiliates");REMOTE_TO_LOCAL.affiliates=K.affiliates; K.trash="vs_trash";LOCAL_TO_REMOTE[K.trash]="trash";REMOTE_KEYS.push("trash");REMOTE_TO_LOCAL.trash=K.trash; /* trash, 2026-11-22 */ /* creator program, 2026-11-12 */
+K.affiliates="vs_affiliates";LOCAL_TO_REMOTE[K.affiliates]="affiliates";REMOTE_KEYS.push("affiliates");REMOTE_TO_LOCAL.affiliates=K.affiliates; K.trash="vs_trash";LOCAL_TO_REMOTE[K.trash]="trash";REMOTE_KEYS.push("trash");REMOTE_TO_LOCAL.trash=K.trash; /* trash, 2026-11-22 */ K.partners="vs_partners";LOCAL_TO_REMOTE[K.partners]="partners";REMOTE_KEYS.push("partners");REMOTE_TO_LOCAL.partners=K.partners; /* partners, 2026-11-25 */ /* creator program, 2026-11-12 */
 K.ushaManual="vs_usha_manual";K.ghlSent="vs_ghl_sent";LOCAL_TO_REMOTE[K.ushaManual]="usha_manual";LOCAL_TO_REMOTE[K.ghlSent]="ghl_sent";REMOTE_KEYS.push("usha_manual","ghl_sent");REMOTE_TO_LOCAL.usha_manual=K.ushaManual;REMOTE_TO_LOCAL.ghl_sent=K.ghlSent;K.bcSnap="vs_bc_snap";K.bcLog="vs_bc_log";LOCAL_TO_REMOTE[K.bcSnap]="bc_snap";LOCAL_TO_REMOTE[K.bcLog]="bc_log";REMOTE_KEYS.push("bc_snap","bc_log");REMOTE_TO_LOCAL.bc_snap=K.bcSnap;REMOTE_TO_LOCAL.bc_log=K.bcLog;
 
 function setSyncPill(state){
@@ -14220,6 +14220,158 @@ try{(function(){
   window.vsTrash={load:load,restore:restore,render:render};
  }catch(err){if(window.console)console.warn("trash init failed",err);}
 })();
+
+/* ═══════════════ PARTNERS (2026-11-25) ═══════════════
+   Track referral partnerships: who they are, status, terms, follow-ups, and
+   leads/sales that came in through their ?ref= link (counted automatically).
+   Stored in Firestore vs_state/partners. */
+(function(){
+ try{
+  var PICON='<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;display:inline-block;vertical-align:-.14em" aria-hidden="true"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg>';
+  var STAT=[["prospect","Prospect","#64748b"],["talks","In talks","#0891b2"],["active","Active","#16a34a"],["paused","Paused","#d97706"],["ended","Ended","#94a3b8"]];
+  var TYPES=["Trucking company / carrier","Freight factoring / finance","Dispatch service","CDL school","CPA / tax preparer","Payroll / HR company","P&C / auto insurance agency","Trade association","Real estate / mortgage","Chamber / networking group","Influencer / media","Other"];
+  var V={f:"all",q:""};
+  var SITE="https://www.vshealthbenefits.com";
+  function load(){return asArr(K.partners);}
+  function save(list){setArr(K.partners,list,true);badge();}
+  function smeta(id){for(var i=0;i<STAT.length;i++)if(STAT[i][0]===id)return STAT[i];return STAT[0];}
+  function code(s){return String(s||"").toLowerCase().replace(/[^a-z0-9-]/g,"").slice(0,40);}
+  function td(){return ymdLocal(new Date());}
+  function ymdLocal(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+  function when(x){var t=x.created||x.createdAt||x.date||x.ts;if(typeof t==="string"&&!/^\d+$/.test(t))t=Date.parse(t);return Number(t)||0;}
+  /* leads that came through this partner's link: tag partner-<code>, note "Referred by partner: <code>", or source "Partner — <code>" */
+  function matches(p,x){
+    var c=code(p.ref);if(!c)return false;
+    var j;try{j=JSON.stringify(x).toLowerCase();}catch(e){return false;}
+    return j.indexOf("partner-"+c+'"')>=0||j.indexOf("referred by partner: "+c)>=0||j.indexOf("partner — "+c)>=0||j.indexOf("partner \\u2014 "+c)>=0;
+  }
+  function stats(p){
+    var L=getLeads().filter(function(x){return matches(p,x);}),B=getBizLeads().filter(function(x){return matches(p,x);});
+    var since=Date.now()-30*864e5;
+    var sold=L.filter(function(x){return x.stage==="sold";}).length+B.filter(function(x){return x.stage==="won";}).length;
+    return {leads:L.length+B.length,last30:L.concat(B).filter(function(x){return when(x)>=since;}).length,sold:sold,
+            latest:L.concat(B).reduce(function(m,x){return Math.max(m,when(x));},0)};
+  }
+  function esc(s){return escapeHtml(s==null?"":String(s));}
+  function fu(p){if(!p.nextFollowUp||p.status==="ended")return "";var t=td();return p.nextFollowUp<t?"late":p.nextFollowUp===t?"today":"soon";}
+  function fmtD(s){if(!s)return "";var d=new Date(String(s).slice(0,10)+"T12:00:00");return isNaN(d)?s:d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"});}
+  function link(p){var c=code(p.ref);return c?SITE+"/?ref="+c:"";}
+
+  function render(){
+    var host=$("partners-mount");if(!host)return;
+    var all=load(),q=V.q.toLowerCase().trim();
+    var S=all.map(function(p){return {p:p,s:stats(p)};});
+    var cnt={all:all.length};STAT.forEach(function(s){cnt[s[0]]=0;});all.forEach(function(p){cnt[p.status||"prospect"]=(cnt[p.status||"prospect"]||0)+1;});
+    var tot=S.reduce(function(t,x){t.leads+=x.s.leads;t.l30+=x.s.last30;t.sold+=x.s.sold;return t;},{leads:0,l30:0,sold:0});
+    var due=all.filter(function(p){var f=fu(p);return f==="late"||f==="today";}).length;
+    var rows=S.filter(function(x){var p=x.p;if(V.f!=="all"&&(p.status||"prospect")!==V.f)return false;if(!q)return true;
+        return [p.name,p.contact,p.type,p.email,p.phone,p.ref,p.notes].join(" ").toLowerCase().indexOf(q)>=0;})
+      .sort(function(a,b){var o={active:0,talks:1,prospect:2,paused:3,ended:4};return (o[a.p.status||"prospect"]-o[b.p.status||"prospect"])||(b.s.leads-a.s.leads)||String(a.p.name||"").localeCompare(String(b.p.name||""));});
+    var kpi=function(n,l,sub){return '<div class="pt-kpi"><b>'+n+'</b><span>'+l+'</span>'+(sub?'<em>'+sub+'</em>':'')+'</div>';};
+    var chip=function(k,l){return '<button type="button" class="pt-chip'+(V.f===k?" on":"")+'" data-ptf="'+k+'">'+l+' <b>'+(cnt[k]||0)+'</b></button>';};
+    var body=rows.map(function(x){var p=x.p,s=x.s,m=smeta(p.status||"prospect"),f=fu(p);
+      return '<tr data-pt="'+esc(p.id)+'"><td><div class="pt-name">'+esc(p.name||"(no name)")+'</div><div class="pt-sub">'+esc([p.type,p.contact].filter(Boolean).join(" · "))+'</div></td>'
+        +'<td><span class="pt-st" style="--c:'+m[2]+'">'+m[1]+'</span></td>'
+        +'<td class="pt-num">'+s.leads+(s.last30?'<span class="pt-sm">'+s.last30+' in 30d</span>':'')+'</td>'
+        +'<td class="pt-num">'+s.sold+'</td>'
+        +'<td>'+(p.ref?'<code class="pt-code">'+esc(code(p.ref))+'</code>':'<span class="pt-muted">No link yet</span>')+'</td>'
+        +'<td>'+(p.nextFollowUp?'<span class="pt-fu '+f+'">'+esc(fmtD(p.nextFollowUp))+'</span>':'<span class="pt-muted">&ndash;</span>')+'</td></tr>';}).join("");
+    host.innerHTML='<div class="pt-kpis">'+kpi(cnt.active||0,"Active partners")+kpi(tot.leads,"Leads from partners",tot.l30+" in the last 30 days")+kpi(tot.sold,"Sold from partners")+kpi(due,"Follow-ups due","today or late")+'</div>'
+      +'<div class="pt-bar"><div class="pt-chips">'+chip("all","All")+STAT.map(function(s){return chip(s[0],s[1]);}).join("")+'</div>'
+      +'<input type="search" class="pt-q" placeholder="Search partners..." value="'+esc(V.q)+'"/><button type="button" class="btn btn-primary btn-sm pt-add">+ Add partner</button></div>'
+      +(body?'<div class="pt-tw"><table class="pt-t"><thead><tr><th>Partner</th><th>Status</th><th>Leads</th><th>Sold</th><th>Referral code</th><th>Next follow-up</th></tr></thead><tbody>'+body+'</tbody></table></div>'
+           :'<div class="pt-none">'+PICON+'<p>'+(all.length?"No partners match.":"No partners yet. Add the businesses that send you clients or that you're working on.")+'</p></div>')
+      +'<p class="pt-note">Leads are counted automatically when someone comes in through a partner&rsquo;s link: <code>'+SITE+'/?ref=theircode</code>. Give each partner a short code (for example <code>expressfreight</code>).</p>';
+    host.querySelectorAll("[data-ptf]").forEach(function(b){b.onclick=function(){V.f=b.getAttribute("data-ptf");render();};});
+    host.querySelectorAll("tr[data-pt]").forEach(function(tr){tr.onclick=function(){openForm(tr.getAttribute("data-pt"));};});
+    var a=host.querySelector(".pt-add");if(a)a.onclick=function(){openForm(null);};
+    var s=host.querySelector(".pt-q");if(s)s.oninput=function(){V.q=s.value;var pos=s.selectionStart;render();var n=host.querySelector(".pt-q");if(n){n.focus();try{n.setSelectionRange(pos,pos);}catch(_){}}};
+  }
+
+  function openForm(id){
+    var list=load(),p=id?list.filter(function(x){return x.id===id;})[0]:null,isNew=!p;
+    p=p||{id:uid(),status:"prospect",created:Date.now()};
+    var s=isNew?{leads:0,last30:0,sold:0,latest:0}:stats(p);
+    var opt=function(arr,cur){return arr.map(function(o){var v=Array.isArray(o)?o[0]:o,l=Array.isArray(o)?o[1]:o;return '<option value="'+esc(v)+'"'+(v===cur?" selected":"")+'>'+esc(l)+'</option>';}).join("");};
+    var f=function(k,l,type,ph){return '<label class="pt-f"><span>'+l+'</span><input data-k="'+k+'" type="'+(type||"text")+'" value="'+esc(p[k]||"")+'" placeholder="'+esc(ph||"")+'"/></label>';};
+    var ov=document.createElement("div");ov.className="pt-ov";
+    ov.innerHTML='<div class="pt-box" role="dialog" aria-modal="true" aria-label="Partner"><div class="pt-hd"><h3>'+(isNew?"Add partner":esc(p.name||"Partner"))+'</h3><button type="button" class="pt-x" aria-label="Close">&times;</button></div>'
+      +(isNew?'':'<div class="pt-stats"><div><b>'+s.leads+'</b><span>leads</span></div><div><b>'+s.last30+'</b><span>last 30 days</span></div><div><b>'+s.sold+'</b><span>sold</span></div><div><b>'+(s.latest?esc(fmtD(ymdLocal(new Date(s.latest)))):"&ndash;")+'</b><span>latest lead</span></div></div>')
+      +'<div class="pt-grid">'+f("name","Partner / company","text","Express Freight Finance")
+      +'<label class="pt-f"><span>Type</span><select data-k="type"><option value="">Choose&hellip;</option>'+opt(TYPES,p.type)+'</select></label>'
+      +'<label class="pt-f"><span>Status</span><select data-k="status">'+opt(STAT.map(function(x){return [x[0],x[1]];}),p.status||"prospect")+'</select></label>'
+      +f("contact","Contact person")+f("phone","Phone","tel")+f("email","Email","email")+f("website","Website","text","https://")
+      +f("ref","Referral code","text","expressfreight")
+      +f("startDate","Partner since","date")+f("lastContact","Last contacted","date")+f("nextFollowUp","Next follow-up","date")
+      +'<label class="pt-f pt-wide"><span>What we agreed (terms, what each side does)</span><textarea data-k="terms" rows="2" placeholder="e.g. They share our link with new drivers; we feature DropPay on our trucking pages">'+esc(p.terms||"")+'</textarea></label>'
+      +'<label class="pt-f pt-wide"><span>Notes</span><textarea data-k="notes" rows="3">'+esc(p.notes||"")+'</textarea></label></div>'
+      +'<div class="pt-linkrow"><span>Their referral link:</span> <code class="pt-link">'+(link(p)||"Add a referral code above")+'</code> <button type="button" class="btn btn-ghost btn-sm pt-copy"'+(link(p)?"":" disabled")+'>Copy</button></div>'
+      +'<div class="pt-acts">'+(isNew?'':'<button type="button" class="btn btn-ghost btn-sm pt-del">Delete</button>')+'<span style="flex:1"></span><button type="button" class="btn btn-ghost btn-sm pt-cancel">Cancel</button><button type="button" class="btn btn-primary btn-sm pt-save">Save partner</button></div></div>';
+    document.body.appendChild(ov);
+    function close(){ov.remove();document.removeEventListener("keydown",onKey);}
+    function onKey(e){if(e.key==="Escape")close();}
+    document.addEventListener("keydown",onKey);
+    ov.addEventListener("click",function(e){if(e.target===ov)close();});
+    ov.querySelector(".pt-x").onclick=close;ov.querySelector(".pt-cancel").onclick=close;
+    var refIn=ov.querySelector('[data-k="ref"]'),lk=ov.querySelector(".pt-link"),cp=ov.querySelector(".pt-copy");
+    refIn.addEventListener("input",function(){var c=code(refIn.value);lk.textContent=c?SITE+"/?ref="+c:"Add a referral code above";cp.disabled=!c;});
+    cp.onclick=function(){var t=lk.textContent;try{navigator.clipboard.writeText(t);}catch(e){}cp.textContent="Copied";setTimeout(function(){cp.textContent="Copy";},1200);};
+    ov.querySelector(".pt-save").onclick=function(){
+      var rec=Object.assign({},p);
+      ov.querySelectorAll("[data-k]").forEach(function(el){rec[el.getAttribute("data-k")]=el.value.trim();});
+      if(!rec.name){ov.querySelector('[data-k="name"]').focus();ov.querySelector('[data-k="name"]').style.borderColor="#dc2626";return;}
+      rec.ref=code(rec.ref);
+      if(rec.ref&&load().some(function(x){return x.id!==rec.id&&code(x.ref)===rec.ref;})){alert("Another partner already uses the code \""+rec.ref+"\". Pick a different one.");return;}
+      rec.updated=Date.now();
+      var cur=load(),i=cur.findIndex(function(x){return x.id===rec.id;});if(i>=0)cur[i]=rec;else cur.unshift(rec);
+      save(cur);close();render();if(typeof toast==="function")toast((isNew?"Added ":"Saved ")+rec.name);
+    };
+    var d=ov.querySelector(".pt-del");if(d)d.onclick=function(){if(!confirm("Delete "+(p.name||"this partner")+"?\n\nTheir leads stay in your pipeline."))return;save(load().filter(function(x){return x.id!==p.id;}));close();render();};
+    setTimeout(function(){var n=ov.querySelector('[data-k="name"]');if(n&&isNew)n.focus();},30);
+  }
+
+  function badge(){var b=$("b-partners");if(!b)return;var n=load().filter(function(p){var f=fu(p);return f==="late"||f==="today";}).length;b.textContent=n;b.style.display=n?"":"none";}
+  function mount(){
+    var nav=$("sidebar-nav");if(!nav)return false;
+    if(!nav.querySelector('[data-tab="partners"]')){
+      var b=document.createElement("button");b.className="sidebar-nav-item";b.type="button";b.setAttribute("data-tab","partners");
+      b.innerHTML='<span class="sni-icon">'+PICON+'</span><span class="sni-label">Partners</span><span class="sni-badge" id="b-partners" style="display:none">0</span>';
+      var after=nav.querySelector('.sidebar-nav-item[data-tab="affiliates"]')||nav.querySelector('.sidebar-nav-item[data-tab="bizleads"]');
+      if(after)after.insertAdjacentElement("afterend",b);else nav.appendChild(b);
+    }
+    if(!$("p-partners")){
+      var ref=$("p-bizleads")||$("p-dashboard");if(!ref)return false;
+      var p=document.createElement("div");p.id="p-partners";p.className="panel";
+      p.innerHTML='<h3>Partners</h3><p class="lede">The businesses that send you clients: status, what you agreed, when to follow up, and how many leads and sales each one brings in.</p><div id="partners-mount"></div>';
+      ref.insertAdjacentElement("afterend",p);
+      var st=document.createElement("style");st.textContent=
+        ".pt-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:4px 0 16px}.pt-kpi{background:#fff;border:1px solid #e4e9f2;border-radius:14px;padding:14px 16px}.pt-kpi b{display:block;font:800 26px Poppins,Inter,sans-serif;color:#0b2346}.pt-kpi span{display:block;font-size:13px;font-weight:600;color:#334155}.pt-kpi em{display:block;font-style:normal;font-size:12px;color:#94a3b8;margin-top:2px}"
+       +".pt-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 12px}.pt-chips{display:flex;gap:6px;flex-wrap:wrap}.pt-chip{border:1px solid #d6dde6;background:#fff;border-radius:999px;padding:6px 12px;font:600 13px Inter,sans-serif;color:#334155;cursor:pointer}.pt-chip b{color:#64748b;margin-left:3px}.pt-chip.on{background:#0b2346;border-color:#0b2346;color:#fff}.pt-chip.on b{color:#cbd5e1}"
+       +".pt-q{flex:1 1 180px;min-width:150px;max-width:300px;padding:8px 12px;border:1px solid #d6dde6;border-radius:10px;font:14px Inter,sans-serif}.pt-add{margin-left:auto}"
+       +".pt-tw{background:#fff;border:1px solid #e4e9f2;border-radius:14px;overflow-x:auto}.pt-t{width:100%;border-collapse:collapse;font-size:14px}.pt-t th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#64748b;padding:10px 14px;border-bottom:1px solid #e4e9f2;white-space:nowrap}.pt-t td{padding:12px 14px;border-bottom:1px solid #f1f5f9;vertical-align:middle}.pt-t tr[data-pt]{cursor:pointer}.pt-t tr[data-pt]:hover{background:#f8fafc}"
+       +".pt-name{font-weight:700;color:#0b2346}.pt-sub{font-size:12.5px;color:#64748b;margin-top:2px}.pt-st{display:inline-block;font-size:12px;font-weight:700;color:var(--c);background:color-mix(in srgb,var(--c) 12%,#fff);border-radius:999px;padding:3px 10px;white-space:nowrap}"
+       +".pt-num{font-weight:800;color:#0b2346;font-size:16px}.pt-sm{display:block;font-size:11.5px;font-weight:600;color:#16a34a}.pt-code{background:#eef4fb;color:#16447f;border-radius:6px;padding:2px 7px;font-size:12.5px}.pt-muted{color:#94a3b8;font-size:13px}"
+       +".pt-fu{font-size:13px;font-weight:600;white-space:nowrap}.pt-fu.late{color:#dc2626}.pt-fu.today{color:#d97706}.pt-fu.soon{color:#334155}.pt-none{text-align:center;color:#64748b;padding:40px 10px;background:#fff;border:1px dashed #d6dde6;border-radius:12px}.pt-none .ico{width:34px!important;height:34px!important;color:#94a3b8}.pt-note{font-size:12.5px;color:#64748b;margin:12px 2px 0}.pt-note code{background:#f1f5f9;border-radius:5px;padding:1px 5px}"
+       +".pt-ov{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding:40px 14px;overflow-y:auto}.pt-box{background:#fff;border-radius:16px;width:100%;max-width:640px;padding:20px 22px;box-shadow:0 30px 80px -20px rgba(0,0,0,.4)}"
+       +".pt-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.pt-hd h3{margin:0;font:800 19px Poppins,Inter,sans-serif;color:#0b2346}.pt-x{border:0;background:none;font-size:26px;line-height:1;cursor:pointer;color:#64748b}"
+       +".pt-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 14px}.pt-stats div{background:#f8fafc;border-radius:10px;padding:8px 10px}.pt-stats b{display:block;font:800 17px Poppins,Inter,sans-serif;color:#0b2346}.pt-stats span{font-size:11.5px;color:#64748b}"
+       +".pt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}.pt-f{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:600;color:#334155}.pt-f input,.pt-f select,.pt-f textarea{font:14px Inter,sans-serif;padding:8px 10px;border:1px solid #d6dde6;border-radius:9px;background:#fff;color:#0b2346;width:100%;box-sizing:border-box}.pt-wide{grid-column:1/-1}"
+       +".pt-linkrow{margin:14px 0 4px;font-size:13px;color:#334155;display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pt-link{background:#eef4fb;color:#16447f;border-radius:6px;padding:4px 8px;font-size:12.5px;word-break:break-all}.pt-acts{display:flex;gap:8px;align-items:center;margin-top:16px}.pt-del{color:#dc2626!important}"
+       +"@media(max-width:760px){.pt-kpis{grid-template-columns:1fr 1fr}.pt-grid{grid-template-columns:1fr}.pt-stats{grid-template-columns:1fr 1fr}.pt-add{margin-left:0}}";
+      document.head.appendChild(st);
+    }
+    if(typeof ALL_TABS!=="undefined"&&ALL_TABS.indexOf("partners")<0)ALL_TABS.push("partners");
+    if(typeof TAB_TITLES!=="undefined")TAB_TITLES.partners="Partners";
+    badge();return true;
+  }
+  document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest('[data-tab="partners"]');if(!b)return;e.preventDefault();e.stopImmediatePropagation();if(typeof switchTab==="function")switchTab("partners");render();},true);
+  if(!mount()){var tries=0,iv=setInterval(function(){if(mount()||++tries>40)clearInterval(iv);},250);}
+  var lastSig="";
+  setInterval(function(){badge();var sig=JSON.stringify(load()).length+":"+getLeads().length+":"+getBizLeads().length;if(sig===lastSig)return;lastSig=sig;var pn=$("p-partners");if(pn&&pn.classList.contains("active")&&!document.querySelector(".pt-ov")&&!(document.activeElement&&document.activeElement.classList.contains("pt-q")))render();},5000);
+  window.vsPartners={load:load,render:render,stats:stats};
+ }catch(err){if(window.console)console.warn("partners init failed",err);}
+})();
+
 
 
 })();
