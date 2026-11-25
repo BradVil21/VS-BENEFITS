@@ -63,7 +63,7 @@ STATS_CARD = ('<div class="th-card"><h2>Why trade owners use us</h2><ul>'
               '<li><b>40+</b><span>states where we&rsquo;re licensed</span></li>'
               '<li><b>$0</b><span>to use us. Carriers pay our commission</span></li></ul></div>')
 
-def hero(slug, lead, span, sub, img=None, alt="", w=1600, h=900):
+def hero(slug, lead, span, sub, img=None, alt="", w=1600, h=900, qtype="business"):
     """img: base name in /compressed with .jpg/.webp and -900 variants (or None for the stats card)."""
     if img:
         media = ('<div class="th-photo"><picture>'
@@ -79,6 +79,26 @@ def hero(slug, lead, span, sub, img=None, alt="", w=1600, h=900):
             '<label for="th-zip-in">Enter your ZIP code</label>'
             '<div class="th-row"><input id="th-zip-in" name="zip" type="text" inputmode="numeric" pattern="[0-9]{{5}}" maxlength="5" placeholder="ZIP code" autocomplete="postal-code" required />'
             '<button type="submit">Find Affordable Plans</button></div>'
-            '<input type="hidden" name="type" value="business" /><input type="hidden" name="from" value="{slug}_hero" /></form>'
+            '<input type="hidden" name="type" value="{qtype}" /><input type="hidden" name="from" value="{slug}_hero" /></form>'
             '<a class="th-rating" href="/#reviews-anchor" aria-label="Rated 5.0 out of 5 from 53 Google reviews">{g}<span class="th-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span> 5.0 from 53 Google reviews<i class="th-free"> &middot; Free, no obligation</i></a>'
-            '</div><div class="th-media">{rib}{media}</div></div></section>').format(lead=lead, span=span, sub=sub, slug=slug, g=G, rib=RIBBON, media=media)
+            '</div><div class="th-media">{rib}{media}</div></div></section>').format(lead=lead, span=span, sub=sub, slug=slug, g=G, rib=RIBBON, media=media, qtype=qtype)
+
+PB_CSS = """<style id="vs-pb-css">
+.pb{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center;max-width:1100px;margin:0 auto}
+.pb>*{min-width:0}
+.pb-img{position:relative}
+.pb-img img{display:block;width:100%;height:auto;border-radius:20px;box-shadow:0 30px 60px -30px rgba(11,35,70,.6)}
+.pb-img::before{content:"";position:absolute;inset:18px -14px -14px 18px;border-radius:20px;background:linear-gradient(135deg,#16447f,#0db5a6);opacity:.18;z-index:-1}
+.pb h2{font-family:'Poppins','Inter',sans-serif;color:#0b2346;font-size:clamp(1.5rem,3vw,2.05rem);line-height:1.2;margin:0 0 14px}
+.pb p{color:#334155;line-height:1.65;margin:0 0 16px}
+.pb ul{list-style:none;padding:0;margin:0 0 22px;display:grid;gap:10px}
+.pb li{position:relative;padding-left:30px;color:#1e293b;line-height:1.5}
+.pb li::before{content:"";position:absolute;left:0;top:3px;width:20px;height:20px;border-radius:50%;background:#0db5a6 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4L19 7'/%3E%3C/svg%3E") center/12px no-repeat}
+@media(max-width:860px){.pb{grid-template-columns:1fr;gap:26px}.pb-img::before{inset:12px -8px -8px 12px}}
+</style>"""
+
+def photo_band(img, alt, heading, text, bullets, href, btn="Get my free quote", w=1200, h=900):
+    pic = ('<picture><source type="image/webp" srcset="/compressed/{i}-900.webp 900w, /compressed/{i}.webp {w}w" sizes="(max-width:860px) 100vw, 540px">'
+           '<img src="/compressed/{i}-900.jpg" srcset="/compressed/{i}-900.jpg 900w, /compressed/{i}.jpg {w}w" sizes="(max-width:860px) 100vw, 540px" width="{w}" height="{h}" alt="{a}" loading="lazy" decoding="async" /></picture>').format(i=img, w=w, h=h, a=alt)
+    return ('<section class="section"><div class="container"><div class="pb"><div class="pb-img">%s</div><div><h2>%s</h2><p>%s</p><ul>%s</ul>'
+            '<a class="btn btn-primary" href="%s">%s</a></div></div></div></section>') % (pic, heading, text, "".join("<li>%s</li>" % b for b in bullets), href, btn)

@@ -312,7 +312,7 @@ RELATED = """
 
 def service_schema(slug, name):
     return {"@context": "https://schema.org", "@type": "Service", "serviceType": name, "name": name, "url": SITE + "/" + slug,
-            "provider": {"@type": "InsuranceAgency", "name": "VS Health Benefits", "url": SITE + "/", "telephone": "+1-954-825-1009",
+            "provider": {"@type": "InsuranceAgency", "name": "VS Health Benefits", "url": SITE + "/", "telephone": "+1-954-866-6872",
                          "email": "info@vshealthbenefits.com", "address": {"@type": "PostalAddress", "addressLocality": "Miami", "addressRegion": "FL", "addressCountry": "US"}},
             "areaServed": {"@type": "Country", "name": "United States"}}
 
@@ -323,6 +323,14 @@ NEWHERO = {
  "health-insurance-for-electricians": ("Electricians &amp; Electrical Contractors", SUB % "licensed electricians", "electrician-lineman-utility-pole", "Electrician working on a utility pole", 1600, 1067),
  "health-insurance-for-landscaping-companies": ("Landscaping &amp; Lawn Care Companies", SUB % "your best crew leads", None, "", 0, 0),
  "health-insurance-for-restoration-companies": ("Restoration Companies", SUB % "certified restoration techs", None, "", 0, 0),
+ "health-insurance-for-barbers": ("Barbers &amp; Barbershop Owners", "Booth renter, commission barber or shop owner? Compare 2027 plans and tax credits that fit your income. Licensed advisors, free, English y Espa&ntilde;ol.", "barber-haircut", "Barber trimming a client's fade with scissors and a comb", 1600, 1200, "individual"),
+}
+# Photo band under the short answer (2026-11-25)
+BANDS = {
+ "health-insurance-for-barbers": dict(img="barber-beard-trim", alt="Barber trimming a client's beard with scissors",
+   heading="Coverage built around the chair",
+   text="Whether you rent a booth, cut on commission or own the shop, nobody hands you a benefits package. We compare every plan in your ZIP, apply every tax credit you qualify for and show you what you can write off.",
+   bullets=["Plans for booth renters and 1099 commission barbers", "Tax credits based on net income after booth rent and supplies", "Group plans or ICHRA for shop owners with staff", "Help in English y Espa&ntilde;ol"]),
 }
 
 import re as _re
@@ -335,11 +343,17 @@ for p in PAGES:
                P.article_schema(p["slug"], p["title"], p["desc"], TODAY)]
     og = "/compressed/%s.jpg" % IMG[p["slug"]][0] if p["slug"] in IMG else "/compressed/hvac-rooftop-technician.jpg"
     if p["slug"] in NEWHERO:
-        span, sub, img, alt, w, h = NEWHERO[p["slug"]]
-        new = TH.hero(p["slug"], "Health Insurance for", span, sub, img, alt, w, h)
+        span, sub, img, alt, w, h = NEWHERO[p["slug"]][:6]
+        qt_h = NEWHERO[p["slug"]][6] if len(NEWHERO[p["slug"]]) > 6 else "business"
+        new = TH.hero(p["slug"], "Health Insurance for", span, sub, img, alt, w, h, qt_h)
         p["main"], n = _re.subn(r'<section class="hero">.*?</section>(<div class="container" style="max-width:900px;margin-top:-12px[^"]*">.*?</div>)?', lambda m: new, p["main"], count=1, flags=_re.S)
         assert n == 1, p["slug"]
         if img: og = "/compressed/%s.jpg" % img
+    if p["slug"] in BANDS:
+        bd = BANDS[p["slug"]]
+        band = TH.photo_band(bd["img"], bd["alt"], bd["heading"], bd["text"], bd["bullets"], "/quote?type=individual&amp;from=%s_photo" % p["slug"])
+        i = p["main"].index('<section class="section bg-soft">')
+        p["main"] = p["main"][:i] + band + "\n" + p["main"][i:]
     html = C.page(p["slug"], p["title"], p["desc"], p["keywords"], p["main"], schemas, og_image=og, related_block=RELATED, sticky_call=True)
     qt = "business" if p["crumb"].startswith("Group") else "individual"
     html = html.replace("from=group-health-insurance-for-dump-truck-fleets&amp;type=business&amp;niche=trucking", "from=%s&amp;type=%s" % (p["slug"], qt))
@@ -348,6 +362,9 @@ for p in PAGES:
     html = html.replace('href="/quote" data-vs-cta="sticky-quote"', 'href="/quote?%sfrom=%s" data-vs-cta="sticky-quote"' % ("type=business&amp;" if qt == "business" else "", p["slug"]))
     if p["slug"] in NEWHERO:
         html = html.replace("</head>", TH.CSS + "\n</head>", 1)
+    if p["slug"] in BANDS:
+        html = html.replace("</head>", TH.PB_CSS + "\n</head>", 1)
     if p["slug"] == "health-insurance-for-hvac-technicians":  # owner: every HVAC page goes to the business quote
         html = html.replace("type=individual", "type=business").replace('href="/quote?from=%s" data-vs-cta' % p["slug"], 'href="/quote?type=business&amp;from=%s" data-vs-cta' % p["slug"])
+    html = html.replace('<a href="/quote" style="color:#16447f;font-weight:700">', '<a href="/quote?from=%s" style="color:#16447f;font-weight:700">' % p["slug"])
     print(P.write(p["slug"], html), len(p["title"]), len(p["desc"]))
