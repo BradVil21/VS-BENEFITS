@@ -508,11 +508,6 @@
       "permanent": true
     },
     {
-      "source": "/truck-driver-health-insurance-raleigh-nc.html",
-      "destination": "/truck-driver-health-insurance-raleigh-nc",
-      "permanent": true
-    },
-    {
       "source": "/truck-driver-health-insurance-florida.html",
       "destination": "/truck-driver-health-insurance-florida",
       "permanent": true
@@ -2055,6 +2050,26 @@
     {
       "source": "/truck-driver-health-insurance-dallas-tx.html",
       "destination": "/truck-driver-health-insurance-texas",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-raleigh-nc",
+      "destination": "/truck-driver-health-insurance?state=NC",
+      "permanent": true
+    },
+    {
+      "source": "/truck-driver-health-insurance-raleigh-nc.html",
+      "destination": "/truck-driver-health-insurance?state=NC",
+      "permanent": true
+    },
+    {
+      "source": "/blog/health-insurance-for-hvac-companies",
+      "destination": "/health-insurance-for-hvac-companies",
+      "permanent": true
+    },
+    {
+      "source": "/blog/health-insurance-for-hvac-companies.html",
+      "destination": "/health-insurance-for-hvac-companies",
       "permanent": true
     }
   ],
