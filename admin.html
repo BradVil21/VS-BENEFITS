@@ -4964,6 +4964,8 @@ var czSTAGES=[
   {id:"follow_up",label:"Follow Up",color:"#0ea5e9"},
   {id:"appointment_scheduled",label:"Appointment Scheduled",color:"#14b8a6"},
   {id:"quoted",label:"Quoted",color:"#8b5cf6"},
+  {id:"pending_approval",label:"Pending Approval",color:"#ea580c"},
+  {id:"guaranteed_issue",label:"Guaranteed Issue",color:"#0d9488"},
   {id:"sixty_plus",label:"60+ Days Out",color:"#f59e0b"},
   {id:"open_enrollment",label:"Open Enrollment",color:"#6366f1"},
   {id:"affordable_care_act",label:"Affordable Care Act",color:"#0891b2"},
@@ -5170,8 +5172,8 @@ function czDaysBetween(a,b){return Math.round((czParseYMD(a)-czParseYMD(b))/8640
 function czPretty(ymd){if(!ymd)return"";return czParseYMD(ymd).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});}
 function czName(c){return ((c.firstName||"")+" "+(c.lastName||"")).trim()||c.name||c.email||"(no name)";}
 function czVal(c){var v=(c.quoteValue!=null&&c.quoteValue!=="")?c.quoteValue:leadValue(c);return Number(v)||0;}
-function czStatusToStage(s){s=(s||"new");var m={"new":"new_lead","contacted":"follow_up","follow-up":"follow_up","appointment-scheduled":"appointment_scheduled","quoted":"quoted","60-days-out":"sixty_plus","open-enrollment":"open_enrollment","ghosted":"ghosted","sold":"sold","enrolled":"sold","declined":"no_longer_interested","lost":"no_longer_interested","no-longer-interested":"no_longer_interested","affordable-care-act":"affordable_care_act","disqualified":"disqualified","dead":"dead"};return m[s]||"new_lead";}
-function czStageToStatus(st){var m={"new_lead":"new","follow_up":"follow-up","appointment_scheduled":"appointment-scheduled","quoted":"quoted","sixty_plus":"60-days-out","open_enrollment":"open-enrollment","ghosted":"ghosted","no_longer_interested":"no-longer-interested","sold":"sold","affordable_care_act":"affordable-care-act","disqualified":"disqualified","dead":"dead"};return m[st]||"follow-up";}
+function czStatusToStage(s){s=(s||"new");var m={"new":"new_lead","contacted":"follow_up","follow-up":"follow_up","appointment-scheduled":"appointment_scheduled","quoted":"quoted","pending-approval":"pending_approval","guaranteed-issue":"guaranteed_issue","60-days-out":"sixty_plus","open-enrollment":"open_enrollment","ghosted":"ghosted","sold":"sold","enrolled":"sold","declined":"no_longer_interested","lost":"no_longer_interested","no-longer-interested":"no_longer_interested","affordable-care-act":"affordable_care_act","disqualified":"disqualified","dead":"dead"};return m[s]||"new_lead";}
+function czStageToStatus(st){var m={"new_lead":"new","follow_up":"follow-up","appointment_scheduled":"appointment-scheduled","quoted":"quoted","pending_approval":"pending-approval","guaranteed_issue":"guaranteed-issue","sixty_plus":"60-days-out","open_enrollment":"open-enrollment","ghosted":"ghosted","no_longer_interested":"no-longer-interested","sold":"sold","affordable_care_act":"affordable-care-act","disqualified":"disqualified","dead":"dead"};return m[st]||"follow-up";}
 function czEnsure(){
   var arr=getLeads();var changed=false;
   arr.forEach(function(l){
@@ -8973,6 +8975,8 @@ try{(function(){
     {key:"contacted",label:"Contacted",ids:["follow_up"],drop:"follow_up",color:"#0ea5e9"},
     {key:"appt",label:"Appointment",ids:["appointment_scheduled"],drop:"appointment_scheduled",color:"#14b8a6"},
     {key:"quoted",label:"Quoted",ids:["quoted"],drop:"quoted",color:"#8b5cf6"},
+    {key:"pending",label:"Pending Approval",ids:["pending_approval"],drop:"pending_approval",color:"#ea580c"},
+    {key:"gi",label:"Guaranteed Issue",ids:["guaranteed_issue"],drop:"guaranteed_issue",color:"#0d9488"},
     {key:"nurture",label:"Nurture · OE / 60+",ids:["sixty_plus","open_enrollment","affordable_care_act"],drop:"sixty_plus",color:"#f59e0b"},
     {key:"sold",label:"Sold",ids:["sold"],drop:"sold",color:"#10b981"},
     {key:"lost",label:"Lost",ids:["ghosted","no_longer_interested","disqualified"],drop:"no_longer_interested",color:"#94a3b8"}
@@ -10618,6 +10622,7 @@ try{(function(){
   var GROUPS=[
     {key:"new",label:"New",ids:["new_lead"]},{key:"contacted",label:"Contacted",ids:["follow_up"]},
     {key:"appt",label:"Appointment",ids:["appointment_scheduled"]},{key:"quoted",label:"Quoted",ids:["quoted"]},
+    {key:"pending",label:"Pending Approval",ids:["pending_approval"]},{key:"gi",label:"Guaranteed Issue",ids:["guaranteed_issue"]},
     {key:"nurture",label:"Nurture",ids:["sixty_plus","open_enrollment","affordable_care_act"]},
     {key:"sold",label:"Sold",ids:["sold"]},{key:"lost",label:"Lost",ids:["ghosted","no_longer_interested","disqualified"]}
   ];
@@ -11334,7 +11339,7 @@ try{(function(){
 
   /* ---- stage words to stages ---- */
   var STAGE_WORDS={
-    leads:[[/not contacted|uncontacted|never contacted/,"new_lead"],[/\bdead\b|bad lead|wrong (number|#)|disconnected|spam|fake|junk|invalid/,"dead"],[/no longer|not interested|declined|do not call|\bdnc\b|closed lost|\blost\b/,"no_longer_interested"],[/disqual|not eligible|ineligible|\bdq\b/,"disqualified"],[/\bsold\b|enrolled|closed won|\bwon\b|\bclient\b|bound|issued|active policy|customer/,"sold"],[/ghost|no answer|unresponsive|no response|no contact/,"ghosted"],[/open enroll|\boe\b/,"open_enrollment"],[/\baca\b|marketplace|obamacare|affordable/,"affordable_care_act"],[/60|nurture|future|later|not ready/,"sixty_plus"],[/quot|proposal/,"quoted"],[/appt|appointment|scheduled|booked|meeting/,"appointment_scheduled"],[/contact|follow|callback|call back|voicemail|\bvm\b|left message|attempt|working|in progress|warm|hot|engaged/,"follow_up"],[/\bnew\b|fresh|\bopen\b|lead/,"new_lead"]],
+    leads:[[/guaranteed[ -]?issue|\bg\.?i\.? plan/,"guaranteed_issue"],[/pending approval|pending underwriting|underwriting|awaiting approval|app submitted|application submitted/,"pending_approval"],[/not contacted|uncontacted|never contacted/,"new_lead"],[/\bdead\b|bad lead|wrong (number|#)|disconnected|spam|fake|junk|invalid/,"dead"],[/no longer|not interested|declined|do not call|\bdnc\b|closed lost|\blost\b/,"no_longer_interested"],[/disqual|not eligible|ineligible|\bdq\b/,"disqualified"],[/\bsold\b|enrolled|closed won|\bwon\b|\bclient\b|bound|issued|active policy|customer/,"sold"],[/ghost|no answer|unresponsive|no response|no contact/,"ghosted"],[/open enroll|\boe\b/,"open_enrollment"],[/\baca\b|marketplace|obamacare|affordable/,"affordable_care_act"],[/60|nurture|future|later|not ready/,"sixty_plus"],[/quot|proposal/,"quoted"],[/appt|appointment|scheduled|booked|meeting/,"appointment_scheduled"],[/contact|follow|callback|call back|voicemail|\bvm\b|left message|attempt|working|in progress|warm|hot|engaged/,"follow_up"],[/\bnew\b|fresh|\bopen\b|lead/,"new_lead"]],
     biz:[[/\bdead\b|bad lead|wrong (number|#)|disconnected|spam|fake|junk|invalid/,"dead"],[/\bwon\b|\bsold\b|\bclient\b|closed won|enrolled|signed|customer/,"won"],[/\blost\b|not interested|declined|closed lost|\bdnc\b|do not call/,"lost"],[/proposal|quot/,"proposal"],[/meeting|appt|appointment|scheduled|booked/,"meeting"],[/not contacted|uncontacted/,"prospect"],[/contact|follow|called|emailed|voicemail|attempt|working|engaged/,"contacted"],[/\bnew\b|prospect|lead|\bopen\b|cold/,"prospect"]]
   };
   function stageFrom(v,kind){
@@ -13538,7 +13543,7 @@ try{(function(){
   if(typeof ALL_TABS!=="undefined"&&ALL_TABS.indexOf("closing")<0)ALL_TABS.push("closing");
   if(typeof TAB_TITLES!=="undefined")TAB_TITLES.closing="Closing List";
 
-  var IND_W={quoted:30,appointment_scheduled:26,open_enrollment:20,affordable_care_act:20,follow_up:14,new_lead:10,sixty_plus:6,ghosted:2};
+  var IND_W={pending_approval:34,guaranteed_issue:30,quoted:30,appointment_scheduled:26,open_enrollment:20,affordable_care_act:20,follow_up:14,new_lead:10,sixty_plus:6,ghosted:2};
   var BIZ_W={proposal:30,quoting:29,meeting:28,contacted:14,working:12,prospect:6};
   var HEAT={hot:{l:"Hot",c:"#dc2626",w:45},warm:{l:"Warm",c:"#f59e0b",w:22},cold:{l:"Cold",c:"#64748b",w:0}};
   var CV={kind:"all",heat:"all",q:""};
@@ -13749,7 +13754,7 @@ try{(function(){
     (typeof getBizLeads==="function"?getBizLeads():[]).forEach(function(b){if(refOf(b)===code){var m=typeof bizStageMeta==="function"?bizStageMeta(b.stage||"prospect"):{label:b.stage,color:"#64748b"};out.push({key:"biz:"+b.id,kind:"biz",id:b.id,rec:b,name:tc(b.company||b.contact||"(no name)"),stage:b.stage||"prospect",stageLabel:m.label,color:m.color,at:Number(b.created)||0});}});
     out.sort(function(a,b){return b.at-a.at;});return out;
   }
-  var LIKELY={appointment_scheduled:1,quoted:1,sold:1,sixty_plus:1,open_enrollment:1,affordable_care_act:1,meeting:1,quoting:1,proposal:1,won:1};
+  var LIKELY={appointment_scheduled:1,quoted:1,pending_approval:1,guaranteed_issue:1,sold:1,sixty_plus:1,open_enrollment:1,affordable_care_act:1,meeting:1,quoting:1,proposal:1,won:1};
   function stats(c){
     var L=referred(c.code),refs=c.refs||{},q=0,unpaid=0,paid=0;
     L.forEach(function(x){var r=refs[x.key];if(r&&r.q){q++;if(r.paid)paid++;else unpaid++;}});

@@ -95,7 +95,7 @@ const CLOSED_BUSINESS = ["won", "lost", "dead"];
 // means the card is in the data and in no column - invisible. Keep in step with
 // czSTAGES and BIZ_STAGES in admin.html.
 const VALID_STAGES = [
-  "new_lead", "follow_up", "appointment_scheduled", "quoted", "sixty_plus",
+  "new_lead", "follow_up", "appointment_scheduled", "quoted", "pending_approval", "guaranteed_issue", "sixty_plus",
   "open_enrollment", "affordable_care_act", "ghosted", "no_longer_interested",
   "disqualified", "sold", "dead",
 ];
